@@ -7,8 +7,8 @@ myelin.torch.functional.lif_refrac
 .. currentmodule:: myelin.torch.functional.lif_refrac
 
 
-Integration Functions
----------------------
+Types
+-----
 
 :hidden:`LIFRefracParameters`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,6 +21,9 @@ Integration Functions
 :hidden:`LIFRefracFeedForwardState`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: LIFRefracFeedForwardState
+
+Integration Functions
+---------------------
 
 :hidden:`lif_refrac_step`
 ~~~~~~~~~~~~~~~~~~~~~~~~~

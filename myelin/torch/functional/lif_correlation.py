@@ -24,7 +24,6 @@ class LIFCorrelationParameters(NamedTuple):
     recurrent_correlation_parameters: CorrelationSensorParameters = CorrelationSensorParameters()
 
 
-@torch.jit.script
 def lif_correlation_step(
     input: torch.Tensor,
     s: LIFCorrelationState,

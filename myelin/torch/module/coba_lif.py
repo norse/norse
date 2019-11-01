@@ -24,7 +24,9 @@ class CobaLIFCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> CobaLIFState:
+    def initial_state(
+        self, batch_size: int, device: torch.device, dtype=torch.float
+    ) -> CobaLIFState:
         return CobaLIFState(
             z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
             v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),

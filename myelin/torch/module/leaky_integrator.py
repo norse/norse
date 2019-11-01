@@ -15,6 +15,7 @@ from typing import Tuple
 class LICell(torch.nn.Module):
     """
     """
+
     def __init__(
         self,
         input_features: int,

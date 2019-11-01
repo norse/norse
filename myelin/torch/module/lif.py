@@ -14,6 +14,21 @@ import numpy as np
 
 
 class LIFCell(torch.nn.Module):
+    """
+    Parameters:
+        shape: Shape of the feedforward state.
+        p (LIFParameters): Parameters of the LIF neuron model.
+        dt (float): Time step to use.
+
+    Examples::
+
+        >>> batch_size = 16
+        >>> lif = LIFCell(10, 20)
+        >>> input = torch.randn(batch_size, 10)
+        >>> s0 = lif.initial_state(batch_size)
+        >>> output, s0 = lif(input, s0)
+    """
+
     def __init__(
         self,
         input_size,
@@ -69,6 +84,21 @@ class LIFLayer(torch.nn.Module):
 
 
 class LIFFeedForwardCell(torch.nn.Module):
+    """
+    Parameters:
+        shape: Shape of the feedforward state.
+        p (LIFParameters): Parameters of the LIF neuron model.
+        dt (float): Time step to use.
+
+    Examples::
+
+        >>> batch_size = 16
+        >>> lif = LIFFeedForwardCell((20, 30))
+        >>> input = torch.randn(batch_size, 20, 30)
+        >>> s0 = lif.initial_state(batch_size)
+        >>> output, s0 = lif(input, s0)
+    """
+
     def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
         super(LIFFeedForwardCell, self).__init__()
         self.shape = shape

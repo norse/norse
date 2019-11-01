@@ -30,7 +30,6 @@ class LIFRefracParameters(NamedTuple):
     rho_reset: torch.Tensor = torch.tensor(5.0)
 
 
-@torch.jit.script
 def lif_refrac_step(
     input: torch.Tensor,
     s: LIFRefracState,
@@ -96,7 +95,6 @@ class LIFRefracFeedForwardState(NamedTuple):
     rho: torch.Tensor
 
 
-@torch.jit.script
 def lif_refrac_feed_forward_step(
     input: torch.Tensor,
     s: LIFRefracFeedForwardState,

@@ -5,38 +5,45 @@ from typing import NamedTuple, Tuple
 
 
 class LSNNParameters(NamedTuple):
-    """"Parameters of an LSNN neuron"""
+    """Parameters of an LSNN neuron
+
+    Parameters:
+        tau_syn_inv (torch.Tensor): inverse synaptic time constant
+        tau_mem_inv (torch.Tensor): inverse membrane time constant
+        tau_adapt_inv (torch.Tensor): inverse adaptation time constant
+        v_leak (torch.Tensor): leak potential
+        v_th (torch.Tensor): threshhold potential
+        v_reset (torch.Tensor): reset potential
+        beta (torch.Tensor): adaptation constant
+    """
 
     tau_syn_inv: torch.Tensor = torch.tensor(1.0 / 5e-3)
-    """inverse synaptic time constant"""
     tau_mem_inv: torch.Tensor = torch.tensor(1.0 / 1e-2)
-    """inverse membrane time constant"""
     tau_adapt_inv: torch.Tensor = torch.tensor(1.0 / 700)
-    """inverse adaptation time constant"""
     v_leak: torch.Tensor = torch.tensor(0.0)
-    """leak potential"""
     v_th: torch.Tensor = torch.tensor(1.0)
-    """threshhold potential"""
     v_reset: torch.Tensor = torch.tensor(0.0)
-    """reset potential"""
     beta: torch.Tensor = torch.tensor(1.8)
-    """adaptation constant"""
     method: str = "super"
     alpha: float = 100.0
 
 
 class LSNNState(NamedTuple):
+    """State of an LSNN neuron
+
+    Parameters:
+        z (torch.Tensor): recurrent spikes
+        v (torch.Tensor): membrane potential
+        i (torch.Tensor): synaptic input current
+        b (torch.Tensor): threshhold adaptation
+    """
+
     z: torch.Tensor
-    """recurrent spikes"""
     v: torch.Tensor
-    """membrane potential"""
     i: torch.Tensor
-    """synaptic input current"""
     b: torch.Tensor
-    """threshhold adaptation"""
 
 
-@torch.jit.script
 def lsnn_step(
     input: torch.Tensor,
     s: LSNNState,
@@ -82,18 +89,52 @@ def lsnn_step(
     return z_new, LSNNState(z_new, v_new, i_new, b_new)
 
 
+def adalif_step(
+    input: torch.Tensor,
+    s: LSNNState,
+    input_weights: torch.Tensor,
+    recurrent_weights: torch.Tensor,
+    p: LSNNParameters = LSNNParameters(),
+    dt: float = 0.001,
+) -> Tuple[torch.Tensor, LSNNState]:
+    """Euler integration step for LIF Neuron with adaptation
+
+    Parameters:
+        input (Tensor): the input spikes at the current time step
+        s (LSNNState): current state of the lsnn unit
+        input_weights (Tensor): synaptic weights for input spikes
+        recurrent_weights (Tensor): synaptic weights for recurrent spikes
+        p (LSNNParameters): parameters of the lsnn unit
+        dt (float): Integration timestep to use
+    """
+    di = -dt * p.tau_syn_inv * s.i
+    i = s.i + di
+    i = i + torch.matmul(input, input_weights)
+    i = i + torch.matmul(s.z, recurrent_weights)
+    dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i - s.b)
+    v = s.v + dv
+    db = -dt * p.tau_adapt_inv * s.b
+    b = s.b + db
+    z_new = threshhold(v - p.v_th, p.method, p.alpha)
+    v = v - z_new * (p.v_th - p.v_reset)
+    b = b + z_new * p.tau_adapt_inv * p.beta
+    return z_new, LSNNState(z_new, v, i, b)
+
+
 class LSNNFeedForwardState(NamedTuple):
-    """Integration state kept for a lsnn module"""
+    """Integration state kept for a lsnn module
+
+    Parameters:
+        v (torch.Tensor): membrane potential
+        i (torch.Tensor): synaptic input current
+        b (torch.Tensor): threshhold adaptation
+    """
 
     v: torch.Tensor
-    """membrane potential"""
     i: torch.Tensor
-    """synaptic input current"""
     b: torch.Tensor
-    """threshhold adaptation"""
 
 
-@torch.jit.script
 def lsnn_feed_forward_step(
     input: torch.Tensor,
     s: LSNNFeedForwardState,

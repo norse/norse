@@ -41,7 +41,6 @@ class CorrelationSensorState(NamedTuple):
     anti_correlation_trace: torch.Tensor
 
 
-@torch.jit.script
 def correlation_sensor_step(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,

@@ -6,40 +6,51 @@ from typing import NamedTuple, Tuple
 
 
 class CobaLIFState(NamedTuple):
+    """State of a conductance based LIF neuron.
+
+    Parameters:
+        z (torch.Tensor): recurrent spikes
+        v (torch.Tensor): membrane potential
+        g_e (torch.Tensor): excitatory input conductance
+        g_i (torch.Tensor): inhibitory input conductance
+    """
+
     z: torch.Tensor
-    """recurrent spikes"""
     v: torch.Tensor
-    """membrane potential"""
     g_e: torch.Tensor
-    """excitatory input conductance"""
     g_i: torch.Tensor
-    """inhibitory input conductance"""
 
 
 class CobaLIFParameters(NamedTuple):
+    """Parameters of conductance based LIF neuron.
+
+    Parameters:
+        tau_syn_exc_inv (torch.Tensor): inverse excitatory synaptic input time constant
+        tau_syn_inh_inv (torch.Tensor): inverse inhibitory synaptic input time constant
+        c_m_inv (torch.Tensor): inverse membrane capacitance
+        g_l (torch.Tensor): leak conductance
+        e_rev_I (torch.Tensor): inhibitory reversal potential
+        e_rev_E (torch.Tensor): excitatory reversal potential
+        v_rest (torch.Tensor): rest membrane potential
+        v_reset (torch.Tensor): reset membrane potential
+        v_thresh (torch.Tensor): threshhold membrane potential
+        method (str): method to determine the spike threshold (relevant for surrogate gradients)
+        alpha (float): hyper parameter to use in surrogate gradient computation
+    """
+
     tau_syn_exc_inv: torch.Tensor = torch.tensor(1.0 / 5)
-    """inverse excitatory synaptic input time constant"""
     tau_syn_inh_inv: torch.Tensor = torch.tensor(1.0 / 5)
-    """inverse inhibitory synaptic input time constant"""
     c_m_inv: torch.Tensor = torch.tensor(1 / 0.2)
-    """inverse membrane capacitance"""
     g_l: torch.Tensor = torch.tensor(1 / 20 * 1 / 0.2)
-    """leak conductance"""
     e_rev_I: torch.Tensor = torch.tensor(-100)
-    """inhibitory reversal potential"""
     e_rev_E: torch.Tensor = torch.tensor(60)
-    """excitatory reversal potential"""
     v_rest: torch.Tensor = torch.tensor(-20)
-    """rest membrane potential"""
     v_reset: torch.Tensor = torch.tensor(-70)
-    """reset membrane potential"""
     v_thresh: torch.Tensor = torch.tensor(-10)
-    """threshhold membrane potential"""
     method: str = "heaviside"
     alpha: float = 0.0
 
 
-@torch.jit.script
 def coba_lif_step(
     input: torch.Tensor,
     s: CobaLIFState,
@@ -51,12 +62,12 @@ def coba_lif_step(
     """Euler integration step for a conductance based LIF neuron.
 
     Parameters:
-        input: the input spikes at the current time step
-        s : current state of the neuron
-        input_weights: input weights (sign determines contribution to inhibitory / excitatory input)
-        recurrent_weights: recurrent weights (sign determines contribution to inhibitory / excitatory input)
-        p : parameters of the neuron
-        dt: Integration time step
+        input (torch.Tensor): the input spikes at the current time step
+        s (CobaLIFState): current state of the neuron
+        input_weights (torch.Tensor): input weights (sign determines contribution to inhibitory / excitatory input)
+        recurrent_weights (torch.Tensor): recurrent weights (sign determines contribution to inhibitory / excitatory input)
+        p (CobaLIFParameters): parameters of the neuron
+        dt (float): Integration time step
     """
     dg_e = -dt * p.tau_syn_exc_inv * s.g_e
     g_e = s.g_e + dg_e
@@ -82,15 +93,19 @@ def coba_lif_step(
 
 
 class CobaLIFFeedForwardState(NamedTuple):
+    """State of a conductance based feed forward LIF neuron.
+
+    Parameter:
+        v (torch.Tensor): membrane potential
+        g_e (torch.Tensor): excitatory input conductance
+        g_i (torch.Tensor): inhibitory input conductance
+    """
+
     v: torch.Tensor
-    """membrane potential"""
     g_e: torch.Tensor
-    """excitatory input conductance"""
     g_i: torch.Tensor
-    """inhibitory input conductance"""
 
 
-@torch.jit.script
 def coba_lif_feed_forward_step(
     input: torch.Tensor,
     s: CobaLIFFeedForwardState,
@@ -100,12 +115,10 @@ def coba_lif_feed_forward_step(
     """Euler integration step for a conductance based LIF neuron.
 
     Parameters:
-        input: synaptic input
-        s : current state of the neuron
-        input_weights: input weights (sign determines contribution to inhibitory / excitatory input)
-        recurrent_weights: recurrent weights (sign determines contribution to inhibitory / excitatory input)
-        p : parameters of the neuron
-        dt: Integration time step
+        input (torch.Tensor): synaptic input
+        s (CobaLIFFeedForwardState): current state of the neuron
+        p (CobaLIFParameters): parameters of the neuron
+        dt (float): Integration time step
     """
     dg_e = -dt * p.tau_syn_exc_inv * s.g_e
     g_e = s.g_e + dg_e

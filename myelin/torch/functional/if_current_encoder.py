@@ -11,4 +11,4 @@ def if_current_encoder_step(
     z = heaviside(v - v_th)
 
     v = v - z * (v - v_reset)
-    return v, z
+    return z, v

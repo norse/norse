@@ -13,25 +13,15 @@ from myelin.torch.module.lif import LIFFeedForwardCell
 
 class ConvNet(torch.nn.Module):
     def __init__(
-        self,
-        device,
-        num_channels=1,
-        feature_size=28,
-        model="super",
-        dtype=torch.float,
-        vis=None,
+        self, device, num_channels=1, feature_size=28, model="super", dtype=torch.float
     ):
         super(ConvNet, self).__init__()
+        self.features = int(((feature_size - 4) / 2 - 4) / 2)
         self.conv1 = torch.nn.Conv2d(num_channels, 20, 5, 1)
         self.conv2 = torch.nn.Conv2d(20, 50, 5, 1)
-        self.features = int(((feature_size - 4) / 2 - 4) / 2)
-        self.feature_size = feature_size
-
         self.fc1 = torch.nn.Linear(self.features * self.features * 50, 500)
         self.out = LICell(500, 10)
         self.device = device
-        self.feature_size = feature_size
-        self.vis = vis
         self.lif0 = LIFFeedForwardCell(
             (20, feature_size - 4, feature_size - 4),
             p=LIFParameters(model=model, alpha=100.0),
@@ -53,7 +43,7 @@ class ConvNet(torch.nn.Module):
         s0 = self.lif0.initial_state(batch_size, self.device, self.dtype)
         s1 = self.lif1.initial_state(batch_size, self.device, self.dtype)
         s2 = self.lif2.initial_state(batch_size, self.device, self.dtype)
-        so = self.out.initial_state(device=self.device, dtype=self.dtype)
+        so = self.out.initial_state(batch_size, device=self.device, dtype=self.dtype)
 
         voltages = torch.zeros(
             seq_length, batch_size, 10, device=self.device, dtype=self.dtype
@@ -76,19 +66,13 @@ class ConvNet(torch.nn.Module):
 
 class ConvNet4(torch.nn.Module):
     def __init__(
-        self,
-        device,
-        num_channels=1,
-        feature_size=28,
-        model="super",
-        dtype=torch.float,
-        vis=None,
+        self, device, num_channels=1, feature_size=28, model="super", dtype=torch.float
     ):
         super(ConvNet4, self).__init__()
+        self.features = int(((feature_size - 4) / 2 - 4) / 2)
+
         self.conv1 = torch.nn.Conv2d(num_channels, 32, 5, 1)
         self.conv2 = torch.nn.Conv2d(32, 64, 5, 1)
-        self.features = int(((feature_size - 4) / 2 - 4) / 2)
-        self.feature_size = feature_size
         self.fc1 = torch.nn.Linear(self.features * self.features * 64, 1024)
         self.lif0 = LIFFeedForwardCell(
             (32, feature_size - 4, feature_size - 4),
@@ -103,8 +87,6 @@ class ConvNet4(torch.nn.Module):
         )
         self.out = LICell(1024, 10)
         self.device = device
-        self.feature_size = feature_size
-        self.vis = vis
         self.dtype = dtype
 
     def forward(self, x):

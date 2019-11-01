@@ -11,7 +11,11 @@ Welcome to myelin's documentation!
    :caption: Contents:
    
    myelin.torch.functional.lif
+   myelin.torch.functional.coba_lif
    myelin.torch.functional.lif_refrac
+   myelin.torch.functional.lif_mc
+   myelin.torch.functional.lsnn
+
 
 Indices and tables
 ==================

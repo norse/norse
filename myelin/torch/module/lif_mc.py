@@ -27,7 +27,9 @@ class LIFMCCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFState:
+    def initial_state(
+        self, batch_size: int, device: torch.device, dtype=torch.float
+    ) -> LIFState:
         return LIFState(
             z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
             v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),

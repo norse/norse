@@ -6,9 +6,8 @@ myelin.torch.functional.lif
 
 .. currentmodule:: myelin.torch.functional.lif
 
-
-Integration Functions
----------------------
+Types
+-----
 
 :hidden:`LIFParameters`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,6 +20,10 @@ Integration Functions
 :hidden:`LIFFeedForwardState`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. autoclass:: LIFFeedForwardState
+
+
+Integration Functions
+---------------------
 
 :hidden:`lif_step`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

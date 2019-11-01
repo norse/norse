@@ -27,7 +27,7 @@ class IFConstantCurrentEncoder(torch.nn.Module):
         spikes = torch.zeros(self.seq_length, *x.shape, device=self.device)
 
         for ts in range(self.seq_length):
-            v, z = if_current_encoder_step(
+            z, v = if_current_encoder_step(
                 input_current=x,
                 v=v,
                 tau_mem_inv=self.tau_mem_inv,
@@ -36,4 +36,4 @@ class IFConstantCurrentEncoder(torch.nn.Module):
             )
             voltages[ts, :, :] = v
             spikes[ts, :, :] = z
-        return voltages, spikes
+        return spikes, voltages

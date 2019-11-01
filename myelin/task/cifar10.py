@@ -12,7 +12,6 @@ from collections import namedtuple
 import torchvision
 import numpy as np
 import matplotlib.pyplot as plt
-from visdom import Visdom
 
 from myelin.torch.models.conv import ConvNet, ConvNet4
 from myelin.torch.module.if_current_encoder import IFConstantCurrentEncoder
@@ -24,7 +23,6 @@ FLAGS = flags.FLAGS
 flags.DEFINE_bool(
     "only_first_spike", False, "Only one spike per input (latency coding)."
 )
-flags.DEFINE_bool("half_precision", False, "Use half precision.")
 flags.DEFINE_bool("save_grads", False, "Save gradients of backward pass.")
 flags.DEFINE_integer(
     "grad_save_interval", 10, "Interval for gradient saving of backward pass."
@@ -91,24 +89,17 @@ def signed_poisson_train(images, seq_length, device, rel_fmax=0.2):
 
 
 class LIFConvNet(torch.nn.Module):
-    def __init__(self, num_channels, seq_length, model="super", device="cpu", vis=None):
+    def __init__(self, num_channels, seq_length, model="super", device="cpu"):
         super(LIFConvNet, self).__init__()
 
         if FLAGS.net == "convnet":
-            if FLAGS.half_precision:
-                dtype = torch.half
-            else:
-                dtype = torch.float
+            dtype = torch.float
             self.rsnn = ConvNet(
-                device=device,
-                num_channels=num_channels,
-                feature_size=32,
-                vis=vis,
-                dtype=dtype,
+                device=device, num_channels=num_channels, feature_size=32, dtype=dtype
             )
         elif FLAGS.net == "convnet4":
             self.rsnn = ConvNet4(
-                device=device, num_channels=num_channels, feature_size=32, vis=vis
+                device=device, num_channels=num_channels, feature_size=32
             )
         self.device = device
 
@@ -259,12 +250,12 @@ def main(argv):
     )
 
     def polar_current_encoder(x):
-        _, x_p = constant_current_encoder(2 * torch.nn.functional.relu(x))
-        _, x_m = constant_current_encoder(2 * torch.nn.functional.relu(-x))
+        x_p, _ = constant_current_encoder(2 * torch.nn.functional.relu(x))
+        x_m, _ = constant_current_encoder(2 * torch.nn.functional.relu(-x))
         return torch.cat((x_p, x_m), 1)
 
     def current_encoder(x):
-        _, x = constant_current_encoder(2 * x)
+        x, _ = constant_current_encoder(2 * x)
         return x
 
     def identity_encoder(x):
@@ -277,7 +268,7 @@ def main(argv):
         return signed_poisson_train(x, FLAGS.seq_length, "cpu")
 
     def signed_current_encoder(x):
-        _, z = constant_current_encoder(torch.abs(x))
+        z, _ = constant_current_encoder(torch.abs(x))
         return torch.sign(x) * z
 
     num_channels = 4
@@ -366,17 +357,11 @@ def main(argv):
     os.chdir(rundir)
     FLAGS.append_flags_into_file(f"flags.txt")
 
-    if FLAGS.visualize_activations:
-        vis = Visdom()
-    else:
-        vis = None
-
     model = LIFConvNet(
         num_channels=num_channels,
         seq_length=FLAGS.seq_length,
         model=FLAGS.model,
         device=device,
-        vis=vis,
     ).to(device)
 
     print(model)

@@ -7,7 +7,6 @@ from .threshhold import threshhold
 from typing import Tuple
 
 
-@torch.jit.script
 def lif_mc_refrac_step(
     input: torch.Tensor,
     s: LIFRefracState,
