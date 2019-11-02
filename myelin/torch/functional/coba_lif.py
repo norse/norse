@@ -74,11 +74,19 @@ def coba_lif_step(
     dg_i = -dt * p.tau_syn_inh_inv * s.g_i
     g_i = s.g_i + dg_i
 
-    g_e = g_e + torch.matmul(input, torch.nn.functional.relu(input_weights))
-    g_i = g_i + torch.matmul(input, torch.nn.functional.relu(-input_weights))
+    g_e = g_e + torch.nn.functional.linear(
+        input, torch.nn.functional.relu(input_weights)
+    )
+    g_i = g_i + torch.nn.functional.linear(
+        input, torch.nn.functional.relu(-input_weights)
+    )
 
-    g_e = g_e + torch.matmul(s.z, torch.nn.functional.relu(recurrent_weights))
-    g_i = g_i + torch.matmul(s.z, torch.nn.functional.relu(-recurrent_weights))
+    g_e = g_e + torch.nn.functional.linear(
+        s.z, torch.nn.functional.relu(recurrent_weights)
+    )
+    g_i = g_i + torch.nn.functional.linear(
+        s.z, torch.nn.functional.relu(-recurrent_weights)
+    )
 
     dv = (
         dt

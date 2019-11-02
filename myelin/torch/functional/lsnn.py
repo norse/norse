@@ -89,7 +89,7 @@ def lsnn_step(
     return z_new, LSNNState(z_new, v_new, i_new, b_new)
 
 
-def adalif_step(
+def ada_lif_step(
     input: torch.Tensor,
     s: LSNNState,
     input_weights: torch.Tensor,
@@ -109,8 +109,8 @@ def adalif_step(
     """
     di = -dt * p.tau_syn_inv * s.i
     i = s.i + di
-    i = i + torch.matmul(input, input_weights)
-    i = i + torch.matmul(s.z, recurrent_weights)
+    i = i + torch.nn.functional.linear(input, input_weights)
+    i = i + torch.nn.functional.linear(s.z, recurrent_weights)
     dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i - s.b)
     v = s.v + dv
     db = -dt * p.tau_adapt_inv * s.b
