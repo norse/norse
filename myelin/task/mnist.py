@@ -276,12 +276,12 @@ def main(argv):
         )
         test_loss, accuracy = test(model, device, test_loader, epoch, writer=writer)
 
-        max_accuracy = np.max(np.array(accuracies))
-
         training_losses += training_loss
         mean_losses.append(mean_loss)
         test_losses.append(test_loss)
         accuracies.append(accuracy)
+
+        max_accuracy = np.max(np.array(accuracies))
 
         if (epoch % FLAGS.model_save_interval == 0) and FLAGS.save_model:
             model_path = f"mnist-{epoch}.pt"
