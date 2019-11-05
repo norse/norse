@@ -24,7 +24,7 @@ def muller_c(y_prev, x_1, x_2):
     return super_fn(x_1 * x_2 + (x_1 + x_2) * y_prev)
 
 
-def edge_detector(z, z_prev):
+def posedge_detector(z, z_prev):
     """Determines whether a transition from 0 to 1 has occured
     providing that z and z_prev are bitvectors
     """

@@ -1,9 +1,9 @@
 import torch
 import numpy as np
 
-from .lif import *
-from .lif_refrac import *
-from .lif_mc_refrac import *
+from .lif import LIFFeedForwardState, LIFState
+from .lif_refrac import LIFRefracState, LIFRefracFeedForwardState
+from .lif_mc_refrac import lif_mc_refrac_step, lif_mc_refrac_feed_forward_step
 
 
 def lif_refrac_step_test():

@@ -55,10 +55,10 @@ def lsnn_step(
     """Euler integration step for LIF Neuron with threshhold adaptation
 
     Parameters:
-        input (Tensor): the input spikes at the current time step
+        input (torch.Tensor): the input spikes at the current time step
         s (LSNNState): current state of the lsnn unit
-        input_weights (Tensor): synaptic weights for input spikes
-        recurrent_weights (Tensor): synaptic weights for recurrent spikes
+        input_weights (torch.Tensor): synaptic weights for input spikes
+        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
         p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use
     """
@@ -100,10 +100,10 @@ def ada_lif_step(
     """Euler integration step for LIF Neuron with adaptation
 
     Parameters:
-        input (Tensor): the input spikes at the current time step
+        input (torch.Tensor): the input spikes at the current time step
         s (LSNNState): current state of the lsnn unit
-        input_weights (Tensor): synaptic weights for input spikes
-        recurrent_weights (Tensor): synaptic weights for recurrent spikes
+        input_weights (torch.Tensor): synaptic weights for input spikes
+        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
         p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use
     """
@@ -144,7 +144,7 @@ def lsnn_feed_forward_step(
     """Euler integration step for LIF Neuron with threshhold adaptation
 
     Parameters:
-        input (Tensor): the input spikes at the current time step
+        input (torch.Tensor): the input spikes at the current time step
         s (LSNNFeedForwardState): current state of the lsnn unit
         p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use

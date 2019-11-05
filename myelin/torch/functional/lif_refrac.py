@@ -42,10 +42,10 @@ def lif_refrac_step(
      LIF neuron-model with a refractory period.
     
     Parameters:
-        input (Tensor): the input spikes at the current time step
+        input (torch.Tensor): the input spikes at the current time step
         s (LIFRefracState): state at the current time step
-        input_weights (Tensor): synaptic weights for incoming spikes
-        recurrent_weights (Tensor): synaptic weights for recurrent spikes
+        input_weights (torch.Tensor): synaptic weights for incoming spikes
+        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
     """
@@ -105,7 +105,7 @@ def lif_refrac_feed_forward_step(
      LIF neuron-model with a refractory period.
 
     Parameters:
-        input (Tensor): the input spikes at the current time step
+        input (torch.Tensor): the input spikes at the current time step
         s (LIFRefracState): state at the current time step
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use

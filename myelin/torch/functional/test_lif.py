@@ -1,7 +1,13 @@
 import torch
 import numpy as np
 
-from .lif import *
+from .lif import (
+    LIFState,
+    LIFFeedForwardState,
+    lif_step,
+    lif_feed_forward_step,
+    lif_current_encoder,
+)
 
 
 def lif_step_test():

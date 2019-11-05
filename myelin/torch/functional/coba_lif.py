@@ -103,7 +103,7 @@ def coba_lif_step(
 class CobaLIFFeedForwardState(NamedTuple):
     """State of a conductance based feed forward LIF neuron.
 
-    Parameter:
+    Parameters:
         v (torch.Tensor): membrane potential
         g_e (torch.Tensor): excitatory input conductance
         g_i (torch.Tensor): inhibitory input conductance

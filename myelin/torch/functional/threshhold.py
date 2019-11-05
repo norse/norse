@@ -54,8 +54,6 @@ class Logistic(torch.autograd.Function):
     """Approximation of the heaviside step function as
 
     h(x,k) = 1/2 + 1/2 tanh(k x)
-
-    with probabilistic spiking.
     """
 
     @staticmethod
@@ -77,7 +75,7 @@ logistic_fn = Logistic.apply
 class HeaviCirc(torch.autograd.Function):
     """Approximation of the heaviside step function as
 
-    h(x,alpha) = 1/2 + 1/2 x / (x^2 + alpha^2)^{1/2}
+    h(x,epsilon) = 1/2 + 1/2 x / (x^2 + alpha^2)^{1/2}
     """
 
     @staticmethod
@@ -97,7 +95,7 @@ class HeaviCirc(torch.autograd.Function):
             )
             * 2
             * alpha,
-            None,
+            torch.zeros_like(x),
         )
 
 

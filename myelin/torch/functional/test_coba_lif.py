@@ -1,7 +1,12 @@
 import torch
 import numpy as np
 
-from .coba_lif import *
+from .coba_lif import (
+    CobaLIFState,
+    CobaLIFFeedForwardState,
+    coba_lif_feed_forward_step,
+    coba_lif_step,
+)
 
 
 def coba_lif_step_test():

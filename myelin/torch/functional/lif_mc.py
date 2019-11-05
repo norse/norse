@@ -18,11 +18,11 @@ def lif_mc_step(
     neuron-model.
 
     Parameters:
-        input (Tensor): the input spikes at the current time step
+        input (torch.Tensor): the input spikes at the current time step
         s (LIFState): current state of the neuron
-        input_weights (Tensor): synaptic weights for incoming spikes
-        recurrent_weights (Tensor): synaptic weights for recurrent spikes
-        g_coupling (Tensor): conductances between the neuron compartments
+        input_weights (torch.Tensor): synaptic weights for incoming spikes
+        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
+        g_coupling (torch.Tensor): conductances between the neuron compartments
         p (LIFParameters): neuron parameters
         dt (float): Integration timestep to use
     """
@@ -58,9 +58,9 @@ def lif_mc_feed_forward_step(
     neuron-model.
 
     Parameters:
-        input (Tensor): the (weighted) input spikes at the current time step
+        input (torch.Tensor): the (weighted) input spikes at the current time step
         s (LIFFeedForwardState): current state of the neuron
-        g_coupling (Tensor): conductances between the neuron compartments
+        g_coupling (torch.Tensor): conductances between the neuron compartments
         p (LIFParameters): neuron parameters
         dt (float): Integration timestep to use
     """
