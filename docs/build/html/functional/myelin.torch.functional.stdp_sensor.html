@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>stdp_sensor &#8212; myelin 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="threshhold" href="myelin.torch.functional.threshhold.html" />
+    <link rel="prev" title="lsnn" href="myelin.torch.functional.lsnn.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="stdp-sensor">
+<h1>stdp_sensor<a class="headerlink" href="#stdp-sensor" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="stdpsensorparameters">
+<h3><span class="hidden-section">STDPSensorParameters</span><a class="headerlink" href="#stdpsensorparameters" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="myelin.torch.functional.stdp_sensor.STDPSensorParameters">
+<em class="property">class </em><code class="sig-prename descclassname">myelin.torch.functional.stdp_sensor.</code><code class="sig-name descname">STDPSensorParameters</code><a class="reference internal" href="../_modules/myelin/torch/functional/stdp_sensor.html#STDPSensorParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#myelin.torch.functional.stdp_sensor.STDPSensorParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of an STDP sensor as it is used for event driven
+plasticity rules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eta_p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – correlation state</p></li>
+<li><p><strong>eta_m</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – anti correlation state</p></li>
+<li><p><strong>tau_ac_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – anti-correlation sensor time constant</p></li>
+<li><p><strong>tau_c_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – correlation sensor time constant</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="stdpsensorstate">
+<h3><span class="hidden-section">STDPSensorState</span><a class="headerlink" href="#stdpsensorstate" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="myelin.torch.functional.stdp_sensor.STDPSensorState">
+<em class="property">class </em><code class="sig-prename descclassname">myelin.torch.functional.stdp_sensor.</code><code class="sig-name descname">STDPSensorState</code><a class="reference internal" href="../_modules/myelin/torch/functional/stdp_sensor.html#STDPSensorState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#myelin.torch.functional.stdp_sensor.STDPSensorState" title="Permalink to this definition">¶</a></dt>
+<dd><p>State of an event driven STDP sensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a_pre</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – presynaptic STDP sensor state.</p></li>
+<li><p><strong>a_post</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – postsynaptic STDP sensor state.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="integration-functions">
+<h2>Integration Functions<a class="headerlink" href="#integration-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="stdp-sensor-step">
+<h3><span class="hidden-section">stdp_sensor_step</span><a class="headerlink" href="#stdp-sensor-step" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="myelin.torch.functional.stdp_sensor.stdp_sensor_step">
+<code class="sig-prename descclassname">myelin.torch.functional.stdp_sensor.</code><code class="sig-name descname">stdp_sensor_step</code><span class="sig-paren">(</span><em class="sig-param">z_pre</em>, <em class="sig-param">z_post</em>, <em class="sig-param">s</em>, <em class="sig-param">p=STDPSensorParameters(eta_p=tensor(1.)</em>, <em class="sig-param">eta_m=tensor(1.)</em>, <em class="sig-param">tau_ac_inv=tensor(10.)</em>, <em class="sig-param">tau_c_inv=tensor(10.))</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myelin/torch/functional/stdp_sensor.html#stdp_sensor_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#myelin.torch.functional.stdp_sensor.stdp_sensor_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event driven STDP rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>z_pre</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – pre-synaptic spikes</p></li>
+<li><p><strong>z_post</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – post-synaptic spikes</p></li>
+<li><p><strong>s</strong> (<a class="reference internal" href="#myelin.torch.functional.stdp_sensor.STDPSensorState" title="myelin.torch.functional.stdp_sensor.STDPSensorState"><em>STDPSensorState</em></a>) – state of the STDP sensor</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#myelin.torch.functional.stdp_sensor.STDPSensorParameters" title="myelin.torch.functional.stdp_sensor.STDPSensorParameters"><em>STDPSensorParameters</em></a>) – STDP sensor parameters</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – integration time step</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#myelin.torch.functional.stdp_sensor.STDPSensorState" title="myelin.torch.functional.stdp_sensor.STDPSensorState"><code class="xref py py-class docutils literal notranslate"><span class="pre">STDPSensorState</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">myelin</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Beginner tutorials</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../functional.html">myelin.torch.functional</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.coba_lif.html">coba_lif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.correlation_sensor.html">correlation_sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.leaky_integrator.html">leaky_integrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif.html">lif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif_mc.html">lif_mc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif_refrac.html">lif_refrac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lsnn.html">lsnn</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">stdp_sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.threshhold.html">threshhold</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../module.html">myelin.torch.module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../functional.html">myelin.torch.functional</a><ul>
+      <li>Previous: <a href="myelin.torch.functional.lsnn.html" title="previous chapter">lsnn</a></li>
+      <li>Next: <a href="myelin.torch.functional.threshhold.html" title="next chapter">threshhold</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Christian Pehle.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/functional/myelin.torch.functional.stdp_sensor.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
