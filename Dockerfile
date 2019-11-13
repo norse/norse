@@ -1,7 +1,10 @@
-FROM pytorch/pytorch:1.3-cuda10.1-cudnn7-runtime
+FROM nvidia/cuda:latest
+
+RUN apt update && apt install -y python3-setuptools
+RUN rm -rf /var/lib/apt/lists/
 
 WORKDIR /myelin
 
 COPY . .
 
-RUN pip install -r requirements.txt --no-cache-dir
+RUN python3 setup.py install
