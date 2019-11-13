@@ -16,7 +16,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="lif" href="myelin.torch.module.lif.html" />
+    <link rel="next" title="leaky_integrator" href="myelin.torch.module.leaky_integrator.html" />
     <link rel="prev" title="myelin.torch.module" href="../module.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -55,6 +55,7 @@ LIF neuron-model. More specifically it implements one integration step of the fo
 <p>and transition equations</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align*}
+    v &amp;= (1-z) v + z v_{\text{reset}} \\
     g_e &amp;= g_e + \text{relu}(w_{\text{input}}) z_{\text{in}} \\
     g_e &amp;= g_e + \text{relu}(w_{\text{rec}}) z_{\text{rec}} \\
     g_i &amp;= g_i + \text{relu}(-w_{\text{input}}) z_{\text{in}} \\
@@ -111,7 +112,11 @@ spikes respectively.</p>
 <li class="toctree-l1"><a class="reference internal" href="../functional.html">myelin.torch.functional</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../module.html">myelin.torch.module</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">coba_lif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.module.leaky_integrator.html">leaky_integrator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="myelin.torch.module.lif.html">lif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.module.lif_mc.html">lif_mc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.module.lif_refrac.html">lif_refrac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.module.lsnn.html">lsnn</a></li>
 </ul>
 </li>
 </ul>
@@ -122,7 +127,7 @@ spikes respectively.</p>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../module.html">myelin.torch.module</a><ul>
       <li>Previous: <a href="../module.html" title="previous chapter">myelin.torch.module</a></li>
-      <li>Next: <a href="myelin.torch.module.lif.html" title="next chapter">lif</a></li>
+      <li>Next: <a href="myelin.torch.module.leaky_integrator.html" title="next chapter">leaky_integrator</a></li>
   </ul></li>
   </ul></li>
 </ul>

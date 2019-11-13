@@ -33,7 +33,10 @@
           <div class="body" role="main">
             
   <h1>Source code for myelin.torch.module.lif</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">..functional.lif</span> <span class="k">import</span> <span class="p">(</span>
     <span class="n">LIFState</span><span class="p">,</span>
@@ -44,8 +47,6 @@
     <span class="n">lif_current_encoder</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
 <div class="viewcode-block" id="LIFCell"><a class="viewcode-back" href="../../../../module/myelin.torch.module.lif.html#myelin.torch.module.lif.LIFCell">[docs]</a><span class="k">class</span> <span class="nc">LIFCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -67,6 +68,7 @@
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \\begin{align*}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\\text{reset}} \\\\</span>
 <span class="sd">            i &amp;= i + w_{\\text{input}} z_{\\text{in}} \\\\</span>
 <span class="sd">            i &amp;= i + w_{\\text{rec}} z_{\\text{rec}}</span>
 <span class="sd">        \end{align*}</span>
@@ -93,7 +95,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">,</span>
-        <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIFParameters</span><span class="p">],</span>
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIFCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -105,7 +107,10 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
     <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -184,7 +189,6 @@
 <span class="sd">        &gt;&gt;&gt; input = torch.randn(batch_size, 20, 30)</span>
 <span class="sd">        &gt;&gt;&gt; s0 = lif.initial_state(batch_size)</span>
 <span class="sd">        &gt;&gt;&gt; output, s0 = lif(input, s0)</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>

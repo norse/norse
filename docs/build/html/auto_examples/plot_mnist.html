@@ -51,11 +51,8 @@ is involved.</p>
 as possible into a traditional deep learning pipeline.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">myelin.torch.functional.lif</span> <span class="k">import</span> <span class="p">(</span>
-    <span class="n">LIFFeedForwardState</span><span class="p">,</span>
     <span class="n">LIFParameters</span><span class="p">,</span>
-    <span class="n">lif_feed_forward_step</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">myelin.torch.functional.leaky_integrator</span> <span class="k">import</span> <span class="n">LIState</span>
 
 <span class="kn">from</span> <span class="nn">myelin.torch.module.leaky_integrator</span> <span class="k">import</span> <span class="n">LICell</span>
 <span class="kn">from</span> <span class="nn">myelin.torch.module.lif</span> <span class="k">import</span> <span class="n">LIFFeedForwardCell</span>
@@ -63,12 +60,12 @@ as possible into a traditional deep learning pipeline.</p>
 
 <span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
-        <span class="n">num_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">feature_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;super&quot;</span><span class="p">,</span>
-        <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+            <span class="n">num_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">feature_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;super&quot;</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Net</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(((</span><span class="n">feature_size</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
@@ -137,9 +134,9 @@ as possible into a traditional deep learning pipeline.</p>
 </pre></div>
 </div>
 <p>We can evaluate the network we just defined on an input of size 1x32x32.
-Note that in contrast to typical spicing neural network simulators time
+Note that in contrast to typical spiking neural network simulators time
 is just another dimension in the input tensor here we chose to evaluate
-the network on 16 timesteps and there is an explicite batch dimension
+the network on 16 timesteps and there is an explicit batch dimension
 (number of concurrently evaluated inputs with identical model parameters).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">timesteps</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
@@ -149,53 +146,37 @@ the network on 16 timesteps and there is an explicite batch dimension
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([[[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0030,  0.0026, -0.0008,  0.0023,  0.0002,  0.0069, -0.0044,
-          -0.0031,  0.0038,  0.0044]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0181,  0.0071, -0.0023,  0.0082, -0.0018,  0.0088, -0.0184,
-          -0.0018,  0.0112,  0.0102]]], grad_fn=&lt;CopySlices&gt;)
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]], grad_fn=&lt;CopySlices&gt;)
 </pre></div>
 </div>
 <p>Since the spiking neural network is implemented as a pytorch module, we
@@ -211,7 +192,7 @@ backward computation expects a gradient for each timestep</p>
 contrary to most other spiking neural network simulators <code class="docutils literal notranslate"><span class="pre">`myelin`</span></code> always
 integrates several indepdentent sets of spiking neural networks at once.</p>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.429 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.809 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-mnist-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c0bb38d576b29abd74b069678007b5f0/plot_mnist.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_mnist.py</span></code></a></p>

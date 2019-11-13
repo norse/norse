@@ -33,19 +33,20 @@
           <div class="body" role="main">
             
   <h1>Source code for myelin.torch.functional.lif</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.jit</span>
 
 <span class="kn">from</span> <span class="nn">.threshhold</span> <span class="k">import</span> <span class="n">threshhold</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
 
 
 <div class="viewcode-block" id="LIFParameters"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.lif.html#myelin.torch.functional.lif.LIFParameters">[docs]</a><span class="k">class</span> <span class="nc">LIFParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Parametrization of a LIF neuron</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters:</span>
-<span class="sd">        tau_syn_inv (torch.Tensor): inverse synaptic time constant</span>
-<span class="sd">        tau_mem_inv (torch.Tensor): inverse membrane time constant</span>
+<span class="sd">        tau_syn_inv (torch.Tensor): inverse synaptic time constant (:math:`1/\\tau_\\text{syn}`)</span>
+<span class="sd">        tau_mem_inv (torch.Tensor): inverse membrane time constant (:math:`1/\\tau_\\text{mem}`)</span>
 <span class="sd">        v_leak (torch.Tensor): leak potential</span>
 <span class="sd">        v_th (torch.Tensor): threshhold potential</span>
 <span class="sd">        v_reset (torch.Tensor): reset potential</span>
@@ -114,6 +115,7 @@
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \begin{align*}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\text{reset}} \\</span>
 <span class="sd">            i &amp;= i + w_{\text{input}} z_{\text{in}} \\</span>
 <span class="sd">            i &amp;= i + w_{\text{rec}} z_{\text{rec}}</span>
 <span class="sd">        \end{align*}</span>
@@ -175,14 +177,17 @@
 <span class="sd">    and transition equations</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        i = i + i_{\text{in}}</span>
+<span class="sd">        \begin{align*}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\text{reset}} \\</span>
+<span class="sd">            i &amp;= i + i_{\text{in}}</span>
+<span class="sd">        \end{align*}</span>
 
 <span class="sd">    where :math:`i_{\text{in}}` is meant to be the result of applying an arbitrary</span>
 <span class="sd">    pytorch module (such as a convolution) to input spikes.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
-<span class="sd">        s (LIFState): current state of the LIF neuron</span>
+<span class="sd">        s (LIFFeedForwardState): current state of the LIF neuron</span>
 <span class="sd">        p (LIFParameters): parameters of a leaky integrate and fire neuron</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
 <span class="sd">    &quot;&quot;&quot;</span>

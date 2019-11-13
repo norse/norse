@@ -1,3 +1,6 @@
+from typing import Tuple, List, Optional
+
+import numpy as np
 import torch
 
 from ..functional.lif import (
@@ -9,8 +12,6 @@ from ..functional.lif import (
     lif_current_encoder,
 )
 
-from typing import Tuple, List
-import numpy as np
 
 
 class LIFCell(torch.nn.Module):
@@ -32,6 +33,7 @@ class LIFCell(torch.nn.Module):
 
     .. math::
         \\begin{align*}
+            v &= (1-z) v + z v_{\\text{reset}} \\\\
             i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
             i &= i + w_{\\text{rec}} z_{\\text{rec}}
         \end{align*}
@@ -58,7 +60,7 @@ class LIFCell(torch.nn.Module):
         self,
         input_size,
         hidden_size,
-        p: LIFParameters = LIFParameters(),
+        p: Optional[LIFParameters],
         dt: float = 0.001,
     ):
         super(LIFCell, self).__init__()
@@ -70,7 +72,10 @@ class LIFCell(torch.nn.Module):
         )
         self.input_size = input_size
         self.hidden_size = hidden_size
-        self.p = p
+        if p is None:
+            self.p = LIFParameters()
+        else:
+            self.p = p
         self.dt = dt
 
     def extra_repr(self):
@@ -149,7 +154,6 @@ class LIFFeedForwardCell(torch.nn.Module):
         >>> input = torch.randn(batch_size, 20, 30)
         >>> s0 = lif.initial_state(batch_size)
         >>> output, s0 = lif(input, s0)
-
     """
 
     def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):

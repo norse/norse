@@ -6,10 +6,13 @@ from .superspike import super_fn
 import numpy as np
 
 
-class HeaviErfc(torch.autograd.Function):
-    """Approximation of the heaviside step function as
 
-    h(x,k) = 1/2 + 1/2 erfc(k x)
+
+class HeaviErfc(torch.autograd.Function):
+    r"""Approximation of the heaviside step function as
+
+    .. math::
+        h(x,k) = \frac{1}{2} + \frac{1}{2} \text{erfc}(k x)
 
     where erfc is the error function.
     """
@@ -30,9 +33,10 @@ heavi_erfc_fn = HeaviErfc.apply
 
 
 class HeaviTanh(torch.autograd.Function):
-    """Approximation of the heaviside step function as
+    r"""Approximation of the heaviside step function as
 
-    h(x,k) = 1/2 + 1/2 tanh(k x)
+    .. math::
+        h(x,k) = \frac{1}{2} + \frac{1}{2} \text{tanh}(k x)
     """
 
     @staticmethod
@@ -51,9 +55,10 @@ heavi_tanh_fn = HeaviTanh.apply
 
 
 class Logistic(torch.autograd.Function):
-    """Approximation of the heaviside step function as
+    r"""Probalistic approximation of the heaviside step function as
 
-    h(x,k) = 1/2 + 1/2 tanh(k x)
+    .. math::
+        z \sim p(\frac{1}{2} + \frac{1}{2} \text{tanh}(k x))
     """
 
     @staticmethod
@@ -73,11 +78,11 @@ logistic_fn = Logistic.apply
 
 
 class HeaviCirc(torch.autograd.Function):
-    """Approximation of the heaviside step function as
+    r"""Approximation of the heaviside step function as
 
-    h(x,epsilon) = 1/2 + 1/2 x / (x^2 + alpha^2)^{1/2}
+    .. math::
+        h(x,\alpha) = \frac{1}{2} + \frac{1}{2} \frac{x}{(x^2 + \alpha^2)^{1/2}}
     """
-
     @staticmethod
     def forward(ctx, x, alpha):
         ctx.save_for_backward(x, alpha)
@@ -156,3 +161,6 @@ def threshhold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
         return heavi_circ_fn(x, alpha)
     elif method == "logistic":
         return logistic_fn(x, alpha)
+
+def sign(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
+    return 2 * threshhold(x, method, alpha) - 1

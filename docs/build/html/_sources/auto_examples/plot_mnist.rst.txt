@@ -28,11 +28,8 @@ as possible into a traditional deep learning pipeline.
 
     import torch
     from myelin.torch.functional.lif import (
-        LIFFeedForwardState,
         LIFParameters,
-        lif_feed_forward_step,
     )
-    from myelin.torch.functional.leaky_integrator import LIState
 
     from myelin.torch.module.leaky_integrator import LICell
     from myelin.torch.module.lif import LIFFeedForwardCell
@@ -40,12 +37,12 @@ as possible into a traditional deep learning pipeline.
 
     class Net(torch.nn.Module):
         def __init__(
-            self,
-            device="cpu",
-            num_channels=1,
-            feature_size=32,
-            model="super",
-            dtype=torch.float,
+                self,
+                device="cpu",
+                num_channels=1,
+                feature_size=32,
+                model="super",
+                dtype=torch.float,
         ):
             super(Net, self).__init__()
             self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -123,9 +120,9 @@ as possible into a traditional deep learning pipeline.
 
 
 We can evaluate the network we just defined on an input of size 1x32x32.
-Note that in contrast to typical spicing neural network simulators time
+Note that in contrast to typical spiking neural network simulators time
 is just another dimension in the input tensor here we chose to evaluate
-the network on 16 timesteps and there is an explicite batch dimension
+the network on 16 timesteps and there is an explicit batch dimension
 (number of concurrently evaluated inputs with identical model parameters).
 
 
@@ -149,57 +146,41 @@ the network on 16 timesteps and there is an explicite batch dimension
 
  .. code-block:: none
 
-    tensor([[[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+    tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0030,  0.0026, -0.0008,  0.0023,  0.0002,  0.0069, -0.0044,
-              -0.0031,  0.0038,  0.0044]],
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-            [[ 0.0181,  0.0071, -0.0023,  0.0082, -0.0018,  0.0088, -0.0184,
-              -0.0018,  0.0112,  0.0102]]], grad_fn=<CopySlices>)
+            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]], grad_fn=<CopySlices>)
 
 
 
-Since the spiking neural network is implemented as a pytorch module, we  
+Since the spiking neural network is implemented as a pytorch module, we
 can use the usual pytorch primitives for optimizing it. Note that the
 backward computation expects a gradient for each timestep
 
@@ -225,7 +206,7 @@ backward computation expects a gradient for each timestep
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.429 seconds)
+   **Total running time of the script:** ( 0 minutes  0.809 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_mnist.py:

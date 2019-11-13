@@ -3,7 +3,6 @@
 
 lif
 ===
-
 .. currentmodule:: myelin.torch.functional.lif
 
 Types

@@ -1,4 +1,7 @@
+from typing import Tuple, List
+
 import torch
+import numpy as np
 
 from ..functional.lsnn import (
     LSNNParameters,
@@ -8,11 +11,44 @@ from ..functional.lsnn import (
     lsnn_feed_forward_step,
 )
 
-from typing import Tuple, List
-import numpy as np
-
 
 class LSNNCell(torch.nn.Module):
+    """Module that computes a single euler-integration step of a LSNN neuron-model.
+    More specifically it implements one integration step of the following ODE
+
+    .. math::
+        \\begin{align*}
+            \dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\
+            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
+            \dot{b} &= -1/\\tau_{b} b
+        \end{align*}
+
+    together with the jump condition
+    
+    .. math::
+        z = \Theta(v - v_{\\text{th}} + b)
+    
+    and transition equations
+
+    .. math::
+        \\begin{align*}
+            v &= (1-z) v + z v_{\\text{reset}} \\\\
+            i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
+            i &= i + w_{\\text{rec}} z_{\\text{rec}} \\\\
+            b &= b + \\beta z
+        \end{align*}
+
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input
+    spikes respectively.
+
+    Parameters:
+        input (torch.Tensor): the input spikes at the current time step
+        s (LSNNState): current state of the lsnn unit
+        input_weights (torch.Tensor): synaptic weights for input spikes
+        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
+        p (LSNNParameters): parameters of the lsnn unit
+        dt (float): Integration timestep to use
+    """
     def __init__(
         self,
         input_features,
@@ -69,6 +105,36 @@ class LSNNLayer(torch.nn.Module):
 
 
 class LSNNFeedForwardCell(torch.nn.Module):
+    """Euler integration cell for LIF Neuron with threshhold adaptation.
+    More specifically it implements one integration step of the following ODE
+
+    .. math::
+        \\begin{align*}
+            \dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\
+            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
+            \dot{b} &= -1/\\tau_{b} b
+        \end{align*}
+
+    together with the jump condition
+    
+    .. math::
+        z = \Theta(v - v_{\\text{th}} + b)
+    
+    and transition equations
+
+    .. math::
+        \\begin{align*}
+            v &= (1-z) v + z v_{\\text{reset}} \\\\
+            i &= i + \\text{input} \\\\
+            b &= b + \\beta z
+        \end{align*}
+
+    Parameters:
+        input (torch.Tensor): the input spikes at the current time step
+        s (LSNNFeedForwardState): current state of the lsnn unit
+        p (LSNNParameters): parameters of the lsnn unit
+        dt (float): Integration timestep to use
+    """
     def __init__(self, shape, p: LSNNParameters = LSNNParameters(), dt: float = 0.001):
         super(LSNNFeedForwardCell, self).__init__()
         self.shape = shape
@@ -76,7 +142,7 @@ class LSNNFeedForwardCell(torch.nn.Module):
         self.dt = dt
 
     def initial_state(
-        self, batch_size, device, dtype=torch.float
+            self, batch_size, device, dtype=torch.float
     ) -> LSNNFeedForwardState:
         """return the initial state of an LSNN neuron"""
         return LSNNFeedForwardState(
