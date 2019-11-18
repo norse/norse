@@ -13,7 +13,27 @@ from typing import Tuple
 
 
 class LICell(torch.nn.Module):
-    """
+    r"""Cell for a leaky-integrator.
+    More specifically it implements a discretized version of the ODE
+
+    .. math::
+
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
+        \end{align*}
+
+
+    and transition equations
+
+    .. math::
+        i = i + w i_{\text{in}}
+
+    Parameters:
+        input_features (int); Input feature dimension
+        output_features (int): Output feature dimension
+        p (LIParameters): parameters of the leaky integrator
+        dt (float): integration timestep to use
     """
 
     def __init__(
@@ -42,6 +62,27 @@ class LICell(torch.nn.Module):
 
 
 class LIFeedForwardCell(torch.nn.Module):
+    r"""Cell for a leaky-integrator.
+    More specifically it implements a discretized version of the ODE
+
+    .. math::
+
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
+        \end{align*}
+
+
+    and transition equations
+
+    .. math::
+        i = i + w i_{\text{in}}
+
+    Parameters:
+        shape: Shape of the preprocessed input spikes
+        p (LIParameters): parameters of the leaky integrator
+        dt (float): integration timestep to use
+    """
     def __init__(self, shape, p: LIParameters = LIParameters(), dt: float = 0.001):
         super(LIFeedForwardCell, self).__init__()
         self.p = p

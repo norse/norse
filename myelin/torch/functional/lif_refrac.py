@@ -106,7 +106,7 @@ def lif_refrac_feed_forward_step(
 
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
-        s (LIFRefracState): state at the current time step
+        s (LIFRefracFeedForwardState): state at the current time step
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
     """

@@ -26,6 +26,7 @@ class CobaLIFCell(torch.nn.Module):
 
     .. math::
         \\begin{align*}
+            v &= (1-z) v + z v_{\\text{reset}} \\\\
             g_e &= g_e + \\text{relu}(w_{\\text{input}}) z_{\\text{in}} \\\\
             g_e &= g_e + \\text{relu}(w_{\\text{rec}}) z_{\\text{rec}} \\\\
             g_i &= g_i + \\text{relu}(-w_{\\text{input}}) z_{\\text{in}} \\\\

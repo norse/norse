@@ -1,3 +1,5 @@
+from typing import Tuple
+import numpy as np
 import torch
 
 from ..functional.lif import LIFState, LIFFeedForwardState, LIFParameters
@@ -10,11 +12,56 @@ from ..functional.lif_refrac import (
     lif_refrac_feed_forward_step,
 )
 
-from typing import Tuple
-import numpy as np
-
 
 class LIFRefracCell(torch.nn.Module):
+    """Module that computes a single euler-integration step of a LIF neuron-model
+    with absolute refractory period. More specifically it implements one integration 
+    step of the following ODE.
+
+    .. math::
+        \\begin{align*}
+            \dot{v} &= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) (v_{\\text{leak}} - v + i) \\\\
+            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
+            \dot{\\rho} &= -1/\\tau_{\\text{refrac}} \Theta(\\rho)
+        \end{align*}
+
+    together with the jump condition
+
+    .. math::
+        \\begin{align*}
+            z &= \Theta(v - v_{\\text{th}}) \\\\
+            z_r &= \Theta(-\\rho)
+        \end{align*}
+
+    and transition equations
+
+    .. math::
+        \\begin{align*}
+            v &= (1-z) v + z v_{\\text{reset}} \\\\
+            i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
+            i &= i + w_{\\text{rec}} z_{\\text{rec}} \\\\
+            \\rho &= \\rho + z_r \\rho_{\\text{reset}} 
+        \end{align*}
+
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input
+    spikes respectively.
+
+    Parameters:
+        input (torch.Tensor): the input spikes at the current time step
+        s (LIFRefracState): state at the current time step
+        input_weights (torch.Tensor): synaptic weights for incoming spikes
+        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
+        p (LIFRefracParameters): parameters of the lif neuron
+        dt (float): Integration timestep to use
+
+    Examples:
+
+        >>> batch_size = 16
+        >>> lif = LIFRefracCell(10, 20)
+        >>> input = torch.randn(batch_size, 10)
+        >>> s0 = lif.initial_state(batch_size)
+        >>> output, s0 = lif(input, s0)
+    """
     def __init__(
         self,
         input_size,
@@ -57,6 +104,45 @@ class LIFRefracCell(torch.nn.Module):
 
 
 class LIFRefracFeedForwardCell(torch.nn.Module):
+    """Module that computes a single euler-integration step of a LIF neuron-model
+    with absolute refractory period. More specifically it implements one integration 
+    step of the following ODE.
+
+    .. math::
+        \\begin{align*}
+            \dot{v} &= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) (v_{\\text{leak}} - v + i) \\\\
+            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
+            \dot{\\rho} &= -1/\\tau_{\\text{refrac}} \Theta(\\rho)
+        \end{align*}
+
+    together with the jump condition
+
+    .. math::
+        \\begin{align*}
+            z &= \Theta(v - v_{\\text{th}}) \\\\
+            z_r &= \Theta(-\\rho)
+        \end{align*}
+
+    and transition equations
+
+    .. math::
+        \\begin{align*}
+            v &= (1-z) v + z v_{\\text{reset}} \\\\
+            \\rho &= \\rho + z_r \\rho_{\\text{reset}} 
+        \end{align*}
+
+    Parameters:
+        shape: Shape of the processed spike input
+        p (LIFRefracParameters): parameters of the lif neuron
+        dt (float): Integration timestep to use
+
+    Examples:
+        >>> batch_size = 16
+        >>> lif = LIFRefracFeedForwardCell((20, 30))
+        >>> input = torch.randn(batch_size, 20, 30)
+        >>> s0 = lif.initial_state(batch_size)
+        >>> output, s0 = lif(input, s0)
+    """
     def __init__(
         self, shape, p: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001
     ):

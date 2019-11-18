@@ -1,16 +1,17 @@
+from typing import NamedTuple, Tuple
+
 import torch
 import torch.jit
 
 from .threshhold import threshhold
-from typing import NamedTuple, Tuple
 
 
 class LIFParameters(NamedTuple):
     """Parametrization of a LIF neuron
     
     Parameters:
-        tau_syn_inv (torch.Tensor): inverse synaptic time constant
-        tau_mem_inv (torch.Tensor): inverse membrane time constant
+        tau_syn_inv (torch.Tensor): inverse synaptic time constant (:math:`1/\\tau_\\text{syn}`)
+        tau_mem_inv (torch.Tensor): inverse membrane time constant (:math:`1/\\tau_\\text{mem}`)
         v_leak (torch.Tensor): leak potential
         v_th (torch.Tensor): threshhold potential
         v_reset (torch.Tensor): reset potential
@@ -79,6 +80,7 @@ def lif_step(
 
     .. math::
         \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
             i &= i + w_{\text{input}} z_{\text{in}} \\
             i &= i + w_{\text{rec}} z_{\text{rec}}
         \end{align*}
@@ -140,14 +142,17 @@ def lif_feed_forward_step(
     and transition equations
 
     .. math::
-        i = i + i_{\text{in}}
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            i &= i + i_{\text{in}}
+        \end{align*}
 
     where :math:`i_{\text{in}}` is meant to be the result of applying an arbitrary
     pytorch module (such as a convolution) to input spikes.
 
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
-        s (LIFState): current state of the LIF neuron
+        s (LIFFeedForwardState): current state of the LIF neuron
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """

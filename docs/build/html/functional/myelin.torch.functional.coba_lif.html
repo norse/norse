@@ -16,7 +16,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="lif" href="myelin.torch.functional.lif.html" />
+    <link rel="next" title="correlation_sensor" href="myelin.torch.functional.correlation_sensor.html" />
     <link rel="prev" title="myelin.torch.functional" href="../functional.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -47,15 +47,15 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tau_syn_exc_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – inverse excitatory synaptic input time constant</p></li>
-<li><p><strong>tau_syn_inh_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – inverse inhibitory synaptic input time constant</p></li>
-<li><p><strong>c_m_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – inverse membrane capacitance</p></li>
-<li><p><strong>g_l</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – leak conductance</p></li>
-<li><p><strong>e_rev_I</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – inhibitory reversal potential</p></li>
-<li><p><strong>e_rev_E</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – excitatory reversal potential</p></li>
-<li><p><strong>v_rest</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – rest membrane potential</p></li>
-<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – reset membrane potential</p></li>
-<li><p><strong>v_thresh</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – threshhold membrane potential</p></li>
+<li><p><strong>tau_syn_exc_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – inverse excitatory synaptic input time constant</p></li>
+<li><p><strong>tau_syn_inh_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – inverse inhibitory synaptic input time constant</p></li>
+<li><p><strong>c_m_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – inverse membrane capacitance</p></li>
+<li><p><strong>g_l</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – leak conductance</p></li>
+<li><p><strong>e_rev_I</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – inhibitory reversal potential</p></li>
+<li><p><strong>e_rev_E</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – excitatory reversal potential</p></li>
+<li><p><strong>v_rest</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – rest membrane potential</p></li>
+<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – reset membrane potential</p></li>
+<li><p><strong>v_thresh</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – threshhold membrane potential</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – method to determine the spike threshold (relevant for surrogate gradients)</p></li>
 <li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – hyper parameter to use in surrogate gradient computation</p></li>
 </ul>
@@ -73,10 +73,10 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>g_e</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – excitatory input conductance</p></li>
-<li><p><strong>g_i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – inhibitory input conductance</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>g_e</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – excitatory input conductance</p></li>
+<li><p><strong>g_i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – inhibitory input conductance</p></li>
 </ul>
 </dd>
 </dl>
@@ -92,9 +92,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>g_e</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – excitatory input conductance</p></li>
-<li><p><strong>g_i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – inhibitory input conductance</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>g_e</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – excitatory input conductance</p></li>
+<li><p><strong>g_i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – inhibitory input conductance</p></li>
 </ul>
 </dd>
 </dl>
@@ -113,16 +113,16 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – the input spikes at the current time step</p></li>
+<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – the input spikes at the current time step</p></li>
 <li><p><strong>s</strong> (<a class="reference internal" href="#myelin.torch.functional.coba_lif.CobaLIFState" title="myelin.torch.functional.coba_lif.CobaLIFState"><em>CobaLIFState</em></a>) – current state of the neuron</p></li>
-<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – input weights (sign determines contribution to inhibitory / excitatory input)</p></li>
-<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – recurrent weights (sign determines contribution to inhibitory / excitatory input)</p></li>
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – input weights (sign determines contribution to inhibitory / excitatory input)</p></li>
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – recurrent weights (sign determines contribution to inhibitory / excitatory input)</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="#myelin.torch.functional.coba_lif.CobaLIFParameters" title="myelin.torch.functional.coba_lif.CobaLIFParameters"><em>CobaLIFParameters</em></a>) – parameters of the neuron</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Integration time step</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#myelin.torch.functional.coba_lif.CobaLIFState" title="myelin.torch.functional.coba_lif.CobaLIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFState</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#myelin.torch.functional.coba_lif.CobaLIFState" title="myelin.torch.functional.coba_lif.CobaLIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -137,14 +137,14 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><em>torch.Tensor</em></a>) – synaptic input</p></li>
+<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><em>torch.Tensor</em></a>) – synaptic input</p></li>
 <li><p><strong>s</strong> (<a class="reference internal" href="#myelin.torch.functional.coba_lif.CobaLIFFeedForwardState" title="myelin.torch.functional.coba_lif.CobaLIFFeedForwardState"><em>CobaLIFFeedForwardState</em></a>) – current state of the neuron</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="#myelin.torch.functional.coba_lif.CobaLIFParameters" title="myelin.torch.functional.coba_lif.CobaLIFParameters"><em>CobaLIFParameters</em></a>) – parameters of the neuron</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Integration time step</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+9e314f5 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#myelin.torch.functional.coba_lif.CobaLIFFeedForwardState" title="myelin.torch.functional.coba_lif.CobaLIFFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFFeedForwardState</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.4.0a0+6de1016 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#myelin.torch.functional.coba_lif.CobaLIFFeedForwardState" title="myelin.torch.functional.coba_lif.CobaLIFFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -178,10 +178,14 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../functional.html">myelin.torch.functional</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">coba_lif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.correlation_sensor.html">correlation_sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.leaky_integrator.html">leaky_integrator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif.html">lif</a></li>
 <li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif_mc.html">lif_mc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif_refrac.html">lif_refrac</a></li>
 <li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lsnn.html">lsnn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.stdp_sensor.html">stdp_sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.threshhold.html">threshhold</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../module.html">myelin.torch.module</a></li>
@@ -193,7 +197,7 @@
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../functional.html">myelin.torch.functional</a><ul>
       <li>Previous: <a href="../functional.html" title="previous chapter">myelin.torch.functional</a></li>
-      <li>Next: <a href="myelin.torch.functional.lif.html" title="next chapter">lif</a></li>
+      <li>Next: <a href="myelin.torch.functional.correlation_sensor.html" title="next chapter">correlation_sensor</a></li>
   </ul></li>
   </ul></li>
 </ul>

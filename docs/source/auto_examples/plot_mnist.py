@@ -18,11 +18,8 @@ as possible into a traditional deep learning pipeline.
 
 import torch
 from myelin.torch.functional.lif import (
-    LIFFeedForwardState,
     LIFParameters,
-    lif_feed_forward_step,
 )
-from myelin.torch.functional.leaky_integrator import LIState
 
 from myelin.torch.module.leaky_integrator import LICell
 from myelin.torch.module.lif import LIFFeedForwardCell
@@ -30,12 +27,12 @@ from myelin.torch.module.lif import LIFFeedForwardCell
 
 class Net(torch.nn.Module):
     def __init__(
-        self,
-        device="cpu",
-        num_channels=1,
-        feature_size=32,
-        model="super",
-        dtype=torch.float,
+            self,
+            device="cpu",
+            num_channels=1,
+            feature_size=32,
+            model="super",
+            dtype=torch.float,
     ):
         super(Net, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -92,9 +89,9 @@ print(net)
 
 ########################################################################
 # We can evaluate the network we just defined on an input of size 1x32x32.
-# Note that in contrast to typical spicing neural network simulators time
+# Note that in contrast to typical spiking neural network simulators time
 # is just another dimension in the input tensor here we chose to evaluate
-# the network on 16 timesteps and there is an explicite batch dimension
+# the network on 16 timesteps and there is an explicit batch dimension
 # (number of concurrently evaluated inputs with identical model parameters).
 
 timesteps = 16
@@ -105,7 +102,7 @@ print(out)
 
 
 ##########################################################################
-# Since the spiking neural network is implemented as a pytorch module, we  
+# Since the spiking neural network is implemented as a pytorch module, we
 # can use the usual pytorch primitives for optimizing it. Note that the
 # backward computation expects a gradient for each timestep
 

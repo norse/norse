@@ -43,9 +43,9 @@
     <span class="sd">&quot;&quot;&quot;Parameters of an LSNN neuron</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        tau_syn_inv (torch.Tensor): inverse synaptic time constant</span>
-<span class="sd">        tau_mem_inv (torch.Tensor): inverse membrane time constant</span>
-<span class="sd">        tau_adapt_inv (torch.Tensor): inverse adaptation time constant</span>
+<span class="sd">        tau_syn_inv (torch.Tensor): inverse synaptic time constant (:math:`1/\\tau_\\text{syn}`)</span>
+<span class="sd">        tau_mem_inv (torch.Tensor): inverse membrane time constant (:math:`1/\\tau_\\text{mem}`)</span>
+<span class="sd">        tau_adapt_inv (torch.Tensor): inverse adaptation time constant (:math:`1/\\tau_b`)</span>
 <span class="sd">        v_leak (torch.Tensor): leak potential</span>
 <span class="sd">        v_th (torch.Tensor): threshhold potential</span>
 <span class="sd">        v_reset (torch.Tensor): reset potential</span>
@@ -88,6 +88,32 @@
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Euler integration step for LIF Neuron with threshhold adaptation</span>
+<span class="sd">    More specifically it implements one integration step of the following ODE</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{align*}</span>
+<span class="sd">            \dot{v} &amp;= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\</span>
+<span class="sd">            \dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\</span>
+<span class="sd">            \dot{b} &amp;= -1/\\tau_{b} b</span>
+<span class="sd">        \end{align*}</span>
+
+<span class="sd">    together with the jump condition</span>
+<span class="sd">    </span>
+<span class="sd">    .. math::</span>
+<span class="sd">        z = \Theta(v - v_{\\text{th}} + b)</span>
+<span class="sd">    </span>
+<span class="sd">    and transition equations</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{align*}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\\text{reset}} \\\\</span>
+<span class="sd">            i &amp;= i + w_{\\text{input}} z_{\\text{in}} \\\\</span>
+<span class="sd">            i &amp;= i + w_{\\text{rec}} z_{\\text{rec}} \\\\</span>
+<span class="sd">            b &amp;= b + \\beta z</span>
+<span class="sd">        \end{align*}</span>
+
+<span class="sd">    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input</span>
+<span class="sd">    spikes respectively.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
@@ -132,7 +158,33 @@
     <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Euler integration step for LIF Neuron with adaptation</span>
+    <span class="sd">&quot;&quot;&quot;Euler integration step for LIF Neuron with adaptation. More specifically </span>
+<span class="sd">    it implements one integration step of the following ODE</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{align*}</span>
+<span class="sd">            \dot{v} &amp;= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + b + i) \\\\</span>
+<span class="sd">            \dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\</span>
+<span class="sd">            \dot{b} &amp;= -1/\\tau_{b} b</span>
+<span class="sd">        \end{align*}</span>
+
+<span class="sd">    together with the jump condition</span>
+<span class="sd">    </span>
+<span class="sd">    .. math::</span>
+<span class="sd">        z = \Theta(v - v_{\\text{th}})</span>
+<span class="sd">    </span>
+<span class="sd">    and transition equations</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{align*}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\\text{reset}} \\\\</span>
+<span class="sd">            i &amp;= i + w_{\\text{input}} z_{\\text{in}} \\\\</span>
+<span class="sd">            i &amp;= i + w_{\\text{rec}} z_{\\text{rec}} \\\\</span>
+<span class="sd">            b &amp;= b + \\beta z</span>
+<span class="sd">        \end{align*}</span>
+
+<span class="sd">    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input</span>
+<span class="sd">    spikes respectively.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
@@ -176,7 +228,29 @@
     <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNFeedForwardState</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Euler integration step for LIF Neuron with threshhold adaptation</span>
+    <span class="sd">&quot;&quot;&quot;Euler integration step for LIF Neuron with threshhold adaptation.</span>
+<span class="sd">    More specifically it implements one integration step of the following ODE</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{align*}</span>
+<span class="sd">            \dot{v} &amp;= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\</span>
+<span class="sd">            \dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\</span>
+<span class="sd">            \dot{b} &amp;= -1/\\tau_{b} b</span>
+<span class="sd">        \end{align*}</span>
+
+<span class="sd">    together with the jump condition</span>
+<span class="sd">    </span>
+<span class="sd">    .. math::</span>
+<span class="sd">        z = \Theta(v - v_{\\text{th}} + b)</span>
+<span class="sd">    </span>
+<span class="sd">    and transition equations</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{align*}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\\text{reset}} \\\\</span>
+<span class="sd">            i &amp;= i + \\text{input} \\\\</span>
+<span class="sd">            b &amp;= b + \\beta z</span>
+<span class="sd">        \end{align*}</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
