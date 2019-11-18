@@ -1,9 +1,8 @@
+import setuptools
 from setuptools import setup
 
-
-with open('requirements.txt') as fp:
+with open("requirements.txt") as fp:
     install_requires = fp.read()
-    print(install_requires)
 
 setup(
     install_requires=install_requires,
@@ -12,5 +11,5 @@ setup(
     url="http://github.com/cpehle/myelin",
     author="Christian Pehle",
     author_email="christian.pehle@gmail.com",
-    packages=["myelin"],
+    packages=setuptools.find_packages(),
 )
