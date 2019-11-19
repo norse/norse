@@ -95,6 +95,10 @@ class LSNNLayer(torch.nn.Module):
         super(LSNNLayer, self).__init__()
         self.cell = cell(*cell_args)
 
+    def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
+        """Return the initial state of the LSNN layer, as given by the internal LSNNCell"""
+        return self.cell.initial_state(batch_size, device, dtype)
+
     def forward(
         self, input: torch.Tensor, state: LSNNState
     ) -> Tuple[torch.Tensor, LSNNState]:

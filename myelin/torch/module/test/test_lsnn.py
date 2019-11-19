@@ -25,3 +25,10 @@ def test_lsnn_forward_shape_fail():
     state = cell.initial_state(5, "cpu")
     data = torch.zeros(10)
     cell.forward(data, state)
+
+def test_lsnn_layer():
+    layer = lsnn.LSNNLayer(lsnn.LSNNCell, 2, 10)
+    state = layer.initial_state(5, "cpu")
+    data = torch.zeros(2, 5, 2)
+    z, state = layer.forward(data, state)
+    assert torch.equal(z, torch.zeros(2, 5, 10))
