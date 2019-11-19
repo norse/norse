@@ -58,21 +58,23 @@ class LSNNCell(torch.nn.Module):
     ):
         super(LSNNCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
-            torch.randn(input_features, output_features) / np.sqrt(input_features)
+            torch.randn(output_features, input_features) / np.sqrt(input_features)
         )
         self.recurrent_weights = torch.nn.Parameter(
             torch.randn(output_features, output_features)
         )
+        self.input_features = input_features
+        self.output_features = output_features
         self.p = p
         self.dt = dt
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
         """return the initial state of an LSNN neuron"""
         return LSNNState(
-            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            b=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+            z=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
+            v=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
+            i=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
+            b=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
         )
 
     def forward(
@@ -92,6 +94,10 @@ class LSNNLayer(torch.nn.Module):
     def __init__(self, cell, *cell_args):
         super(LSNNLayer, self).__init__()
         self.cell = cell(*cell_args)
+
+    def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
+        """Return the initial state of the LSNN layer, as given by the internal LSNNCell"""
+        return self.cell.initial_state(batch_size, device, dtype)
 
     def forward(
         self, input: torch.Tensor, state: LSNNState
