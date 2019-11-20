@@ -4,7 +4,7 @@
 lif_refrac
 ==========
 
-.. currentmodule:: myelin.torch.functional.lif_refrac
+.. currentmodule:: norse.torch.functional.lif_refrac
 
 
 Types

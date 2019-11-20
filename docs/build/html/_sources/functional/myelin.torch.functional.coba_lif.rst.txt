@@ -4,7 +4,7 @@
 coba_lif
 ========
 
-.. currentmodule:: myelin.torch.functional.coba_lif
+.. currentmodule:: norse.torch.functional.coba_lif
 
 
 Types

@@ -19,7 +19,7 @@ is involved.
 How to define a Network
 -----------------------
 
-The spiking neural network primitives in myelin are designed to fit in as seamlessly
+The spiking neural network primitives in norse are designed to fit in as seamlessly
 as possible into a traditional deep learning pipeline.
 
 
@@ -27,12 +27,12 @@ as possible into a traditional deep learning pipeline.
 
 
     import torch
-    from myelin.torch.functional.lif import (
+    from norse.torch.functional.lif import (
         LIFParameters,
     )
 
-    from myelin.torch.module.leaky_integrator import LICell
-    from myelin.torch.module.lif import LIFFeedForwardCell
+    from norse.torch.module.leaky_integrator import LICell
+    from norse.torch.module.lif import LIFFeedForwardCell
 
 
     class Net(torch.nn.Module):
@@ -119,6 +119,7 @@ as possible into a traditional deep learning pipeline.
 
 
 
+
 We can evaluate the network we just defined on an input of size 1x32x32.
 Note that in contrast to typical spiking neural network simulators time
 is just another dimension in the input tensor here we chose to evaluate
@@ -146,37 +147,54 @@ the network on 16 timesteps and there is an explicit batch dimension
 
  .. code-block:: none
 
-    tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+    tensor([[[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+               0.0000,  0.0000,  0.0000]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+            [[ 0.0029, -0.0002,  0.0040,  0.0026, -0.0017, -0.0054,  0.0014,
+              -0.0030,  0.0001, -0.0002]],
 
-            [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]], grad_fn=<CopySlices>)
+            [[ 0.0025, -0.0071,  0.0027, -0.0037,  0.0090, -0.0163,  0.0030,
+              -0.0102, -0.0041,  0.0024]]], grad_fn=<CopySlices>)
+
 
 
 
@@ -197,16 +215,17 @@ backward computation expects a gradient for each timestep
 
 
 
+
 .. note::
 
-    ``myelin`` like pytorch only supports mini-batches. This means that
-    contrary to most other spiking neural network simulators ```myelin``` always
+    ``norse`` like pytorch only supports mini-batches. This means that
+    contrary to most other spiking neural network simulators ```norse``` always
     integrates several indepdentent sets of spiking neural networks at once.
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.809 seconds)
+   **Total running time of the script:** ( 0 minutes  1.422 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_mnist.py:
