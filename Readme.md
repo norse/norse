@@ -1,15 +1,14 @@
-# Myelin
+# Norse
 
 A library to do deep learning with spiking neural networks. 
 
 ## Getting Started
 
 The primary dependencies of this project are torch, tensorflow and OpenAI gym.
-A more comprehensive list of dependencies can be found in ```myelin.yml```.
 
 ## Examples
 
-The directory [myelin/task](myelin/task) contains three example experiments.
+The directory [norse/task](norse/task) contains three example experiments.
 You can execute them by invoking the run_*.py scripts from this directory.
 
 - To train a MNIST classification network, invoke

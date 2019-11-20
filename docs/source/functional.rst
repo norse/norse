@@ -1,4 +1,4 @@
-myelin.torch.functional
+norse.torch.functional
 -----------------------
 
 .. toctree::

@@ -3,7 +3,7 @@
 
 leaky_integrator
 ================
-.. currentmodule:: myelin.torch.functional.leaky_integrator
+.. currentmodule:: norse.torch.functional.leaky_integrator
 
 Types
 -----

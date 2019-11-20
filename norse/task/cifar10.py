@@ -13,8 +13,8 @@ import torchvision
 import numpy as np
 import matplotlib.pyplot as plt
 
-from myelin.torch.models.conv import ConvNet, ConvNet4
-from myelin.torch.module.if_current_encoder import IFConstantCurrentEncoder
+from norse.torch.models.conv import ConvNet, ConvNet4
+from norse.torch.module.if_current_encoder import IFConstantCurrentEncoder
 
 from torch.utils.tensorboard import SummaryWriter
 

@@ -1,4 +1,4 @@
-import myelin.task.mnist as mnist
+import norse.task.mnist as mnist
 
 import torch
 from absl import app

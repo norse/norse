@@ -11,9 +11,9 @@ import os
 import gym
 
 
-from myelin.torch.functional.lif import LIFParameters
-from myelin.torch.module.lif import LIFConstantCurrentEncoder, LIFCell
-from myelin.torch.module.leaky_integrator import LICell
+from norse.torch.functional.lif import LIFParameters
+from norse.torch.module.lif import LIFConstantCurrentEncoder, LIFCell
+from norse.torch.module.leaky_integrator import LICell
 
 FLAGS = flags.FLAGS
 

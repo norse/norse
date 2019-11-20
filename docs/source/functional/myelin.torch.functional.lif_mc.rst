@@ -4,7 +4,7 @@
 lif_mc
 ======
 
-.. currentmodule:: myelin.torch.functional.lif_mc
+.. currentmodule:: norse.torch.functional.lif_mc
 
 
 Integration Functions

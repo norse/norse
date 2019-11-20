@@ -1,4 +1,4 @@
-import myelin.task.cifar10 as cifar
+import norse.task.cifar10 as cifar
 
 import torch
 from absl import app

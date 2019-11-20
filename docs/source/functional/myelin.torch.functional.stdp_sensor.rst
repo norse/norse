@@ -3,7 +3,7 @@
 
 stdp_sensor
 ===========
-.. currentmodule:: myelin.torch.functional.stdp_sensor
+.. currentmodule:: norse.torch.functional.stdp_sensor
 
 Types
 -----

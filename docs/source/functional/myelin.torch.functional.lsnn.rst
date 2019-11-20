@@ -4,7 +4,7 @@
 lsnn
 ====
 
-.. currentmodule:: myelin.torch.functional.lsnn
+.. currentmodule:: norse.torch.functional.lsnn
 
 Types
 -----

@@ -12,17 +12,17 @@ is involved.
 How to define a Network
 -----------------------
 
-The spiking neural network primitives in myelin are designed to fit in as seamlessly
+The spiking neural network primitives in norse are designed to fit in as seamlessly
 as possible into a traditional deep learning pipeline.
 """
 
 import torch
-from myelin.torch.functional.lif import (
+from norse.torch.functional.lif import (
     LIFParameters,
 )
 
-from myelin.torch.module.leaky_integrator import LICell
-from myelin.torch.module.lif import LIFFeedForwardCell
+from norse.torch.module.leaky_integrator import LICell
+from norse.torch.module.lif import LIFFeedForwardCell
 
 
 class Net(torch.nn.Module):
@@ -112,6 +112,6 @@ out.backward(torch.randn(timesteps, batch_size, 10))
 ########################################################################
 # .. note::
 #
-#     ``myelin`` like pytorch only supports mini-batches. This means that
-#     contrary to most other spiking neural network simulators ```myelin``` always
+#     ``norse`` like pytorch only supports mini-batches. This means that
+#     contrary to most other spiking neural network simulators ```norse``` always
 #     integrates several indepdentent sets of spiking neural networks at once.

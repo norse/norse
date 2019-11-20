@@ -13,8 +13,8 @@ import torch
 import torchvision
 
 from torch.utils.tensorboard import SummaryWriter
-from myelin.torch.models.conv import ConvNet4
-from myelin.torch.module.lif import LIFConstantCurrentEncoder
+from norse.torch.models.conv import ConvNet4
+from norse.torch.module.lif import LIFConstantCurrentEncoder
 
 FLAGS = flags.FLAGS
 
