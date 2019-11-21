@@ -91,6 +91,19 @@ class LSNNCell(torch.nn.Module):
 
 
 class LSNNLayer(torch.nn.Module):
+    """A Long short-term memory neuron module adapted from https://arxiv.org/abs/1803.09574
+
+    Usage:
+      >>> from norse.torch.module import LSNNLayer, LSNNCell
+      >>> layer = LSNNLayer(LSNNCell, 2, 10)    // LSNNCell with 2 inputs and 10 outputs
+      >>> state = layer.initial_state(5, "cpu") // 5 batch size running on CPU
+      >>> data  = torch.zeros(2, 5, 2)          // Generate data of shape [5, 2, 10]
+      >>> output, new_state = layer.forward(data, state) 
+
+    Parameters:
+      cell (torch.nn.Module): the underling neuron module, uninitialized
+      \*cell_args: variable length input arguments for the underlying cell constructor
+    """
     def __init__(self, cell, *cell_args):
         super(LSNNLayer, self).__init__()
         self.cell = cell(*cell_args)
