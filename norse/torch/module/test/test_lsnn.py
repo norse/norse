@@ -1,5 +1,6 @@
 import torch
 import myelin.torch.module.lsnn as lsnn
+import norse.torch.module.lsnn as lsnn
 
 from nose.tools import raises
 

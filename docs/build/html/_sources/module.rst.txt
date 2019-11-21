@@ -1,4 +1,4 @@
-myelin.torch.module
+norse.torch.module
 -------------------
 
 .. toctree::

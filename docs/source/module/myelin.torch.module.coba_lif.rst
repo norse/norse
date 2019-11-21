@@ -4,7 +4,7 @@
 coba_lif
 ========
 
-.. currentmodule:: myelin.torch.module.coba_lif
+.. currentmodule:: norse.torch.module.coba_lif
 
 :hidden:`CobaLIFCell`
 ~~~~~~~~~~~~~~~~~~~~~

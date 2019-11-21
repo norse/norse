@@ -1,9 +1,9 @@
 import torch
 import numpy as np
 
-from myelin.torch.module.leaky_integrator import LICell
-from myelin.torch.module.lif_correlation import LIFCorrelation
-from myelin.torch.functional.correlation_sensor import correlation_based_update
+from norse.torch.module.leaky_integrator import LICell
+from norse.torch.module.lif_correlation import LIFCorrelation
+from norse.torch.functional.correlation_sensor import correlation_based_update
 
 
 def main(argv):

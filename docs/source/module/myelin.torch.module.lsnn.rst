@@ -4,7 +4,7 @@
 lsnn
 ====
 
-.. currentmodule:: myelin.torch.module.lsnn
+.. currentmodule:: norse.torch.module.lsnn
 
 :hidden:`LSNNCell`
 ~~~~~~~~~~~~~~~~~~

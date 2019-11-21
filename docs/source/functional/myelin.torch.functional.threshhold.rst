@@ -3,7 +3,7 @@
 
 threshhold
 ==========
-.. currentmodule:: myelin.torch.functional.threshhold
+.. currentmodule:: norse.torch.functional.threshhold
 
 
 :hidden:`HeaviErfc`

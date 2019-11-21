@@ -5,6 +5,8 @@
 
 Computation times
 =================
-**00:00.809** total execution time for **auto_examples** files:
+**00:01.422** total execution time for **auto_examples** files:
 
-- **00:00.809**: :ref:`sphx_glr_auto_examples_plot_mnist.py` (``plot_mnist.py``)
++-----------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_mnist.py` (``plot_mnist.py``) | 00:01.422 | 0.0 MB |
++-----------------------------------------------------------------+-----------+--------+

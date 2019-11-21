@@ -4,7 +4,7 @@
 lif_refrac
 ==========
 
-.. currentmodule:: myelin.torch.module.lif_refrac
+.. currentmodule:: norse.torch.module.lif_refrac
 
 :hidden:`LIFRefracCell`
 ~~~~~~~~~~~~~~~~~~~~~~~

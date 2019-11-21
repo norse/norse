@@ -13,14 +13,13 @@
 #
 import os
 import sys
-import sphinx_rtd_theme
 
 sys.path.insert(0, os.path.abspath("../../"))
 
 
 # -- Project information -----------------------------------------------------
 
-project = "myelin"
+project = "norse"
 copyright = "2019, Christian Pehle"
 author = "Christian Pehle"
 

@@ -4,7 +4,7 @@
 lif
 ===
 
-.. currentmodule:: myelin.torch.module.lif
+.. currentmodule:: norse.torch.module.lif
 
 :hidden:`LIFCell`
 ~~~~~~~~~~~~~~~~~

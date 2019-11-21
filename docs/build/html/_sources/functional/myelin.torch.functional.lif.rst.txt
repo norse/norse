@@ -3,7 +3,7 @@
 
 lif
 ===
-.. currentmodule:: myelin.torch.functional.lif
+.. currentmodule:: norse.torch.functional.lif
 
 Types
 -----

@@ -1,4 +1,4 @@
-import myelin.task.cartpole as cartpole
+import norse.task.cartpole as cartpole
 from absl import app
 from absl import flags
 

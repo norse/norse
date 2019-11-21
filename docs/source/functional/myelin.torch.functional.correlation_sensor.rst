@@ -3,7 +3,7 @@
 
 correlation_sensor
 ==================
-.. currentmodule:: myelin.torch.functional.correlation_sensor
+.. currentmodule:: norse.torch.functional.correlation_sensor
 
 Types
 -----

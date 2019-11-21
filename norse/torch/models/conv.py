@@ -1,14 +1,13 @@
 import torch
 
-from myelin.torch.functional.lif import (
+from norse.torch.functional.lif import (
     LIFFeedForwardState,
     LIFParameters,
     lif_feed_forward_step,
 )
-from myelin.torch.functional.leaky_integrator import LIState
-
-from myelin.torch.module.leaky_integrator import LICell
-from myelin.torch.module.lif import LIFFeedForwardCell
+from norse.torch.functional.leaky_integrator import LIState
+from norse.torch.module.leaky_integrator import LICell
+from norse.torch.module.lif import LIFFeedForwardCell
 
 
 class ConvNet(torch.nn.Module):
