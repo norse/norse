@@ -81,7 +81,7 @@ output, new_state = layer.forward(data, state)
 ## Similar work
 
 A number of projects exist that attempts to leverage the strength of bio-inspired neural networks, however none of them are fully integrated with modern machine-learning libraries such as Torch or [Tensorflow](https://www.tensorflow.org/). 
-We created norse for two reasons: to 1) apply findings from decades of research in practical settings, and to 2) accelerate our own research within bio-inspired learning.
+Norse was created for two reasons: to 1) apply findings from decades of research in practical settings, and to 2) accelerate our own research within bio-inspired learning.
 
 The below list of projects serves to illustrate the state of the art, while explaining our own incentives to create and use norse.
 

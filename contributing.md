@@ -1,6 +1,6 @@
 # Contributing to Norse
 
-We welcome issues, suggested changes and comments of any kind. This document serves to make it as painless as possible to contribute by explaining how your contribution are included as fast as possible.
+Issues, suggested changes and comments of any kind are welcome. This document serves to make it as painless as possible to contribute by explaining how your contribution are included as fast as possible.
 
 ## Asking questions or getting in touch
 
@@ -12,9 +12,9 @@ If you would simply like to get in touch with us, please contact us via email:
 
 Bug reports are most welcome, but please be as specific and constructive as possible. As a minimum you should include 
 * *What* the problem is, stated briefly
-* *How* it happened, and how we can reproduce is
+* *How* it happened, and how it can be reproduced
 * *Why* this is a problem
-  * This might not be clear to us. The clearer you can make it, the faster we will fix it
+  * This might not be clear to someone else than you. The clearer you can make it, the faster it will be understood and fixed
 
 ## Contributing code
 
