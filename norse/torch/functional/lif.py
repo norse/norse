@@ -120,7 +120,7 @@ def lif_step(
 
 def lif_feed_forward_step(
     input: torch.Tensor,
-    s: LIFFeedForwardState,
+    s: LIFFeedForwardState = LIFFeedForwardState(0, 0),
     p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
