@@ -6,6 +6,44 @@
 Norse
 =====
 
+Norse is a library to do 
+`deep learning <https://en.wikipedia.org/wiki/Deep_learning>`_ 
+with 
+`spiking neural networks <https://en.wikipedia.org/wiki/Spiking_neural_network>`_.
+
+.. |image:: https://github.com/norse/norse/workflows/Python%20package/badge.svg
+   :target: https://github.com/norse/norse/actions
+
+The purpose of this library is to exploit the advantages of `bio-inspired neural components <https://en.wikipedia.org/wiki/Spiking_neural_network>`_, who are sparse and event-driven - a fundamental difference from artificial neural networks.
+Norse expands `PyTorch <https://pytorch.org/>`_ with primitives for bio-inspired neural components, 
+bringing you two advantages: a modern and proven infrastructure based on PyTorch and deep learning-compatible spiking neural network components.
+ 
+Getting started
+---------------
+
+Norse is a library that you can either install via `PyPi <https://pypi.org/project/norse/>`_ or from source. Note that `pip <https://pip.pypa.io/en/stable/>`_ is required.
+
+* Installing from PyPi: 
+
+.. code:: bash
+
+    pip install norse
+
+* Installing from source:
+ 
+.. code:: bash
+
+    git clone https://github.com/norse/norse
+    pip install -e norse
+
+Running experiments
+-------------------
+
+Running experiments is as easy as running 
+
+Writing your own experiments
+----------------------------
+
 .. toctree::
    :maxdepth: 2
    :caption: Tutorials
@@ -28,7 +66,7 @@ Norse
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

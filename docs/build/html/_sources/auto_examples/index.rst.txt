@@ -43,13 +43,13 @@ Below is a set of tutorials and examples that should get you started with the li
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/cpehle/development/myelin-electronicvisions/docs/source/auto_examples/auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/jens/workspace/norse/norse/docs/source/auto_examples/auto_examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/cpehle/development/myelin-electronicvisions/docs/source/auto_examples/auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/jens/workspace/norse/norse/docs/source/auto_examples/auto_examples_jupyter.zip>`
 
 
 .. only:: html
