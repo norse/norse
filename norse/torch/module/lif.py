@@ -100,9 +100,9 @@ class LIFCell(torch.nn.Module):
 
 
 class LIFLayer(torch.nn.Module):
-    def __init__(self, cell, *cell_args):
+    def __init__(self, *cell_args, **kw_args):
         super(LIFLayer, self).__init__()
-        self.cell = cell(*cell_args)
+        self.cell = LIFCell(*cell_args, **kw_args)
 
     def forward(
         self, input: torch.Tensor, state: LIFState
