@@ -12,7 +12,10 @@ BUILDDIR      = build
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile
+.PHONY: help serve Makefile
+
+serve:
+	@ls $(SOURCEDIR)/** | entr -rs "$(SPHINXBUILD) -M html $(SOURCEDIR) $(BUILDDIR) && xdotool search 'Norse .* documentation' windowactivate key --clearmodifiers shift+ctrl+r"
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
