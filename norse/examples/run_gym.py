@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+
+"""
+A cartpole learning example.
+"""
+
 import norse.task.cartpole as cartpole
 from absl import app
 from absl import flags
@@ -17,5 +23,8 @@ flags.DEFINE_boolean("render", False, "Render the environment")
 flags.DEFINE_string("environment", "CartPole-v1", "Gym environment to use.")
 flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
 
-if __name__ == "__main__":
+def main(argv):
     app.run(cartpole.main)
+
+if __name__ == "__main__":
+    main()

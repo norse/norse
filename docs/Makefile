@@ -14,6 +14,7 @@ help:
 
 .PHONY: help serve Makefile
 
+# Listens for changes and updates any window titled 'Norse .* documentation'
 serve:
 	@ls $(SOURCEDIR)/** | entr -rs "$(SPHINXBUILD) -M html $(SOURCEDIR) $(BUILDDIR) && xdotool search 'Norse .* documentation' windowactivate key --clearmodifiers shift+ctrl+r"
 

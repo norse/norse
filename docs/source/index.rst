@@ -41,14 +41,23 @@ Running experiments
 
 Running experiments is as easy as running 
 
+.. code:: bash
+
+    python3 -m norse
+
+This will run a simple MNIST experiment with default parameters. See :doc:`/experiments` for detailed instructions.
+
 Writing your own experiments
 ----------------------------
+
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Tutorials
 
    auto_examples/index
+   experiments
 
 .. toctree::
    :maxdepth: 2

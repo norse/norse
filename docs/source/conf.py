@@ -24,7 +24,7 @@ copyright = "2019, Christian Pehle"
 author = "Christian Pehle"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1"
+release = "0.0.2"
 
 
 # -- General configuration ---------------------------------------------------
@@ -46,7 +46,7 @@ extensions = [
 ]
 
 sphinx_gallery_conf = {
-    "examples_dirs": "../../examples",  # path to your example scripts
+    "examples_dirs": "../../norse/examples",  # path to your example scripts
     "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
 }
 

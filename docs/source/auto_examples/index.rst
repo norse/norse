@@ -12,6 +12,66 @@ Below is a set of tutorials and examples that should get you started with the li
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="A cartpole learning example.">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_run_gym_thumb.png
+
+     :ref:`sphx_glr_auto_examples_run_gym.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/run_gym
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="MNIST classification example.">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_run_mnist_thumb.png
+
+     :ref:`sphx_glr_auto_examples_run_mnist.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/run_mnist
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An CIFAR classification task example">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_run_cifar_thumb.png
+
+     :ref:`sphx_glr_auto_examples_run_cifar.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/run_cifar
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Spiking neural networks are not that much different than Artificial Neural Networks that are cu...">
 
 .. only:: html
