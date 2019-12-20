@@ -1,4 +1,4 @@
-from typing import Tuple, List, Optional
+from typing import Tuple, List
 
 import numpy as np
 import torch
@@ -60,22 +60,19 @@ class LIFCell(torch.nn.Module):
         self,
         input_size,
         hidden_size,
-        p: Optional[LIFParameters],
+        p: LIFParameters = LIFParameters(),
         dt: float = 0.001,
     ):
         super(LIFCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, input_size) / np.sqrt(input_size)
+            torch.randn(hidden_size, input_size) * np.sqrt(2/hidden_size)
         )
         self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
+            torch.randn(hidden_size, hidden_size) * np.sqrt(2/hidden_size)
         )
         self.input_size = input_size
         self.hidden_size = hidden_size
-        if p is None:
-            self.p = LIFParameters()
-        else:
-            self.p = p
+        self.p = p
         self.dt = dt
 
     def extra_repr(self):
@@ -103,9 +100,9 @@ class LIFCell(torch.nn.Module):
 
 
 class LIFLayer(torch.nn.Module):
-    def __init__(self, cell, *cell_args):
+    def __init__(self, *cell_args, **kw_args):
         super(LIFLayer, self).__init__()
-        self.cell = cell(*cell_args)
+        self.cell = LIFCell(*cell_args, **kw_args)
 
     def forward(
         self, input: torch.Tensor, state: LIFState
