@@ -29,18 +29,30 @@ This readme explains how to install norse and apply it in your own experiments.
 
 Note that this guide assumes you are on a terminal friendly environment with access to the `pip`, `python` and `git` commands. Python version 3.7+ is required.
 
+#### Installing from source
+
+For now this is the recommended way of installing the package, make sure
+that you have installed torch, following their [installation instructions](https://pytorch.org/get-started/locally/)
+and then install norse.
+
+You can either directly install the library from github using pip:
+```bash
+pip install -U git+https://github.com/norse/norse
+```
+or if you want to contribute to the development of the library you
+can install it directly from source
+```bash
+git clone https://github.com/norse/norse
+cd norse
+pip install -e .
+```
+
 #### Installing from PyPi
 
 ```bash
 pip install norse
 ```
 
-#### Installing from source
-```python
-git clone https://github.com/norse/norse
-cd norse
-python setup.py install
-```
 
 The primary dependencies of this project are [torch](https://pytorch.org/), [tensorboard](https://www.tensorflow.org/tensorboard/) and [OpenAI gym](https://github.com/openai/gym).
 A more comprehensive list of dependencies can be found in [`requirements.txt`](requirements.txt).
