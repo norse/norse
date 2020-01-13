@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 """
-MNIST classification example.
+MNIST classification example
+============================
 """
 
 import norse.task.mnist as mnist

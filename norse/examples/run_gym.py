@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
 """
-A cartpole learning example.
+A cartpole learning example with OpenAI gym
+===========================================
+
+This example illustrates how to use `OpenAI Gym <https://gym.openai.com/>`_ to 
+train a cartpole task.
 """
 
 import norse.task.cartpole as cartpole

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+
 """
-An CIFAR classification task example
+A CIFAR classification task example
+===================================
 """
 
 import norse.task.cifar10 as cifar
