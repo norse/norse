@@ -103,7 +103,7 @@ The below list of projects serves to illustrate the state of the art, while expl
   * NEST constructs and evaluates highly detailed simulations of spiking neural networks. This is useful in a medical/biological sense but maps poorly to large datasets and deep learning.
 * [Nengo DL](https://www.nengo.ai/nengo-dl/introduction.html)
   * Nengo is a neuron simulator, and Nengo-DL is a deep learning network simulator that optimised spike-based neural networks based on an approximation method suggested by [Hunsberger and Eliasmith (2016)](https://arxiv.org/abs/1611.05141). This approach maps to, but does not build on, the deep learning framework Tensorflow, which is fundamentally different from incorporating the spiking constructs into the framework itself.
-* [BindsNET](https://github.com/BindsNET/bindsnet) BindsNET also build on PyTorch and is explicity target at machine learning tasks, however while it allows for reuse of pytorch functions in its network definition, it implements a Network abstraction with the typical 'node' and 'connection' abstraction common in spiking neural network simulators. It also uses licensed under the AGPL.
+* [BindsNET](https://github.com/BindsNET/bindsnet) also builds on PyTorch and is explicitly targeted at machine learning tasks. It implements a Network abstraction with the typical 'node' and 'connection' notions common in spiking neural network simulators like nest.
 
 ## Contributing
 
