@@ -5,7 +5,7 @@ A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) wit
 
 [![Test Status](https://github.com/norse/norse/workflows/Python%20package/badge.svg)](https://github.com/norse/norse/actions) 
 
-The purpose of this library is to exploit the advantages of bio-inspired neural components, who are sparse and event-driven - a fundamental difference from artificial neural networks.
+The purpose of this library is to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
 Norse expands [PyTorch](https://pytorch.org/) with primitives for bio-inspired neural components, 
 bringing you two advantages: a modern and proven infrastructure based on PyTorch and deep learning-compatible spiking neural network components.
 
@@ -103,6 +103,7 @@ The below list of projects serves to illustrate the state of the art, while expl
   * NEST constructs and evaluates highly detailed simulations of spiking neural networks. This is useful in a medical/biological sense but maps poorly to large datasets and deep learning.
 * [Nengo DL](https://www.nengo.ai/nengo-dl/introduction.html)
   * Nengo is a neuron simulator, and Nengo-DL is a deep learning network simulator that optimised spike-based neural networks based on an approximation method suggested by [Hunsberger and Eliasmith (2016)](https://arxiv.org/abs/1611.05141). This approach maps to, but does not build on, the deep learning framework Tensorflow, which is fundamentally different from incorporating the spiking constructs into the framework itself.
+* [BindsNET](https://github.com/BindsNET/bindsnet) BindsNET also build on PyTorch and is explicity target at machine learning tasks, however while it allows for reuse of pytorch functions in its network definition, it implements a Network abstraction with the typical 'node' and 'connection' abstraction common in spiking neural network simulators. It also uses licensed under the AGPL.
 
 ## Contributing
 
