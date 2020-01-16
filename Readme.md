@@ -23,7 +23,7 @@ python run_mnist.py
 Norse is a machine learning library that builds on the [PyTorch](https://pytorch.org/) infrastructure. 
 While we have a few tasks included, it is meant to be used in designing and evaluating experiments involving biologically realistic neural networks.
 
-This readme explains how to install norse and apply it in your own experiments. If you just want to try out the library, perhaps the best option is to use run one of the [jupyter notebooks](notebooks/) on google collab. 
+This readme explains how to install norse and apply it in your own experiments. If you just want to try out the library, perhaps the best option is to run one of the [jupyter notebooks](notebooks/) on google collab. 
 
 ### Installation
 
