@@ -8,7 +8,7 @@ from .threshhold import threshhold
 
 class LIFParameters(NamedTuple):
     """Parametrization of a LIF neuron
-    
+
     Parameters:
         tau_syn_inv (torch.Tensor): inverse synaptic time constant (:math:`1/\\tau_\\text{syn}`)
         tau_mem_inv (torch.Tensor): inverse membrane time constant (:math:`1/\\tau_\\text{mem}`)
@@ -19,11 +19,11 @@ class LIFParameters(NamedTuple):
         alpha (float): hyper parameter to use in surrogate gradient computation
     """
 
-    tau_syn_inv: torch.Tensor = torch.constant(1.0 / 5e-3)
-    tau_mem_inv: torch.Tensor = torch.constant(1.0 / 1e-2)
-    v_leak: torch.Tensor = torch.constant(0.0)
-    v_th: torch.Tensor = torch.constant(1.0)
-    v_reset: torch.Tensor = torch.constant(0.0)
+    tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
+    tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
+    v_leak: torch.Tensor = torch.as_tensor(0.0)
+    v_th: torch.Tensor = torch.as_tensor(1.0)
+    v_reset: torch.Tensor = torch.as_tensor(0.0)
     method: str = "super"
     alpha: float = 0.0
 
@@ -72,10 +72,10 @@ def lif_step(
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
         z = \Theta(v - v_{\text{th}})
-    
+
     and transition equations
 
     .. math::
@@ -135,10 +135,10 @@ def lif_feed_forward_step(
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
         z = \Theta(v - v_{\text{th}})
-    
+
     and transition equations
 
     .. math::

@@ -29,10 +29,10 @@ def post_pre_update(post_pre, post_spike_mask, pre_spike_mask):
 
 
 class CorrelationSensorParameters(NamedTuple):
-    eta_p: torch.Tensor = torch.constant(1.0)
-    eta_m: torch.Tensor = torch.constant(1.0)
-    tau_ac_inv: torch.Tensor = torch.constant(1.0 / 100e-3)
-    tau_c_inv: torch.Tensor = torch.constant(1.0 / 100e-3)
+    eta_p: torch.Tensor = torch.as_tensor(1.0)
+    eta_m: torch.Tensor = torch.as_tensor(1.0)
+    tau_ac_inv: torch.Tensor = torch.as_tensor(1.0 / 100e-3)
+    tau_c_inv: torch.Tensor = torch.as_tensor(1.0 / 100e-3)
 
 
 class CorrelationSensorState(NamedTuple):

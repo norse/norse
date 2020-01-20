@@ -26,10 +26,10 @@ class LIParameters(NamedTuple):
         v_reset (torch.Tensor): reset potential
     """
 
-    tau_syn_inv: torch.Tensor = torch.constant(1.0 / 5e-3)
-    tau_mem_inv: torch.Tensor = torch.constant(1.0 / 1e-2)
-    v_leak: torch.Tensor = torch.constant(0.0)
-    v_reset: torch.Tensor = torch.constant(0.0)
+    tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
+    tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
+    v_leak: torch.Tensor = torch.as_tensor(0.0)
+    v_reset: torch.Tensor = torch.as_tensor(0.0)
 
 
 def li_step(
