@@ -17,13 +17,13 @@ class LSNNParameters(NamedTuple):
         beta (torch.Tensor): adaptation constant
     """
 
-    tau_syn_inv: torch.Tensor = torch.tensor(1.0 / 5e-3)
-    tau_mem_inv: torch.Tensor = torch.tensor(1.0 / 1e-2)
-    tau_adapt_inv: torch.Tensor = torch.tensor(1.0 / 700)
-    v_leak: torch.Tensor = torch.tensor(0.0)
-    v_th: torch.Tensor = torch.tensor(1.0)
-    v_reset: torch.Tensor = torch.tensor(0.0)
-    beta: torch.Tensor = torch.tensor(1.8)
+    tau_syn_inv: torch.Tensor = torch.constant(1.0 / 5e-3)
+    tau_mem_inv: torch.Tensor = torch.constant(1.0 / 1e-2)
+    tau_adapt_inv: torch.Tensor = torch.constant(1.0 / 700)
+    v_leak: torch.Tensor = torch.constant(0.0)
+    v_th: torch.Tensor = torch.constant(1.0)
+    v_reset: torch.Tensor = torch.constant(0.0)
+    beta: torch.Tensor = torch.constant(1.8)
     method: str = "super"
     alpha: float = 100.0
 

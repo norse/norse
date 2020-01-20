@@ -7,7 +7,7 @@ from .leaky_integrator import LIState, li_feed_forward_step, li_step
 def lif_step_test():
     input = torch.ones(20)
     s = LIState(v=torch.zeros(10), i=torch.zeros(10))
-    input_weights = torch.tensor(np.random.randn(10, 20)).float()
+    input_weights = torch.randn(10, 20).float()
 
     for i in range(100):
         z, s = li_step(input, s, input_weights)

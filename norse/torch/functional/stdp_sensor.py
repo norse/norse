@@ -13,10 +13,11 @@ class STDPSensorParameters(NamedTuple):
         tau_ac_inv (torch.Tensor): anti-correlation sensor time constant
         tau_c_inv (torch.Tensor): correlation sensor time constant
     """
-    eta_p: torch.Tensor = torch.tensor(1.0)
-    eta_m: torch.Tensor = torch.tensor(1.0)
-    tau_ac_inv: torch.Tensor = torch.tensor(1.0 / 100e-3)
-    tau_c_inv: torch.Tensor = torch.tensor(1.0 / 100e-3)
+
+    eta_p: torch.Tensor = torch.constant(1.0)
+    eta_m: torch.Tensor = torch.constant(1.0)
+    tau_ac_inv: torch.Tensor = torch.constant(1.0 / 100e-3)
+    tau_c_inv: torch.Tensor = torch.constant(1.0 / 100e-3)
 
 
 class STDPSensorState(NamedTuple):
@@ -26,6 +27,7 @@ class STDPSensorState(NamedTuple):
         a_pre (torch.Tensor): presynaptic STDP sensor state.
         a_post (torch.Tensor): postsynaptic STDP sensor state.
     """
+
     a_pre: torch.Tensor
     a_post: torch.Tensor
 

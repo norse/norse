@@ -39,35 +39,35 @@ class LIFCorrelation(torch.nn.Module):
                 i=torch.zeros(batch_size, hidden_features, device=device, dtype=dtype),
             ),
             input_correlation_state=CorrelationSensorState(
-                post_pre=torch.tensor(
-                    np.zeros((batch_size, input_features, hidden_features)),
+                post_pre=torch.zeros(
+                    (batch_size, input_features, hidden_features),
                     device=device,
                     dtype=dtype,
                 ),
-                correlation_trace=torch.tensor(
-                    np.zeros((batch_size, input_features, hidden_features)),
+                correlation_trace=torch.zeros(
+                    (batch_size, input_features, hidden_features),
                     device=device,
                     dtype=dtype,
                 ).float(),
-                anti_correlation_trace=torch.tensor(
-                    np.zeros((batch_size, input_features, hidden_features)),
+                anti_correlation_trace=torch.zeros(
+                    (batch_size, input_features, hidden_features),
                     device=device,
                     dtype=dtype,
                 ).float(),
             ),
             recurrent_correlation_state=CorrelationSensorState(
-                correlation_trace=torch.tensor(
-                    np.zeros((batch_size, hidden_features, hidden_features)),
+                correlation_trace=torch.zeros(
+                    (batch_size, hidden_features, hidden_features),
                     device=device,
                     dtype=dtype,
                 ),
-                anti_correlation_trace=torch.tensor(
-                    np.zeros((batch_size, hidden_features, hidden_features)),
+                anti_correlation_trace=torch.zeros(
+                    (batch_size, hidden_features, hidden_features),
                     device=device,
                     dtype=dtype,
                 ),
-                post_pre=torch.tensor(
-                    np.zeros((batch_size, hidden_features, hidden_features)),
+                post_pre=torch.zeros(
+                    (batch_size, hidden_features, hidden_features),
                     device=device,
                     dtype=dtype,
                 ),

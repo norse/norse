@@ -38,15 +38,15 @@ class CobaLIFParameters(NamedTuple):
         alpha (float): hyper parameter to use in surrogate gradient computation
     """
 
-    tau_syn_exc_inv: torch.Tensor = torch.tensor(1.0 / 5)
-    tau_syn_inh_inv: torch.Tensor = torch.tensor(1.0 / 5)
-    c_m_inv: torch.Tensor = torch.tensor(1 / 0.2)
-    g_l: torch.Tensor = torch.tensor(1 / 20 * 1 / 0.2)
-    e_rev_I: torch.Tensor = torch.tensor(-100)
-    e_rev_E: torch.Tensor = torch.tensor(60)
-    v_rest: torch.Tensor = torch.tensor(-20)
-    v_reset: torch.Tensor = torch.tensor(-70)
-    v_thresh: torch.Tensor = torch.tensor(-10)
+    tau_syn_exc_inv: torch.Tensor = torch.constant(1.0 / 5)
+    tau_syn_inh_inv: torch.Tensor = torch.constant(1.0 / 5)
+    c_m_inv: torch.Tensor = torch.constant(1 / 0.2)
+    g_l: torch.Tensor = torch.constant(1 / 20 * 1 / 0.2)
+    e_rev_I: torch.Tensor = torch.constant(-100)
+    e_rev_E: torch.Tensor = torch.constant(60)
+    v_rest: torch.Tensor = torch.constant(-20)
+    v_reset: torch.Tensor = torch.constant(-70)
+    v_thresh: torch.Tensor = torch.constant(-10)
     method: str = "heaviside"
     alpha: float = 0.0
 

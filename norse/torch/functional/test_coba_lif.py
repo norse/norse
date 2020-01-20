@@ -14,8 +14,8 @@ def coba_lif_step_test():
     s = CobaLIFState(
         z=torch.zeros(10), v=torch.zeros(10), g_e=torch.zeros(10), g_i=torch.zeros(10)
     )
-    input_weights = torch.tensor(np.random.randn(10, 20)).float()
-    recurrent_weights = torch.tensor(np.random.randn(10, 10)).float()
+    input_weights = torch.randn(10, 20).float()
+    recurrent_weights = torch.randn(10, 10).float()
 
     for i in range(100):
         z, s = coba_lif_step(input, s, input_weights, recurrent_weights)
