@@ -8,7 +8,6 @@ from ..functional.lif_correlation import (
 from ..functional.lif import LIFState
 from ..functional.correlation_sensor import CorrelationSensorState
 
-import numpy as np
 from typing import Tuple
 
 

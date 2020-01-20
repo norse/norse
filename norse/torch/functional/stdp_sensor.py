@@ -40,9 +40,9 @@ def stdp_sensor_step(
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, STDPSensorState]:
     """Event driven STDP rule.
-    
+
     Parameters:
-        z_pre (torch.Tensor): pre-synaptic spikes 
+        z_pre (torch.Tensor): pre-synaptic spikes
         z_post (torch.Tensor): post-synaptic spikes
         s (STDPSensorState): state of the STDP sensor
         p (STDPSensorParameters): STDP sensor parameters

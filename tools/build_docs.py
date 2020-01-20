@@ -31,34 +31,36 @@ import norse
 from tensorflow_docs.api_generator import generate_lib
 from tensorflow_docs.api_generator import public_api
 
-PROJECT_SHORT_NAME = 'norse'
-PROJECT_FULL_NAME = 'norse'
-CODE_URL_PREFIX = 'https://github.com/norse/norse/'
+PROJECT_SHORT_NAME = "norse"
+PROJECT_FULL_NAME = "norse"
+CODE_URL_PREFIX = "https://github.com/norse/norse/"
 
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string(
-    'output_dir',
-    default='/tmp/generated_docs',
-    help='Where to write the resulting docs to.')
+    "output_dir",
+    default="/tmp/generated_docs",
+    help="Where to write the resulting docs to.",
+)
 
 
 def main(argv):
-  if argv[1:]:
-    raise ValueError('Unrecognized arguments: {}'.format(argv[1:]))
+    if argv[1:]:
+        raise ValueError("Unrecognized arguments: {}".format(argv[1:]))
 
-  doc_generator = generate_lib.DocGenerator(
-      root_title=PROJECT_FULL_NAME,
-      # Replace `tensorflow_docs` with your module, here.
-      py_modules=[(PROJECT_SHORT_NAME, norse)],
-      code_url_prefix=CODE_URL_PREFIX,
-      # This callback cleans up a lot of aliases caused by internal imports.
-      callbacks=[public_api.local_definitions_filter])
+    doc_generator = generate_lib.DocGenerator(
+        root_title=PROJECT_FULL_NAME,
+        # Replace `tensorflow_docs` with your module, here.
+        py_modules=[(PROJECT_SHORT_NAME, norse)],
+        code_url_prefix=CODE_URL_PREFIX,
+        # This callback cleans up a lot of aliases caused by internal imports.
+        callbacks=[public_api.local_definitions_filter],
+    )
 
-  doc_generator.build(FLAGS.output_dir)
+    doc_generator.build(FLAGS.output_dir)
 
-  print('Output docs to: ', FLAGS.output_dir)
+    print("Output docs to: ", FLAGS.output_dir)
 
 
-if __name__ == '__main__':
-  app.run(main)
+if __name__ == "__main__":
+    app.run(main)

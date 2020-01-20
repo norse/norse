@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 
 from .coba_lif import (
     CobaLIFState,

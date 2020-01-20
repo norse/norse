@@ -83,6 +83,7 @@ class LIFeedForwardCell(torch.nn.Module):
         p (LIParameters): parameters of the leaky integrator
         dt (float): integration timestep to use
     """
+
     def __init__(self, shape, p: LIParameters = LIParameters(), dt: float = 0.001):
         super(LIFeedForwardCell, self).__init__()
         self.p = p

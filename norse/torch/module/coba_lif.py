@@ -50,6 +50,7 @@ class CobaLIFCell(torch.nn.Module):
         >>> s0 = lif.initial_state(batch_size)
         >>> output, s0 = lif(input, s0)
     """
+
     def __init__(
         self,
         input_size,

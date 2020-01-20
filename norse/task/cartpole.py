@@ -104,7 +104,9 @@ class LSNNPolicy(torch.nn.Module):
         self.constant_current_encoder = LIFConstantCurrentEncoder(
             40, device=self.device
         )
-        self.lif_layer = LSNNCell(2 * self.state_dim, self.hidden_features,
+        self.lif_layer = LSNNCell(
+            2 * self.state_dim,
+            self.hidden_features,
             p=LSNNParameters(method="super", alpha=100.0),
         )
         self.dropout = torch.nn.Dropout(p=0.5)

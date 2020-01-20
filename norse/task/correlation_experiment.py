@@ -7,8 +7,6 @@ from norse.torch.functional.correlation_sensor import correlation_based_update
 
 
 def main(argv):
-    import time
-
     torch.manual_seed(42)
     np.random.seed(42)
 

@@ -62,6 +62,7 @@ class LIFRefracCell(torch.nn.Module):
         >>> s0 = lif.initial_state(batch_size)
         >>> output, s0 = lif(input, s0)
     """
+
     def __init__(
         self,
         input_size,
@@ -143,6 +144,7 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
         >>> s0 = lif.initial_state(batch_size)
         >>> output, s0 = lif(input, s0)
     """
+
     def __init__(
         self, shape, p: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001
     ):
