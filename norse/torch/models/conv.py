@@ -12,7 +12,7 @@ from norse.torch.module.lif import LIFFeedForwardCell
 
 class ConvNet(torch.nn.Module):
     def __init__(
-        self, device, num_channels=1, feature_size=28, model="super", dtype=torch.float
+        self, device, num_channels=1, feature_size=28, method="super", dtype=torch.float
     ):
         super(ConvNet, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -23,14 +23,14 @@ class ConvNet(torch.nn.Module):
         self.device = device
         self.lif0 = LIFFeedForwardCell(
             (20, feature_size - 4, feature_size - 4),
-            p=LIFParameters(model=model, alpha=100.0),
+            p=LIFParameters(method=method, alpha=100.0),
         )
         self.lif1 = LIFFeedForwardCell(
             (50, int((feature_size - 4) / 2) - 4, int((feature_size - 4) / 2) - 4),
-            p=LIFParameters(model=model, alpha=100.0),
+            p=LIFParameters(method=method, alpha=100.0),
         )
         self.lif2 = LIFFeedForwardCell(
-            (500,), p=LIFParameters(model=model, alpha=100.0)
+            (500,), p=LIFParameters(method=method, alpha=100.0)
         )
         self.dtype = dtype
 
@@ -65,7 +65,7 @@ class ConvNet(torch.nn.Module):
 
 class ConvNet4(torch.nn.Module):
     def __init__(
-        self, device, num_channels=1, feature_size=28, model="super", dtype=torch.float
+        self, device, num_channels=1, feature_size=28, method="super", dtype=torch.float
     ):
         super(ConvNet4, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -75,14 +75,14 @@ class ConvNet4(torch.nn.Module):
         self.fc1 = torch.nn.Linear(self.features * self.features * 64, 1024)
         self.lif0 = LIFFeedForwardCell(
             (32, feature_size - 4, feature_size - 4),
-            p=LIFParameters(method=model, alpha=100.0),
+            p=LIFParameters(method=method, alpha=100.0),
         )
         self.lif1 = LIFFeedForwardCell(
             (64, int((feature_size - 4) / 2) - 4, int((feature_size - 4) / 2) - 4),
-            p=LIFParameters(method=model, alpha=100.0),
+            p=LIFParameters(method=method, alpha=100.0),
         )
         self.lif2 = LIFFeedForwardCell(
-            (1024,), p=LIFParameters(method=model, alpha=100.0)
+            (1024,), p=LIFParameters(method=method, alpha=100.0)
         )
         self.out = LICell(1024, 10)
         self.device = device
