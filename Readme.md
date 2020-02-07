@@ -94,7 +94,7 @@ output, new_state = layer.forward(data, state)
 
 It is also possible to use the library to simulate spiking activity on a single-neuron basis: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/norse/norse/blob/master/notebooks/spike_plotting.ipynb)
 
-![Spike raster plot](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAl4AAAJNCAYAAADgY3uzAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+![Spike raster plot](notebooks/spikes.png)
 
 
 ## Similar work
