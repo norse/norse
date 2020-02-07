@@ -77,7 +77,7 @@ You can execute them by invoking the `run_*.py` scripts from the base directory.
 The default choices of hyperparameters are meant as reasonable starting points.
 
 ### Example on using the library: Long short-term spiking neural networks
-long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
+The ong short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
 ```python
 from norse.torch.module import LSNNLayer, LSNNCell
 # LSNNCell with 2 inputs and 10 outputs
@@ -89,6 +89,13 @@ data  = torch.zeros(2, 5, 2)
 # Tuple of output data and layer state
 output, new_state = layer.forward(data, state) 
 ```
+
+### Example on using the library: Low-level spike raster plots
+
+It is also possible to use the library to simulate spiking activity on a single-neuron basis: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/norse/norse/blob/master/notebooks/spike_plotting.ipynb)
+
+![Spike raster plot](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAl4AAAJNCAYAAADgY3uzAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+
 
 ## Similar work
 

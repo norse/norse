@@ -169,9 +169,9 @@ class LIFFeedForwardCell(torch.nn.Module):
         )
 
     def forward(
-        self, input: torch.Tensor, state: LIFFeedForwardState
+        self, x: torch.Tensor, state: LIFFeedForwardState
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
-        return lif_feed_forward_step(input, state, p=self.p, dt=self.dt)
+        return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
 
 
 class LIFConstantCurrentEncoder(torch.nn.Module):
