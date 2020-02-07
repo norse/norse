@@ -147,9 +147,9 @@ class LIFFeedForwardCell(torch.nn.Module):
 
         >>> batch_size = 16
         >>> lif = LIFFeedForwardCell((20, 30))
-        >>> input = torch.randn(batch_size, 20, 30)
+        >>> data = torch.randn(batch_size, 20, 30)
         >>> s0 = lif.initial_state(batch_size, "cpu")
-        >>> output, s0 = lif(input, s0)
+        >>> output, s0 = lif(data, s0)
     """
 
     def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
