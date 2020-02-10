@@ -147,9 +147,9 @@ class LIFFeedForwardCell(torch.nn.Module):
 
         >>> batch_size = 16
         >>> lif = LIFFeedForwardCell((20, 30))
-        >>> input = torch.randn(batch_size, 20, 30)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> data = torch.randn(batch_size, 20, 30)
+        >>> s0 = lif.initial_state(batch_size, "cpu")
+        >>> output, s0 = lif(data, s0)
     """
 
     def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
@@ -162,16 +162,16 @@ class LIFFeedForwardCell(torch.nn.Module):
         s = f"{self.shape}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype) -> LIFFeedForwardState:
+    def initial_state(self, batch_size, device, dtype=None) -> LIFFeedForwardState:
         return LIFFeedForwardState(
             v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
             i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
         )
 
     def forward(
-        self, input: torch.Tensor, state: LIFFeedForwardState
+        self, x: torch.Tensor, state: LIFFeedForwardState
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
-        return lif_feed_forward_step(input, state, p=self.p, dt=self.dt)
+        return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
 
 
 class LIFConstantCurrentEncoder(torch.nn.Module):
