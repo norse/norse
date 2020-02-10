@@ -89,14 +89,6 @@ data  = torch.zeros(2, 5, 2)
 # Tuple of output data and layer state
 output, new_state = layer.forward(data, state) 
 ```
-
-### Example on using the library: Low-level spike raster plots
-
-It is also possible to use the library to simulate spiking activity on a single-neuron basis: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/norse/norse/blob/master/notebooks/spike_plotting.ipynb)
-
-![Spike raster plot](notebooks/spikes.png)
-
-
 ## Similar work
 
 A number of projects exist that attempts to leverage the strength of bio-inspired neural networks, however none of them are fully integrated with modern machine-learning libraries such as Torch or [Tensorflow](https://www.tensorflow.org/). 

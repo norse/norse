@@ -8,3 +8,4 @@ norse.torch.functional
    :titlesonly:
 
    functional/*
+
