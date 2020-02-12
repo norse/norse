@@ -36,11 +36,7 @@ that you have installed torch, following their [installation instructions](https
 and then install norse.
 
 You can either directly install the library from github using pip:
-```bash
-pip install -U git+https://github.com/norse/norse
-```
-or if you want to contribute to the development of the library you
-can install it directly from source
+```bashPyNN is a python interface that allows you to define and simulate spiking neural network models on different backends (both software simulators and neuromorphic hardware). It does not currently provide mechanisms for optimisation or arbitrary synaptic plasticity.
 ```bash
 git clone https://github.com/norse/norse
 cd norse
@@ -100,21 +96,21 @@ The below list of projects serves to illustrate the state of the art, while expl
 * [SNN toolbox](https://snntoolbox.readthedocs.io/en/latest/guide/intro.html) <q>automates the conversion of pre-trained analog to spiking neural networks</q>. The tool is solely for already trained networks and omits the (possibly platform specific) training.
 * [Neuron Simulation Toolkit (NEST)](https://nest-simulator.org) constructs and evaluates highly detailed simulations of spiking neural networks. This is useful in a medical/biological sense but maps poorly to large datasets and deep learning.
 * [Nengo DL](https://www.nengo.ai/nengo-dl/introduction.html) is a neuron simulator, and Nengo-DL is a deep learning network simulator that optimised spike-based neural networks based on an approximation method suggested by [Hunsberger and Eliasmith (2016)](https://arxiv.org/abs/1611.05141). This approach maps to, but does not build on, the deep learning framework Tensorflow, which is fundamentally different from incorporating the spiking constructs into the framework itself. In turn, this requires manual translations into each individual backend, which influences portability.
-* [PyNN](http://neuralensemble.org/docs/PyNN/) is a language for building neuronal network models. Like Nengo, PyNN is manually translating their own neural graph into a diverse set of backends, which also requires specific and exotic boilerplate code for each platform.
+* [PyNN](http://neuralensemble.org/docs/PyNN/) is a Python interface that allows you to define and simulate spiking neural network models on different backends (both software simulators and neuromorphic hardware). It does not currently provide mechanisms for optimisation or arbitrary synaptic plasticity.
 * [BindsNET](https://github.com/BindsNET/bindsnet) also builds on PyTorch and is explicitly targeted at machine learning tasks. It implements a Network abstraction with the typical 'node' and 'connection' notions common in spiking neural network simulators like nest.
 * [SpyTorch](https://github.com/fzenke/spytorch) presents a set of tutorials for training SNNs with the surrogate gradient approach SuperSpike by [F. Zenke, and S. Ganguli (2017)](https://arxiv.org/abs/1705.11146). Norse [implements SuperSpike](https://github.com/norse/norse/blob/master/norse/torch/functional/superspike.py), but allows for other surrogate gradients and training approaches.
 
-## Contributing
+## 4. Contributing
 
 Please refer to the [contributing.md](contributing.md)
 
-## Credits
+## 5. Credits
 
 Norse is created by
 * [Christian Pehle](https://www.kip.uni-heidelberg.de/people/10110) (@GitHub [cpehle](https://github.com/cpehle/)), doctoral student at University of Heidelberg, Germany.
 * [Jens E. Pedersen](https://www.kth.se/profile/jeped) (@GitHub [jegp](https://github.com/jegp/)), doctoral student at KTH Royal Institute of Technology, Sweden.
 
 
-## License
+## 6. License
 
 LGPLv3. See [LICENSE](LICENSE) for license details.
