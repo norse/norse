@@ -73,7 +73,7 @@ You can execute them by invoking the `run_*.py` scripts from the base directory.
 The default choices of hyperparameters are meant as reasonable starting points.
 
 ### 2.3. Example on using the library: Long short-term spiking neural networks
-The ong short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
+The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
 ```python
 from norse.torch.module import LSNNLayer, LSNNCell
 # LSNNCell with 2 inputs and 10 outputs
