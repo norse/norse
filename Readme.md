@@ -77,7 +77,7 @@ You can execute them by invoking the `run_*.py` scripts from the base directory.
 The default choices of hyperparameters are meant as reasonable starting points.
 
 ### Example on using the library: Long short-term spiking neural networks
-The ong short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
+The ong short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
 ```python
 from norse.torch.module import LSNNLayer, LSNNCell
 # LSNNCell with 2 inputs and 10 outputs
@@ -96,13 +96,11 @@ Norse was created for two reasons: to 1) apply findings from decades of research
 
 The below list of projects serves to illustrate the state of the art, while explaining our own incentives to create and use norse.
 
-* [SNN toolbox](https://snntoolbox.readthedocs.io/en/latest/guide/intro.html)
-  * This toolbox `automates the conversion of pre-trained analog to spiking neural networks'. The tool is solely for already trained networks and omits the (possibly platform specific) training.
-* [Neuron Simulation Toolkit (NEST)](https://nest-simulator.org)
-  * NEST constructs and evaluates highly detailed simulations of spiking neural networks. This is useful in a medical/biological sense but maps poorly to large datasets and deep learning.
-* [Nengo DL](https://www.nengo.ai/nengo-dl/introduction.html)
-  * Nengo is a neuron simulator, and Nengo-DL is a deep learning network simulator that optimised spike-based neural networks based on an approximation method suggested by [Hunsberger and Eliasmith (2016)](https://arxiv.org/abs/1611.05141). This approach maps to, but does not build on, the deep learning framework Tensorflow, which is fundamentally different from incorporating the spiking constructs into the framework itself.
+* [SNN toolbox](https://snntoolbox.readthedocs.io/en/latest/guide/intro.html) <q>automates the conversion of pre-trained analog to spiking neural networks</q>. The tool is solely for already trained networks and omits the (possibly platform specific) training.
+* [Neuron Simulation Toolkit (NEST)](https://nest-simulator.org) constructs and evaluates highly detailed simulations of spiking neural networks. This is useful in a medical/biological sense but maps poorly to large datasets and deep learning.
+* [Nengo DL](https://www.nengo.ai/nengo-dl/introduction.html) is a neuron simulator, and Nengo-DL is a deep learning network simulator that optimised spike-based neural networks based on an approximation method suggested by [Hunsberger and Eliasmith (2016)](https://arxiv.org/abs/1611.05141). This approach maps to, but does not build on, the deep learning framework Tensorflow, which is fundamentally different from incorporating the spiking constructs into the framework itself. In turn, this does not scale because any translation between Nengo and other tools and frameworks will have to be hardcoded.
 * [BindsNET](https://github.com/BindsNET/bindsnet) also builds on PyTorch and is explicitly targeted at machine learning tasks. It implements a Network abstraction with the typical 'node' and 'connection' notions common in spiking neural network simulators like nest.
+* [SpyTorch](https://github.com/fzenke/spytorch) presents a set of tutorials for training SNNs with the surrogate gradient approach SuperSpike by [F. Zenke, and S. Ganguli (2017)](https://arxiv.org/abs/1705.11146). Norse [implements SuperSpike](https://github.com/norse/norse/blob/master/norse/torch/functional/superspike.py), but allows for other surrogate gradients and training approaches.
 
 ## Contributing
 
