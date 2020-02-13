@@ -13,7 +13,6 @@ from ..functional.lif import (
 )
 
 
-
 class LIFCell(torch.nn.Module):
     """Module that computes a single euler-integration step of a LIF neuron-model. 
     More specifically it implements one integration step of the following ODE
@@ -65,10 +64,10 @@ class LIFCell(torch.nn.Module):
     ):
         super(LIFCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, input_size) * np.sqrt(2/hidden_size)
+            torch.randn(hidden_size, input_size) * np.sqrt(2 / hidden_size)
         )
         self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) * np.sqrt(2/hidden_size)
+            torch.randn(hidden_size, hidden_size) * np.sqrt(2 / hidden_size)
         )
         self.input_size = input_size
         self.hidden_size = hidden_size
@@ -148,9 +147,9 @@ class LIFFeedForwardCell(torch.nn.Module):
 
         >>> batch_size = 16
         >>> lif = LIFFeedForwardCell((20, 30))
-        >>> input = torch.randn(batch_size, 20, 30)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> data = torch.randn(batch_size, 20, 30)
+        >>> s0 = lif.initial_state(batch_size, "cpu")
+        >>> output, s0 = lif(data, s0)
     """
 
     def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
@@ -163,16 +162,16 @@ class LIFFeedForwardCell(torch.nn.Module):
         s = f"{self.shape}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype) -> LIFFeedForwardState:
+    def initial_state(self, batch_size, device, dtype=None) -> LIFFeedForwardState:
         return LIFFeedForwardState(
             v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
             i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
         )
 
     def forward(
-        self, input: torch.Tensor, state: LIFFeedForwardState
+        self, x: torch.Tensor, state: LIFFeedForwardState
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
-        return lif_feed_forward_step(input, state, p=self.p, dt=self.dt)
+        return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
 
 
 class LIFConstantCurrentEncoder(torch.nn.Module):

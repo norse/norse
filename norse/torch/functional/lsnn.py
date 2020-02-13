@@ -5,25 +5,25 @@ from typing import NamedTuple, Tuple
 
 
 class LSNNParameters(NamedTuple):
-    """Parameters of an LSNN neuron
+    r"""Parameters of an LSNN neuron
 
     Parameters:
-        tau_syn_inv (torch.Tensor): inverse synaptic time constant (:math:`1/\\tau_\\text{syn}`)
-        tau_mem_inv (torch.Tensor): inverse membrane time constant (:math:`1/\\tau_\\text{mem}`)
-        tau_adapt_inv (torch.Tensor): inverse adaptation time constant (:math:`1/\\tau_b`)
+        tau_syn_inv (torch.Tensor): inverse synaptic time constant (:math:`1/\tau_\text{syn}`)
+        tau_mem_inv (torch.Tensor): inverse membrane time constant (:math:`1/\tau_\text{mem}`)
+        tau_adapt_inv (torch.Tensor): inverse adaptation time constant (:math:`1/\tau_b`)
         v_leak (torch.Tensor): leak potential
         v_th (torch.Tensor): threshhold potential
         v_reset (torch.Tensor): reset potential
         beta (torch.Tensor): adaptation constant
     """
 
-    tau_syn_inv: torch.Tensor = torch.tensor(1.0 / 5e-3)
-    tau_mem_inv: torch.Tensor = torch.tensor(1.0 / 1e-2)
-    tau_adapt_inv: torch.Tensor = torch.tensor(1.0 / 700)
-    v_leak: torch.Tensor = torch.tensor(0.0)
-    v_th: torch.Tensor = torch.tensor(1.0)
-    v_reset: torch.Tensor = torch.tensor(0.0)
-    beta: torch.Tensor = torch.tensor(1.8)
+    tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
+    tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
+    tau_adapt_inv: torch.Tensor = torch.as_tensor(1.0 / 700)
+    v_leak: torch.Tensor = torch.as_tensor(0.0)
+    v_th: torch.Tensor = torch.as_tensor(1.0)
+    v_reset: torch.Tensor = torch.as_tensor(0.0)
+    beta: torch.Tensor = torch.as_tensor(1.8)
     method: str = "super"
     alpha: float = 100.0
 
@@ -52,32 +52,32 @@ def lsnn_step(
     p: LSNNParameters = LSNNParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LSNNState]:
-    """Euler integration step for LIF Neuron with threshhold adaptation
+    r"""Euler integration step for LIF Neuron with threshhold adaptation
     More specifically it implements one integration step of the following ODE
 
     .. math::
-        \\begin{align*}
-            \dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\
-            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
-            \dot{b} &= -1/\\tau_{b} b
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i \\
+            \dot{b} &= -1/\tau_{b} b
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
-        z = \Theta(v - v_{\\text{th}} + b)
-    
+        z = \Theta(v - v_{\text{th}} + b)
+
     and transition equations
 
     .. math::
-        \\begin{align*}
-            v &= (1-z) v + z v_{\\text{reset}} \\\\
-            i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
-            i &= i + w_{\\text{rec}} z_{\\text{rec}} \\\\
-            b &= b + \\beta z
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            i &= i + w_{\text{input}} z_{\text{in}} \\
+            i &= i + w_{\text{rec}} z_{\text{rec}} \\
+            b &= b + \beta z
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input
+    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the recurrent and input
     spikes respectively.
 
     Parameters:
@@ -123,32 +123,32 @@ def ada_lif_step(
     p: LSNNParameters = LSNNParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LSNNState]:
-    """Euler integration step for LIF Neuron with adaptation. More specifically 
+    r"""Euler integration step for LIF Neuron with adaptation. More specifically
     it implements one integration step of the following ODE
 
     .. math::
-        \\begin{align*}
-            \dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + b + i) \\\\
-            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
-            \dot{b} &= -1/\\tau_{b} b
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + b + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i \\
+            \dot{b} &= -1/\tau_{b} b
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
-        z = \Theta(v - v_{\\text{th}})
-    
+        z = \Theta(v - v_{\text{th}})
+
     and transition equations
 
     .. math::
-        \\begin{align*}
-            v &= (1-z) v + z v_{\\text{reset}} \\\\
-            i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
-            i &= i + w_{\\text{rec}} z_{\\text{rec}} \\\\
-            b &= b + \\beta z
+        \begin{align*}
+            v &= (1-z) v + z v_{\\text{reset}} \\
+            i &= i + w_{\text{input}} z_{\\text{in}} \\
+            i &= i + w_{\text{rec}} z_{\\text{rec}} \\
+            b &= b + \beta z
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input
+    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the recurrent and input
     spikes respectively.
 
     Parameters:
@@ -193,28 +193,28 @@ def lsnn_feed_forward_step(
     p: LSNNParameters = LSNNParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
-    """Euler integration step for LIF Neuron with threshhold adaptation.
+    r"""Euler integration step for LIF Neuron with threshhold adaptation.
     More specifically it implements one integration step of the following ODE
 
     .. math::
         \\begin{align*}
-            \dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\
-            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
-            \dot{b} &= -1/\\tau_{b} b
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i \\
+            \dot{b} &= -1/\tau_{b} b
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
-        z = \Theta(v - v_{\\text{th}} + b)
-    
+        z = \Theta(v - v_{\text{th}} + b)
+
     and transition equations
 
     .. math::
-        \\begin{align*}
-            v &= (1-z) v + z v_{\\text{reset}} \\\\
-            i &= i + \\text{input} \\\\
-            b &= b + \\beta z
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            i &= i + \text{input} \\
+            b &= b + \beta z
         \end{align*}
 
     Parameters:

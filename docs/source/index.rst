@@ -47,9 +47,8 @@ Running experiments is as easy as running
 
 This will run a simple MNIST experiment with default parameters. See :doc:`/experiments` for detailed instructions.
 
-Writing your own experiments
+Table of contents
 ----------------------------
-
 
 .. toctree::
    :maxdepth: 2
@@ -66,10 +65,6 @@ Writing your own experiments
    
    functional
    module
-
-
-
-
 
 
 

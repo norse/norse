@@ -54,7 +54,7 @@ class PiecewiseLinear(namedtuple("PiecewiseLinear", ("batch_size", "knots", "val
 
 def generate_poisson_trains(batch_size, num_trains, seq_length, freq):
     trains = np.random.rand(seq_length, batch_size, num_trains) < freq
-    return torch.tensor(trains).float()
+    return torch.from_numpy(trains).float()
 
 
 def add_luminance(images):
@@ -332,7 +332,7 @@ def main(argv):
         [torchvision.transforms.ToTensor()] + luminance_transforms + [encoder]
     )
 
-    kwargs = {"num_workers": 0, "pin_memory": True} if FLAGS.device is "cuda" else {}
+    kwargs = {"num_workers": 0, "pin_memory": True} if FLAGS.device == "cuda" else {}
     train_loader = torch.utils.data.DataLoader(
         torchvision.datasets.CIFAR10(
             root=".", train=True, download=True, transform=transform_train

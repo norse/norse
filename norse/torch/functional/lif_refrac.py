@@ -27,7 +27,7 @@ class LIFRefracParameters(NamedTuple):
     """
 
     lif: LIFParameters = LIFParameters()
-    rho_reset: torch.Tensor = torch.tensor(5.0)
+    rho_reset: torch.Tensor = torch.as_tensor(5.0)
 
 
 def lif_refrac_step(

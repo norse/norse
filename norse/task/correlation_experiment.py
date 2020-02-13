@@ -7,8 +7,6 @@ from norse.torch.functional.correlation_sensor import correlation_based_update
 
 
 def main(argv):
-    import time
-
     torch.manual_seed(42)
     np.random.seed(42)
 
@@ -32,7 +30,7 @@ def main(argv):
             requires_grad=False,
         )
         x_data[mask < prob] = 1.0
-        y_data = torch.tensor(1 * (np.random.rand(batch_size) < 0.5), device=device)
+        y_data = torch.from_numpy(1 * (np.random.rand(batch_size) < 0.5), device=device)
         return x_data, y_data
 
     seq_length = 500
@@ -51,13 +49,11 @@ def main(argv):
     )
 
     input_weights = (
-        torch.tensor(np.random.randn(input_features, hidden_features), device=device)
-        .float()
-        .t()
+        torch.randn((input_features, hidden_features), device=device).float().t()
     )
 
-    recurrent_weights = torch.tensor(
-        np.random.randn(hidden_features, hidden_features), device=device
+    recurrent_weights = torch.randn(
+        (hidden_features, hidden_features), device=device
     ).float()
 
     lif_correlation = LIFCorrelation(input_features, hidden_features)

@@ -19,9 +19,7 @@ flags.DEFINE_float("gamma", 0.99, "discount factor to use")
 flags.DEFINE_integer(
     "log_interval", 10, "In which intervals to display learning progress."
 )
-flags.DEFINE_enum(
-    "model", "super", ["super"], "Model to use for training."
-)
+flags.DEFINE_enum("model", "super", ["super"], "Model to use for training.")
 flags.DEFINE_enum("policy", "snn", ["snn", "lsnn", "ann"], "Select policy to use.")
 flags.DEFINE_boolean("render", False, "Render the environment")
 flags.DEFINE_string("environment", "CartPole-v1", "Gym environment to use.")

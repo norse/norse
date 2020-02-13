@@ -18,7 +18,7 @@ class SuperSpike(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, grad_output):
-        input, = ctx.saved_tensors
+        (input,) = ctx.saved_tensors
         alpha = ctx.alpha
         grad_input = grad_output.clone()
         grad = grad_input / (alpha * torch.abs(input) + 1.0).pow(

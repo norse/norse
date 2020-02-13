@@ -8,7 +8,7 @@ from .threshhold import threshhold
 
 class LIFParameters(NamedTuple):
     """Parametrization of a LIF neuron
-    
+
     Parameters:
         tau_syn_inv (torch.Tensor): inverse synaptic time constant (:math:`1/\\tau_\\text{syn}`)
         tau_mem_inv (torch.Tensor): inverse membrane time constant (:math:`1/\\tau_\\text{mem}`)
@@ -19,11 +19,11 @@ class LIFParameters(NamedTuple):
         alpha (float): hyper parameter to use in surrogate gradient computation
     """
 
-    tau_syn_inv: torch.Tensor = torch.tensor(1.0 / 5e-3)
-    tau_mem_inv: torch.Tensor = torch.tensor(1.0 / 1e-2)
-    v_leak: torch.Tensor = torch.tensor(0.0)
-    v_th: torch.Tensor = torch.tensor(1.0)
-    v_reset: torch.Tensor = torch.tensor(0.0)
+    tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
+    tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
+    v_leak: torch.Tensor = torch.as_tensor(0.0)
+    v_th: torch.Tensor = torch.as_tensor(1.0)
+    v_reset: torch.Tensor = torch.as_tensor(0.0)
     method: str = "super"
     alpha: float = 0.0
 
@@ -72,10 +72,10 @@ def lif_step(
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
         z = \Theta(v - v_{\text{th}})
-    
+
     and transition equations
 
     .. math::
@@ -135,10 +135,10 @@ def lif_feed_forward_step(
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
         z = \Theta(v - v_{\text{th}})
-    
+
     and transition equations
 
     .. math::
@@ -179,7 +179,22 @@ def lif_current_encoder(
     v: torch.Tensor,
     p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
-):
+) -> Tuple[torch.Tensor, torch.Tensor]:
+    r"""Computes a single euler-integration step of a leaky integrator. More
+    specifically it implements one integration step of the following ODE
+
+    .. math::
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
+        \end{align*}
+
+    Parameters:
+        input (torch.Tensor): the input current at the current time step
+        s (LIFState): current state of the LIF neuron
+        p (LIFParameters): parameters of a leaky integrate and fire neuron
+        dt (float): Integration timestep to use
+    """
     dv = dt * p.tau_mem_inv * ((p.v_leak - v) + input_current)
     v = v + dv
     z = threshhold(v - p.v_th, p.method, p.alpha)

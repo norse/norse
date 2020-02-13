@@ -1,5 +1,6 @@
-# adapted from https://github.com/pytorch/examples/blob/master/reinforcement_learning/reinforce.py
-# for license see LICENSE.cartpole
+# Parts of this code were adapted from the pytorch example at
+# https://github.com/pytorch/examples/blob/master/reinforcement_learning/reinforce.py
+# which is licensed under the license found in LICENSE.cartpole
 
 import torch
 import numpy as np
@@ -10,9 +11,9 @@ import random
 import os
 import gym
 
-
 from norse.torch.functional.lif import LIFParameters
 from norse.torch.module.lif import LIFConstantCurrentEncoder, LIFCell
+from norse.torch.module.lsnn import LSNNCell, LSNNParameters
 from norse.torch.module.leaky_integrator import LICell
 
 FLAGS = flags.FLAGS
@@ -100,12 +101,16 @@ class LSNNPolicy(torch.nn.Module):
         self.output_features = 2
         self.device = device
         # self.affine1 = torch.nn.Linear(self.state_dim, self.input_features)
-        self.constant_current_encoder = snn.LIFConstantCurrentEncoder(
+        self.constant_current_encoder = LIFConstantCurrentEncoder(
             40, device=self.device
         )
-        self.lif_layer = snn.LSNNCell(2 * self.state_dim, self.hidden_features)
+        self.lif_layer = LSNNCell(
+            2 * self.state_dim,
+            self.hidden_features,
+            p=LSNNParameters(method="super", alpha=100.0),
+        )
         self.dropout = torch.nn.Dropout(p=0.5)
-        self.readout = snn.LICell(self.hidden_features, self.output_features)
+        self.readout = LICell(self.hidden_features, self.output_features)
 
         self.saved_log_probs = []
         self.rewards = []
@@ -129,10 +134,10 @@ class LSNNPolicy(torch.nn.Module):
 
         # sequential integration loop
         for ts in range(seq_length):
-            z1, s1 = self.lif_layer(x[ts, :, :], z1, v1, i1, b1)
+            z1, s1 = self.lif_layer(x[ts, :, :], s1)
             z1 = self.dropout(z1)
-            so = self.readout(z1, so)
-            voltages[ts, :, :] = so.v
+            vo, so = self.readout(z1, so)
+            voltages[ts, :, :] = vo
 
         m, _ = torch.max(voltages, 0)
         p_y = torch.nn.functional.softmax(m, dim=1)
@@ -156,7 +161,7 @@ def finish_episode(policy, optimizer):
     for r in policy.rewards[::-1]:
         R = r + FLAGS.gamma * R
         returns.insert(0, R)
-    returns = torch.tensor(returns)
+    returns = torch.as_tensor(returns)
     returns = (returns - returns.mean()) / (returns.std() + eps)
     for log_prob, R in zip(policy.saved_log_probs, returns):
         policy_loss.append(-log_prob * R)

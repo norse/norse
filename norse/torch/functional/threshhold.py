@@ -6,8 +6,6 @@ from .superspike import super_fn
 import numpy as np
 
 
-
-
 class HeaviErfc(torch.autograd.Function):
     r"""Approximation of the heaviside step function as
 
@@ -25,7 +23,7 @@ class HeaviErfc(torch.autograd.Function):
     @staticmethod
     def backward(ctx, dy):
         x, k, = ctx.saved_tensors
-        derfc = (2 * torch.exp(-k.pow(2) * x.pow(2))) / (torch.tensor(np.pi).sqrt())
+        derfc = (2 * torch.exp(-k.pow(2) * x.pow(2))) / (torch.as_tensor(np.pi).sqrt())
         return derfc * dy, None
 
 
@@ -83,6 +81,7 @@ class HeaviCirc(torch.autograd.Function):
     .. math::
         h(x,\alpha) = \frac{1}{2} + \frac{1}{2} \frac{x}{(x^2 + \alpha^2)^{1/2}}
     """
+
     @staticmethod
     def forward(ctx, x, alpha):
         ctx.save_for_backward(x, alpha)
@@ -161,6 +160,7 @@ def threshhold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
         return heavi_circ_fn(x, alpha)
     elif method == "logistic":
         return logistic_fn(x, alpha)
+
 
 def sign(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
     return 2 * threshhold(x, method, alpha) - 1
