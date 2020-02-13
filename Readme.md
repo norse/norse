@@ -11,43 +11,39 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 
 **Documentation**: https://norse.ai/docs/
 
-## Example usage: template tasks
+## 1. Example usage: template tasks
 
 Norse comes packed with a few example tasks, such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database), but is generally meant for use in specific deep learning tasks (see below section on long short-term spiking neural networks):
 ```bash 
 python run_mnist.py
 ```
 
-## Getting Started
+## 2. Getting Started
 
 Norse is a machine learning library that builds on the [PyTorch](https://pytorch.org/) infrastructure. 
 While we have a few tasks included, it is meant to be used in designing and evaluating experiments involving biologically realistic neural networks.
 
 This readme explains how to install norse and apply it in your own experiments. If you just want to try out the library, perhaps the best option is to run one of the [jupyter notebooks](notebooks/) on google collab. 
 
-### Installation
+### 2.1. Installation
 
 Note that this guide assumes you are on a terminal friendly environment with access to the `pip`, `python` and `git` commands. Python version 3.7+ is required.
 
-#### Installing from source
+#### 2.1.1. Installing from source
 
 For now this is the recommended way of installing the package, make sure
 that you have installed torch, following their [installation instructions](https://pytorch.org/get-started/locally/)
 and then install norse.
 
 You can either directly install the library from github using pip:
-```bash
-pip install -U git+https://github.com/norse/norse
-```
-or if you want to contribute to the development of the library you
-can install it directly from source
+```bashPyNN is a python interface that allows you to define and simulate spiking neural network models on different backends (both software simulators and neuromorphic hardware). It does not currently provide mechanisms for optimisation or arbitrary synaptic plasticity.
 ```bash
 git clone https://github.com/norse/norse
 cd norse
 pip install -e .
 ```
 
-#### Installing from PyPi
+#### 2.1.2. Installing from PyPi
 
 ```bash
 pip install norse
@@ -57,7 +53,7 @@ pip install norse
 The primary dependencies of this project are [torch](https://pytorch.org/), [tensorboard](https://www.tensorflow.org/tensorboard/) and [OpenAI gym](https://github.com/openai/gym).
 A more comprehensive list of dependencies can be found in [`requirements.txt`](requirements.txt).
 
-### Running examples
+### 2.2. Running examples
 
 The directory [norse/task](norse/task) contains three example experiments, serving as short, self contained, correct examples ([SSCCE](http://www.sscce.org/)).
 You can execute them by invoking the `norse` module from the base directory.
@@ -77,8 +73,8 @@ You can execute them by invoking the `norse` module from the base directory.
     
 The default choices of hyperparameters are meant as reasonable starting points. More information is available when typing: `python -m norse --help`.
 
-### Example on using the library: Long short-term spiking neural networks
-The ong short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
+### 2.3. Example on using the library: Long short-term spiking neural networks
+The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
 ```python
 from norse.torch.module import LSNNLayer, LSNNCell
 # LSNNCell with 2 inputs and 10 outputs
@@ -90,7 +86,8 @@ data  = torch.zeros(2, 5, 2)
 # Tuple of output data and layer state
 output, new_state = layer.forward(data, state) 
 ```
-## Similar work
+
+## 3. Similar work
 
 A number of projects exist that attempts to leverage the strength of bio-inspired neural networks, however none of them are fully integrated with modern machine-learning libraries such as Torch or [Tensorflow](https://www.tensorflow.org/). 
 Norse was created for two reasons: to 1) apply findings from decades of research in practical settings, and to 2) accelerate our own research within bio-inspired learning.
@@ -105,17 +102,17 @@ The below list of projects serves to illustrate the state of the art, while expl
 * [SNN toolbox](https://snntoolbox.readthedocs.io/en/latest/guide/intro.html) <q>automates the conversion of pre-trained analog to spiking neural networks</q>. The tool is solely for already trained networks and omits the (possibly platform specific) training.
 * [SpyTorch](https://github.com/fzenke/spytorch) presents a set of tutorials for training SNNs with the surrogate gradient approach SuperSpike by [F. Zenke, and S. Ganguli (2017)](https://arxiv.org/abs/1705.11146). Norse [implements SuperSpike](https://github.com/norse/norse/blob/master/norse/torch/functional/superspike.py), but allows for other surrogate gradients and training approaches.
 
-## Contributing
+## 4. Contributing
 
 Please refer to the [contributing.md](contributing.md)
 
-## Credits
+## 5. Credits
 
 Norse is created by
 * [Christian Pehle](https://www.kip.uni-heidelberg.de/people/10110) (@GitHub [cpehle](https://github.com/cpehle/)), doctoral student at University of Heidelberg, Germany.
 * [Jens E. Pedersen](https://www.kth.se/profile/jeped) (@GitHub [jegp](https://github.com/jegp/)), doctoral student at KTH Royal Institute of Technology, Sweden.
 
 
-## License
+## 6. License
 
 LGPLv3. See [LICENSE](LICENSE) for license details.
