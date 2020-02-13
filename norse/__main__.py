@@ -1,18 +1,14 @@
-from absl import app
-from absl import flags
 import importlib
-import os
-
-FLAGS = flags.FLAGS
-flags.DEFINE_enum("task", "mnist", ["cifar", "gym", "mnist"], "Task to run.")
-
+import subprocess
+import sys
 
 def main(argv):
-    task_module = importlib.import_module(
-        f"norse.examples.run_{FLAGS.task}", package="."
-    )
-    app.run(task_module.main)
+    if argv[1] not in ["cifar", "gym", "mnist"]:
+        raise ValueError("Expected cifar, gym or mnist")
+
+    task_module = "norse/examples/run_" + argv[1] + ".py"
+    subprocess.call([sys.executable, task_module] + argv[2:])
 
 
 if __name__ == "__main__":
-    app.run(main)
+    main(sys.argv)
