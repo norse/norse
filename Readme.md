@@ -14,7 +14,7 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 ## 1. Example usage: template tasks
 
 Norse comes packed with a few example tasks, such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database), but is generally meant for use in specific deep learning tasks (see below section on long short-term spiking neural networks):
-```bash 
+```bash
 python run_mnist.py
 ```
 
@@ -36,7 +36,7 @@ that you have installed torch, following their [installation instructions](https
 and then install norse.
 
 You can either directly install the library from github using pip:
-```bashPyNN is a python interface that allows you to define and simulate spiking neural network models on different backends (both software simulators and neuromorphic hardware). It does not currently provide mechanisms for optimisation or arbitrary synaptic plasticity.
+
 ```bash
 git clone https://github.com/norse/norse
 cd norse
