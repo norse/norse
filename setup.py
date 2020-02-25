@@ -23,7 +23,7 @@ setup(
     author_email='christian.pehle@gmail.com',
     packages=setuptools.find_packages(),
     classifiers=[
-        "Development Status :: 2 - Alpha",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
@@ -36,5 +36,5 @@ setup(
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    keywords="norse machine learning",
+    keywords="machine learning spiking neural networks",
 )
