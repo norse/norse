@@ -21,7 +21,8 @@ def main(argv):
         freq = 5
         prob = freq * dt
         mask = torch.rand(
-            (seq_length, batch_size, input_features), device=device, dtype=dtype
+            (seq_length, batch_size, input_features), device=device,
+            dtype=dtype
         )
         x_data = torch.zeros(
             (seq_length, batch_size, input_features),
@@ -30,7 +31,8 @@ def main(argv):
             requires_grad=False,
         )
         x_data[mask < prob] = 1.0
-        y_data = torch.from_numpy(1 * (np.random.rand(batch_size) < 0.5), device=device)
+        y_data = torch.from_numpy(
+            1 * (np.random.rand(batch_size) < 0.5), device=device)
         return x_data, y_data
 
     seq_length = 500
@@ -49,7 +51,8 @@ def main(argv):
     )
 
     input_weights = (
-        torch.randn((input_features, hidden_features), device=device).float().t()
+        torch.randn((input_features, hidden_features),
+                    device=device).float().t()
     )
 
     recurrent_weights = torch.randn(
@@ -78,7 +81,8 @@ def main(argv):
         s1 = lif_correlation.initial_state(batch_size, device=device)
         so = out.initial_state(batch_size, device=device)
 
-        voltages = torch.zeros(seq_length, batch_size, output_features, device=device)
+        voltages = torch.zeros(seq_length, batch_size,
+                               output_features, device=device)
         hidden_voltages = torch.zeros(
             seq_length, batch_size, hidden_features, device=device
         )

@@ -1,8 +1,9 @@
 import torch
 
-from .lif_refrac import LIFRefracState, LIFRefracFeedForwardState, LIFRefracParameters
-from .lif import LIFParameters, LIFState, LIFFeedForwardState
-from .threshhold import threshhold
+from .lif_refrac import LIFRefracState, LIFRefracFeedForwardState
+from .lif_refrac import LIFRefracParameters
+from .lif import LIFState, LIFFeedForwardState
+from .threshold import threshold
 
 from typing import Tuple
 
@@ -17,7 +18,7 @@ def lif_mc_refrac_step(
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFRefracState]:
     # compute whether neurons are refractory or not
-    refrac_mask = threshhold(s.rho, p.lif.method, p.lif.alpha)
+    refrac_mask = threshold(s.rho, p.lif.method, p.lif.alpha)
     # compute voltage
     dv = (1 - refrac_mask) * dt * p.lif.tau_mem_inv * (
         (p.lif.v_leak - s.lif.v) + s.lif.i
@@ -29,7 +30,7 @@ def lif_mc_refrac_step(
     i_decayed = s.lif.i + di
 
     # compute new spikes
-    z_new = threshhold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
+    z_new = threshold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.lif.v_reset
 
@@ -56,7 +57,7 @@ def lif_mc_refrac_feed_forward_step(
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFRefracState]:
     # compute whether neurons are refractory or not
-    refrac_mask = threshhold(s.rho, p.lif.method, p.lif.alpha)
+    refrac_mask = threshold(s.rho, p.lif.method, p.lif.alpha)
     # compute voltage
     dv = (1 - refrac_mask) * dt * p.lif.tau_mem_inv * (
         (p.lif.v_leak - s.lif.v) + s.lif.i
@@ -68,7 +69,7 @@ def lif_mc_refrac_feed_forward_step(
     i_decayed = s.lif.i + di
 
     # compute new spikes
-    z_new = threshhold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
+    z_new = threshold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.lif.v_reset
 
@@ -80,4 +81,5 @@ def lif_mc_refrac_feed_forward_step(
         s.rho - refrac_mask
     ) + z_new * p.rho_reset
 
-    return z_new, LIFRefracFeedForwardState(LIFFeedForwardState(v_new, i_new), rho_new)
+    return z_new, LIFRefracFeedForwardState(LIFFeedForwardState(v_new, i_new),
+                                            rho_new)

@@ -1,6 +1,6 @@
 import torch
 
-from .threshhold import threshhold
+from .threshold import threshold
 
 from typing import NamedTuple, Tuple
 
@@ -25,16 +25,19 @@ class CobaLIFParameters(NamedTuple):
     """Parameters of conductance based LIF neuron.
 
     Parameters:
-        tau_syn_exc_inv (torch.Tensor): inverse excitatory synaptic input time constant
-        tau_syn_inh_inv (torch.Tensor): inverse inhibitory synaptic input time constant
+        tau_syn_exc_inv (torch.Tensor): inverse excitatory synaptic input
+                                        time constant
+        tau_syn_inh_inv (torch.Tensor): inverse inhibitory synaptic input
+                                        time constant
         c_m_inv (torch.Tensor): inverse membrane capacitance
         g_l (torch.Tensor): leak conductance
         e_rev_I (torch.Tensor): inhibitory reversal potential
         e_rev_E (torch.Tensor): excitatory reversal potential
         v_rest (torch.Tensor): rest membrane potential
         v_reset (torch.Tensor): reset membrane potential
-        v_thresh (torch.Tensor): threshhold membrane potential
-        method (str): method to determine the spike threshold (relevant for surrogate gradients)
+        v_thresh (torch.Tensor): threshold membrane potential
+        method (str): method to determine the spike threshold
+                      (relevant for surrogate gradients)
         alpha (float): hyper parameter to use in surrogate gradient computation
     """
 
@@ -64,8 +67,10 @@ def coba_lif_step(
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
         s (CobaLIFState): current state of the neuron
-        input_weights (torch.Tensor): input weights (sign determines contribution to inhibitory / excitatory input)
-        recurrent_weights (torch.Tensor): recurrent weights (sign determines contribution to inhibitory / excitatory input)
+        input_weights (torch.Tensor): input weights
+            (sign determines  contribution to inhibitory / excitatory input)
+        recurrent_weights (torch.Tensor): recurrent weights
+            (sign determines contribution to inhibitory / excitatory input)
         p (CobaLIFParameters): parameters of the neuron
         dt (float): Integration time step
     """
@@ -91,11 +96,13 @@ def coba_lif_step(
     dv = (
         dt
         * p.c_m_inv
-        * (p.g_l * (p.v_rest - s.v) + g_e * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v))
+        * (p.g_l * (p.v_rest - s.v) + g_e
+            * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v)
+           )
     )
     v = s.v + dv
 
-    z_new = threshhold(v - p.v_thresh, p.method, p.alpha)
+    z_new = threshold(v - p.v_thresh, p.method, p.alpha)
     v = (1 - z_new) * v + z_new * p.v_reset
     return z_new, CobaLIFState(z_new, v, g_e, g_i)
 
@@ -139,10 +146,12 @@ def coba_lif_feed_forward_step(
     dv = (
         dt
         * p.c_m_inv
-        * (p.g_l * (p.v_rest - s.v) + g_e * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v))
+        * (p.g_l * (p.v_rest - s.v) + g_e
+           * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v)
+           )
     )
     v = s.v + dv
 
-    z_new = threshhold(v - p.v_thresh, p.method, p.alpha)
+    z_new = threshold(v - p.v_thresh, p.method, p.alpha)
     v = (1 - z_new) * v + z_new * p.v_reset
     return z_new, CobaLIFFeedForwardState(v, g_e, g_i)

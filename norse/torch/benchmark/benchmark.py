@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def benchmark(
         run,
         n_runs=100,

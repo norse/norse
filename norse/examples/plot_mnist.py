@@ -12,8 +12,8 @@ is involved.
 How to define a Network
 -----------------------
 
-The spiking neural network primitives in norse are designed to fit in as seamlessly
-as possible into a traditional deep learning pipeline.
+The spiking neural network primitives in norse are designed to fit in
+as seamlessly as possible into a traditional deep learning pipeline.
 """
 
 import torch
@@ -45,7 +45,8 @@ class Net(torch.nn.Module):
             p=LIFParameters(method=model, alpha=100.0),
         )
         self.lif1 = LIFFeedForwardCell(
-            (64, int((feature_size - 4) / 2) - 4, int((feature_size - 4) / 2) - 4),
+            (64, int((feature_size - 4) / 2) - 4,
+             int((feature_size - 4) / 2) - 4),
             p=LIFParameters(method=model, alpha=100.0),
         )
         self.lif2 = LIFFeedForwardCell(
@@ -60,10 +61,14 @@ class Net(torch.nn.Module):
         batch_size = x.shape[1]
 
         # specify the initial states
-        s0 = self.lif0.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        s1 = self.lif1.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        s2 = self.lif2.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        so = self.out.initial_state(batch_size, device=self.device, dtype=self.dtype)
+        s0 = self.lif0.initial_state(
+            batch_size, device=self.device, dtype=self.dtype)
+        s1 = self.lif1.initial_state(
+            batch_size, device=self.device, dtype=self.dtype)
+        s2 = self.lif2.initial_state(
+            batch_size, device=self.device, dtype=self.dtype)
+        so = self.out.initial_state(
+            batch_size, device=self.device, dtype=self.dtype)
 
         voltages = torch.zeros(
             seq_length, batch_size, 10, device=self.device, dtype=self.dtype
@@ -113,5 +118,6 @@ out.backward(torch.randn(timesteps, batch_size, 10))
 # .. note::
 #
 #     ``norse`` like pytorch only supports mini-batches. This means that
-#     contrary to most other spiking neural network simulators ```norse``` always
-#     integrates several indepdentent sets of spiking neural networks at once.
+#     contrary to most other spiking neural network simulators ```norse```
+#     always integrates several indepdentent sets of spiking neural
+#     networks at once.

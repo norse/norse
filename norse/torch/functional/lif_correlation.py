@@ -20,8 +20,10 @@ class LIFCorrelationState(NamedTuple):
 
 class LIFCorrelationParameters(NamedTuple):
     lif_parameters: LIFParameters = LIFParameters()
-    input_correlation_parameters: CorrelationSensorParameters = CorrelationSensorParameters()
-    recurrent_correlation_parameters: CorrelationSensorParameters = CorrelationSensorParameters()
+    input_correlation_parameters: CorrelationSensorParameters = \
+        CorrelationSensorParameters()
+    recurrent_correlation_parameters: CorrelationSensorParameters = \
+        CorrelationSensorParameters()
 
 
 def lif_correlation_step(
@@ -33,7 +35,8 @@ def lif_correlation_step(
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFCorrelationState]:
     z_new, s_new = lif_step(
-        input, s.lif_state, input_weights, recurrent_weights, p.lif_parameters, dt
+        input, s.lif_state, input_weights, recurrent_weights,
+        p.lif_parameters, dt
     )
 
     input_correlation_state_new = correlation_sensor_step(

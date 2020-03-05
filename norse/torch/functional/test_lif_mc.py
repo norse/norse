@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 
 from .lif import LIFState, LIFFeedForwardState
 from .lif_mc import lif_mc_step, lif_mc_feed_forward_step
@@ -13,7 +12,8 @@ def lif_mc_step_test():
     g_coupling = torch.randn(10, 10).float()
 
     for i in range(100):
-        z, s = lif_mc_step(input, s, input_weights, recurrent_weights, g_coupling)
+        z, s = lif_mc_step(input, s, input_weights,
+                           recurrent_weights, g_coupling)
 
 
 def lif_mc_feed_forward_step_test():

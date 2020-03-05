@@ -1,6 +1,6 @@
 import torch
 
-from .threshhold import threshhold
+from .threshold import threshold
 from typing import NamedTuple, Tuple
 
 
@@ -8,11 +8,14 @@ class LSNNParameters(NamedTuple):
     r"""Parameters of an LSNN neuron
 
     Parameters:
-        tau_syn_inv (torch.Tensor): inverse synaptic time constant (:math:`1/\tau_\text{syn}`)
-        tau_mem_inv (torch.Tensor): inverse membrane time constant (:math:`1/\tau_\text{mem}`)
-        tau_adapt_inv (torch.Tensor): inverse adaptation time constant (:math:`1/\tau_b`)
+        tau_syn_inv (torch.Tensor): inverse synaptic time 
+                                    constant (:math:`1/\tau_\text{syn}`)
+        tau_mem_inv (torch.Tensor): inverse membrane time 
+                                    constant (:math:`1/\tau_\text{mem}`)
+        tau_adapt_inv (torch.Tensor): inverse adaptation time 
+                                      constant (:math:`1/\tau_b`)
         v_leak (torch.Tensor): leak potential
-        v_th (torch.Tensor): threshhold potential
+        v_th (torch.Tensor): threshold potential
         v_reset (torch.Tensor): reset potential
         beta (torch.Tensor): adaptation constant
     """
@@ -35,7 +38,7 @@ class LSNNState(NamedTuple):
         z (torch.Tensor): recurrent spikes
         v (torch.Tensor): membrane potential
         i (torch.Tensor): synaptic input current
-        b (torch.Tensor): threshhold adaptation
+        b (torch.Tensor): threshold adaptation
     """
 
     z: torch.Tensor
@@ -52,7 +55,7 @@ def lsnn_step(
     p: LSNNParameters = LSNNParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LSNNState]:
-    r"""Euler integration step for LIF Neuron with threshhold adaptation
+    r"""Euler integration step for LIF Neuron with threshold adaptation
     More specifically it implements one integration step of the following ODE
 
     .. math::
@@ -77,8 +80,8 @@ def lsnn_step(
             b &= b + \beta z
         \end{align*}
 
-    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the recurrent and input
-    spikes respectively.
+    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the recurrent 
+    and input spikes respectively.
 
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
@@ -96,12 +99,12 @@ def lsnn_step(
     di = -dt * p.tau_syn_inv * s.i
     i_decayed = s.i + di
 
-    # compute threshhold adaptation update
+    # compute threshold adaptation update
     db = dt * p.tau_adapt_inv * (p.v_th - s.b)
     b_decayed = s.b + db
 
     # compute new spikes
-    z_new = threshhold(v_decayed - b_decayed, p.method, p.alpha)
+    z_new = threshold(v_decayed - b_decayed, p.method, p.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
     # compute current jumps
@@ -148,8 +151,8 @@ def ada_lif_step(
             b &= b + \beta z
         \end{align*}
 
-    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the recurrent and input
-    spikes respectively.
+    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the recurrent
+    and input spikes respectively.
 
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
@@ -167,7 +170,7 @@ def ada_lif_step(
     v = s.v + dv
     db = -dt * p.tau_adapt_inv * s.b
     b = s.b + db
-    z_new = threshhold(v - p.v_th, p.method, p.alpha)
+    z_new = threshold(v - p.v_th, p.method, p.alpha)
     v = v - z_new * (p.v_th - p.v_reset)
     b = b + z_new * p.tau_adapt_inv * p.beta
     return z_new, LSNNState(z_new, v, i, b)
@@ -179,7 +182,7 @@ class LSNNFeedForwardState(NamedTuple):
     Parameters:
         v (torch.Tensor): membrane potential
         i (torch.Tensor): synaptic input current
-        b (torch.Tensor): threshhold adaptation
+        b (torch.Tensor): threshold adaptation
     """
 
     v: torch.Tensor
@@ -193,7 +196,7 @@ def lsnn_feed_forward_step(
     p: LSNNParameters = LSNNParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
-    r"""Euler integration step for LIF Neuron with threshhold adaptation.
+    r"""Euler integration step for LIF Neuron with threshold adaptation.
     More specifically it implements one integration step of the following ODE
 
     .. math::
@@ -231,12 +234,12 @@ def lsnn_feed_forward_step(
     di = -dt * p.tau_syn_inv * s.i
     i_decayed = s.i + di
 
-    # compute threshhold updates
+    # compute threshold updates
     db = dt * p.tau_adapt_inv * (p.v_th - s.b)
     b_decayed = s.b + db
 
     # compute new spikes
-    z_new = threshhold(v_decayed - b_decayed, p.method, p.alpha)
+    z_new = threshold(v_decayed - b_decayed, p.method, p.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
     # compute b update

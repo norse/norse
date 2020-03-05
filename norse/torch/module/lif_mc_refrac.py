@@ -29,15 +29,20 @@ class LIFMCRefracCell(torch.nn.Module):
         self.dt = dt
 
     def initial_state(
-        self, batch_size: int, device: torch.device, dtype: torch.float = torch.float
+        self, batch_size: int, device: torch.device,
+        dtype: torch.float = torch.float
     ) -> LIFRefracState:
         return LIFRefracState(
             lif=LIFState(
-                z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-                v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-                i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+                z=torch.zeros(batch_size, self.hidden_size,
+                              device=device, dtype=dtype),
+                v=torch.zeros(batch_size, self.hidden_size,
+                              device=device, dtype=dtype),
+                i=torch.zeros(batch_size, self.hidden_size,
+                              device=device, dtype=dtype),
             ),
-            rho=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+            rho=torch.zeros(batch_size, self.hidden_size,
+                            device=device, dtype=dtype),
         )
 
     def forward(

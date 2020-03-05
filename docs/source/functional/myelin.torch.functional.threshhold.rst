@@ -1,6 +1,6 @@
-threshhold
+threshold
 ==========
-.. currentmodule:: norse.torch.functional.threshhold
+.. currentmodule:: norse.torch.functional.threshold
 
 .. autoclass:: HeaviErfc
 .. autoclass:: HeaviTanh

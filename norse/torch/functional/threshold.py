@@ -18,12 +18,13 @@ class HeaviErfc(torch.autograd.Function):
     @staticmethod
     def forward(ctx, x, k):
         ctx.save_for_backward(x, k)
-        return heaviside(x)  # 0.5 + 0.5 * torch.erfc(k * x)
+        return heaviside(x)  # 0 + 0.5 * torch.erfc(k * x)
 
     @staticmethod
     def backward(ctx, dy):
         x, k, = ctx.saved_tensors
-        derfc = (2 * torch.exp(-k.pow(2) * x.pow(2))) / (torch.as_tensor(np.pi).sqrt())
+        derfc = (2 * torch.exp(-k.pow(2) * x.pow(2))) / \
+            (torch.as_tensor(np.pi).sqrt())
         return derfc * dy, None
 
 
@@ -79,7 +80,8 @@ class HeaviCirc(torch.autograd.Function):
     r"""Approximation of the heaviside step function as
 
     .. math::
-        h(x,\alpha) = \frac{1}{2} + \frac{1}{2} \frac{x}{(x^2 + \alpha^2)^{1/2}}
+        h(x,\alpha) = \frac{1}{2} + \frac{1}{2} \
+        \frac{x}{(x^2 + \alpha^2)^{1/2}}
     """
 
     @staticmethod
@@ -147,7 +149,7 @@ class HeaviTent(torch.autograd.Function):
 heavi_tent_fn = HeaviTent.apply
 
 
-def threshhold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
+def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
     if method == "heaviside":
         return heaviside(x)
     elif method == "super":
@@ -163,4 +165,4 @@ def threshhold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
 
 
 def sign(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
-    return 2 * threshhold(x, method, alpha) - 1
+    return 2 * threshold(x, method, alpha) - 1
