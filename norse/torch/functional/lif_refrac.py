@@ -87,7 +87,7 @@ class LIFRefracFeedForwardState(NamedTuple):
     """State of a feed forward LIF neuron with absolute refractory period.
 
     Parameters:
-        lif (LIFFeedForwardState): state of the feed forward LIF 
+        lif (LIFFeedForwardState): state of the feed forward LIF
                                    neuron integration
         rho (torch.Tensor): refractory state (count towards zero)
     """
@@ -114,8 +114,7 @@ def lif_refrac_feed_forward_step(
     rho_mask = threshold(s.rho, p.lif.method, p.lif.alpha)
 
     # compute voltage updates
-    dv = (1 - rho_mask) * dt * p.lif.tau_mem_inv * \
-        ((p.lif.v_leak - s.lif.v) + s.lif.i)
+    dv = (1 - rho_mask) * dt * p.lif.tau_mem_inv * ((p.lif.v_leak - s.lif.v) + s.lif.i)
     v_decayed = s.lif.v + dv
 
     # compute current updates
@@ -133,5 +132,4 @@ def lif_refrac_feed_forward_step(
     rho_new = (1 - z_new) * torch.nn.functional.relu(
         s.rho - rho_mask
     ) + z_new * p.rho_reset
-    return z_new, LIFRefracFeedForwardState(LIFFeedForwardState(v_new, i_new
-                                                                ), rho_new)
+    return z_new, LIFRefracFeedForwardState(LIFFeedForwardState(v_new, i_new), rho_new)

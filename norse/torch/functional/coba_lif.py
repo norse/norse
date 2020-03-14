@@ -96,9 +96,7 @@ def coba_lif_step(
     dv = (
         dt
         * p.c_m_inv
-        * (p.g_l * (p.v_rest - s.v) + g_e
-            * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v)
-           )
+        * (p.g_l * (p.v_rest - s.v) + g_e * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v))
     )
     v = s.v + dv
 
@@ -146,9 +144,7 @@ def coba_lif_feed_forward_step(
     dv = (
         dt
         * p.c_m_inv
-        * (p.g_l * (p.v_rest - s.v) + g_e
-           * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v)
-           )
+        * (p.g_l * (p.v_rest - s.v) + g_e * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v))
     )
     v = s.v + dv
 

@@ -14,7 +14,7 @@ from ..functional.lif_refrac import (
 
 
 class LIFRefracCell(torch.nn.Module):
-    """Module that computes a single euler-integration step of a LIF 
+    """Module that computes a single euler-integration step of a LIF
     neuron-model with absolute refractory period. More specifically it
     implements one integration step of the following ODE.
 
@@ -41,7 +41,7 @@ class LIFRefracCell(torch.nn.Module):
             v &= (1-z) v + z v_{\\text{reset}} \\\\
             i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
             i &= i + w_{\\text{rec}} z_{\\text{rec}} \\\\
-            \\rho &= \\rho + z_r \\rho_{\\text{reset}} 
+            \\rho &= \\rho + z_r \\rho_{\\text{reset}}
         \end{align*}
 
     where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
@@ -82,19 +82,14 @@ class LIFRefracCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype=torch.float
-                      ) -> LIFRefracState:
+    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFRefracState:
         return LIFRefracState(
             lif=LIFState(
-                z=torch.zeros(batch_size, self.hidden_size,
-                              device=device, dtype=dtype),
-                v=torch.zeros(batch_size, self.hidden_size,
-                              device=device, dtype=dtype),
-                i=torch.zeros(batch_size, self.hidden_size,
-                              device=device, dtype=dtype),
+                z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+                v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+                i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
             ),
-            rho=torch.zeros(batch_size, self.hidden_size,
-                            device=device, dtype=dtype),
+            rho=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
         )
 
     def forward(
@@ -136,7 +131,7 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     .. math::
         \\begin{align*}
             v &= (1-z) v + z v_{\\text{reset}} \\\\
-            \\rho &= \\rho + z_r \\rho_{\\text{reset}} 
+            \\rho &= \\rho + z_r \\rho_{\\text{reset}}
         \end{align*}
 
     Parameters:
@@ -153,8 +148,7 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     """
 
     def __init__(
-        self, shape, p: LIFRefracParameters = LIFRefracParameters(),
-        dt: float = 0.001
+        self, shape, p: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001
     ):
         super(LIFRefracFeedForwardCell, self).__init__()
         self.shape = shape
@@ -164,13 +158,10 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     def initial_state(self, batch_size, device, dtype) -> LIFFeedForwardState:
         return LIFRefracFeedForwardState(
             LIFFeedForwardState(
-                v=torch.zeros(batch_size, *self.shape,
-                              device=device, dtype=dtype),
-                i=torch.zeros(batch_size, *self.shape,
-                              device=device, dtype=dtype),
+                v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
+                i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
             ),
-            rho=torch.zeros(batch_size, *self.shape,
-                            device=device, dtype=dtype),
+            rho=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
         )
 
     def forward(

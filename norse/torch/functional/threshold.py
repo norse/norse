@@ -23,8 +23,7 @@ class HeaviErfc(torch.autograd.Function):
     @staticmethod
     def backward(ctx, dy):
         x, k, = ctx.saved_tensors
-        derfc = (2 * torch.exp(-k.pow(2) * x.pow(2))) / \
-            (torch.as_tensor(np.pi).sqrt())
+        derfc = (2 * torch.exp(-k.pow(2) * x.pow(2))) / (torch.as_tensor(np.pi).sqrt())
         return derfc * dy, None
 
 

@@ -8,11 +8,11 @@ class LSNNParameters(NamedTuple):
     r"""Parameters of an LSNN neuron
 
     Parameters:
-        tau_syn_inv (torch.Tensor): inverse synaptic time 
+        tau_syn_inv (torch.Tensor): inverse synaptic time
                                     constant (:math:`1/\tau_\text{syn}`)
-        tau_mem_inv (torch.Tensor): inverse membrane time 
+        tau_mem_inv (torch.Tensor): inverse membrane time
                                     constant (:math:`1/\tau_\text{mem}`)
-        tau_adapt_inv (torch.Tensor): inverse adaptation time 
+        tau_adapt_inv (torch.Tensor): inverse adaptation time
                                       constant (:math:`1/\tau_b`)
         v_leak (torch.Tensor): leak potential
         v_th (torch.Tensor): threshold potential
@@ -80,7 +80,7 @@ def lsnn_step(
             b &= b + \beta z
         \end{align*}
 
-    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the recurrent 
+    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the recurrent
     and input spikes respectively.
 
     Parameters:

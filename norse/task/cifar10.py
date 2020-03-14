@@ -31,26 +31,21 @@ flags.DEFINE_string("prefix", "", "Prefix for save path to use.")
 flags.DEFINE_enum(
     "encoding",
     "poisson",
-    ["poisson", "constant", "constant_polar", "signed_poisson",
-     "signed_constant"],
+    ["poisson", "constant", "constant_polar", "signed_poisson", "signed_constant"],
     "Encoding to use for input",
 )
 
 flags.DEFINE_enum(
-    "net", "convnet4", ["convnet",
-                        "convnet4"], "Which network architecture to use"
+    "net", "convnet4", ["convnet", "convnet4"], "Which network architecture to use"
 )
 flags.DEFINE_integer("plot_interval", 10, "Interval for plotting.")
 flags.DEFINE_float("input_scale", 1, "Scaling factor for input current.")
-flags.DEFINE_float("current_encoder_v_th", 1.0,
-                   "v_th for constant current encoder")
-flags.DEFINE_bool("learning_rate_schedule", False,
-                  "Use a learning rate schedule")
+flags.DEFINE_float("current_encoder_v_th", 1.0, "v_th for constant current encoder")
+flags.DEFINE_bool("learning_rate_schedule", False, "Use a learning rate schedule")
 flags.DEFINE_bool("find_learning_rate", False, "Find learning rate")
 
 
-class PiecewiseLinear(namedtuple("PiecewiseLinear", ("batch_size", "knots",
-                                                     "vals"))):
+class PiecewiseLinear(namedtuple("PiecewiseLinear", ("batch_size", "knots", "vals"))):
     def step(self, optimizer, t):
         lr = np.interp([t], self.knots, self.vals)[0]
         for group in optimizer.param_groups:
@@ -78,9 +73,7 @@ def add_luminance(images):
 
 
 def poisson_train(images, seq_length, device, rel_fmax=0.2):
-    return (
-        torch.rand(seq_length, *images.shape).float() < rel_fmax * images
-    ).float()
+    return (torch.rand(seq_length, *images.shape).float() < rel_fmax * images).float()
 
 
 def signed_poisson_train(images, seq_length, device, rel_fmax=0.2):
@@ -100,8 +93,7 @@ class LIFConvNet(torch.nn.Module):
         if FLAGS.net == "convnet":
             dtype = torch.float
             self.rsnn = ConvNet(
-                device=device, num_channels=num_channels, feature_size=32,
-                dtype=dtype
+                device=device, num_channels=num_channels, feature_size=32, dtype=dtype
             )
         elif FLAGS.net == "convnet4":
             self.rsnn = ConvNet4(
@@ -117,8 +109,7 @@ class LIFConvNet(torch.nn.Module):
 
 
 def train(
-    model, device, train_loader, optimizer, epoch, lr_scheduler=None,
-    writer=None
+    model, device, train_loader, optimizer, epoch, lr_scheduler=None, writer=None
 ):
     model.train()
     losses = []
@@ -133,12 +124,8 @@ def train(
         loss.backward()
         if FLAGS.save_grads and batch_idx % FLAGS.grad_save_interval == 0:
             for idx, p in enumerate(model.parameters()):
-                np.save(
-                    f"param-{idx}-{epoch}-{batch_idx}-grad.npy",
-                    p.grad.numpy())
-                np.save(
-                    f"param-{idx}-{epoch}-{batch_idx}-data.npy",
-                    p.data.numpy())
+                np.save(f"param-{idx}-{epoch}-{batch_idx}-grad.npy", p.grad.numpy())
+                np.save(f"param-{idx}-{epoch}-{batch_idx}-data.npy", p.data.numpy())
 
         if lr_scheduler:
             lr_scheduler.step(optimizer, t=(epoch + batch_idx / train_batches))
@@ -167,13 +154,11 @@ def train(
             for tag, value in model.named_parameters():
                 tag = tag.replace(".", "/")
                 writer.add_histogram(tag, value.data.cpu().numpy(), step)
-                writer.add_histogram(
-                    tag + "/grad", value.grad.data.cpu().numpy(), step)
+                writer.add_histogram(tag + "/grad", value.grad.data.cpu().numpy(), step)
 
         if FLAGS.do_plot and batch_idx % FLAGS.plot_interval == 0:
             ts = np.arange(0, FLAGS.seq_length) * FLAGS.dt
-            _, axs = plt.subplots(4, 4, figsize=(
-                15, 10), sharex=True, sharey=True)
+            _, axs = plt.subplots(4, 4, figsize=(15, 10), sharex=True, sharey=True)
             axs = axs.reshape(-1)  # flatten
             for nrn in range(10):
                 one_trace = model.voltages.detach().cpu().numpy()[:, 0, nrn]
@@ -305,8 +290,7 @@ def main(argv):
             [torchvision.transforms.ToTensor(), add_luminance]
         )
         kwargs = (
-            {"num_workers": 4, "pin_memory": True} if
-            FLAGS.device == "cuda" else {}
+            {"num_workers": 4, "pin_memory": True} if FLAGS.device == "cuda" else {}
         )
         train_loader = torch.utils.data.DataLoader(
             torchvision.datasets.CIFAR10(
@@ -339,8 +323,7 @@ def main(argv):
         [torchvision.transforms.ToTensor()] + luminance_transforms + [encoder]
     )
 
-    kwargs = {"num_workers": 0,
-              "pin_memory": True} if FLAGS.device == "cuda" else {}
+    kwargs = {"num_workers": 0, "pin_memory": True} if FLAGS.device == "cuda" else {}
     train_loader = torch.utils.data.DataLoader(
         torchvision.datasets.CIFAR10(
             root=".", train=True, download=True, transform=transform_train
@@ -350,8 +333,7 @@ def main(argv):
         **kwargs,
     )
     test_loader = torch.utils.data.DataLoader(
-        torchvision.datasets.CIFAR10(
-            root=".", train=False, transform=transform_test),
+        torchvision.datasets.CIFAR10(root=".", train=False, transform=transform_test),
         batch_size=FLAGS.batch_size,
         **kwargs,
     )
@@ -387,15 +369,12 @@ def main(argv):
             nesterov=True,
         )
     elif FLAGS.optimizer == "adam":
-        optimizer = torch.optim.Adam(
-            model.parameters(), lr=FLAGS.learning_rate)
+        optimizer = torch.optim.Adam(model.parameters(), lr=FLAGS.learning_rate)
     elif FLAGS.optimizer == "rms":
-        optimizer = torch.optim.RMSprop(
-            model.parameters(), lr=FLAGS.learning_rate)
+        optimizer = torch.optim.RMSprop(model.parameters(), lr=FLAGS.learning_rate)
 
     if FLAGS.only_output:
-        optimizer = torch.optim.Adam(
-            model.out.parameters(), lr=FLAGS.learning_rate)
+        optimizer = torch.optim.Adam(model.out.parameters(), lr=FLAGS.learning_rate)
 
     if FLAGS.resume:
         if os.path.isfile(FLAGS.resume):
@@ -426,8 +405,7 @@ def main(argv):
             lr_scheduler=lr_scheduler,
             writer=writer,
         )
-        test_loss, accuracy = test(
-            model, device, test_loader, epoch, writer=writer)
+        test_loss, accuracy = test(model, device, test_loader, epoch, writer=writer)
 
         training_losses += training_loss
         mean_losses.append(mean_loss)

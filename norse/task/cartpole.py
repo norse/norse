@@ -65,10 +65,8 @@ class Policy(torch.nn.Module):
     def forward(self, x):
         scale = 50
         x = x.to(self.device)
-        _, x_pos = self.constant_current_encoder(
-            torch.nn.functional.relu(scale * x))
-        _, x_neg = self.constant_current_encoder(
-            torch.nn.functional.relu(-scale * x))
+        _, x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
+        _, x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
         x = torch.cat([x_pos, x_neg], dim=2)
 
         seq_length, batch_size, _ = x.shape
@@ -119,10 +117,8 @@ class LSNNPolicy(torch.nn.Module):
 
     def forward(self, x):
         scale = 50
-        _, x_pos = self.constant_current_encoder(
-            torch.nn.functional.relu(scale * x))
-        _, x_neg = self.constant_current_encoder(
-            torch.nn.functional.relu(-scale * x))
+        _, x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
+        _, x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
         x = torch.cat([x_pos, x_neg], dim=2)
 
         seq_length, batch_size, _ = x.shape
@@ -201,8 +197,7 @@ def main(argv):
     elif FLAGS.policy == "snn":
         policy = Policy()
     elif FLAGS.policy == "lsnn":
-        policy = LSNNPolicy(device=FLAGS.device,
-                            model=FLAGS.model).to(FLAGS.device)
+        policy = LSNNPolicy(device=FLAGS.device, model=FLAGS.model).to(FLAGS.device)
     optimizer = torch.optim.Adam(policy.parameters(), lr=FLAGS.learning_rate)
 
     running_rewards = []
@@ -226,8 +221,7 @@ def main(argv):
 
         if e % FLAGS.log_interval == 0:
             logging.info(
-                "Episode {}/{} \tLast reward: {:.2f}\tAverage reward: {:.2f}"
-                .format(
+                "Episode {}/{} \tLast reward: {:.2f}\tAverage reward: {:.2f}".format(
                     e, FLAGS.episodes, ep_reward, running_reward
                 )
             )
@@ -236,8 +230,7 @@ def main(argv):
         if running_reward > env.spec.reward_threshold:
             logging.info(
                 "Solved! Running reward is now {} and "
-                "the last episode runs to {} time steps!".format(
-                    running_reward, t)
+                "the last episode runs to {} time steps!".format(running_reward, t)
             )
             break
 

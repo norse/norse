@@ -81,5 +81,4 @@ def lif_mc_refrac_feed_forward_step(
         s.rho - refrac_mask
     ) + z_new * p.rho_reset
 
-    return z_new, LIFRefracFeedForwardState(LIFFeedForwardState(v_new, i_new),
-                                            rho_new)
+    return z_new, LIFRefracFeedForwardState(LIFFeedForwardState(v_new, i_new), rho_new)

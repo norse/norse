@@ -2,3 +2,13 @@
 """
 
 from . import torch
+from . import task
+
+__all__ = [
+    task,
+    torch.benchmark,
+    torch.functional,
+    torch.models.conv,
+    torch.module.lif,
+    torch.module.lsnn,
+]

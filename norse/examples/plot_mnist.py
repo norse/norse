@@ -17,9 +17,7 @@ as seamlessly as possible into a traditional deep learning pipeline.
 """
 
 import torch
-from norse.torch.functional.lif import (
-    LIFParameters,
-)
+from norse.torch.functional.lif import LIFParameters
 
 from norse.torch.module.leaky_integrator import LICell
 from norse.torch.module.lif import LIFFeedForwardCell
@@ -27,12 +25,12 @@ from norse.torch.module.lif import LIFFeedForwardCell
 
 class Net(torch.nn.Module):
     def __init__(
-            self,
-            device="cpu",
-            num_channels=1,
-            feature_size=32,
-            model="super",
-            dtype=torch.float,
+        self,
+        device="cpu",
+        num_channels=1,
+        feature_size=32,
+        model="super",
+        dtype=torch.float,
     ):
         super(Net, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -45,8 +43,7 @@ class Net(torch.nn.Module):
             p=LIFParameters(method=model, alpha=100.0),
         )
         self.lif1 = LIFFeedForwardCell(
-            (64, int((feature_size - 4) / 2) - 4,
-             int((feature_size - 4) / 2) - 4),
+            (64, int((feature_size - 4) / 2) - 4, int((feature_size - 4) / 2) - 4),
             p=LIFParameters(method=model, alpha=100.0),
         )
         self.lif2 = LIFFeedForwardCell(
@@ -61,14 +58,10 @@ class Net(torch.nn.Module):
         batch_size = x.shape[1]
 
         # specify the initial states
-        s0 = self.lif0.initial_state(
-            batch_size, device=self.device, dtype=self.dtype)
-        s1 = self.lif1.initial_state(
-            batch_size, device=self.device, dtype=self.dtype)
-        s2 = self.lif2.initial_state(
-            batch_size, device=self.device, dtype=self.dtype)
-        so = self.out.initial_state(
-            batch_size, device=self.device, dtype=self.dtype)
+        s0 = self.lif0.initial_state(batch_size, device=self.device, dtype=self.dtype)
+        s1 = self.lif1.initial_state(batch_size, device=self.device, dtype=self.dtype)
+        s2 = self.lif2.initial_state(batch_size, device=self.device, dtype=self.dtype)
+        so = self.out.initial_state(batch_size, device=self.device, dtype=self.dtype)
 
         voltages = torch.zeros(
             seq_length, batch_size, 10, device=self.device, dtype=self.dtype

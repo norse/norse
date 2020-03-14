@@ -13,8 +13,8 @@ from ..functional.lsnn import (
 
 
 class LSNNCell(torch.nn.Module):
-    r"""Module that computes a single euler-integration step of a LSNN 
-    neuron-model. More specifically it implements one integration step of 
+    r"""Module that computes a single euler-integration step of a LSNN
+    neuron-model. More specifically it implements one integration step of
     the following ODE
 
     .. math::
@@ -39,7 +39,7 @@ class LSNNCell(torch.nn.Module):
             b &= b + \\beta z
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the 
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
     recurrent and input spikes respectively.
 
     Parameters:
@@ -60,8 +60,7 @@ class LSNNCell(torch.nn.Module):
     ):
         super(LSNNCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
-            torch.randn(output_features, input_features) /
-            np.sqrt(input_features)
+            torch.randn(output_features, input_features) / np.sqrt(input_features)
         )
         self.recurrent_weights = torch.nn.Parameter(
             torch.randn(output_features, output_features)
@@ -71,18 +70,13 @@ class LSNNCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype=torch.float
-                      ) -> LSNNState:
+    def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
         """return the initial state of an LSNN neuron"""
         return LSNNState(
-            z=torch.zeros(batch_size, self.output_features,
-                          device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.output_features,
-                          device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.output_features,
-                          device=device, dtype=dtype),
-            b=torch.zeros(batch_size, self.output_features,
-                          device=device, dtype=dtype),
+            z=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
+            v=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
+            i=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
+            b=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
         )
 
     def forward(
@@ -99,7 +93,7 @@ class LSNNCell(torch.nn.Module):
 
 
 class LSNNLayer(torch.nn.Module):
-    r"""A Long short-term memory neuron module adapted from 
+    r"""A Long short-term memory neuron module adapted from
         https://arxiv.org/abs/1803.09574
 
     Usage:
@@ -119,8 +113,7 @@ class LSNNLayer(torch.nn.Module):
         super(LSNNLayer, self).__init__()
         self.cell = cell(*cell_args)
 
-    def initial_state(self, batch_size, device, dtype=torch.float
-                      ) -> LSNNState:
+    def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
         """Return the initial state of the LSNN layer, as given by the
         internal LSNNCell"""
         return self.cell.initial_state(batch_size, device, dtype)
@@ -168,8 +161,7 @@ class LSNNFeedForwardCell(torch.nn.Module):
         dt (float): Integration timestep to use
     """
 
-    def __init__(self, shape, p: LSNNParameters = LSNNParameters(),
-                 dt: float = 0.001):
+    def __init__(self, shape, p: LSNNParameters = LSNNParameters(), dt: float = 0.001):
         super(LSNNFeedForwardCell, self).__init__()
         self.shape = shape
         self.p = p

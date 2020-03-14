@@ -12,8 +12,7 @@ def spiking_vector_quantization_step(v: torch.Tensor, phi: torch.Tensor):
     phi_abs_sum = torch.sum(phi_abs)
     phi_abs_sorted, indices = torch.sort(phi_abs)
     phi_abs_summed = torch.cumsum(phi_abs_sorted, dim=1)
-    z = torch.sign(phi) * torch.sign((phi_abs_sum -
-                                      phi_abs_summed - 0.5))[indices]
+    z = torch.sign(phi) * torch.sign((phi_abs_sum - phi_abs_summed - 0.5))[indices]
     phi = phi - z
     return z, phi
 

@@ -14,7 +14,7 @@ def test_lsnn_cell():
 
 @raises(TypeError)
 def test_lsnn_cell_param_fail():
-    cell = lsnn.LSNNCell()
+    _ = lsnn.LSNNCell()
 
 
 @raises(TypeError)

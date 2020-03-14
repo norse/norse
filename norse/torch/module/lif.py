@@ -15,7 +15,7 @@ from ..functional.lif import (
 
 class LIFCell(torch.nn.Module):
     """Module that computes a single euler-integration step of a LIF
-    neuron-model. More specifically it implements one integration step 
+    neuron-model. More specifically it implements one integration step
     of the following ODE
 
     .. math::
@@ -81,12 +81,9 @@ class LIFCell(torch.nn.Module):
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LIFState:
         return LIFState(
-            z=torch.zeros(batch_size, self.hidden_size,
-                          device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size,
-                          device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.hidden_size,
-                          device=device, dtype=dtype),
+            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+            i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
         )
 
     def forward(
@@ -157,8 +154,7 @@ class LIFFeedForwardCell(torch.nn.Module):
         >>> output, s0 = lif(data, s0)
     """
 
-    def __init__(self, shape, p: LIFParameters = LIFParameters(),
-                 dt: float = 0.001):
+    def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
         super(LIFFeedForwardCell, self).__init__()
         self.shape = shape
         self.p = p
@@ -168,8 +164,7 @@ class LIFFeedForwardCell(torch.nn.Module):
         s = f"{self.shape}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype=None
-                      ) -> LIFFeedForwardState:
+    def initial_state(self, batch_size, device, dtype=None) -> LIFFeedForwardState:
         return LIFFeedForwardState(
             v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
             i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
@@ -202,8 +197,7 @@ class LIFConstantCurrentEncoder(torch.nn.Module):
         spikes = torch.zeros(self.seq_length, *x.shape, device=self.device)
 
         for ts in range(self.seq_length):
-            z, v = lif_current_encoder(
-                input_current=x, v=v, p=self.p, dt=self.dt)
+            z, v = lif_current_encoder(input_current=x, v=v, p=self.p, dt=self.dt)
             voltages[ts, :, :] = v
             spikes[ts, :, :] = z
         return voltages, spikes

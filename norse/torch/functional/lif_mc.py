@@ -27,8 +27,7 @@ def lif_mc_step(
         dt (float): Integration timestep to use
     """
     # compute voltage
-    dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i
-                               ) + torch.nn.functional.linear(
+    dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i) + torch.nn.functional.linear(
         s.v, g_coupling
     )
     v_decayed = s.v + dv
@@ -55,11 +54,11 @@ def lif_mc_feed_forward_step(
     p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
-    """Computes a single euler-integration feed forward step of a LIF 
+    """Computes a single euler-integration feed forward step of a LIF
     multi-compartment neuron-model.
 
     Parameters:
-        input (torch.Tensor): the (weighted) input spikes at the 
+        input (torch.Tensor): the (weighted) input spikes at the
                               current time step
         s (LIFFeedForwardState): current state of the neuron
         g_coupling (torch.Tensor): conductances between the neuron compartments
@@ -67,8 +66,7 @@ def lif_mc_feed_forward_step(
         dt (float): Integration timestep to use
     """
     # compute voltage
-    dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i
-                               ) + torch.nn.functional.linear(
+    dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i) + torch.nn.functional.linear(
         s.v, g_coupling
     )
     v_decayed = s.v + dv

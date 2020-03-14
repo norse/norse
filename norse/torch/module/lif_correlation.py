@@ -33,12 +33,9 @@ class LIFCorrelation(torch.nn.Module):
 
         return LIFCorrelationState(
             lif_state=LIFState(
-                z=torch.zeros(batch_size, hidden_features,
-                              device=device, dtype=dtype),
-                v=torch.zeros(batch_size, hidden_features,
-                              device=device, dtype=dtype),
-                i=torch.zeros(batch_size, hidden_features,
-                              device=device, dtype=dtype),
+                z=torch.zeros(batch_size, hidden_features, device=device, dtype=dtype),
+                v=torch.zeros(batch_size, hidden_features, device=device, dtype=dtype),
+                i=torch.zeros(batch_size, hidden_features, device=device, dtype=dtype),
             ),
             input_correlation_state=CorrelationSensorState(
                 post_pre=torch.zeros(

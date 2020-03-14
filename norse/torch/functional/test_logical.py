@@ -1,25 +1,22 @@
 import torch
 import numpy as np
 
-from .logical import logical_and, logical_or, logical_xor, muller_c
+from .logical import logical_and, logical_or, logical_xor
 from .logical import posedge_detector
 
 
 def logical_and_test():
-    z = logical_and(torch.as_tensor([1, 0, 0, 1]),
-                    torch.as_tensor([1, 0, 0, 0]))
+    z = logical_and(torch.as_tensor([1, 0, 0, 1]), torch.as_tensor([1, 0, 0, 0]))
     np.testing.assert_equal(z.numpy(), np.array([1, 0, 0, 0]))
 
 
 def logical_or_test():
-    z = logical_or(torch.as_tensor([1, 0, 0, 1]),
-                   torch.as_tensor([1, 0, 0, 0]))
+    z = logical_or(torch.as_tensor([1, 0, 0, 1]), torch.as_tensor([1, 0, 0, 0]))
     np.testing.assert_equal(z.numpy(), np.array([1, 0, 0, 1]))
 
 
 def logical_xor_test():
-    z = logical_xor(torch.as_tensor([1, 0, 0, 1]),
-                    torch.as_tensor([1, 0, 0, 0]))
+    z = logical_xor(torch.as_tensor([1, 0, 0, 1]), torch.as_tensor([1, 0, 0, 0]))
     np.testing.assert_equal(z.numpy(), np.array([0, 0, 0, 1]))
 
 

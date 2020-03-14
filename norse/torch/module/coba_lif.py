@@ -36,7 +36,7 @@ class CobaLIFCell(torch.nn.Module):
             g_i &= g_i + \\text{relu}(-w_{\\text{rec}}) z_{\\text{rec}} \\\\
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent 
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent
     and input spikes respectively.
 
     Parameters:
@@ -75,14 +75,10 @@ class CobaLIFCell(torch.nn.Module):
         self, batch_size: int, device: torch.device, dtype=torch.float
     ) -> CobaLIFState:
         return CobaLIFState(
-            z=torch.zeros(batch_size, self.hidden_size,
-                          device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size,
-                          device=device, dtype=dtype),
-            g_e=torch.zeros(batch_size, self.hidden_size,
-                            device=device, dtype=dtype),
-            g_i=torch.zeros(batch_size, self.hidden_size,
-                            device=device, dtype=dtype),
+            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+            g_e=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+            g_i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
         )
 
     def forward(

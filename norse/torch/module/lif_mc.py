@@ -32,7 +32,7 @@ class LIFMCCell(torch.nn.Module):
             i &= i + w_{\\text{rec}} z_{\\text{rec}}
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the 
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
     recurrent and input spikes respectively.
 
 
@@ -69,12 +69,9 @@ class LIFMCCell(torch.nn.Module):
         self, batch_size: int, device: torch.device, dtype=torch.float
     ) -> LIFState:
         return LIFState(
-            z=torch.zeros(batch_size, self.hidden_size,
-                          device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size,
-                          device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.hidden_size,
-                          device=device, dtype=dtype),
+            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
+            i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
         )
 
     def forward(
