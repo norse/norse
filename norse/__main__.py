@@ -1,6 +1,6 @@
-import importlib
 import subprocess
 import sys
+
 
 def main(argv):
     if argv[1] not in ["cifar", "gym", "mnist"]:

@@ -4,7 +4,8 @@
 A cartpole learning example with OpenAI gym
 ===========================================
 
-This example illustrates how to use `OpenAI Gym <https://gym.openai.com/>`_ to 
+This example illustrates how to use
+`OpenAI Gym <https://gym.openai.com/>`_ to
 train a cartpole task.
 """
 
@@ -25,8 +26,10 @@ flags.DEFINE_boolean("render", False, "Render the environment")
 flags.DEFINE_string("environment", "CartPole-v1", "Gym environment to use.")
 flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
 
+
 def main():
     app.run(cartpole.main)
+
 
 if __name__ == "__main__":
     main()

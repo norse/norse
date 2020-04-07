@@ -2,7 +2,7 @@ import torch
 from typing import Tuple
 
 from .lif import LIFState, LIFFeedForwardState, LIFParameters
-from .threshhold import threshhold
+from .threshold import threshold
 
 
 def lif_mc_step(
@@ -35,7 +35,7 @@ def lif_mc_step(
     di = -dt * p.tau_syn_inv * s.i
     i_decayed = s.i + di
     # compute new spikes
-    z_new = threshhold(v_decayed - p.v_th, p.method, p.alpha)
+    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
     # compute current jumps
@@ -54,11 +54,12 @@ def lif_mc_feed_forward_step(
     p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
-    """Computes a single euler-integration feed forward step of a LIF multi-compartment
-    neuron-model.
+    """Computes a single euler-integration feed forward step of a LIF
+    multi-compartment neuron-model.
 
     Parameters:
-        input (torch.Tensor): the (weighted) input spikes at the current time step
+        input (torch.Tensor): the (weighted) input spikes at the
+                              current time step
         s (LIFFeedForwardState): current state of the neuron
         g_coupling (torch.Tensor): conductances between the neuron compartments
         p (LIFParameters): neuron parameters
@@ -73,7 +74,7 @@ def lif_mc_feed_forward_step(
     di = -dt * p.tau_syn_inv * s.i
     i_decayed = s.i + di
     # compute new spikes
-    z_new = threshhold(v_decayed - p.v_th, p.method, p.alpha)
+    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
     # compute current jumps

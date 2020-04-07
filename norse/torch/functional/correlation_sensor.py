@@ -66,7 +66,7 @@ def correlation_sensor_step(
     post_spike_mask = post_mask(s.post_pre, z_post)
 
     post_pre_new = post_pre_update(s.post_pre, post_spike_mask, pre_spike_mask)
-    correlation_trace_new = correlation_trace_decayed + p.eta_p * pre_spike_mask
+    correlation_trace_new = correlation_trace_decayed + (p.eta_p * pre_spike_mask)
     anti_correlation_trace_new = (
         anti_correlation_trace_decayed + p.eta_m * post_spike_mask
     )

@@ -1,5 +1,4 @@
 import os
-import datetime
 import uuid
 
 from absl import app
@@ -125,7 +124,7 @@ def train(model, device, train_loader, optimizer, epoch, writer=None):
             fig, axs = plt.subplots(4, 4, figsize=(15, 10), sharex=True, sharey=True)
             axs = axs.reshape(-1)  # flatten
             for nrn in range(10):
-                one_trace = voltages.detach().cpu().numpy()[:, 0, nrn]
+                one_trace = model.voltages.detach().cpu().numpy()[:, 0, nrn]
                 fig.sca(axs[nrn])
                 fig.plot(ts, one_trace)
             fig.xlabel("Time [s]")
@@ -159,7 +158,8 @@ def test(model, device, test_loader, epoch, writer=None):
 
     accuracy = 100.0 * correct / len(test_loader.dataset)
     logging.info(
-        f"\nTest set {FLAGS.model}: Average loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)} ({accuracy:.0f}%)\n"
+        f"\nTest set {FLAGS.model}: Average loss: {test_loss:.4f}, \
+            Accuracy: {correct}/{len(test_loader.dataset)} ({accuracy:.0f}%)\n"
     )
     if writer:
         writer.add_scalar("Loss/test", test_loss, epoch)
@@ -202,7 +202,7 @@ def main(argv):
 
     device = torch.device(FLAGS.device)
 
-    kwargs = {"num_workers": 1, "pin_memory": True} if FLAGS.device is "cuda" else {}
+    kwargs = {"num_workers": 1, "pin_memory": True} if FLAGS.device == "cuda" else {}
     train_loader = torch.utils.data.DataLoader(
         torchvision.datasets.MNIST(
             root=".",
@@ -210,7 +210,8 @@ def main(argv):
             download=True,
             transform=torchvision.transforms.Compose(
                 [
-                    #                    torchvision.transforms.RandomCrop(size=[28,28], padding=4),
+                    # torchvision.transforms.
+                    #    RandomCrop(size=[28,28], padding=4)
                     torchvision.transforms.ToTensor(),
                     torchvision.transforms.Normalize((0.1307,), (0.3081,)),
                 ]
@@ -246,7 +247,6 @@ def main(argv):
     FLAGS.append_flags_into_file(f"flags.txt")
 
     input_features = 28 * 28
-    output_features = 10
 
     model = LIFConvNet(
         input_features,

@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 
 from .lif import LIFFeedForwardState, LIFState
 from .lif_refrac import LIFRefracState, LIFRefracFeedForwardState

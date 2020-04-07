@@ -13,8 +13,9 @@ from ..functional.lsnn import (
 
 
 class LSNNCell(torch.nn.Module):
-    r"""Module that computes a single euler-integration step of a LSNN neuron-model.
-    More specifically it implements one integration step of the following ODE
+    r"""Module that computes a single euler-integration step of a LSNN
+    neuron-model. More specifically it implements one integration step of
+    the following ODE
 
     .. math::
         \\begin{align*}
@@ -38,8 +39,8 @@ class LSNNCell(torch.nn.Module):
             b &= b + \\beta z
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input
-    spikes respectively.
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
+    recurrent and input spikes respectively.
 
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
@@ -92,18 +93,20 @@ class LSNNCell(torch.nn.Module):
 
 
 class LSNNLayer(torch.nn.Module):
-    r"""A Long short-term memory neuron module adapted from https://arxiv.org/abs/1803.09574
+    r"""A Long short-term memory neuron module adapted from
+        https://arxiv.org/abs/1803.09574
 
     Usage:
       >>> from norse.torch.module import LSNNLayer, LSNNCell
-      >>> layer = LSNNLayer(LSNNCell, 2, 10)    // LSNNCell with 2 inputs and 10 outputs
+      >>> layer = LSNNLayer(LSNNCell, 2, 10)    // LSNNCell of shape 2 -> 10
       >>> state = layer.initial_state(5, "cpu") // 5 batch size running on CPU
-      >>> data  = torch.zeros(2, 5, 2)          // Generate data of shape [5, 2, 10]
+      >>> data  = torch.zeros(2, 5, 2)          // Data of shape [5, 2, 10]
       >>> output, new_state = layer.forward(data, state)
 
     Parameters:
       cell (torch.nn.Module): the underling neuron module, uninitialized
-      *cell_args: variable length input arguments for the underlying cell constructor
+      *cell_args: variable length input arguments for the underlying cell
+                  constructor
     """
 
     def __init__(self, cell, *cell_args):
@@ -111,7 +114,8 @@ class LSNNLayer(torch.nn.Module):
         self.cell = cell(*cell_args)
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
-        """Return the initial state of the LSNN layer, as given by the internal LSNNCell"""
+        """Return the initial state of the LSNN layer, as given by the
+        internal LSNNCell"""
         return self.cell.initial_state(batch_size, device, dtype)
 
     def forward(
@@ -126,7 +130,7 @@ class LSNNLayer(torch.nn.Module):
 
 
 class LSNNFeedForwardCell(torch.nn.Module):
-    r"""Euler integration cell for LIF Neuron with threshhold adaptation.
+    r"""Euler integration cell for LIF Neuron with threshold adaptation.
     More specifically it implements one integration step of the following ODE
 
     .. math::

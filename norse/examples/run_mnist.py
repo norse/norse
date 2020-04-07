@@ -7,7 +7,6 @@ MNIST classification example
 
 import norse.task.mnist as mnist
 
-import torch
 from absl import app
 from absl import flags
 
@@ -38,8 +37,10 @@ flags.DEFINE_boolean("only_output", False, "Train only the last layer...")
 flags.DEFINE_boolean("do_plot", False, "Do intermediate plots")
 flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
 
+
 def main():
     app.run(mnist.main)
+
 
 if __name__ == "__main__":
     main()

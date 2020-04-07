@@ -20,7 +20,7 @@ and will have to build up the action-potential from scratch.
 In the below example 10 neurons have been simulated over 100 timesteps, but with
 different input activity. Neuron 0, for instance, received 0 input current,
 meaning that it never accumulated enough energy to spike. Neuron 9, on the other
-hand, spikes on roughly every 4th timestep. 
+hand, spikes on roughly every 4th timestep.
 
 Follow our notebook on how to `simulate and plot spiking data
 <https://colab.research.google.com/github/norse/norse/blob/master/notebooks/spike_plotting.ipynb>`_

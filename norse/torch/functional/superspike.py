@@ -4,8 +4,9 @@ from .heaviside import heaviside
 
 class SuperSpike(torch.autograd.Function):
     """SuperSpike surrogate gradient as described in Section 3.3.2 of
-    
-        F. Zenke, S. Ganguli, "SuperSpike: Supervised Learning in Multilayer Spiking Neural Networks", 
+
+        F. Zenke, S. Ganguli, "SuperSpike: Supervised Learning in
+                               Multilayer Spiking Neural Networks",
         Neural Computation 30, 1514–1541 (2018),
         doi:10.1162/neco_a_01086
     """

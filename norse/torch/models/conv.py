@@ -1,11 +1,6 @@
 import torch
 
-from norse.torch.functional.lif import (
-    LIFFeedForwardState,
-    LIFParameters,
-    lif_feed_forward_step,
-)
-from norse.torch.functional.leaky_integrator import LIState
+from norse.torch.functional.lif import LIFParameters
 from norse.torch.module.leaky_integrator import LICell
 from norse.torch.module.lif import LIFFeedForwardCell
 

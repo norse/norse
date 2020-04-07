@@ -12,14 +12,12 @@ is involved.
 How to define a Network
 -----------------------
 
-The spiking neural network primitives in norse are designed to fit in as seamlessly
-as possible into a traditional deep learning pipeline.
+The spiking neural network primitives in norse are designed to fit in
+as seamlessly as possible into a traditional deep learning pipeline.
 """
 
 import torch
-from norse.torch.functional.lif import (
-    LIFParameters,
-)
+from norse.torch.functional.lif import LIFParameters
 
 from norse.torch.module.leaky_integrator import LICell
 from norse.torch.module.lif import LIFFeedForwardCell
@@ -27,12 +25,12 @@ from norse.torch.module.lif import LIFFeedForwardCell
 
 class Net(torch.nn.Module):
     def __init__(
-            self,
-            device="cpu",
-            num_channels=1,
-            feature_size=32,
-            model="super",
-            dtype=torch.float,
+        self,
+        device="cpu",
+        num_channels=1,
+        feature_size=32,
+        model="super",
+        dtype=torch.float,
     ):
         super(Net, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -113,5 +111,6 @@ out.backward(torch.randn(timesteps, batch_size, 10))
 # .. note::
 #
 #     ``norse`` like pytorch only supports mini-batches. This means that
-#     contrary to most other spiking neural network simulators ```norse``` always
-#     integrates several indepdentent sets of spiking neural networks at once.
+#     contrary to most other spiking neural network simulators ```norse```
+#     always integrates several indepdentent sets of spiking neural
+#     networks at once.

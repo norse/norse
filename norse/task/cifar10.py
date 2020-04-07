@@ -73,9 +73,7 @@ def add_luminance(images):
 
 
 def poisson_train(images, seq_length, device, rel_fmax=0.2):
-    return (
-        torch.rand(seq_length, *images.shape).float() < rel_fmax * images
-    ).float()
+    return (torch.rand(seq_length, *images.shape).float() < rel_fmax * images).float()
 
 
 def signed_poisson_train(images, seq_length, device, rel_fmax=0.2):
@@ -163,7 +161,7 @@ def train(
             _, axs = plt.subplots(4, 4, figsize=(15, 10), sharex=True, sharey=True)
             axs = axs.reshape(-1)  # flatten
             for nrn in range(10):
-                one_trace = voltages.detach().cpu().numpy()[:, 0, nrn]
+                one_trace = model.voltages.detach().cpu().numpy()[:, 0, nrn]
                 plt.sca(axs[nrn])
                 plt.plot(ts, one_trace)
             plt.xlabel("Time [s]")
@@ -195,7 +193,8 @@ def test(model, device, test_loader, epoch, writer=None):
 
     accuracy = 100.0 * correct / len(test_loader.dataset)
     logging.info(
-        f"\nTest set {FLAGS.model}: Average loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)} ({accuracy:.0f}%)\n"
+        f"\nTest set {FLAGS.model}: Average loss: {test_loss:.4f}, \
+            Accuracy: {correct}/{len(test_loader.dataset)} ({accuracy:.0f}%)\n"
     )
 
     if writer:
@@ -221,12 +220,6 @@ def load(path, model, optimizer, device):
     optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
     model.train(device=device)
     return model, optimizer
-
-
-def compute_min(loader):
-    min = 0.0
-    for batch_idx, (data, target) in enumerate(loader):
-        print(torch.min(data))
 
 
 def main(argv):
@@ -297,7 +290,7 @@ def main(argv):
             [torchvision.transforms.ToTensor(), add_luminance]
         )
         kwargs = (
-            {"num_workers": 4, "pin_memory": True} if FLAGS.device is "cuda" else {}
+            {"num_workers": 4, "pin_memory": True} if FLAGS.device == "cuda" else {}
         )
         train_loader = torch.utils.data.DataLoader(
             torchvision.datasets.CIFAR10(
@@ -366,8 +359,6 @@ def main(argv):
 
     if device == "cuda":
         model = torch.nn.DataParallel(model).to(device)
-
-    batch_size = FLAGS.batch_size
 
     if FLAGS.optimizer == "sgd":
         optimizer = torch.optim.SGD(
