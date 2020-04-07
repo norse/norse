@@ -3,7 +3,7 @@
 
 from . import task
 
-from .torch import benchmark, functional, models, module
+from .torch import benchmark, functional
 from .torch.models import conv
 from .torch.module import lif, lsnn
 
@@ -12,6 +12,6 @@ __all__ = [
     benchmark,
     functional,
     conv,
-    module.lif,
-    module.lsnn,
+    lif,
+    lsnn,
 ]
