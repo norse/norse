@@ -11,12 +11,13 @@ Norse is a library to do
 with 
 `spiking neural networks <https://en.wikipedia.org/wiki/Spiking_neural_network>`_.
 
-.. |image:: https://github.com/norse/norse/workflows/Python%20package/badge.svg
+.. image:: https://github.com/norse/norse/workflows/Python%20package/badge.svg
    :target: https://github.com/norse/norse/actions
 
 The purpose of this library is to exploit the advantages of `bio-inspired neural components <https://en.wikipedia.org/wiki/Spiking_neural_network>`_, who are sparse and event-driven - a fundamental difference from artificial neural networks.
-Norse expands `PyTorch <https://pytorch.org/>`_ with primitives for bio-inspired neural components, 
-bringing you two advantages: a modern and proven infrastructure based on PyTorch and deep learning-compatible spiking neural network components.
+Norse expands on `PyTorch <https://pytorch.org/>`_, bringing you two advantages: a modern and proven infrastructure and deep learning-compatible components.
+
+Read more in the :ref:`page-introduction-spiking`.
  
 Getting started
 ---------------
