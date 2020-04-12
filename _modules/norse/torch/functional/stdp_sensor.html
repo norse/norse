@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.functional.stdp_sensor &#8212; norse 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for norse.torch.functional.stdp_sensor</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<div class="viewcode-block" id="STDPSensorParameters"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.stdp_sensor.html#norse.torch.functional.stdp_sensor.STDPSensorParameters">[docs]</a><span class="k">class</span> <span class="nc">STDPSensorParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of an STDP sensor as it is used for event driven</span>
+<span class="sd">    plasticity rules.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        eta_p (torch.Tensor): correlation state</span>
+<span class="sd">        eta_m (torch.Tensor): anti correlation state</span>
+<span class="sd">        tau_ac_inv (torch.Tensor): anti-correlation sensor time constant</span>
+<span class="sd">        tau_c_inv (torch.Tensor): correlation sensor time constant</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">eta_p</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">eta_m</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">tau_ac_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">100e-3</span><span class="p">)</span>
+    <span class="n">tau_c_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">100e-3</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="STDPSensorState"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.stdp_sensor.html#norse.torch.functional.stdp_sensor.STDPSensorState">[docs]</a><span class="k">class</span> <span class="nc">STDPSensorState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;State of an event driven STDP sensor.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        a_pre (torch.Tensor): presynaptic STDP sensor state.</span>
+<span class="sd">        a_post (torch.Tensor): postsynaptic STDP sensor state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">a_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="n">a_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
+
+
+<div class="viewcode-block" id="stdp_sensor_step"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.stdp_sensor.html#norse.torch.functional.stdp_sensor.stdp_sensor_step">[docs]</a><span class="k">def</span> <span class="nf">stdp_sensor_step</span><span class="p">(</span>
+    <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">s</span><span class="p">:</span> <span class="n">STDPSensorState</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">STDPSensorParameters</span> <span class="o">=</span> <span class="n">STDPSensorParameters</span><span class="p">(),</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">STDPSensorState</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Event driven STDP rule.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        z_pre (torch.Tensor): pre-synaptic spikes</span>
+<span class="sd">        z_post (torch.Tensor): post-synaptic spikes</span>
+<span class="sd">        s (STDPSensorState): state of the STDP sensor</span>
+<span class="sd">        p (STDPSensorParameters): STDP sensor parameters</span>
+<span class="sd">        dt (float): integration time step</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">da_pre</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_c_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">s</span><span class="o">.</span><span class="n">a_pre</span><span class="p">)</span>
+    <span class="n">a_pre_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">da_pre</span>
+
+    <span class="n">da_post</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_c_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">s</span><span class="o">.</span><span class="n">a_post</span><span class="p">)</span>
+    <span class="n">a_post_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">a_post</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">da_post</span>
+
+    <span class="n">a_pre_new</span> <span class="o">=</span> <span class="n">a_pre_decayed</span> <span class="o">+</span> <span class="n">z_pre</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_p</span>
+    <span class="n">a_post_new</span> <span class="o">=</span> <span class="n">a_post_decayed</span> <span class="o">+</span> <span class="n">z_post</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_m</span>
+
+    <span class="n">dw</span> <span class="o">=</span> <span class="n">z_pre</span> <span class="o">*</span> <span class="n">a_pre_new</span> <span class="o">+</span> <span class="n">z_post</span> <span class="o">*</span> <span class="n">a_post_new</span>
+    <span class="k">return</span> <span class="n">dw</span><span class="p">,</span> <span class="n">STDPSensorState</span><span class="p">(</span><span class="n">a_pre_new</span><span class="p">,</span> <span class="n">a_post_new</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">norse</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">Running Experiments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../functional.html">norse.torch.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module.html">norse.torch.module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

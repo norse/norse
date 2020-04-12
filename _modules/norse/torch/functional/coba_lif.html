@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.functional.coba_lif &#8212; norse 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for norse.torch.functional.coba_lif</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<div class="viewcode-block" id="CobaLIFState"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.CobaLIFState">[docs]</a><span class="k">class</span> <span class="nc">CobaLIFState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;State of a conductance based LIF neuron.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        z (torch.Tensor): recurrent spikes</span>
+<span class="sd">        v (torch.Tensor): membrane potential</span>
+<span class="sd">        g_e (torch.Tensor): excitatory input conductance</span>
+<span class="sd">        g_i (torch.Tensor): inhibitory input conductance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="n">v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="n">g_e</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="n">g_i</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
+
+
+<div class="viewcode-block" id="CobaLIFParameters"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.CobaLIFParameters">[docs]</a><span class="k">class</span> <span class="nc">CobaLIFParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of conductance based LIF neuron.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        tau_syn_exc_inv (torch.Tensor): inverse excitatory synaptic input</span>
+<span class="sd">                                        time constant</span>
+<span class="sd">        tau_syn_inh_inv (torch.Tensor): inverse inhibitory synaptic input</span>
+<span class="sd">                                        time constant</span>
+<span class="sd">        c_m_inv (torch.Tensor): inverse membrane capacitance</span>
+<span class="sd">        g_l (torch.Tensor): leak conductance</span>
+<span class="sd">        e_rev_I (torch.Tensor): inhibitory reversal potential</span>
+<span class="sd">        e_rev_E (torch.Tensor): excitatory reversal potential</span>
+<span class="sd">        v_rest (torch.Tensor): rest membrane potential</span>
+<span class="sd">        v_reset (torch.Tensor): reset membrane potential</span>
+<span class="sd">        v_thresh (torch.Tensor): threshold membrane potential</span>
+<span class="sd">        method (str): method to determine the spike threshold</span>
+<span class="sd">                      (relevant for surrogate gradients)</span>
+<span class="sd">        alpha (float): hyper parameter to use in surrogate gradient computation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tau_syn_exc_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">tau_syn_inh_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">c_m_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">g_l</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">20</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">e_rev_I</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">e_rev_E</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+    <span class="n">v_rest</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">v_reset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">)</span>
+    <span class="n">v_thresh</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;heaviside&quot;</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+
+
+<div class="viewcode-block" id="coba_lif_step"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.coba_lif_step">[docs]</a><span class="k">def</span> <span class="nf">coba_lif_step</span><span class="p">(</span>
+    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">s</span><span class="p">:</span> <span class="n">CobaLIFState</span><span class="p">,</span>
+    <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">CobaLIFParameters</span> <span class="o">=</span> <span class="n">CobaLIFParameters</span><span class="p">(),</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">CobaLIFState</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Euler integration step for a conductance based LIF neuron.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
+<span class="sd">        s (CobaLIFState): current state of the neuron</span>
+<span class="sd">        input_weights (torch.Tensor): input weights</span>
+<span class="sd">            (sign determines  contribution to inhibitory / excitatory input)</span>
+<span class="sd">        recurrent_weights (torch.Tensor): recurrent weights</span>
+<span class="sd">            (sign determines contribution to inhibitory / excitatory input)</span>
+<span class="sd">        p (CobaLIFParameters): parameters of the neuron</span>
+<span class="sd">        dt (float): Integration time step</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dg_e</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_exc_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">g_e</span>
+    <span class="n">g_e</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">g_e</span> <span class="o">+</span> <span class="n">dg_e</span>
+    <span class="n">dg_i</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inh_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">g_i</span>
+    <span class="n">g_i</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">g_i</span> <span class="o">+</span> <span class="n">dg_i</span>
+
+    <span class="n">g_e</span> <span class="o">=</span> <span class="n">g_e</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span>
+        <span class="nb">input</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">input_weights</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">g_i</span> <span class="o">=</span> <span class="n">g_i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span>
+        <span class="nb">input</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">input_weights</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">g_e</span> <span class="o">=</span> <span class="n">g_e</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">recurrent_weights</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">g_i</span> <span class="o">=</span> <span class="n">g_i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">recurrent_weights</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">dv</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">dt</span>
+        <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">c_m_inv</span>
+        <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">g_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">v_rest</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">g_e</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">e_rev_E</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">g_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">e_rev_I</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+
+    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_thresh</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">CobaLIFState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">g_e</span><span class="p">,</span> <span class="n">g_i</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CobaLIFFeedForwardState"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.CobaLIFFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">CobaLIFFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;State of a conductance based feed forward LIF neuron.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        v (torch.Tensor): membrane potential</span>
+<span class="sd">        g_e (torch.Tensor): excitatory input conductance</span>
+<span class="sd">        g_i (torch.Tensor): inhibitory input conductance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="n">g_e</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="n">g_i</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
+
+
+<div class="viewcode-block" id="coba_lif_feed_forward_step"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.coba_lif_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">coba_lif_feed_forward_step</span><span class="p">(</span>
+    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">s</span><span class="p">:</span> <span class="n">CobaLIFFeedForwardState</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">CobaLIFParameters</span> <span class="o">=</span> <span class="n">CobaLIFParameters</span><span class="p">(),</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">CobaLIFFeedForwardState</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Euler integration step for a conductance based LIF neuron.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        input (torch.Tensor): synaptic input</span>
+<span class="sd">        s (CobaLIFFeedForwardState): current state of the neuron</span>
+<span class="sd">        p (CobaLIFParameters): parameters of the neuron</span>
+<span class="sd">        dt (float): Integration time step</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dg_e</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_exc_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">g_e</span>
+    <span class="n">g_e</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">g_e</span> <span class="o">+</span> <span class="n">dg_e</span>
+    <span class="n">dg_i</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inh_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">g_i</span>
+    <span class="n">g_i</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">g_i</span> <span class="o">+</span> <span class="n">dg_i</span>
+
+    <span class="n">g_e</span> <span class="o">=</span> <span class="n">g_e</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="n">g_i</span> <span class="o">=</span> <span class="n">g_i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="nb">input</span><span class="p">)</span>
+
+    <span class="n">dv</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">dt</span>
+        <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">c_m_inv</span>
+        <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">g_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">v_rest</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">g_e</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">e_rev_E</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">g_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">e_rev_I</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+
+    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_thresh</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">CobaLIFFeedForwardState</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">g_e</span><span class="p">,</span> <span class="n">g_i</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">norse</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">Running Experiments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../functional.html">norse.torch.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module.html">norse.torch.module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

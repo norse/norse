@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>correlation_sensor &#8212; norse 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="leaky_integrator" href="myelin.torch.functional.leaky_integrator.html" />
+    <link rel="prev" title="coba_lif" href="myelin.torch.functional.coba_lif.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="correlation-sensor">
+<h1>correlation_sensor<a class="headerlink" href="#correlation-sensor" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="correlationsensorparameters">
+<h3><span class="hidden-section">CorrelationSensorParameters</span><a class="headerlink" href="#correlationsensorparameters" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorParameters">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.correlation_sensor.</code><code class="sig-name descname">CorrelationSensorParameters</code><span class="sig-paren">(</span><em class="sig-param">eta_p</em>, <em class="sig-param">eta_m</em>, <em class="sig-param">tau_ac_inv</em>, <em class="sig-param">tau_c_inv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/correlation_sensor.html#CorrelationSensorParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorParameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="correlationsensorstate">
+<h3><span class="hidden-section">CorrelationSensorState</span><a class="headerlink" href="#correlationsensorstate" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorState">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.correlation_sensor.</code><code class="sig-name descname">CorrelationSensorState</code><span class="sig-paren">(</span><em class="sig-param">post_pre</em>, <em class="sig-param">correlation_trace</em>, <em class="sig-param">anti_correlation_trace</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/correlation_sensor.html#CorrelationSensorState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorState" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="integration-functions">
+<h2>Integration Functions<a class="headerlink" href="#integration-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="correlation-sensor-step">
+<h3><span class="hidden-section">correlation_sensor_step</span><a class="headerlink" href="#correlation-sensor-step" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="norse.torch.functional.correlation_sensor.correlation_sensor_step">
+<code class="sig-prename descclassname">norse.torch.functional.correlation_sensor.</code><code class="sig-name descname">correlation_sensor_step</code><span class="sig-paren">(</span><em class="sig-param">z_pre</em>, <em class="sig-param">z_post</em>, <em class="sig-param">s</em>, <em class="sig-param">p=CorrelationSensorParameters(eta_p=tensor(1.)</em>, <em class="sig-param">eta_m=tensor(1.)</em>, <em class="sig-param">tau_ac_inv=tensor(10.)</em>, <em class="sig-param">tau_c_inv=tensor(10.))</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/correlation_sensor.html#correlation_sensor_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.correlation_sensor.correlation_sensor_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Euler integration step of an idealized version of the correlation sensor
+as it is present on the BrainScaleS 2 chips.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#norse.torch.functional.correlation_sensor.CorrelationSensorState" title="norse.torch.functional.correlation_sensor.CorrelationSensorState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CorrelationSensorState</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">norse</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../functional.html">norse.torch.functional</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.coba_lif.html">coba_lif</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">correlation_sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.leaky_integrator.html">leaky_integrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif.html">lif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif_mc.html">lif_mc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif_refrac.html">lif_refrac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lsnn.html">lsnn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.stdp_sensor.html">stdp_sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.threshhold.html">threshold</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../module.html">norse.torch.module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../functional.html">norse.torch.functional</a><ul>
+      <li>Previous: <a href="myelin.torch.functional.coba_lif.html" title="previous chapter">coba_lif</a></li>
+      <li>Next: <a href="myelin.torch.functional.leaky_integrator.html" title="next chapter">leaky_integrator</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/functional/myelin.torch.functional.correlation_sensor.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
