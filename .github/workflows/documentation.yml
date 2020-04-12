@@ -17,14 +17,13 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements-dev.txt
     - name: Compile docs
       uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs/"
+        pre-build-command: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
     - name: Commit documentation changes
       run: |
         git clone https://github.com/norse/norse --branch gh-pages --single-branch gh-pages
