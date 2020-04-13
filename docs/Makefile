@@ -16,7 +16,7 @@ help:
 
 # Listens for changes and updates any window titled 'Norse .* documentation'
 serve:
-	@ls $(SOURCEDIR)/** | entr -rs "$(SPHINXBUILD) -M html $(SOURCEDIR) $(BUILDDIR) && xdotool search 'Norse .* documentation' windowactivate key --clearmodifiers shift+ctrl+r"
+	@ls $(SOURCEDIR)/** | entr -rs "$(SPHINXBUILD) -M html $(SOURCEDIR) $(BUILDDIR) && xdotool search 'Norse .* documentation' windowactivate key --clearmodifiers ctrl+shift+r"
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).

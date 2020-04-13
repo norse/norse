@@ -20,8 +20,8 @@ sys.path.insert(0, os.path.abspath("../../"))
 # -- Project information -----------------------------------------------------
 
 project = "norse"
-copyright = "2019, Christian Pehle"
-author = "Christian Pehle"
+copyright = "2020, Norse.ai"
+author = "Norse.ai"
 
 # The full version, including alpha/beta/rc tags
 release = "0.0.2"
@@ -41,6 +41,7 @@ extensions = [
     "matplotlib.sphinxext.plot_directive",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
+    "sphinx.ext.githubpages",
     "sphinx_autodoc_typehints",
     "sphinx_gallery.gen_gallery",
 ]
