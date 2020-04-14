@@ -48,7 +48,7 @@ class LIFConvNet(torch.nn.Module):
         )
         self.only_first_spike = only_first_spike
         self.input_features = input_features
-        self.rsnn = ConvNet4(device=device, model=model)
+        self.rsnn = ConvNet4(device=device, method=model)
         self.device = device
         self.seq_length = seq_length
 
