@@ -1,0 +1,43 @@
+name: Documentation
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Compile docs
+      uses: ammaraskar/sphinx-action@master
+      with:
+        docs-folder: "docs/"
+        pre-build-command: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+    - name: Commit documentation changes
+      run: |
+        git clone https://github.com/norse/norse --branch gh-pages --single-branch gh-pages
+        cp -r docs/build/html/* gh-pages/
+        cd gh-pages
+        git config --local user.email "jensegholm@protonmail.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Update documentation" -a || true
+        # The above command will fail if no changes were present, so we ignore
+        # the return code.
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: gh-pages
+        directory: gh-pages
+        github_token: ${{ secrets.GITHUB_TOKEN }}
