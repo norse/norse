@@ -2,6 +2,7 @@
 """
 from . import coba_lif
 from . import correlation_sensor
+from . import encode
 from . import heaviside
 from . import if_current_encoder
 from . import leaky_integrator
@@ -17,6 +18,7 @@ from . import superspike
 __all__ = [
     coba_lif,
     correlation_sensor,
+    encode,
     heaviside,
     if_current_encoder,
     leaky_integrator,

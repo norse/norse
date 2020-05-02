@@ -1,10 +1,14 @@
 import torch
 
 
-def heaviside(input):
+def heaviside(data):
+    """
+    A `heaviside step function <https://en.wikipedia.org/wiki/Heaviside_step_function>`_
+    that truncates numbers <= 0 to 0 and everything else to 1.
+
+    .. math::
+        H[n]=\begin{cases} 0, & n <= 0, \\ 1, & n \g 0, \end{cases}
+    """
     return torch.where(
-        input <= torch.zeros_like(input),
-        torch.zeros_like(input),
-        torch.ones_like(input),
+        data <= torch.zeros_like(data), torch.zeros_like(data), torch.ones_like(data),
     )
-    # return 0.5 * (torch.sign(input) + 1.0)
