@@ -48,7 +48,7 @@ def population_encode(
     if a number gets close to its "receptive field".
 
     .. figure:: https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/PopulationCode.svg/1920px-PopulationCode.svg.png
-        
+
         Gaussian curves representing different neuron "receptive fields". Image credit: `Andrew K. Richardson`_.
 
     .. _Andrew K. Richardson: https://commons.wikimedia.org/wiki/File:PopulationCode.svg
@@ -70,12 +70,21 @@ def population_encode(
                 (which changes for each index in the output tensor) and the actual data value to encode respectively.z
                 Defaults to gaussian radial basis kernel function.
         distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.
+    
+    Returns:
     """
     # Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py
-    size = (input_values.size(0), out_features)
+    size = (input_values.size(0), out_features) + input_values.size()[1:]
     if not scale:
         scale = input_values.max()
     centres = torch.linspace(0, scale, out_features).expand(size)
     x = input_values.unsqueeze(1).expand(size)
     distances = distance_function(x, centres) * scale
     return kernel(distances)
+
+# Angle coding
+
+# Rate coding
+# Spike latency
+# Constant encoding
+#  - With refraction (similar to spike latency)
