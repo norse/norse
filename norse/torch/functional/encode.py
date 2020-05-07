@@ -79,3 +79,25 @@ def population_encode(
     x = input_values.unsqueeze(1).expand(size)
     distances = distance_function(x, centres) * scale
     return kernel(distances)
+
+
+def poisson_encode(
+    input_values : torch.Tensor,
+    seq_length : int,
+    f_max : float = 100,
+    dt : float = 0.001,
+):
+    """
+    Encodes a tensor of input values, which are assumed to be in the
+    range [0,1] into a tensor of one dimension higher of binary values,
+    which represent input spikes.
+
+    See for example https://www.cns.nyu.edu/~david/handouts/poisson.pdf.
+
+    Parameters:
+        input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [0,1].
+        sequence_length (int): Number of time steps in the resulting spike train.
+        f_max (float): Maximal frequency (in Hertz) which will be emitted.
+        dt (float): Integration time step (should coincide with the integration time step used in the model)
+    """
+    return (torch.rand(seq_length, *input_values.shape).float() < dt * f_max * input_values).float()
