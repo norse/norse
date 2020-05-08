@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.functional.superspike &#8212; norse 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for norse.torch.functional.superspike</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">.heaviside</span> <span class="kn">import</span> <span class="n">heaviside</span>
+
+
+<div class="viewcode-block" id="SuperSpike"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.superspike.SuperSpike">[docs]</a><span class="k">class</span> <span class="nc">SuperSpike</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;SuperSpike surrogate gradient as described in Section 3.3.2 of</span>
+
+<span class="sd">        F. Zenke, S. Ganguli, &quot;SuperSpike: Supervised Learning in</span>
+<span class="sd">                               Multilayer Spiking Neural Networks&quot;,</span>
+<span class="sd">        Neural Computation 30, 1514–1541 (2018),</span>
+<span class="sd">        doi:10.1162/neco_a_01086</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SuperSpike.forward"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.superspike.SuperSpike.forward">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">save_for_backward</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SuperSpike.backward"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.superspike.SuperSpike.backward">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">):</span>
+        <span class="p">(</span><span class="nb">input</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">alpha</span>
+        <span class="n">grad_input</span> <span class="o">=</span> <span class="n">grad_output</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">grad_input</span> <span class="o">/</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span>
+            <span class="mi">2</span>
+        <span class="p">)</span>  <span class="c1"># section 3.3.2 (beta -&gt; alpha)</span>
+        <span class="k">return</span> <span class="n">grad</span><span class="p">,</span> <span class="kc">None</span></div></div>
+
+
+<div class="viewcode-block" id="super_fn"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.superspike.super_fn">[docs]</a><span class="k">def</span> <span class="nf">super_fn</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">SuperSpike</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">norse</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../spiking.html">Introduction to spikes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.html">norse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.task.html">norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.functional.html">norse.torch.functional package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.module.html">norse.torch.module package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

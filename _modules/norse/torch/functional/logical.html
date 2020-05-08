@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.functional.logical &#8212; norse 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for norse.torch.functional.logical</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">.superspike</span> <span class="kn">import</span> <span class="n">super_fn</span>
+
+
+<div class="viewcode-block" id="logical_and"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.logical.logical_and">[docs]</a><span class="k">def</span> <span class="nf">logical_and</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes a logical and provided x and y are bitvectors.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="logical_xor"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.logical.logical_xor">[docs]</a><span class="k">def</span> <span class="nf">logical_xor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes a logical xor provided x and y are bitvectors.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="logical_or"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.logical.logical_or">[docs]</a><span class="k">def</span> <span class="nf">logical_or</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes a logical or provided x and y are bitvectors.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">super_fn</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="muller_c"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.logical.muller_c">[docs]</a><span class="k">def</span> <span class="nf">muller_c</span><span class="p">(</span><span class="n">y_prev</span><span class="p">,</span> <span class="n">x_1</span><span class="p">,</span> <span class="n">x_2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the muller-c element next state provided x_1 and x_2 are bitvectors</span>
+<span class="sd">    and y_prev is the previous state.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">super_fn</span><span class="p">(</span><span class="n">x_1</span> <span class="o">*</span> <span class="n">x_2</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_1</span> <span class="o">+</span> <span class="n">x_2</span><span class="p">)</span> <span class="o">*</span> <span class="n">y_prev</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="posedge_detector"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.logical.posedge_detector">[docs]</a><span class="k">def</span> <span class="nf">posedge_detector</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">z_prev</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determines whether a transition from 0 to 1 has occured</span>
+<span class="sd">    providing that z and z_prev are bitvectors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_prev</span><span class="p">)</span> <span class="o">*</span> <span class="n">z</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">norse</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../spiking.html">Introduction to spikes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.html">norse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.task.html">norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.functional.html">norse.torch.functional package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.module.html">norse.torch.module package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

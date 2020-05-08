@@ -18,8 +18,6 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="leaky_integrator" href="myelin.torch.functional.leaky_integrator.html" />
-    <link rel="prev" title="correlation_sensor" href="myelin.torch.functional.correlation_sensor.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -36,10 +34,61 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="encode">
-<h1>encode<a class="headerlink" href="#encode" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-norse.torch.functional.encode">
+<span id="encode"></span><h1>encode<a class="headerlink" href="#module-norse.torch.functional.encode" title="Permalink to this headline">¶</a></h1>
+<p>Stateless encoding functionality for Norse, offering different ways to convert numerical
+inputs to the spiking domain. Note that some functions, like <cite>population_encode</cite> does not return spikes,
+but rather numerical values that will have to be converted into spikes via, for instance, the poisson encoder.</p>
+<p>The probability models builds on top of the PyTorch distributions package: <a class="reference external" href="https://arxiv.org/abs/1711.10604">https://arxiv.org/abs/1711.10604</a></p>
 <div class="section" id="integration-functions">
 <h2>Integration Functions<a class="headerlink" href="#integration-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="norse.torch.functional.encode.constant_current_lif_encode">
+<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">constant_current_lif_encode</code><span class="sig-paren">(</span><em class="sig-param">input_current</em>, <em class="sig-param">seq_length</em>, <em class="sig-param">parameters=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=0.0)</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#constant_current_lif_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.constant_current_lif_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that
+occur during a number of timesteps/iterations (seq_length).</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq_length</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># Simulate two iterations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">constant_current_lif_encode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">)</span>
+<span class="go">(tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage</span>
+<span class="go">         [0.3800, 0.7600, 0.0000, 0.0000]]),</span>
+<span class="go"> tensor([[0., 0., 0., 1.],                   # Spikes for each iteration</span>
+<span class="go">         [0., 0., 1., 1.]]))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><em>torch.Tensor</em></a>) – The input tensor, representing LIF current</p></li>
+<li><p><strong>seq_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of iterations to simulate</p></li>
+<li><p><strong>parameters</strong> (<a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif.LIFParameters" title="norse.torch.functional.lif.LIFParameters"><em>LIFParameters</em></a>) – Initial neuron parameters. Defaults to zero.</p></li>
+<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Time delta between simulation steps</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.functional.encode.poisson_encode">
+<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">poisson_encode</code><span class="sig-paren">(</span><em class="sig-param">input_values</em>, <em class="sig-param">seq_length</em>, <em class="sig-param">f_max=100</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#poisson_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.poisson_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encodes a tensor of input values, which are assumed to be in the
+range [0,1] into a tensor of one dimension higher of binary values,
+which represent input spikes.</p>
+<p>See for example <a class="reference external" href="https://www.cns.nyu.edu/~david/handouts/poisson.pdf">https://www.cns.nyu.edu/~david/handouts/poisson.pdf</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
+<li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
+<li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Maximal frequency (in Hertz) which will be emitted.</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="function">
 <dt id="norse.torch.functional.encode.population_encode">
 <code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">population_encode</code><span class="sig-paren">(</span><em class="sig-param">input_values</em>, <em class="sig-param">out_features</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">kernel=&lt;function gaussian_rbf&gt;</em>, <em class="sig-param">distance_function=&lt;function euclidean_distance&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#population_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.population_encode" title="Permalink to this definition">¶</a></dt>
@@ -74,6 +123,7 @@ Defaults to gaussian radial basis kernel function.</p></li>
 </ul>
 </dd>
 </dl>
+<p>Returns:</p>
 </dd></dl>
 
 </div>
@@ -100,33 +150,22 @@ Defaults to gaussian radial basis kernel function.</p></li>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Beginner tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spiking.html">Introduction to spikes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../functional.html">norse.torch.functional</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.coba_lif.html">coba_lif</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.correlation_sensor.html">correlation_sensor</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">encode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.leaky_integrator.html">leaky_integrator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif.html">lif</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif_mc.html">lif_mc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif_refrac.html">lif_refrac</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lsnn.html">lsnn</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.stdp_sensor.html">stdp_sensor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.threshhold.html">threshold</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../module.html">norse.torch.module</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../norse.html">norse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../norse.task.html">norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../norse.torch.functional.html">norse.torch.functional package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../norse.torch.module.html">norse.torch.module package</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="../functional.html">norse.torch.functional</a><ul>
-      <li>Previous: <a href="myelin.torch.functional.correlation_sensor.html" title="previous chapter">correlation_sensor</a></li>
-      <li>Next: <a href="myelin.torch.functional.leaky_integrator.html" title="next chapter">leaky_integrator</a></li>
-  </ul></li>
   </ul></li>
 </ul>
 </div>

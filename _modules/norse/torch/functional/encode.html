@@ -37,7 +37,8 @@
   <h1>Source code for norse.torch.functional.encode</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Stateless encoding functionality for Norse, offering different ways to convert numerical</span>
-<span class="sd">inputs to the spiking domain.</span>
+<span class="sd">inputs to the spiking domain. Note that some functions, like `population_encode` does not return spikes, </span>
+<span class="sd">but rather numerical values that will have to be converted into spikes via, for instance, the poisson encoder.</span>
 
 <span class="sd">The probability models builds on top of the PyTorch distributions package: https://arxiv.org/abs/1711.10604</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -46,8 +47,49 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.distributions</span> <span class="k">as</span> <span class="nn">tdist</span>
 
+<span class="kn">from</span> <span class="nn">.lif</span> <span class="kn">import</span> <span class="n">lif_current_encoder</span><span class="p">,</span> <span class="n">LIFParameters</span>
 
-<span class="k">def</span> <span class="nf">gaussian_rbf</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+
+<div class="viewcode-block" id="constant_current_lif_encode"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.encode.constant_current_lif_encode">[docs]</a><span class="k">def</span> <span class="nf">constant_current_lif_encode</span><span class="p">(</span><span class="n">input_current</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+                                <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                <span class="n">parameters</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+                                <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that </span>
+<span class="sd">    occur during a number of timesteps/iterations (seq_length).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.tensor([2, 4, 8, 16])</span>
+<span class="sd">        &gt;&gt;&gt; seq_length = 2 # Simulate two iterations</span>
+<span class="sd">        &gt;&gt;&gt; constant_current_lif_encode(data, seq_length)</span>
+<span class="sd">        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage</span>
+<span class="sd">                 [0.3800, 0.7600, 0.0000, 0.0000]]), </span>
+<span class="sd">         tensor([[0., 0., 0., 1.],                   # Spikes for each iteration</span>
+<span class="sd">                 [0., 0., 1., 1.]]))</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        input_current (torch.Tensor): The input tensor, representing LIF current</span>
+<span class="sd">        seq_length (int): The number of iterations to simulate</span>
+<span class="sd">        parameters (LIFParameters): Initial neuron parameters. Defaults to zero.</span>
+<span class="sd">        tau_mem_inv (float):</span>
+<span class="sd">        dt (float): Time delta between simulation steps</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">input_current</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_current</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">input_current</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_current</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">voltages</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_current</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                           <span class="n">device</span><span class="o">=</span><span class="n">input_current</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">spikes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_current</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                         <span class="n">device</span><span class="o">=</span><span class="n">input_current</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seq_length</span><span class="p">):</span>
+        <span class="n">z</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">lif_current_encoder</span><span class="p">(</span>
+            <span class="n">input_current</span><span class="o">=</span><span class="n">input_current</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+        <span class="n">voltages</span><span class="p">[</span><span class="n">ts</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="n">spikes</span><span class="p">[</span><span class="n">ts</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
+    <span class="k">return</span> <span class="n">voltages</span><span class="p">,</span> <span class="n">spikes</span></div>
+
+
+<div class="viewcode-block" id="gaussian_rbf"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.encode.gaussian_rbf">[docs]</a><span class="k">def</span> <span class="nf">gaussian_rbf</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A `gaussian radial basis kernel &lt;https://en.wikipedia.org/wiki/Radial_basis_function_kernel&gt;`_</span>
 <span class="sd">    that calculates the radial basis given a distance value (distance between :math:`x` and a data </span>
@@ -60,17 +102,17 @@
 <span class="sd">        tensor (torch.Tensor): The tensor containing distance values to convert to radial bases</span>
 <span class="sd">        sigma (float): The spread of the gaussian distribution. Defaults to 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">tensor</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">tensor</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span></div>
 
 
-<span class="k">def</span> <span class="nf">euclidean_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="euclidean_distance"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.encode.euclidean_distance">[docs]</a><span class="k">def</span> <span class="nf">euclidean_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simple euclidean distance metric.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="population_encode"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.encode.html#norse.torch.functional.encode.population_encode">[docs]</a><span class="k">def</span> <span class="nf">population_encode</span><span class="p">(</span>
+<div class="viewcode-block" id="population_encode"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.encode.population_encode">[docs]</a><span class="k">def</span> <span class="nf">population_encode</span><span class="p">(</span>
     <span class="n">input_values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">out_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">scale</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -85,7 +127,7 @@
 <span class="sd">    if a number gets close to its &quot;receptive field&quot;.</span>
 
 <span class="sd">    .. figure:: https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/PopulationCode.svg/1920px-PopulationCode.svg.png</span>
-<span class="sd">        </span>
+
 <span class="sd">        Gaussian curves representing different neuron &quot;receptive fields&quot;. Image credit: `Andrew K. Richardson`_.</span>
 
 <span class="sd">    .. _Andrew K. Richardson: https://commons.wikimedia.org/wiki/File:PopulationCode.svg</span>
@@ -107,9 +149,11 @@
 <span class="sd">                (which changes for each index in the output tensor) and the actual data value to encode respectively.z</span>
 <span class="sd">                Defaults to gaussian radial basis kernel function.</span>
 <span class="sd">        distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.</span>
+
+<span class="sd">    Returns:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py</span>
-    <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_values</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">out_features</span><span class="p">)</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_values</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">out_features</span><span class="p">)</span> <span class="o">+</span> <span class="n">input_values</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">scale</span><span class="p">:</span>
         <span class="n">scale</span> <span class="o">=</span> <span class="n">input_values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
     <span class="n">centres</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">out_features</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
@@ -118,11 +162,11 @@
     <span class="k">return</span> <span class="n">kernel</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">poisson_encode</span><span class="p">(</span>
-    <span class="n">input_values</span> <span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">seq_length</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">f_max</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
-    <span class="n">dt</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<div class="viewcode-block" id="poisson_encode"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.encode.poisson_encode">[docs]</a><span class="k">def</span> <span class="nf">poisson_encode</span><span class="p">(</span>
+    <span class="n">input_values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Encodes a tensor of input values, which are assumed to be in the</span>
@@ -137,7 +181,7 @@
 <span class="sd">        f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
 <span class="sd">        dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">f_max</span> <span class="o">*</span> <span class="n">input_values</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">f_max</span> <span class="o">*</span> <span class="n">input_values</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span></div>
 </pre></div>
 
           </div>
@@ -160,11 +204,16 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Beginner tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../spiking.html">Introduction to spikes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../functional.html">norse.torch.functional</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module.html">norse.torch.module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.html">norse package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.task.html">norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.functional.html">norse.torch.functional package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.module.html">norse.torch.module package</a></li>
 </ul>
 
 <div class="relations">
