@@ -135,7 +135,7 @@
 <span class="sd">        input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [0,1].</span>
 <span class="sd">        sequence_length (int): Number of time steps in the resulting spike train.</span>
 <span class="sd">        f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
-<span class="sd">        distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.</span>
+<span class="sd">        dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">f_max</span> <span class="o">*</span> <span class="n">input_values</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
 </pre></div>
