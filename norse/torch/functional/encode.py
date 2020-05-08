@@ -1,6 +1,7 @@
 """
 Stateless encoding functionality for Norse, offering different ways to convert numerical
-inputs to the spiking domain.
+inputs to the spiking domain. Note that some functions, like `population_encode` does not return spikes, 
+but rather numerical values that will have to be converted into spikes via, for instance, the poisson encoder.
 
 The probability models builds on top of the PyTorch distributions package: https://arxiv.org/abs/1711.10604
 """
