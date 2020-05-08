@@ -1,4 +1,5 @@
-"""Stateless spiking neural network components.
+"""
+Stateless spiking neural network components.
 """
 from . import coba_lif
 from . import correlation_sensor

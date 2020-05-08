@@ -9,6 +9,46 @@ from typing import Callable, Union
 import torch
 import torch.distributions as tdist
 
+from .lif import lif_current_encoder, LIFParameters
+
+
+def constant_current_encoder_lif(input_current: torch.Tensor,
+                                 seq_length: int,
+                                 parameters: LIFParameters = LIFParameters(),
+                                 dt: float = 0.001):
+    """
+    Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that 
+    occur during a number of timesteps/iterations (seq_length).
+
+    Example:
+        >>> data = torch.tensor([2, 4, 8, 16])
+        >>> seq_length = 2 # Simulate two iterations
+        >>> constant_current_encoder_lif(data, seq_length)
+        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage
+                 [0.3800, 0.7600, 0.0000, 0.0000]]), 
+         tensor([[0., 0., 0., 1.],                   # Spikes for each iteration
+                 [0., 0., 1., 1.]]))
+
+    Parameters:
+        input_current (torch.Tensor): The input tensor, representing LIF current
+        seq_length (int): The number of iterations to simulate
+        parameters (LIFParameters): Initial neuron parameters. Defaults to zero.
+        dt (float): Time delta between simulation steps
+    """
+    v = torch.zeros(*input_current.shape, device=input_current.device)
+    z = torch.zeros(*input_current.shape, device=input_current.device)
+    voltages = torch.zeros(seq_length, *input_current.shape,
+                           device=input_current.device)
+    spikes = torch.zeros(seq_length, *input_current.shape,
+                         device=input_current.device)
+
+    for ts in range(seq_length):
+        z, v = lif_current_encoder(
+            input_current=input_current, v=v, p=parameters, dt=dt)
+        voltages[ts] = v
+        spikes[ts] = z
+    return voltages, spikes
+
 
 def gaussian_rbf(tensor: torch.Tensor, sigma: float = 1):
     """
@@ -70,7 +110,7 @@ def population_encode(
                 (which changes for each index in the output tensor) and the actual data value to encode respectively.z
                 Defaults to gaussian radial basis kernel function.
         distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.
-    
+
     Returns:
     """
     # Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py

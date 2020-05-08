@@ -24,4 +24,4 @@ def encode_population_batch_test():
     data = torch.tensor([[0, 0, 0], [0.5, 0.5, 0.5], [1, 1, 1]])
     out_features = 3
     actual = encode.population_encode(data, out_features)
-    np.testing.assert_equal(np.array(actual.size()), np.array([3, 3, 3]))
+    np.testing.assert_equal(*actual.size(), np.array([3, 3, 3]))
