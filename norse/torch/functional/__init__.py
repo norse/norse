@@ -5,7 +5,6 @@ from . import coba_lif
 from . import correlation_sensor
 from . import encode
 from . import heaviside
-from . import if_current_encoder
 from . import leaky_integrator
 from . import lif_correlation
 from . import lif_mc_refrac
@@ -21,7 +20,6 @@ __all__ = [
     correlation_sensor,
     encode,
     heaviside,
-    if_current_encoder,
     leaky_integrator,
     lif_correlation,
     lif_mc,

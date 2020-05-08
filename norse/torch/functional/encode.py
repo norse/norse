@@ -12,10 +12,10 @@ import torch.distributions as tdist
 from .lif import lif_current_encoder, LIFParameters
 
 
-def constant_current_encoder_lif(input_current: torch.Tensor,
-                                 seq_length: int,
-                                 parameters: LIFParameters = LIFParameters(),
-                                 dt: float = 0.001):
+def constant_current_lif_encode(input_current: torch.Tensor,
+                                seq_length: int,
+                                parameters: LIFParameters = LIFParameters(),
+                                dt: float = 0.001):
     """
     Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that 
     occur during a number of timesteps/iterations (seq_length).
@@ -23,7 +23,7 @@ def constant_current_encoder_lif(input_current: torch.Tensor,
     Example:
         >>> data = torch.tensor([2, 4, 8, 16])
         >>> seq_length = 2 # Simulate two iterations
-        >>> constant_current_encoder_lif(data, seq_length)
+        >>> constant_current_lif_encode(data, seq_length)
         (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage
                  [0.3800, 0.7600, 0.0000, 0.0000]]), 
          tensor([[0., 0., 0., 1.],                   # Spikes for each iteration
@@ -33,6 +33,7 @@ def constant_current_encoder_lif(input_current: torch.Tensor,
         input_current (torch.Tensor): The input tensor, representing LIF current
         seq_length (int): The number of iterations to simulate
         parameters (LIFParameters): Initial neuron parameters. Defaults to zero.
+        tau_mem_inv (float):
         dt (float): Time delta between simulation steps
     """
     v = torch.zeros(*input_current.shape, device=input_current.device)
@@ -122,9 +123,24 @@ def population_encode(
     distances = distance_function(x, centres) * scale
     return kernel(distances)
 
-# Angle coding
 
-# Rate coding
-# Spike latency
-# Constant encoding
-#  - With refraction (similar to spike latency)
+def poisson_encode(
+    input_values: torch.Tensor,
+    seq_length: int,
+    f_max: float = 100,
+    dt: float = 0.001,
+):
+    """
+    Encodes a tensor of input values, which are assumed to be in the
+    range [0,1] into a tensor of one dimension higher of binary values,
+    which represent input spikes.
+
+    See for example https://www.cns.nyu.edu/~david/handouts/poisson.pdf.
+
+    Parameters:
+        input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [0,1].
+        sequence_length (int): Number of time steps in the resulting spike train.
+        f_max (float): Maximal frequency (in Hertz) which will be emitted.
+        dt (float): Integration time step (should coincide with the integration time step used in the model)
+    """
+    return (torch.rand(seq_length, *input_values.shape).float() < dt * f_max * input_values).float()
