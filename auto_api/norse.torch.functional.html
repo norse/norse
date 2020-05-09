@@ -376,22 +376,19 @@ occur during a number of timesteps/iterations (seq_length).</p>
 <dl class="function">
 <dt id="norse.torch.functional.encode.gaussian_rbf">
 <code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">gaussian_rbf</code><span class="sig-paren">(</span><em class="sig-param">tensor</em>, <em class="sig-param">sigma=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#gaussian_rbf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.gaussian_rbf" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Radial_basis_function_kernel">gaussian radial basis kernel</a>
+<dd><p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Radial_basis_function_kernel">gaussian radial basis kernel</a>
 that calculates the radial basis given a distance value (distance between <span class="math notranslate nohighlight">\(x\)</span> and a data
 value <span class="math notranslate nohighlight">\(x'\)</span>, or <span class="math notranslate nohighlight">\(\|\mathbf{x} - \mathbf{x'}\|^2\)</span> below).</p>
 <div class="math notranslate nohighlight">
-\[K(\mathbf{x}, \mathbf{x'}) = \exp\left(-\]</div>
-</div></blockquote>
-<p>rac{|mathbf{x} - mathbf{x’}|^2}{2sigma^2}
-ight)</p>
-<blockquote>
-<div><dl class="simple">
-<dt>Parameters:</dt><dd><p>tensor (torch.Tensor): The tensor containing distance values to convert to radial bases
-sigma (float): The spread of the gaussian distribution. Defaults to 1.</p>
+\[K(\mathbf{x}, \mathbf{x'}) = \exp\left(- \frac{\|\mathbf{x} - \mathbf{x'}\|^2}{2\sigma^2}\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – The tensor containing distance values to convert to radial bases</p></li>
+<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The spread of the gaussian distribution. Defaults to 1.</p></li>
+</ul>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
 <dl class="function">
@@ -477,7 +474,7 @@ which represent input spikes.</p>
 <dd><p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Heaviside_step_function">heaviside step function</a>
 that truncates numbers &lt;= 0 to 0 and everything else to 1.</p>
 <div class="math notranslate nohighlight">
-\[H[n]=egin{cases} 0, &amp; n &lt;= 0, \ 1, &amp; n \g 0, \end{cases}\]</div>
+\[H[n]=\begin{cases} 0, &amp; n &lt;= 0, \ 1, &amp; n \g 0, \end{cases}\]</div>
 </dd></dl>
 
 </div>
