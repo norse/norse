@@ -18,7 +18,7 @@ help:
 
 # Listens for changes and updates any window titled 'Norse .* documentation'
 serve:
-	@ls $(SOURCEDIR)/**/*.rst | entr -rs "$(SPHINXAPI) $(CODEDIR) -o $(SOURCEDIR) && $(SOURCEDIR) $(SPHINXBUILD) -M html $(SOURCEDIR) $(BUILDDIR)"
+	@ls $(CODEDIR)/**/*.py | entr -rs '$(SPHINXAPI) -o $(SOURCEDIR)/auto_api -H Norse -f -e -M $(CODEDIR) $(SOURCEDIR) && $(SPHINXBUILD) -M html $(SOURCEDIR) $(BUILDDIR)'
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).

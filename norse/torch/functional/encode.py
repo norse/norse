@@ -3,6 +3,7 @@ Stateless encoding functionality for Norse, offering different ways to convert n
 inputs to the spiking domain. Note that some functions, like `population_encode` does not return spikes,
 but rather numerical values that will have to be converted into spikes via, for instance, the poisson encoder.
 """
+
 from typing import Callable, Union
 
 import torch
@@ -42,7 +43,8 @@ def constant_current_lif_encode(
     voltages = torch.zeros(
         seq_length, *input_current.shape, device=input_current.device
     )
-    spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
+    spikes = torch.zeros(seq_length, *input_current.shape,
+                         device=input_current.device)
 
     for ts in range(seq_length):
         z, v = lif_current_encoder(
@@ -60,7 +62,7 @@ def gaussian_rbf(tensor: torch.Tensor, sigma: float = 1):
     value :math:`x'`, or :math:`\|\mathbf{x} - \mathbf{x'}\|^2` below).
 
     .. math::
-        K(\mathbf{x}, \mathbf{x'}) = \exp\left(-\frac{\|\mathbf{x} - \mathbf{x'}\|^2}{2\sigma^2}\right)
+        K(\mathbf{x}, \mathbf{x'}) = \exp\left(- \\frac{\|\mathbf{x} - \mathbf{x'}\|^2}{2\sigma^2}\\right)
 
     Parameters:
         tensor (torch.Tensor): The tensor containing distance values to convert to radial bases
@@ -143,5 +145,6 @@ def poisson_encode(
         dt (float): Integration time step (should coincide with the integration time step used in the model)
     """
     return (
-        torch.rand(seq_length, *input_values.shape).float() < dt * f_max * input_values
+        torch.rand(seq_length, *input_values.shape).float() < dt *
+        f_max * input_values
     ).float()
