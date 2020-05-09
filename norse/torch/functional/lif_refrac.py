@@ -1,7 +1,7 @@
 import torch
 
 from .lif import LIFParameters, LIFState, LIFFeedForwardState
-from .threshhold import threshhold
+from .threshold import threshold
 
 from typing import NamedTuple, Tuple
 
@@ -40,7 +40,7 @@ def lif_refrac_step(
 ) -> Tuple[torch.Tensor, LIFRefracState]:
     r"""Computes a single euler-integration step of a recurrently connected
      LIF neuron-model with a refractory period.
-    
+
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
         s (LIFRefracState): state at the current time step
@@ -49,7 +49,7 @@ def lif_refrac_step(
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
     """
-    refrac_mask = threshhold(s.rho, p.lif.method, p.lif.alpha)
+    refrac_mask = threshold(s.rho, p.lif.method, p.lif.alpha)
 
     # compute voltage updates
     dv = (
@@ -65,7 +65,7 @@ def lif_refrac_step(
     i_decayed = s.lif.i + di
 
     # compute new spikes
-    z_new = threshhold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
+    z_new = threshold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.lif.v_reset
     # compute current jumps
@@ -87,7 +87,8 @@ class LIFRefracFeedForwardState(NamedTuple):
     """State of a feed forward LIF neuron with absolute refractory period.
 
     Parameters:
-        lif (LIFFeedForwardState): state of the feed forward LIF neuron integration
+        lif (LIFFeedForwardState): state of the feed forward LIF
+                                   neuron integration
         rho (torch.Tensor): refractory state (count towards zero)
     """
 
@@ -110,7 +111,7 @@ def lif_refrac_feed_forward_step(
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
     """
-    rho_mask = threshhold(s.rho, p.lif.method, p.lif.alpha)
+    rho_mask = threshold(s.rho, p.lif.method, p.lif.alpha)
 
     # compute voltage updates
     dv = (1 - rho_mask) * dt * p.lif.tau_mem_inv * ((p.lif.v_leak - s.lif.v) + s.lif.i)
@@ -121,7 +122,7 @@ def lif_refrac_feed_forward_step(
     i_decayed = s.lif.i + di
 
     # compute new spikes
-    z_new = threshhold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
+    z_new = threshold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.lif.v_reset
     # compute current jumps

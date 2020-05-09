@@ -18,12 +18,12 @@ setup(
     description="A library for deep learning with spiking neural networks",
     long_description=readme_text,
     long_description_content_type="text/markdown",
-    url="http://github.com/electronicvisions/norse",
+    url="http://github.com/norse/norse",
     author="Christian Pehle",
     author_email="christian.pehle@gmail.com",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Development Status :: 2 - Alpha",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
@@ -36,5 +36,5 @@ setup(
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    keywords="norse machine learning",
+    keywords="machine learning spiking neural networks",
 )

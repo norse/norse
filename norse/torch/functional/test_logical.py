@@ -1,7 +1,8 @@
 import torch
 import numpy as np
 
-from .logical import logical_and, logical_or, logical_xor, muller_c, posedge_detector
+from .logical import logical_and, logical_or, logical_xor
+from .logical import posedge_detector
 
 
 def logical_and_test():

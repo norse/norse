@@ -11,6 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 #
+import types
 import os
 import sys
 
@@ -20,11 +21,11 @@ sys.path.insert(0, os.path.abspath("../../"))
 # -- Project information -----------------------------------------------------
 
 project = "norse"
-copyright = "2019, Christian Pehle"
-author = "Christian Pehle"
+copyright = "2020, Norse.ai"
+author = "Norse.ai"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1"
+release = "0.0.2"
 
 
 # -- General configuration ---------------------------------------------------
@@ -41,12 +42,13 @@ extensions = [
     "matplotlib.sphinxext.plot_directive",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
+    "sphinx.ext.githubpages",
     "sphinx_autodoc_typehints",
     "sphinx_gallery.gen_gallery",
 ]
 
 sphinx_gallery_conf = {
-    "examples_dirs": "../../examples",  # path to your example scripts
+    "examples_dirs": "../../norse/examples",  # path to your example scripts
     "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
 }
 
@@ -77,3 +79,6 @@ intersphinx_mapping = {
     "numpy": ("http://docs.scipy.org/doc/numpy/", None),
     "PyTorch": ("http://pytorch.org/docs/master/", None),
 }
+
+# Include __init__ docstrings
+autoclass_content = "both"

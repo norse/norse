@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 
 from .leaky_integrator import LIState, li_feed_forward_step, li_step
 

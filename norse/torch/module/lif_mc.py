@@ -13,15 +13,16 @@ class LIFMCCell(torch.nn.Module):
 
     .. math::
         \\begin{align*}
-            \\dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - g_{\\text{coupling}} v + i) \\\\
+            \\dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} \
+            - g_{\\text{coupling}} v + i) \\\\
             \\dot{i} &= -1/\\tau_{\\text{syn}} i
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
         z = \Theta(v - v_{\\text{th}})
-    
+
     and transition equations
 
     .. math::
@@ -31,9 +32,9 @@ class LIFMCCell(torch.nn.Module):
             i &= i + w_{\\text{rec}} z_{\\text{rec}}
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input
-    spikes respectively.
-    
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
+    recurrent and input spikes respectively.
+
 
     Parameters:
         input (torch.Tensor): the input spikes at the current time step

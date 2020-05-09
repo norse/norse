@@ -9,35 +9,11 @@ that there is an insistence that communication between units in the network
 happens through spikes - represented as binary one or zero - and that time
 is involved.
 
-Working with spikes
--------------------
-
-Spikes are representations of activity happening at a certain timestep.
-The basic logic of a spiking neuron is this: if enough input is accumulated over
-a series of timesteps, a spike is emitted. When that happens, the neuron resets
-and will have to build up the action-potential from scratch.
-
-In the below example 10 neurons have been simulated over 100 timesteps, but with
-different input activity. Neuron 0, for instance, received 0 input current,
-meaning that it never accumulated enough energy to spike. Neuron 9, on the other
-hand, spikes on roughly every 4th timestep.
-
-Follow our notebook on how to `simulate and plot spiking data
-<https://colab.research.google.com/github/norse/norse/blob/master/notebooks/spike_plotting.ipynb>`_
-if you are curious how this works.
-
-.. figure:: spikes.png
-    :align: center
-    :alt: Spikes over time for 10 different neurons
-
-    10 neurons are each given different inputs over 100 timesteps to produce
-    different spiking patterns.
-
 How to define a Network
 -----------------------
 
-The spiking neural network primitives in norse are designed to fit in as seamlessly
-as possible into a traditional deep learning pipeline.
+The spiking neural network primitives in norse are designed to fit in
+as seamlessly as possible into a traditional deep learning pipeline.
 """
 
 import torch
@@ -135,5 +111,6 @@ out.backward(torch.randn(timesteps, batch_size, 10))
 # .. note::
 #
 #     ``norse`` like pytorch only supports mini-batches. This means that
-#     contrary to most other spiking neural network simulators ```norse``` always
-#     integrates several indepdentent sets of spiking neural networks at once.
+#     contrary to most other spiking neural network simulators ```norse```
+#     always integrates several indepdentent sets of spiking neural
+#     networks at once.
