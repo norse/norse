@@ -35,7 +35,6 @@ def constant_current_lif_encode(
         input_current (torch.Tensor): The input tensor, representing LIF current
         seq_length (int): The number of iterations to simulate
         parameters (LIFParameters): Initial neuron parameters. Defaults to zero.
-        tau_mem_inv (float):
         dt (float): Time delta between simulation steps
     """
     v = torch.zeros(*input_current.shape, device=input_current.device)
