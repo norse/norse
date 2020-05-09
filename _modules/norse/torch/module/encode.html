@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.module.encode &#8212; norse 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for norse.torch.module.encode</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Stateful encoders as torch modules.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">norse.torch.functional</span> <span class="kn">import</span> <span class="n">lif</span>
+<span class="kn">import</span> <span class="nn">norse.torch.functional.encode</span> <span class="k">as</span> <span class="nn">encode</span>
+
+
+<div class="viewcode-block" id="ConstantCurrentLIFEncoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.ConstantCurrentLIFEncoder">[docs]</a><span class="k">class</span> <span class="nc">ConstantCurrentLIFEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">parameters</span><span class="p">:</span> <span class="n">lif</span><span class="o">.</span><span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">lif</span><span class="o">.</span><span class="n">LIFParameters</span><span class="p">(),</span>
+                 <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that </span>
+<span class="sd">        occur during a number of timesteps/iterations (seq_length).</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; data = torch.tensor([2, 4, 8, 16])</span>
+<span class="sd">            &gt;&gt;&gt; seq_length = 2 # Simulate two iterations</span>
+<span class="sd">            &gt;&gt;&gt; constant_current_lif_encode(data, seq_length)</span>
+<span class="sd">            (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage</span>
+<span class="sd">                    [0.3800, 0.7600, 0.0000, 0.0000]]), </span>
+<span class="sd">            tensor([[0., 0., 0., 1.],                   # Spikes for each iteration</span>
+<span class="sd">                    [0., 0., 1., 1.]]))</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            seq_length (int): The number of iterations to simulate</span>
+<span class="sd">            parameters (LIFParameters): Initial neuron parameters. Defaults to zero.</span>
+<span class="sd">            dt (float): Time delta between simulation steps</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ConstantCurrentLIFEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span> <span class="o">=</span> <span class="n">seq_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
+<div class="viewcode-block" id="ConstantCurrentLIFEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.ConstantCurrentLIFEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_currents</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">constant_current_lif_encode</span><span class="p">(</span><span class="n">input_currents</span><span class="p">,</span> <span class="n">seq_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="PoissonEncoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.PoissonEncoder">[docs]</a><span class="k">class</span> <span class="nc">PoissonEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encodes a tensor of input values, which are assumed to be in the</span>
+<span class="sd">        range [0,1] (if not signed, [-1,1] if signed) </span>
+<span class="sd">        into a tensor of one dimension higher of binary values,</span>
+<span class="sd">        which represent input spikes.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [0,1].</span>
+<span class="sd">            sequence_length (int): Number of time steps in the resulting spike train.</span>
+<span class="sd">            f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
+<span class="sd">            dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PopulationEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
+<div class="viewcode-block" id="PoissonEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.PoissonEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">poisson_encode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f_max</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="PopulationEncoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.PopulationEncoder">[docs]</a><span class="k">class</span> <span class="nc">PopulationEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">scale</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">kernel</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">gaussian_rbf</span><span class="p">,</span>
+                 <span class="n">distance_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">euclidean_distance</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encodes a set of input values into population codes, such that each singular input value is represented by</span>
+<span class="sd">        a list of numbers (typically calculated by a radial basis kernel), whose length is equal to the out_features.</span>
+
+<span class="sd">        Population encoding can be visualised by imagining a number of neurons in a list, whose activity increases</span>
+<span class="sd">        if a number gets close to its &quot;receptive field&quot;.</span>
+
+<span class="sd">        .. figure:: https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/PopulationCode.svg/1920px-PopulationCode.svg.png</span>
+
+<span class="sd">            Gaussian curves representing different neuron &quot;receptive fields&quot;. Image credit: `Andrew K. Richardson`_.</span>
+
+<span class="sd">        .. _Andrew K. Richardson: https://com</span>
+<span class="sd">        super(PopulationEncoder, self).__init__()mons.wikimedia.org/wiki/File:PopulationCode.svg</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; data = torch.tensor(0, 0.5, 1)</span>
+<span class="sd">            &gt;&gt;&gt; out_features = 3</span>
+<span class="sd">            &gt;&gt;&gt; PopulationEncoder(out_features).forward(out_features)</span>
+<span class="sd">            tensor([[1.0000, 0.8825, 0.6065],</span>
+<span class="sd">                    [0.8825, 1.0000, 0.8825],</span>
+<span class="sd">                    [0.6065, 0.8825, 1.0000]])</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            out_features (int): The number of output *per* input value</span>
+<span class="sd">            scale (torch.Tensor): The scaling factor for the kernels. Defaults to the maximum value of the input.</span>
+<span class="sd">                                Can also be set for each individual sample.</span>
+<span class="sd">            kernel: A function that takes two inputs and returns a tensor. The two inputs represent the center value</span>
+<span class="sd">                    (which changes for each index in the output tensor) and the actual data value to encode respectively.z</span>
+<span class="sd">                    Defaults to gaussian radial basis kernel function.</span>
+<span class="sd">            distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PopulationEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_features</span> <span class="o">=</span> <span class="n">out_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distance_function</span> <span class="o">=</span> <span class="n">distance_function</span>
+
+<div class="viewcode-block" id="PopulationEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.PopulationEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">population_encode</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_function</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SignedPoissonEncoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.SignedPoissonEncoder">[docs]</a><span class="k">class</span> <span class="nc">SignedPoissonEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encodes a tensor of input values, which are assumed to be in the</span>
+<span class="sd">        range [-1,1] (if not signed, [-1,1] if signed) </span>
+<span class="sd">        into a tensor of one dimension higher of binary values,</span>
+<span class="sd">        which represent input spikes.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [0,1].</span>
+<span class="sd">            sequence_length (int): Number of time steps in the resulting spike train.</span>
+<span class="sd">            f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
+<span class="sd">            dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SignedPoissonEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span> <span class="o">=</span> <span class="n">seq_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span> <span class="o">=</span> <span class="n">f_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
+<div class="viewcode-block" id="SignedPoissonEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.SignedPoissonEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">signed_poisson_encode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f_max</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">norse</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../spiking.html">Introduction to spikes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.torch.html">norse.torch package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
