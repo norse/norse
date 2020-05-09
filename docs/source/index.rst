@@ -73,12 +73,7 @@ Table of contents
    :glob:
    :titlesonly:
    
-   norse
-   norse.task
-   norse.torch.benchmark
-   norse.torch.functional
-   norse.torch.models
-   norse.torch.module
+   auto_api/norse.torch
 
 
 

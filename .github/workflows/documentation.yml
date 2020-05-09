@@ -28,6 +28,7 @@ jobs:
           pre-build-command: |
             python -m pip install --upgrade pip
             pip install -r requirements-dev.txt
+            sphinx-apidoc -o docs/source/auto_api -H Norse -f -M norse/
       - name: Commit documentation changes
         run: |
           git clone https://github.com/norse/norse --branch gh-pages --single-branch gh-pages
