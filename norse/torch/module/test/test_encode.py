@@ -23,6 +23,5 @@ def encode_population_test():
 
 def constant_current_lif_encode_test():
     data = torch.tensor([0, 0, 0, 0])
-    v, z = encode.ConstantCurrentLIFEncoder(2).forward(data)
-    np.testing.assert_equal(np.zeros((2, 4)), v.numpy())
+    z = encode.ConstantCurrentLIFEncoder(2).forward(data)
     np.testing.assert_equal(np.zeros((2, 4)), z.numpy())

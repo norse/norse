@@ -39,18 +39,14 @@ def constant_current_lif_encode(
     """
     v = torch.zeros(*input_current.shape, device=input_current.device)
     z = torch.zeros(*input_current.shape, device=input_current.device)
-    voltages = torch.zeros(
-        seq_length, *input_current.shape, device=input_current.device
-    )
     spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
 
     for ts in range(seq_length):
         z, v = lif_current_encoder(
             input_current=input_current, v=v, p=parameters, dt=dt
         )
-        voltages[ts] = v
         spikes[ts] = z
-    return voltages, spikes
+    return spikes
 
 
 def gaussian_rbf(tensor: torch.Tensor, sigma: float = 1):
