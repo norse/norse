@@ -25,7 +25,7 @@ jobs:
       run: |
         pip install nose
         nosetests
-    - name: Lint with flake
+    - name: Lint with black
       run: |
-        pip install flake8
-        flake8 norse --ignore C901,W605,W503 --max-line-length=120
+        pip install black
+        black --check norse

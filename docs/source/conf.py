@@ -11,6 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 #
+import types
 import os
 import sys
 
@@ -78,3 +79,6 @@ intersphinx_mapping = {
     "numpy": ("http://docs.scipy.org/doc/numpy/", None),
     "PyTorch": ("http://pytorch.org/docs/master/", None),
 }
+
+# Include __init__ docstrings
+autoclass_content = "both"

@@ -37,6 +37,14 @@ Norse is a library that you can either install via `PyPi <https://pypi.org/proje
     git clone https://github.com/norse/norse
     pip install -e norse
 
+Tutorials and understanding spikes
+----------------------------------
+
+In biology, neural networks are living things that change over time and where sparseness plays a critical role. 
+We have prepared some introductory texts and tutorials that will help you understand why we use spiking neural networks in our work. 
+
+Read more in our :ref:`page-introduction-spiking`.
+
 Running experiments
 -------------------
 
@@ -57,6 +65,7 @@ Table of contents
 
    auto_examples/index
    experiments
+   spiking
 
 .. toctree::
    :maxdepth: 2
@@ -64,8 +73,7 @@ Table of contents
    :glob:
    :titlesonly:
    
-   functional
-   module
+   auto_api/norse.torch
 
 
 
