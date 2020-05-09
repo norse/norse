@@ -1,6 +1,6 @@
 """
 Stateless encoding functionality for Norse, offering different ways to convert numerical
-inputs to the spiking domain. Note that some functions, like `population_encode` does not return spikes, 
+inputs to the spiking domain. Note that some functions, like `population_encode` does not return spikes,
 but rather numerical values that will have to be converted into spikes via, for instance, the poisson encoder.
 """
 from typing import Callable, Union
@@ -11,10 +11,12 @@ import torch.distributions as tdist
 from .lif import lif_current_encoder, LIFParameters
 
 
-def constant_current_lif_encode(input_current: torch.Tensor,
-                                seq_length: int,
-                                parameters: LIFParameters = LIFParameters(),
-                                dt: float = 0.001):
+def constant_current_lif_encode(
+    input_current: torch.Tensor,
+    seq_length: int,
+    parameters: LIFParameters = LIFParameters(),
+    dt: float = 0.001,
+):
     """
     Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that 
     occur during a number of timesteps/iterations (seq_length).
@@ -37,14 +39,15 @@ def constant_current_lif_encode(input_current: torch.Tensor,
     """
     v = torch.zeros(*input_current.shape, device=input_current.device)
     z = torch.zeros(*input_current.shape, device=input_current.device)
-    voltages = torch.zeros(seq_length, *input_current.shape,
-                           device=input_current.device)
-    spikes = torch.zeros(seq_length, *input_current.shape,
-                         device=input_current.device)
+    voltages = torch.zeros(
+        seq_length, *input_current.shape, device=input_current.device
+    )
+    spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
 
     for ts in range(seq_length):
         z, v = lif_current_encoder(
-            input_current=input_current, v=v, p=parameters, dt=dt)
+            input_current=input_current, v=v, p=parameters, dt=dt
+        )
         voltages[ts] = v
         spikes[ts] = z
     return voltages, spikes
@@ -124,10 +127,7 @@ def population_encode(
 
 
 def poisson_encode(
-    input_values: torch.Tensor,
-    seq_length: int,
-    f_max: float = 100,
-    dt: float = 0.001,
+    input_values: torch.Tensor, seq_length: int, f_max: float = 100, dt: float = 0.001,
 ):
     """
     Encodes a tensor of input values, which are assumed to be in the
@@ -142,4 +142,6 @@ def poisson_encode(
         f_max (float): Maximal frequency (in Hertz) which will be emitted.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
     """
-    return (torch.rand(seq_length, *input_values.shape).float() < dt * f_max * input_values).float()
+    return (
+        torch.rand(seq_length, *input_values.shape).float() < dt * f_max * input_values
+    ).float()

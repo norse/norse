@@ -23,5 +23,8 @@ class IFConstantCurrentEncoder(torch.nn.Module):
 
     def forward(self, x):
         lif_parameters = LIFParameters(
-            tau_mem_inv=self.tau_mem_inv, v_th=self.v_th, v_reset=self.v_reset)
-        return constant_current_lif_encode(x, self.v, parameters=lif_parameters, dt=self.dt)
+            tau_mem_inv=self.tau_mem_inv, v_th=self.v_th, v_reset=self.v_reset
+        )
+        return constant_current_lif_encode(
+            x, self.v, parameters=lif_parameters, dt=self.dt
+        )
