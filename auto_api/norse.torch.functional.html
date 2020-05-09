@@ -450,6 +450,24 @@ Defaults to gaussian radial basis kernel function.</p></li>
 <p>Returns:</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="norse.torch.functional.encode.signed_poisson_encode">
+<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">signed_poisson_encode</code><span class="sig-paren">(</span><em class="sig-param">input_values</em>, <em class="sig-param">seq_length</em>, <em class="sig-param">f_max=100</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#signed_poisson_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.signed_poisson_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encodes a tensor of input values, which are assumed to be in the
+range [-1,1] into a tensor of one dimension higher of binary values,
+which represent input spikes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [-1,1].</p></li>
+<li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
+<li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Maximal frequency (in Hertz) which will be emitted.</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-norse.torch.functional.heaviside">
 <span id="norse-torch-functional-heaviside-module"></span><h2>norse.torch.functional.heaviside module<a class="headerlink" href="#module-norse.torch.functional.heaviside" title="Permalink to this headline">¶</a></h2>
