@@ -18,6 +18,8 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="lsnn" href="myelin.torch.functional.lsnn.html" />
+    <link rel="prev" title="lif_mc" href="myelin.torch.functional.lif_mc.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -45,8 +47,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lif</strong> (<a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif.LIFParameters" title="norse.torch.functional.lif.LIFParameters"><em>LIFParameters</em></a>) – parameters of the LIF neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>lif</strong> (<a class="reference internal" href="myelin.torch.functional.lif.html#norse.torch.functional.lif.LIFParameters" title="norse.torch.functional.lif.LIFParameters"><em>LIFParameters</em></a>) – parameters of the LIF neuron integration</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -59,8 +61,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lif</strong> (<a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><em>LIFState</em></a>) – state of the LIF neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>lif</strong> (<a class="reference internal" href="myelin.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><em>LIFState</em></a>) – state of the LIF neuron integration</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -73,9 +75,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lif</strong> (<a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif.LIFFeedForwardState" title="norse.torch.functional.lif.LIFFeedForwardState"><em>LIFFeedForwardState</em></a>) – state of the feed forward LIF
+<li><p><strong>lif</strong> (<a class="reference internal" href="myelin.torch.functional.lif.html#norse.torch.functional.lif.LIFFeedForwardState" title="norse.torch.functional.lif.LIFFeedForwardState"><em>LIFFeedForwardState</em></a>) – state of the feed forward LIF
 neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -94,16 +96,16 @@ neuron integration</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><em>torch.Tensor</em></a>) – the input spikes at the current time step</p></li>
-<li><p><strong>s</strong> (<a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><em>LIFRefracState</em></a>) – state at the current time step</p></li>
-<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><em>torch.Tensor</em></a>) – synaptic weights for incoming spikes</p></li>
-<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><em>torch.Tensor</em></a>) – synaptic weights for recurrent spikes</p></li>
-<li><p><strong>p</strong> (<a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif_refrac.LIFRefracParameters" title="norse.torch.functional.lif_refrac.LIFRefracParameters"><em>LIFRefracParameters</em></a>) – parameters of the lif neuron</p></li>
+<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – the input spikes at the current time step</p></li>
+<li><p><strong>s</strong> (<a class="reference internal" href="#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><em>LIFRefracState</em></a>) – state at the current time step</p></li>
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – synaptic weights for incoming spikes</p></li>
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – synaptic weights for recurrent spikes</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.lif_refrac.LIFRefracParameters" title="norse.torch.functional.lif_refrac.LIFRefracParameters"><em>LIFRefracParameters</em></a>) – parameters of the lif neuron</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Integration timestep to use</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -118,14 +120,14 @@ neuron integration</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><em>torch.Tensor</em></a>) – the input spikes at the current time step</p></li>
-<li><p><strong>s</strong> (<a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif_refrac.LIFRefracFeedForwardState" title="norse.torch.functional.lif_refrac.LIFRefracFeedForwardState"><em>LIFRefracFeedForwardState</em></a>) – state at the current time step</p></li>
-<li><p><strong>p</strong> (<a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif_refrac.LIFRefracParameters" title="norse.torch.functional.lif_refrac.LIFRefracParameters"><em>LIFRefracParameters</em></a>) – parameters of the lif neuron</p></li>
+<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – the input spikes at the current time step</p></li>
+<li><p><strong>s</strong> (<a class="reference internal" href="#norse.torch.functional.lif_refrac.LIFRefracFeedForwardState" title="norse.torch.functional.lif_refrac.LIFRefracFeedForwardState"><em>LIFRefracFeedForwardState</em></a>) – state at the current time step</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.lif_refrac.LIFRefracParameters" title="norse.torch.functional.lif_refrac.LIFRefracParameters"><em>LIFRefracParameters</em></a>) – parameters of the lif neuron</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Integration timestep to use</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+0c936f9 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="../norse.torch.functional.html#norse.torch.functional.lif_refrac.LIFRefracFeedForwardState" title="norse.torch.functional.lif_refrac.LIFRefracFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracFeedForwardState</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.lif_refrac.LIFRefracFeedForwardState" title="norse.torch.functional.lif_refrac.LIFRefracFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -154,22 +156,32 @@ neuron integration</p></li>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Beginner tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../spiking.html">Introduction to spikes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../norse.html">norse package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../norse.task.html">norse.task package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../norse.torch.functional.html">norse.torch.functional package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../norse.torch.models.html">norse.torch.models package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../norse.torch.module.html">norse.torch.module package</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../functional.html">norse.torch.functional</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.coba_lif.html">coba_lif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.correlation_sensor.html">correlation_sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.leaky_integrator.html">leaky_integrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif.html">lif</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lif_mc.html">lif_mc</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">lif_refrac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.lsnn.html">lsnn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.stdp_sensor.html">stdp_sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myelin.torch.functional.threshhold.html">threshold</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../module.html">norse.torch.module</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../functional.html">norse.torch.functional</a><ul>
+      <li>Previous: <a href="myelin.torch.functional.lif_mc.html" title="previous chapter">lif_mc</a></li>
+      <li>Next: <a href="myelin.torch.functional.lsnn.html" title="next chapter">lsnn</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>

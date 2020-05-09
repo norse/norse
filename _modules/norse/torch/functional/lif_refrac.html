@@ -43,7 +43,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
 
 
-<div class="viewcode-block" id="LIFRefracState"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.lif_refrac.LIFRefracState">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFRefracState"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;State of a LIF neuron with absolute refractory period.</span>
 
 <span class="sd">    Parameters:</span>
@@ -55,7 +55,7 @@
     <span class="n">rho</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
 
 
-<div class="viewcode-block" id="LIFRefracParameters"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.lif_refrac.LIFRefracParameters">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFRefracParameters"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracParameters">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Parameters of a LIF neuron with absolute refractory period.</span>
 
 <span class="sd">    Parameters:</span>
@@ -67,7 +67,7 @@
     <span class="n">rho_reset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="lif_refrac_step"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.lif_refrac.lif_refrac_step">[docs]</a><span class="k">def</span> <span class="nf">lif_refrac_step</span><span class="p">(</span>
+<div class="viewcode-block" id="lif_refrac_step"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.lif_refrac_step">[docs]</a><span class="k">def</span> <span class="nf">lif_refrac_step</span><span class="p">(</span>
     <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">s</span><span class="p">:</span> <span class="n">LIFRefracState</span><span class="p">,</span>
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -120,7 +120,7 @@
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">(</span><span class="n">LIFState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">),</span> <span class="n">rho_new</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="LIFRefracFeedForwardState"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.lif_refrac.LIFRefracFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFRefracFeedForwardState"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;State of a feed forward LIF neuron with absolute refractory period.</span>
 
 <span class="sd">    Parameters:</span>
@@ -133,7 +133,7 @@
     <span class="n">rho</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
 
 
-<div class="viewcode-block" id="lif_refrac_feed_forward_step"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.lif_refrac.lif_refrac_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">lif_refrac_feed_forward_step</span><span class="p">(</span>
+<div class="viewcode-block" id="lif_refrac_feed_forward_step"><a class="viewcode-back" href="../../../../functional/myelin.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.lif_refrac_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">lif_refrac_feed_forward_step</span><span class="p">(</span>
     <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">s</span><span class="p">:</span> <span class="n">LIFRefracFeedForwardState</span><span class="p">,</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
@@ -192,16 +192,11 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Beginner tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">Running Experiments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../spiking.html">Introduction to spikes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.html">norse package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.task.html">norse.task package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.functional.html">norse.torch.functional package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.models.html">norse.torch.models package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.module.html">norse.torch.module package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../functional.html">norse.torch.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module.html">norse.torch.module</a></li>
 </ul>
 
 <div class="relations">
