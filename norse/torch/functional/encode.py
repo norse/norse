@@ -43,8 +43,7 @@ def constant_current_lif_encode(
     voltages = torch.zeros(
         seq_length, *input_current.shape, device=input_current.device
     )
-    spikes = torch.zeros(seq_length, *input_current.shape,
-                         device=input_current.device)
+    spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
 
     for ts in range(seq_length):
         z, v = lif_current_encoder(
@@ -145,8 +144,7 @@ def poisson_encode(
         dt (float): Integration time step (should coincide with the integration time step used in the model)
     """
     return (
-        torch.rand(seq_length, *input_values.shape).float() < dt *
-        f_max * input_values
+        torch.rand(seq_length, *input_values.shape).float() < dt * f_max * input_values
     ).float()
 
 
