@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.functional.coba_lif module &#8212; norse 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="norse.torch.functional.correlation_sensor module" href="norse.torch.functional.correlation_sensor.html" />
+    <link rel="prev" title="norse.torch.functional package" href="norse.torch.functional.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-norse.torch.functional.coba_lif">
+<span id="norse-torch-functional-coba-lif-module"></span><h1>norse.torch.functional.coba_lif module<a class="headerlink" href="#module-norse.torch.functional.coba_lif" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="norse.torch.functional.coba_lif.CobaLIFFeedForwardState">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.coba_lif.</code><code class="sig-name descname">CobaLIFFeedForwardState</code><a class="reference internal" href="../_modules/norse/torch/functional/coba_lif.html#CobaLIFFeedForwardState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFFeedForwardState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>State of a conductance based feed forward LIF neuron.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>g_e</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – excitatory input conductance</p></li>
+<li><p><strong>g_i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – inhibitory input conductance</p></li>
+</ul>
+</dd>
+</dl>
+<p>Create new instance of CobaLIFFeedForwardState(v, g_e, g_i)</p>
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFFeedForwardState.g_e">
+<code class="sig-name descname">g_e</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFFeedForwardState.g_e" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFFeedForwardState.g_i">
+<code class="sig-name descname">g_i</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFFeedForwardState.g_i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFFeedForwardState.v">
+<code class="sig-name descname">v</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFFeedForwardState.v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.coba_lif.</code><code class="sig-name descname">CobaLIFParameters</code><a class="reference internal" href="../_modules/norse/torch/functional/coba_lif.html#CobaLIFParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>Parameters of conductance based LIF neuron.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tau_syn_exc_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – inverse excitatory synaptic input
+time constant</p></li>
+<li><p><strong>tau_syn_inh_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – inverse inhibitory synaptic input
+time constant</p></li>
+<li><p><strong>c_m_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – inverse membrane capacitance</p></li>
+<li><p><strong>g_l</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – leak conductance</p></li>
+<li><p><strong>e_rev_I</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – inhibitory reversal potential</p></li>
+<li><p><strong>e_rev_E</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – excitatory reversal potential</p></li>
+<li><p><strong>v_rest</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – rest membrane potential</p></li>
+<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – reset membrane potential</p></li>
+<li><p><strong>v_thresh</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – threshold membrane potential</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – method to determine the spike threshold
+(relevant for surrogate gradients)</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – hyper parameter to use in surrogate gradient computation</p></li>
+</ul>
+</dd>
+</dl>
+<p>Create new instance of CobaLIFParameters(tau_syn_exc_inv, tau_syn_inh_inv, c_m_inv, g_l, e_rev_I, e_rev_E, v_rest, v_reset, v_thresh, method, alpha)</p>
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.alpha">
+<code class="sig-name descname">alpha</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 10</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.c_m_inv">
+<code class="sig-name descname">c_m_inv</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.c_m_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.e_rev_E">
+<code class="sig-name descname">e_rev_E</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.e_rev_E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.e_rev_I">
+<code class="sig-name descname">e_rev_I</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.e_rev_I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.g_l">
+<code class="sig-name descname">g_l</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.g_l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.method">
+<code class="sig-name descname">method</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 9</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.tau_syn_exc_inv">
+<code class="sig-name descname">tau_syn_exc_inv</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.tau_syn_exc_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.tau_syn_inh_inv">
+<code class="sig-name descname">tau_syn_inh_inv</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.tau_syn_inh_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.v_reset">
+<code class="sig-name descname">v_reset</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.v_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 7</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.v_rest">
+<code class="sig-name descname">v_rest</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.v_rest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 6</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFParameters.v_thresh">
+<code class="sig-name descname">v_thresh</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFParameters.v_thresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 8</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="norse.torch.functional.coba_lif.CobaLIFState">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.coba_lif.</code><code class="sig-name descname">CobaLIFState</code><a class="reference internal" href="../_modules/norse/torch/functional/coba_lif.html#CobaLIFState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>State of a conductance based LIF neuron.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>g_e</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – excitatory input conductance</p></li>
+<li><p><strong>g_i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – inhibitory input conductance</p></li>
+</ul>
+</dd>
+</dl>
+<p>Create new instance of CobaLIFState(z, v, g_e, g_i)</p>
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFState.g_e">
+<code class="sig-name descname">g_e</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFState.g_e" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFState.g_i">
+<code class="sig-name descname">g_i</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFState.g_i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFState.v">
+<code class="sig-name descname">v</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFState.v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.coba_lif.CobaLIFState.z">
+<code class="sig-name descname">z</code><a class="headerlink" href="#norse.torch.functional.coba_lif.CobaLIFState.z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.functional.coba_lif.coba_lif_feed_forward_step">
+<code class="sig-prename descclassname">norse.torch.functional.coba_lif.</code><code class="sig-name descname">coba_lif_feed_forward_step</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">s</em>, <em class="sig-param">p=CobaLIFParameters(tau_syn_exc_inv=tensor(0.2000)</em>, <em class="sig-param">tau_syn_inh_inv=tensor(0.2000)</em>, <em class="sig-param">c_m_inv=tensor(5.)</em>, <em class="sig-param">g_l=tensor(0.2500)</em>, <em class="sig-param">e_rev_I=tensor(-100)</em>, <em class="sig-param">e_rev_E=tensor(60)</em>, <em class="sig-param">v_rest=tensor(-20)</em>, <em class="sig-param">v_reset=tensor(-70)</em>, <em class="sig-param">v_thresh=tensor(-10)</em>, <em class="sig-param">method='heaviside'</em>, <em class="sig-param">alpha=0.0)</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/coba_lif.html#coba_lif_feed_forward_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.coba_lif.coba_lif_feed_forward_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Euler integration step for a conductance based LIF neuron.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – synaptic input</p></li>
+<li><p><strong>s</strong> (<a class="reference internal" href="#norse.torch.functional.coba_lif.CobaLIFFeedForwardState" title="norse.torch.functional.coba_lif.CobaLIFFeedForwardState"><em>CobaLIFFeedForwardState</em></a>) – current state of the neuron</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.coba_lif.CobaLIFParameters" title="norse.torch.functional.coba_lif.CobaLIFParameters"><em>CobaLIFParameters</em></a>) – parameters of the neuron</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Integration time step</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.coba_lif.CobaLIFFeedForwardState" title="norse.torch.functional.coba_lif.CobaLIFFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFFeedForwardState</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.functional.coba_lif.coba_lif_step">
+<code class="sig-prename descclassname">norse.torch.functional.coba_lif.</code><code class="sig-name descname">coba_lif_step</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">s</em>, <em class="sig-param">input_weights</em>, <em class="sig-param">recurrent_weights</em>, <em class="sig-param">p=CobaLIFParameters(tau_syn_exc_inv=tensor(0.2000)</em>, <em class="sig-param">tau_syn_inh_inv=tensor(0.2000)</em>, <em class="sig-param">c_m_inv=tensor(5.)</em>, <em class="sig-param">g_l=tensor(0.2500)</em>, <em class="sig-param">e_rev_I=tensor(-100)</em>, <em class="sig-param">e_rev_E=tensor(60)</em>, <em class="sig-param">v_rest=tensor(-20)</em>, <em class="sig-param">v_reset=tensor(-70)</em>, <em class="sig-param">v_thresh=tensor(-10)</em>, <em class="sig-param">method='heaviside'</em>, <em class="sig-param">alpha=0.0)</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/coba_lif.html#coba_lif_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.coba_lif.coba_lif_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Euler integration step for a conductance based LIF neuron.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – the input spikes at the current time step</p></li>
+<li><p><strong>s</strong> (<a class="reference internal" href="#norse.torch.functional.coba_lif.CobaLIFState" title="norse.torch.functional.coba_lif.CobaLIFState"><em>CobaLIFState</em></a>) – current state of the neuron</p></li>
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – input weights
+(sign determines  contribution to inhibitory / excitatory input)</p></li>
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><em>torch.Tensor</em></a>) – recurrent weights
+(sign determines contribution to inhibitory / excitatory input)</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.coba_lif.CobaLIFParameters" title="norse.torch.functional.coba_lif.CobaLIFParameters"><em>CobaLIFParameters</em></a>) – parameters of the neuron</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Integration time step</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+f6b1c04 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.coba_lif.CobaLIFState" title="norse.torch.functional.coba_lif.CobaLIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFState</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">norse</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spiking.html">Introduction to spikes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="norse.torch.html">norse.torch package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="norse.torch.functional.html">norse.torch.functional package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.module.html">norse.torch.module package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="norse.torch.html">norse.torch package</a><ul>
+  <li><a href="norse.torch.functional.html">norse.torch.functional package</a><ul>
+      <li>Previous: <a href="norse.torch.functional.html" title="previous chapter">norse.torch.functional package</a></li>
+      <li>Next: <a href="norse.torch.functional.correlation_sensor.html" title="next chapter">norse.torch.functional.correlation_sensor module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/auto_api/norse.torch.functional.coba_lif.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

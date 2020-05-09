@@ -65,20 +65,20 @@
     <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">post_pre</span> <span class="o">+</span> <span class="n">post_spike_mask</span> <span class="o">-</span> <span class="n">pre_spike_mask</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="CorrelationSensorParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.correlation_sensor.CorrelationSensorParameters">[docs]</a><span class="k">class</span> <span class="nc">CorrelationSensorParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="CorrelationSensorParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.correlation_sensor.html#norse.torch.functional.correlation_sensor.CorrelationSensorParameters">[docs]</a><span class="k">class</span> <span class="nc">CorrelationSensorParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="n">eta_p</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="n">eta_m</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="n">tau_ac_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">100e-3</span><span class="p">)</span>
     <span class="n">tau_c_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">100e-3</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CorrelationSensorState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.correlation_sensor.CorrelationSensorState">[docs]</a><span class="k">class</span> <span class="nc">CorrelationSensorState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="CorrelationSensorState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.correlation_sensor.html#norse.torch.functional.correlation_sensor.CorrelationSensorState">[docs]</a><span class="k">class</span> <span class="nc">CorrelationSensorState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="n">post_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
     <span class="n">correlation_trace</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
     <span class="n">anti_correlation_trace</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
 
 
-<div class="viewcode-block" id="correlation_sensor_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.correlation_sensor.correlation_sensor_step">[docs]</a><span class="k">def</span> <span class="nf">correlation_sensor_step</span><span class="p">(</span>
+<div class="viewcode-block" id="correlation_sensor_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.correlation_sensor.html#norse.torch.functional.correlation_sensor.correlation_sensor_step">[docs]</a><span class="k">def</span> <span class="nf">correlation_sensor_step</span><span class="p">(</span>
     <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">s</span><span class="p">:</span> <span class="n">CorrelationSensorState</span><span class="p">,</span>
@@ -115,7 +115,7 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="correlation_based_update"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.correlation_sensor.correlation_based_update">[docs]</a><span class="k">def</span> <span class="nf">correlation_based_update</span><span class="p">(</span>
+<div class="viewcode-block" id="correlation_based_update"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.correlation_sensor.html#norse.torch.functional.correlation_sensor.correlation_based_update">[docs]</a><span class="k">def</span> <span class="nf">correlation_based_update</span><span class="p">(</span>
     <span class="n">ts</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">linear_update</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
     <span class="n">weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>

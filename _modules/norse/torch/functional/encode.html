@@ -49,7 +49,7 @@
 <span class="kn">from</span> <span class="nn">.lif</span> <span class="kn">import</span> <span class="n">lif_current_encoder</span><span class="p">,</span> <span class="n">LIFParameters</span>
 
 
-<div class="viewcode-block" id="constant_current_lif_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.encode.constant_current_lif_encode">[docs]</a><span class="k">def</span> <span class="nf">constant_current_lif_encode</span><span class="p">(</span>
+<div class="viewcode-block" id="constant_current_lif_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.constant_current_lif_encode">[docs]</a><span class="k">def</span> <span class="nf">constant_current_lif_encode</span><span class="p">(</span>
     <span class="n">input_current</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">parameters</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
@@ -91,7 +91,7 @@
     <span class="k">return</span> <span class="n">voltages</span><span class="p">,</span> <span class="n">spikes</span></div>
 
 
-<div class="viewcode-block" id="gaussian_rbf"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.encode.gaussian_rbf">[docs]</a><span class="k">def</span> <span class="nf">gaussian_rbf</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="gaussian_rbf"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.gaussian_rbf">[docs]</a><span class="k">def</span> <span class="nf">gaussian_rbf</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A `gaussian radial basis kernel &lt;https://en.wikipedia.org/wiki/Radial_basis_function_kernel&gt;`_</span>
 <span class="sd">    that calculates the radial basis given a distance value (distance between :math:`x` and a data </span>
@@ -107,14 +107,14 @@
     <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">tensor</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="euclidean_distance"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.encode.euclidean_distance">[docs]</a><span class="k">def</span> <span class="nf">euclidean_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="euclidean_distance"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.euclidean_distance">[docs]</a><span class="k">def</span> <span class="nf">euclidean_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simple euclidean distance metric.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="population_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.encode.population_encode">[docs]</a><span class="k">def</span> <span class="nf">population_encode</span><span class="p">(</span>
+<div class="viewcode-block" id="population_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.population_encode">[docs]</a><span class="k">def</span> <span class="nf">population_encode</span><span class="p">(</span>
     <span class="n">input_values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">out_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">scale</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -164,7 +164,7 @@
     <span class="k">return</span> <span class="n">kernel</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="poisson_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.encode.poisson_encode">[docs]</a><span class="k">def</span> <span class="nf">poisson_encode</span><span class="p">(</span>
+<div class="viewcode-block" id="poisson_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.poisson_encode">[docs]</a><span class="k">def</span> <span class="nf">poisson_encode</span><span class="p">(</span>
     <span class="n">input_values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -185,7 +185,7 @@
     <span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="signed_poisson_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.encode.signed_poisson_encode">[docs]</a><span class="k">def</span> <span class="nf">signed_poisson_encode</span><span class="p">(</span>
+<div class="viewcode-block" id="signed_poisson_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.signed_poisson_encode">[docs]</a><span class="k">def</span> <span class="nf">signed_poisson_encode</span><span class="p">(</span>
     <span class="n">input_values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

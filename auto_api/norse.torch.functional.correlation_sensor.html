@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.functional.correlation_sensor module &#8212; norse 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="norse.torch.functional.encode module" href="norse.torch.functional.encode.html" />
+    <link rel="prev" title="norse.torch.functional.coba_lif module" href="norse.torch.functional.coba_lif.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-norse.torch.functional.correlation_sensor">
+<span id="norse-torch-functional-correlation-sensor-module"></span><h1>norse.torch.functional.correlation_sensor module<a class="headerlink" href="#module-norse.torch.functional.correlation_sensor" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorParameters">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.correlation_sensor.</code><code class="sig-name descname">CorrelationSensorParameters</code><span class="sig-paren">(</span><em class="sig-param">eta_p</em>, <em class="sig-param">eta_m</em>, <em class="sig-param">tau_ac_inv</em>, <em class="sig-param">tau_c_inv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/correlation_sensor.html#CorrelationSensorParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>Create new instance of CorrelationSensorParameters(eta_p, eta_m, tau_ac_inv, tau_c_inv)</p>
+<dl class="attribute">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorParameters.eta_m">
+<code class="sig-name descname">eta_m</code><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorParameters.eta_m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorParameters.eta_p">
+<code class="sig-name descname">eta_p</code><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorParameters.eta_p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorParameters.tau_ac_inv">
+<code class="sig-name descname">tau_ac_inv</code><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorParameters.tau_ac_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorParameters.tau_c_inv">
+<code class="sig-name descname">tau_c_inv</code><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorParameters.tau_c_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorState">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.correlation_sensor.</code><code class="sig-name descname">CorrelationSensorState</code><span class="sig-paren">(</span><em class="sig-param">post_pre</em>, <em class="sig-param">correlation_trace</em>, <em class="sig-param">anti_correlation_trace</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/correlation_sensor.html#CorrelationSensorState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>Create new instance of CorrelationSensorState(post_pre, correlation_trace, anti_correlation_trace)</p>
+<dl class="attribute">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorState.anti_correlation_trace">
+<code class="sig-name descname">anti_correlation_trace</code><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorState.anti_correlation_trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorState.correlation_trace">
+<code class="sig-name descname">correlation_trace</code><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorState.correlation_trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.correlation_sensor.CorrelationSensorState.post_pre">
+<code class="sig-name descname">post_pre</code><a class="headerlink" href="#norse.torch.functional.correlation_sensor.CorrelationSensorState.post_pre" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.functional.correlation_sensor.correlation_based_update">
+<code class="sig-prename descclassname">norse.torch.functional.correlation_sensor.</code><code class="sig-name descname">correlation_based_update</code><span class="sig-paren">(</span><em class="sig-param">ts</em>, <em class="sig-param">linear_update</em>, <em class="sig-param">weights</em>, <em class="sig-param">correlation_state</em>, <em class="sig-param">learning_rate</em>, <em class="sig-param">ts_frequency</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/correlation_sensor.html#correlation_based_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.correlation_sensor.correlation_based_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.functional.correlation_sensor.correlation_sensor_step">
+<code class="sig-prename descclassname">norse.torch.functional.correlation_sensor.</code><code class="sig-name descname">correlation_sensor_step</code><span class="sig-paren">(</span><em class="sig-param">z_pre</em>, <em class="sig-param">z_post</em>, <em class="sig-param">s</em>, <em class="sig-param">p=CorrelationSensorParameters(eta_p=tensor(1.)</em>, <em class="sig-param">eta_m=tensor(1.)</em>, <em class="sig-param">tau_ac_inv=tensor(10.)</em>, <em class="sig-param">tau_c_inv=tensor(10.))</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/correlation_sensor.html#correlation_sensor_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.correlation_sensor.correlation_sensor_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Euler integration step of an idealized version of the correlation sensor
+as it is present on the BrainScaleS 2 chips.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#norse.torch.functional.correlation_sensor.CorrelationSensorState" title="norse.torch.functional.correlation_sensor.CorrelationSensorState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CorrelationSensorState</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">norse</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spiking.html">Introduction to spikes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="norse.torch.html">norse.torch package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="norse.torch.functional.html">norse.torch.functional package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.module.html">norse.torch.module package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="norse.torch.html">norse.torch package</a><ul>
+  <li><a href="norse.torch.functional.html">norse.torch.functional package</a><ul>
+      <li>Previous: <a href="norse.torch.functional.coba_lif.html" title="previous chapter">norse.torch.functional.coba_lif module</a></li>
+      <li>Next: <a href="norse.torch.functional.encode.html" title="next chapter">norse.torch.functional.encode module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/auto_api/norse.torch.functional.correlation_sensor.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
