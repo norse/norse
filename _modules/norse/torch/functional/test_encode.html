@@ -43,7 +43,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="encode_population_test"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.test_encode.encode_population_test">[docs]</a><span class="k">def</span> <span class="nf">encode_population_test</span><span class="p">():</span>
+<div class="viewcode-block" id="encode_population_test"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.test_encode.encode_population_test">[docs]</a><span class="k">def</span> <span class="nf">encode_population_test</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
     <span class="n">out_features</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">actual</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">population_encode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">out_features</span><span class="p">)</span>
@@ -57,14 +57,14 @@
     <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_almost_equal</span><span class="p">(</span><span class="n">actual</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">expected</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span></div>
 
 
-<div class="viewcode-block" id="encode_population_batch_test"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.test_encode.encode_population_batch_test">[docs]</a><span class="k">def</span> <span class="nf">encode_population_batch_test</span><span class="p">():</span>
+<div class="viewcode-block" id="encode_population_batch_test"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.test_encode.encode_population_batch_test">[docs]</a><span class="k">def</span> <span class="nf">encode_population_batch_test</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
     <span class="n">out_features</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">actual</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">population_encode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">out_features</span><span class="p">)</span>
     <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">actual</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span></div>
 
 
-<div class="viewcode-block" id="constant_current_lif_encode_test"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.test_encode.constant_current_lif_encode_test">[docs]</a><span class="k">def</span> <span class="nf">constant_current_lif_encode_test</span><span class="p">():</span>
+<div class="viewcode-block" id="constant_current_lif_encode_test"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.test_encode.constant_current_lif_encode_test">[docs]</a><span class="k">def</span> <span class="nf">constant_current_lif_encode_test</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
     <span class="n">v</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">constant_current_lif_encode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">v</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
@@ -101,12 +101,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.html">norse package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.task.html">norse.task package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.functional.html">norse.torch.functional package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.models.html">norse.torch.models package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.module.html">norse.torch.module package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.torch.html">norse.torch package</a></li>
 </ul>
 
 <div class="relations">

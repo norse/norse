@@ -39,7 +39,7 @@
 <span class="kn">from</span> <span class="nn">.heaviside</span> <span class="kn">import</span> <span class="n">heaviside</span>
 
 
-<div class="viewcode-block" id="SuperSpike"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.superspike.SuperSpike">[docs]</a><span class="k">class</span> <span class="nc">SuperSpike</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
+<div class="viewcode-block" id="SuperSpike"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.superspike.SuperSpike">[docs]</a><span class="k">class</span> <span class="nc">SuperSpike</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;SuperSpike surrogate gradient as described in Section 3.3.2 of</span>
 
 <span class="sd">        F. Zenke, S. Ganguli, &quot;SuperSpike: Supervised Learning in</span>
@@ -48,13 +48,13 @@
 <span class="sd">        doi:10.1162/neco_a_01086</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SuperSpike.forward"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.superspike.SuperSpike.forward">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SuperSpike.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.superspike.SuperSpike.forward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">ctx</span><span class="o">.</span><span class="n">save_for_backward</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
         <span class="n">ctx</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SuperSpike.backward"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.superspike.SuperSpike.backward">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SuperSpike.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.superspike.SuperSpike.backward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">):</span>
         <span class="p">(</span><span class="nb">input</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">alpha</span>
@@ -65,7 +65,7 @@
         <span class="k">return</span> <span class="n">grad</span><span class="p">,</span> <span class="kc">None</span></div></div>
 
 
-<div class="viewcode-block" id="super_fn"><a class="viewcode-back" href="../../../../norse.torch.functional.html#norse.torch.functional.superspike.super_fn">[docs]</a><span class="k">def</span> <span class="nf">super_fn</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<div class="viewcode-block" id="super_fn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.html#norse.torch.functional.superspike.super_fn">[docs]</a><span class="k">def</span> <span class="nf">super_fn</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">SuperSpike</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span></div>
 </pre></div>
 
@@ -93,12 +93,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.html">norse package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.task.html">norse.task package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.benchmark.html">norse.torch.benchmark package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.functional.html">norse.torch.functional package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.models.html">norse.torch.models package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../norse.torch.module.html">norse.torch.module package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.torch.html">norse.torch package</a></li>
 </ul>
 
 <div class="relations">
