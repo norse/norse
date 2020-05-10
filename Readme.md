@@ -15,8 +15,10 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 
 Norse comes packed with a few example tasks, such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database), but is generally meant for use in specific deep learning tasks (see below section on long short-term spiking neural networks):
 ```bash
-python run_mnist.py
+python -m norse mnist
 ```
+You can also run one of the [jupyter notebooks](notebooks/) on google collab.
+
 
 ## 2. Getting Started
 
