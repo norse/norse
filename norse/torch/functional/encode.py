@@ -26,16 +26,17 @@ def constant_current_lif_encode(
         >>> data = torch.tensor([2, 4, 8, 16])
         >>> seq_length = 2 # Simulate two iterations
         >>> constant_current_lif_encode(data, seq_length)
-        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage
+         # State in terms of membrane voltage
+        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   
                  [0.3800, 0.7600, 0.0000, 0.0000]]), 
-         tensor([[0., 0., 0., 1.],                   # Spikes for each iteration
+         # Spikes for each iteration
+         tensor([[0., 0., 0., 1.],                   
                  [0., 0., 1., 1.]]))
 
     Parameters:
         input_current (torch.Tensor): The input tensor, representing LIF current
         seq_length (int): The number of iterations to simulate
         parameters (LIFParameters): Initial neuron parameters. Defaults to zero.
-        tau_mem_inv (float):
         dt (float): Time delta between simulation steps
 
     Returns:
