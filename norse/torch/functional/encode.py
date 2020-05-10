@@ -17,7 +17,7 @@ def constant_current_lif_encode(
     seq_length: int,
     parameters: LIFParameters = LIFParameters(),
     dt: float = 0.001,
-):
+) -> torch.Tensor:
     """
     Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that 
     occur during a number of timesteps/iterations (seq_length).
@@ -37,21 +37,21 @@ def constant_current_lif_encode(
         parameters (LIFParameters): Initial neuron parameters. Defaults to zero.
         tau_mem_inv (float):
         dt (float): Time delta between simulation steps
+
+    Returns:
+        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
     v = torch.zeros(*input_current.shape, device=input_current.device)
     z = torch.zeros(*input_current.shape, device=input_current.device)
-    voltages = torch.zeros(
-        seq_length, *input_current.shape, device=input_current.device
-    )
-    spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
+    spikes = torch.zeros(seq_length, *input_current.shape,
+                         device=input_current.device)
 
     for ts in range(seq_length):
         z, v = lif_current_encoder(
             input_current=input_current, v=v, p=parameters, dt=dt
         )
-        voltages[ts] = v
         spikes[ts] = z
-    return voltages, spikes
+    return spikes
 
 
 def gaussian_rbf(tensor: torch.Tensor, sigma: float = 1):
@@ -83,7 +83,7 @@ def population_encode(
     scale: Union[int, torch.Tensor] = None,
     kernel: Callable[[torch.Tensor], torch.Tensor] = gaussian_rbf,
     distance_function: Callable[[torch.Tensor], torch.Tensor] = euclidean_distance,
-):
+) -> torch.Tensor:
     """
     Encodes a set of input values into population codes, such that each singular input value is represented by
     a list of numbers (typically calculated by a radial basis kernel), whose length is equal to the out_features.
@@ -116,6 +116,7 @@ def population_encode(
         distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.
 
     Returns:
+        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
     # Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py
     size = (input_values.size(0), out_features) + input_values.size()[1:]
@@ -129,7 +130,7 @@ def population_encode(
 
 def poisson_encode(
     input_values: torch.Tensor, seq_length: int, f_max: float = 100, dt: float = 0.001,
-):
+) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
     range [0,1] into a tensor of one dimension higher of binary values,
@@ -142,15 +143,19 @@ def poisson_encode(
         sequence_length (int): Number of time steps in the resulting spike train.
         f_max (float): Maximal frequency (in Hertz) which will be emitted.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
+
+    Returns:
+        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
     return (
-        torch.rand(seq_length, *input_values.shape).float() < dt * f_max * input_values
+        torch.rand(seq_length, *input_values.shape).float() < dt *
+        f_max * input_values
     ).float()
 
 
 def signed_poisson_encode(
     input_values: torch.Tensor, seq_length: int, f_max: float = 100, dt: float = 0.001
-):
+) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
     range [-1,1] into a tensor of one dimension higher of binary values,
@@ -161,6 +166,9 @@ def signed_poisson_encode(
         sequence_length (int): Number of time steps in the resulting spike train.
         f_max (float): Maximal frequency (in Hertz) which will be emitted.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
+
+    Returns:
+        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
     return (
         torch.sign(input_values)
@@ -169,3 +177,39 @@ def signed_poisson_encode(
             < dt * f_max * torch.abs(input_values)
         ).float()
     )
+
+
+def spike_latency_encode(
+    input_spikes: torch.Tensor
+) -> torch.Tensor:
+    """
+    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a 
+    neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes
+    fast.
+
+    See `R. Van Rullen & S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex <https://doi.org/10.1162/08997660152002852>`_.
+
+    Spikes are identified by their unique position within each sequence. 
+
+    Example:
+        >>> data = torch.tensor([[0, 1, 1], [1, 1, 1]])
+        >>> spike_latency_encode(data)
+        tensor([[0, 1, 1],
+                [1, 0, 0]])
+
+    Parameters:
+        input_spikes (torch.Tensor): A tensor of input spikes, assumed to be at least 2D (sequences, ...)
+
+    Returns:
+        A tensor where the first spike (1) is retained in the sequence
+    """
+    if len(input_spikes.size()) == 1:
+        return input_spikes
+
+    mask = torch.zeros(input_spikes.size()[1:]).byte()
+    spikes = input_spikes.clone()
+    for index in range(len(spikes)):
+        z = spikes[index]
+        spikes[index] = torch.where(mask, torch.zeros_like(z), z)
+        mask[z.bool()] = 1
+    return spikes
