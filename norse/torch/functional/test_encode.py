@@ -32,8 +32,7 @@ def constant_current_lif_encode_test():
     z = encode.constant_current_lif_encode(data, 2)
     np.testing.assert_equal(np.zeros((2, 4)), z.numpy())
 
-    data = torch.tensor([[16, 16, 16], [32, 32, 32], [
-                        64, 64, 64], [128, 128, 128]])
+    data = torch.tensor([[16, 16, 16], [32, 32, 32], [64, 64, 64], [128, 128, 128]])
     z = encode.constant_current_lif_encode(data, 10)
     np.testing.assert_equal(z[-1].numpy(), np.ones((4, 3)))
 

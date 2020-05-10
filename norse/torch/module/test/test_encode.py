@@ -30,8 +30,7 @@ def constant_current_lif_encode_test():
 def spike_latency_encode_test():
     data = torch.tensor([[0, 100, 100], [100, 100, 100]])
     encoder = torch.nn.Sequential(
-        encode.ConstantCurrentLIFEncoder(2),
-        encode.SpikeLatencyEncoder()
+        encode.ConstantCurrentLIFEncoder(2), encode.SpikeLatencyEncoder()
     )
     actual = encoder(data)
     expected = np.zeros((2, 2, 3))

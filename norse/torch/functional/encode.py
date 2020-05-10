@@ -44,8 +44,7 @@ def constant_current_lif_encode(
     """
     v = torch.zeros(*input_current.shape, device=input_current.device)
     z = torch.zeros(*input_current.shape, device=input_current.device)
-    spikes = torch.zeros(seq_length, *input_current.shape,
-                         device=input_current.device)
+    spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
 
     for ts in range(seq_length):
         z, v = lif_current_encoder(
@@ -149,8 +148,7 @@ def poisson_encode(
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
     return (
-        torch.rand(seq_length, *input_values.shape).float() < dt *
-        f_max * input_values
+        torch.rand(seq_length, *input_values.shape).float() < dt * f_max * input_values
     ).float()
 
 
@@ -180,9 +178,7 @@ def signed_poisson_encode(
     )
 
 
-def spike_latency_encode(
-    input_spikes: torch.Tensor
-) -> torch.Tensor:
+def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     """
     For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a 
     neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes
