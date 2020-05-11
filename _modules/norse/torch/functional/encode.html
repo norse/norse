@@ -54,7 +54,7 @@
     <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">parameters</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that </span>
 <span class="sd">    occur during a number of timesteps/iterations (seq_length).</span>
@@ -63,9 +63,11 @@
 <span class="sd">        &gt;&gt;&gt; data = torch.tensor([2, 4, 8, 16])</span>
 <span class="sd">        &gt;&gt;&gt; seq_length = 2 # Simulate two iterations</span>
 <span class="sd">        &gt;&gt;&gt; constant_current_lif_encode(data, seq_length)</span>
-<span class="sd">        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage</span>
+<span class="sd">         # State in terms of membrane voltage</span>
+<span class="sd">        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   </span>
 <span class="sd">                 [0.3800, 0.7600, 0.0000, 0.0000]]), </span>
-<span class="sd">         tensor([[0., 0., 0., 1.],                   # Spikes for each iteration</span>
+<span class="sd">         # Spikes for each iteration</span>
+<span class="sd">         tensor([[0., 0., 0., 1.],                   </span>
 <span class="sd">                 [0., 0., 1., 1.]]))</span>
 
 <span class="sd">    Parameters:</span>
@@ -73,21 +75,20 @@
 <span class="sd">        seq_length (int): The number of iterations to simulate</span>
 <span class="sd">        parameters (LIFParameters): Initial neuron parameters. Defaults to zero.</span>
 <span class="sd">        dt (float): Time delta between simulation steps</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">input_current</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_current</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">input_current</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_current</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-    <span class="n">voltages</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-        <span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_current</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_current</span><span class="o">.</span><span class="n">device</span>
-    <span class="p">)</span>
     <span class="n">spikes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_current</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_current</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seq_length</span><span class="p">):</span>
         <span class="n">z</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">lif_current_encoder</span><span class="p">(</span>
             <span class="n">input_current</span><span class="o">=</span><span class="n">input_current</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span>
         <span class="p">)</span>
-        <span class="n">voltages</span><span class="p">[</span><span class="n">ts</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
         <span class="n">spikes</span><span class="p">[</span><span class="n">ts</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
-    <span class="k">return</span> <span class="n">voltages</span><span class="p">,</span> <span class="n">spikes</span></div>
+    <span class="k">return</span> <span class="n">spikes</span></div>
 
 
 <div class="viewcode-block" id="gaussian_rbf"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.gaussian_rbf">[docs]</a><span class="k">def</span> <span class="nf">gaussian_rbf</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
@@ -119,7 +120,7 @@
     <span class="n">scale</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">kernel</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="n">gaussian_rbf</span><span class="p">,</span>
     <span class="n">distance_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="n">euclidean_distance</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Encodes a set of input values into population codes, such that each singular input value is represented by</span>
 <span class="sd">    a list of numbers (typically calculated by a radial basis kernel), whose length is equal to the out_features.</span>
@@ -152,6 +153,7 @@
 <span class="sd">        distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.</span>
 
 <span class="sd">    Returns:</span>
+<span class="sd">        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py</span>
     <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_values</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">out_features</span><span class="p">)</span> <span class="o">+</span> <span class="n">input_values</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
@@ -165,7 +167,7 @@
 
 <div class="viewcode-block" id="poisson_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.poisson_encode">[docs]</a><span class="k">def</span> <span class="nf">poisson_encode</span><span class="p">(</span>
     <span class="n">input_values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Encodes a tensor of input values, which are assumed to be in the</span>
 <span class="sd">    range [0,1] into a tensor of one dimension higher of binary values,</span>
@@ -178,6 +180,9 @@
 <span class="sd">        sequence_length (int): Number of time steps in the resulting spike train.</span>
 <span class="sd">        f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
 <span class="sd">        dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">f_max</span> <span class="o">*</span> <span class="n">input_values</span>
@@ -186,7 +191,7 @@
 
 <div class="viewcode-block" id="signed_poisson_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.signed_poisson_encode">[docs]</a><span class="k">def</span> <span class="nf">signed_poisson_encode</span><span class="p">(</span>
     <span class="n">input_values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Encodes a tensor of input values, which are assumed to be in the</span>
 <span class="sd">    range [-1,1] into a tensor of one dimension higher of binary values,</span>
@@ -197,6 +202,9 @@
 <span class="sd">        sequence_length (int): Number of time steps in the resulting spike train.</span>
 <span class="sd">        f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
 <span class="sd">        dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">input_values</span><span class="p">)</span>
@@ -205,6 +213,40 @@
             <span class="o">&lt;</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">f_max</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">input_values</span><span class="p">)</span>
         <span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
     <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="spike_latency_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.spike_latency_encode">[docs]</a><span class="k">def</span> <span class="nf">spike_latency_encode</span><span class="p">(</span><span class="n">input_spikes</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a </span>
+<span class="sd">    neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes</span>
+<span class="sd">    fast.</span>
+
+<span class="sd">    See `R. Van Rullen &amp; S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex &lt;https://doi.org/10.1162/08997660152002852&gt;`_.</span>
+
+<span class="sd">    Spikes are identified by their unique position within each sequence. </span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.tensor([[0, 1, 1], [1, 1, 1]])</span>
+<span class="sd">        &gt;&gt;&gt; spike_latency_encode(data)</span>
+<span class="sd">        tensor([[0, 1, 1],</span>
+<span class="sd">                [1, 0, 0]])</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        input_spikes (torch.Tensor): A tensor of input spikes, assumed to be at least 2D (sequences, ...)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tensor where the first spike (1) is retained in the sequence</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_spikes</span><span class="o">.</span><span class="n">size</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">input_spikes</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">input_spikes</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">byte</span><span class="p">()</span>
+    <span class="n">spikes</span> <span class="o">=</span> <span class="n">input_spikes</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="p">)):</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">spikes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">z</span><span class="o">.</span><span class="n">bool</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">spikes</span></div>
 </pre></div>
 
           </div>
