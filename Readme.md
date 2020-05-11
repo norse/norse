@@ -5,7 +5,20 @@
 A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) with [spiking neural networks](https://en.wikipedia.org/wiki/Spiking_neural_network).
 
 
-[![Test Status](https://github.com/norse/norse/workflows/Python%20package/badge.svg)](https://github.com/norse/norse/actions) 
+
+<p align="center">
+    <a href="https://github.com/norse/norse/actions">
+        <img src="https://github.com/norse/norse/workflows/Python%20package/badge.svg" alt="Test status"></a>
+    <a href="https://github.com/norse/norse/pulse" alt="Activity">
+        <img src="https://img.shields.io/github/commit-activity/m/norse/norse" />
+    </a>
+    <a href="https://pypi.org/project/norse/" alt="PyPi">
+        <img src="https://img.shields.io/pypi/dm/norse" />
+    </a>
+    <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
+        <img src="https://img.shields.io/lgtm/alerts/g/norse/norse"
+            alt="Total alerts"/></a>
+</p>
 
 The purpose of this library is to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
 Norse expands [PyTorch](https://pytorch.org/) with primitives for bio-inspired neural components, 
