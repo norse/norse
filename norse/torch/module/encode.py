@@ -10,10 +10,12 @@ import norse.torch.functional.encode as encode
 
 
 class ConstantCurrentLIFEncoder(torch.nn.Module):
-
-    def __init__(self, seq_length: int,
-                 parameters: lif.LIFParameters = lif.LIFParameters(),
-                 dt: float = 0.001):
+    def __init__(
+        self,
+        seq_length: int,
+        parameters: lif.LIFParameters = lif.LIFParameters(),
+        dt: float = 0.001,
+    ):
         """
         Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that 
         occur during a number of timesteps/iterations (seq_length).
@@ -38,7 +40,12 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
         self.dt = dt
 
     def forward(self, input_currents):
-        return encode.constant_current_lif_encode(input_currents, seq_length=self.seq_length, parameters=self.parameters, dt=self.dt)
+        return encode.constant_current_lif_encode(
+            input_currents,
+            seq_length=self.seq_length,
+            parameters=self.parameters,
+            dt=self.dt,
+        )
 
 
 class PoissonEncoder(torch.nn.Module):
@@ -55,7 +62,9 @@ class PoissonEncoder(torch.nn.Module):
             f_max (float): Maximal frequency (in Hertz) which will be emitted.
             dt (float): Integration time step (should coincide with the integration time step used in the model)
         """
-        super(PopulationEncoder, self).__init__()
+        super(PoissonEncoder, self).__init__()
+        self.seq_length = seq_length
+        self.f_max = f_max
         self.dt = dt
 
     def forward(self, x):
@@ -63,10 +72,15 @@ class PoissonEncoder(torch.nn.Module):
 
 
 class PopulationEncoder(torch.nn.Module):
-    def __init__(self, out_features: int,
-                 scale: Union[int, torch.Tensor] = None,
-                 kernel: Callable[[torch.Tensor], torch.Tensor] = encode.gaussian_rbf,
-                 distance_function: Callable[[torch.Tensor], torch.Tensor] = encode.euclidean_distance):
+    def __init__(
+        self,
+        out_features: int,
+        scale: Union[int, torch.Tensor] = None,
+        kernel: Callable[[torch.Tensor], torch.Tensor] = encode.gaussian_rbf,
+        distance_function: Callable[
+            [torch.Tensor], torch.Tensor
+        ] = encode.euclidean_distance,
+    ):
         """
         Encodes a set of input values into population codes, such that each singular input value is represented by
         a list of numbers (typically calculated by a radial basis kernel), whose length is equal to the out_features.
@@ -105,7 +119,13 @@ class PopulationEncoder(torch.nn.Module):
         self.distance_function = distance_function
 
     def forward(self, input_data):
-        return encode.population_encode(input_data, self.out_features, self.scale, self.kernel, self.distance_function)
+        return encode.population_encode(
+            input_data,
+            self.out_features,
+            self.scale,
+            self.kernel,
+            self.distance_function,
+        )
 
 
 class SignedPoissonEncoder(torch.nn.Module):
@@ -128,4 +148,39 @@ class SignedPoissonEncoder(torch.nn.Module):
         self.dt = dt
 
     def forward(self, x):
-        return encode.signed_poisson_encode(x, self.seq_length, f_max=self.f_max, dt=self.dt)
+        return encode.signed_poisson_encode(
+            x, self.seq_length, f_max=self.f_max, dt=self.dt
+        )
+
+
+class SpikeLatencyEncoder(torch.nn.Module):
+    def __init__(self):
+        """
+        For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a 
+        neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes
+        fast.
+
+        See `R. Van Rullen & S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex <https://doi.org/10.1162/08997660152002852>`_.
+
+        Spikes are identified by their unique position in the input array. 
+
+        Example:
+            >>> data = torch.tensor([[0, 1, 1], [1, 1, 1]])
+            >>> encoder = torch.nn.Sequential(
+                            ConstantCurrentLIFEncoder()
+                            SpikeLatencyEncoder()
+                          )
+            >>> encoder(data)
+            tensor([[0, 1, 1],
+                    [1, 0, 0]])
+
+        Parameters:
+            input_spikes (torch.Tensor): A tensor of input spikes, assumed to be at least 2D (sequences, ...)
+
+        Returns:
+            A tensor where the first spike (1) is retained in the sequence
+        """
+        super(SpikeLatencyEncoder, self).__init__()
+
+    def forward(self, input_spikes):
+        return encode.spike_latency_encode(input_spikes)
