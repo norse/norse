@@ -1,4 +1,4 @@
-![Norse](logo.png)
+<img src="logo.png" align="left" height="50%" >
 --------------------------------------------------------
 
 A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) with [spiking neural networks](https://en.wikipedia.org/wiki/Spiking_neural_network).
