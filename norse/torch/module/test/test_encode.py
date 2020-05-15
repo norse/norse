@@ -6,6 +6,8 @@ import torch
 from .. import encode
 import numpy as np
 
+# Fixes a linting error:
+# pylint: disable=E1102
 
 def encode_population_test():
     data = torch.tensor([0, 0.5, 1])
