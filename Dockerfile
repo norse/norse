@@ -1,4 +1,4 @@
-FROM nvidia/cuda:latest
+FROM nvidia/cuda:10.2-cudnn7-runtime-ubuntu18.04
 
 RUN apt update && apt install -y python3-setuptools
 RUN rm -rf /var/lib/apt/lists/
