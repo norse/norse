@@ -71,7 +71,7 @@ You can execute them by invoking the `norse` module from the base directory.
     python -m norse.task.cartpole
     ```
     
-The default choices of hyperparameters are meant as reasonable starting points. More information is available when typing: `python -m norse --help`.
+The default choices of hyperparameters are meant as reasonable starting points. More information is available when typing: `python -m norse.task.<task> --help`, where `<task>` is the above listed task names.
 
 ### 2.3. Example on using the library: Long short-term spiking neural networks
 The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 

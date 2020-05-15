@@ -52,7 +52,7 @@ Running experiments is as easy as running
 
 .. code:: bash
 
-    python3 -m norse
+    python3 -m norse.task.mnist
 
 This will run a simple MNIST experiment with default parameters. See :doc:`/experiments` for detailed instructions.
 
