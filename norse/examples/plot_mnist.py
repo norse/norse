@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-r"""
+"""
 Spiking Neural Networks
 =======================
 

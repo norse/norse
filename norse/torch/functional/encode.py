@@ -7,7 +7,6 @@ but rather numerical values that will have to be converted into spikes via, for 
 from typing import Callable, Union
 
 import torch
-import torch.distributions as tdist
 
 from .lif import lif_current_encoder, LIFParameters
 

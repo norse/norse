@@ -28,7 +28,7 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 
 Norse comes packed with a few example tasks, such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database), but is generally meant for use in specific deep learning tasks (see below section on long short-term spiking neural networks):
 ```bash
-python run_mnist.py
+python -m norse.task.mnist
 ```
 
 ## 2. Getting Started
@@ -73,18 +73,18 @@ You can execute them by invoking the `norse` module from the base directory.
 
 - To train an MNIST classification network, invoke
     ```
-    python -m norse mnist
+    python -m norse.task.mnist
     ```
 - To train a CIFAR classification network, invoke
     ```
-    python -m norse cifar
+    python -m norse.task.cifar10
     ```
 - To train the cartpole balancing task with Policy gradient, invoke
     ```
-    python -m norse gym
+    python -m norse.task.cartpole
     ```
     
-The default choices of hyperparameters are meant as reasonable starting points. More information is available when typing: `python -m norse --help`.
+The default choices of hyperparameters are meant as reasonable starting points. More information is available when typing: `python -m norse.task.<task> --help`, where `<task>` is the above listed task names.
 
 ### 2.3. Example on using the library: Long short-term spiking neural networks
 The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
