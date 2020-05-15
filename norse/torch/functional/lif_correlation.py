@@ -33,7 +33,12 @@ def lif_correlation_step(
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFCorrelationState]:
     z_new, s_new = lif_step(
-        input_tensor, state.lif_state, input_weights, recurrent_weights, parameters.lif_parameters, dt
+        input_tensor,
+        state.lif_state,
+        input_weights,
+        recurrent_weights,
+        parameters.lif_parameters,
+        dt,
     )
 
     input_correlation_state_new = correlation_sensor_step(

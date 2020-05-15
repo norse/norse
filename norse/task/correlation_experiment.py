@@ -6,7 +6,7 @@ from norse.torch.module.lif_correlation import LIFCorrelation
 from norse.torch.functional.correlation_sensor import correlation_based_update
 
 
-def main(argv):
+def main():
     torch.manual_seed(42)
     np.random.seed(42)
 

@@ -30,7 +30,9 @@ def lif_mc_refrac_step(
     i_decayed = state.lif.i + di
 
     # compute new spikes
-    z_new = threshold(v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha)
+    z_new = threshold(
+        v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha
+    )
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * parameters.lif.v_reset
 
@@ -69,7 +71,9 @@ def lif_mc_refrac_feed_forward_step(
     i_decayed = state.lif.i + di
 
     # compute new spikes
-    z_new = threshold(v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha)
+    z_new = threshold(
+        v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha
+    )
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * parameters.lif.v_reset
 

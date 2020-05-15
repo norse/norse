@@ -161,7 +161,9 @@ class LSNNFeedForwardCell(torch.nn.Module):
         dt (float): Integration timestep to use
     """
 
-    def __init__(self, shape, parameters: LSNNParameters = LSNNParameters(), dt: float = 0.001):
+    def __init__(
+        self, shape, parameters: LSNNParameters = LSNNParameters(), dt: float = 0.001
+    ):
         super(LSNNFeedForwardCell, self).__init__()
         self.shape = shape
         self.parameters = parameters
@@ -180,4 +182,6 @@ class LSNNFeedForwardCell(torch.nn.Module):
     def forward(
         self, input_tensor: torch.Tensor, state: LSNNFeedForwardState
     ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
-        return lsnn_feed_forward_step(input_tensor, state, parameters=self.parameters, dt=self.dt)
+        return lsnn_feed_forward_step(
+            input_tensor, state, parameters=self.parameters, dt=self.dt
+        )

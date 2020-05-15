@@ -166,7 +166,11 @@ def ada_lif_step(
     i = state.i + di
     i = i + torch.nn.functional.linear(input_tensor, input_weights)
     i = i + torch.nn.functional.linear(state.z, recurrent_weights)
-    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i - state.b)
+    dv = (
+        dt
+        * parameters.tau_mem_inv
+        * ((parameters.v_leak - state.v) + state.i - state.b)
+    )
     v = state.v + dv
     db = -dt * parameters.tau_adapt_inv * state.b
     b = state.b + db

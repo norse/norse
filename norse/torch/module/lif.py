@@ -154,7 +154,9 @@ class LIFFeedForwardCell(torch.nn.Module):
         >>> output, s0 = lif(data, s0)
     """
 
-    def __init__(self, shape, parameters: LIFParameters = LIFParameters(), dt: float = 0.001):
+    def __init__(
+        self, shape, parameters: LIFParameters = LIFParameters(), dt: float = 0.001
+    ):
         super(LIFFeedForwardCell, self).__init__()
         self.shape = shape
         self.parameters = parameters
@@ -197,7 +199,9 @@ class LIFConstantCurrentEncoder(torch.nn.Module):
         spikes = torch.zeros(self.seq_length, *x.shape, device=self.device)
 
         for ts in range(self.seq_length):
-            z, v = lif_current_encoder(input_current=x, voltage=v, parameters=self.parameters, dt=self.dt)
+            z, v = lif_current_encoder(
+                input_current=x, voltage=v, parameters=self.parameters, dt=self.dt
+            )
             voltages[ts, :, :] = v
             spikes[ts, :, :] = z
         return voltages, spikes

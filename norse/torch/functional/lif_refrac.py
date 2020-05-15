@@ -65,7 +65,9 @@ def lif_refrac_step(
     i_decayed = state.lif.i + di
 
     # compute new spikes
-    z_new = threshold(v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha)
+    z_new = threshold(
+        v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha
+    )
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * parameters.lif.v_reset
     # compute current jumps
@@ -114,7 +116,12 @@ def lif_refrac_feed_forward_step(
     rho_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
 
     # compute voltage updates
-    dv = (1 - rho_mask) * dt * parameters.lif.tau_mem_inv * ((parameters.lif.v_leak - state.lif.v) + state.lif.i)
+    dv = (
+        (1 - rho_mask)
+        * dt
+        * parameters.lif.tau_mem_inv
+        * ((parameters.lif.v_leak - state.lif.v) + state.lif.i)
+    )
     v_decayed = state.lif.v + dv
 
     # compute current updates
@@ -122,7 +129,9 @@ def lif_refrac_feed_forward_step(
     i_decayed = state.lif.i + di
 
     # compute new spikes
-    z_new = threshold(v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha)
+    z_new = threshold(
+        v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha
+    )
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * parameters.lif.v_reset
     # compute current jumps

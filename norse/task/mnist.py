@@ -66,7 +66,6 @@ class LIFConvNet(torch.nn.Module):
         model="super",
         device="cpu",
         only_first_spike=False,
-        refrac=False,
     ):
         super(LIFConvNet, self).__init__()
         self.constant_current_encoder = LIFConstantCurrentEncoder(
@@ -214,7 +213,7 @@ def load(path, model, optimizer):
     return model, optimizer
 
 
-def main(argv):
+def main():
     writer = SummaryWriter()
 
     torch.manual_seed(FLAGS.random_seed)
