@@ -3,7 +3,6 @@ from norse.torch.benchmark.benchmark import benchmark
 
 import numpy as np
 import torch
-import pickle
 
 if __name__ == "__main__":
     n_time_steps = 1000
@@ -36,4 +35,4 @@ if __name__ == "__main__":
         timings.append(timing)
 
     with open("benchmark.pt", "wb") as f:
-        pickle.dump(timings, f)
+        np.array(timings).tofile(f)
