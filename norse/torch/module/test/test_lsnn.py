@@ -15,11 +15,13 @@ def test_lsnn_cell():
 
 @raises(TypeError)
 def test_lsnn_cell_param_fail():
+    # pylint: disable=E1120
     _ = lsnn.LSNNCell()
 
 
 @raises(TypeError)
 def test_lsnn_state_fail():
+    # pylint: disable=E1120
     cell = lsnn.LSNNCell(2, 10)
     cell.initial_state()
 
