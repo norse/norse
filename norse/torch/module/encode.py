@@ -118,9 +118,9 @@ class PopulationEncoder(torch.nn.Module):
         self.kernel = kernel
         self.distance_function = distance_function
 
-    def forward(self, input_data):
+    def forward(self, input_tensor):
         return encode.population_encode(
-            input_data,
+            input_tensor,
             self.out_features,
             self.scale,
             self.kernel,

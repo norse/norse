@@ -12,17 +12,17 @@ class SuperSpike(torch.autograd.Function):
     """
 
     @staticmethod
-    def forward(ctx, input: torch.Tensor, alpha: float) -> torch.Tensor:
-        ctx.save_for_backward(input)
+    def forward(ctx, input_tensor: torch.Tensor, alpha: float) -> torch.Tensor:
+        ctx.save_for_backward(input_tensor)
         ctx.alpha = alpha
-        return heaviside(input)
+        return heaviside(input_tensor)
 
     @staticmethod
     def backward(ctx, grad_output):
-        (input,) = ctx.saved_tensors
+        (inp,) = ctx.saved_tensors
         alpha = ctx.alpha
         grad_input = grad_output.clone()
-        grad = grad_input / (alpha * torch.abs(input) + 1.0).pow(
+        grad = grad_input / (alpha * torch.abs(inp) + 1.0).pow(
             2
         )  # section 3.3.2 (beta -> alpha)
         return grad, None

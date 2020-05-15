@@ -33,10 +33,10 @@ class LIParameters(NamedTuple):
 
 
 def li_step(
-    input: torch.Tensor,
-    s: LIState,
+    input_tensor: torch.Tensor,
+    state: LIState,
     input_weights: torch.Tensor,
-    p: LIParameters = LIParameters(),
+    parameters: LIParameters = LIParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIState]:
     r"""Single euler integration step of a leaky-integrator.
@@ -56,7 +56,7 @@ def li_step(
         i = i + w i_{\text{in}}
 
     Parameters:
-        input (torch.Tensor); Input spikes
+        input_tensor (torch.Tensor); Input spikes
         s (LIState): state of the leaky integrator
         input_weights (torch.Tensor): weights for incoming spikes
         p (LIParameters): parameters of the leaky integrator
@@ -64,30 +64,30 @@ def li_step(
     """
 
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i)
-    v_new = s.v + dv
+    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i)
+    v_new = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * s.i
-    i_decayed = s.i + di
+    di = -dt * parameters.tau_syn_inv * state.i
+    i_decayed = state.i + di
 
     # compute current jumps
-    i_new = i_decayed + torch.nn.functional.linear(input, input_weights)
+    i_new = i_decayed + torch.nn.functional.linear(input_tensor, input_weights)
     return v_new, LIState(v_new, i_new)
 
 
 # @torch.jit.script
 def li_feed_forward_step(
-    input: torch.Tensor, s: LIState, p: LIParameters = LIParameters(), dt: float = 0.001
+    input_tensor: torch.Tensor, state: LIState, parameters: LIParameters = LIParameters(), dt: float = 0.001
 ) -> Tuple[torch.Tensor, LIState]:
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i)
-    v_new = s.v + dv
+    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i)
+    v_new = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * s.i
-    i_decayed = s.i + di
+    di = -dt * parameters.tau_syn_inv * state.i
+    i_decayed = state.i + di
 
     # compute current jumps
-    i_new = i_decayed + input
+    i_new = i_decayed + input_tensor
     return v_new, LIState(v_new, i_new)
