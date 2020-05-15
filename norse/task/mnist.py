@@ -278,7 +278,6 @@ def main():
         FLAGS.seq_length,
         model=FLAGS.model,
         device=device,
-        refrac=FLAGS.refrac,
         only_first_spike=FLAGS.only_first_spike,
     ).to(device)
 
