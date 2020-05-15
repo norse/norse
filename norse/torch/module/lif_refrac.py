@@ -148,7 +148,10 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     """
 
     def __init__(
-        self, shape, parameters: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001
+        self,
+        shape,
+        parameters: LIFRefracParameters = LIFRefracParameters(),
+        dt: float = 0.001,
     ):
         super(LIFRefracFeedForwardCell, self).__init__()
         self.shape = shape
@@ -167,4 +170,6 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     def forward(
         self, input_tensor: torch.Tensor, state: LIFRefracFeedForwardState
     ) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
-        return lif_refrac_feed_forward_step(input_tensor, state, parameters=self.parameters, dt=self.dt)
+        return lif_refrac_feed_forward_step(
+            input_tensor, state, parameters=self.parameters, dt=self.dt
+        )

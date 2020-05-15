@@ -51,14 +51,22 @@ class LICell(torch.nn.Module):
         self.dt = dt
         self.output_features = output_features
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIState:
+    def initial_state(self, device, dtype=torch.float) -> LIState:
         return LIState(
             v=torch.zeros(self.output_features, device=device, dtype=dtype),
             i=torch.zeros(self.output_features, device=device, dtype=dtype),
         )
 
-    def forward(self, input_tensor: torch.Tensor, state: LIState) -> Tuple[torch.Tensor, LIState]:
-        return li_step(input_tensor, state, self.input_weights, parameters=self.parameters, dt=self.dt)
+    def forward(
+        self, input_tensor: torch.Tensor, state: LIState
+    ) -> Tuple[torch.Tensor, LIState]:
+        return li_step(
+            input_tensor,
+            state,
+            self.input_weights,
+            parameters=self.parameters,
+            dt=self.dt,
+        )
 
 
 class LIFeedForwardCell(torch.nn.Module):
@@ -84,7 +92,9 @@ class LIFeedForwardCell(torch.nn.Module):
         dt (float): integration timestep to use
     """
 
-    def __init__(self, shape, parameters: LIParameters = LIParameters(), dt: float = 0.001):
+    def __init__(
+        self, shape, parameters: LIParameters = LIParameters(), dt: float = 0.001
+    ):
         super(LIFeedForwardCell, self).__init__()
         self.parameters = parameters
         self.dt = dt
@@ -96,5 +106,9 @@ class LIFeedForwardCell(torch.nn.Module):
             i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
         )
 
-    def forward(self, input_tensor: torch.Tensor, s: LIState) -> Tuple[torch.Tensor, LIState]:
-        return li_feed_forward_step(input_tensor, s, parameters=self.parameters, dt=self.dt)
+    def forward(
+        self, input_tensor: torch.Tensor, s: LIState
+    ) -> Tuple[torch.Tensor, LIState]:
+        return li_feed_forward_step(
+            input_tensor, s, parameters=self.parameters, dt=self.dt
+        )

@@ -96,7 +96,11 @@ def coba_lif_step(
     dv = (
         dt
         * parameters.c_m_inv
-        * (parameters.g_l * (parameters.v_rest - state.v) + g_e * (parameters.e_rev_E - state.v) + g_i * (parameters.e_rev_I - state.v))
+        * (
+            parameters.g_l * (parameters.v_rest - state.v)
+            + g_e * (parameters.e_rev_E - state.v)
+            + g_i * (parameters.e_rev_I - state.v)
+        )
     )
     v = state.v + dv
 
@@ -144,7 +148,11 @@ def coba_lif_feed_forward_step(
     dv = (
         dt
         * parameters.c_m_inv
-        * (parameters.g_l * (parameters.v_rest - state.v) + g_e * (parameters.e_rev_E - state.v) + g_i * (parameters.e_rev_I - state.v))
+        * (
+            parameters.g_l * (parameters.v_rest - state.v)
+            + g_e * (parameters.e_rev_E - state.v)
+            + g_i * (parameters.e_rev_I - state.v)
+        )
     )
     v = state.v + dv
 

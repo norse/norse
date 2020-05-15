@@ -56,7 +56,9 @@ def correlation_sensor_step(
         state.correlation_trace + (1 - state.post_pre) * dcorrelation_trace
     )
 
-    danti_correlation_trace = dt * parameters.tau_ac_inv * (-state.anti_correlation_trace)
+    danti_correlation_trace = (
+        dt * parameters.tau_ac_inv * (-state.anti_correlation_trace)
+    )
     anti_correlation_trace_decayed = (
         state.anti_correlation_trace + state.post_pre * danti_correlation_trace
     )
@@ -66,7 +68,9 @@ def correlation_sensor_step(
     post_spike_mask = post_mask(state.post_pre, z_post)
 
     post_pre_new = post_pre_update(state.post_pre, post_spike_mask, pre_spike_mask)
-    correlation_trace_new = correlation_trace_decayed + (parameters.eta_p * pre_spike_mask)
+    correlation_trace_new = correlation_trace_decayed + (
+        parameters.eta_p * pre_spike_mask
+    )
     anti_correlation_trace_new = (
         anti_correlation_trace_decayed + parameters.eta_m * post_spike_mask
     )
@@ -87,10 +91,7 @@ def correlation_based_update(
     ts_frequency: int,
 ):
     if ts % ts_frequency == 0:
-        (
-            input_features,
-            hidden_features,
-        ) = correlation_state.correlation_trace.shape
+        (input_features, hidden_features,) = correlation_state.correlation_trace.shape
         # proposed weight update
         dw = torch.cat(
             (

@@ -27,9 +27,9 @@ def lif_mc_step(
         dt (float): Integration timestep to use
     """
     # compute voltage
-    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i) + torch.nn.functional.linear(
-        state.v, g_coupling
-    )
+    dv = dt * parameters.tau_mem_inv * (
+        (parameters.v_leak - state.v) + state.i
+    ) + torch.nn.functional.linear(state.v, g_coupling)
     v_decayed = state.v + dv
     # compute current updates
     di = -dt * parameters.tau_syn_inv * state.i
@@ -66,9 +66,9 @@ def lif_mc_feed_forward_step(
         dt (float): Integration timestep to use
     """
     # compute voltage
-    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i) + torch.nn.functional.linear(
-        state.v, g_coupling
-    )
+    dv = dt * parameters.tau_mem_inv * (
+        (parameters.v_leak - state.v) + state.i
+    ) + torch.nn.functional.linear(state.v, g_coupling)
     v_decayed = state.v + dv
     # compute current updates
     di = -dt * parameters.tau_syn_inv * state.i

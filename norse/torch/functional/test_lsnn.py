@@ -10,7 +10,7 @@ from .lsnn import (
 
 
 def lsnn_step_test():
-    input = torch.ones(20)
+    x = torch.ones(20)
     s = LSNNState(
         z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10), b=torch.zeros(10)
     )
@@ -18,11 +18,11 @@ def lsnn_step_test():
     recurrent_weights = torch.randn(10, 10).float()
 
     for _ in range(100):
-        _, s = lsnn_step(input, s, input_weights, recurrent_weights)
+        _, s = lsnn_step(x, s, input_weights, recurrent_weights)
 
 
 def lsnn_step_test_batch():
-    input = torch.ones(16, 20)
+    x = torch.ones(16, 20)
     s = LSNNState(
         z=torch.zeros(16, 10),
         v=torch.zeros(16, 10),
@@ -32,12 +32,12 @@ def lsnn_step_test_batch():
     input_weights = torch.randn(10, 20).float()
     recurrent_weights = torch.randn(10, 10).float()
 
-    for i in range(100):
-        z, s = lsnn_step(input, s, input_weights, recurrent_weights)
+    for _ in range(100):
+        _, s = lsnn_step(x, s, input_weights, recurrent_weights)
 
 
 def ada_lif_step_test():
-    input = torch.ones(20)
+    x = torch.ones(20)
     s = LSNNState(
         z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10), b=torch.zeros(10)
     )
@@ -45,12 +45,12 @@ def ada_lif_step_test():
     recurrent_weights = torch.randn(10, 10).float()
 
     for _ in range(100):
-        _, s = ada_lif_step(input, s, input_weights, recurrent_weights)
+        _, s = ada_lif_step(x, s, input_weights, recurrent_weights)
 
 
 def lsnn_feed_forward_step_test():
-    input = torch.ones(10)
+    x = torch.ones(10)
     s = LSNNFeedForwardState(v=torch.zeros(10), i=torch.zeros(10), b=torch.zeros(10))
 
     for _ in range(100):
-        _, s = lsnn_feed_forward_step(input, s)
+        _, s = lsnn_feed_forward_step(x, s)

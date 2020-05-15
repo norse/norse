@@ -32,7 +32,7 @@ flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
 
 
 class ANNPolicy(torch.nn.Module):
-    def __init__(self, device="cpu"):
+    def __init__(self):
         super(ANNPolicy, self).__init__()
         self.state_space = 4
         self.action_space = 2
@@ -119,7 +119,7 @@ class LSNNPolicy(torch.nn.Module):
         self.lif_layer = LSNNCell(
             2 * self.state_dim,
             self.hidden_features,
-            parameters=LSNNParameters(method="super", alpha=100.0),
+            parameters=LSNNParameters(model, alpha=100.0),
         )
         self.dropout = torch.nn.Dropout(p=0.5)
         self.readout = LICell(self.hidden_features, self.output_features)
@@ -185,7 +185,7 @@ def finish_episode(policy, optimizer):
     del policy.saved_log_probs[:]
 
 
-def main(argv):
+def main():
     running_reward = 10
     torch.manual_seed(FLAGS.random_seed)
     random.seed(FLAGS.random_seed)

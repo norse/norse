@@ -78,7 +78,10 @@ def li_step(
 
 # @torch.jit.script
 def li_feed_forward_step(
-    input_tensor: torch.Tensor, state: LIState, parameters: LIParameters = LIParameters(), dt: float = 0.001
+    input_tensor: torch.Tensor,
+    state: LIState,
+    parameters: LIParameters = LIParameters(),
+    dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIState]:
     # compute voltage updates
     dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i)
