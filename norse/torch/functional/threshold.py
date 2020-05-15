@@ -151,6 +151,8 @@ heavi_tent_fn = HeaviTent.apply
 def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
     if method == "heaviside":
         return heaviside(x)
+    elif method == "super":
+        return super_fn(x, alpha)
     elif method == "tanh":
         return heavi_tanh_fn(x, alpha)
     elif method == "tent":
@@ -159,8 +161,12 @@ def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
         return heavi_circ_fn(x, alpha)
     elif method == "logistic":
         return logistic_fn(x, alpha)
-
-    return super_fn(x, alpha)
+    else:
+        raise ValueError(
+            f"Attempted to apply threshold function {method}, but no such "
+            + "function exist. We currently support heaviside, super, "
+            + "tanh, tent, circ, and logistic."
+        )
 
 
 def sign(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:

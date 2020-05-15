@@ -349,10 +349,7 @@ def main():
     os.chdir(rundir)
     FLAGS.append_flags_into_file(f"flags.txt")
 
-    model = LIFConvNet(
-        num_channels=num_channels,
-        device=device,
-    ).to(device)
+    model = LIFConvNet(num_channels=num_channels, device=device,).to(device)
 
     print(model)
 
