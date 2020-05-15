@@ -60,9 +60,13 @@ confidence=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable=bad-continuation,
+disable=C0103,
+        C0111,
+        @0611, # Redefining built-in
+        bad-continuation,
         anomalous-backslash-in-string,
         redundant-keyword-arg,
+        arguments-differ,
         print-statement,
         parameter-unpacking,
         unpacking-in-except,
@@ -232,7 +236,7 @@ ignored-classes=optparse.Values,thread._local,_thread._local
 # (useful for modules/projects where namespaces are manipulated during runtime
 # and thus existing member attributes cannot be deduced by static analysis). It
 # supports qualified module names, as well as Unix pattern matching.
-ignored-modules=gym,torch,torchvision
+ignored-modules=absl,gym,nose,numpy,matplotlib,torch,torchvision
 
 # Show a hint with possible names when a member name was not found. The aspect
 # of finding the hint is based on edit distance.
