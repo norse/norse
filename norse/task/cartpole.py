@@ -17,7 +17,8 @@ from norse.torch.module.lsnn import LSNNCell, LSNNParameters
 from norse.torch.module.leaky_integrator import LICell
 
 FLAGS = flags.FLAGS
-flags.DEFINE_enum("device", "cpu", ["cpu", "cuda"], "Device to use by pytorch.")
+flags.DEFINE_enum("device", "cpu", [
+                  "cpu", "cuda"], "Device to use by pytorch.")
 flags.DEFINE_integer("episodes", 100, "Number of training trials.")
 flags.DEFINE_float("learning_rate", 1e-3, "Learning rate to use.")
 flags.DEFINE_float("gamma", 0.99, "discount factor to use")
@@ -25,7 +26,8 @@ flags.DEFINE_integer(
     "log_interval", 10, "In which intervals to display learning progress."
 )
 flags.DEFINE_enum("model", "super", ["super"], "Model to use for training.")
-flags.DEFINE_enum("policy", "snn", ["snn", "lsnn", "ann"], "Select policy to use.")
+flags.DEFINE_enum("policy", "snn", [
+                  "snn", "lsnn", "ann"], "Select policy to use.")
 flags.DEFINE_boolean("render", False, "Render the environment")
 flags.DEFINE_string("environment", "CartPole-v1", "Gym environment to use.")
 flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
@@ -77,8 +79,10 @@ class Policy(torch.nn.Module):
     def forward(self, x):
         scale = 50
         x = x.to(self.device)
-        _, x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
-        _, x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
+        _, x_pos = self.constant_current_encoder(
+            torch.nn.functional.relu(scale * x))
+        _, x_neg = self.constant_current_encoder(
+            torch.nn.functional.relu(-scale * x))
         x = torch.cat([x_pos, x_neg], dim=2)
 
         seq_length, batch_size, _ = x.shape
@@ -129,8 +133,10 @@ class LSNNPolicy(torch.nn.Module):
 
     def forward(self, x):
         scale = 50
-        _, x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
-        _, x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
+        _, x_pos = self.constant_current_encoder(
+            torch.nn.functional.relu(scale * x))
+        _, x_neg = self.constant_current_encoder(
+            torch.nn.functional.relu(-scale * x))
         x = torch.cat([x_pos, x_neg], dim=2)
 
         seq_length, batch_size, _ = x.shape
@@ -209,7 +215,8 @@ def main(argv):
     elif FLAGS.policy == "snn":
         policy = Policy()
     elif FLAGS.policy == "lsnn":
-        policy = LSNNPolicy(device=FLAGS.device, model=FLAGS.model).to(FLAGS.device)
+        policy = LSNNPolicy(device=FLAGS.device,
+                            model=FLAGS.model).to(FLAGS.device)
     optimizer = torch.optim.Adam(policy.parameters(), lr=FLAGS.learning_rate)
 
     running_rewards = []
@@ -242,7 +249,8 @@ def main(argv):
         if running_reward > env.spec.reward_threshold:
             logging.info(
                 "Solved! Running reward is now {} and "
-                "the last episode runs to {} time steps!".format(running_reward, t)
+                "the last episode runs to {} time steps!".format(
+                    running_reward, t)
             )
             break
 
