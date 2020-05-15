@@ -44,7 +44,7 @@ class LIFCell(torch.nn.Module):
     Parameters:
         input_size (int): Size of the input.
         hidden_size (int): Size of the hidden state.
-        p (LIFParameters): Parameters of the LIF neuron model.
+        parameters (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
 
     Examples:
@@ -60,7 +60,7 @@ class LIFCell(torch.nn.Module):
         self,
         input_size,
         hidden_size,
-        p: LIFParameters = LIFParameters(),
+        parameters: LIFParameters = LIFParameters(),
         dt: float = 0.001,
     ):
         super(LIFCell, self).__init__()
@@ -72,11 +72,11 @@ class LIFCell(torch.nn.Module):
         )
         self.input_size = input_size
         self.hidden_size = hidden_size
-        self.p = p
+        self.parameters = parameters
         self.dt = dt
 
     def extra_repr(self):
-        s = f"{self.input_size}, {self.hidden_size}, p={self.p}, dt={self.dt}"
+        s = f"{self.input_size}, {self.hidden_size}, p={self.parameters}, dt={self.dt}"
         return s
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LIFState:
@@ -87,14 +87,14 @@ class LIFCell(torch.nn.Module):
         )
 
     def forward(
-        self, input: torch.Tensor, state: LIFState
+        self, input_tensor: torch.Tensor, state: LIFState
     ) -> Tuple[torch.Tensor, LIFState]:
         return lif_step(
-            input,
+            input_tensor,
             state,
             self.input_weights,
             self.recurrent_weights,
-            p=self.p,
+            parameters=self.parameters,
             dt=self.dt,
         )
 
@@ -105,9 +105,9 @@ class LIFLayer(torch.nn.Module):
         self.cell = LIFCell(*cell_args, **kw_args)
 
     def forward(
-        self, input: torch.Tensor, state: LIFState
+        self, input_tensor: torch.Tensor, state: LIFState
     ) -> Tuple[torch.Tensor, LIFState]:
-        inputs = input.unbind(0)
+        inputs = input_tensor.unbind(0)
         outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
         for i in range(len(inputs)):
             out, state = self.cell(inputs[i], state)
@@ -142,7 +142,7 @@ class LIFFeedForwardCell(torch.nn.Module):
 
     Parameters:
         shape: Shape of the feedforward state.
-        p (LIFParameters): Parameters of the LIF neuron model.
+        parameters (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
 
     Examples:
@@ -154,14 +154,14 @@ class LIFFeedForwardCell(torch.nn.Module):
         >>> output, s0 = lif(data, s0)
     """
 
-    def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
+    def __init__(self, shape, parameters: LIFParameters = LIFParameters(), dt: float = 0.001):
         super(LIFFeedForwardCell, self).__init__()
         self.shape = shape
-        self.p = p
+        self.parameters = parameters
         self.dt = dt
 
     def extra_repr(self):
-        s = f"{self.shape}, p={self.p}, dt={self.dt}"
+        s = f"{self.shape}, p={self.parameters}, dt={self.dt}"
         return s
 
     def initial_state(self, batch_size, device, dtype=None) -> LIFFeedForwardState:
@@ -173,20 +173,20 @@ class LIFFeedForwardCell(torch.nn.Module):
     def forward(
         self, x: torch.Tensor, state: LIFFeedForwardState
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
-        return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
+        return lif_feed_forward_step(x, state, parameters=self.parameters, dt=self.dt)
 
 
 class LIFConstantCurrentEncoder(torch.nn.Module):
     def __init__(
         self,
         seq_length,
-        p: LIFParameters = LIFParameters(),
+        parameters: LIFParameters = LIFParameters(),
         dt: float = 0.001,
         device="cpu",
     ):
         super(LIFConstantCurrentEncoder, self).__init__()
         self.seq_length = seq_length
-        self.p = p
+        self.parameters = parameters
         self.device = device
         self.dt = dt
 
@@ -197,7 +197,7 @@ class LIFConstantCurrentEncoder(torch.nn.Module):
         spikes = torch.zeros(self.seq_length, *x.shape, device=self.device)
 
         for ts in range(self.seq_length):
-            z, v = lif_current_encoder(input_current=x, v=v, p=self.p, dt=self.dt)
+            z, v = lif_current_encoder(input_current=x, voltage=v, parameters=self.parameters, dt=self.dt)
             voltages[ts, :, :] = v
             spikes[ts, :, :] = z
         return voltages, spikes

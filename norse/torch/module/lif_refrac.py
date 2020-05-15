@@ -68,7 +68,7 @@ class LIFRefracCell(torch.nn.Module):
         self,
         input_size,
         hidden_size,
-        p: LIFRefracParameters = LIFRefracParameters(),
+        parameters: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
     ):
         super(LIFRefracCell, self).__init__()
@@ -79,7 +79,7 @@ class LIFRefracCell(torch.nn.Module):
             torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
         )
         self.hidden_size = hidden_size
-        self.p = p
+        self.parameters = parameters
         self.dt = dt
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LIFRefracState:
@@ -93,14 +93,14 @@ class LIFRefracCell(torch.nn.Module):
         )
 
     def forward(
-        self, input: torch.Tensor, state: LIFRefracState
+        self, input_tensor: torch.Tensor, state: LIFRefracState
     ) -> Tuple[torch.Tensor, LIFRefracState]:
         return lif_refrac_step(
-            input,
+            input_tensor,
             state,
             self.input_weights,
             self.recurrent_weights,
-            p=self.p,
+            parameters=self.parameters,
             dt=self.dt,
         )
 
@@ -136,7 +136,7 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
 
     Parameters:
         shape: Shape of the processed spike input
-        p (LIFRefracParameters): parameters of the lif neuron
+        parameters (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
 
     Examples:
@@ -148,11 +148,11 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     """
 
     def __init__(
-        self, shape, p: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001
+        self, shape, parameters: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001
     ):
         super(LIFRefracFeedForwardCell, self).__init__()
         self.shape = shape
-        self.p = p
+        self.parameters = parameters
         self.dt = dt
 
     def initial_state(self, batch_size, device, dtype) -> LIFFeedForwardState:
@@ -165,6 +165,6 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
         )
 
     def forward(
-        self, input: torch.Tensor, state: LIFRefracFeedForwardState
+        self, input_tensor: torch.Tensor, state: LIFRefracFeedForwardState
     ) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
-        return lif_refrac_feed_forward_step(input, state, p=self.p, dt=self.dt)
+        return lif_refrac_feed_forward_step(input_tensor, state, parameters=self.parameters, dt=self.dt)

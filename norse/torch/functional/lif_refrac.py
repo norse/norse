@@ -31,54 +31,54 @@ class LIFRefracParameters(NamedTuple):
 
 
 def lif_refrac_step(
-    input: torch.Tensor,
-    s: LIFRefracState,
+    input_tensor: torch.Tensor,
+    state: LIFRefracState,
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
-    p: LIFRefracParameters = LIFRefracParameters(),
+    parameters: LIFRefracParameters = LIFRefracParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFRefracState]:
     r"""Computes a single euler-integration step of a recurrently connected
      LIF neuron-model with a refractory period.
 
     Parameters:
-        input (torch.Tensor): the input spikes at the current time step
+        input_tensor (torch.Tensor): the input spikes at the current time step
         s (LIFRefracState): state at the current time step
         input_weights (torch.Tensor): synaptic weights for incoming spikes
         recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
     """
-    refrac_mask = threshold(s.rho, p.lif.method, p.lif.alpha)
+    refrac_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
 
     # compute voltage updates
     dv = (
         (1 - refrac_mask)
         * dt
-        * p.lif.tau_mem_inv
-        * ((p.lif.v_leak - s.lif.v) + s.lif.i)
+        * parameters.lif.tau_mem_inv
+        * ((parameters.lif.v_leak - state.lif.v) + state.lif.i)
     )
-    v_decayed = s.lif.v + dv
+    v_decayed = state.lif.v + dv
 
     # compute current updates
-    di = -dt * p.lif.tau_syn_inv * s.lif.i
-    i_decayed = s.lif.i + di
+    di = -dt * parameters.lif.tau_syn_inv * state.lif.i
+    i_decayed = state.lif.i + di
 
     # compute new spikes
-    z_new = threshold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
+    z_new = threshold(v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.lif.v_reset
+    v_new = (1 - z_new) * v_decayed + z_new * parameters.lif.v_reset
     # compute current jumps
     i_new = (
         i_decayed
-        + torch.nn.functional.linear(input, input_weights)
-        + torch.nn.functional.linear(s.lif.z, recurrent_weights)
+        + torch.nn.functional.linear(input_tensor, input_weights)
+        + torch.nn.functional.linear(state.lif.z, recurrent_weights)
     )
 
     # compute update to refractory counter
     rho_new = (1 - z_new) * torch.nn.functional.relu(
-        s.rho - refrac_mask
-    ) + z_new * p.rho_reset
+        state.rho - refrac_mask
+    ) + z_new * parameters.rho_reset
 
     return z_new, LIFRefracState(LIFState(z_new, v_new, i_new), rho_new)
 
@@ -97,39 +97,39 @@ class LIFRefracFeedForwardState(NamedTuple):
 
 
 def lif_refrac_feed_forward_step(
-    input: torch.Tensor,
-    s: LIFRefracFeedForwardState,
-    p: LIFRefracParameters = LIFRefracParameters(),
+    input_tensor: torch.Tensor,
+    state: LIFRefracFeedForwardState,
+    parameters: LIFRefracParameters = LIFRefracParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
     r"""Computes a single euler-integration step of a feed forward
      LIF neuron-model with a refractory period.
 
     Parameters:
-        input (torch.Tensor): the input spikes at the current time step
+        input_tensor (torch.Tensor): the input spikes at the current time step
         s (LIFRefracFeedForwardState): state at the current time step
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
     """
-    rho_mask = threshold(s.rho, p.lif.method, p.lif.alpha)
+    rho_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
 
     # compute voltage updates
-    dv = (1 - rho_mask) * dt * p.lif.tau_mem_inv * ((p.lif.v_leak - s.lif.v) + s.lif.i)
-    v_decayed = s.lif.v + dv
+    dv = (1 - rho_mask) * dt * parameters.lif.tau_mem_inv * ((parameters.lif.v_leak - state.lif.v) + state.lif.i)
+    v_decayed = state.lif.v + dv
 
     # compute current updates
-    di = -dt * p.lif.tau_syn_inv * s.lif.i
-    i_decayed = s.lif.i + di
+    di = -dt * parameters.lif.tau_syn_inv * state.lif.i
+    i_decayed = state.lif.i + di
 
     # compute new spikes
-    z_new = threshold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
+    z_new = threshold(v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.lif.v_reset
+    v_new = (1 - z_new) * v_decayed + z_new * parameters.lif.v_reset
     # compute current jumps
-    i_new = i_decayed + input
+    i_new = i_decayed + input_tensor
 
     # compute update to refractory counter
     rho_new = (1 - z_new) * torch.nn.functional.relu(
-        s.rho - rho_mask
-    ) + z_new * p.rho_reset
+        state.rho - rho_mask
+    ) + z_new * parameters.rho_reset
     return z_new, LIFRefracFeedForwardState(LIFFeedForwardState(v_new, i_new), rho_new)

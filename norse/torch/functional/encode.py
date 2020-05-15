@@ -47,7 +47,7 @@ def constant_current_lif_encode(
 
     for ts in range(seq_length):
         z, v = lif_current_encoder(
-            input_current=input_current, v=v, p=parameters, dt=dt
+            input_current=input_current, voltage=v, parameters=parameters, dt=dt
         )
         spikes[ts] = z
     return spikes
