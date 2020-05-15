@@ -1,9 +1,10 @@
 <p align="center">
-<img src="logo.png" align="left">
+<img src="logo.png">
 </p>
 
+<p>
 A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) with [spiking neural networks](https://en.wikipedia.org/wiki/Spiking_neural_network).
-
+</p>
 
 [![Test Status](https://github.com/norse/norse/workflows/Python%20package/badge.svg)](https://github.com/norse/norse/actions) 
 
