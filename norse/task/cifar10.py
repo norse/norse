@@ -351,8 +351,6 @@ def main():
 
     model = LIFConvNet(
         num_channels=num_channels,
-        seq_length=FLAGS.seq_length,
-        model=FLAGS.model,
         device=device,
     ).to(device)
 
