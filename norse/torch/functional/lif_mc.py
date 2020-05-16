@@ -34,7 +34,7 @@ def lif_mc_step(
     v_new = state.v + dt * torch.nn.functional.linear(state.v, g_coupling)
     return lif_step(
         input_tensor,
-        LIFFeedForwardState(state.z, v_new, state.i),
+        LIFState(state.z, v_new, state.i),
         input_weights,
         recurrent_weights,
         parameters,
