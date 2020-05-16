@@ -35,6 +35,16 @@ class LIFRefracParameters(NamedTuple):
     lif: LIFParameters = LIFParameters()
     rho_reset: torch.Tensor = torch.as_tensor(5.0)
 
+def compute_refractory_update():
+
+    refrac_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
+    v_new = (1 - refrac_mask) * s_new.v + refrac_mask * state.lif.v
+    z_new = (1 - refrac_mask) * z_new
+
+    # compute update to refractory counter
+    rho_new = (1 - z_new) * torch.nn.functional.relu(
+        state.rho - refrac_mask
+    ) + z_new * parameters.rho_reset
 
 def lif_refrac_step(
     input_tensor: torch.Tensor,
@@ -68,7 +78,7 @@ def lif_refrac_step(
         state.rho - refrac_mask
     ) + z_new * parameters.rho_reset
 
-    return z_new, LIFRefracState(LIFState(z_new, v_new, s_new.i_new), rho_new)
+    return z_new, LIFRefracState(LIFState(z_new, v_new, s_new.i), rho_new)
 
 
 class LIFRefracFeedForwardState(NamedTuple):
