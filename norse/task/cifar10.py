@@ -347,7 +347,7 @@ def main():
 
     os.makedirs(rundir, exist_ok=True)
     os.chdir(rundir)
-    FLAGS.append_flags_into_file(f"flags.txt")
+    FLAGS.append_flags_into_file("flags.txt")
 
     model = LIFConvNet(num_channels=num_channels, device=device,).to(device)
 
@@ -418,7 +418,7 @@ def main():
     np.save("mean_losses.npy", np.array(mean_losses))
     np.save("test_losses.npy", np.array(test_losses))
     np.save("accuracies.npy", np.array(accuracies))
-    model_path = f"cifar10-final.pt"
+    model_path = "cifar10-final.pt"
     save(model_path, model, optimizer)
 
     logging.info(f"output saved to {rundir}")
