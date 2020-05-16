@@ -269,7 +269,7 @@ def main():
 
     os.makedirs(path, exist_ok=True)
     os.chdir(path)
-    FLAGS.append_flags_into_file(f"flags.txt")
+    FLAGS.append_flags_into_file("flags.txt")
 
     input_features = 28 * 28
 
@@ -321,7 +321,7 @@ def main():
     np.save("mean_losses.npy", np.array(mean_losses))
     np.save("test_losses.npy", np.array(test_losses))
     np.save("accuracies.npy", np.array(accuracies))
-    model_path = f"mnist-final.pt"
+    model_path = "mnist-final.pt"
     save(
         model_path,
         epoch=epoch,

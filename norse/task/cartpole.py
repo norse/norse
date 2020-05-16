@@ -193,7 +193,7 @@ def main():
     label = f"{FLAGS.policy}-{FLAGS.model}-{FLAGS.random_seed}"
     os.makedirs(f"runs/cartpole/{label}", exist_ok=True)
     os.chdir(f"runs/cartpole/{label}")
-    FLAGS.append_flags_into_file(f"flags.txt")
+    FLAGS.append_flags_into_file("flags.txt")
 
     np.random.seed(FLAGS.random_seed)
     if hasattr(torch, "cuda_is_available"):
@@ -246,10 +246,10 @@ def main():
             )
             break
 
-    np.save(f"running_rewards.npy", np.array(running_rewards))
-    np.save(f"episode_rewards.npy", np.array(episode_rewards))
-    torch.save(optimizer.state_dict(), f"optimizer.pt")
-    torch.save(policy.state_dict(), f"policy.pt")
+    np.save("running_rewards.npy", np.array(running_rewards))
+    np.save("episode_rewards.npy", np.array(episode_rewards))
+    torch.save(optimizer.state_dict(), "optimizer.pt")
+    torch.save(policy.state_dict(), "policy.pt")
 
 
 if __name__ == "__main__":
