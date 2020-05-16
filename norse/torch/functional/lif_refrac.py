@@ -35,16 +35,32 @@ class LIFRefracParameters(NamedTuple):
     lif: LIFParameters = LIFParameters()
     rho_reset: torch.Tensor = torch.as_tensor(5.0)
 
-def compute_refractory_update():
 
+def compute_refractory_update(
+    state: LIFRefracState,
+    z_new: torch.Tensor,
+    v_new: torch.Tensor,
+    parameters: LIFRefracParameters = LIFRefracParameters(),
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Compute the refractory update.
+
+    Parameters:
+        state (LIFRefracState): Initial state of the refractory neuron.
+        z_new (torch.Tensor): New spikes that were generated.
+        v_new (torch.Tensor): New voltage after the lif update step.
+        parameters (torch.Tensor): Refractory parameters.
+    """
     refrac_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
-    v_new = (1 - refrac_mask) * s_new.v + refrac_mask * state.lif.v
+    v_new = (1 - refrac_mask) * v_new + refrac_mask * state.lif.v
     z_new = (1 - refrac_mask) * z_new
 
     # compute update to refractory counter
     rho_new = (1 - z_new) * torch.nn.functional.relu(
         state.rho - refrac_mask
     ) + z_new * parameters.rho_reset
+
+    return v_new, z_new, rho_new
+
 
 def lif_refrac_step(
     input_tensor: torch.Tensor,
@@ -65,18 +81,10 @@ def lif_refrac_step(
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
     """
-    refrac_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
-
     z_new, s_new = lif_step(
         input_tensor, state.lif, input_weights, recurrent_weights, parameters.lif, dt
     )
-    v_new = (1 - refrac_mask) * s_new.v + refrac_mask * state.lif.v
-    z_new = (1 - refrac_mask) * z_new
-
-    # compute update to refractory counter
-    rho_new = (1 - z_new) * torch.nn.functional.relu(
-        state.rho - refrac_mask
-    ) + z_new * parameters.rho_reset
+    v_new, z_new, rho_new = compute_refractory_update(state, z_new, s_new.v, parameters)
 
     return z_new, LIFRefracState(LIFState(z_new, v_new, s_new.i), rho_new)
 
@@ -109,16 +117,8 @@ def lif_refrac_feed_forward_step(
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
     """
-    refrac_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
-
     z_new, s_new = lif_feed_forward_step(input_tensor, state.lif, parameters.lif, dt)
-    v_new = (1 - refrac_mask) * s_new.v + refrac_mask * state.lif.v
-    z_new = (1 - refrac_mask) * z_new
-
-    # compute update to refractory counter
-    rho_new = (1 - z_new) * torch.nn.functional.relu(
-        state.rho - refrac_mask
-    ) + z_new * parameters.rho_reset
+    v_new, z_new, rho_new = compute_refractory_update(state, z_new, s_new.v, parameters)
 
     return (
         z_new,
