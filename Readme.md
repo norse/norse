@@ -15,9 +15,7 @@ A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) wit
     <a href="https://pypi.org/project/norse/" alt="PyPi">
         <img src="https://img.shields.io/pypi/dm/norse" />
     </a>
-    <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
-        <img src="https://img.shields.io/lgtm/alerts/g/norse/norse"
-            alt="Total alerts"/></a>
+    <a href="https://www.codacy.com/gh/norse/norse?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=norse/norse&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/a9ab846fc6114afda4320badcb8a69c2"/></a>
 </p>
 
 The purpose of this library is to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
