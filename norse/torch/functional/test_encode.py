@@ -40,6 +40,11 @@ def constant_current_lif_encode_test():
     np.testing.assert_equal(z[-1].numpy(), np.ones((4, 3)))
 
 
+def spike_latency_lif_encode_test():
+    spikes = encode.spike_latency_lif_encode(1.1 * torch.ones(10), seq_length=128)
+    assert torch.sum(spikes).data == 10
+
+
 def spike_latency_encode_with_batch_test():
     data = torch.tensor([[100, 100], [100, 100]])
     spikes = encode.constant_current_lif_encode(data, 5)

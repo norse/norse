@@ -137,7 +137,6 @@ class SignedPoissonEncoder(torch.nn.Module):
         which represent input spikes.
 
         Parameters:
-            input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [0,1].
             sequence_length (int): Number of time steps in the resulting spike train.
             f_max (float): Maximal frequency (in Hertz) which will be emitted.
             dt (float): Integration time step (should coincide with the integration time step used in the model)
@@ -150,6 +149,29 @@ class SignedPoissonEncoder(torch.nn.Module):
     def forward(self, x):
         return encode.signed_poisson_encode(
             x, self.seq_length, f_max=self.f_max, dt=self.dt
+        )
+
+
+class SpikeLatencyLIFEncoder(torch.nn.Module):
+    """Encodes an input value by the time the first spike occurs.
+    Similar to the ConstantCurrentLIFEncoder, but the LIF can be
+    thought to have an infinite refractory period.
+
+    Parameters:
+        sequence_length (int): Number of time steps in the resulting spike train.
+        parameters (LIFParameters): Parameters of the LIF neuron model.
+        dt (float): Integration time step (should coincide with the integration time step used in the model)
+    """
+
+    def __init__(self, seq_length, parameters=lif.LIFParameters(), dt=0.001):
+        super(SpikeLatencyLIFEncoder, self).__init__()
+        self.seq_length = seq_length
+        self.parameters = parameters
+        self.dt = dt
+
+    def forward(self, input_current):
+        encode.spike_latency_lif_encode(
+            input_current, self.seq_length, self.parameters, self.dt
         )
 
 
