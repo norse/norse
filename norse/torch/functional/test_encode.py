@@ -45,7 +45,7 @@ def spike_latency_encode_with_batch_test():
     spikes = encode.constant_current_lif_encode(data, 5)
     actual = encode.spike_latency_encode(spikes).to_dense()
     expected = np.zeros((5, 2, 2))
-    for i in range(len(expected)):
+    for i, _ in enumerate(expected):
         expected[i] = np.array([[1, 1], [0, 0]])
     np.testing.assert_equal(actual.numpy(), expected)
 

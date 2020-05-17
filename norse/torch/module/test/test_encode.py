@@ -37,6 +37,6 @@ def spike_latency_encode_test():
     )
     actual = encoder(data).to_dense()
     expected = np.zeros((2, 2, 3))
-    for i in range(len(expected)):
+    for i, _ in enumerate(expected):
         expected[i] = np.array([[0, 1, 1], [1, 0, 0]])
     np.testing.assert_equal(actual.numpy(), expected)
