@@ -177,6 +177,37 @@ def signed_poisson_encode(
     )
 
 
+def spike_latency_lif_encode(
+    input_current: torch.Tensor,
+    seq_length: int,
+    parameters: LIFParameters = LIFParameters(),
+    dt=0.001,
+) -> torch.Tensor:
+    """Encodes an input value by the time the first spike occurs.
+    Similar to the ConstantCurrentLIFEncoder, but the LIF can be
+    thought to have an infinite refractory period.
+
+    Parameters:
+        input_current (torch.Tensor): Input current to encode (needs to be positive).
+        sequence_length (int): Number of time steps in the resulting spike train.
+        parameters (LIFParameters): Parameters of the LIF neuron model.
+        dt (float): Integration time step (should coincide with the integration time step used in the model)
+    """
+    voltage = torch.zeros_like(input_current)
+    z = torch.zeros_like(input_current)
+    mask = torch.zeros_like(input_current).byte()
+    spikes = []
+
+    for _ in range(seq_length):
+        z, voltage = lif_current_encoder(
+            input_current=input_current, voltage=voltage, parameters=parameters, dt=dt
+        )
+        spikes += [torch.where(mask, torch.zeros_like(z), z)]
+        mask[z.bool()] = 1
+
+    return torch.stack(spikes)
+
+
 def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     """
     For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a 
