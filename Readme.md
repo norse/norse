@@ -5,6 +5,7 @@
 A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) with [spiking neural networks](https://en.wikipedia.org/wiki/Spiking_neural_network).
 
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c38c8f563b704532b2f3598ab62cdbff)](https://app.codacy.com/gh/norse/norse?utm_source=github.com&utm_medium=referral&utm_content=norse/norse&utm_campaign=Badge_Grade_Dashboard)
 [![Test Status](https://github.com/norse/norse/workflows/Python%20package/badge.svg)](https://github.com/norse/norse/actions) 
 
 The purpose of this library is to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
