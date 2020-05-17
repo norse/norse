@@ -57,10 +57,18 @@ class Net(torch.nn.Module):
         seq_batch_size = x.shape[1]
 
         # specify the initial states
-        s0 = self.lif0.initial_state(seq_batch_size, device=self.device, dtype=self.dtype)
-        s1 = self.lif1.initial_state(seq_batch_size, device=self.device, dtype=self.dtype)
-        s2 = self.lif2.initial_state(seq_batch_size, device=self.device, dtype=self.dtype)
-        so = self.out.initial_state(seq_batch_size, device=self.device, dtype=self.dtype)
+        s0 = self.lif0.initial_state(
+            seq_batch_size, device=self.device, dtype=self.dtype
+        )
+        s1 = self.lif1.initial_state(
+            seq_batch_size, device=self.device, dtype=self.dtype
+        )
+        s2 = self.lif2.initial_state(
+            seq_batch_size, device=self.device, dtype=self.dtype
+        )
+        so = self.out.initial_state(
+            seq_batch_size, device=self.device, dtype=self.dtype
+        )
 
         voltages = torch.zeros(
             seq_length, seq_batch_size, 10, device=self.device, dtype=self.dtype

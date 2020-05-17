@@ -35,8 +35,8 @@ def spike_latency_encode_test():
     encoder = torch.nn.Sequential(
         encode.ConstantCurrentLIFEncoder(2), encode.SpikeLatencyEncoder()
     )
-    actual = encoder(data)
+    actual = encoder(data).to_dense()
     expected = np.zeros((2, 2, 3))
-    expected[0] = np.array([[0, 1, 1], [1, 1, 1]])
-    print(actual)
+    for i in range(len(expected)):
+        expected[i] = np.array([[0, 1, 1], [1, 0, 0]])
     np.testing.assert_equal(actual.numpy(), expected)

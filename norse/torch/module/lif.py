@@ -176,32 +176,3 @@ class LIFFeedForwardCell(torch.nn.Module):
         self, x: torch.Tensor, state: LIFFeedForwardState
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
         return lif_feed_forward_step(x, state, parameters=self.parameters, dt=self.dt)
-
-
-class LIFConstantCurrentEncoder(torch.nn.Module):
-    def __init__(
-        self,
-        seq_length,
-        parameters: LIFParameters = LIFParameters(),
-        dt: float = 0.001,
-        device="cpu",
-    ):
-        super(LIFConstantCurrentEncoder, self).__init__()
-        self.seq_length = seq_length
-        self.parameters = parameters
-        self.device = device
-        self.dt = dt
-
-    def forward(self, x):
-        v = torch.zeros(*x.shape, device=self.device)
-        z = torch.zeros(*x.shape, device=self.device)
-        voltages = torch.zeros(self.seq_length, *x.shape, device=self.device)
-        spikes = torch.zeros(self.seq_length, *x.shape, device=self.device)
-
-        for ts in range(self.seq_length):
-            z, v = lif_current_encoder(
-                input_current=x, voltage=v, parameters=self.parameters, dt=self.dt
-            )
-            voltages[ts, :, :] = v
-            spikes[ts, :, :] = z
-        return voltages, spikes
