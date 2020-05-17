@@ -233,42 +233,10 @@ def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     if len(input_spikes.size()) == 1:
         return input_spikes
 
-    n = input_spikes.numel()
-    indices = torch.arange(0, n)
-    size = input_spikes.size()
-    size_mul = 1
-    for dim in size:
-        size_mul *= dim
-    sequence_dim = len(size) - 2
-    sequence_size, neuron_size = size[-2:]
-    outer_size = sum(size[:-2])
-    _, first_indices = torch.topk(input_spikes, k=1, dim=sequence_dim)
-
-    # Retrieve absolute indices for spikes
-    if outer_size == 0:
-        index_add = indices.chunk(sequence_size)[0]
-        index_mul = torch.arange(neuron_size, neuron_size * sequence_size)
-    else:
-        index_add = torch.cat(indices.split(neuron_size)[::sequence_size])
-        index_mul = torch.arange(neuron_size, neuron_size * sequence_size).repeat(
-            outer_size
-        )
-
-    spike_indices = index_add + first_indices.flatten() * index_mul
-
-    # Extract spike coordinates
-    index_list = []
-    size_above = 1
-    size_below = size_mul
-    for dim in size:
-        size_above *= dim
-        size_below = max(1, size_below // dim)
-        dim_indices = indices[:dim].repeat_interleave(size_below).repeat(size_above)
-        index_list.append(torch.take(dim_indices, spike_indices))
-    index_coordinates = torch.stack(index_list)
-
-    spike_data = torch.take(input_spikes, spike_indices)
-
-    return torch.sparse_coo_tensor(
-        index_coordinates, spike_data, size=input_spikes.size()
-    )
+    mask = torch.zeros(input_spikes.size()[1:], device=input_spikes.device).byte()
+    spikes = input_spikes.clone()
+    zero_spikes = torch.zeros_like(spikes[0])
+    for index, spike_list in enumerate(spikes):
+        spikes[index] = torch.where(mask, zero_spikes, spike_list)
+        mask[spike_list.bool()] = 1
+    return spikes
