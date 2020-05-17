@@ -40,11 +40,10 @@ def spike_latency_encode_test():
     expected[0] = np.array([[0, 1, 1], [1, 1, 1]])
     np.testing.assert_equal(actual.numpy(), expected)
 
+
 def spike_latency_encode_chain_test():
     data = torch.randn(7, 5) + 10
     encoder = torch.nn.Sequential(
-        encode.ConstantCurrentLIFEncoder(2),
-        encode.SpikeLatencyEncoder()
+        encode.ConstantCurrentLIFEncoder(2), encode.SpikeLatencyEncoder()
     )
     encoder(data)
-    
