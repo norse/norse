@@ -85,11 +85,11 @@
 
 
 <div class="viewcode-block" id="lsnn_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.lsnn_step">[docs]</a><span class="k">def</span> <span class="nf">lsnn_step</span><span class="p">(</span>
-    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">s</span><span class="p">:</span> <span class="n">LSNNState</span><span class="p">,</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LSNNState</span><span class="p">,</span>
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">]:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Euler integration step for LIF Neuron with threshold adaptation</span>
@@ -121,7 +121,7 @@
 <span class="sd">    and input spikes respectively.</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
+<span class="sd">        input_tensor (torch.Tensor): the input spikes at the current time step</span>
 <span class="sd">        s (LSNNState): current state of the lsnn unit</span>
 <span class="sd">        input_weights (torch.Tensor): synaptic weights for input spikes</span>
 <span class="sd">        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes</span>
@@ -129,38 +129,38 @@
 <span class="sd">        dt (float): Integration timestep to use</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># compute voltage decay</span>
-    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">v_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">v_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
 
     <span class="c1"># compute current decay</span>
-    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span>
-    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
+    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span>
+    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
 
     <span class="c1"># compute threshold adaptation update</span>
-    <span class="n">db</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">v_th</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-    <span class="n">b_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span> <span class="o">+</span> <span class="n">db</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_th</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">b_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">b</span> <span class="o">+</span> <span class="n">db</span>
 
     <span class="c1"># compute new spikes</span>
-    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_decayed</span> <span class="o">-</span> <span class="n">b_decayed</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_decayed</span> <span class="o">-</span> <span class="n">b_decayed</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
     <span class="c1"># compute reset</span>
-    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_reset</span>
     <span class="c1"># compute current jumps</span>
     <span class="n">i_new</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">i_decayed</span>
-        <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">)</span>
-        <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="n">b_new</span> <span class="o">=</span> <span class="n">b_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">beta</span>
+    <span class="n">b_new</span> <span class="o">=</span> <span class="n">b_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">beta</span>
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">,</span> <span class="n">b_new</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ada_lif_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.ada_lif_step">[docs]</a><span class="k">def</span> <span class="nf">ada_lif_step</span><span class="p">(</span>
-    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">s</span><span class="p">:</span> <span class="n">LSNNState</span><span class="p">,</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LSNNState</span><span class="p">,</span>
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">]:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Euler integration step for LIF Neuron with adaptation. More specifically</span>
@@ -192,24 +192,28 @@
 <span class="sd">    and input spikes respectively.</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
+<span class="sd">        input_tensor (torch.Tensor): the input spikes at the current time step</span>
 <span class="sd">        s (LSNNState): current state of the lsnn unit</span>
 <span class="sd">        input_weights (torch.Tensor): synaptic weights for input spikes</span>
 <span class="sd">        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes</span>
 <span class="sd">        p (LSNNParameters): parameters of the lsnn unit</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">)</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">)</span>
-    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
-    <span class="n">db</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span> <span class="o">+</span> <span class="n">db</span>
-    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">-</span> <span class="n">z_new</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">v_th</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span><span class="p">)</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">beta</span>
+    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">)</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">dt</span>
+        <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_mem_inv</span>
+        <span class="o">*</span> <span class="p">((</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">b</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">b</span> <span class="o">+</span> <span class="n">db</span>
+    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">-</span> <span class="n">z_new</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_th</span> <span class="o">-</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_reset</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">beta</span>
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></div>
 
 
@@ -228,9 +232,9 @@
 
 
 <div class="viewcode-block" id="lsnn_feed_forward_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.lsnn_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">lsnn_feed_forward_step</span><span class="p">(</span>
-    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">s</span><span class="p">:</span> <span class="n">LSNNFeedForwardState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LSNNFeedForwardState</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNFeedForwardState</span><span class="p">]:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Euler integration step for LIF Neuron with threshold adaptation.</span>
@@ -258,31 +262,31 @@
 <span class="sd">        \end{align*}</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
+<span class="sd">        input_tensor (torch.Tensor): the input spikes at the current time step</span>
 <span class="sd">        s (LSNNFeedForwardState): current state of the lsnn unit</span>
 <span class="sd">        p (LSNNParameters): parameters of the lsnn unit</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># compute voltage updates</span>
-    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">v_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">v_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
 
     <span class="c1"># compute current updates</span>
-    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span>
-    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
+    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span>
+    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
 
     <span class="c1"># compute threshold updates</span>
-    <span class="n">db</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">v_th</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-    <span class="n">b_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span> <span class="o">+</span> <span class="n">db</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_adapt_inv</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_th</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">b_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">b</span> <span class="o">+</span> <span class="n">db</span>
 
     <span class="c1"># compute new spikes</span>
-    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_decayed</span> <span class="o">-</span> <span class="n">b_decayed</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_decayed</span> <span class="o">-</span> <span class="n">b_decayed</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
     <span class="c1"># compute reset</span>
-    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_reset</span>
     <span class="c1"># compute b update</span>
-    <span class="n">b_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">b_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span>
+    <span class="n">b_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">b_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">b</span>
     <span class="c1"># compute current jumps</span>
-    <span class="n">i_new</span> <span class="o">=</span> <span class="n">i_decayed</span> <span class="o">+</span> <span class="nb">input</span>
+    <span class="n">i_new</span> <span class="o">=</span> <span class="n">i_decayed</span> <span class="o">+</span> <span class="n">input_tensor</span>
 
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LSNNFeedForwardState</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">v_new</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i_new</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b_new</span><span class="p">)</span></div>
 </pre></div>

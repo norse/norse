@@ -155,9 +155,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distance_function</span> <span class="o">=</span> <span class="n">distance_function</span>
 
-<div class="viewcode-block" id="PopulationEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.PopulationEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">):</span>
+<div class="viewcode-block" id="PopulationEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.PopulationEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">population_encode</span><span class="p">(</span>
-            <span class="n">input_data</span><span class="p">,</span>
+            <span class="n">input_tensor</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">,</span>
@@ -191,33 +191,25 @@
 
 
 <div class="viewcode-block" id="SpikeLatencyEncoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.SpikeLatencyEncoder">[docs]</a><span class="k">class</span> <span class="nc">SpikeLatencyEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a </span>
-<span class="sd">        neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes</span>
-<span class="sd">        fast.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a </span>
+<span class="sd">    neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes</span>
+<span class="sd">    fast.</span>
 
-<span class="sd">        See `R. Van Rullen &amp; S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex &lt;https://doi.org/10.1162/08997660152002852&gt;`_.</span>
+<span class="sd">    See `R. Van Rullen &amp; S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex &lt;https://doi.org/10.1162/08997660152002852&gt;`_.</span>
 
-<span class="sd">        Spikes are identified by their unique position in the input array. </span>
+<span class="sd">    Spikes are identified by their unique position in the input array. </span>
 
-<span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; data = torch.tensor([[0, 1, 1], [1, 1, 1]])</span>
-<span class="sd">            &gt;&gt;&gt; encoder = torch.nn.Sequential(</span>
-<span class="sd">                            ConstantCurrentLIFEncoder()</span>
-<span class="sd">                            SpikeLatencyEncoder()</span>
-<span class="sd">                          )</span>
-<span class="sd">            &gt;&gt;&gt; encoder(data)</span>
-<span class="sd">            tensor([[0, 1, 1],</span>
-<span class="sd">                    [1, 0, 0]])</span>
-
-<span class="sd">        Parameters:</span>
-<span class="sd">            input_spikes (torch.Tensor): A tensor of input spikes, assumed to be at least 2D (sequences, ...)</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            A tensor where the first spike (1) is retained in the sequence</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SpikeLatencyEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.tensor([[0, 1, 1], [1, 1, 1]])</span>
+<span class="sd">        &gt;&gt;&gt; encoder = torch.nn.Sequential(</span>
+<span class="sd">                        ConstantCurrentLIFEncoder()</span>
+<span class="sd">                        SpikeLatencyEncoder()</span>
+<span class="sd">                        )</span>
+<span class="sd">        &gt;&gt;&gt; encoder(data)</span>
+<span class="sd">        tensor([[0, 1, 1],</span>
+<span class="sd">                [1, 0, 0]])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SpikeLatencyEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.SpikeLatencyEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_spikes</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">spike_latency_encode</span><span class="p">(</span><span class="n">input_spikes</span><span class="p">)</span></div></div>

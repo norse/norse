@@ -92,53 +92,57 @@
 
 
 <div class="viewcode-block" id="coba_lif_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.coba_lif_step">[docs]</a><span class="k">def</span> <span class="nf">coba_lif_step</span><span class="p">(</span>
-    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">s</span><span class="p">:</span> <span class="n">CobaLIFState</span><span class="p">,</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">CobaLIFState</span><span class="p">,</span>
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">CobaLIFParameters</span> <span class="o">=</span> <span class="n">CobaLIFParameters</span><span class="p">(),</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">CobaLIFParameters</span> <span class="o">=</span> <span class="n">CobaLIFParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">CobaLIFState</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Euler integration step for a conductance based LIF neuron.</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
+<span class="sd">        input_tensor (torch.Tensor): the input spikes at the current time step</span>
 <span class="sd">        s (CobaLIFState): current state of the neuron</span>
 <span class="sd">        input_weights (torch.Tensor): input weights</span>
 <span class="sd">            (sign determines  contribution to inhibitory / excitatory input)</span>
 <span class="sd">        recurrent_weights (torch.Tensor): recurrent weights</span>
 <span class="sd">            (sign determines contribution to inhibitory / excitatory input)</span>
-<span class="sd">        p (CobaLIFParameters): parameters of the neuron</span>
+<span class="sd">        parameters (CobaLIFParameters): parameters of the neuron</span>
 <span class="sd">        dt (float): Integration time step</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dg_e</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_exc_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">g_e</span>
-    <span class="n">g_e</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">g_e</span> <span class="o">+</span> <span class="n">dg_e</span>
-    <span class="n">dg_i</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inh_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">g_i</span>
-    <span class="n">g_i</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">g_i</span> <span class="o">+</span> <span class="n">dg_i</span>
+    <span class="n">dg_e</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_syn_exc_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">g_e</span>
+    <span class="n">g_e</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">g_e</span> <span class="o">+</span> <span class="n">dg_e</span>
+    <span class="n">dg_i</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_syn_inh_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">g_i</span>
+    <span class="n">g_i</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">g_i</span> <span class="o">+</span> <span class="n">dg_i</span>
 
     <span class="n">g_e</span> <span class="o">=</span> <span class="n">g_e</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span>
-        <span class="nb">input</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">input_weights</span><span class="p">)</span>
+        <span class="n">input_tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">input_weights</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">g_i</span> <span class="o">=</span> <span class="n">g_i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span>
-        <span class="nb">input</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">input_weights</span><span class="p">)</span>
+        <span class="n">input_tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">input_weights</span><span class="p">)</span>
     <span class="p">)</span>
 
     <span class="n">g_e</span> <span class="o">=</span> <span class="n">g_e</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">recurrent_weights</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">recurrent_weights</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">g_i</span> <span class="o">=</span> <span class="n">g_i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">recurrent_weights</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">recurrent_weights</span><span class="p">)</span>
     <span class="p">)</span>
 
     <span class="n">dv</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">dt</span>
-        <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">c_m_inv</span>
-        <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">g_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">v_rest</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">g_e</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">e_rev_E</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">g_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">e_rev_I</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">))</span>
+        <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">c_m_inv</span>
+        <span class="o">*</span> <span class="p">(</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">g_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_rest</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">g_e</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">e_rev_E</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">g_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">e_rev_I</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+        <span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
 
-    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_thresh</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_thresh</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_reset</span>
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">CobaLIFState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">g_e</span><span class="p">,</span> <span class="n">g_i</span><span class="p">)</span></div>
 
 
@@ -157,36 +161,40 @@
 
 
 <div class="viewcode-block" id="coba_lif_feed_forward_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.coba_lif_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">coba_lif_feed_forward_step</span><span class="p">(</span>
-    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">s</span><span class="p">:</span> <span class="n">CobaLIFFeedForwardState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">CobaLIFParameters</span> <span class="o">=</span> <span class="n">CobaLIFParameters</span><span class="p">(),</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">CobaLIFFeedForwardState</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">CobaLIFParameters</span> <span class="o">=</span> <span class="n">CobaLIFParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">CobaLIFFeedForwardState</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Euler integration step for a conductance based LIF neuron.</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        input (torch.Tensor): synaptic input</span>
-<span class="sd">        s (CobaLIFFeedForwardState): current state of the neuron</span>
-<span class="sd">        p (CobaLIFParameters): parameters of the neuron</span>
+<span class="sd">        input_tensor (torch.Tensor): synaptic input</span>
+<span class="sd">        state (CobaLIFFeedForwardState): current state of the neuron</span>
+<span class="sd">        parameters (CobaLIFParameters): parameters of the neuron</span>
 <span class="sd">        dt (float): Integration time step</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dg_e</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_exc_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">g_e</span>
-    <span class="n">g_e</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">g_e</span> <span class="o">+</span> <span class="n">dg_e</span>
-    <span class="n">dg_i</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inh_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">g_i</span>
-    <span class="n">g_i</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">g_i</span> <span class="o">+</span> <span class="n">dg_i</span>
+    <span class="n">dg_e</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_syn_exc_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">g_e</span>
+    <span class="n">g_e</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">g_e</span> <span class="o">+</span> <span class="n">dg_e</span>
+    <span class="n">dg_i</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_syn_inh_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">g_i</span>
+    <span class="n">g_i</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">g_i</span> <span class="o">+</span> <span class="n">dg_i</span>
 
-    <span class="n">g_e</span> <span class="o">=</span> <span class="n">g_e</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
-    <span class="n">g_i</span> <span class="o">=</span> <span class="n">g_i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="nb">input</span><span class="p">)</span>
+    <span class="n">g_e</span> <span class="o">=</span> <span class="n">g_e</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
+    <span class="n">g_i</span> <span class="o">=</span> <span class="n">g_i</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">input_tensor</span><span class="p">)</span>
 
     <span class="n">dv</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">dt</span>
-        <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">c_m_inv</span>
-        <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">g_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">v_rest</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">g_e</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">e_rev_E</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">g_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">e_rev_I</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">))</span>
+        <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">c_m_inv</span>
+        <span class="o">*</span> <span class="p">(</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">g_l</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_rest</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">g_e</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">e_rev_E</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">g_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">e_rev_I</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+        <span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
 
-    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_thresh</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_thresh</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_reset</span>
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">CobaLIFFeedForwardState</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">g_e</span><span class="p">,</span> <span class="n">g_i</span><span class="p">)</span></div>
 </pre></div>
 

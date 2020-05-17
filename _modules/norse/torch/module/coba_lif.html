@@ -79,7 +79,7 @@
 <span class="sd">    Parameters:</span>
 <span class="sd">        input_size (int): Size of the input.</span>
 <span class="sd">        hidden_size (int): Size of the hidden state.</span>
-<span class="sd">        p (LIFParameters): Parameters of the LIF neuron model.</span>
+<span class="sd">        parameters (LIFParameters): Parameters of the LIF neuron model.</span>
 <span class="sd">        dt (float): Time step to use.</span>
 
 <span class="sd">    Examples:</span>
@@ -95,7 +95,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">,</span>
-        <span class="n">p</span><span class="p">:</span> <span class="n">CobaLIFParameters</span> <span class="o">=</span> <span class="n">CobaLIFParameters</span><span class="p">(),</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="n">CobaLIFParameters</span> <span class="o">=</span> <span class="n">CobaLIFParameters</span><span class="p">(),</span>
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CobaLIFCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -105,7 +105,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
 <div class="viewcode-block" id="CobaLIFCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.coba_lif.html#norse.torch.module.coba_lif.CobaLIFCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span>
@@ -119,14 +119,14 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="CobaLIFCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.coba_lif.html#norse.torch.module.coba_lif.CobaLIFCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">CobaLIFState</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">CobaLIFState</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">CobaLIFState</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">coba_lif_step</span><span class="p">(</span>
-            <span class="nb">input</span><span class="p">,</span>
+            <span class="n">input_tensor</span><span class="p">,</span>
             <span class="n">state</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="p">,</span>
-            <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span>
             <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
         <span class="p">)</span></div></div>
 </pre></div>

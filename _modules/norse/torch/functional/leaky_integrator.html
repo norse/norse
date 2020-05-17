@@ -70,10 +70,10 @@
 
 
 <div class="viewcode-block" id="li_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.leaky_integrator.html#norse.torch.functional.leaky_integrator.li_step">[docs]</a><span class="k">def</span> <span class="nf">li_step</span><span class="p">(</span>
-    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">s</span><span class="p">:</span> <span class="n">LIState</span><span class="p">,</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LIState</span><span class="p">,</span>
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">LIParameters</span> <span class="o">=</span> <span class="n">LIParameters</span><span class="p">(),</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">LIParameters</span> <span class="o">=</span> <span class="n">LIParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIState</span><span class="p">]:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Single euler integration step of a leaky-integrator.</span>
@@ -93,7 +93,7 @@
 <span class="sd">        i = i + w i_{\text{in}}</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        input (torch.Tensor); Input spikes</span>
+<span class="sd">        input_tensor (torch.Tensor); Input spikes</span>
 <span class="sd">        s (LIState): state of the leaky integrator</span>
 <span class="sd">        input_weights (torch.Tensor): weights for incoming spikes</span>
 <span class="sd">        p (LIParameters): parameters of the leaky integrator</span>
@@ -101,32 +101,35 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># compute voltage updates</span>
-    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">v_new</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">v_new</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
 
     <span class="c1"># compute current updates</span>
-    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span>
-    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
+    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span>
+    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
 
     <span class="c1"># compute current jumps</span>
-    <span class="n">i_new</span> <span class="o">=</span> <span class="n">i_decayed</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">)</span>
+    <span class="n">i_new</span> <span class="o">=</span> <span class="n">i_decayed</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">LIState</span><span class="p">(</span><span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">)</span></div>
 
 
 <span class="c1"># @torch.jit.script</span>
 <div class="viewcode-block" id="li_feed_forward_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.leaky_integrator.html#norse.torch.functional.leaky_integrator.li_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">li_feed_forward_step</span><span class="p">(</span>
-    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">LIState</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIParameters</span> <span class="o">=</span> <span class="n">LIParameters</span><span class="p">(),</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LIState</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">LIParameters</span> <span class="o">=</span> <span class="n">LIParameters</span><span class="p">(),</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIState</span><span class="p">]:</span>
     <span class="c1"># compute voltage updates</span>
-    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">v_new</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">v_new</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
 
     <span class="c1"># compute current updates</span>
-    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span>
-    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
+    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span>
+    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
 
     <span class="c1"># compute current jumps</span>
-    <span class="n">i_new</span> <span class="o">=</span> <span class="n">i_decayed</span> <span class="o">+</span> <span class="nb">input</span>
+    <span class="n">i_new</span> <span class="o">=</span> <span class="n">i_decayed</span> <span class="o">+</span> <span class="n">input_tensor</span>
     <span class="k">return</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">LIState</span><span class="p">(</span><span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">)</span></div>
 </pre></div>
 

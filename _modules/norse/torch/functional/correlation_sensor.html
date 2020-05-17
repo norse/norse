@@ -81,31 +81,35 @@
 <div class="viewcode-block" id="correlation_sensor_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.correlation_sensor.html#norse.torch.functional.correlation_sensor.correlation_sensor_step">[docs]</a><span class="k">def</span> <span class="nf">correlation_sensor_step</span><span class="p">(</span>
     <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">s</span><span class="p">:</span> <span class="n">CorrelationSensorState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">CorrelationSensorParameters</span> <span class="o">=</span> <span class="n">CorrelationSensorParameters</span><span class="p">(),</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">CorrelationSensorState</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">CorrelationSensorParameters</span> <span class="o">=</span> <span class="n">CorrelationSensorParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CorrelationSensorState</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Euler integration step of an idealized version of the correlation sensor</span>
 <span class="sd">    as it is present on the BrainScaleS 2 chips.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dcorrelation_trace</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_c_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">s</span><span class="o">.</span><span class="n">correlation_trace</span><span class="p">)</span>
+    <span class="n">dcorrelation_trace</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_c_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">correlation_trace</span><span class="p">)</span>
     <span class="n">correlation_trace_decayed</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">correlation_trace</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">post_pre</span><span class="p">)</span> <span class="o">*</span> <span class="n">dcorrelation_trace</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">correlation_trace</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">post_pre</span><span class="p">)</span> <span class="o">*</span> <span class="n">dcorrelation_trace</span>
     <span class="p">)</span>
 
-    <span class="n">danti_correlation_trace</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_ac_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">s</span><span class="o">.</span><span class="n">anti_correlation_trace</span><span class="p">)</span>
+    <span class="n">danti_correlation_trace</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">dt</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">tau_ac_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">anti_correlation_trace</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">anti_correlation_trace_decayed</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">anti_correlation_trace</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">post_pre</span> <span class="o">*</span> <span class="n">danti_correlation_trace</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">anti_correlation_trace</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">post_pre</span> <span class="o">*</span> <span class="n">danti_correlation_trace</span>
     <span class="p">)</span>
 
     <span class="c1"># compute the pre and post masks based on the current spikes</span>
-    <span class="n">pre_spike_mask</span> <span class="o">=</span> <span class="n">pre_mask</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">post_pre</span><span class="p">,</span> <span class="n">z_pre</span><span class="p">)</span>
-    <span class="n">post_spike_mask</span> <span class="o">=</span> <span class="n">post_mask</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">post_pre</span><span class="p">,</span> <span class="n">z_post</span><span class="p">)</span>
+    <span class="n">pre_spike_mask</span> <span class="o">=</span> <span class="n">pre_mask</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">post_pre</span><span class="p">,</span> <span class="n">z_pre</span><span class="p">)</span>
+    <span class="n">post_spike_mask</span> <span class="o">=</span> <span class="n">post_mask</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">post_pre</span><span class="p">,</span> <span class="n">z_post</span><span class="p">)</span>
 
-    <span class="n">post_pre_new</span> <span class="o">=</span> <span class="n">post_pre_update</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">post_pre</span><span class="p">,</span> <span class="n">post_spike_mask</span><span class="p">,</span> <span class="n">pre_spike_mask</span><span class="p">)</span>
-    <span class="n">correlation_trace_new</span> <span class="o">=</span> <span class="n">correlation_trace_decayed</span> <span class="o">+</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">eta_p</span> <span class="o">*</span> <span class="n">pre_spike_mask</span><span class="p">)</span>
+    <span class="n">post_pre_new</span> <span class="o">=</span> <span class="n">post_pre_update</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">post_pre</span><span class="p">,</span> <span class="n">post_spike_mask</span><span class="p">,</span> <span class="n">pre_spike_mask</span><span class="p">)</span>
+    <span class="n">correlation_trace_new</span> <span class="o">=</span> <span class="n">correlation_trace_decayed</span> <span class="o">+</span> <span class="p">(</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">eta_p</span> <span class="o">*</span> <span class="n">pre_spike_mask</span>
+    <span class="p">)</span>
     <span class="n">anti_correlation_trace_new</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">anti_correlation_trace_decayed</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_m</span> <span class="o">*</span> <span class="n">post_spike_mask</span>
+        <span class="n">anti_correlation_trace_decayed</span> <span class="o">+</span> <span class="n">parameters</span><span class="o">.</span><span class="n">eta_m</span> <span class="o">*</span> <span class="n">post_spike_mask</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">CorrelationSensorState</span><span class="p">(</span>
@@ -124,11 +128,7 @@
     <span class="n">ts_frequency</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">ts</span> <span class="o">%</span> <span class="n">ts_frequency</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="p">(</span>
-            <span class="n">batch_size</span><span class="p">,</span>
-            <span class="n">input_features</span><span class="p">,</span>
-            <span class="n">hidden_features</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="n">correlation_state</span><span class="o">.</span><span class="n">correlation_trace</span><span class="o">.</span><span class="n">shape</span>
+        <span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">hidden_features</span><span class="p">,)</span> <span class="o">=</span> <span class="n">correlation_state</span><span class="o">.</span><span class="n">correlation_trace</span><span class="o">.</span><span class="n">shape</span>
         <span class="c1"># proposed weight update</span>
         <span class="n">dw</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
             <span class="p">(</span>

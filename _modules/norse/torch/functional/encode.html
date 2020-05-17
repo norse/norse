@@ -84,7 +84,7 @@
 
     <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seq_length</span><span class="p">):</span>
         <span class="n">z</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">lif_current_encoder</span><span class="p">(</span>
-            <span class="n">input_current</span><span class="o">=</span><span class="n">input_current</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span>
+            <span class="n">input_current</span><span class="o">=</span><span class="n">input_current</span><span class="p">,</span> <span class="n">voltage</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span>
         <span class="p">)</span>
         <span class="n">spikes</span><span class="p">[</span><span class="n">ts</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
     <span class="k">return</span> <span class="n">spikes</span></div>
@@ -239,13 +239,45 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_spikes</span><span class="o">.</span><span class="n">size</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">input_spikes</span>
 
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">input_spikes</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">byte</span><span class="p">()</span>
-    <span class="n">spikes</span> <span class="o">=</span> <span class="n">input_spikes</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="p">)):</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-        <span class="n">spikes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">z</span><span class="p">)</span>
-        <span class="n">mask</span><span class="p">[</span><span class="n">z</span><span class="o">.</span><span class="n">bool</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="n">spikes</span></div>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">input_spikes</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">input_spikes</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+    <span class="n">size_mul</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">size</span><span class="p">:</span>
+        <span class="n">size_mul</span> <span class="o">*=</span> <span class="n">dim</span>
+    <span class="n">sequence_dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span>
+    <span class="n">sequence_size</span><span class="p">,</span> <span class="n">neuron_size</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">outer_size</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">size</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">first_indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="n">input_spikes</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">sequence_dim</span><span class="p">)</span>
+
+    <span class="c1"># Retrieve absolute indices for spikes</span>
+    <span class="k">if</span> <span class="n">outer_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">index_add</span> <span class="o">=</span> <span class="n">indices</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="n">sequence_size</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">index_mul</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">neuron_size</span><span class="p">,</span> <span class="n">neuron_size</span> <span class="o">*</span> <span class="n">sequence_size</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">index_add</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">indices</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">neuron_size</span><span class="p">)[::</span><span class="n">sequence_size</span><span class="p">])</span>
+        <span class="n">index_mul</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">neuron_size</span><span class="p">,</span> <span class="n">neuron_size</span> <span class="o">*</span> <span class="n">sequence_size</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span>
+            <span class="n">outer_size</span>
+        <span class="p">)</span>
+
+    <span class="n">spike_indices</span> <span class="o">=</span> <span class="n">index_add</span> <span class="o">+</span> <span class="n">first_indices</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">*</span> <span class="n">index_mul</span>
+
+    <span class="c1"># Extract spike coordinates</span>
+    <span class="n">index_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">size_above</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">size_below</span> <span class="o">=</span> <span class="n">size_mul</span>
+    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">size</span><span class="p">:</span>
+        <span class="n">size_above</span> <span class="o">*=</span> <span class="n">dim</span>
+        <span class="n">size_below</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size_below</span> <span class="o">//</span> <span class="n">dim</span><span class="p">)</span>
+        <span class="n">dim_indices</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[:</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">repeat_interleave</span><span class="p">(</span><span class="n">size_below</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">size_above</span><span class="p">)</span>
+        <span class="n">index_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">dim_indices</span><span class="p">,</span> <span class="n">spike_indices</span><span class="p">))</span>
+    <span class="n">index_coordinates</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">index_list</span><span class="p">)</span>
+
+    <span class="n">spike_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">input_spikes</span><span class="p">,</span> <span class="n">spike_indices</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">sparse_coo_tensor</span><span class="p">(</span>
+        <span class="n">index_coordinates</span><span class="p">,</span> <span class="n">spike_data</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">input_spikes</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+    <span class="p">)</span></div>
 </pre></div>
 
           </div>
