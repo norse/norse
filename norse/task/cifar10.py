@@ -102,7 +102,7 @@ def add_luminance(images):
     )
 
 
-def poisson_train(images, seq_length, device, rel_fmax=0.2):
+def poisson_train(images, seq_length, rel_fmax=0.2):
     return (torch.rand(seq_length, *images.shape).float() < rel_fmax * images).float()
 
 
@@ -117,7 +117,7 @@ def signed_poisson_train(images, seq_length, device, rel_fmax=0.2):
 
 
 class LIFConvNet(torch.nn.Module):
-    def __init__(self, num_channels, seq_length, model="super", device="cpu"):
+    def __init__(self, num_channels, device="cpu"):
         super(LIFConvNet, self).__init__()
 
         if FLAGS.net == "convnet":
@@ -252,7 +252,7 @@ def load(path, model, optimizer, device):
     return model, optimizer
 
 
-def main(argv):
+def main():
     writer = SummaryWriter()
 
     torch.manual_seed(FLAGS.random_seed)
@@ -279,9 +279,6 @@ def main(argv):
         x, _ = constant_current_encoder(2 * x)
         return x
 
-    def identity_encoder(x):
-        return x
-
     def poisson_encoder(x):
         return poisson_train(x, FLAGS.seq_length, device)
 
@@ -305,32 +302,6 @@ def main(argv):
     elif FLAGS.encoding == "constant_polar":
         encoder = polar_current_encoder
         num_channels = 2 * num_channels
-
-    def compute_min_max(loader):
-
-        minimum = 0.0
-        maximum = 0.0
-        for data, _ in loader:
-            minimum = min(torch.min(data), minimum)
-            maximum = max(torch.max(data), maximum)
-        return minimum, maximum
-
-    def train_min_max():
-        transform_train = torchvision.transforms.Compose(
-            [torchvision.transforms.ToTensor(), add_luminance]
-        )
-        kwargs = (
-            {"num_workers": 4, "pin_memory": True} if FLAGS.device == "cuda" else {}
-        )
-        train_loader = torch.utils.data.DataLoader(
-            torchvision.datasets.CIFAR10(
-                root=".", train=True, download=True, transform=transform_train
-            ),
-            batch_size=FLAGS.batch_size,
-            shuffle=True,
-            **kwargs,
-        )
-        return compute_min_max(train_loader)
 
     luminance_transforms = [
         add_luminance,
@@ -376,14 +347,9 @@ def main(argv):
 
     os.makedirs(rundir, exist_ok=True)
     os.chdir(rundir)
-    FLAGS.append_flags_into_file(f"flags.txt")
+    FLAGS.append_flags_into_file("flags.txt")
 
-    model = LIFConvNet(
-        num_channels=num_channels,
-        seq_length=FLAGS.seq_length,
-        model=FLAGS.model,
-        device=device,
-    ).to(device)
+    model = LIFConvNet(num_channels=num_channels, device=device,).to(device)
 
     print(model)
 
@@ -452,7 +418,7 @@ def main(argv):
     np.save("mean_losses.npy", np.array(mean_losses))
     np.save("test_losses.npy", np.array(test_losses))
     np.save("accuracies.npy", np.array(accuracies))
-    model_path = f"cifar10-final.pt"
+    model_path = "cifar10-final.pt"
     save(model_path, model, optimizer)
 
     logging.info(f"output saved to {rundir}")

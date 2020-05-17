@@ -42,7 +42,7 @@ class CobaLIFCell(torch.nn.Module):
     Parameters:
         input_size (int): Size of the input.
         hidden_size (int): Size of the hidden state.
-        p (LIFParameters): Parameters of the LIF neuron model.
+        parameters (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
 
     Examples:
@@ -58,7 +58,7 @@ class CobaLIFCell(torch.nn.Module):
         self,
         input_size,
         hidden_size,
-        p: CobaLIFParameters = CobaLIFParameters(),
+        parameters: CobaLIFParameters = CobaLIFParameters(),
         dt: float = 0.001,
     ):
         super(CobaLIFCell, self).__init__()
@@ -68,7 +68,7 @@ class CobaLIFCell(torch.nn.Module):
         self.recurrent_weights = torch.nn.Parameter(
             torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
         )
-        self.p = p
+        self.parameters = parameters
         self.dt = dt
 
     def initial_state(
@@ -82,13 +82,13 @@ class CobaLIFCell(torch.nn.Module):
         )
 
     def forward(
-        self, input: torch.Tensor, state: CobaLIFState
+        self, input_tensor: torch.Tensor, state: CobaLIFState
     ) -> Tuple[torch.Tensor, CobaLIFState]:
         return coba_lif_step(
-            input,
+            input_tensor,
             state,
             self.input_weights,
             self.recurrent_weights,
-            p=self.p,
+            parameters=self.parameters,
             dt=self.dt,
         )

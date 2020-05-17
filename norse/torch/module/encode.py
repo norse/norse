@@ -118,9 +118,9 @@ class PopulationEncoder(torch.nn.Module):
         self.kernel = kernel
         self.distance_function = distance_function
 
-    def forward(self, input_data):
+    def forward(self, input_tensor):
         return encode.population_encode(
-            input_data,
+            input_tensor,
             self.out_features,
             self.scale,
             self.kernel,
@@ -154,33 +154,25 @@ class SignedPoissonEncoder(torch.nn.Module):
 
 
 class SpikeLatencyEncoder(torch.nn.Module):
-    def __init__(self):
-        """
-        For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a 
-        neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes
-        fast.
+    """
+    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a 
+    neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes
+    fast.
 
-        See `R. Van Rullen & S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex <https://doi.org/10.1162/08997660152002852>`_.
+    See `R. Van Rullen & S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex <https://doi.org/10.1162/08997660152002852>`_.
 
-        Spikes are identified by their unique position in the input array. 
+    Spikes are identified by their unique position in the input array. 
 
-        Example:
-            >>> data = torch.tensor([[0, 1, 1], [1, 1, 1]])
-            >>> encoder = torch.nn.Sequential(
-                            ConstantCurrentLIFEncoder()
-                            SpikeLatencyEncoder()
-                          )
-            >>> encoder(data)
-            tensor([[0, 1, 1],
-                    [1, 0, 0]])
-
-        Parameters:
-            input_spikes (torch.Tensor): A tensor of input spikes, assumed to be at least 2D (sequences, ...)
-
-        Returns:
-            A tensor where the first spike (1) is retained in the sequence
-        """
-        super(SpikeLatencyEncoder, self).__init__()
+    Example:
+        >>> data = torch.tensor([[0, 1, 1], [1, 1, 1]])
+        >>> encoder = torch.nn.Sequential(
+                        ConstantCurrentLIFEncoder()
+                        SpikeLatencyEncoder()
+                        )
+        >>> encoder(data)
+        tensor([[0, 1, 1],
+                [1, 0, 0]])
+    """
 
     def forward(self, input_spikes):
         return encode.spike_latency_encode(input_spikes)

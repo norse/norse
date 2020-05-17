@@ -47,7 +47,7 @@ def constant_current_lif_encode(
 
     for ts in range(seq_length):
         z, v = lif_current_encoder(
-            input_current=input_current, v=v, p=parameters, dt=dt
+            input_current=input_current, voltage=v, parameters=parameters, dt=dt
         )
         spikes[ts] = z
     return spikes
@@ -202,10 +202,42 @@ def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     if len(input_spikes.size()) == 1:
         return input_spikes
 
-    mask = torch.zeros(input_spikes.size()[1:]).byte()
-    spikes = input_spikes.clone()
-    for index in range(len(spikes)):
-        z = spikes[index]
-        spikes[index] = torch.where(mask, torch.zeros_like(z), z)
-        mask[z.bool()] = 1
-    return spikes
+    n = input_spikes.numel()
+    indices = torch.arange(0, n)
+    size = input_spikes.size()
+    size_mul = 1
+    for dim in size:
+        size_mul *= dim
+    sequence_dim = len(size) - 2
+    sequence_size, neuron_size = size[-2:]
+    outer_size = sum(size[:-2])
+    _, first_indices = torch.topk(input_spikes, k=1, dim=sequence_dim)
+
+    # Retrieve absolute indices for spikes
+    if outer_size == 0:
+        index_add = indices.chunk(sequence_size)[0]
+        index_mul = torch.arange(neuron_size, neuron_size * sequence_size)
+    else:
+        index_add = torch.cat(indices.split(neuron_size)[::sequence_size])
+        index_mul = torch.arange(neuron_size, neuron_size * sequence_size).repeat(
+            outer_size
+        )
+
+    spike_indices = index_add + first_indices.flatten() * index_mul
+
+    # Extract spike coordinates
+    index_list = []
+    size_above = 1
+    size_below = size_mul
+    for dim in size:
+        size_above *= dim
+        size_below = max(1, size_below // dim)
+        dim_indices = indices[:dim].repeat_interleave(size_below).repeat(size_above)
+        index_list.append(torch.take(dim_indices, spike_indices))
+    index_coordinates = torch.stack(index_list)
+
+    spike_data = torch.take(input_spikes, spike_indices)
+
+    return torch.sparse_coo_tensor(
+        index_coordinates, spike_data, size=input_spikes.size()
+    )

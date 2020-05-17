@@ -55,53 +55,57 @@ class CobaLIFParameters(NamedTuple):
 
 
 def coba_lif_step(
-    input: torch.Tensor,
-    s: CobaLIFState,
+    input_tensor: torch.Tensor,
+    state: CobaLIFState,
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
-    p: CobaLIFParameters = CobaLIFParameters(),
+    parameters: CobaLIFParameters = CobaLIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, CobaLIFState]:
     """Euler integration step for a conductance based LIF neuron.
 
     Parameters:
-        input (torch.Tensor): the input spikes at the current time step
+        input_tensor (torch.Tensor): the input spikes at the current time step
         s (CobaLIFState): current state of the neuron
         input_weights (torch.Tensor): input weights
             (sign determines  contribution to inhibitory / excitatory input)
         recurrent_weights (torch.Tensor): recurrent weights
             (sign determines contribution to inhibitory / excitatory input)
-        p (CobaLIFParameters): parameters of the neuron
+        parameters (CobaLIFParameters): parameters of the neuron
         dt (float): Integration time step
     """
-    dg_e = -dt * p.tau_syn_exc_inv * s.g_e
-    g_e = s.g_e + dg_e
-    dg_i = -dt * p.tau_syn_inh_inv * s.g_i
-    g_i = s.g_i + dg_i
+    dg_e = -dt * parameters.tau_syn_exc_inv * state.g_e
+    g_e = state.g_e + dg_e
+    dg_i = -dt * parameters.tau_syn_inh_inv * state.g_i
+    g_i = state.g_i + dg_i
 
     g_e = g_e + torch.nn.functional.linear(
-        input, torch.nn.functional.relu(input_weights)
+        input_tensor, torch.nn.functional.relu(input_weights)
     )
     g_i = g_i + torch.nn.functional.linear(
-        input, torch.nn.functional.relu(-input_weights)
+        input_tensor, torch.nn.functional.relu(-input_weights)
     )
 
     g_e = g_e + torch.nn.functional.linear(
-        s.z, torch.nn.functional.relu(recurrent_weights)
+        state.z, torch.nn.functional.relu(recurrent_weights)
     )
     g_i = g_i + torch.nn.functional.linear(
-        s.z, torch.nn.functional.relu(-recurrent_weights)
+        state.z, torch.nn.functional.relu(-recurrent_weights)
     )
 
     dv = (
         dt
-        * p.c_m_inv
-        * (p.g_l * (p.v_rest - s.v) + g_e * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v))
+        * parameters.c_m_inv
+        * (
+            parameters.g_l * (parameters.v_rest - state.v)
+            + g_e * (parameters.e_rev_E - state.v)
+            + g_i * (parameters.e_rev_I - state.v)
+        )
     )
-    v = s.v + dv
+    v = state.v + dv
 
-    z_new = threshold(v - p.v_thresh, p.method, p.alpha)
-    v = (1 - z_new) * v + z_new * p.v_reset
+    z_new = threshold(v - parameters.v_thresh, parameters.method, parameters.alpha)
+    v = (1 - z_new) * v + z_new * parameters.v_reset
     return z_new, CobaLIFState(z_new, v, g_e, g_i)
 
 
@@ -120,34 +124,38 @@ class CobaLIFFeedForwardState(NamedTuple):
 
 
 def coba_lif_feed_forward_step(
-    input: torch.Tensor,
-    s: CobaLIFFeedForwardState,
-    p: CobaLIFParameters = CobaLIFParameters(),
+    input_tensor: torch.Tensor,
+    state: CobaLIFFeedForwardState,
+    parameters: CobaLIFParameters = CobaLIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, CobaLIFFeedForwardState]:
     """Euler integration step for a conductance based LIF neuron.
 
     Parameters:
-        input (torch.Tensor): synaptic input
-        s (CobaLIFFeedForwardState): current state of the neuron
-        p (CobaLIFParameters): parameters of the neuron
+        input_tensor (torch.Tensor): synaptic input
+        state (CobaLIFFeedForwardState): current state of the neuron
+        parameters (CobaLIFParameters): parameters of the neuron
         dt (float): Integration time step
     """
-    dg_e = -dt * p.tau_syn_exc_inv * s.g_e
-    g_e = s.g_e + dg_e
-    dg_i = -dt * p.tau_syn_inh_inv * s.g_i
-    g_i = s.g_i + dg_i
+    dg_e = -dt * parameters.tau_syn_exc_inv * state.g_e
+    g_e = state.g_e + dg_e
+    dg_i = -dt * parameters.tau_syn_inh_inv * state.g_i
+    g_i = state.g_i + dg_i
 
-    g_e = g_e + torch.nn.functional.relu(input)
-    g_i = g_i + torch.nn.functional.relu(-input)
+    g_e = g_e + torch.nn.functional.relu(input_tensor)
+    g_i = g_i + torch.nn.functional.relu(-input_tensor)
 
     dv = (
         dt
-        * p.c_m_inv
-        * (p.g_l * (p.v_rest - s.v) + g_e * (p.e_rev_E - s.v) + g_i * (p.e_rev_I - s.v))
+        * parameters.c_m_inv
+        * (
+            parameters.g_l * (parameters.v_rest - state.v)
+            + g_e * (parameters.e_rev_E - state.v)
+            + g_i * (parameters.e_rev_I - state.v)
+        )
     )
-    v = s.v + dv
+    v = state.v + dv
 
-    z_new = threshold(v - p.v_thresh, p.method, p.alpha)
-    v = (1 - z_new) * v + z_new * p.v_reset
+    z_new = threshold(v - parameters.v_thresh, parameters.method, parameters.alpha)
+    v = (1 - z_new) * v + z_new * parameters.v_reset
     return z_new, CobaLIFFeedForwardState(v, g_e, g_i)

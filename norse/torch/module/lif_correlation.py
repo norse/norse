@@ -16,13 +16,13 @@ class LIFCorrelation(torch.nn.Module):
         self,
         input_size,
         hidden_size,
-        p: LIFCorrelationParameters = LIFCorrelationParameters(),
+        parameters: LIFCorrelationParameters = LIFCorrelationParameters(),
         dt: float = 0.001,
     ):
         super(LIFCorrelation, self).__init__()
         self.hidden_size = hidden_size
         self.input_size = input_size
-        self.p = p
+        self.parameters = parameters
         self.dt = dt
 
     def initial_state(
@@ -75,11 +75,16 @@ class LIFCorrelation(torch.nn.Module):
 
     def forward(
         self,
-        input: torch.Tensor,
-        s: LIFCorrelationState,
+        input_tensor: torch.Tensor,
+        state: LIFCorrelationState,
         input_weights: torch.Tensor,
         recurrent_weights: torch.Tensor,
     ) -> Tuple[torch.Tensor, LIFCorrelationState]:
         return lif_correlation_step(
-            input, s, input_weights, recurrent_weights, self.p, self.dt
+            input_tensor,
+            state,
+            input_weights,
+            recurrent_weights,
+            self.parameters,
+            self.dt,
         )

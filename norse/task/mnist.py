@@ -66,7 +66,6 @@ class LIFConvNet(torch.nn.Module):
         model="super",
         device="cpu",
         only_first_spike=False,
-        refrac=False,
     ):
         super(LIFConvNet, self).__init__()
         self.constant_current_encoder = LIFConstantCurrentEncoder(
@@ -214,7 +213,7 @@ def load(path, model, optimizer):
     return model, optimizer
 
 
-def main(argv):
+def main():
     writer = SummaryWriter()
 
     torch.manual_seed(FLAGS.random_seed)
@@ -270,7 +269,7 @@ def main(argv):
 
     os.makedirs(path, exist_ok=True)
     os.chdir(path)
-    FLAGS.append_flags_into_file(f"flags.txt")
+    FLAGS.append_flags_into_file("flags.txt")
 
     input_features = 28 * 28
 
@@ -279,7 +278,6 @@ def main(argv):
         FLAGS.seq_length,
         model=FLAGS.model,
         device=device,
-        refrac=FLAGS.refrac,
         only_first_spike=FLAGS.only_first_spike,
     ).to(device)
 
@@ -323,7 +321,7 @@ def main(argv):
     np.save("mean_losses.npy", np.array(mean_losses))
     np.save("test_losses.npy", np.array(test_losses))
     np.save("accuracies.npy", np.array(accuracies))
-    model_path = f"mnist-final.pt"
+    model_path = "mnist-final.pt"
     save(
         model_path,
         epoch=epoch,

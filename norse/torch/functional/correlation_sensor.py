@@ -44,31 +44,35 @@ class CorrelationSensorState(NamedTuple):
 def correlation_sensor_step(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,
-    s: CorrelationSensorState,
-    p: CorrelationSensorParameters = CorrelationSensorParameters(),
+    state: CorrelationSensorState,
+    parameters: CorrelationSensorParameters = CorrelationSensorParameters(),
     dt: float = 0.001,
 ) -> CorrelationSensorState:
     """Euler integration step of an idealized version of the correlation sensor
     as it is present on the BrainScaleS 2 chips.
     """
-    dcorrelation_trace = dt * p.tau_c_inv * (-s.correlation_trace)
+    dcorrelation_trace = dt * parameters.tau_c_inv * (-state.correlation_trace)
     correlation_trace_decayed = (
-        s.correlation_trace + (1 - s.post_pre) * dcorrelation_trace
+        state.correlation_trace + (1 - state.post_pre) * dcorrelation_trace
     )
 
-    danti_correlation_trace = dt * p.tau_ac_inv * (-s.anti_correlation_trace)
+    danti_correlation_trace = (
+        dt * parameters.tau_ac_inv * (-state.anti_correlation_trace)
+    )
     anti_correlation_trace_decayed = (
-        s.anti_correlation_trace + s.post_pre * danti_correlation_trace
+        state.anti_correlation_trace + state.post_pre * danti_correlation_trace
     )
 
     # compute the pre and post masks based on the current spikes
-    pre_spike_mask = pre_mask(s.post_pre, z_pre)
-    post_spike_mask = post_mask(s.post_pre, z_post)
+    pre_spike_mask = pre_mask(state.post_pre, z_pre)
+    post_spike_mask = post_mask(state.post_pre, z_post)
 
-    post_pre_new = post_pre_update(s.post_pre, post_spike_mask, pre_spike_mask)
-    correlation_trace_new = correlation_trace_decayed + (p.eta_p * pre_spike_mask)
+    post_pre_new = post_pre_update(state.post_pre, post_spike_mask, pre_spike_mask)
+    correlation_trace_new = correlation_trace_decayed + (
+        parameters.eta_p * pre_spike_mask
+    )
     anti_correlation_trace_new = (
-        anti_correlation_trace_decayed + p.eta_m * post_spike_mask
+        anti_correlation_trace_decayed + parameters.eta_m * post_spike_mask
     )
 
     return CorrelationSensorState(
@@ -87,11 +91,7 @@ def correlation_based_update(
     ts_frequency: int,
 ):
     if ts % ts_frequency == 0:
-        (
-            batch_size,
-            input_features,
-            hidden_features,
-        ) = correlation_state.correlation_trace.shape
+        (input_features, hidden_features,) = correlation_state.correlation_trace.shape
         # proposed weight update
         dw = torch.cat(
             (

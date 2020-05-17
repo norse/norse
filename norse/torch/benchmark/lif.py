@@ -30,12 +30,12 @@ def lif_benchmark(
 
     start = time.time()
     for ts in range(T):
-        z, s = lif_step(
-            input=input_spikes[ts, :],
-            s=s,
+        _, s = lif_step(
+            input_tensor=input_spikes[ts, :],
+            state=s,
             input_weights=iw,
             recurrent_weights=rw,
-            p=p,
+            parameters=p,
             dt=0.001,
         )
 
@@ -62,7 +62,7 @@ def lif_feed_forward_benchmark(
     start = time.time()
     for ts in range(T):
         x = fc(input_spikes[ts, :])
-        z, s = lif_feed_forward_step(input=x, s=s, p=p, dt=0.01)
+        _, s = lif_feed_forward_step(input_tensor=x, state=s, parameters=p, dt=0.01)
 
     end = time.time()
     dt = (end - start) / T

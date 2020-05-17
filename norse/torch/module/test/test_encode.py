@@ -6,6 +6,9 @@ import torch
 from .. import encode
 import numpy as np
 
+# Fixes a linting error:
+# pylint: disable=E1102
+
 
 def encode_population_test():
     data = torch.tensor([0, 0.5, 1])
@@ -32,8 +35,8 @@ def spike_latency_encode_test():
     encoder = torch.nn.Sequential(
         encode.ConstantCurrentLIFEncoder(2), encode.SpikeLatencyEncoder()
     )
-    actual = encoder(data)
+    actual = encoder(data).to_dense()
     expected = np.zeros((2, 2, 3))
-    expected[0] = np.array([[0, 1, 1], [1, 1, 1]])
-    print(actual)
+    for i, _ in enumerate(expected):
+        expected[i] = np.array([[0, 1, 1], [1, 0, 0]])
     np.testing.assert_equal(actual.numpy(), expected)

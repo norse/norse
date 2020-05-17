@@ -39,14 +39,14 @@ class Net(torch.nn.Module):
         self.fc1 = torch.nn.Linear(self.features * self.features * 64, 1024)
         self.lif0 = LIFFeedForwardCell(
             (32, feature_size - 4, feature_size - 4),
-            p=LIFParameters(method=model, alpha=100.0),
+            parameters=LIFParameters(method=model, alpha=100.0),
         )
         self.lif1 = LIFFeedForwardCell(
             (64, int((feature_size - 4) / 2) - 4, int((feature_size - 4) / 2) - 4),
-            p=LIFParameters(method=model, alpha=100.0),
+            parameters=LIFParameters(method=model, alpha=100.0),
         )
         self.lif2 = LIFFeedForwardCell(
-            (1024,), p=LIFParameters(method=model, alpha=100.0)
+            (1024,), parameters=LIFParameters(method=model, alpha=100.0)
         )
         self.out = LICell(1024, 10)
         self.device = device
@@ -54,16 +54,24 @@ class Net(torch.nn.Module):
 
     def forward(self, x):
         seq_length = x.shape[0]
-        batch_size = x.shape[1]
+        seq_batch_size = x.shape[1]
 
         # specify the initial states
-        s0 = self.lif0.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        s1 = self.lif1.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        s2 = self.lif2.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        so = self.out.initial_state(batch_size, device=self.device, dtype=self.dtype)
+        s0 = self.lif0.initial_state(
+            seq_batch_size, device=self.device, dtype=self.dtype
+        )
+        s1 = self.lif1.initial_state(
+            seq_batch_size, device=self.device, dtype=self.dtype
+        )
+        s2 = self.lif2.initial_state(
+            seq_batch_size, device=self.device, dtype=self.dtype
+        )
+        so = self.out.initial_state(
+            seq_batch_size, device=self.device, dtype=self.dtype
+        )
 
         voltages = torch.zeros(
-            seq_length, batch_size, 10, device=self.device, dtype=self.dtype
+            seq_length, seq_batch_size, 10, device=self.device, dtype=self.dtype
         )
 
         for ts in range(seq_length):
@@ -93,8 +101,8 @@ print(net)
 
 timesteps = 16
 batch_size = 1
-input = torch.abs(torch.randn(timesteps, batch_size, 1, 32, 32))
-out = net(input)
+data = torch.abs(torch.randn(timesteps, batch_size, 1, 32, 32))
+out = net(data)
 print(out)
 
 

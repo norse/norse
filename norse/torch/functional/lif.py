@@ -58,11 +58,11 @@ class LIFFeedForwardState(NamedTuple):
 
 
 def lif_step(
-    input: torch.Tensor,
-    s: LIFState,
+    input_tensor: torch.Tensor,
+    state: LIFState,
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
-    p: LIFParameters = LIFParameters(),
+    parameters: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFState]:
     r"""Computes a single euler-integration step of a LIF neuron-model. More
@@ -92,7 +92,7 @@ def lif_step(
     and input spikes respectively.
 
     Parameters:
-        input (torch.Tensor): the input spikes at the current time step
+        input_tensor (torch.Tensor): the input spikes at the current time step
         s (LIFState): current state of the LIF neuron
         input_weights (torch.Tensor): synaptic weights for incoming spikes
         recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
@@ -100,31 +100,31 @@ def lif_step(
         dt (float): Integration timestep to use
     """
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i)
-    v_decayed = s.v + dv
+    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i)
+    v_decayed = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * s.i
-    i_decayed = s.i + di
+    di = -dt * parameters.tau_syn_inv * state.i
+    i_decayed = state.i + di
 
     # compute new spikes
-    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+    z_new = threshold(v_decayed - parameters.v_th, parameters.method, parameters.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    v_new = (1 - z_new) * v_decayed + z_new * parameters.v_reset
     # compute current jumps
     i_new = (
         i_decayed
-        + torch.nn.functional.linear(input, input_weights)
-        + torch.nn.functional.linear(s.z, recurrent_weights)
+        + torch.nn.functional.linear(input_tensor, input_weights)
+        + torch.nn.functional.linear(state.z, recurrent_weights)
     )
 
     return z_new, LIFState(z_new, v_new, i_new)
 
 
 def lif_feed_forward_step(
-    input: torch.Tensor,
-    s: LIFFeedForwardState = LIFFeedForwardState(0, 0),
-    p: LIFParameters = LIFParameters(),
+    input_tensor: torch.Tensor,
+    state: LIFFeedForwardState = LIFFeedForwardState(0, 0),
+    parameters: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
     r"""Computes a single euler-integration step for a lif neuron-model.
@@ -155,33 +155,33 @@ def lif_feed_forward_step(
     arbitrary pytorch module (such as a convolution) to input spikes.
 
     Parameters:
-        input (torch.Tensor): the input spikes at the current time step
-        s (LIFFeedForwardState): current state of the LIF neuron
-        p (LIFParameters): parameters of a leaky integrate and fire neuron
+        input_tensor (torch.Tensor): the input spikes at the current time step
+        state (LIFFeedForwardState): current state of the LIF neuron
+        parameters (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - s.v) + s.i)
-    v_decayed = s.v + dv
+    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i)
+    v_decayed = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * s.i
-    i_decayed = s.i + di
+    di = -dt * parameters.tau_syn_inv * state.i
+    i_decayed = state.i + di
 
     # compute new spikes
-    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+    z_new = threshold(v_decayed - parameters.v_th, parameters.method, parameters.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    v_new = (1 - z_new) * v_decayed + z_new * parameters.v_reset
     # compute current jumps
-    i_new = i_decayed + input
+    i_new = i_decayed + input_tensor
 
     return z_new, LIFFeedForwardState(v_new, i_new)
 
 
 def lif_current_encoder(
     input_current: torch.Tensor,
-    v: torch.Tensor,
-    p: LIFParameters = LIFParameters(),
+    voltage: torch.Tensor,
+    parameters: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     r"""Computes a single euler-integration step of a leaky integrator. More
@@ -195,13 +195,13 @@ def lif_current_encoder(
 
     Parameters:
         input (torch.Tensor): the input current at the current time step
-        s (LIFState): current state of the LIF neuron
-        p (LIFParameters): parameters of a leaky integrate and fire neuron
+        voltage (torch.Tensor): current state of the LIF neuron
+        parameters (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    dv = dt * p.tau_mem_inv * ((p.v_leak - v) + input_current)
-    v = v + dv
-    z = threshold(v - p.v_th, p.method, p.alpha)
+    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - voltage) + input_current)
+    voltage = voltage + dv
+    z = threshold(voltage - parameters.v_th, parameters.method, parameters.alpha)
 
-    v = v - z * (v - p.v_reset)
-    return z, v
+    voltage = voltage - z * (voltage - parameters.v_reset)
+    return z, voltage

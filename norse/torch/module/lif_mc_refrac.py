@@ -13,7 +13,7 @@ class LIFMCRefracCell(torch.nn.Module):
         self,
         input_size: int,
         hidden_size: int,
-        p: LIFRefracParameters = LIFRefracParameters(),
+        parameters: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
     ):
         self.input_weights = torch.nn.Parameter(
@@ -25,7 +25,7 @@ class LIFMCRefracCell(torch.nn.Module):
         self.g_coupling = torch.nn.Parameter(
             torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
         )
-        self.p = p
+        self.parameters = parameters
         self.dt = dt
 
     def initial_state(
@@ -41,14 +41,14 @@ class LIFMCRefracCell(torch.nn.Module):
         )
 
     def forward(
-        self, input: torch.Tensor, state: LIFRefracState
+        self, input_tensor: torch.Tensor, state: LIFRefracState
     ) -> Tuple[torch.Tensor, LIFRefracState]:
         return lif_mc_refrac_step(
-            input,
+            input_tensor,
             state,
             self.input_weights,
             self.recurrent_weights,
             self.g_coupling,
-            p=self.p,
+            parameters=self.parameters,
             dt=self.dt,
         )

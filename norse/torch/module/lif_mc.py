@@ -50,7 +50,7 @@ class LIFMCCell(torch.nn.Module):
         self,
         input_size: int,
         hidden_size: int,
-        p: LIFParameters = LIFParameters(),
+        parameters: LIFParameters = LIFParameters(),
         dt: float = 0.001,
     ):
         self.input_weights = torch.nn.Parameter(
@@ -62,7 +62,7 @@ class LIFMCCell(torch.nn.Module):
         self.g_coupling = torch.nn.Parameter(
             torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
         )
-        self.p = p
+        self.parameters = parameters
         self.dt = dt
 
     def initial_state(
@@ -75,14 +75,14 @@ class LIFMCCell(torch.nn.Module):
         )
 
     def forward(
-        self, input: torch.Tensor, state: LIFState
+        self, input_tensor: torch.Tensor, state: LIFState
     ) -> Tuple[torch.Tensor, LIFState]:
         return lif_mc_step(
-            input,
+            input_tensor,
             state,
             self.input_weights,
             self.recurrent_weights,
             self.g_coupling,
-            p=self.p,
+            parameters=self.parameters,
             dt=self.dt,
         )

@@ -6,7 +6,7 @@ from norse.torch.module.lif_correlation import LIFCorrelation
 from norse.torch.functional.correlation_sensor import correlation_based_update
 
 
-def main(argv):
+def main():
     torch.manual_seed(42)
     np.random.seed(42)
 
@@ -136,4 +136,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main([])
+    main()

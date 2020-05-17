@@ -20,6 +20,7 @@ class IFConstantCurrentEncoder(torch.nn.Module):
         self.v_th = v_th
         self.v_reset = v_reset
         self.device = device
+        self.dt = dt
 
     def forward(self, x):
         lif_parameters = LIFParameters(

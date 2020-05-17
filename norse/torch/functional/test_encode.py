@@ -5,6 +5,9 @@ import torch
 from . import encode
 import numpy as np
 
+# Fixes a linting error:
+# pylint: disable=E1102
+
 
 def encode_population_test():
     data = torch.tensor([0, 0.5, 1])
@@ -37,19 +40,24 @@ def constant_current_lif_encode_test():
     np.testing.assert_equal(z[-1].numpy(), np.ones((4, 3)))
 
 
-def spike_latency_encode_test():
+def spike_latency_encode_with_batch_test():
     data = torch.tensor([[100, 100], [100, 100]])
     spikes = encode.constant_current_lif_encode(data, 5)
-    actual = encode.spike_latency_encode(spikes)
+    actual = encode.spike_latency_encode(spikes).to_dense()
     expected = np.zeros((5, 2, 2))
-    expected[0] = np.ones((2, 2))
+    for i, _ in enumerate(expected):
+        expected[i] = np.array([[1, 1], [0, 0]])
     np.testing.assert_equal(actual.numpy(), expected)
 
-    spikes = torch.tensor([[0, 1, 1], [1, 1, 1]])
-    actual = encode.spike_latency_encode(spikes)
-    np.testing.assert_equal(actual.numpy(), np.array([[0, 1, 1], [1, 0, 0]]))
 
+def spike_latency_encode_without_batch_test():
+    spikes = torch.tensor([[0, 1, 1, 0], [1, 1, 1, 0]])
+    actual = encode.spike_latency_encode(spikes).to_dense()
+    np.testing.assert_equal(actual.numpy(), np.array([[0, 1, 1, 0], [1, 0, 0, 0]]))
+
+
+def spike_latency_encode_without_batch_2_test():
     spikes = torch.tensor([[[0, 1, 1], [1, 1, 1]], [[1, 1, 1], [1, 1, 1]]])
-    actual = encode.spike_latency_encode(spikes)
-    expected = np.array([[[0, 1, 1], [1, 1, 1]], [[1, 0, 0], [0, 0, 0]]])
+    actual = encode.spike_latency_encode(spikes).to_dense()
+    expected = np.array([[[0, 1, 1], [1, 0, 0]], [[1, 1, 1], [0, 0, 0]]])
     np.testing.assert_equal(actual.numpy(), expected)
