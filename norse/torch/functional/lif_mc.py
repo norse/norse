@@ -1,8 +1,13 @@
 import torch
 from typing import Tuple
 
-from .lif import LIFState, LIFFeedForwardState, LIFParameters
-from .threshold import threshold
+from .lif import (
+    LIFState,
+    LIFFeedForwardState,
+    LIFParameters,
+    lif_step,
+    lif_feed_forward_step,
+)
 
 
 def lif_mc_step(
@@ -26,25 +31,15 @@ def lif_mc_step(
         p (LIFParameters): neuron parameters
         dt (float): Integration timestep to use
     """
-    # compute voltage
-    dv = dt * parameters.tau_mem_inv * (
-        (parameters.v_leak - state.v) + state.i
-    ) + torch.nn.functional.linear(state.v, g_coupling)
-    v_decayed = state.v + dv
-    # compute current updates
-    di = -dt * parameters.tau_syn_inv * state.i
-    i_decayed = state.i + di
-    # compute new spikes
-    z_new = threshold(v_decayed - parameters.v_th, parameters.method, parameters.alpha)
-    # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * parameters.v_reset
-    # compute current jumps
-    i_new = (
-        i_decayed
-        + torch.nn.functional.linear(input_tensor, input_weights)
-        + torch.nn.functional.linear(state.z, recurrent_weights)
+    v_new = state.v + dt * torch.nn.functional.linear(state.v, g_coupling)
+    return lif_step(
+        input_tensor,
+        LIFState(state.z, v_new, state.i),
+        input_weights,
+        recurrent_weights,
+        parameters,
+        dt,
     )
-    return z_new, LIFState(z_new, v_new, i_new)
 
 
 def lif_mc_feed_forward_step(
@@ -65,18 +60,7 @@ def lif_mc_feed_forward_step(
         p (LIFParameters): neuron parameters
         dt (float): Integration timestep to use
     """
-    # compute voltage
-    dv = dt * parameters.tau_mem_inv * (
-        (parameters.v_leak - state.v) + state.i
-    ) + torch.nn.functional.linear(state.v, g_coupling)
-    v_decayed = state.v + dv
-    # compute current updates
-    di = -dt * parameters.tau_syn_inv * state.i
-    i_decayed = state.i + di
-    # compute new spikes
-    z_new = threshold(v_decayed - parameters.v_th, parameters.method, parameters.alpha)
-    # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * parameters.v_reset
-    # compute current jumps
-    i_new = i_decayed + input_tensor
-    return z_new, LIFFeedForwardState(v_new, i_new)
+    v_new = state.v + dt * torch.nn.functional.linear(state.v, g_coupling)
+    return lif_feed_forward_step(
+        input_tensor, LIFFeedForwardState(v_new, state.i), parameters, dt
+    )
