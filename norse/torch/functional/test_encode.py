@@ -92,13 +92,15 @@ def spike_latency_encode_without_batch_3_test():
     )
     actual = encode.spike_latency_encode(spikes)
     expected = spikes.clone()
-    expected[1] = torch.tensor([
-        [0.0, 0.0, 1.0, 0.0, 0.0],
-        [1.0, 1.0, 1.0, 1.0, 0.0],
-        [0.0, 1.0, 0.0, 1.0, 1.0],
-        [0.0, 1.0, 0.0, 1.0, 0.0],
-        [1.0, 0.0, 0.0, 1.0, 1.0],
-        [0.0, 1.0, 1.0, 1.0, 0.0],
-        [1.0, 1.0, 1.0, 0.0, 1.0],
-    ])
+    expected[1] = torch.tensor(
+        [
+            [0.0, 0.0, 1.0, 0.0, 0.0],
+            [1.0, 1.0, 1.0, 1.0, 0.0],
+            [0.0, 1.0, 0.0, 1.0, 1.0],
+            [0.0, 1.0, 0.0, 1.0, 0.0],
+            [1.0, 0.0, 0.0, 1.0, 1.0],
+            [0.0, 1.0, 1.0, 1.0, 0.0],
+            [1.0, 1.0, 1.0, 0.0, 1.0],
+        ]
+    )
     np.testing.assert_equal(actual.numpy(), expected)

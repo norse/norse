@@ -170,7 +170,7 @@ class SpikeLatencyLIFEncoder(torch.nn.Module):
         self.dt = dt
 
     def forward(self, input_current):
-        encode.spike_latency_lif_encode(
+        return encode.spike_latency_lif_encode(
             input_current, self.seq_length, self.parameters, self.dt
         )
 
