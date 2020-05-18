@@ -214,6 +214,37 @@
     <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="spike_latency_lif_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.spike_latency_lif_encode">[docs]</a><span class="k">def</span> <span class="nf">spike_latency_lif_encode</span><span class="p">(</span>
+    <span class="n">input_current</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+    <span class="n">dt</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Encodes an input value by the time the first spike occurs.</span>
+<span class="sd">    Similar to the ConstantCurrentLIFEncoder, but the LIF can be</span>
+<span class="sd">    thought to have an infinite refractory period.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        input_current (torch.Tensor): Input current to encode (needs to be positive).</span>
+<span class="sd">        sequence_length (int): Number of time steps in the resulting spike train.</span>
+<span class="sd">        parameters (LIFParameters): Parameters of the LIF neuron model.</span>
+<span class="sd">        dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">voltage</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">input_current</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">input_current</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">input_current</span><span class="p">)</span><span class="o">.</span><span class="n">byte</span><span class="p">()</span>
+    <span class="n">spikes</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seq_length</span><span class="p">):</span>
+        <span class="n">z</span><span class="p">,</span> <span class="n">voltage</span> <span class="o">=</span> <span class="n">lif_current_encoder</span><span class="p">(</span>
+            <span class="n">input_current</span><span class="o">=</span><span class="n">input_current</span><span class="p">,</span> <span class="n">voltage</span><span class="o">=</span><span class="n">voltage</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span>
+        <span class="p">)</span>
+        <span class="n">spikes</span> <span class="o">+=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">z</span><span class="p">)]</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">z</span><span class="o">.</span><span class="n">bool</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="spike_latency_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.spike_latency_encode">[docs]</a><span class="k">def</span> <span class="nf">spike_latency_encode</span><span class="p">(</span><span class="n">input_spikes</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a </span>

@@ -174,7 +174,6 @@
 <span class="sd">        which represent input spikes.</span>
 
 <span class="sd">        Parameters:</span>
-<span class="sd">            input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [0,1].</span>
 <span class="sd">            sequence_length (int): Number of time steps in the resulting spike train.</span>
 <span class="sd">            f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
 <span class="sd">            dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
@@ -187,6 +186,29 @@
 <div class="viewcode-block" id="SignedPoissonEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.SignedPoissonEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">signed_poisson_encode</span><span class="p">(</span>
             <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f_max</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SpikeLatencyLIFEncoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.SpikeLatencyLIFEncoder">[docs]</a><span class="k">class</span> <span class="nc">SpikeLatencyLIFEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encodes an input value by the time the first spike occurs.</span>
+<span class="sd">    Similar to the ConstantCurrentLIFEncoder, but the LIF can be</span>
+<span class="sd">    thought to have an infinite refractory period.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        sequence_length (int): Number of time steps in the resulting spike train.</span>
+<span class="sd">        parameters (LIFParameters): Parameters of the LIF neuron model.</span>
+<span class="sd">        dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">lif</span><span class="o">.</span><span class="n">LIFParameters</span><span class="p">(),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SpikeLatencyLIFEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span> <span class="o">=</span> <span class="n">seq_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
+<div class="viewcode-block" id="SpikeLatencyLIFEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.SpikeLatencyLIFEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_current</span><span class="p">):</span>
+        <span class="n">encode</span><span class="o">.</span><span class="n">spike_latency_lif_encode</span><span class="p">(</span>
+            <span class="n">input_current</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
         <span class="p">)</span></div></div>
 
 
