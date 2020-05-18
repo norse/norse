@@ -236,7 +236,7 @@ def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     mask = torch.zeros(input_spikes.size()[1:], device=input_spikes.device).byte()
     spikes = []
     zero_spikes = torch.zeros_like(input_spikes[0])
-    for spike_seq in input_spikes:
-        spikes.append(torch.where(mask, zero_spikes, spike_seq))
-        mask[spike_seq.bool()] = 1
+    for index in range(input_spikes.shape[0]):
+        spikes.append(torch.where(mask, zero_spikes, input_spikes[index]))
+        mask[input_spikes[index].bool()] = 1
     return torch.stack(spikes)
