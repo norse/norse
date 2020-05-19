@@ -147,7 +147,8 @@ def poisson_encode(
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
     return (
-        torch.rand(seq_length, *input_values.shape).float() < dt * f_max * input_values
+        torch.rand(seq_length, *input_values.shape, device=input_values.device).float()
+        < dt * f_max * input_values
     ).float()
 
 
