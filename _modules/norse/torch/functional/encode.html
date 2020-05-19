@@ -184,7 +184,8 @@
 <span class="sd">        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">f_max</span> <span class="o">*</span> <span class="n">input_values</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">input_values</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_values</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+        <span class="o">&lt;</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">f_max</span> <span class="o">*</span> <span class="n">input_values</span>
     <span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span></div>
 
 
