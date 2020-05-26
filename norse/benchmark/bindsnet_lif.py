@@ -46,7 +46,6 @@ def lif_feed_forward_benchmark(
         learning=False,
         dt=dt,
     ).to(device)
-    model.set_batch_size(batch_size)
     model.dt = dt
 
     start = time.time()
@@ -92,7 +91,7 @@ def main(argv):
             results += [result]
 
     timestamp = time.strftime("%Y-%M-%d-%H-%M-%S")
-    filename = f"{__file__}-{timestamp}.csv"
+    filename = f"bindsnet-lif-{timestamp}.csv"
     with open(filename, "w") as f:
         for index, result in enumerate(results):
             w = csv.DictWriter(f, result.keys())

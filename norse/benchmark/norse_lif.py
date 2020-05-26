@@ -95,7 +95,7 @@ def main(argv):
             results += [result]
 
     timestamp = time.strftime("%Y-%M-%d-%H-%M-%S")
-    filename = f"{__file__}-{timestamp}.csv"
+    filename = f"norse-lif-{timestamp}.csv"
     with open(filename, "w") as f:
         for index, result in enumerate(results):
             w = csv.DictWriter(f, result.keys())
