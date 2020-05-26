@@ -41,11 +41,11 @@ def lif_feed_forward_benchmark(
         .float()
     )
     model = LIFNodes(
-        n=input_features * output_features,
-        shape=(input_features, output_features),
+        n=output_features,
         learning=False,
         dt=dt,
     ).to(device)
+    model.set_batch_size(batch_size)
     model.dt = dt
 
     start = time.time()
