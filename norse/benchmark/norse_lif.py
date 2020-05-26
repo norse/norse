@@ -27,6 +27,7 @@ flags.DEFINE_float("dt", 0.001, "Simulation timestep")
 flags.DEFINE_string("device", "cpu", "Device to use [cpu, cuda]")
 
 
+import csv
 import torch
 import time
 import numpy as np
