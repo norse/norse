@@ -1,9 +1,9 @@
 """Norse is a library for doing deep learning with spiking neural networks.
 """
 
-from . import task
+from . import benchmark, task
 
-from .torch import benchmark, functional
+from .torch import functional
 from .torch.models import conv
 from .torch.module import lif, lsnn
 
