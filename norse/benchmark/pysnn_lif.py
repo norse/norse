@@ -2,12 +2,14 @@ from absl import app
 from absl import flags
 from absl import logging
 
-import csv, time, torch
+import csv
+import time
+import torch
 
-from bindsnet.network import Network
-from bindsnet.network.topology import Connection
-from bindsnet.network.nodes import LIFNodes, Input
-from bindsnet.encoding import PoissonEncoder
+from pysnn.connection import Linear
+from pysnn.encoding import PoissonEncoder
+from pysnn.neuron import LIFNeuron, Input
+from pysnn.network import SNNNetwork
 
 FLAGS = flags.FLAGS
 
@@ -32,27 +34,48 @@ def lif_feed_forward_benchmark(
     dt=0.001,
     device="cpu",
 ):
-    T = dt * n_time_steps
-    network = Network(batch_size=batch_size, dt=dt)
+    T = int(dt * n_time_steps)
 
-    network.add_layer(Input(n=input_features), name="Input")
-    network.add_layer(LIFNodes(n=output_features), name="Neurons")
-    network.add_connection(
-        Connection(source=network.layers["Input"], target=network.layers["Neurons"]),
-        source="Input",
-        target="Neurons",
+    # Default parameters from Norse neuron model
+    tau_syn = torch.as_tensor(5e-3)
+    tau_mem = torch.as_tensor(1e-2)
+    v_th = torch.as_tensor(1.0)
+    v_reset = torch.as_tensor(0.0)
+
+    input_layer = Input((batch_size, 1, input_features), dt=dt, alpha_t=1.0, tau_t=1.0)
+    linear_layer = Linear(
+        in_features=input_features,
+        out_features=output_features,
+        batch_size=batch_size,
+        dt=dt,
+        delay=0,
+    )
+    lif_layer = LIFNeuron(
+        cells_shape=(batch_size, 1, output_features),
+        thresh=v_th,
+        v_rest=v_reset,
+        alpha_v=1.0,
+        alpha_t=1.0,
+        dt=dt,
+        duration_refrac=0.001,
+        tau_v=tau_syn,
+        tau_t=tau_mem,
+        update_type="exponential",
     )
 
-    input_spikes = (
-        PoissonEncoder(time=T, dt=dt)(0.3 * torch.ones(batch_size, input_features))
-        .to(device)
-        .float()
-    )
+    input_spikes = PoissonEncoder(duration=T, dt=dt)(
+        0.3 * torch.ones(batch_size, input_features)
+    ).to(device)
 
-    input_data = {"Input": input_spikes}
-    network.to(device)
     start = time.time()
-    network.run(inputs=input_data, time=T)
+    spikes = []
+    for ts in range(n_time_steps):
+        z, t = input_layer(input_spikes[:, :, ts])
+        z, _ = linear_layer(z, t)
+        z, _ = lif_layer(z)
+        spikes += [z]
+
+    spikes = torch.stack(spikes)
     end = time.time()
 
     duration = end - start
@@ -89,7 +112,7 @@ def main(argv):
             results += [result]
 
     timestamp = time.strftime("%Y-%M-%d-%H-%M-%S")
-    filename = f"bindsnet-lif-{timestamp}.csv"
+    filename = f"pysnn-lif-{timestamp}.csv"
     with open(filename, "w") as f:
         for index, result in enumerate(results):
             w = csv.DictWriter(f, result.keys())

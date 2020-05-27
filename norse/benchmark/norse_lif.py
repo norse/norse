@@ -18,7 +18,6 @@ flags.DEFINE_integer(
     10,
     "Number of batch sizes to simulate in base-2 (2 = [1, 2] and 4 = [1, 2, 4, 8] for instance",
 )
-flags.DEFINE_integer("num_neurons", 1000, "Number of neurons to simulate")
 flags.DEFINE_integer("start", 250, "Start of the number of inputs to sweep")
 flags.DEFINE_integer("step", 250, "Steps in which to sweep over the number of inputs")
 flags.DEFINE_integer("stop", 10000, "Number of inputs to sweep to")
