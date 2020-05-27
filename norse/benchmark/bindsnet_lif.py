@@ -45,16 +45,14 @@ def lif_feed_forward_benchmark(
     )
 
     input_spikes = (
-        PoissonEncoder(time=T, dt=dt)(
-            0.3 * torch.ones(batch_size, input_features)
-        )
+        PoissonEncoder(time=T, dt=dt)(0.3 * torch.ones(batch_size, input_features))
         .to(device)
         .float()
     )
 
     input_data = {"Input": input_spikes}
-    start = time.time()
     network.to(device)
+    start = time.time()
     network.run(inputs=input_data, time=T)
     end = time.time()
 
