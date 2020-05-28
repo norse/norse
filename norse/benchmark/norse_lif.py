@@ -1,3 +1,7 @@
+from absl import app
+from absl import flags
+from absl import logging
+
 from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
@@ -6,10 +10,6 @@ from norse.torch.functional.lif import (
     lif_feed_forward_step,
 )
 from norse.torch.module.encode import PoissonEncoder
-
-from absl import app
-from absl import flags
-from absl import logging
 
 FLAGS = flags.FLAGS
 
@@ -29,8 +29,6 @@ flags.DEFINE_string("device", "cpu", "Device to use [cpu, cuda]")
 import csv
 import torch
 import time
-import numpy as np
-import pandas as pd
 
 
 def lif_feed_forward_benchmark(
