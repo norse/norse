@@ -1,10 +1,10 @@
-from absl import app
-from absl import flags
-from absl import logging
-
 import csv
 import time
 import torch
+
+from absl import app
+from absl import flags
+from absl import logging
 
 from pysnn.connection import Linear
 from pysnn.encoding import PoissonEncoder
