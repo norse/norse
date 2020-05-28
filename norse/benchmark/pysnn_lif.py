@@ -42,14 +42,16 @@ def lif_feed_forward_benchmark(
     v_th = torch.as_tensor(1.0)
     v_reset = torch.as_tensor(0.0)
 
-    input_layer = Input((batch_size, 1, input_features), dt=dt, alpha_t=1.0, tau_t=1.0)
+    input_layer = Input(
+        (batch_size, 1, input_features), dt=dt, alpha_t=1.0, tau_t=1.0
+    ).to(device)
     linear_layer = Linear(
         in_features=input_features,
         out_features=output_features,
         batch_size=batch_size,
         dt=dt,
         delay=0,
-    )
+    ).to(device)
     lif_layer = LIFNeuron(
         cells_shape=(batch_size, 1, output_features),
         thresh=v_th,
@@ -61,7 +63,7 @@ def lif_feed_forward_benchmark(
         tau_v=tau_syn,
         tau_t=tau_mem,
         update_type="exponential",
-    )
+    ).to(device)
 
     input_spikes = PoissonEncoder(duration=T, dt=dt)(
         0.3 * torch.ones(batch_size, input_features)
