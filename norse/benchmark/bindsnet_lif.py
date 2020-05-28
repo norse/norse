@@ -1,8 +1,10 @@
+import csv
+import time
+import torch
+
 from absl import app
 from absl import flags
 from absl import logging
-
-import csv, time, torch
 
 from bindsnet.network import Network
 from bindsnet.network.topology import Connection
