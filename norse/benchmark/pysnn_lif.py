@@ -67,12 +67,12 @@ def lif_feed_forward_benchmark(
 
     input_spikes = PoissonEncoder(duration=T, dt=dt)(
         0.3 * torch.ones(batch_size, input_features)
-    ).to(device)
+    ).reshape(batch_size, 1, input_features, n_time_steps).to(device)
 
     start = time.time()
     spikes = []
     for ts in range(n_time_steps):
-        z, t = input_layer(input_spikes[:, :, ts])
+        z, t = input_layer(input_spikes[:, :, :, ts])
         z, _ = linear_layer(z, t)
         z, _ = lif_layer(z)
         spikes += [z]
