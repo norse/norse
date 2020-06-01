@@ -95,7 +95,7 @@ def main(argv):
     except RuntimeError as e:
         logging.error("RuntimeError when running benchmark: " + str(e))
 
-    timestamp = time.strftime("%Y-%M-%d-%H-%M-%S")
+    timestamp = time.strftime("%Y-%m-%d-%H-%M-%S")
     filename = f"bindsnet-lif-{timestamp}.csv"
     with open(filename, "w") as f:
         for index, result in enumerate(results):
