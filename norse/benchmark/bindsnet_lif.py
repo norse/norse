@@ -11,6 +11,8 @@ from bindsnet.network.topology import Connection
 from bindsnet.network.nodes import LIFNodes, Input
 from bindsnet.encoding import PoissonEncoder
 
+import logging
+
 FLAGS = flags.FLAGS
 
 flags.DEFINE_integer(
@@ -77,18 +79,21 @@ def main(argv):
     batch_sizes = [2 ** i for i in range(FLAGS.batches)]
     results = []
 
-    for batch_size in batch_sizes:
-        for n_inputs in range(FLAGS.start, FLAGS.stop, FLAGS.step):
-            result = lif_feed_forward_benchmark(
-                output_features=n_inputs,
-                input_features=n_inputs,
-                batch_size=batch_size,
-                n_time_steps=FLAGS.sequence_length,
-                dt=FLAGS.dt,
-                device=FLAGS.device,
-            )
-            logging.info(result)
-            results += [result]
+    try:
+        for batch_size in batch_sizes:
+            for n_inputs in range(FLAGS.start, FLAGS.stop, FLAGS.step):
+                result = lif_feed_forward_benchmark(
+                    output_features=n_inputs,
+                    input_features=n_inputs,
+                    batch_size=batch_size,
+                    n_time_steps=FLAGS.sequence_length,
+                    dt=FLAGS.dt,
+                    device=FLAGS.device,
+                )
+                logging.info(result)
+                results += [result]
+    except RuntimeError as e:
+        logging.error("RuntimeError when running benchmark: " + str(e))
 
     timestamp = time.strftime("%Y-%M-%d-%H-%M-%S")
     filename = f"bindsnet-lif-{timestamp}.csv"
