@@ -210,7 +210,7 @@ def main():
         policy = Policy()
     elif FLAGS.policy == "lsnn":
         policy = LSNNPolicy(device=FLAGS.device, model=FLAGS.model).to(FLAGS.device)
-    optimizer = torch.optim.Adam(policy.p(), lr=FLAGS.learning_rate)
+    optimizer = torch.optim.Adam(policy.parameters(), lr=FLAGS.learning_rate)
 
     running_rewards = []
     episode_rewards = []

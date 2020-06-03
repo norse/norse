@@ -54,7 +54,7 @@ Running experiments is as easy as running
 
     python3 -m norse.task.mnist
 
-This will run a simple MNIST experiment with defaultp. See :doc:`/experiments` for detailed instructions.
+This will run a simple MNIST experiment with default parameters. See :doc:`/experiments` for detailed instructions.
 
 Table of contents
 ----------------------------

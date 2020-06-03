@@ -153,7 +153,7 @@ def train(
         loss = torch.nn.functional.nll_loss(output, target)
         loss.backward()
         if FLAGS.save_grads and batch_idx % FLAGS.grad_save_interval == 0:
-            for idx, p in enumerate(model.p()):
+            for idx, p in enumerate(model.parameters()):
                 np.save(f"param-{idx}-{epoch}-{batch_idx}-grad.npy", p.grad.numpy())
                 np.save(f"param-{idx}-{epoch}-{batch_idx}-data.npy", p.data.numpy())
 
@@ -358,19 +358,19 @@ def main():
 
     if FLAGS.optimizer == "sgd":
         optimizer = torch.optim.SGD(
-            model.p(),
+            model.parameters(),
             lr=FLAGS.learning_rate,
             momentum=0.9,
             weight_decay=5e-4 * FLAGS.batch_size,
             nesterov=True,
         )
     elif FLAGS.optimizer == "adam":
-        optimizer = torch.optim.Adam(model.p(), lr=FLAGS.learning_rate)
+        optimizer = torch.optim.Adam(model.parameters(), lr=FLAGS.learning_rate)
     elif FLAGS.optimizer == "rms":
-        optimizer = torch.optim.RMSprop(model.p(), lr=FLAGS.learning_rate)
+        optimizer = torch.optim.RMSprop(model.parameters(), lr=FLAGS.learning_rate)
 
     if FLAGS.only_output:
-        optimizer = torch.optim.Adam(model.out.p(), lr=FLAGS.learning_rate)
+        optimizer = torch.optim.Adam(model.out.parameters(), lr=FLAGS.learning_rate)
 
     if FLAGS.resume:
         if os.path.isfile(FLAGS.resume):

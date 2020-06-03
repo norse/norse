@@ -65,7 +65,7 @@ def main():
     rec_linear_update = torch.nn.Linear(2 * 8 * 8, 8 * 8)
 
     optimizer = torch.optim.Adam(
-        list(linear_update.p()) + [input_weights, recurrent_weights] + list(out.p()),
+        list(linear_update.parameters()) + [input_weights, recurrent_weights] + list(out.p()),
         lr=1e-1,
     )
 
