@@ -9,7 +9,6 @@ from ..functional.lif import (
     LIFParameters,
     lif_step,
     lif_feed_forward_step,
-    lif_current_encoder,
 )
 
 

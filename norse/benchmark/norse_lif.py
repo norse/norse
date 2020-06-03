@@ -32,7 +32,7 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     spikes = []
     for ts in range(T):
         x = fc(input_spikes[ts, :])
-        z, s = lif_feed_forward_step(input_tensor=x, state=s, parameters=p, dt=0.001)
+        z, s = lif_feed_forward_step(input_tensor=x, state=s, p=p, dt=0.001)
         spikes += [z]
 
     spikes = torch.stack(spikes)
