@@ -71,7 +71,7 @@ def coba_lif_step(
             (sign determines  contribution to inhibitory / excitatory input)
         recurrent_weights (torch.Tensor): recurrent weights
             (sign determines contribution to inhibitory / excitatory input)
-        parameters (CobaLIFParameters): parameters of the neuron
+        p (CobaLIFParameters): parameters of the neuron
         dt (float): Integration time step
     """
     dg_e = -dt * p.tau_syn_exc_inv * state.g_e
@@ -134,7 +134,7 @@ def coba_lif_feed_forward_step(
     Parameters:
         input_tensor (torch.Tensor): synaptic input
         state (CobaLIFFeedForwardState): current state of the neuron
-        parameters (CobaLIFParameters): parameters of the neuron
+        p (CobaLIFParameters): parameters of the neuron
         dt (float): Integration time step
     """
     dg_e = -dt * p.tau_syn_exc_inv * state.g_e

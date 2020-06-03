@@ -32,7 +32,7 @@ class LICell(torch.nn.Module):
     Parameters:
         input_features (int); Input feature dimension
         output_features (int): Output feature dimension
-        parameters (LIParameters): parameters of the leaky integrator
+        p (LIParameters): parameters of the leaky integrator
         dt (float): integration timestep to use
     """
 

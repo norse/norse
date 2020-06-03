@@ -47,7 +47,7 @@ class LSNNCell(torch.nn.Module):
         s (LSNNState): current state of the lsnn unit
         input_weights (torch.Tensor): synaptic weights for input spikes
         recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
-        parameters (LSNNParameters): parameters of the lsnn unit
+        p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use
     """
 
@@ -157,7 +157,7 @@ class LSNNFeedForwardCell(torch.nn.Module):
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
         s (LSNNFeedForwardState): current state of the lsnn unit
-        parameters (LSNNParameters): parameters of the lsnn unit
+        p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use
     """
 

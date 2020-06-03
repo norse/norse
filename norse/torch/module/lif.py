@@ -44,7 +44,7 @@ class LIFCell(torch.nn.Module):
     Parameters:
         input_size (int): Size of the input.
         hidden_size (int): Size of the hidden state.
-        parameters (LIFParameters): Parameters of the LIF neuron model.
+        p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
 
     Examples:
@@ -142,7 +142,7 @@ class LIFFeedForwardCell(torch.nn.Module):
 
     Parameters:
         shape: Shape of the feedforward state.
-        parameters (LIFParameters): Parameters of the LIF neuron model.
+        p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
 
     Examples:

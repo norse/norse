@@ -31,7 +31,7 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
 
         Parameters:
             seq_length (int): The number of iterations to simulate
-            parameters (LIFParameters): Initial neuronp. Defaults to zero.
+            p (LIFParameters): Initial neuronp. Defaults to zero.
             dt (float): Time delta between simulation steps
         """
         super(ConstantCurrentLIFEncoder, self).__init__()
@@ -159,7 +159,7 @@ class SpikeLatencyLIFEncoder(torch.nn.Module):
 
     Parameters:
         sequence_length (int): Number of time steps in the resulting spike train.
-        parameters (LIFParameters): Parameters of the LIF neuron model.
+        p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
     """
 

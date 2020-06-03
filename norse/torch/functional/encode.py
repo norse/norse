@@ -35,7 +35,7 @@ def constant_current_lif_encode(
     Parameters:
         input_current (torch.Tensor): The input tensor, representing LIF current
         seq_length (int): The number of iterations to simulate
-        parameters (LIFParameters): Initial neuronp. Defaults to zero.
+        p (LIFParameters): Initial neuronp. Defaults to zero.
         dt (float): Time delta between simulation steps
 
     Returns:
@@ -191,7 +191,7 @@ def spike_latency_lif_encode(
     Parameters:
         input_current (torch.Tensor): Input current to encode (needs to be positive).
         sequence_length (int): Number of time steps in the resulting spike train.
-        parameters (LIFParameters): Parameters of the LIF neuron model.
+        p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
     """
     voltage = torch.zeros_like(input_current)

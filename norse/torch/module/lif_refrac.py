@@ -136,7 +136,7 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
 
     Parameters:
         shape: Shape of the processed spike input
-        parameters (LIFRefracParameters): parameters of the lif neuron
+        p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
 
     Examples:

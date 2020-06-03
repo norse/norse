@@ -157,7 +157,7 @@ def lif_feed_forward_step(
     Parameters:
         input_tensor (torch.Tensor): the input spikes at the current time step
         state (LIFFeedForwardState): current state of the LIF neuron
-        parameters (LIFParameters): parameters of a leaky integrate and fire neuron
+        p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
     # compute voltage updates
@@ -196,7 +196,7 @@ def lif_current_encoder(
     Parameters:
         input (torch.Tensor): the input current at the current time step
         voltage (torch.Tensor): current state of the LIF neuron
-        parameters (LIFParameters): parameters of a leaky integrate and fire neuron
+        p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
     dv = dt * p.tau_mem_inv * ((p.v_leak - voltage) + input_current)
