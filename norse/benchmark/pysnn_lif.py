@@ -19,7 +19,10 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     v_reset = torch.as_tensor(0.0)
 
     input_layer = Input(
-        (parameters.batch_size, 1, parameters.features), dt=parameters.dt, alpha_t=1.0, tau_t=1.0
+        (parameters.batch_size, 1, parameters.features),
+        dt=parameters.dt,
+        alpha_t=1.0,
+        tau_t=1.0,
     ).to(parameters.device)
     linear_layer = Linear(
         in_features=parameters.features,

@@ -41,10 +41,7 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
 
     def forward(self, input_currents):
         return encode.constant_current_lif_encode(
-            input_currents,
-            seq_length=self.seq_length,
-            p=self.p,
-            dt=self.dt,
+            input_currents, seq_length=self.seq_length, p=self.p, dt=self.dt,
         )
 
 

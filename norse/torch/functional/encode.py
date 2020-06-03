@@ -46,9 +46,7 @@ def constant_current_lif_encode(
     spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
 
     for ts in range(seq_length):
-        z, v = lif_current_encoder(
-            input_current=input_current, voltage=v, p=p, dt=dt
-        )
+        z, v = lif_current_encoder(input_current=input_current, voltage=v, p=p, dt=dt)
         spikes[ts] = z
     return spikes
 

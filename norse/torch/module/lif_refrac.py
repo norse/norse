@@ -167,6 +167,4 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     def forward(
         self, input_tensor: torch.Tensor, state: LIFRefracFeedForwardState
     ) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
-        return lif_refrac_feed_forward_step(
-            input_tensor, state, p=self.p, dt=self.dt
-        )
+        return lif_refrac_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

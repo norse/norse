@@ -180,6 +180,4 @@ class LSNNFeedForwardCell(torch.nn.Module):
     def forward(
         self, input_tensor: torch.Tensor, state: LSNNFeedForwardState
     ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
-        return lsnn_feed_forward_step(
-            input_tensor, state, p=self.p, dt=self.dt
-        )
+        return lsnn_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

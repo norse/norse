@@ -81,10 +81,5 @@ class LIFCorrelation(torch.nn.Module):
         recurrent_weights: torch.Tensor,
     ) -> Tuple[torch.Tensor, LIFCorrelationState]:
         return lif_correlation_step(
-            input_tensor,
-            state,
-            input_weights,
-            recurrent_weights,
-            self.p,
-            self.dt,
+            input_tensor, state, input_weights, recurrent_weights, self.p, self.dt,
         )

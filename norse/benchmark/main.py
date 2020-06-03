@@ -52,7 +52,9 @@ def benchmark(
                     duration = model(parameters)
                     durations.append(duration)
             except RuntimeError as e:
-                message = f"RuntimeError when running benchmark {config} {parameters}: {e}"
+                message = (
+                    f"RuntimeError when running benchmark {config} {parameters}: {e}"
+                )
                 logging.error(message)
 
             data = BenchmarkData(
