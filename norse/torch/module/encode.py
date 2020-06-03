@@ -13,7 +13,7 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
     def __init__(
         self,
         seq_length: int,
-        parameters: lif.LIFParameters = lif.LIFParameters(),
+        p: lif.LIFParameters = lif.LIFParameters(),
         dt: float = 0.001,
     ):
         """
@@ -31,19 +31,19 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
 
         Parameters:
             seq_length (int): The number of iterations to simulate
-            parameters (LIFParameters): Initial neuron parameters. Defaults to zero.
+            parameters (LIFParameters): Initial neuronp. Defaults to zero.
             dt (float): Time delta between simulation steps
         """
         super(ConstantCurrentLIFEncoder, self).__init__()
         self.seq_length = seq_length
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def forward(self, input_currents):
         return encode.constant_current_lif_encode(
             input_currents,
             seq_length=self.seq_length,
-            parameters=self.parameters,
+            p=self.p,
             dt=self.dt,
         )
 
@@ -163,15 +163,15 @@ class SpikeLatencyLIFEncoder(torch.nn.Module):
         dt (float): Integration time step (should coincide with the integration time step used in the model)
     """
 
-    def __init__(self, seq_length, parameters=lif.LIFParameters(), dt=0.001):
+    def __init__(self, seq_length, p=lif.LIFParameters(), dt=0.001):
         super(SpikeLatencyLIFEncoder, self).__init__()
         self.seq_length = seq_length
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def forward(self, input_current):
         return encode.spike_latency_lif_encode(
-            input_current, self.seq_length, self.parameters, self.dt
+            input_current, self.seq_length, self.p, self.dt
         )
 
 

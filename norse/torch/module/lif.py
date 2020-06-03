@@ -60,7 +60,7 @@ class LIFCell(torch.nn.Module):
         self,
         input_size,
         hidden_size,
-        parameters: LIFParameters = LIFParameters(),
+        p: LIFParameters = LIFParameters(),
         dt: float = 0.001,
     ):
         super(LIFCell, self).__init__()
@@ -72,11 +72,11 @@ class LIFCell(torch.nn.Module):
         )
         self.input_size = input_size
         self.hidden_size = hidden_size
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def extra_repr(self):
-        s = f"{self.input_size}, {self.hidden_size}, p={self.parameters}, dt={self.dt}"
+        s = f"{self.input_size}, {self.hidden_size}, p={self.p}, dt={self.dt}"
         return s
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LIFState:
@@ -94,7 +94,7 @@ class LIFCell(torch.nn.Module):
             state,
             self.input_weights,
             self.recurrent_weights,
-            parameters=self.parameters,
+            p=self.p,
             dt=self.dt,
         )
 
@@ -154,16 +154,14 @@ class LIFFeedForwardCell(torch.nn.Module):
         >>> output, s0 = lif(data, s0)
     """
 
-    def __init__(
-        self, shape, parameters: LIFParameters = LIFParameters(), dt: float = 0.001
-    ):
+    def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
         super(LIFFeedForwardCell, self).__init__()
         self.shape = shape
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def extra_repr(self):
-        s = f"{self.shape}, p={self.parameters}, dt={self.dt}"
+        s = f"{self.shape}, p={self.p}, dt={self.dt}"
         return s
 
     def initial_state(self, batch_size, device, dtype=None) -> LIFFeedForwardState:
@@ -175,4 +173,4 @@ class LIFFeedForwardCell(torch.nn.Module):
     def forward(
         self, x: torch.Tensor, state: LIFFeedForwardState
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
-        return lif_feed_forward_step(x, state, parameters=self.parameters, dt=self.dt)
+        return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)

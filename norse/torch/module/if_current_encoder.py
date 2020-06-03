@@ -27,5 +27,5 @@ class IFConstantCurrentEncoder(torch.nn.Module):
             tau_mem_inv=self.tau_mem_inv, v_th=self.v_th, v_reset=self.v_reset
         )
         return constant_current_lif_encode(
-            x, self.v, parameters=lif_parameters, dt=self.dt
+            x, self.v, p=lif_parameters, dt=self.dt
         )

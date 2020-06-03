@@ -36,7 +36,7 @@ def li_step(
     input_tensor: torch.Tensor,
     state: LIState,
     input_weights: torch.Tensor,
-    parameters: LIParameters = LIParameters(),
+    p: LIParameters = LIParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIState]:
     r"""Single euler integration step of a leaky-integrator.
@@ -64,11 +64,11 @@ def li_step(
     """
 
     # compute voltage updates
-    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i)
+    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
     v_new = state.v + dv
 
     # compute current updates
-    di = -dt * parameters.tau_syn_inv * state.i
+    di = -dt * p.tau_syn_inv * state.i
     i_decayed = state.i + di
 
     # compute current jumps
@@ -80,15 +80,15 @@ def li_step(
 def li_feed_forward_step(
     input_tensor: torch.Tensor,
     state: LIState,
-    parameters: LIParameters = LIParameters(),
+    p: LIParameters = LIParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIState]:
     # compute voltage updates
-    dv = dt * parameters.tau_mem_inv * ((parameters.v_leak - state.v) + state.i)
+    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
     v_new = state.v + dv
 
     # compute current updates
-    di = -dt * parameters.tau_syn_inv * state.i
+    di = -dt * p.tau_syn_inv * state.i
     i_decayed = state.i + di
 
     # compute current jumps

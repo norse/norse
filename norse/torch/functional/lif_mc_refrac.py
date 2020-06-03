@@ -14,27 +14,25 @@ def lif_mc_refrac_step(
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
     g_coupling: torch.Tensor,
-    parameters: LIFRefracParameters = LIFRefracParameters(),
+    p: LIFRefracParameters = LIFRefracParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFRefracState]:
     # compute whether neurons are refractory or not
-    refrac_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
+    refrac_mask = threshold(state.rho, p.lif.method, p.lif.alpha)
     # compute voltage
-    dv = (1 - refrac_mask) * dt * parameters.lif.tau_mem_inv * (
-        (parameters.lif.v_leak - state.lif.v) + state.lif.i
+    dv = (1 - refrac_mask) * dt * p.lif.tau_mem_inv * (
+        (p.lif.v_leak - state.lif.v) + state.lif.i
     ) + torch.nn.functional.linear(state.lif.v, g_coupling)
     v_decayed = state.lif.v + dv
 
     # compute current updates
-    di = -dt * parameters.lif.tau_syn_inv * state.lif.i
+    di = -dt * p.lif.tau_syn_inv * state.lif.i
     i_decayed = state.lif.i + di
 
     # compute new spikes
-    z_new = threshold(
-        v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha
-    )
+    z_new = threshold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * parameters.lif.v_reset
+    v_new = (1 - z_new) * v_decayed + z_new * p.lif.v_reset
 
     # compute current jumps
     i_new = (
@@ -46,7 +44,7 @@ def lif_mc_refrac_step(
     # compute update to refractory counter
     rho_new = (1 - z_new) * torch.nn.functional.relu(
         state.rho - refrac_mask
-    ) + z_new * parameters.rho_reset
+    ) + z_new * p.rho_reset
 
     return z_new, LIFRefracState(LIFState(z_new, v_new, i_new), rho_new)
 
@@ -55,27 +53,25 @@ def lif_mc_refrac_feed_forward_step(
     input_tensor: torch.Tensor,
     state: LIFRefracState,
     g_coupling: torch.Tensor,
-    parameters: LIFRefracParameters = LIFRefracParameters(),
+    p: LIFRefracParameters = LIFRefracParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFRefracState]:
     # compute whether neurons are refractory or not
-    refrac_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
+    refrac_mask = threshold(state.rho, p.lif.method, p.lif.alpha)
     # compute voltage
-    dv = (1 - refrac_mask) * dt * parameters.lif.tau_mem_inv * (
-        (parameters.lif.v_leak - state.lif.v) + state.lif.i
+    dv = (1 - refrac_mask) * dt * p.lif.tau_mem_inv * (
+        (p.lif.v_leak - state.lif.v) + state.lif.i
     ) + torch.nn.functional.linear(state.lif.v, g_coupling)
     v_decayed = state.lif.v + dv
 
     # compute current updates
-    di = -dt * parameters.lif.tau_syn_inv * state.lif.i
+    di = -dt * p.lif.tau_syn_inv * state.lif.i
     i_decayed = state.lif.i + di
 
     # compute new spikes
-    z_new = threshold(
-        v_decayed - parameters.lif.v_th, parameters.lif.method, parameters.lif.alpha
-    )
+    z_new = threshold(v_decayed - p.lif.v_th, p.lif.method, p.lif.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * parameters.lif.v_reset
+    v_new = (1 - z_new) * v_decayed + z_new * p.lif.v_reset
 
     # compute current jumps
     i_new = i_decayed + input_tensor
@@ -83,6 +79,6 @@ def lif_mc_refrac_feed_forward_step(
     # compute update to refractory counter
     rho_new = (1 - z_new) * torch.nn.functional.relu(
         state.rho - refrac_mask
-    ) + z_new * parameters.rho_reset
+    ) + z_new * p.rho_reset
 
     return z_new, LIFRefracFeedForwardState(LIFFeedForwardState(v_new, i_new), rho_new)

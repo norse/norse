@@ -55,7 +55,7 @@ class LSNNCell(torch.nn.Module):
         self,
         input_features,
         output_features,
-        parameters: LSNNParameters = LSNNParameters(),
+        p: LSNNParameters = LSNNParameters(),
         dt: float = 0.001,
     ):
         super(LSNNCell, self).__init__()
@@ -67,7 +67,7 @@ class LSNNCell(torch.nn.Module):
         )
         self.input_features = input_features
         self.output_features = output_features
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
@@ -87,7 +87,7 @@ class LSNNCell(torch.nn.Module):
             state,
             self.input_weights,
             self.recurrent_weights,
-            parameters=self.parameters,
+            p=self.p,
             dt=self.dt,
         )
 
@@ -161,12 +161,10 @@ class LSNNFeedForwardCell(torch.nn.Module):
         dt (float): Integration timestep to use
     """
 
-    def __init__(
-        self, shape, parameters: LSNNParameters = LSNNParameters(), dt: float = 0.001
-    ):
+    def __init__(self, shape, p: LSNNParameters = LSNNParameters(), dt: float = 0.001):
         super(LSNNFeedForwardCell, self).__init__()
         self.shape = shape
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def initial_state(
@@ -183,5 +181,5 @@ class LSNNFeedForwardCell(torch.nn.Module):
         self, input_tensor: torch.Tensor, state: LSNNFeedForwardState
     ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
         return lsnn_feed_forward_step(
-            input_tensor, state, parameters=self.parameters, dt=self.dt
+            input_tensor, state, p=self.p, dt=self.dt
         )

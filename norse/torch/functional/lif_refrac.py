@@ -40,7 +40,7 @@ def compute_refractory_update(
     state: LIFRefracState,
     z_new: torch.Tensor,
     v_new: torch.Tensor,
-    parameters: LIFRefracParameters = LIFRefracParameters(),
+    p: LIFRefracParameters = LIFRefracParameters(),
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """Compute the refractory update.
 
@@ -48,16 +48,16 @@ def compute_refractory_update(
         state (LIFRefracState): Initial state of the refractory neuron.
         z_new (torch.Tensor): New spikes that were generated.
         v_new (torch.Tensor): New voltage after the lif update step.
-        parameters (torch.Tensor): Refractory parameters.
+        parameters (torch.Tensor): Refractoryp.
     """
-    refrac_mask = threshold(state.rho, parameters.lif.method, parameters.lif.alpha)
+    refrac_mask = threshold(state.rho, p.lif.method, p.lif.alpha)
     v_new = (1 - refrac_mask) * v_new + refrac_mask * state.lif.v
     z_new = (1 - refrac_mask) * z_new
 
     # compute update to refractory counter
     rho_new = (1 - z_new) * torch.nn.functional.relu(
         state.rho - refrac_mask
-    ) + z_new * parameters.rho_reset
+    ) + z_new * p.rho_reset
 
     return v_new, z_new, rho_new
 
@@ -67,7 +67,7 @@ def lif_refrac_step(
     state: LIFRefracState,
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
-    parameters: LIFRefracParameters = LIFRefracParameters(),
+    p: LIFRefracParameters = LIFRefracParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFRefracState]:
     r"""Computes a single euler-integration step of a recurrently connected
@@ -82,9 +82,9 @@ def lif_refrac_step(
         dt (float): Integration timestep to use
     """
     z_new, s_new = lif_step(
-        input_tensor, state.lif, input_weights, recurrent_weights, parameters.lif, dt
+        input_tensor, state.lif, input_weights, recurrent_weights, p.lif, dt
     )
-    v_new, z_new, rho_new = compute_refractory_update(state, z_new, s_new.v, parameters)
+    v_new, z_new, rho_new = compute_refractory_update(state, z_new, s_new.v, p)
 
     return z_new, LIFRefracState(LIFState(z_new, v_new, s_new.i), rho_new)
 
@@ -105,7 +105,7 @@ class LIFRefracFeedForwardState(NamedTuple):
 def lif_refrac_feed_forward_step(
     input_tensor: torch.Tensor,
     state: LIFRefracFeedForwardState,
-    parameters: LIFRefracParameters = LIFRefracParameters(),
+    p: LIFRefracParameters = LIFRefracParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
     r"""Computes a single euler-integration step of a feed forward
@@ -117,8 +117,8 @@ def lif_refrac_feed_forward_step(
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
     """
-    z_new, s_new = lif_feed_forward_step(input_tensor, state.lif, parameters.lif, dt)
-    v_new, z_new, rho_new = compute_refractory_update(state, z_new, s_new.v, parameters)
+    z_new, s_new = lif_feed_forward_step(input_tensor, state.lif, p.lif, dt)
+    v_new, z_new, rho_new = compute_refractory_update(state, z_new, s_new.v, p)
 
     return (
         z_new,

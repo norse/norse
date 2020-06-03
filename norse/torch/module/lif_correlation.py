@@ -16,13 +16,13 @@ class LIFCorrelation(torch.nn.Module):
         self,
         input_size,
         hidden_size,
-        parameters: LIFCorrelationParameters = LIFCorrelationParameters(),
+        p: LIFCorrelationParameters = LIFCorrelationParameters(),
         dt: float = 0.001,
     ):
         super(LIFCorrelation, self).__init__()
         self.hidden_size = hidden_size
         self.input_size = input_size
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def initial_state(
@@ -85,6 +85,6 @@ class LIFCorrelation(torch.nn.Module):
             state,
             input_weights,
             recurrent_weights,
-            self.parameters,
+            self.p,
             self.dt,
         )

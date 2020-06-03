@@ -115,7 +115,7 @@ def train(model, device, train_loader, optimizer, epoch, writer=None):
         loss.backward()
 
         if FLAGS.clip_grad:
-            torch.nn.utils.clip_grad_norm_(model.parameters(), FLAGS.grad_clip_value)
+            torch.nn.utils.clip_grad_norm_(model.p(), FLAGS.grad_clip_value)
 
         optimizer.step()
         step += 1
@@ -282,12 +282,12 @@ def main():
     ).to(device)
 
     if FLAGS.optimizer == "sgd":
-        optimizer = torch.optim.SGD(model.parameters(), lr=FLAGS.learning_rate)
+        optimizer = torch.optim.SGD(model.p(), lr=FLAGS.learning_rate)
     elif FLAGS.optimizer == "adam":
-        optimizer = torch.optim.Adam(model.parameters(), lr=FLAGS.learning_rate)
+        optimizer = torch.optim.Adam(model.p(), lr=FLAGS.learning_rate)
 
     if FLAGS.only_output:
-        optimizer = torch.optim.Adam(model.out.parameters(), lr=FLAGS.learning_rate)
+        optimizer = torch.optim.Adam(model.out.p(), lr=FLAGS.learning_rate)
 
     training_losses = []
     mean_losses = []

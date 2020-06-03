@@ -68,7 +68,7 @@ class LIFRefracCell(torch.nn.Module):
         self,
         input_size,
         hidden_size,
-        parameters: LIFRefracParameters = LIFRefracParameters(),
+        p: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
     ):
         super(LIFRefracCell, self).__init__()
@@ -79,7 +79,7 @@ class LIFRefracCell(torch.nn.Module):
             torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
         )
         self.hidden_size = hidden_size
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LIFRefracState:
@@ -100,7 +100,7 @@ class LIFRefracCell(torch.nn.Module):
             state,
             self.input_weights,
             self.recurrent_weights,
-            parameters=self.parameters,
+            p=self.p,
             dt=self.dt,
         )
 
@@ -148,14 +148,11 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     """
 
     def __init__(
-        self,
-        shape,
-        parameters: LIFRefracParameters = LIFRefracParameters(),
-        dt: float = 0.001,
+        self, shape, p: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001,
     ):
         super(LIFRefracFeedForwardCell, self).__init__()
         self.shape = shape
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def initial_state(self, batch_size, device, dtype) -> LIFFeedForwardState:
@@ -171,5 +168,5 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
         self, input_tensor: torch.Tensor, state: LIFRefracFeedForwardState
     ) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
         return lif_refrac_feed_forward_step(
-            input_tensor, state, parameters=self.parameters, dt=self.dt
+            input_tensor, state, p=self.p, dt=self.dt
         )
