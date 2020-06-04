@@ -104,7 +104,7 @@ def run_benchmark(function, label):
         step=FLAGS.step,
     )
 
-    collector = partial(collect, label="bindsnet_lif")
+    collector = partial(collect, label=label)
     results = benchmark(function, collector, config)
 
     timestamp = time.strftime("%Y-%m-%d-%H-%M-%S")
