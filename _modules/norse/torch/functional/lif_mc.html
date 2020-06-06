@@ -53,7 +53,7 @@
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">g_coupling</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">parameters</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Computes a single euler-integration step of a LIF multi-compartment</span>
@@ -74,7 +74,7 @@
         <span class="n">LIFState</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">),</span>
         <span class="n">input_weights</span><span class="p">,</span>
         <span class="n">recurrent_weights</span><span class="p">,</span>
-        <span class="n">parameters</span><span class="p">,</span>
+        <span class="n">p</span><span class="p">,</span>
         <span class="n">dt</span><span class="p">,</span>
     <span class="p">)</span></div>
 
@@ -83,7 +83,7 @@
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span><span class="p">,</span>
     <span class="n">g_coupling</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">parameters</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Computes a single euler-integration feed forward step of a LIF</span>
@@ -99,7 +99,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">v_new</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">g_coupling</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">lif_feed_forward_step</span><span class="p">(</span>
-        <span class="n">input_tensor</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">v_new</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">),</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">dt</span>
+        <span class="n">input_tensor</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">v_new</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span>
     <span class="p">)</span></div>
 </pre></div>
 
