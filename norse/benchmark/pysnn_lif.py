@@ -4,7 +4,6 @@ import torch
 from pysnn.connection import Linear
 from pysnn.encoding import PoissonEncoder
 from pysnn.neuron import LIFNeuron, Input
-from pysnn.network import SNNNetwork
 
 from benchmark import BenchmarkParameters
 
