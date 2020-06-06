@@ -16,7 +16,7 @@ def lif_mc_step(
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
     g_coupling: torch.Tensor,
-    parameters: LIFParameters = LIFParameters(),
+    p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFState]:
     """Computes a single euler-integration step of a LIF multi-compartment
@@ -37,7 +37,7 @@ def lif_mc_step(
         LIFState(state.z, v_new, state.i),
         input_weights,
         recurrent_weights,
-        parameters,
+        p,
         dt,
     )
 
@@ -46,7 +46,7 @@ def lif_mc_feed_forward_step(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState,
     g_coupling: torch.Tensor,
-    parameters: LIFParameters = LIFParameters(),
+    p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
     """Computes a single euler-integration feed forward step of a LIF
@@ -62,5 +62,5 @@ def lif_mc_feed_forward_step(
     """
     v_new = state.v + dt * torch.nn.functional.linear(state.v, g_coupling)
     return lif_feed_forward_step(
-        input_tensor, LIFFeedForwardState(v_new, state.i), parameters, dt
+        input_tensor, LIFFeedForwardState(v_new, state.i), p, dt
     )

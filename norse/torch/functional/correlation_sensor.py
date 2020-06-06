@@ -45,20 +45,18 @@ def correlation_sensor_step(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,
     state: CorrelationSensorState,
-    parameters: CorrelationSensorParameters = CorrelationSensorParameters(),
+    p: CorrelationSensorParameters = CorrelationSensorParameters(),
     dt: float = 0.001,
 ) -> CorrelationSensorState:
     """Euler integration step of an idealized version of the correlation sensor
     as it is present on the BrainScaleS 2 chips.
     """
-    dcorrelation_trace = dt * parameters.tau_c_inv * (-state.correlation_trace)
+    dcorrelation_trace = dt * p.tau_c_inv * (-state.correlation_trace)
     correlation_trace_decayed = (
         state.correlation_trace + (1 - state.post_pre) * dcorrelation_trace
     )
 
-    danti_correlation_trace = (
-        dt * parameters.tau_ac_inv * (-state.anti_correlation_trace)
-    )
+    danti_correlation_trace = dt * p.tau_ac_inv * (-state.anti_correlation_trace)
     anti_correlation_trace_decayed = (
         state.anti_correlation_trace + state.post_pre * danti_correlation_trace
     )
@@ -68,11 +66,9 @@ def correlation_sensor_step(
     post_spike_mask = post_mask(state.post_pre, z_post)
 
     post_pre_new = post_pre_update(state.post_pre, post_spike_mask, pre_spike_mask)
-    correlation_trace_new = correlation_trace_decayed + (
-        parameters.eta_p * pre_spike_mask
-    )
+    correlation_trace_new = correlation_trace_decayed + (p.eta_p * pre_spike_mask)
     anti_correlation_trace_new = (
-        anti_correlation_trace_decayed + parameters.eta_m * post_spike_mask
+        anti_correlation_trace_decayed + p.eta_m * post_spike_mask
     )
 
     return CorrelationSensorState(

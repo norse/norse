@@ -66,7 +66,7 @@ class Policy(torch.nn.Module):
         self.lif = LIFCell(
             2 * self.state_dim,
             self.hidden_features,
-            parameters=LIFParameters(method="super", alpha=100.0),
+            p=LIFParameters(method="super", alpha=100.0),
         )
         self.dropout = torch.nn.Dropout(p=0.5)
         self.readout = LICell(self.hidden_features, self.output_features)
@@ -119,7 +119,7 @@ class LSNNPolicy(torch.nn.Module):
         self.lif_layer = LSNNCell(
             2 * self.state_dim,
             self.hidden_features,
-            parameters=LSNNParameters(model, alpha=100.0),
+            p=LSNNParameters(model, alpha=100.0),
         )
         self.dropout = torch.nn.Dropout(p=0.5)
         self.readout = LICell(self.hidden_features, self.output_features)

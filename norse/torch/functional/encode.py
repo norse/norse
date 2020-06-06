@@ -14,7 +14,7 @@ from .lif import lif_current_encoder, LIFParameters
 def constant_current_lif_encode(
     input_current: torch.Tensor,
     seq_length: int,
-    parameters: LIFParameters = LIFParameters(),
+    p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> torch.Tensor:
     """
@@ -35,7 +35,7 @@ def constant_current_lif_encode(
     Parameters:
         input_current (torch.Tensor): The input tensor, representing LIF current
         seq_length (int): The number of iterations to simulate
-        parameters (LIFParameters): Initial neuron parameters. Defaults to zero.
+        p (LIFParameters): Initial neuronp. Defaults to zero.
         dt (float): Time delta between simulation steps
 
     Returns:
@@ -46,9 +46,7 @@ def constant_current_lif_encode(
     spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
 
     for ts in range(seq_length):
-        z, v = lif_current_encoder(
-            input_current=input_current, voltage=v, parameters=parameters, dt=dt
-        )
+        z, v = lif_current_encoder(input_current=input_current, voltage=v, p=p, dt=dt)
         spikes[ts] = z
     return spikes
 
@@ -181,7 +179,7 @@ def signed_poisson_encode(
 def spike_latency_lif_encode(
     input_current: torch.Tensor,
     seq_length: int,
-    parameters: LIFParameters = LIFParameters(),
+    p: LIFParameters = LIFParameters(),
     dt=0.001,
 ) -> torch.Tensor:
     """Encodes an input value by the time the first spike occurs.
@@ -191,7 +189,7 @@ def spike_latency_lif_encode(
     Parameters:
         input_current (torch.Tensor): Input current to encode (needs to be positive).
         sequence_length (int): Number of time steps in the resulting spike train.
-        parameters (LIFParameters): Parameters of the LIF neuron model.
+        p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
     """
     voltage = torch.zeros_like(input_current)
@@ -201,7 +199,7 @@ def spike_latency_lif_encode(
 
     for _ in range(seq_length):
         z, voltage = lif_current_encoder(
-            input_current=input_current, voltage=voltage, parameters=parameters, dt=dt
+            input_current=input_current, voltage=voltage, p=p, dt=dt
         )
         spikes += [torch.where(mask, torch.zeros_like(z), z)]
         mask[z.bool()] = 1

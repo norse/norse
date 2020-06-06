@@ -36,7 +36,7 @@ def stdp_sensor_step(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,
     state: STDPSensorState,
-    parameters: STDPSensorParameters = STDPSensorParameters(),
+    p: STDPSensorParameters = STDPSensorParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, STDPSensorState]:
     """Event driven STDP rule.
@@ -48,14 +48,14 @@ def stdp_sensor_step(
         p (STDPSensorParameters): STDP sensor parameters
         dt (float): integration time step
     """
-    da_pre = parameters.tau_c_inv * (-state.a_pre)
+    da_pre = p.tau_c_inv * (-state.a_pre)
     a_pre_decayed = state.a_pre + dt * da_pre
 
-    da_post = parameters.tau_c_inv * (-state.a_post)
+    da_post = p.tau_c_inv * (-state.a_post)
     a_post_decayed = state.a_post + dt * da_post
 
-    a_pre_new = a_pre_decayed + z_pre * parameters.eta_p
-    a_post_new = a_post_decayed + z_post * parameters.eta_m
+    a_pre_new = a_pre_decayed + z_pre * p.eta_p
+    a_post_new = a_post_decayed + z_post * p.eta_m
 
     dw = z_pre * a_pre_new + z_post * a_post_new
     return dw, STDPSensorState(a_pre_new, a_post_new)

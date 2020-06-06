@@ -18,14 +18,14 @@ class ConvNet(torch.nn.Module):
         self.device = device
         self.lif0 = LIFFeedForwardCell(
             (20, feature_size - 4, feature_size - 4),
-            parameters=LIFParameters(method=method, alpha=100.0),
+            p=LIFParameters(method=method, alpha=100.0),
         )
         self.lif1 = LIFFeedForwardCell(
             (50, int((feature_size - 4) / 2) - 4, int((feature_size - 4) / 2) - 4),
-            parameters=LIFParameters(method=method, alpha=100.0),
+            p=LIFParameters(method=method, alpha=100.0),
         )
         self.lif2 = LIFFeedForwardCell(
-            (500,), parameters=LIFParameters(method=method, alpha=100.0)
+            (500,), p=LIFParameters(method=method, alpha=100.0)
         )
         self.dtype = dtype
 
@@ -70,14 +70,14 @@ class ConvNet4(torch.nn.Module):
         self.fc1 = torch.nn.Linear(self.features * self.features * 64, 1024)
         self.lif0 = LIFFeedForwardCell(
             (32, feature_size - 4, feature_size - 4),
-            parameters=LIFParameters(method=method, alpha=100.0),
+            p=LIFParameters(method=method, alpha=100.0),
         )
         self.lif1 = LIFFeedForwardCell(
             (64, int((feature_size - 4) / 2) - 4, int((feature_size - 4) / 2) - 4),
-            parameters=LIFParameters(method=method, alpha=100.0),
+            p=LIFParameters(method=method, alpha=100.0),
         )
         self.lif2 = LIFFeedForwardCell(
-            (1024,), parameters=LIFParameters(method=method, alpha=100.0)
+            (1024,), p=LIFParameters(method=method, alpha=100.0)
         )
         self.out = LICell(1024, 10)
         self.device = device

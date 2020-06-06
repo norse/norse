@@ -29,7 +29,7 @@ def lif_correlation_step(
     state: LIFCorrelationState,
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
-    parameters: LIFCorrelationParameters = LIFCorrelationParameters(),
+    p: LIFCorrelationParameters = LIFCorrelationParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFCorrelationState]:
     z_new, s_new = lif_step(
@@ -37,7 +37,7 @@ def lif_correlation_step(
         state.lif_state,
         input_weights,
         recurrent_weights,
-        parameters.lif_parameters,
+        p.lif_parameters,
         dt,
     )
 
@@ -45,7 +45,7 @@ def lif_correlation_step(
         z_pre=input_tensor,
         z_post=z_new,
         state=state.input_correlation_state,
-        parameters=parameters.input_correlation_parameters,
+        p=p.input_correlation_parameters,
         dt=dt,
     )
 
@@ -53,7 +53,7 @@ def lif_correlation_step(
         z_pre=state.lif_state.z,
         z_post=z_new,
         state=state.recurrent_correlation_state,
-        parameters=parameters.recurrent_correlation_parameters,
+        p=p.recurrent_correlation_parameters,
         dt=dt,
     )
     return (

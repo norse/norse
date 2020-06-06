@@ -47,7 +47,7 @@ class LSNNCell(torch.nn.Module):
         s (LSNNState): current state of the lsnn unit
         input_weights (torch.Tensor): synaptic weights for input spikes
         recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
-        parameters (LSNNParameters): parameters of the lsnn unit
+        p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use
     """
 
@@ -55,7 +55,7 @@ class LSNNCell(torch.nn.Module):
         self,
         input_features,
         output_features,
-        parameters: LSNNParameters = LSNNParameters(),
+        p: LSNNParameters = LSNNParameters(),
         dt: float = 0.001,
     ):
         super(LSNNCell, self).__init__()
@@ -67,7 +67,7 @@ class LSNNCell(torch.nn.Module):
         )
         self.input_features = input_features
         self.output_features = output_features
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
@@ -87,7 +87,7 @@ class LSNNCell(torch.nn.Module):
             state,
             self.input_weights,
             self.recurrent_weights,
-            parameters=self.parameters,
+            p=self.p,
             dt=self.dt,
         )
 
@@ -157,16 +157,14 @@ class LSNNFeedForwardCell(torch.nn.Module):
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
         s (LSNNFeedForwardState): current state of the lsnn unit
-        parameters (LSNNParameters): parameters of the lsnn unit
+        p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use
     """
 
-    def __init__(
-        self, shape, parameters: LSNNParameters = LSNNParameters(), dt: float = 0.001
-    ):
+    def __init__(self, shape, p: LSNNParameters = LSNNParameters(), dt: float = 0.001):
         super(LSNNFeedForwardCell, self).__init__()
         self.shape = shape
-        self.parameters = parameters
+        self.p = p
         self.dt = dt
 
     def initial_state(
@@ -182,6 +180,4 @@ class LSNNFeedForwardCell(torch.nn.Module):
     def forward(
         self, input_tensor: torch.Tensor, state: LSNNFeedForwardState
     ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
-        return lsnn_feed_forward_step(
-            input_tensor, state, parameters=self.parameters, dt=self.dt
-        )
+        return lsnn_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)
