@@ -18,7 +18,7 @@ A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) wit
     <a href="https://www.codacy.com/gh/norse/norse?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=norse/norse&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/a9ab846fc6114afda4320badcb8a69c2"/></a>
 </p>
 
-The purpose of this library is to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
+This library aims to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
 Norse expands [PyTorch](https://pytorch.org/) with primitives for bio-inspired neural components, 
 bringing you two advantages: a modern and proven infrastructure based on PyTorch and deep learning-compatible spiking neural network components.
 
@@ -102,11 +102,24 @@ data  = torch.zeros(2, 5, 2)
 output, new_state = layer.forward(data, state) 
 ```
 
-## 3. Similar work
+## 3. Why Norse? 
 
-A number of projects exist that attempts to leverage the strength of bio-inspired neural networks, however none of them are fully integrated with modern machine-learning libraries such as Torch or [Tensorflow](https://www.tensorflow.org/). 
-Norse was created for two reasons: to 1) apply findings from decades of research in practical settings, and to 2) accelerate our own research within bio-inspired learning.
+Norse was created for two reasons: to 1) apply findings from decades of research in practical settings
+and to 2) accelerate our own research within bio-inspired learning.
 
+A number of projects exist that attempts to leverage the strength of bio-inspired neural networks, 
+however only few of them integrates with modern machine-learning libraries such as 
+Torch or [Tensorflow](https://www.tensorflow.org/) and many of them are stale. 
+
+However, we are passionate about Norse and we believe it has significant potential outside our own research.
+Primarily because we strive to follow best practices and that we promise to maintain this library for the
+simple reason that we depend on it ourselves.
+Second, we have implemented a large number of neuron models, synapse dynamics, encodding and decoding algorithms, 
+dataset integrations, tasks, and examples. This will likely continue as we expand our work.
+Finally, we have worked---and are working---to keep Norse as performant as possible. 
+Preliminary benchmarks suggests that [Norse is leading the field for single-layer networks](https://github.com/norse/norse/tree/master/norse/benchmark).
+
+## 4. Similar work
 The below list of projects serves to illustrate the state of the art, while explaining our own incentives to create and use norse.
 
 * [BindsNET](https://github.com/BindsNET/bindsnet) also builds on PyTorch and is explicitly targeted at machine learning tasks. It implements a Network abstraction with the typical 'node' and 'connection' notions common in spiking neural network simulators like nest.
@@ -121,17 +134,17 @@ The below list of projects serves to illustrate the state of the art, while expl
 * [SpyTorch](https://github.com/fzenke/spytorch) presents a set of tutorials for training SNNs with the surrogate gradient approach SuperSpike by [F. Zenke, and S. Ganguli (2017)](https://arxiv.org/abs/1705.11146). Norse [implements SuperSpike](https://github.com/norse/norse/blob/master/norse/torch/functional/superspike.py), but allows for other surrogate gradients and training approaches.
 * [s2net](https://github.com/romainzimmer/s2net) is based on the implementation presented in [SpyTorch](https://github.com/fzenke/spytorch), but implements convolutional layers as well. It also contains a demonstration how to use those primitives to train a model on the [Google Speech Commands dataset](https://arxiv.org/abs/1804.03209).
 
-## 4. Contributing
+## 5. Contributing
 
 Please refer to the [contributing.md](contributing.md)
 
-## 5. Credits
+## 6. Credits
 
 Norse is created by
 * [Christian Pehle](https://www.kip.uni-heidelberg.de/people/10110) (@GitHub [cpehle](https://github.com/cpehle/)), doctoral student at University of Heidelberg, Germany.
 * [Jens E. Pedersen](https://www.kth.se/profile/jeped) (@GitHub [jegp](https://github.com/jegp/)), doctoral student at KTH Royal Institute of Technology, Sweden.
 
 
-## 6. License
+## 7. License
 
 LGPLv3. See [LICENSE](LICENSE) for license details.
