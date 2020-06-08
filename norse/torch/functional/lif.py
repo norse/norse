@@ -11,12 +11,12 @@ class LIFParameters(NamedTuple):
 
     Parameters:
         tau_syn_inv (torch.Tensor): inverse synaptic time
-                                    constant (:math:`1/\\tau_\\text{syn}`)
+                                    constant (:math:`1/\\tau_\\text{syn}`) in 1/ms
         tau_mem_inv (torch.Tensor): inverse membrane time
-                                    constant (:math:`1/\\tau_\\text{mem}`)
-        v_leak (torch.Tensor): leak potential
-        v_th (torch.Tensor): threshold potential
-        v_reset (torch.Tensor): reset potential
+                                    constant (:math:`1/\\tau_\\text{mem}`) in 1/ms
+        v_leak (torch.Tensor): leak potential in mV
+        v_th (torch.Tensor): threshold potential in mV
+        v_reset (torch.Tensor): reset potential in mV
         method (str): method to determine the spike threshold
                       (relevant for surrogate gradients)
         alpha (float): hyper parameter to use in surrogate gradient computation
@@ -31,6 +31,11 @@ class LIFParameters(NamedTuple):
     alpha: float = 0.0
 
 
+default_bio_parameters = LIFParameters(
+    tau_syn_inv=1 / 0.5, tau_mem_inv=1 / 20.0, v_leak=-65.0, v_th=-50.0, v_reset=-65.0,
+)
+
+
 class LIFState(NamedTuple):
     """State of a LIF neuron
 
@@ -43,6 +48,9 @@ class LIFState(NamedTuple):
     z: torch.Tensor
     v: torch.Tensor
     i: torch.Tensor
+
+
+default_bio_initial_state = LIFState(z=0.0, v=-65.0, i=0.0)
 
 
 class LIFFeedForwardState(NamedTuple):
