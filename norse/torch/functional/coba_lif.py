@@ -21,6 +21,9 @@ class CobaLIFState(NamedTuple):
     g_i: torch.Tensor
 
 
+default_bio_state = CobaLIFState(z=0.0, v=-65.0, g_e=0.0, g_i=0.0)
+
+
 class CobaLIFParameters(NamedTuple):
     """Parameters of conductance based LIF neuron.
 
@@ -50,8 +53,19 @@ class CobaLIFParameters(NamedTuple):
     v_rest: torch.Tensor = torch.as_tensor(-20)
     v_reset: torch.Tensor = torch.as_tensor(-70)
     v_thresh: torch.Tensor = torch.as_tensor(-10)
-    method: str = "heaviside"
-    alpha: float = 0.0
+    method: str = "super"
+    alpha: float = 100.0
+
+
+default_bio_parameters = CobaLIFParameters(
+    tau_syn_exc_inv=1 / 0.3,
+    tau_syn_inh_inv=1 / 0.5,
+    e_rev_E=0.0,
+    e_rev_I=-70.0,
+    v_thresh=-50.0,
+    v_reset=-65.0,
+    v_rest=-65.0,
+)
 
 
 def coba_lif_step(
