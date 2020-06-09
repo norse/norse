@@ -66,7 +66,9 @@ class Net(torch.nn.Module):
         s2 = self.lif2.initial_state(
             seq_batch_size, device=self.device, dtype=self.dtype
         )
-        so = self.out.initial_state(seq_batch_size, device=self.device, dtype=self.dtype)
+        so = self.out.initial_state(
+            seq_batch_size, device=self.device, dtype=self.dtype
+        )
 
         voltages = torch.zeros(
             seq_length, seq_batch_size, 10, device=self.device, dtype=self.dtype
