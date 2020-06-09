@@ -51,10 +51,14 @@ class LICell(torch.nn.Module):
         self.dt = dt
         self.output_features = output_features
 
-    def initial_state(self, device, dtype=torch.float) -> LIState:
+    def initial_state(self, batch_size, device, dtype=torch.float) -> LIState:
         return LIState(
-            v=torch.zeros(self.output_features, device=device, dtype=dtype),
-            i=torch.zeros(self.output_features, device=device, dtype=dtype),
+            v=torch.zeros(
+                (batch_size, self.output_features), device=device, dtype=dtype
+            ),
+            i=torch.zeros(
+                (batch_size, self.output_features), device=device, dtype=dtype
+            ),
         )
 
     def forward(

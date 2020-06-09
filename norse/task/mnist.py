@@ -11,9 +11,8 @@ import matplotlib.pyplot as plt
 import torch
 import torchvision
 
-from torch.utils.tensorboard import SummaryWriter
 from norse.torch.models.conv import ConvNet4
-from norse.torch.module.lif import LIFConstantCurrentEncoder
+from norse.torch.module.encode import ConstantCurrentLIFEncoder
 
 FLAGS = flags.FLAGS
 
@@ -68,9 +67,7 @@ class LIFConvNet(torch.nn.Module):
         only_first_spike=False,
     ):
         super(LIFConvNet, self).__init__()
-        self.constant_current_encoder = LIFConstantCurrentEncoder(
-            seq_length=seq_length, device=device
-        )
+        self.constant_current_encoder = ConstantCurrentLIFEncoder(seq_length=seq_length)
         self.only_first_spike = only_first_spike
         self.input_features = input_features
         self.rsnn = ConvNet4(device=device, method=model)
@@ -79,7 +76,7 @@ class LIFConvNet(torch.nn.Module):
 
     def forward(self, x):
         batch_size = x.shape[0]
-        _, x = self.constant_current_encoder(
+        x = self.constant_current_encoder(
             x.view(-1, self.input_features) * FLAGS.input_scale
         )
         if self.only_first_spike:
@@ -213,8 +210,13 @@ def load(path, model, optimizer):
     return model, optimizer
 
 
-def main():
-    writer = SummaryWriter()
+def main(argv):
+    try:
+        from torch.utils.tensorboard import SummaryWriter
+
+        writer = SummaryWriter()
+    except ImportError:
+        writer = None
 
     torch.manual_seed(FLAGS.random_seed)
 
@@ -329,7 +331,8 @@ def main():
         optimizer=optimizer,
         is_best=accuracy > max_accuracy,
     )
-    writer.close()
+    if writer:
+        writer.close()
 
 
 if __name__ == "__main__":
