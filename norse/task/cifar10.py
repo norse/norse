@@ -16,8 +16,6 @@ import matplotlib.pyplot as plt
 from norse.torch.models.conv import ConvNet, ConvNet4
 from norse.torch.module.if_current_encoder import IFConstantCurrentEncoder
 
-from torch.utils.tensorboard import SummaryWriter
-
 FLAGS = flags.FLAGS
 
 flags.DEFINE_bool(
@@ -106,12 +104,11 @@ def poisson_train(images, seq_length, rel_fmax=0.2):
     return (torch.rand(seq_length, *images.shape).float() < rel_fmax * images).float()
 
 
-def signed_poisson_train(images, seq_length, device, rel_fmax=0.2):
+def signed_poisson_train(images, seq_length, rel_fmax=0.2):
     return (
         torch.sign(images)
         * (
-            torch.rand(seq_length, *images.shape).float().to(device)
-            < rel_fmax * torch.abs(images)
+            torch.rand(seq_length, *images.shape).float() < rel_fmax * torch.abs(images)
         ).float()
     )
 
@@ -252,8 +249,13 @@ def load(path, model, optimizer, device):
     return model, optimizer
 
 
-def main():
-    writer = SummaryWriter()
+def main(args):
+    try:
+        from torch.utils.tensorboard import SummaryWriter
+
+        writer = SummaryWriter()
+    except ImportError:
+        writer = None
 
     torch.manual_seed(FLAGS.random_seed)
 
@@ -280,10 +282,10 @@ def main():
         return x
 
     def poisson_encoder(x):
-        return poisson_train(x, FLAGS.seq_length, device)
+        return poisson_train(x, seq_length=FLAGS.seq_length)
 
     def signed_poisson_encoder(x):
-        return signed_poisson_train(x, FLAGS.seq_length, device)
+        return signed_poisson_train(x, seq_length=FLAGS.seq_length)
 
     def signed_current_encoder(x):
         z, _ = constant_current_encoder(torch.abs(x))
@@ -423,7 +425,8 @@ def main():
 
     logging.info(f"output saved to {rundir}")
     logging.info(f"{start - stop}")
-    writer.close()
+    if writer:
+        writer.close()
 
 
 if __name__ == "__main__":

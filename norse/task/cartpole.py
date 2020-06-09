@@ -12,7 +12,8 @@ import os
 import gym
 
 from norse.torch.functional.lif import LIFParameters
-from norse.torch.module.lif import LIFConstantCurrentEncoder, LIFCell
+from norse.torch.module.encode import ConstantCurrentLIFEncoder
+from norse.torch.module.lif import LIFCell
 from norse.torch.module.lsnn import LSNNCell, LSNNParameters
 from norse.torch.module.leaky_integrator import LICell
 
@@ -60,9 +61,7 @@ class Policy(torch.nn.Module):
         self.hidden_features = 128
         self.output_features = 2
         self.device = device
-        self.constant_current_encoder = LIFConstantCurrentEncoder(
-            40, device=self.device
-        )
+        self.constant_current_encoder = ConstantCurrentLIFEncoder(40)
         self.lif = LIFCell(
             2 * self.state_dim,
             self.hidden_features,
@@ -77,8 +76,8 @@ class Policy(torch.nn.Module):
     def forward(self, x):
         scale = 50
         x = x.to(self.device)
-        _, x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
-        _, x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
+        x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
+        x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
         x = torch.cat([x_pos, x_neg], dim=2)
 
         seq_length, batch_size, _ = x.shape
@@ -113,9 +112,7 @@ class LSNNPolicy(torch.nn.Module):
         self.output_features = 2
         self.device = device
         # self.affine1 = torch.nn.Linear(self.state_dim, self.input_features)
-        self.constant_current_encoder = LIFConstantCurrentEncoder(
-            40, device=self.device
-        )
+        self.constant_current_encoder = ConstantCurrentLIFEncoder(40)
         self.lif_layer = LSNNCell(
             2 * self.state_dim,
             self.hidden_features,
@@ -185,7 +182,7 @@ def finish_episode(policy, optimizer):
     del policy.saved_log_probs[:]
 
 
-def main():
+def main(args):
     running_reward = 10
     torch.manual_seed(FLAGS.random_seed)
     random.seed(FLAGS.random_seed)
