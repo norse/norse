@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.functional.tsodyks_makram module &#8212; norse 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="norse.torch.models package" href="norse.torch.models.html" />
+    <link rel="prev" title="norse.torch.functional.threshold module" href="norse.torch.functional.threshold.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-norse.torch.functional.tsodyks_makram">
+<span id="norse-torch-functional-tsodyks-makram-module"></span><h1>norse.torch.functional.tsodyks_makram module<a class="headerlink" href="#module-norse.torch.functional.tsodyks_makram" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="norse.torch.functional.tsodyks_makram.TsodyksMakramParameters">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.tsodyks_makram.</code><code class="sig-name descname">TsodyksMakramParameters</code><a class="reference internal" href="../_modules/norse/torch/functional/tsodyks_makram.html#TsodyksMakramParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>Parameters of the Tsodyks-Makram Model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tau_f_inv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – facilitation time constant (in ms).</p></li>
+<li><p><strong>tau_s_inv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – synaptic time constant (in ms).</p></li>
+<li><p><strong>tau_d_inv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – depressing time constant (in ms).</p></li>
+<li><p><strong>U</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – size of the jump in the utilization variable.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Create new instance of TsodyksMakramParameters(tau_f_inv, tau_s_inv, tau_d_inv, U)</p>
+<dl class="attribute">
+<dt id="norse.torch.functional.tsodyks_makram.TsodyksMakramParameters.U">
+<code class="sig-name descname">U</code><a class="headerlink" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramParameters.U" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.tsodyks_makram.TsodyksMakramParameters.tau_d_inv">
+<code class="sig-name descname">tau_d_inv</code><a class="headerlink" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramParameters.tau_d_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.tsodyks_makram.TsodyksMakramParameters.tau_f_inv">
+<code class="sig-name descname">tau_f_inv</code><a class="headerlink" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramParameters.tau_f_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.tsodyks_makram.TsodyksMakramParameters.tau_s_inv">
+<code class="sig-name descname">tau_s_inv</code><a class="headerlink" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramParameters.tau_s_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="norse.torch.functional.tsodyks_makram.TsodyksMakramState">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.tsodyks_makram.</code><code class="sig-name descname">TsodyksMakramState</code><a class="reference internal" href="../_modules/norse/torch/functional/tsodyks_makram.html#TsodyksMakramState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>State of the Tsodyks-Makram Model, note
+that we are tracking the input current state separately.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+4ec86ca ))"><em>torch.Tensor</em></a>) – utilization parameter.</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+4ec86ca ))"><em>torch.Tensor</em></a>) – fraction of remaining available resources.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Create new instance of TsodyksMakramState(u, x)</p>
+<dl class="attribute">
+<dt id="norse.torch.functional.tsodyks_makram.TsodyksMakramState.u">
+<code class="sig-name descname">u</code><a class="headerlink" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramState.u" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.tsodyks_makram.TsodyksMakramState.x">
+<code class="sig-name descname">x</code><a class="headerlink" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramState.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.functional.tsodyks_makram.stp_step">
+<code class="sig-prename descclassname">norse.torch.functional.tsodyks_makram.</code><code class="sig-name descname">stp_step</code><span class="sig-paren">(</span><em class="sig-param">z</em>, <em class="sig-param">s</em>, <em class="sig-param">p</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/tsodyks_makram.html#stp_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.tsodyks_makram.stp_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Euler integration step for Tsodyks Makram model of STP.</p>
+<p>Reference: <a class="reference external" href="http://www.scholarpedia.org/article/Short-term_synaptic_plasticity">http://www.scholarpedia.org/article/Short-term_synaptic_plasticity</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+4ec86ca ))"><em>torch.Tensor</em></a>) – Input spikes</p></li>
+<li><p><strong>s</strong> (<a class="reference internal" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramState" title="norse.torch.functional.tsodyks_makram.TsodyksMakramState"><em>TsodyksMakramState</em></a>) – State of the Tsodyks-Makram model</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramParameters" title="norse.torch.functional.tsodyks_makram.TsodyksMakramParameters"><em>TsodyksMakramParameters</em></a>) – Parameters of the Tsodyks-Makram model</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Euler integration timestep</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.6.0a0+4ec86ca ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.tsodyks_makram.TsodyksMakramState" title="norse.torch.functional.tsodyks_makram.TsodyksMakramState"><code class="xref py py-class docutils literal notranslate"><span class="pre">TsodyksMakramState</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">norse</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spiking.html">Introduction to spikes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="norse.torch.html">norse.torch package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="norse.torch.functional.html">norse.torch.functional package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.module.html">norse.torch.module package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="norse.torch.html">norse.torch package</a><ul>
+  <li><a href="norse.torch.functional.html">norse.torch.functional package</a><ul>
+      <li>Previous: <a href="norse.torch.functional.threshold.html" title="previous chapter">norse.torch.functional.threshold module</a></li>
+      <li>Next: <a href="norse.torch.models.html" title="next chapter">norse.torch.models package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/auto_api/norse.torch.functional.tsodyks_makram.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
