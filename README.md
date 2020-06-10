@@ -30,7 +30,7 @@ Norse comes packed with a few example tasks, such as [MNIST](https://en.wikipedi
 ```bash
 python -m norse.task.mnist
 ```
-You can also run one of the [jupyter notebooks](notebooks/) on google collab.
+You can also run one of the [jupyter notebooks](https://github.com/norse/notebooks/tree/master/notebooks) on google collab.
 
 
 ## 2. Getting Started
@@ -38,7 +38,7 @@ You can also run one of the [jupyter notebooks](notebooks/) on google collab.
 Norse is a machine learning library that builds on the [PyTorch](https://pytorch.org/) infrastructure. 
 While we have a few tasks included, it is meant to be used in designing and evaluating experiments involving biologically realistic neural networks.
 
-This readme explains how to install norse and apply it in your own experiments. If you just want to try out the library, perhaps the best option is to run one of the [jupyter notebooks](notebooks/) on google collab. 
+This readme explains how to install norse and apply it in your own experiments. If you just want to try out the library, perhaps the best option is to run one of the [jupyter notebooks](https://github.com/norse/notebooks/tree/master/notebooks) on google collab. 
 
 ### 2.1. Installation
 
@@ -85,7 +85,7 @@ You can execute them by invoking the `norse` module from the base directory.
     ```
     python -m norse.task.cartpole
     ```
-    
+
 The default choices of hyperparameters are meant as reasonable starting points. More information is available when typing: `python -m norse.task.<task> --help`, where `<task>` is the above listed task names.
 
 ### 2.3. Example on using the library: Long short-term spiking neural networks
@@ -95,21 +95,21 @@ from norse.torch.module import LSNNLayer, LSNNCell
 # LSNNCell with 2 inputs and 10 outputs
 layer = LSNNLayer(LSNNCell, 2, 10)
 # 5 batch size running on CPU
-state = layer.initial_state(5, "cpu") 
+state = layer.initial_state(5, "cpu")
 # Generate data of shape [5, 2, 10]
 data  = torch.zeros(2, 5, 2)
 # Tuple of output data and layer state
-output, new_state = layer.forward(data, state) 
+output, new_state = layer.forward(data, state)
 ```
 
-## 3. Why Norse? 
+## 3. Why Norse?
 
 Norse was created for two reasons: to 1) apply findings from decades of research in practical settings
 and to 2) accelerate our own research within bio-inspired learning.
 
 A number of projects exist that attempts to leverage the strength of bio-inspired neural networks, 
 however only few of them integrates with modern machine-learning libraries such as 
-Torch or [Tensorflow](https://www.tensorflow.org/) and many of them are stale. 
+Torch or [Tensorflow](https://www.tensorflow.org/) and many of them are stale.
 
 However, we are passionate about Norse and we believe it has significant potential outside our own research.
 Primarily because we strive to follow best practices and that we promise to maintain this library for the
