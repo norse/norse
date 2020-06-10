@@ -58,6 +58,9 @@
     <span class="n">g_i</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
 
 
+<span class="n">default_bio_state</span> <span class="o">=</span> <span class="n">CobaLIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">v</span><span class="o">=-</span><span class="mf">65.0</span><span class="p">,</span> <span class="n">g_e</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">g_i</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="CobaLIFParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.CobaLIFParameters">[docs]</a><span class="k">class</span> <span class="nc">CobaLIFParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Parameters of conductance based LIF neuron.</span>
 
@@ -87,8 +90,19 @@
     <span class="n">v_rest</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">v_reset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">)</span>
     <span class="n">v_thresh</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;heaviside&quot;</span>
-    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;super&quot;</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.0</span></div>
+
+
+<span class="n">default_bio_parameters</span> <span class="o">=</span> <span class="n">CobaLIFParameters</span><span class="p">(</span>
+    <span class="n">tau_syn_exc_inv</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">tau_syn_inh_inv</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">e_rev_E</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">e_rev_I</span><span class="o">=-</span><span class="mf">70.0</span><span class="p">,</span>
+    <span class="n">v_thresh</span><span class="o">=-</span><span class="mf">50.0</span><span class="p">,</span>
+    <span class="n">v_reset</span><span class="o">=-</span><span class="mf">65.0</span><span class="p">,</span>
+    <span class="n">v_rest</span><span class="o">=-</span><span class="mf">65.0</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="coba_lif_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.coba_lif_step">[docs]</a><span class="k">def</span> <span class="nf">coba_lif_step</span><span class="p">(</span>
