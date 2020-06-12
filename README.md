@@ -42,7 +42,7 @@ This readme explains how to install norse and apply it in your own experiments. 
 
 ### 2.1. Installation
 
-Note that this guide assumes you are on a terminal friendly environment with access to the `pip`, `python` and `git` commands. Python version 3.7+ is required.
+Note that this guide assumes you are in a terminal friendly environment with access to the `pip`, `python` and `git` commands. Python version 3.7+ is required.
 
 #### 2.1.1. Installing from source
 
@@ -64,8 +64,7 @@ pip install -e .
 pip install norse
 ```
 
-
-The primary dependencies of this project are [torch](https://pytorch.org/), [tensorboard](https://www.tensorflow.org/tensorboard/) and [OpenAI gym](https://github.com/openai/gym).
+The primary dependencies of this project are [torch](https://pytorch.org/) and [OpenAI gym](https://github.com/openai/gym).
 A more comprehensive list of dependencies can be found in [`requirements.txt`](requirements.txt).
 
 ### 2.2. Running examples
@@ -111,16 +110,16 @@ A number of projects exist that attempts to leverage the strength of bio-inspire
 however only few of them integrates with modern machine-learning libraries such as 
 Torch or [Tensorflow](https://www.tensorflow.org/) and many of them are stale.
 
-However, we are passionate about Norse and we believe it has significant potential outside our own research.
-Primarily because we strive to follow best practices and that we promise to maintain this library for the
+We are passionate about Norse and believe it has significant potential outside our own research.
+Primarily because we strive to follow best practices and promise to maintain this library for the
 simple reason that we depend on it ourselves.
 Second, we have implemented a large number of neuron models, synapse dynamics, encodding and decoding algorithms, 
 dataset integrations, tasks, and examples. This will likely continue as we expand our work.
 Finally, we have worked---and are working---to keep Norse as performant as possible. 
-Preliminary benchmarks suggests that [Norse is leading the field for single-layer networks](https://github.com/norse/norse/tree/master/norse/benchmark).
+Preliminary benchmarks suggest that [Norse is leading the field for single-layer networks](https://github.com/norse/norse/tree/master/norse/benchmark).
 
 ## 4. Similar work
-The below list of projects serves to illustrate the state of the art, while explaining our own incentives to create and use norse.
+The list of projects below serves to illustrate the state of the art, while explaining our own incentives to create and use norse.
 
 * [BindsNET](https://github.com/BindsNET/bindsnet) also builds on PyTorch and is explicitly targeted at machine learning tasks. It implements a Network abstraction with the typical 'node' and 'connection' notions common in spiking neural network simulators like nest.
 * [cuSNN](https://github.com/tudelft/cuSNN) is a C++ GPU-accelerated simulator for large-scale networks. The library focuses on CUDA and includes spike-time dependent plasicity (STDP) learning rules.
