@@ -8,7 +8,7 @@ pwd = path.abspath(path.dirname(__file__))
 with open(path.join(pwd, "requirements.txt")) as fp:
     install_requires = fp.read()
 
-with open(path.join(pwd, "Readme.md"), encoding="utf-8") as fp:
+with open(path.join(pwd, "README.md"), encoding="utf-8") as fp:
     readme_text = fp.read()
 
 setup(
