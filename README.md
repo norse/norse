@@ -107,16 +107,21 @@ Norse was created for two reasons: to 1) apply findings from decades of research
 and to 2) accelerate our own research within bio-inspired learning.
 
 A number of projects exist that attempts to leverage the strength of bio-inspired neural networks, 
-however only few of them integrates with modern machine-learning libraries such as 
-Torch or [Tensorflow](https://www.tensorflow.org/) and many of them are stale.
+however only few of them integrate with modern machine-learning libraries such as 
+PyTorch or [Tensorflow](https://www.tensorflow.org/) and many of them are no longer actively developed.
 
 We are passionate about Norse and believe it has significant potential outside our own research.
 Primarily because we strive to follow best practices and promise to maintain this library for the
 simple reason that we depend on it ourselves.
-Second, we have implemented a large number of neuron models, synapse dynamics, encodding and decoding algorithms, 
-dataset integrations, tasks, and examples. This will likely continue as we expand our work.
-Finally, we have worked---and are working---to keep Norse as performant as possible. 
-Preliminary benchmarks suggest that [Norse is leading the field for single-layer networks](https://github.com/norse/norse/tree/master/norse/benchmark).
+Second, we have implemented a number of neuron models, synapse dynamics, encodding and decoding algorithms, 
+dataset integrations, tasks, and examples. While we are far from the comprehensive coverage of 
+simulators used in computational neuroscience such as Brian, NEST or NEURON, we expect to close this gap as
+we continue to develop the library.
+
+Finally, we are working to keep Norse as performant as possible. 
+Preliminary benchmarks suggest that on small networks of up to ~10000 neurons [Norse achieves excellent performance](https://github.com/norse/norse/tree/master/norse/benchmark). We aim to create a library
+that scales from a single notebook to several nodes on a HPC cluster. We expect to be significantly
+helped in that endeavour by the preexisting investment in scalable training and inference with PyTorch.
 
 ## 4. Similar work
 The list of projects below serves to illustrate the state of the art, while explaining our own incentives to create and use norse.
