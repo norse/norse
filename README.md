@@ -113,7 +113,7 @@ PyTorch or [Tensorflow](https://www.tensorflow.org/) and many of them are no lon
 We are passionate about Norse and believe it has significant potential outside our own research.
 Primarily because we strive to follow best practices and promise to maintain this library for the
 simple reason that we depend on it ourselves.
-Second, we have implemented a number of neuron models, synapse dynamics, encodding and decoding algorithms, 
+Second, we have implemented a number of neuron models, synapse dynamics, encoding and decoding algorithms, 
 dataset integrations, tasks, and examples. While we are far from the comprehensive coverage of 
 simulators used in computational neuroscience such as Brian, NEST or NEURON, we expect to close this gap as
 we continue to develop the library.
