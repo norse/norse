@@ -120,7 +120,7 @@ we continue to develop the library.
 
 Finally, we are working to keep Norse as performant as possible. 
 Preliminary benchmarks suggest that on small networks of up to ~10000 neurons [Norse achieves excellent performance](https://github.com/norse/norse/tree/master/norse/benchmark). We aim to create a library
-that scales from a single notebook to several nodes on a HPC cluster. We expect to be significantly
+that scales from a single laptop to several nodes on a HPC cluster. We expect to be significantly
 helped in that endeavour by the preexisting investment in scalable training and inference with PyTorch.
 
 ## 4. Similar work
