@@ -67,7 +67,7 @@
             <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">x_data</span><span class="p">[</span><span class="n">mask</span> <span class="o">&lt;</span> <span class="n">prob</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-        <span class="n">y_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">y_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span>
 
     <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">500</span>
@@ -104,7 +104,7 @@
     <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span>
         <span class="nb">list</span><span class="p">(</span><span class="n">linear_update</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
         <span class="o">+</span> <span class="p">[</span><span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">]</span>
-        <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">p</span><span class="p">()),</span>
+        <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">parameters</span><span class="p">()),</span>
         <span class="n">lr</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">,</span>
     <span class="p">)</span>
 
