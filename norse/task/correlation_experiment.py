@@ -30,7 +30,7 @@ def main():
             requires_grad=False,
         )
         x_data[mask < prob] = 1.0
-        y_data = torch.from_numpy(1 * (np.random.rand(batch_size) < 0.5), device=device)
+        y_data = torch.tensor(1 * (np.random.rand(batch_size) < 0.5), device=device)
         return x_data, y_data
 
     seq_length = 500
@@ -67,7 +67,7 @@ def main():
     optimizer = torch.optim.Adam(
         list(linear_update.parameters())
         + [input_weights, recurrent_weights]
-        + list(out.p()),
+        + list(out.parameters()),
         lr=1e-1,
     )
 
