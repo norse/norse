@@ -6,6 +6,7 @@ from norse.task.speech_commands.model import LSTMModel
 
 BATCH_SIZE = 16
 LR = 0.0001
+DEVICE = "cuda"
 
 
 speech_commands = torchaudio.datasets.SPEECHCOMMANDS(root=".", download=True)
@@ -34,7 +35,7 @@ valid_loader = torch.utils.data.DataLoader(
     valid_speech_commands, batch_size=BATCH_SIZE, shuffle=True
 )
 
-model = LSTMModel(n_output=13)
+model = LSTMModel(n_output=13).to(DEVICE)
 loss_function = torch.nn.NLLLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=LR)
 
@@ -45,7 +46,9 @@ def test(model, test_loader, epoch):
     correct = 0
     with torch.no_grad():
         for data, target in test_loader:
-            # data, target = data.to(device), target.to(device)
+            data, target = data.to(DEVICE), target.to(DEVICE)
+            data = data.squeeze(1)
+            data = data.permute(2, 0, 1)
             output = model(data)
             test_loss += torch.nn.functional.nll_loss(
                 output, target, reduction="sum"
@@ -66,16 +69,17 @@ def test(model, test_loader, epoch):
 
 
 for epoch in range(10):
+    model.train()
     print(f"=========== {epoch} ===========")
     for idx, (data, target) in enumerate(train_loader):
         data = data.squeeze(1)
         data = data.permute(2, 0, 1)
         model.zero_grad()
-        out = model(data)
-        loss = loss_function(out, target)
+        out = model(data.to(DEVICE))
+        loss = loss_function(out, target.to(DEVICE))
         loss.backward()
         optimizer.step()
-        if idx % 100 == 0:
+        if idx % 1000 == 0:
             print(f"{idx} {loss.data}")
 
     test(model, valid_loader, epoch)
