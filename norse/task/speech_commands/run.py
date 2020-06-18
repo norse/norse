@@ -1,7 +1,7 @@
 import torch
 import torchaudio
 from norse.dataset.speech_commands import SpeechCommands, prepare_dataset
-from norse.task.speech_commands.model import LSTMModel
+from norse.task.speech_commands.model import LSTMModel, LIFModel
 
 
 BATCH_SIZE = 16
@@ -35,7 +35,7 @@ valid_loader = torch.utils.data.DataLoader(
     valid_speech_commands, batch_size=BATCH_SIZE, shuffle=True
 )
 
-model = LSTMModel(n_output=13).to(DEVICE)
+model = LIFModel(n_output=13).to(DEVICE)  # LSTMModel(n_output=13).to(DEVICE)
 loss_function = torch.nn.NLLLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=LR)
 
