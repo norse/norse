@@ -15,6 +15,9 @@ A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) wit
     <a href="https://pypi.org/project/norse/" alt="PyPi">
         <img src="https://img.shields.io/pypi/dm/norse" />
     </a>
+    <a href="https://discord.gg/3Xwerqg">
+        <img src="https://img.shields.io/discord/723215296399147089"
+            alt="chat on Discord"></a>
     <a href="https://www.codacy.com/gh/norse/norse?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=norse/norse&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/a9ab846fc6114afda4320badcb8a69c2"/></a>
 </p>
 
