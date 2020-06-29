@@ -100,18 +100,19 @@ class LSNNLayer(torch.nn.Module):
       >>> from norse.torch.module import LSNNLayer, LSNNCell
       >>> layer = LSNNLayer(LSNNCell, 2, 10)    // LSNNCell of shape 2 -> 10
       >>> state = layer.initial_state(5, "cpu") // 5 batch size running on CPU
-      >>> data  = torch.zeros(2, 5, 2)          // Data of shape [5, 2, 10]
+      >>> data  = torch.zeros(2, 5, 2)          // Arbitrary data
       >>> output, new_state = layer.forward(data, state)
 
     Parameters:
       cell (torch.nn.Module): the underling neuron module, uninitialized
       *cell_args: variable length input arguments for the underlying cell
                   constructor
+      **cell_kwargs: variable length key-value arguments for the underlying cell constructor
     """
 
-    def __init__(self, cell, *cell_args):
+    def __init__(self, cell, *cell_args, **cell_kwargs):
         super(LSNNLayer, self).__init__()
-        self.cell = cell(*cell_args)
+        self.cell = cell(*cell_args, **cell_kwargs)
 
     def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
         """Return the initial state of the LSNN layer, as given by the
@@ -121,10 +122,23 @@ class LSNNLayer(torch.nn.Module):
     def forward(
         self, input_tensor: torch.Tensor, state: LSNNState
     ) -> Tuple[torch.Tensor, LSNNState]:
+        """
+        Takes one step in the LSNN layer by simulating the layer for a number of timesteps.
+        Since the layer is recurrent, each simulation state (LSNNState) is used as the input for the next step.
+
+        The function expects inputs in the shape (simulation time steps, batch size, ...).
+
+        Parameters:
+        input_tensor (torch.Tensor): Input tensor with timesteps in the first dimension
+        state (LSNNState): The input LSNN state
+
+        Returns:
+        A tuple of 1) spikes from each timestep and 2) the LSNNState from the last timestep.
+        """
         inputs = input_tensor.unbind(0)
         outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
-        for i in range(len(inputs)):
-            out, state = self.cell(inputs[i], state)
+        for input_step in inputs:
+            out, state = self.cell(input_step, state)
             outputs += [out]
         return torch.stack(outputs), state
 

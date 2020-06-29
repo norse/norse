@@ -6,11 +6,18 @@ from nose.tools import raises
 
 
 def test_lsnn_cell():
-    cell = lsnn.LSNNCell(2, 10)
+    cell = lsnn.LSNNCell(2, 2)
     state = cell.initial_state(5, "cpu")
-    data = torch.zeros(5, 2)
+    data = torch.ones(5, 2)
     z, state = cell(data, state)
-    np.testing.assert_equal(z.numpy(), np.zeros((5, 10)))
+    np.testing.assert_equal(z.numpy(), np.zeros((5, 2)))
+    z, state = cell(data, state)
+    np.testing.assert_raises(
+        AssertionError,
+        np.testing.assert_equal,
+        state.i.detach().numpy(),
+        np.zeros((5, 2)),
+    )
 
 
 @raises(TypeError)
@@ -38,5 +45,6 @@ def test_lsnn_layer():
     layer = lsnn.LSNNLayer(lsnn.LSNNCell, 2, 10)
     state = layer.initial_state(5, "cpu")
     data = torch.zeros(2, 5, 2)
-    z, _ = layer.forward(data, state)
+    z, s = layer.forward(data, state)
     np.testing.assert_equal(z.detach().numpy(), np.zeros((2, 5, 10)))
+    assert isinstance(s, lsnn.LSNNState)
