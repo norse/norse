@@ -137,18 +137,19 @@
 <span class="sd">      &gt;&gt;&gt; from norse.torch.module import LSNNLayer, LSNNCell</span>
 <span class="sd">      &gt;&gt;&gt; layer = LSNNLayer(LSNNCell, 2, 10)    // LSNNCell of shape 2 -&gt; 10</span>
 <span class="sd">      &gt;&gt;&gt; state = layer.initial_state(5, &quot;cpu&quot;) // 5 batch size running on CPU</span>
-<span class="sd">      &gt;&gt;&gt; data  = torch.zeros(2, 5, 2)          // Data of shape [5, 2, 10]</span>
+<span class="sd">      &gt;&gt;&gt; data  = torch.zeros(2, 5, 2)          // Arbitrary data</span>
 <span class="sd">      &gt;&gt;&gt; output, new_state = layer.forward(data, state)</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">      cell (torch.nn.Module): the underling neuron module, uninitialized</span>
 <span class="sd">      *cell_args: variable length input arguments for the underlying cell</span>
 <span class="sd">                  constructor</span>
+<span class="sd">      **cell_kwargs: variable length key-value arguments for the underlying cell constructor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="o">*</span><span class="n">cell_args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">cell_kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LSNNLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="o">*</span><span class="n">cell_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">cell_kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LSNNLayer.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.lsnn.LSNNLayer.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNState</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Return the initial state of the LSNN layer, as given by the</span>
@@ -158,10 +159,23 @@
 <div class="viewcode-block" id="LSNNLayer.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.lsnn.LSNNLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">LSNNState</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes one step in the LSNN layer by simulating the layer for a number of timesteps.</span>
+<span class="sd">        Since the layer is recurrent, each simulation state (LSNNState) is used as the input for the next step.</span>
+
+<span class="sd">        The function expects inputs in the shape (simulation time steps, batch size, ...).</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        input_tensor (torch.Tensor): Input tensor with timesteps in the first dimension</span>
+<span class="sd">        state (LSNNState): The input LSNN state</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        A tuple of 1) spikes from each timestep and 2) the LSNNState from the last timestep.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="n">input_tensor</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># torch.jit.annotate(List[torch.Tensor], [])</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inputs</span><span class="p">)):</span>
-            <span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">state</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">input_step</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">input_step</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
             <span class="n">outputs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">out</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span> <span class="n">state</span></div></div>
 
