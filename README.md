@@ -98,7 +98,7 @@ from norse.torch.module import LSNNLayer, LSNNCell
 layer = LSNNLayer(LSNNCell, 2, 10)
 # 5 batch size running on CPU
 state = layer.initial_state(5, "cpu")
-# Generate data of shape [5, 2, 10]
+# Generate data 
 data  = torch.zeros(2, 5, 2)
 # Tuple of output data and layer state
 output, new_state = layer.forward(data, state)
