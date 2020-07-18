@@ -9,11 +9,14 @@ A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) wit
 <p align="center">
     <a href="https://github.com/norse/norse/actions">
         <img src="https://github.com/norse/norse/workflows/Python%20package/badge.svg" alt="Test status"></a>
+    <a href="https://pypi.org/project/norse/" alt="PyPi">
+        <img src="https://img.shields.io/pypi/v/norse" />
+    </a>
+    <a href="https://anaconda.org/norse" alt="Conda">
+        <img src="https://img.shields.io/conda/v/norse/norse" />
+    </a>
     <a href="https://github.com/norse/norse/pulse" alt="Activity">
         <img src="https://img.shields.io/github/commit-activity/m/norse/norse" />
-    </a>
-    <a href="https://pypi.org/project/norse/" alt="PyPi">
-        <img src="https://img.shields.io/pypi/dm/norse" />
     </a>
     <a href="https://discord.gg/3Xwerqg">
         <img src="https://img.shields.io/discord/723215296399147089"
@@ -27,68 +30,72 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 
 **Documentation**: https://norse.ai/docs/
 
-## 1. Example usage: template tasks
+## 1. Getting started
 
-Norse comes packed with a few example tasks, such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database), but is generally meant for use in specific deep learning tasks (see below section on long short-term spiking neural networks):
+To try Norse, the best option is to run one of the [jupyter notebooks](https://github.com/norse/notebooks/tree/master/notebooks) on Google collab. 
+
+Alternatively, [you can install Norse](#installation) and run one of the [included tasks](https://norse.github.io/norse/experiments.html) such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database):
 ```bash
 python -m norse.task.mnist
 ```
-You can also run one of the [jupyter notebooks](https://github.com/norse/notebooks) on google collab.
 
 
-## 2. Getting Started
+## 2. Using Norse
 
-Norse is a machine learning library that builds on the [PyTorch](https://pytorch.org/) infrastructure. 
-While we have a few tasks included, it is meant to be used in designing and evaluating experiments involving biologically realistic neural networks.
+Norse is generally meant as a library for customized use in specific deep learning tasks. This has been detailed in our documentation: [working with Norse](https://norse.github.io/norse/installing.html).
 
-This readme explains how to install norse and apply it in your own experiments. If you just want to try out the library, perhaps the best option is to run one of the [jupyter notebooks](https://github.com/norse/notebooks/tree/master/notebooks) on google collab. 
+Here we briefly explain how to install Norse and start to apply it in your own work. 
 
 ### 2.1. Installation
+<a name="installation"></a>
 
-Note that this guide assumes you are in a terminal friendly environment with access to the `pip`, `python` and `git` commands. Python version 3.7+ is required.
+Note that we assume you are using Python version 3.7+, are in a terminal friendly environment, and have installed the necessary requirements. 
+[More detailed installation instructions are available in the documentation](https://norse.github.io/norse/installing.html).
 
-#### 2.1.1. Installing from source
+<table>
+<thead>
+<tr>
+<th>Method</th><th>Instructions</th><th>Prerequisites</th>
+</tr>
+</thead>
 
-For now this is the recommended way of installing the package, make sure
-that you have installed torch, following their [installation instructions](https://pytorch.org/get-started/locally/)
-and then install norse.
-
-You can either directly install the library from github using pip:
-
-```bash
+<tr>
+<td>From PyPi</td><td><div class="highlight highlight-source-shell"><pre>
+pip install norse
+</pre></div></td><td><a href="https://pypi.org/" title="PyPi">Pip</a></td>
+</tr>
+<tr>
+<td>From Conda</td><td> <div class="highlight highlight-source-shell"><pre>
+conda install -c norse norse
+</pre></div></td><td><a href="https://docs.anaconda.com/anaconda/install/" title="Anaconda">Anaconda</a> or <a href="https://docs.conda.io/en/latest/miniconda.html" title="Miniconda">Miniconda</a></td>
+</tr>
+<tr>
+<td>From source</td><td><div class="highlight highlight-source-shell"><pre>
 git clone https://github.com/norse/norse
 cd norse
 pip install -e .
-```
-
-#### 2.1.2. Installing from PyPi
-
-```bash
-pip install norse
-```
-
-The primary dependencies of this project are [torch](https://pytorch.org/) and [OpenAI gym](https://github.com/openai/gym).
-A more comprehensive list of dependencies can be found in [`requirements.txt`](requirements.txt).
+</pre></div></td><td><a href="https://pypi.org/" title="PyPi">Pip</a>, <a href="https://pytorch.org/get-started/locally/" title="PyTorch">PyTorch</a></td>
+</tr>
+</table>
 
 ### 2.2. Running examples
 
-The directory [norse/task](norse/task) contains three example experiments, serving as short, self contained, correct examples ([SSCCE](http://www.sscce.org/)).
-You can execute them by invoking the `norse` module from the base directory.
+Norse is bundled with a number of example experiments, serving as short, self contained, correct examples ([SSCCE](http://www.sscce.org/)).
+They can be run by invoking the `norse` module from the base directory.
+More information and tasks are available [in our documentation](https://norse.github.io/norse/experiments.html) and in your console by typing: `python -m norse.task.<task> --help`, where `<task>` is one of the task names.
 
 - To train an MNIST classification network, invoke
-    ```
+    ```bash
     python -m norse.task.mnist
     ```
 - To train a CIFAR classification network, invoke
-    ```
+    ```bash
     python -m norse.task.cifar10
     ```
 - To train the cartpole balancing task with Policy gradient, invoke
-    ```
+    ```bash
     python -m norse.task.cartpole
     ```
-
-The default choices of hyperparameters are meant as reasonable starting points. More information is available when typing: `python -m norse.task.<task> --help`, where `<task>` is the above listed task names.
 
 ### 2.3. Example on using the library: Long short-term spiking neural networks
 The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
@@ -98,9 +105,9 @@ from norse.torch.module import LSNNLayer, LSNNCell
 layer = LSNNLayer(LSNNCell, 2, 10)
 # 5 batch size running on CPU
 state = layer.initial_state(5, "cpu")
-# Generate data 
-data  = torch.zeros(2, 5, 2)
-# Tuple of output data and layer state
+# Generate data (20 timesteps with 8 sequences simultaneously)
+data  = torch.zeros(20, 8, 2)
+# Tuple of output data of shape (8, 2) and layer state
 output, new_state = layer.forward(data, state)
 ```
 
@@ -126,6 +133,8 @@ Preliminary benchmarks suggest that on small networks of up to ~10000 neurons [N
 that scales from a single laptop to several nodes on a HPC cluster. We expect to be significantly
 helped in that endeavour by the preexisting investment in scalable training and inference with PyTorch.
 
+[Read more about Norse in our documentation](https://norse.github.io/norse/about.html).
+
 ## 4. Similar work
 The list of projects below serves to illustrate the state of the art, while explaining our own incentives to create and use norse.
 
@@ -145,7 +154,7 @@ The list of projects below serves to illustrate the state of the art, while expl
 
 ## 5. Contributing
 
-Please refer to the [contributing.md](contributing.md)
+Contributions are warmly encouraged and always welcome. However, we also have high expectations around the code base so if you wish to contribute, please refer to our [contribution guidelines](contributing.md).
 
 ## 6. Credits
 
@@ -153,6 +162,7 @@ Norse is created by
 * [Christian Pehle](https://www.kip.uni-heidelberg.de/people/10110) (@GitHub [cpehle](https://github.com/cpehle/)), doctoral student at University of Heidelberg, Germany.
 * [Jens E. Pedersen](https://www.kth.se/profile/jeped) (@GitHub [jegp](https://github.com/jegp/)), doctoral student at KTH Royal Institute of Technology, Sweden.
 
+More information about Norse can be found [in our documentation](https://norse.github.io/norse/about.html).
 
 ## 7. License
 

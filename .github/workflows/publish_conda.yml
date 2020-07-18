@@ -1,0 +1,18 @@
+name: publish_conda
+
+on:
+  release:
+    types: [published]
+    
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set env
+      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+    - name: publish-to-conda
+      uses: maxibor/conda-package-publish-action@v1.1
+      with:
+        subDir: 'publish/conda'
+        AnacondaToken: ${{ secrets.ANACONDA_TOKEN }}

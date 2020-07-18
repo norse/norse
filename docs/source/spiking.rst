@@ -1,7 +1,7 @@
-.. _page-introduction-spiking:
+.. _page-spiking:
 
-Introduction to spikes
-----------------------
+Introduction to spiking neural networks
+---------------------------------------
 
 Regular neural networks consist of atomic neurons, that basically take a lot of input and sends it through a function (typically sigmoidal).
 The issue with this approach is that the temporal dimension is mostly ignored. 

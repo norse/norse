@@ -1,0 +1,43 @@
+{% set name = "norse" %}
+{% set version = "v0.0.3" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  path: ../../
+
+build:
+  noarch: python
+  number: 0
+  script: 
+    - python -m pip install --no-deps --ignore-installed .
+    
+requirements:
+  host:
+    - python
+    - pip
+    - pytorch>=1.5.0
+  run:
+    - python
+    - pytorch>=1.5.0
+    - torchvision
+    - matplotlib
+    - numpy
+    - absl-py
+
+about:
+  home: https://norse.ai/docs
+  license: LGPLv3
+  license_file: LICENSE
+  summary: A library to do deep learning with spiking neural networks.
+  description: 
+  dev_url: https://github.com/norse/norse
+  doc_url: https://norse.ai/docs
+  doc_source_url: https://github.com/norse/norse/blob/master/README.md
+
+
+extra:
+  recipe-maintainers:
+    - jegp
