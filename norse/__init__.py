@@ -8,10 +8,10 @@ from .torch.models import conv
 from .torch.module import lif, lsnn
 
 __all__ = [
-    task,
-    benchmark,
-    functional,
-    conv,
-    lif,
-    lsnn,
+    "task",
+    "benchmark",
+    "functional",
+    "conv",
+    "lif",
+    "lsnn",
 ]
