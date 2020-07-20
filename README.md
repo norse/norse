@@ -42,7 +42,7 @@ python -m norse.task.mnist
 
 ## 2. Using Norse
 
-Norse is generally meant as a library for customized use in specific deep learning tasks. This has been detailed in our documentation: [working with Norse](https://norse.github.io/norse/installing.html).
+Norse is generally meant as a library for customized use in specific deep learning tasks. This has been detailed in our documentation: [working with Norse](https://norse.github.io/norse/working.html).
 
 Here we briefly explain how to install Norse and start to apply it in your own work. 
 
