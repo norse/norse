@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>5. Working with Norse &#8212; norse 0.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Beginner tutorials" href="auto_examples/index.html" />
+    <link rel="prev" title="4. Learning with spikes" href="learning.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="working-with-norse">
+<span id="page-working"></span><h1><span class="section-number">5. </span>Working with Norse<a class="headerlink" href="#working-with-norse" title="Permalink to this headline">¶</a></h1>
+<p>For us, Norse is a tool to accelerate our own work within spiking neural networks.
+This page serves to describe the fundamental ideas behind the Python code in Norse.
+We will start by explaining some basic terminology, describe a <em>suggestion</em> to how Norse
+can be approach, and finally provide examples on how to work with Norse.</p>
+<div class="section" id="fundamental-concepts">
+<h2><span class="section-number">5.1. </span>Fundamental concepts<a class="headerlink" href="#fundamental-concepts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functional-vs-module-packaging">
+<h3><span class="section-number">5.1.1. </span>Functional vs. module packaging<a class="headerlink" href="#functional-vs-module-packaging" title="Permalink to this headline">¶</a></h3>
+<p>As with PyTorch, the package is organised into a <em>functional</em> and <em>module</em> part.
+The <em>functional</em> package contains functions and classes that are considered atomic. If you use this package, you are expected to piece the code together yourself. The <em>module</em> package contains PyTorch modules on a slightly higher level. This is the abstraction we will work with in this document.</p>
+</div>
+<div class="section" id="cell-parameters">
+<h3><span class="section-number">5.1.2. </span>Cell parameters<a class="headerlink" href="#cell-parameters" title="Permalink to this headline">¶</a></h3>
+<p>All cells and layers use neuron parameters to describe information about the neurons (for instance the membrane potential and leak).
+Norse is designed such that all neurons require parameters for each forward pass.
+In practice this looks like</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFParameters</span><span class="p">,</span> <span class="n">LIFCell</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">p</span>    <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(</span><span class="n">v_leak</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> <span class="c1"># Default values except for v_leak</span>
+<span class="n">cell</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>     <span class="c1"># Shape 2 -&gt; 4</span>
+</pre></div>
+</div>
+<p>All future executions with that cell will then use the neuron parameters.</p>
+</div>
+<div class="section" id="layer-and-cell-states">
+<h3><span class="section-number">5.1.3. </span>Layer and cell states<a class="headerlink" href="#layer-and-cell-states" title="Permalink to this headline">¶</a></h3>
+<p>Because we are working with temporal data, neuron parameters change over time.
+That is encoded in a state class (e.g. <a class="reference external" href="https://github.com/norse/norse/blob/012a97bb23ea6b6ec0cb47866c62b3711b0c53da/norse/torch/functional/lif.py#L39">LIFState</a>)
+that represents the current values of the neuron (for instance membrane potential and leak).</p>
+<p>Neurons and states <strong>are immutable</strong>.
+Every time you call a neuron, the state will be returned along with the output (spikes).
+Typically as the second parameter.
+The reason for this is that you can then re-use the state in the next time step, to capture the neuron parameters.</p>
+<p>The initial value of such a state is found by invoking the <code class="docutils literal notranslate"><span class="pre">initial_state</span></code> of the cell/layer, like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">cell</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>     <span class="c1"># Shape 2 -&gt; 4</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This informs the cell that there are 8 entries in the batches and that the data will be evaluated on the CPU.</p>
+<p>Here is an example on how to evaluate a sequence of inputs modified from the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/module/lif.py#L106">LIFLayer</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># Shape (timesteps, batch, input)</span>
+
+<span class="n">cell</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>           <span class="c1"># Shape (input, output)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inputs</span><span class="p">)):</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">out</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span> <span class="n">state</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="how-to-approach-norse">
+<h2><span class="section-number">5.2. </span>How to approach Norse<a class="headerlink" href="#how-to-approach-norse" title="Permalink to this headline">¶</a></h2>
+<p>Norse is meant to be used as a library. Specifically, that means taking parts of it and
+remixing to fit the needs of a specific task.
+We have tried to provide useful, documented, and correct features from the spiking neural network domain, such
+that they become simple to work with.</p>
+<p>The two main differences from artificial neural networks is 1) the state variables containing the neuron parameters
+and 2) the temporal dimension (see <a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spiking neural networks</span></a>).
+Apart from that, Norse works like you would expect any PyTorch module to work.</p>
+<p>A specific recommendation to work with Norse is to consider</p>
+<ol class="arabic simple">
+<li><p>What neuron models you need to work with</p></li>
+<li><p>What learning/plasticity models you need</p></li>
+</ol>
+<div class="section" id="deciding-on-neuron-models">
+<h3><span class="section-number">5.2.1. </span>Deciding on neuron models<a class="headerlink" href="#deciding-on-neuron-models" title="Permalink to this headline">¶</a></h3>
+<p>The choice of neuron model depends on the task.
+The <a class="reference external" href="https://neuronaldynamics.epfl.ch/online/Ch5.S2.html">leaky integrate-and-fire neuron model</a> is one of the
+most common.
+In Norse, this is implemented as a recurrent cell in <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/module/lif.py#L15">lif.py</a>.</p>
+</div>
+<div class="section" id="deciding-on-learning-plasiticy-models">
+<h3><span class="section-number">5.2.2. </span>Deciding on learning/plasiticy models<a class="headerlink" href="#deciding-on-learning-plasiticy-models" title="Permalink to this headline">¶</a></h3>
+<p>This is an area of active development and will be expanded upon soon.</p>
+<p>Optimisation is mainly done using PyTorch’s optimizers, as seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py#L100">MNIST task</a>.</p>
+</div>
+</div>
+<div class="section" id="examples-on-working-with-norse">
+<h2><span class="section-number">5.3. </span>Examples on working with Norse<a class="headerlink" href="#examples-on-working-with-norse" title="Permalink to this headline">¶</a></h2>
+<p>We have put considerable effort into streamlining it for three scenarios:
+1) porting deep learning models to the spiking/temporal domain,
+2) extending existing models,
+3) exploring novel ideas.</p>
+<div class="section" id="porting-deep-learning-models">
+<h3><span class="section-number">5.3.1. </span>Porting deep learning models<a class="headerlink" href="#porting-deep-learning-models" title="Permalink to this headline">¶</a></h3>
+<p>A classical example of this can be seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py">MNIST</a>
+where convolutions are brought into Norse.</p>
+</div>
+<div class="section" id="extending-existing-models">
+<h3><span class="section-number">5.3.2. </span>Extending existing models<a class="headerlink" href="#extending-existing-models" title="Permalink to this headline">¶</a></h3>
+<p>An example of this can be seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/memory.py">memory task</a>,
+where <a class="reference external" href="https://github.com/IGITUGraz/LSNN-official">adaptive long short-term spiking neural networks</a>
+are added to</p>
+</div>
+<div class="section" id="exploring-novel-ideas">
+<h3><span class="section-number">5.3.3. </span>Exploring novel ideas<a class="headerlink" href="#exploring-novel-ideas" title="Permalink to this headline">¶</a></h3>
+<p>This is an area of active development and will be expanded upon soon.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A library to do deep learning with spiking neural networks.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=norse&repo=norse&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spiking.html">3. Introduction to spiking neural networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Working with Norse</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fundamental-concepts">5.1. Fundamental concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-approach-norse">5.2. How to approach Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples-on-working-with-norse">5.3. Examples on working with Norse</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">1. Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experiments.html">2. Running Experiments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.benchmark.html">1. norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.task.html">2. norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.torch.html">3. norse.torch package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="learning.html" title="previous chapter"><span class="section-number">4. </span>Learning with spikes</a></li>
+      <li>Next: <a href="auto_examples/index.html" title="next chapter"><span class="section-number">1. </span>Beginner tutorials</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/working.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

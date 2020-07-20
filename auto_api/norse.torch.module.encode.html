@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>norse.torch.module.encode module &#8212; norse 0.0.2 documentation</title>
+    <title>3.1.3.2.2. norse.torch.module.encode module &#8212; norse 0.0.3 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
@@ -16,10 +16,11 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="norse.torch.module.if_current_encoder module" href="norse.torch.module.if_current_encoder.html" />
-    <link rel="prev" title="norse.torch.module.coba_lif module" href="norse.torch.module.coba_lif.html" />
+    <link rel="next" title="3.1.3.2.3. norse.torch.module.if_current_encoder module" href="norse.torch.module.if_current_encoder.html" />
+    <link rel="prev" title="3.1.3.2.1. norse.torch.module.coba_lif module" href="norse.torch.module.coba_lif.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -37,7 +38,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-norse.torch.module.encode">
-<span id="norse-torch-module-encode-module"></span><h1>norse.torch.module.encode module<a class="headerlink" href="#module-norse.torch.module.encode" title="Permalink to this headline">¶</a></h1>
+<span id="norse-torch-module-encode-module"></span><h1><span class="section-number">3.1.3.2.2. </span>norse.torch.module.encode module<a class="headerlink" href="#module-norse.torch.module.encode" title="Permalink to this headline">¶</a></h1>
 <p>Stateful encoders as torch modules.</p>
 <dl class="class">
 <dt id="norse.torch.module.encode.ConstantCurrentLIFEncoder">
@@ -91,7 +92,7 @@ which represent input spikes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+86a2bdc ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+bd42e1a ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
 <li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
 <li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Maximal frequency (in Hertz) which will be emitted.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
@@ -140,12 +141,12 @@ if a number gets close to its “receptive field”.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of output <em>per</em> input value</p></li>
-<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+86a2bdc ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
+<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+bd42e1a ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
 Can also be set for each individual sample.</p></li>
-<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+86a2bdc ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+86a2bdc ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
+<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+bd42e1a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+bd42e1a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
 (which changes for each index in the output tensor) and the actual data value to encode respectively.z
 Defaults to gaussian radial basis kernel function.</p></li>
-<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+86a2bdc ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+86a2bdc ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
+<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+bd42e1a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+bd42e1a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
 </ul>
 </dd>
 </dl>
@@ -277,31 +278,51 @@ registered hooks while the latter silently ignores them.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">norse</a></h1>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
 
 
 
+<p class="blurb">A library to do deep learning with spiking neural networks.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=norse&repo=norse&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
 
 
 
 
 
 <h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spiking.html">3. Introduction to spiking neural networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../working.html">5. Working with Norse</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../experiments.html">Running Experiments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../learning.html">Learning with spikes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../spiking.html">Introduction to spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">1. Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">2. Running Experiments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="norse.benchmark.html">norse.benchmark package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="norse.task.html">norse.task package</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="norse.torch.html">norse.torch package</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="norse.torch.functional.html">norse.torch.functional package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="norse.torch.models.html">norse.torch.models package</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="norse.torch.module.html">norse.torch.module package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="norse.benchmark.html">1. norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="norse.task.html">2. norse.task package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="norse.torch.html">3. norse.torch package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.functional.html">3.1.1. norse.torch.functional package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.models.html">3.1.2. norse.torch.models package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="norse.torch.module.html">3.1.3. norse.torch.module package</a></li>
 </ul>
 </li>
 </ul>
@@ -310,10 +331,10 @@ registered hooks while the latter silently ignores them.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="norse.torch.html">norse.torch package</a><ul>
-  <li><a href="norse.torch.module.html">norse.torch.module package</a><ul>
-      <li>Previous: <a href="norse.torch.module.coba_lif.html" title="previous chapter">norse.torch.module.coba_lif module</a></li>
-      <li>Next: <a href="norse.torch.module.if_current_encoder.html" title="next chapter">norse.torch.module.if_current_encoder module</a></li>
+  <li><a href="norse.torch.html"><span class="section-number">3. </span>norse.torch package</a><ul>
+  <li><a href="norse.torch.module.html"><span class="section-number">3.1.3. </span>norse.torch.module package</a><ul>
+      <li>Previous: <a href="norse.torch.module.coba_lif.html" title="previous chapter"><span class="section-number">3.1.3.2.1. </span>norse.torch.module.coba_lif module</a></li>
+      <li>Next: <a href="norse.torch.module.if_current_encoder.html" title="next chapter"><span class="section-number">3.1.3.2.3. </span>norse.torch.module.if_current_encoder module</a></li>
   </ul></li>
   </ul></li>
   </ul></li>

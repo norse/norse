@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Running Experiments &#8212; norse 0.0.2 documentation</title>
+    <title>2. Running Experiments &#8212; norse 0.0.3 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
@@ -16,10 +16,11 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Learning with spikes" href="learning.html" />
-    <link rel="prev" title="Spiking Neural Networks" href="auto_examples/plot_mnist.html" />
+    <link rel="next" title="1. norse.benchmark package" href="auto_api/norse.benchmark.html" />
+    <link rel="prev" title="1.1. Spiking Neural Networks" href="auto_examples/plot_mnist.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,14 +38,14 @@
           <div class="body" role="main">
             
   <div class="section" id="running-experiments">
-<span id="page-experiments"></span><h1>Running Experiments<a class="headerlink" href="#running-experiments" title="Permalink to this headline">¶</a></h1>
+<span id="page-experiments"></span><h1><span class="section-number">2. </span>Running Experiments<a class="headerlink" href="#running-experiments" title="Permalink to this headline">¶</a></h1>
 <p>Norse arrives with a number of built-in examples.
 These tasks serves to 1) illustrate what types of tasks <em>can</em> be done with Norse
 and 2) how to use Norse for specific experiments. Please note that some tasks require
 additional dependencies, like OpenAI gym for the cartpole task, which is not included in
 vanilla Norse.</p>
 <div class="section" id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.1. </span>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <p>The tasks below uses a large number of configurable parameters to control the model/network size,
 <a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch-device">epochs and batch size</a>,
 task load, <a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch-device">pytorch device</a>,
@@ -59,7 +60,7 @@ descriptions - and find even more - of the parameters above. You can access thes
 using the <code class="docutils literal notranslate"><span class="pre">--help</span></code> flag on any tasks below, for instance <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">norse.task.mnist</span> <span class="pre">--help</span></code>.</p>
 </div>
 <div class="section" id="cartpole">
-<h2>Cartpole<a class="headerlink" href="#cartpole" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.2. </span>Cartpole<a class="headerlink" href="#cartpole" title="Permalink to this headline">¶</a></h2>
 <p>This tasks is a balancing exercise where a controller learns to counter the gravitational force
 on an upright cartpole. You will need to install <a class="reference external" href="https://gym.openai.com/">OpenAI Gym</a>, to
 provide the simulation environments for the robot. If you are using pip, this is as easy as
@@ -70,7 +71,7 @@ typing <code class="docutils literal notranslate"><span class="pre">pip</span> <
 </div>
 </div>
 <div class="section" id="cifar10">
-<h2>Cifar10<a class="headerlink" href="#cifar10" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.3. </span>Cifar10<a class="headerlink" href="#cifar10" title="Permalink to this headline">¶</a></h2>
 <p>Cifar10 is a labeled database of 60’000 32x32 images in 10 classes. The task is to learn to classify
 each image.</p>
 <p>The cifar task can be run without any additional dependencies like so:</p>
@@ -79,7 +80,7 @@ each image.</p>
 </div>
 </div>
 <div class="section" id="correlation-experiment">
-<h2>Correlation experiment<a class="headerlink" href="#correlation-experiment" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.4. </span>Correlation experiment<a class="headerlink" href="#correlation-experiment" title="Permalink to this headline">¶</a></h2>
 <p>The correlation experiment serves to demonstrate how neurons can learn patterns with a certain probability.
 It can be run without any additional dependencies like so:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 -m norse.task.correlation_experiment
@@ -87,7 +88,7 @@ It can be run without any additional dependencies like so:</p>
 </div>
 </div>
 <div class="section" id="memory-task">
-<h2>Memory task<a class="headerlink" href="#memory-task" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.5. </span>Memory task<a class="headerlink" href="#memory-task" title="Permalink to this headline">¶</a></h2>
 <p>The memory task demonstrates how a recurrent spiking neural network can store a pattern
 and later recall it, similar to the STORE/RECALL experiment in the paper on
 <a class="reference external" href="https://arxiv.org/abs/1901.09049">Biologically inspired alternatives to backpropagation through time for learning in recurrent neural nets</a> by Guillaume Bellec, Franz Scherr, Elias Hajek,
@@ -98,7 +99,7 @@ Darjan Salaj, Robert Legenstein, and Wolfgang Maass.</p>
 </div>
 </div>
 <div class="section" id="mnist">
-<h2>MNIST<a class="headerlink" href="#mnist" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.6. </span>MNIST<a class="headerlink" href="#mnist" title="Permalink to this headline">¶</a></h2>
 <p>MNIST is a <a class="reference external" href="https://en.wikipedia.org/wiki/MNIST_database">database of 70’000 handwritten digits</a> where
 the task is to learn to classify each image as one of the 10 digits.</p>
 <p>The task can be run without any additional dependencies like so:</p>
@@ -115,44 +116,64 @@ the task is to learn to classify each image as one of the 10 digits.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">norse</a></h1>
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
 
 
 
+<p class="blurb">A library to do deep learning with spiking neural networks.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=norse&repo=norse&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
 
 
 
 
 
 <h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spiking.html">3. Introduction to spiking neural networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">5. Working with Norse</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Beginner tutorials</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Running Experiments</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cartpole">Cartpole</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cifar10">Cifar10</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#correlation-experiment">Correlation experiment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#memory-task">Memory task</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mnist">MNIST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">1. Beginner tutorials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Running Experiments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#parameters">2.1. Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cartpole">2.2. Cartpole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cifar10">2.3. Cifar10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#correlation-experiment">2.4. Correlation experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#memory-task">2.5. Memory task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mnist">2.6. MNIST</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="learning.html">Learning with spikes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="spiking.html">Introduction to spikes</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.benchmark.html">norse.benchmark package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.task.html">norse.task package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.torch.html">norse.torch package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.benchmark.html">1. norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.task.html">2. norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.torch.html">3. norse.torch package</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="auto_examples/plot_mnist.html" title="previous chapter">Spiking Neural Networks</a></li>
-      <li>Next: <a href="learning.html" title="next chapter">Learning with spikes</a></li>
+      <li>Previous: <a href="auto_examples/plot_mnist.html" title="previous chapter"><span class="section-number">1.1. </span>Spiking Neural Networks</a></li>
+      <li>Next: <a href="auto_api/norse.benchmark.html" title="next chapter"><span class="section-number">1. </span>norse.benchmark package</a></li>
   </ul></li>
 </ul>
 </div>
