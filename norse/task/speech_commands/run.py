@@ -1,13 +1,13 @@
 import torch
 import torchaudio
 from norse.dataset.speech_commands import SpeechCommands, prepare_dataset
-from norse.task.speech_commands.model import LSTMModel, LIFModel
+from norse.task.speech_commands.model import LSTMModel, lsnn_model, lif_model
 
 
 BATCH_SIZE = 16
 LR = 0.0001
 DEVICE = "cuda"
-
+MODEL = "lif"
 
 speech_commands = torchaudio.datasets.SPEECHCOMMANDS(root=".", download=True)
 train_sc, valid_sc, test_sc = prepare_dataset(speech_commands)
@@ -30,12 +30,17 @@ train_loader = torch.utils.data.DataLoader(
     train_speech_commands, batch_size=BATCH_SIZE, shuffle=True
 )
 
-
 valid_loader = torch.utils.data.DataLoader(
     valid_speech_commands, batch_size=BATCH_SIZE, shuffle=True
 )
 
-model = LIFModel(n_output=13).to(DEVICE)  # LSTMModel(n_output=13).to(DEVICE)
+if MODEL == "lif":
+    model = lif_model(n_output=13).to(DEVICE)
+elif MODEL == "lsnn":
+    model = lsnn_model(n_output=13).to(DEVICE)
+else:
+    model = LSTMModel(n_output=13).to(DEVICE)
+
 loss_function = torch.nn.NLLLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=LR)
 
