@@ -1,13 +1,22 @@
 import torch
 import torchaudio
+import argparse
+
 from norse.dataset.speech_commands import SpeechCommands, prepare_dataset
 from norse.task.speech_commands.model import LSTMModel, lsnn_model, lif_model
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--learning_rate", default=0.0001)
+parser.add_argument("--batch_size", default=16)
+parser.add_argument("--device", default="cuda")
+parser.add_argument("--model", default="lif")
 
-BATCH_SIZE = 16
-LR = 0.0001
-DEVICE = "cuda"
-MODEL = "lif"
+args = parser.parse_args()
+
+BATCH_SIZE = args.batch_size  # 16
+LR = args.learning_rate  # 0.0001
+DEVICE = args.device  # "cuda"
+MODEL = args.model  # "lif"
 
 speech_commands = torchaudio.datasets.SPEECHCOMMANDS(root=".", download=True)
 train_sc, valid_sc, test_sc = prepare_dataset(speech_commands)

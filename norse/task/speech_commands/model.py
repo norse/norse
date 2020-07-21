@@ -6,7 +6,7 @@ from norse.torch.module.leaky_integrator import LICell
 
 class SNNModel(torch.nn.Module):
     def __init__(self, cell, n_features=128, n_input=80, n_output=10):
-        super(LIFModel, self).__init__()
+        super(SNNModel, self).__init__()
         self.n_features = n_features
         self.n_input = n_input
         self.n_output = n_output
