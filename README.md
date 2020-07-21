@@ -71,9 +71,7 @@ conda install -c norse norse
 </tr>
 <tr>
 <td>From source</td><td><div class="highlight highlight-source-shell"><pre>
-git clone https://github.com/norse/norse
-cd norse
-pip install -e .
+pip install -qU git+https://github.com/norse/norse
 </pre></div></td><td><a href="https://pypi.org/" title="PyPi">Pip</a>, <a href="https://pytorch.org/get-started/locally/" title="PyTorch">PyTorch</a></td>
 </tr>
 </table>
