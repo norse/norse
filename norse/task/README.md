@@ -26,3 +26,15 @@ python -m norse.task.cartpole --episodes=1000 --learning_rate=0.005 --device=cud
 ```bash
 python -m norse.task.correlation_experiment
 ```
+
+## Speech Commands experiment
+
+
+This task requires you to install the ```torchaudio``` library.
+You can then train a model to classify speech commands (based on the
+[Google Speech Commands Dataset v2](https://arxiv.org/abs/1804.03209)), 
+by running
+
+```bash
+python -m norse.task.speech_commands.run
+```

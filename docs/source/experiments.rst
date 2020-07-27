@@ -89,3 +89,14 @@ The task can be run without any additional dependencies like so:
 .. code:: bash
 
     python3 -m norse.task.mnist
+
+Speech Command recognition task
+===============================
+
+The `speech commands dataset <https://arxiv.org/abs/1804.03209>`_ as described
+in linked article serves as an example of a temporal classification task.
+The corresponding example task can be run like so:
+
+.. code:: bash
+
+    python -m norse.task.speech_commands.run
