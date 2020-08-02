@@ -1,5 +1,6 @@
 from typing import Callable, NamedTuple
 
+
 class STDPState(NamedTuple):
     """State of an event driven STDP.
 
@@ -7,6 +8,7 @@ class STDPState(NamedTuple):
         a_pre (torch.Tensor): presynaptic STDP state.
         a_post (torch.Tensor): postsynaptic STDP state.
     """
+
     a_pre: torch.Tensor
     a_post: torch.Tensor
 
