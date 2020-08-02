@@ -32,7 +32,7 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 
 ## 1. Getting started
 
-To try Norse, the best option is to run one of the [jupyter notebooks](https://github.com/norse/notebooks/tree/master/notebooks) on Google collab. 
+To try Norse, the best option is to run one of the [jupyter notebooks](https://github.com/norse/notebooks/tree/master/) on Google collab. 
 
 Alternatively, [you can install Norse](#installation) and run one of the [included tasks](https://norse.github.io/norse/experiments.html) such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database):
 ```bash
