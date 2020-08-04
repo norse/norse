@@ -3,67 +3,67 @@ from typing import Tuple
 import numpy as np
 import torch
 
-from ..functional.lif import (
-    LIFState,
-    LIFFeedForwardState,
-    LIFParameters,
-    lif_step,
-    lif_feed_forward_step,
+from ..functional.lif_ex import (
+    LIFExState,
+    LIFExFeedForwardState,
+    LIFExParameters,
+    lif_ex_step,
+    lif_ex_feed_forward_step,
 )
 
 
-class LIFCell(torch.nn.Module):
-    """Module that computes a single euler-integration step of a
-    LIF neuron-model with recurrence.
-    More specifically it implements one integration step
-    of the following ODE
+class LIFExCell(torch.nn.Module):
+    r"""Computes a single euler-integration step of a recurrent
+    exponential LIF neuron-model adapted from
+    https://neuronaldynamics.epfl.ch/online/Ch5.S2.html.
+    More specifically it implements one integration step of the following ODE
 
     .. math::
         \begin{align*}
-            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{v} &= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right)\right) \\
             \dot{i} &= -1/\tau_{\text{syn}} i
         \end{align*}
 
     together with the jump condition
 
     .. math::
-        z = \Theta(v - v_{\\text{th}})
+        z = \Theta(v - v_{\text{th}})
 
     and transition equations
 
     .. math::
         \\begin{align*}
             v &= (1-z) v + z v_{\\text{reset}} \\
-            i &= i + w_{\\text{input}} z_{\text{in}} \\
-            i &= i + w_{\\text{rec}} z_{\text{rec}}
+            i &= i + w_{\text{input}} z_{\text{in}} \\
+            i &= i + w_{\text{rec}} z_{\text{rec}}
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
+    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the
     recurrent and input spikes respectively.
 
     Parameters:
         input_size (int): Size of the input.
         hidden_size (int): Size of the hidden state.
-        p (LIFParameters): Parameters of the LIF neuron model.
+        p (LIFExParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
 
     Examples:
 
         >>> batch_size = 16
-        >>> lif = LIFCell(10, 20)
+        >>> lif_ex = LIFExCell(10, 20)
         >>> input = torch.randn(batch_size, 10)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> s0 = lif_ex.initial_state(batch_size)
+        >>> output, s0 = lif_ex(input, s0)
     """
 
     def __init__(
         self,
         input_size,
         hidden_size,
-        p: LIFParameters = LIFParameters(),
+        p: LIFExParameters = LIFExParameters(),
         dt: float = 0.001,
     ):
-        super(LIFCell, self).__init__()
+        super(LIFExCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
             torch.randn(hidden_size, input_size) * np.sqrt(2 / hidden_size)
         )
@@ -79,17 +79,17 @@ class LIFCell(torch.nn.Module):
         s = f"{self.input_size}, {self.hidden_size}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFState:
-        return LIFState(
+    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFExState:
+        return LIFExState(
             z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
             v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
             i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
         )
 
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFState
-    ) -> Tuple[torch.Tensor, LIFState]:
-        return lif_step(
+        self, input_tensor: torch.Tensor, state: LIFExState
+    ) -> Tuple[torch.Tensor, LIFExState]:
+        return lif_ex_step(
             input_tensor,
             state,
             self.input_weights,
@@ -99,30 +99,30 @@ class LIFCell(torch.nn.Module):
         )
 
 
-class LIFLayer(torch.nn.Module):
+class LIFExLayer(torch.nn.Module):
     """
-    A neuron layer that wraps a recurrent LIFCell in time such
+    A neuron layer that wraps a recurrent LIFExCell in time such
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
 
     Example:
     >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-    >>> l = LIFLayer(2, 4)
+    >>> l = LIFExLayer(2, 4)
     >>> s = l.initial_state(5, 'cpu')
-    >>> l(data, s) # Returns tuple of (Tensor(10, 5, 4), LIFState)
+    >>> l(data, s) # Returns tuple of (Tensor(10, 5, 4), LIFExState)
     """
 
     def __init__(self, *cell_args, **kw_args):
-        super(LIFLayer, self).__init__()
-        self.cell = LIFCell(*cell_args, **kw_args)
+        super(LIFExLayer, self).__init__()
+        self.cell = LIFExCell(*cell_args, **kw_args)
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFState:
+    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFExState:
         return self.cell.initial_state(batch_size, device, dtype)
 
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFState
-    ) -> Tuple[torch.Tensor, LIFState]:
+        self, input_tensor: torch.Tensor, state: LIFExState
+    ) -> Tuple[torch.Tensor, LIFExState]:
         inputs = input_tensor.unbind(0)
         outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
         for _, input_step in enumerate(inputs):
@@ -131,47 +131,51 @@ class LIFLayer(torch.nn.Module):
         return torch.stack(outputs), state
 
 
-class LIFFeedForwardCell(torch.nn.Module):
-    """Module that computes a single euler-integration step of a LIF neuron.
+class LIFExFeedForwardCell(torch.nn.Module):
+    r"""Computes a single euler-integration step of a feed-forward exponential
+    LIF neuron-model adapted from
+    https://neuronaldynamics.epfl.ch/online/Ch5.S2.html.
     It takes as input the input current as generated by an arbitrary torch
     module or function. More specifically it implements one integration step
     of the following ODE
 
     .. math::
-        \\begin{align*}
-            \dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\
-            \dot{i} &= -1/\\tau_{\\text{syn}} i
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right)\right) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
         \end{align*}
 
     together with the jump condition
 
     .. math::
-        z = \Theta(v - v_{\\text{th}})
+        z = \Theta(v - v_{\text{th}})
 
     and transition equations
 
     .. math::
-        i = i + i_{\\text{in}}
+        i = i + i_{\text{in}}
 
-    where :math:`i_{\\text{in}}` is meant to be the result of applying
+    where :math:`i_{\text{in}}` is meant to be the result of applying
     an arbitrary pytorch module (such as a convolution) to input spikes.
 
     Parameters:
         shape: Shape of the feedforward state.
-        p (LIFParameters): Parameters of the LIF neuron model.
+        p (LIFExParameters): Parameters of the LIFEx neuron model.
         dt (float): Time step to use.
 
     Examples:
 
         >>> batch_size = 16
-        >>> lif = LIFFeedForwardCell((20, 30))
+        >>> lif_ex = LIFExFeedForwardCell((20, 30))
         >>> data = torch.randn(batch_size, 20, 30)
-        >>> s0 = lif.initial_state(batch_size, "cpu")
-        >>> output, s0 = lif(data, s0)
+        >>> s0 = lif_ex.initial_state(batch_size, "cpu")
+        >>> output, s0 = lif_ex(data, s0)
     """
 
-    def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
-        super(LIFFeedForwardCell, self).__init__()
+    def __init__(
+        self, shape, p: LIFExParameters = LIFExParameters(), dt: float = 0.001
+    ):
+        super(LIFExFeedForwardCell, self).__init__()
         self.shape = shape
         self.p = p
         self.dt = dt
@@ -180,13 +184,13 @@ class LIFFeedForwardCell(torch.nn.Module):
         s = f"{self.shape}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype=None) -> LIFFeedForwardState:
-        return LIFFeedForwardState(
+    def initial_state(self, batch_size, device, dtype=None) -> LIFExFeedForwardState:
+        return LIFExFeedForwardState(
             v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
             i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
         )
 
     def forward(
-        self, x: torch.Tensor, state: LIFFeedForwardState
-    ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
-        return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
+        self, x: torch.Tensor, state: LIFExFeedForwardState
+    ) -> Tuple[torch.Tensor, LIFExFeedForwardState]:
+        return lif_ex_feed_forward_step(x, state, p=self.p, dt=self.dt)
