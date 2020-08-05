@@ -20,7 +20,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="norse.torch.module.lif_correlation module" href="norse.torch.module.lif_correlation.html" />
+    <link rel="next" title="norse.torch.module.lif_adex module" href="norse.torch.module.lif_adex.html" />
     <link rel="prev" title="norse.torch.module.leaky_integrator module" href="norse.torch.module.leaky_integrator.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -44,24 +44,25 @@
 <dt id="norse.torch.module.lif.LIFCell">
 <em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif.</code><code class="sig-name descname">LIFCell</code><span class="sig-paren">(</span><em class="sig-param">input_size</em>, <em class="sig-param">hidden_size</em>, <em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=0.0)</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif.LIFCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Module that computes a single euler-integration step of a LIF
-neuron-model. More specifically it implements one integration step
+<p>Module that computes a single euler-integration step of a
+LIF neuron-model with recurrence.
+More specifically it implements one integration step
 of the following ODE</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align*}
-    \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
-    \dot{i} &amp;= -1/\tau_{\text{syn}} i
-\end{align*}\end{split}\]</div>
+\[egin{align*}
+    \dot{v} &amp;= 1/       au_{    ext{mem}} (v_{  ext{leak}} - v + i) \
+    \dot{i} &amp;= -1/      au_{    ext{syn}} i
+\end{align*}\]</div>
 <p>together with the jump condition</p>
 <div class="math notranslate nohighlight">
 \[z = \Theta(v - v_{\text{th}})\]</div>
 <p>and transition equations</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align*}
-    v &amp;= (1-z) v + z v_{\text{reset}} \\
-    i &amp;= i + w_{\text{input}} z_{\text{in}} \\
-    i &amp;= i + w_{\text{rec}} z_{\text{rec}}
-\end{align*}\end{split}\]</div>
+\[\begin{align*}
+    v &amp;= (1-z) v + z v_{\text{reset}} \
+    i &amp;= i + w_{\text{input}} z_{       ext{in}} \
+    i &amp;= i + w_{\text{rec}} z_{ ext{rec}}
+\end{align*}\]</div>
 <p>where <span class="math notranslate nohighlight">\(z_{\text{rec}}\)</span> and <span class="math notranslate nohighlight">\(z_{\text{in}}\)</span> are the
 recurrent and input spikes respectively.</p>
 <dl class="field-list simple">
@@ -198,6 +199,17 @@ strings are acceptable.</p>
 <dt id="norse.torch.module.lif.LIFLayer">
 <em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif.</code><code class="sig-name descname">LIFLayer</code><span class="sig-paren">(</span><em class="sig-param">*cell_args</em>, <em class="sig-param">**kw_args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif.LIFLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>A neuron layer that wraps a recurrent LIFCell in time such
+that the layer keeps track of temporal sequences of spikes.
+After application, the layer returns a tuple containing</p>
+<blockquote>
+<div><p>(spikes from all timesteps, state from the last timestep).</p>
+</div></blockquote>
+<p>Example:
+&gt;&gt;&gt; data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
+&gt;&gt;&gt; l = LIFLayer(2, 4)
+&gt;&gt;&gt; s = l.initial_state(5, ‘cpu’)
+&gt;&gt;&gt; l(data, s) # Returns tuple of (Tensor(10, 5, 4), LIFState)</p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="method">
 <dt id="norse.torch.module.lif.LIFLayer.forward">
@@ -205,6 +217,16 @@ strings are acceptable.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+fa9ae67 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFState</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="norse.torch.module.lif.LIFLayer.initial_state">
+<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param">batch_size</em>, <em class="sig-param">device</em>, <em class="sig-param">dtype=torch.float32</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFLayer.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif.LIFLayer.initial_state" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFState</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -282,7 +304,7 @@ strings are acceptable.</p>
   <li><a href="norse.torch.html">norse.torch package</a><ul>
   <li><a href="norse.torch.module.html">norse.torch.module package</a><ul>
       <li>Previous: <a href="norse.torch.module.leaky_integrator.html" title="previous chapter">norse.torch.module.leaky_integrator module</a></li>
-      <li>Next: <a href="norse.torch.module.lif_correlation.html" title="next chapter">norse.torch.module.lif_correlation module</a></li>
+      <li>Next: <a href="norse.torch.module.lif_adex.html" title="next chapter">norse.torch.module.lif_adex module</a></li>
   </ul></li>
   </ul></li>
   </ul></li>

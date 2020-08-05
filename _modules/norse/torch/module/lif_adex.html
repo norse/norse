@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>norse.torch.module.lif &#8212; norse 0.0.3 documentation</title>
+    <title>norse.torch.module.lif_adex &#8212; norse 0.0.3 documentation</title>
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
@@ -36,73 +36,74 @@
 
           <div class="body" role="main">
             
-  <h1>Source code for norse.torch.module.lif</h1><div class="highlight"><pre>
+  <h1>Source code for norse.torch.module.lif_adex</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">..functional.lif</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">LIFState</span><span class="p">,</span>
-    <span class="n">LIFFeedForwardState</span><span class="p">,</span>
-    <span class="n">LIFParameters</span><span class="p">,</span>
-    <span class="n">lif_step</span><span class="p">,</span>
-    <span class="n">lif_feed_forward_step</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">..functional.lif_adex</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LIFAdExState</span><span class="p">,</span>
+    <span class="n">LIFAdExFeedForwardState</span><span class="p">,</span>
+    <span class="n">LIFAdExParameters</span><span class="p">,</span>
+    <span class="n">lif_adex_step</span><span class="p">,</span>
+    <span class="n">lif_adex_feed_forward_step</span><span class="p">,</span>
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="LIFCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFCell">[docs]</a><span class="k">class</span> <span class="nc">LIFCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a</span>
-<span class="sd">    LIF neuron-model with recurrence.</span>
-<span class="sd">    More specifically it implements one integration step</span>
-<span class="sd">    of the following ODE</span>
+<div class="viewcode-block" id="LIFAdExCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExCell">[docs]</a><span class="k">class</span> <span class="nc">LIFAdExCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes a single euler-integration step of a recurrent adaptive exponential</span>
+<span class="sd">    LIF neuron-model adapted from</span>
+<span class="sd">    http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model.</span>
+<span class="sd">    More specifically it implements one integration step of the following ODE</span>
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \begin{align*}</span>
-<span class="sd">            \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\</span>
-<span class="sd">            \dot{i} &amp;= -1/\tau_{\text{syn}} i</span>
+<span class="sd">            \dot{v} &amp;= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right)\right) \\</span>
+<span class="sd">            \dot{i} &amp;= -1/\tau_{\text{syn}} i \\</span>
+<span class="sd">            \dot{a} &amp;= 1/\tau_{\text{ada}} \left( a_{current} (V - v_{\text{leak}}) - a \right)</span>
 <span class="sd">        \end{align*}</span>
 
 <span class="sd">    together with the jump condition</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        z = \Theta(v - v_{\\text{th}})</span>
+<span class="sd">        z = \Theta(v - v_{\text{th}})</span>
 
 <span class="sd">    and transition equations</span>
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \\begin{align*}</span>
-<span class="sd">            v &amp;= (1-z) v + z v_{\\text{reset}} \\</span>
-<span class="sd">            i &amp;= i + w_{\\text{input}} z_{\text{in}} \\</span>
-<span class="sd">            i &amp;= i + w_{\\text{rec}} z_{\text{rec}}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\text{reset}} \\</span>
+<span class="sd">            i &amp;= i + w_{\text{input}} z_{\text{in}} \\</span>
+<span class="sd">            i &amp;= i + w_{\text{rec}} z_{\text{rec}}</span>
 <span class="sd">        \end{align*}</span>
 
-<span class="sd">    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the</span>
+<span class="sd">    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the</span>
 <span class="sd">    recurrent and input spikes respectively.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        input_size (int): Size of the input.</span>
 <span class="sd">        hidden_size (int): Size of the hidden state.</span>
-<span class="sd">        p (LIFParameters): Parameters of the LIF neuron model.</span>
+<span class="sd">        p (LIFExParameters): Parameters of the LIF neuron model.</span>
 <span class="sd">        dt (float): Time step to use.</span>
 
 <span class="sd">    Examples:</span>
 
 <span class="sd">        &gt;&gt;&gt; batch_size = 16</span>
-<span class="sd">        &gt;&gt;&gt; lif = LIFCell(10, 20)</span>
+<span class="sd">        &gt;&gt;&gt; lif_ex = LIFAdExCell(10, 20)</span>
 <span class="sd">        &gt;&gt;&gt; input = torch.randn(batch_size, 10)</span>
-<span class="sd">        &gt;&gt;&gt; s0 = lif.initial_state(batch_size)</span>
-<span class="sd">        &gt;&gt;&gt; output, s0 = lif(input, s0)</span>
+<span class="sd">        &gt;&gt;&gt; s0 = lif_ex.initial_state(batch_size)</span>
+<span class="sd">        &gt;&gt;&gt; output, s0 = lif_ex(input, s0)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">,</span>
-        <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">LIFAdExParameters</span> <span class="o">=</span> <span class="n">LIFAdExParameters</span><span class="p">(),</span>
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LIFCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LIFAdExCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">input_size</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">hidden_size</span><span class="p">)</span>
         <span class="p">)</span>
@@ -114,21 +115,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
-<div class="viewcode-block" id="LIFCell.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFCell.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFAdExCell.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExCell.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.input_size}</span><span class="s2">, </span><span class="si">{self.hidden_size}</span><span class="s2">, p=</span><span class="si">{self.p}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="LIFCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFState</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">LIFState</span><span class="p">(</span>
+<div class="viewcode-block" id="LIFAdExCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFAdExState</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">LIFAdExState</span><span class="p">(</span>
             <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
             <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
             <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+            <span class="n">a</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="LIFCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">LIFState</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="n">lif_step</span><span class="p">(</span>
+<div class="viewcode-block" id="LIFAdExCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">LIFAdExState</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFAdExState</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">lif_adex_step</span><span class="p">(</span>
             <span class="n">input_tensor</span><span class="p">,</span>
             <span class="n">state</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span><span class="p">,</span>
@@ -138,30 +140,30 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="LIFLayer"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFLayer">[docs]</a><span class="k">class</span> <span class="nc">LIFLayer</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A neuron layer that wraps a recurrent LIFCell in time such</span>
+<div class="viewcode-block" id="LIFAdExLayer"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExLayer">[docs]</a><span class="k">class</span> <span class="nc">LIFAdExLayer</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A neuron layer that wraps a recurrent LIFAdExCell in time such</span>
 <span class="sd">    that the layer keeps track of temporal sequences of spikes.</span>
 <span class="sd">    After application, the layer returns a tuple containing</span>
 <span class="sd">      (spikes from all timesteps, state from the last timestep).</span>
 
+
 <span class="sd">    Example:</span>
 <span class="sd">    &gt;&gt;&gt; data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons</span>
-<span class="sd">    &gt;&gt;&gt; l = LIFLayer(2, 4)</span>
+<span class="sd">    &gt;&gt;&gt; l = LIFAdExLayer(2, 4)</span>
 <span class="sd">    &gt;&gt;&gt; s = l.initial_state(5, &#39;cpu&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; l(data, s) # Returns tuple of (Tensor(10, 5, 4), LIFState)</span>
+<span class="sd">    &gt;&gt;&gt; l(data, s) # Returns tuple of (Tensor(10, 5, 4), LIFExState)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LIFLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LIFAdExLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">LIFAdExCell</span><span class="p">(</span><span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LIFLayer.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFLayer.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFState</span><span class="p">:</span>
+<div class="viewcode-block" id="LIFAdExLayer.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExLayer.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFAdExState</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LIFLayer.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">LIFState</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">]:</span>
+<div class="viewcode-block" id="LIFAdExLayer.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">LIFAdExState</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFAdExState</span><span class="p">]:</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="n">input_tensor</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># torch.jit.annotate(List[torch.Tensor], [])</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">input_step</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
@@ -170,65 +172,71 @@
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span> <span class="n">state</span></div></div>
 
 
-<div class="viewcode-block" id="LIFFeedForwardCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFFeedForwardCell">[docs]</a><span class="k">class</span> <span class="nc">LIFFeedForwardCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a LIF neuron.</span>
+<div class="viewcode-block" id="LIFAdExFeedForwardCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExFeedForwardCell">[docs]</a><span class="k">class</span> <span class="nc">LIFAdExFeedForwardCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes a single euler-integration step of a feed-forward exponential</span>
+<span class="sd">    LIF neuron-model adapted from</span>
+<span class="sd">    http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model.</span>
 <span class="sd">    It takes as input the input current as generated by an arbitrary torch</span>
 <span class="sd">    module or function. More specifically it implements one integration step</span>
 <span class="sd">    of the following ODE</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        \\begin{align*}</span>
-<span class="sd">            \dot{v} &amp;= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\</span>
-<span class="sd">            \dot{i} &amp;= -1/\\tau_{\\text{syn}} i</span>
+<span class="sd">        \begin{align*}</span>
+<span class="sd">            \dot{v} &amp;= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right)\right) \\</span>
+<span class="sd">            \dot{i} &amp;= -1/\tau_{\text{syn}} i \\</span>
+<span class="sd">            \dot{a} &amp;= 1/\tau_{\text{ada}} \left( a_{current} (V - v_{\text{leak}}) - a \right)</span>
 <span class="sd">        \end{align*}</span>
 
 <span class="sd">    together with the jump condition</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        z = \Theta(v - v_{\\text{th}})</span>
+<span class="sd">        z = \Theta(v - v_{\text{th}})</span>
 
 <span class="sd">    and transition equations</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        i = i + i_{\\text{in}}</span>
+<span class="sd">        i = i + i_{\text{in}}</span>
 
-<span class="sd">    where :math:`i_{\\text{in}}` is meant to be the result of applying</span>
+<span class="sd">    where :math:`i_{\text{in}}` is meant to be the result of applying</span>
 <span class="sd">    an arbitrary pytorch module (such as a convolution) to input spikes.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        shape: Shape of the feedforward state.</span>
-<span class="sd">        p (LIFParameters): Parameters of the LIF neuron model.</span>
+<span class="sd">        p (LIFExParameters): Parameters of the LIFEx neuron model.</span>
 <span class="sd">        dt (float): Time step to use.</span>
 
 <span class="sd">    Examples:</span>
 
 <span class="sd">        &gt;&gt;&gt; batch_size = 16</span>
-<span class="sd">        &gt;&gt;&gt; lif = LIFFeedForwardCell((20, 30))</span>
+<span class="sd">        &gt;&gt;&gt; lif_ex = LIFExFeedForwardCell((20, 30))</span>
 <span class="sd">        &gt;&gt;&gt; data = torch.randn(batch_size, 20, 30)</span>
-<span class="sd">        &gt;&gt;&gt; s0 = lif.initial_state(batch_size, &quot;cpu&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; output, s0 = lif(data, s0)</span>
+<span class="sd">        &gt;&gt;&gt; s0 = lif_ex.initial_state(batch_size, &quot;cpu&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; output, s0 = lif_ex(data, s0)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LIFFeedForwardCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFAdExParameters</span> <span class="o">=</span> <span class="n">LIFAdExParameters</span><span class="p">(),</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LIFAdExFeedForwardCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
-<div class="viewcode-block" id="LIFFeedForwardCell.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFFeedForwardCell.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFAdExFeedForwardCell.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExFeedForwardCell.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.shape}</span><span class="s2">, p=</span><span class="si">{self.p}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="LIFFeedForwardCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFFeedForwardCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFFeedForwardState</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span>
+<div class="viewcode-block" id="LIFAdExFeedForwardCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExFeedForwardCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFAdExFeedForwardState</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">LIFAdExFeedForwardState</span><span class="p">(</span>
             <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
             <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+            <span class="n">a</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="LIFFeedForwardCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFFeedForwardCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="n">lif_feed_forward_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="LIFAdExFeedForwardCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_adex.html#norse.torch.module.lif_adex.LIFAdExFeedForwardCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">LIFAdExFeedForwardState</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFAdExFeedForwardState</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">lif_adex_feed_forward_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
