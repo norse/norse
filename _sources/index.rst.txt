@@ -105,6 +105,7 @@ Table of contents
 
    about
    installing
+   hardware
    spiking
    learning
    working
@@ -123,7 +124,6 @@ Table of contents
    :caption: API Docs
    :glob:
    :titlesonly:
-   :numbered:
 
    auto_api/norse.benchmark
    auto_api/norse.module

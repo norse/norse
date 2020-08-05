@@ -7,6 +7,7 @@
     <title>Norse &#8212; norse 0.0.3 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
@@ -124,12 +125,17 @@ Read more about why we created Norse in <a class="reference internal" href="abou
 <li class="toctree-l2"><a class="reference internal" href="installing.html#optional-dependencies">2.2. Optional dependencies</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="spiking.html">3. Introduction to spiking neural networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="learning.html">4. Learning with spikes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working.html">5. Working with Norse</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="working.html#fundamental-concepts">5.1. Fundamental concepts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="working.html#how-to-approach-norse">5.2. How to approach Norse</a></li>
-<li class="toctree-l2"><a class="reference internal" href="working.html#examples-on-working-with-norse">5.3. Examples on working with Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">3. Hardware acceleration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#accelerating-norse-models-with-to">3.1. Accelerating Norse models with <code class="docutils literal notranslate"><span class="pre">.to</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#accelerating-norse-nested-models">3.2. Accelerating Norse nested models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spiking.html">4. Introduction to spiking neural networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">5. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">6. Working with Norse</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="working.html#fundamental-concepts">6.1. Fundamental concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="working.html#how-to-approach-norse">6.2. How to approach Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="working.html#examples-on-working-with-norse">6.3. Examples on working with Norse</a></li>
 </ul>
 </li>
 </ul>
@@ -153,26 +159,26 @@ Read more about why we created Norse in <a class="reference internal" href="abou
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.benchmark.html">1. norse.benchmark package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.benchmark.html">1.1.1. norse.benchmark.benchmark module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.bindsnet_lif.html">1.1.2. norse.benchmark.bindsnet_lif module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.main.html">1.1.3. norse.benchmark.main module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.norse_lif.html">1.1.4. norse.benchmark.norse_lif module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.pysnn_lif.html">1.1.5. norse.benchmark.pysnn_lif module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.benchmark.html">norse.benchmark package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.benchmark.html">norse.benchmark.benchmark module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.bindsnet_lif.html">norse.benchmark.bindsnet_lif module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.main.html">norse.benchmark.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.norse_lif.html">norse.benchmark.norse_lif module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.benchmark.pysnn_lif.html">norse.benchmark.pysnn_lif module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.task.html">2. norse.task package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.cartpole.html">2.1.1. norse.task.cartpole module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.cifar10.html">2.1.2. norse.task.cifar10 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.correlation_experiment.html">2.1.3. norse.task.correlation_experiment module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.memory.html">2.1.4. norse.task.memory module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.mnist.html">2.1.5. norse.task.mnist module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.task.html">norse.task package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.cartpole.html">norse.task.cartpole module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.cifar10.html">norse.task.cifar10 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.correlation_experiment.html">norse.task.correlation_experiment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.memory.html">norse.task.memory module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.task.mnist.html">norse.task.mnist module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.torch.html">3. norse.torch package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.functional.html">3.1.1. norse.torch.functional package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.models.html">3.1.2. norse.torch.models package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.module.html">3.1.3. norse.torch.module package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.torch.html">norse.torch package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.functional.html">norse.torch.functional package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.module.html">norse.torch.module package</a></li>
 </ul>
 </li>
 </ul>
@@ -223,9 +229,10 @@ Read more about why we created Norse in <a class="reference internal" href="abou
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">1. About Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="spiking.html">3. Introduction to spiking neural networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="learning.html">4. Learning with spikes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working.html">5. Working with Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">3. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spiking.html">4. Introduction to spiking neural networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">5. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">6. Working with Norse</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -234,9 +241,9 @@ Read more about why we created Norse in <a class="reference internal" href="abou
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.benchmark.html">1. norse.benchmark package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.task.html">2. norse.task package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.torch.html">3. norse.torch package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.task.html">norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.torch.html">norse.torch package</a></li>
 </ul>
 
 <div class="relations">

@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>3. Hardware acceleration &#8212; norse 0.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Introduction to spiking neural networks" href="spiking.html" />
+    <link rel="prev" title="2. Installing Norse" href="installing.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="hardware-acceleration">
+<span id="page-hardware"></span><h1><span class="section-number">3. </span>Hardware acceleration<a class="headerlink" href="#hardware-acceleration" title="Permalink to this headline">¶</a></h1>
+<p>Norse is built on top of <a class="reference external" href="https://pytorch.org">PyTorch</a> which has excellent support for hardware acceleration.
+This article will cover how Norse can be accelerated with GPUs through the <a class="reference external" href="https://en.wikipedia.org/wiki/CUDA">CUDA platform</a>.</p>
+<p>Since Norse is using PyTorch primitives, it is worth familiarising yourself with the use of GPUs in PyTorch.
+Here is a tutorial describing how to use GPUs with the <code class="docutils literal notranslate"><span class="pre">to</span></code> method in PyTorch:
+<a class="reference external" href="https://pytorch.org/tutorials/beginner/nn_tutorial.html#using-your-gpu">https://pytorch.org/tutorials/beginner/nn_tutorial.html#using-your-gpu</a></p>
+<div class="section" id="accelerating-norse-models-with-to">
+<h2><span class="section-number">3.1. </span>Accelerating Norse models with <code class="docutils literal notranslate"><span class="pre">.to</span></code><a class="headerlink" href="#accelerating-norse-models-with-to" title="Permalink to this headline">¶</a></h2>
+<p>To accelerate neuron models in Norse, one simply has to call the <code class="docutils literal notranslate"><span class="pre">.to</span></code> method on models and data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span>
+<span class="n">LIFCell</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accelerating-norse-nested-models">
+<h2><span class="section-number">3.2. </span>Accelerating Norse nested models<a class="headerlink" href="#accelerating-norse-nested-models" title="Permalink to this headline">¶</a></h2>
+<p>It might be necessary to sometimes build your own nested <cite>torch.nn</cite> modules.
+In that case it’s recommended to propagate a <code class="docutils literal notranslate"><span class="pre">device</span></code> parameter to inner modules, to ensure that data is
+moved to the GPU as soon as possible.</p>
+<p>Here is an example of a nested model that we will move to the GPU
+(taken and simplified from our <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py#L60">MNIST task example</a>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LIFConvNet</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_features</span><span class="p">,</span>
+        <span class="n">seq_length</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;super&quot;</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LIFConvNet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constant_current_encoder</span> <span class="o">=</span> <span class="n">ConstantCurrentLIFEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="n">seq_length</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_features</span> <span class="o">=</span> <span class="n">input_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rsnn</span> <span class="o">=</span> <span class="n">ConvNet4</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span> <span class="o">=</span> <span class="n">seq_length</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant_current_encoder</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_features</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+        <span class="n">voltages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsnn</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">voltages</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">log_p_y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">log_p_y</span>
+</pre></div>
+</div>
+<p>We can now use this model in a <code class="docutils literal notranslate"><span class="pre">main</span></code> by initialising it with the correct device:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="n">input_features</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="n">seq_length</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LIFConvNet</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A library to do deep learning with spiking neural networks.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=norse&repo=norse&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Hardware acceleration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#accelerating-norse-models-with-to">3.1. Accelerating Norse models with <code class="docutils literal notranslate"><span class="pre">.to</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#accelerating-norse-nested-models">3.2. Accelerating Norse nested models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spiking.html">4. Introduction to spiking neural networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">5. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">6. Working with Norse</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">1. Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experiments.html">2. Running Experiments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.task.html">norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_api/norse.torch.html">norse.torch package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installing.html" title="previous chapter"><span class="section-number">2. </span>Installing Norse</a></li>
+      <li>Next: <a href="spiking.html" title="next chapter"><span class="section-number">4. </span>Introduction to spiking neural networks</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/hardware.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
