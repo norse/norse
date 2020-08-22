@@ -1,10 +1,7 @@
 import torch
-import matplotlib.pyplot as plt
 
 from .stdp import (
     STDPState,
-    STDPParameters,
-    STDPConvParameters,
     linear_soft_multiplicative_stdp_step,
     linear_hard_multiplicative_stdp_step,
     linear_additive_stdp_step,
