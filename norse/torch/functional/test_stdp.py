@@ -1,7 +1,17 @@
 import torch
 import matplotlib.pyplot as plt
 
-from .stdp import STDPState, STDPParameters, STDPConvParameters, linear_soft_multiplicative_stdp_step, linear_hard_multiplicative_stdp_step, linear_additive_stdp_step, conv2d_soft_multiplicative_stdp_step, conv2d_hard_multiplicative_stdp_step, conv2d_additive_stdp_step
+from .stdp import (
+    STDPState,
+    STDPParameters,
+    STDPConvParameters,
+    linear_soft_multiplicative_stdp_step,
+    linear_hard_multiplicative_stdp_step,
+    linear_additive_stdp_step,
+    conv2d_soft_multiplicative_stdp_step,
+    conv2d_hard_multiplicative_stdp_step,
+    conv2d_additive_stdp_step,
+)
 
 
 def test_linear_soft_multiplicative_stdp_step():
@@ -54,7 +64,10 @@ def test_conv2d_soft_multiplicative_stdp_step():
     torch.nn.init.uniform_(w)  # weights between 0 and 1 as default
     z_pre = torch.ones((time, batch, in_channels, *in_hw))
     z_post = (torch.randn(time, batch, out_channels, *out_hw) > 0).float()
-    s = STDPState(x=torch.zeros(batch, in_channels, *in_hw), y=torch.zeros(batch, out_channels, *out_hw))
+    s = STDPState(
+        x=torch.zeros(batch, in_channels, *in_hw),
+        y=torch.zeros(batch, out_channels, *out_hw),
+    )
 
     for i in range(time):
         dw, s = conv2d_soft_multiplicative_stdp_step(w, z_pre[i], z_post[i], s)
@@ -72,7 +85,10 @@ def test_conv2d_hard_multiplicative_stdp_step():
     torch.nn.init.uniform_(w)  # weights between 0 and 1 as default
     z_pre = torch.ones((time, batch, in_channels, *in_hw))
     z_post = (torch.randn(time, batch, out_channels, *out_hw) > 0).float()
-    s = STDPState(x=torch.zeros(batch, in_channels, *in_hw), y=torch.zeros(batch, out_channels, *out_hw))
+    s = STDPState(
+        x=torch.zeros(batch, in_channels, *in_hw),
+        y=torch.zeros(batch, out_channels, *out_hw),
+    )
 
     for i in range(time):
         dw, s = conv2d_hard_multiplicative_stdp_step(w, z_pre[i], z_post[i], s)
@@ -90,7 +106,10 @@ def test_conv2d_additive_stdp_step():
     torch.nn.init.uniform_(w)  # weights between 0 and 1 as default
     z_pre = torch.ones((time, batch, in_channels, *in_hw))
     z_post = (torch.randn(time, batch, out_channels, *out_hw) > 0).float()
-    s = STDPState(x=torch.zeros(batch, in_channels, *in_hw), y=torch.zeros(batch, out_channels, *out_hw))
+    s = STDPState(
+        x=torch.zeros(batch, in_channels, *in_hw),
+        y=torch.zeros(batch, out_channels, *out_hw),
+    )
 
     for i in range(time):
         dw, s = conv2d_additive_stdp_step(w, z_pre[i], z_post[i], s)

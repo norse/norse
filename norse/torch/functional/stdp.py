@@ -18,6 +18,7 @@ class STDPParameters(NamedTuple):
         eta_plus (float): contribution of pre-post activity to synaptic weight (should be >= 0)
         eta_minus (float): contribution of post-pre activity to synaptic weight (should be >= 0)
     """
+
     a_pre: torch.Tensor = torch.as_tensor(1.0)
     a_post: torch.Tensor = torch.as_tensor(1.0)
     tau_pre_inv: torch.Tensor = torch.as_tensor(1.0 / 100e-3)
@@ -46,6 +47,7 @@ class STDPConvParameters(NamedTuple):
         padding (int or tuple): convolutional padding, defaults to 0 like nn.Conv2d
         dilation (int or tuple): convolutional dilation, defaults to 1 like nn.Conv2d
     """
+
     a_pre: torch.Tensor = torch.as_tensor(1.0)
     a_post: torch.Tensor = torch.as_tensor(1.0)
     tau_pre_inv: torch.Tensor = torch.as_tensor(1.0 / 100e-3)
@@ -59,8 +61,6 @@ class STDPConvParameters(NamedTuple):
     dilation: Union[int, Tuple] = 1
 
 
-
-
 class STDPState(NamedTuple):
     """State of spike-timing-dependent plasticity (STDP)
 
@@ -68,6 +68,7 @@ class STDPState(NamedTuple):
         x (torch.Tensor): presynaptic spike trace
         y (torch.Tensor): postsynaptic spike trace
     """
+
     x: torch.Tensor
     y: torch.Tensor
 
@@ -259,15 +260,31 @@ def conv2d_soft_multiplicative_stdp_step(
     out_channels, _, kernel_h, kernel_w = w.shape
 
     # Unfold presynaptic neurons to get receptive field per postsynaptic neuron
-    x_decayed_uf = torch.nn.functional.unfold(x_decayed, (kernel_h, kernel_w), dilation=p.dilation, padding=p.padding, stride=p.stride)
-    z_pre_uf = torch.nn.functional.unfold(z_pre, (kernel_h, kernel_w), dilation=p.dilation, padding=p.padding, stride=p.stride)
+    x_decayed_uf = torch.nn.functional.unfold(
+        x_decayed,
+        (kernel_h, kernel_w),
+        dilation=p.dilation,
+        padding=p.padding,
+        stride=p.stride,
+    )
+    z_pre_uf = torch.nn.functional.unfold(
+        z_pre,
+        (kernel_h, kernel_w),
+        dilation=p.dilation,
+        padding=p.padding,
+        stride=p.stride,
+    )
 
     # TODO: what to do with batch dimension in an online rule? Sum? Nothing?
     # Sum before reshape
-    dw_plus = _A_plus_soft(w, p.w_max, p.eta_plus) * torch.bmm(z_post.view(batch_size, out_channels, -1), x_decayed_uf.permute((0, 2, 1))).sum(0).view(w.shape)
-    dw_minus = _A_minus_soft(w, p.w_min, p.eta_minus) * torch.bmm(y_decayed.view(batch_size, out_channels, -1), z_pre_uf.permute((0, 2, 1))).sum(0).view(w.shape)
+    dw_plus = _A_plus_soft(w, p.w_max, p.eta_plus) * torch.bmm(
+        z_post.view(batch_size, out_channels, -1), x_decayed_uf.permute((0, 2, 1))
+    ).sum(0).view(w.shape)
+    dw_minus = _A_minus_soft(w, p.w_min, p.eta_minus) * torch.bmm(
+        y_decayed.view(batch_size, out_channels, -1), z_pre_uf.permute((0, 2, 1))
+    ).sum(0).view(w.shape)
 
-    dw = (dw_plus - dw_minus)
+    dw = dw_plus - dw_minus
 
     return dw, STDPState(x=x_decayed, y=y_decayed)
 
@@ -303,15 +320,31 @@ def conv2d_hard_multiplicative_stdp_step(
     out_channels, _, kernel_h, kernel_w = w.shape
 
     # Unfold presynaptic neurons to get receptive field per postsynaptic neuron
-    x_decayed_uf = torch.nn.functional.unfold(x_decayed, (kernel_h, kernel_w), dilation=p.dilation, padding=p.padding, stride=p.stride)
-    z_pre_uf = torch.nn.functional.unfold(z_pre, (kernel_h, kernel_w), dilation=p.dilation, padding=p.padding, stride=p.stride)
+    x_decayed_uf = torch.nn.functional.unfold(
+        x_decayed,
+        (kernel_h, kernel_w),
+        dilation=p.dilation,
+        padding=p.padding,
+        stride=p.stride,
+    )
+    z_pre_uf = torch.nn.functional.unfold(
+        z_pre,
+        (kernel_h, kernel_w),
+        dilation=p.dilation,
+        padding=p.padding,
+        stride=p.stride,
+    )
 
     # TODO: what to do with batch dimension in an online rule? Sum? Nothing?
     # Sum before reshape
-    dw_plus = _A_plus_hard(w, p.w_max, p.eta_plus) * torch.bmm(z_post.view(batch_size, out_channels, -1), x_decayed_uf.permute((0, 2, 1))).sum(0).view(w.shape)
-    dw_minus = _A_minus_hard(w, p.w_min, p.eta_minus) * torch.bmm(y_decayed.view(batch_size, out_channels, -1), z_pre_uf.permute((0, 2, 1))).sum(0).view(w.shape)
+    dw_plus = _A_plus_hard(w, p.w_max, p.eta_plus) * torch.bmm(
+        z_post.view(batch_size, out_channels, -1), x_decayed_uf.permute((0, 2, 1))
+    ).sum(0).view(w.shape)
+    dw_minus = _A_minus_hard(w, p.w_min, p.eta_minus) * torch.bmm(
+        y_decayed.view(batch_size, out_channels, -1), z_pre_uf.permute((0, 2, 1))
+    ).sum(0).view(w.shape)
 
-    dw = (dw_plus - dw_minus)
+    dw = dw_plus - dw_minus
 
     return dw, STDPState(x=x_decayed, y=y_decayed)
 
@@ -346,11 +379,27 @@ def conv2d_additive_stdp_step(
     out_channels, _, kernel_h, kernel_w = w.shape
 
     # Unfold presynaptic neurons to get receptive field per postsynaptic neuron
-    x_decayed_uf = torch.nn.functional.unfold(x_decayed, (kernel_h, kernel_w), dilation=p.dilation, padding=p.padding, stride=p.stride)
-    z_pre_uf = torch.nn.functional.unfold(z_pre, (kernel_h, kernel_w), dilation=p.dilation, padding=p.padding, stride=p.stride)
+    x_decayed_uf = torch.nn.functional.unfold(
+        x_decayed,
+        (kernel_h, kernel_w),
+        dilation=p.dilation,
+        padding=p.padding,
+        stride=p.stride,
+    )
+    z_pre_uf = torch.nn.functional.unfold(
+        z_pre,
+        (kernel_h, kernel_w),
+        dilation=p.dilation,
+        padding=p.padding,
+        stride=p.stride,
+    )
 
-    dw_plus = p.eta_plus * torch.bmm(z_post.view(batch_size, out_channels, -1), x_decayed_uf.permute((0, 2, 1)))
-    dw_minus = p.eta_minus * torch.bmm(y_decayed.view(batch_size, out_channels, -1), z_pre_uf.permute((0, 2, 1)))
+    dw_plus = p.eta_plus * torch.bmm(
+        z_post.view(batch_size, out_channels, -1), x_decayed_uf.permute((0, 2, 1))
+    )
+    dw_minus = p.eta_minus * torch.bmm(
+        y_decayed.view(batch_size, out_channels, -1), z_pre_uf.permute((0, 2, 1))
+    )
 
     # TODO: what to do with batch dimension in an online rule? Sum? Nothing?
     dw = (dw_plus - dw_minus).sum(0).view(w.shape)
