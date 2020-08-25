@@ -12,14 +12,12 @@ class IFConstantCurrentEncoder(torch.nn.Module):
         v_th=1.0,
         v_reset=0.0,
         dt: float = 0.001,
-        device="cpu",
     ):
         super(IFConstantCurrentEncoder, self).__init__()
         self.seq_length = seq_length
         self.tau_mem_inv = tau_mem_inv
         self.v_th = v_th
         self.v_reset = v_reset
-        self.device = device
         self.dt = dt
 
     def forward(self, x):

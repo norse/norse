@@ -25,7 +25,6 @@ from norse.torch.module.lif import LIFFeedForwardCell
 class Net(torch.nn.Module):
     def __init__(
         self,
-        device="cpu",
         num_channels=1,
         feature_size=32,
         model="super",
@@ -49,30 +48,24 @@ class Net(torch.nn.Module):
             (1024,), p=LIFParameters(method=model, alpha=100.0)
         )
         self.out = LICell(1024, 10)
-        self.device = device
         self.dtype = dtype
+        # One would normally also define the device here
+        # However, Norse has been built to infer the device type from the input data
+        # It is still possible to enforce the device type on initialisation
+        # More details are available in our documentation:
+        #   https://norse.github.io/norse/hardware.html
 
     def forward(self, x):
         seq_length = x.shape[0]
         seq_batch_size = x.shape[1]
 
         # specify the initial states
-        s0 = self.lif0.initial_state(
-            seq_batch_size, device=self.device, dtype=self.dtype
-        )
-        s1 = self.lif1.initial_state(
-            seq_batch_size, device=self.device, dtype=self.dtype
-        )
-        s2 = self.lif2.initial_state(
-            seq_batch_size, device=self.device, dtype=self.dtype
-        )
-        so = self.out.initial_state(
-            seq_batch_size, device=self.device, dtype=self.dtype
-        )
+        s0 = None
+        s1 = None
+        s2 = None
+        so = None
 
-        voltages = torch.zeros(
-            seq_length, seq_batch_size, 10, device=self.device, dtype=self.dtype
-        )
+        voltages = torch.zeros(seq_length, seq_batch_size, 10, dtype=self.dtype)
 
         for ts in range(seq_length):
             z = self.conv1(x[ts, :])

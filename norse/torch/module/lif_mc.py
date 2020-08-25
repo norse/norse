@@ -1,10 +1,10 @@
 import torch
 
+import numpy as np
+from typing import Optional, Tuple
+
 from ..functional.lif import LIFState, LIFParameters
 from ..functional.lif_mc import lif_mc_step
-
-import numpy as np
-from typing import Tuple
 
 
 class LIFMCCell(torch.nn.Module):
@@ -65,18 +65,25 @@ class LIFMCCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(
-        self, batch_size: int, device: torch.device, dtype=torch.float
-    ) -> LIFState:
-        return LIFState(
-            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFState
+        self, input_tensor: torch.Tensor, state: Optional[LIFState] = None
     ) -> Tuple[torch.Tensor, LIFState]:
+        if state is None:
+            state = LIFState(
+                z=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor,
+                ),
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor,
+                ),
+            )
         return lif_mc_step(
             input_tensor,
             state,

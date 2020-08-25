@@ -1,4 +1,8 @@
-from typing import Callable, NamedTuple
+import torch
+from typing import NamedTuple
+from norse.torch.functional.heaviside import heaviside
+
+from norse.torch.functional.stdp_sensor import STDPSensorState
 
 
 class STDPState(NamedTuple):

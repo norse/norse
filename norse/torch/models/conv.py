@@ -7,7 +7,7 @@ from norse.torch.module.lif import LIFFeedForwardCell
 
 class ConvNet(torch.nn.Module):
     def __init__(
-        self, device, num_channels=1, feature_size=28, method="super", dtype=torch.float
+        self, num_channels=1, feature_size=28, method="super", dtype=torch.float
     ):
         super(ConvNet, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -15,7 +15,6 @@ class ConvNet(torch.nn.Module):
         self.conv2 = torch.nn.Conv2d(20, 50, 5, 1)
         self.fc1 = torch.nn.Linear(self.features * self.features * 50, 500)
         self.out = LICell(500, 10)
-        self.device = device
         self.lif0 = LIFFeedForwardCell(
             (20, feature_size - 4, feature_size - 4),
             p=LIFParameters(method=method, alpha=100.0),
@@ -34,13 +33,13 @@ class ConvNet(torch.nn.Module):
         batch_size = x.shape[1]
 
         # specify the initial states
-        s0 = self.lif0.initial_state(batch_size, self.device, self.dtype)
-        s1 = self.lif1.initial_state(batch_size, self.device, self.dtype)
-        s2 = self.lif2.initial_state(batch_size, self.device, self.dtype)
-        so = self.out.initial_state(batch_size, device=self.device, dtype=self.dtype)
+        s0 = None
+        s1 = None
+        s2 = None
+        so = None
 
         voltages = torch.zeros(
-            seq_length, batch_size, 10, device=self.device, dtype=self.dtype
+            seq_length, batch_size, 10, device=x.device, dtype=self.dtype
         )
 
         for ts in range(seq_length):
@@ -60,7 +59,7 @@ class ConvNet(torch.nn.Module):
 
 class ConvNet4(torch.nn.Module):
     def __init__(
-        self, device, num_channels=1, feature_size=28, method="super", dtype=torch.float
+        self, num_channels=1, feature_size=28, method="super", dtype=torch.float
     ):
         super(ConvNet4, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -80,7 +79,6 @@ class ConvNet4(torch.nn.Module):
             (1024,), p=LIFParameters(method=method, alpha=100.0)
         )
         self.out = LICell(1024, 10)
-        self.device = device
         self.dtype = dtype
 
     def forward(self, x):
@@ -88,13 +86,13 @@ class ConvNet4(torch.nn.Module):
         batch_size = x.shape[1]
 
         # specify the initial states
-        s0 = self.lif0.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        s1 = self.lif1.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        s2 = self.lif2.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        so = self.out.initial_state(batch_size, device=self.device, dtype=self.dtype)
+        s0 = None
+        s1 = None
+        s2 = None
+        so = None
 
         voltages = torch.zeros(
-            seq_length, batch_size, 10, device=self.device, dtype=self.dtype
+            seq_length, batch_size, 10, device=x.device, dtype=self.dtype
         )
 
         for ts in range(seq_length):

@@ -114,22 +114,17 @@ def signed_poisson_train(images, seq_length, rel_fmax=0.2):
 
 
 class LIFConvNet(torch.nn.Module):
-    def __init__(self, num_channels, device="cpu"):
+    def __init__(self, num_channels):
         super(LIFConvNet, self).__init__()
 
         if FLAGS.net == "convnet":
             dtype = torch.float
-            self.rsnn = ConvNet(
-                device=device, num_channels=num_channels, feature_size=32, dtype=dtype
-            )
+            self.rsnn = ConvNet(num_channels=num_channels, feature_size=32, dtype=dtype)
         elif FLAGS.net == "convnet4":
-            self.rsnn = ConvNet4(
-                device=device, num_channels=num_channels, feature_size=32
-            )
-        self.device = device
+            self.rsnn = ConvNet4(num_channels=num_channels, feature_size=32)
 
     def forward(self, x):
-        voltages = self.rsnn(x.to(self.device).permute(1, 0, 2, 3, 4))
+        voltages = self.rsnn(x).permute(1, 0, 2)
         m, _ = torch.max(voltages, 0)
         log_p_y = torch.nn.functional.log_softmax(m, dim=1)
         return log_p_y
@@ -351,7 +346,7 @@ def main(args):
     os.chdir(rundir)
     FLAGS.append_flags_into_file("flags.txt")
 
-    model = LIFConvNet(num_channels=num_channels, device=device,).to(device)
+    model = LIFConvNet(num_channels=num_channels).to(device)
 
     print(model)
 

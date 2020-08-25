@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 import torch
@@ -52,8 +52,7 @@ class LIFExCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif_ex = LIFExCell(10, 20)
         >>> input = torch.randn(batch_size, 10)
-        >>> s0 = lif_ex.initial_state(batch_size)
-        >>> output, s0 = lif_ex(input, s0)
+        >>> output, s0 = lif_ex(input)
     """
 
     def __init__(
@@ -79,16 +78,24 @@ class LIFExCell(torch.nn.Module):
         s = f"{self.input_size}, {self.hidden_size}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFExState:
-        return LIFExState(
-            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFExState
+        self, input_tensor: torch.Tensor, state: Optional[LIFExState] = None
     ) -> Tuple[torch.Tensor, LIFExState]:
+        if state is None:
+            state = LIFExState(
+                z=torch.zeros(
+                    (input_tensor.shape[0], self.hidden_size),
+                    dtype=input_tensor.dtype,
+                    device=input_tensor.device,
+                ),
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
         return lif_ex_step(
             input_tensor,
             state,
@@ -109,19 +116,15 @@ class LIFExLayer(torch.nn.Module):
     Example:
     >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
     >>> l = LIFExLayer(2, 4)
-    >>> s = l.initial_state(5, 'cpu')
-    >>> l(data, s) # Returns tuple of (Tensor(10, 5, 4), LIFExState)
+    >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFExState)
     """
 
     def __init__(self, *cell_args, **kw_args):
         super(LIFExLayer, self).__init__()
         self.cell = LIFExCell(*cell_args, **kw_args)
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFExState:
-        return self.cell.initial_state(batch_size, device, dtype)
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFExState
+        self, input_tensor: torch.Tensor, state: Optional[LIFExState] = None
     ) -> Tuple[torch.Tensor, LIFExState]:
         inputs = input_tensor.unbind(0)
         outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
@@ -168,8 +171,7 @@ class LIFExFeedForwardCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif_ex = LIFExFeedForwardCell((20, 30))
         >>> data = torch.randn(batch_size, 20, 30)
-        >>> s0 = lif_ex.initial_state(batch_size, "cpu")
-        >>> output, s0 = lif_ex(data, s0)
+        >>> output, s0 = lif_ex(data)
     """
 
     def __init__(
@@ -184,13 +186,12 @@ class LIFExFeedForwardCell(torch.nn.Module):
         s = f"{self.shape}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype=None) -> LIFExFeedForwardState:
-        return LIFExFeedForwardState(
-            v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, x: torch.Tensor, state: LIFExFeedForwardState
+        self, x: torch.Tensor, state: Optional[LIFExFeedForwardState] = None
     ) -> Tuple[torch.Tensor, LIFExFeedForwardState]:
+        if state is None:
+            state = LIFExFeedForwardState(
+                v=self.p.v_leak,
+                i=torch.zeros(x.shape[0], *self.shape, device=x.device, dtype=x.dtype),
+            )
         return lif_ex_feed_forward_step(x, state, p=self.p, dt=self.dt)

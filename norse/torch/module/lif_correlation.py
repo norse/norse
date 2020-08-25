@@ -1,5 +1,7 @@
 import torch
 
+from typing import Optional, Tuple
+
 from ..functional.lif_correlation import (
     LIFCorrelationState,
     LIFCorrelationParameters,
@@ -7,8 +9,6 @@ from ..functional.lif_correlation import (
 )
 from ..functional.lif import LIFState
 from ..functional.correlation_sensor import CorrelationSensorState
-
-from typing import Tuple
 
 
 class LIFCorrelation(torch.nn.Module):
@@ -25,61 +25,73 @@ class LIFCorrelation(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(
-        self, batch_size, device, dtype=torch.float
-    ) -> LIFCorrelationState:
-        hidden_features = self.hidden_size
-        input_features = self.input_size
-
-        return LIFCorrelationState(
-            lif_state=LIFState(
-                z=torch.zeros(batch_size, hidden_features, device=device, dtype=dtype),
-                v=torch.zeros(batch_size, hidden_features, device=device, dtype=dtype),
-                i=torch.zeros(batch_size, hidden_features, device=device, dtype=dtype),
-            ),
-            input_correlation_state=CorrelationSensorState(
-                post_pre=torch.zeros(
-                    (batch_size, input_features, hidden_features),
-                    device=device,
-                    dtype=dtype,
-                ),
-                correlation_trace=torch.zeros(
-                    (batch_size, input_features, hidden_features),
-                    device=device,
-                    dtype=dtype,
-                ).float(),
-                anti_correlation_trace=torch.zeros(
-                    (batch_size, input_features, hidden_features),
-                    device=device,
-                    dtype=dtype,
-                ).float(),
-            ),
-            recurrent_correlation_state=CorrelationSensorState(
-                correlation_trace=torch.zeros(
-                    (batch_size, hidden_features, hidden_features),
-                    device=device,
-                    dtype=dtype,
-                ),
-                anti_correlation_trace=torch.zeros(
-                    (batch_size, hidden_features, hidden_features),
-                    device=device,
-                    dtype=dtype,
-                ),
-                post_pre=torch.zeros(
-                    (batch_size, hidden_features, hidden_features),
-                    device=device,
-                    dtype=dtype,
-                ),
-            ),
-        )
-
     def forward(
         self,
         input_tensor: torch.Tensor,
-        state: LIFCorrelationState,
         input_weights: torch.Tensor,
         recurrent_weights: torch.Tensor,
+        state: Optional[LIFCorrelationState],
     ) -> Tuple[torch.Tensor, LIFCorrelationState]:
+        if state is None:
+            hidden_features = self.hidden_size
+            input_features = self.input_size
+            batch_size = input_tensor.shape[0]
+            state = LIFCorrelationState(
+                lif_state=LIFState(
+                    z=torch.zeros(
+                        batch_size,
+                        hidden_features,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ),
+                    v=self.p.lif_parameters.v_leak,
+                    i=torch.zeros(
+                        batch_size,
+                        hidden_features,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ),
+                ),
+                input_correlation_state=CorrelationSensorState(
+                    post_pre=torch.zeros(
+                        (batch_size, input_features, hidden_features),
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ),
+                    correlation_trace=torch.zeros(
+                        (batch_size, input_features, hidden_features),
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ).float(),
+                    anti_correlation_trace=torch.zeros(
+                        (batch_size, input_features, hidden_features),
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ).float(),
+                ),
+                recurrent_correlation_state=CorrelationSensorState(
+                    correlation_trace=torch.zeros(
+                        (batch_size, hidden_features, hidden_features),
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ),
+                    anti_correlation_trace=torch.zeros(
+                        (batch_size, hidden_features, hidden_features),
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ),
+                    post_pre=torch.zeros(
+                        (batch_size, hidden_features, hidden_features),
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ),
+                ),
+            )
         return lif_correlation_step(
-            input_tensor, state, input_weights, recurrent_weights, self.p, self.dt,
+            input_tensor,
+            state,
+            input_weights,
+            recurrent_weights,
+            self.p,
+            self.dt,
         )

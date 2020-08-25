@@ -32,7 +32,11 @@ class LIFParameters(NamedTuple):
 
 
 default_bio_parameters = LIFParameters(
-    tau_syn_inv=1 / 0.5, tau_mem_inv=1 / 20.0, v_leak=-65.0, v_th=-50.0, v_reset=-65.0,
+    tau_syn_inv=1 / 0.5,
+    tau_mem_inv=1 / 20.0,
+    v_leak=-65.0,
+    v_th=-50.0,
+    v_reset=-65.0,
 )
 
 

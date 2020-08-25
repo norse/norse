@@ -63,15 +63,13 @@ class LIFConvNet(torch.nn.Module):
         input_features,
         seq_length,
         model="super",
-        device="cpu",
         only_first_spike=False,
     ):
         super(LIFConvNet, self).__init__()
         self.constant_current_encoder = ConstantCurrentLIFEncoder(seq_length=seq_length)
         self.only_first_spike = only_first_spike
         self.input_features = input_features
-        self.rsnn = ConvNet4(device=device, method=model)
-        self.device = device
+        self.rsnn = ConvNet4(method=model)
         self.seq_length = seq_length
 
     def forward(self, x):
@@ -88,7 +86,7 @@ class LIFConvNet(torch.nn.Module):
                 if spike_counter[batch, nrn] == 0:
                     zeros[t, batch, nrn] = 1
                     spike_counter[batch, nrn] += 1
-            x = torch.from_numpy(zeros).to(self.device)
+            x = torch.from_numpy(zeros).to(x.device)
 
         x = x.reshape(self.seq_length, batch_size, 1, 28, 28)
         voltages = self.rsnn(x)
@@ -279,7 +277,6 @@ def main(argv):
         input_features,
         FLAGS.seq_length,
         model=FLAGS.model,
-        device=device,
         only_first_spike=FLAGS.only_first_spike,
     ).to(device)
 

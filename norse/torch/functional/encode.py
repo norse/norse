@@ -18,7 +18,7 @@ def constant_current_lif_encode(
     dt: float = 0.001,
 ) -> torch.Tensor:
     """
-    Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that 
+    Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that
     occur during a number of timesteps/iterations (seq_length).
 
     Example:
@@ -26,10 +26,10 @@ def constant_current_lif_encode(
         >>> seq_length = 2 # Simulate two iterations
         >>> constant_current_lif_encode(data, seq_length)
          # State in terms of membrane voltage
-        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   
-                 [0.3800, 0.7600, 0.0000, 0.0000]]), 
+        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],
+                 [0.3800, 0.7600, 0.0000, 0.0000]]),
          # Spikes for each iteration
-         tensor([[0., 0., 0., 1.],                   
+         tensor([[0., 0., 0., 1.],
                  [0., 0., 1., 1.]]))
 
     Parameters:
@@ -54,7 +54,7 @@ def constant_current_lif_encode(
 def gaussian_rbf(tensor: torch.Tensor, sigma: float = 1):
     """
     A `gaussian radial basis kernel <https://en.wikipedia.org/wiki/Radial_basis_function_kernel>`_
-    that calculates the radial basis given a distance value (distance between :math:`x` and a data 
+    that calculates the radial basis given a distance value (distance between :math:`x` and a data
     value :math:`x'`, or :math:`\|\mathbf{x} - \mathbf{x'}\|^2` below).
 
     .. math::
@@ -126,7 +126,10 @@ def population_encode(
 
 
 def poisson_encode(
-    input_values: torch.Tensor, seq_length: int, f_max: float = 100, dt: float = 0.001,
+    input_values: torch.Tensor,
+    seq_length: int,
+    f_max: float = 100,
+    dt: float = 0.001,
 ) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
@@ -209,13 +212,13 @@ def spike_latency_lif_encode(
 
 def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     """
-    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a 
+    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a
     neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes
     fast.
 
     See `R. Van Rullen & S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex <https://doi.org/10.1162/08997660152002852>`_.
 
-    Spikes are identified by their unique position within each sequence. 
+    Spikes are identified by their unique position within each sequence.
 
     Example:
         >>> data = torch.tensor([[0, 1, 1], [1, 1, 1]])

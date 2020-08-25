@@ -7,8 +7,7 @@ def regularization_module_test():
     cell = lif.LIFFeedForwardCell((2,))  # 2 -> 4
     r = RegularizationCell()  # Defaults to spike counting
     data = torch.ones(5, 2) + 10  # Batch size of 5
-    s = cell.initial_state(5, device="cpu")
-    z, s = cell(data, s)
+    z, s = cell(data)
     z, rs = r(z, s)
     assert rs == 0
     z, s = cell(data, s)

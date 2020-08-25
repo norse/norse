@@ -75,8 +75,8 @@ def main():
     num_episodes = 100
 
     for e in range(num_episodes):
-        s1 = lif_correlation.initial_state(batch_size, device=device)
-        so = out.initial_state(batch_size, device=device)
+        s1 = None
+        so = None
 
         voltages = torch.zeros(seq_length, batch_size, output_features, device=device)
         hidden_voltages = torch.zeros(
@@ -91,9 +91,9 @@ def main():
         for ts in range(seq_length):
             z1, s1 = lif_correlation(
                 x[ts, :, :],
-                s1,
                 input_weights=input_weights,
                 recurrent_weights=recurrent_weights,
+                state=s1,
             )
 
             input_weights = correlation_based_update(

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 import torch
 import numpy as np
@@ -70,18 +70,31 @@ class LSNNCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
-        """return the initial state of an LSNN neuron"""
-        return LSNNState(
-            z=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
-            b=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LSNNState
+        self, input_tensor: torch.Tensor, state: Optional[LSNNState] = None
     ) -> Tuple[torch.Tensor, LSNNState]:
+        if state is None:
+            state = LSNNState(
+                z=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                b=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
         return lsnn_step(
             input_tensor,
             state,
@@ -99,9 +112,8 @@ class LSNNLayer(torch.nn.Module):
     Usage:
       >>> from norse.torch.module import LSNNLayer, LSNNCell
       >>> layer = LSNNLayer(LSNNCell, 2, 10)    // LSNNCell of shape 2 -> 10
-      >>> state = layer.initial_state(5, "cpu") // 5 batch size running on CPU
       >>> data  = torch.zeros(2, 5, 2)          // Arbitrary data
-      >>> output, new_state = layer.forward(data, state)
+      >>> output, state = layer.forward(data)
 
     Parameters:
       cell (torch.nn.Module): the underling neuron module, uninitialized
@@ -114,13 +126,8 @@ class LSNNLayer(torch.nn.Module):
         super(LSNNLayer, self).__init__()
         self.cell = cell(*cell_args, **cell_kwargs)
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
-        """Return the initial state of the LSNN layer, as given by the
-        internal LSNNCell"""
-        return self.cell.initial_state(batch_size, device, dtype)
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LSNNState
+        self, input_tensor: torch.Tensor, state: Optional[LSNNState] = None
     ) -> Tuple[torch.Tensor, LSNNState]:
         """
         Takes one step in the LSNN layer by simulating the layer for a number of timesteps.
@@ -130,7 +137,7 @@ class LSNNLayer(torch.nn.Module):
 
         Parameters:
         input_tensor (torch.Tensor): Input tensor with timesteps in the first dimension
-        state (LSNNState): The input LSNN state
+        state (Optional[LSNNState]): The input LSNN state. Defaults to None on the first timestep
 
         Returns:
         A tuple of 1) spikes from each timestep and 2) the LSNNState from the last timestep.
@@ -181,17 +188,23 @@ class LSNNFeedForwardCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(
-        self, batch_size, device, dtype=torch.float
-    ) -> LSNNFeedForwardState:
-        """return the initial state of an LSNN neuron"""
-        return LSNNFeedForwardState(
-            v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            b=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LSNNFeedForwardState
+        self, input_tensor: torch.Tensor, state: Optional[LSNNFeedForwardState] = None
     ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
+        if state is None:
+            state = LSNNFeedForwardState(
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                b=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
         return lsnn_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

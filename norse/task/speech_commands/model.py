@@ -17,8 +17,8 @@ class SNNModel(torch.nn.Module):
         seq_length = x.shape[0]
         batch_size = x.shape[1]
 
-        s = self.cell.initial_state(batch_size, x.device, x.dtype)
-        so = self.readout.initial_state(batch_size, x.device, x.dtype)
+        s = None
+        so = None
 
         for ts in range(seq_length):
             z, s = self.cell(x[ts, :], s)
