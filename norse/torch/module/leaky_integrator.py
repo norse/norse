@@ -1,6 +1,7 @@
 import torch
 import torch.jit
 import numpy as np
+from typing import Optional, Tuple
 
 from ..functional.leaky_integrator import (
     li_step,
@@ -8,8 +9,6 @@ from ..functional.leaky_integrator import (
     LIState,
     LIParameters,
 )
-
-from typing import Tuple
 
 
 class LICell(torch.nn.Module):
@@ -51,20 +50,25 @@ class LICell(torch.nn.Module):
         self.dt = dt
         self.output_features = output_features
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIState:
-        return LIState(
-            v=torch.zeros(
-                (batch_size, self.output_features), device=device, dtype=dtype
-            ),
-            i=torch.zeros(
-                (batch_size, self.output_features), device=device, dtype=dtype
-            ),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIState
+        self, input_tensor: torch.Tensor, state: Optional[LIState]
     ) -> Tuple[torch.Tensor, LIState]:
-        return li_step(input_tensor, state, self.input_weights, p=self.p, dt=self.dt,)
+        if state is None:
+            state = LIState(
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    (input_tensor.shape[0], self.output_features),
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
+        return li_step(
+            input_tensor,
+            state,
+            self.input_weights,
+            p=self.p,
+            dt=self.dt,
+        )
 
 
 class LIFeedForwardCell(torch.nn.Module):
@@ -96,13 +100,17 @@ class LIFeedForwardCell(torch.nn.Module):
         self.dt = dt
         self.shape = shape
 
-    def initial_state(self, batch_size, device, dtype=torch.float):
-        return LIState(
-            v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, s: LIState
+        self, input_tensor: torch.Tensor, state: Optional[LIState]
     ) -> Tuple[torch.Tensor, LIState]:
+        if state is None:
+            state = LIState(
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    *self.shape,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype
+                ),
+            )
         return li_feed_forward_step(input_tensor, s, p=self.p, dt=self.dt)

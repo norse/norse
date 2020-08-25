@@ -30,11 +30,17 @@ Accelerating Norse nested models
 ======================================
 
 It might be necessary to sometimes build your own nested `torch.nn` modules. 
-In that case it's recommended to propagate a ``device`` parameter to inner modules, to ensure that data is 
-moved to the GPU as soon as possible.
+We recommend that you adhere to the PyTorch 
+`torch.nn.Module <https://pytorch.org/docs/stable/generated/torch.nn.Module.html>`_
+idiosyncrasy, where you register possible nested tensors as either 
+`Parameters <https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.register_parameter>`_
+or 
+`Buffers <https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.register_buffer>`_
+.
 
-Here is an example of a nested model that we will move to the GPU
-(taken and simplified from our `MNIST task example <https://github.com/norse/norse/blob/master/norse/task/mnist.py#L60>`_):
+If things are setup correctly, it should be simple to move models and tensors to the GPU
+(the example is a simplified version of our 
+`MNIST task example <https://github.com/norse/norse/blob/master/norse/task/mnist.py#L60>`_):
 
 .. code:: python
 
@@ -44,12 +50,11 @@ Here is an example of a nested model that we will move to the GPU
             input_features,
             seq_length,
             model="super",
-            device="cpu"
         ):
             super(LIFConvNet, self).__init__()
             self.constant_current_encoder = ConstantCurrentLIFEncoder(seq_length=seq_length)
             self.input_features = input_features
-            self.rsnn = ConvNet4(method=model, device=device)
+            self.rsnn = ConvNet4(method=model)
             self.seq_length = seq_length
 
         def forward(self, x):
@@ -63,7 +68,7 @@ Here is an example of a nested model that we will move to the GPU
             log_p_y = torch.nn.functional.log_softmax(m, dim=1)
             return log_p_y
 
-We can now use this model in a ``main`` by initialising it with the correct device:
+We can now initialise the model and move it to the correct device:
 
 .. code:: python
 
@@ -71,5 +76,5 @@ We can now use this model in a ``main`` by initialising it with the correct devi
         device = ...
         input_features = ...
         seq_length = ...
-        model = LIFConvNet(input_features, seq_length, device=device).to(device)
+        model = LIFConvNet(input_features, seq_length).to(device)
         ...

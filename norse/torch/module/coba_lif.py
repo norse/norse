@@ -1,10 +1,10 @@
 import torch
 
+from typing import Optional, Tuple
+import numpy as np
+
 from ..functional.coba_lif import CobaLIFParameters, CobaLIFState
 from ..functional.coba_lif import coba_lif_step
-
-from typing import Tuple
-import numpy as np
 
 
 class CobaLIFCell(torch.nn.Module):
@@ -50,8 +50,7 @@ class CobaLIFCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif = CobaLIFCell(10, 20)
         >>> input = torch.randn(batch_size, 10)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> output, s0 = lif(input)
     """
 
     def __init__(
@@ -71,19 +70,36 @@ class CobaLIFCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(
-        self, batch_size: int, device: torch.device, dtype=torch.float
-    ) -> CobaLIFState:
-        return CobaLIFState(
-            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            g_e=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            g_i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: CobaLIFState
+        self, input_tensor: torch.Tensor, state: Optional[CobaLIFState]
     ) -> Tuple[torch.Tensor, CobaLIFState]:
+        if state is None:
+            state = CobaLIFState(
+                z=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                v=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                g_e=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                g_i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
         return coba_lif_step(
             input_tensor,
             state,

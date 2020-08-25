@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 import torch
@@ -52,8 +52,7 @@ class LIFCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif = LIFCell(10, 20)
         >>> input = torch.randn(batch_size, 10)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> output, s0 = lif(input)
     """
 
     def __init__(
@@ -79,16 +78,25 @@ class LIFCell(torch.nn.Module):
         s = f"{self.input_size}, {self.hidden_size}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFState:
-        return LIFState(
-            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFState
+        self, input_tensor: torch.Tensor, state: Optional[LIFState] = None
     ) -> Tuple[torch.Tensor, LIFState]:
+        if state is None:
+            state = LIFState(
+                z=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
         return lif_step(
             input_tensor,
             state,
@@ -109,19 +117,15 @@ class LIFLayer(torch.nn.Module):
     Example:
     >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
     >>> l = LIFLayer(2, 4)
-    >>> s = l.initial_state(5, 'cpu')
-    >>> l(data, s) # Returns tuple of (Tensor(10, 5, 4), LIFState)
+    >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
     """
 
     def __init__(self, *cell_args, **kw_args):
         super(LIFLayer, self).__init__()
         self.cell = LIFCell(*cell_args, **kw_args)
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFState:
-        return self.cell.initial_state(batch_size, device, dtype)
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFState
+        self, input_tensor: torch.Tensor, state: Optional[LIFState] = None
     ) -> Tuple[torch.Tensor, LIFState]:
         inputs = input_tensor.unbind(0)
         outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
@@ -166,8 +170,7 @@ class LIFFeedForwardCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif = LIFFeedForwardCell((20, 30))
         >>> data = torch.randn(batch_size, 20, 30)
-        >>> s0 = lif.initial_state(batch_size, "cpu")
-        >>> output, s0 = lif(data, s0)
+        >>> output, s0 = lif(data)
     """
 
     def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
@@ -180,13 +183,12 @@ class LIFFeedForwardCell(torch.nn.Module):
         s = f"{self.shape}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype=None) -> LIFFeedForwardState:
-        return LIFFeedForwardState(
-            v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, x: torch.Tensor, state: LIFFeedForwardState
+        self, x: torch.Tensor, state: Optional[LIFFeedForwardState] = None
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
+        if state is None:
+            state = LIFFeedForwardState(
+                v=self.p.v_leak,
+                i=torch.zeros(x.shape[0], *self.shape, device=x.device, dtype=x.dtype),
+            )
         return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)

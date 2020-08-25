@@ -24,8 +24,7 @@ class RegularizationCell(torch.nn.Module):
         >>> cell = lif.LIFCell(2, 4) # 2 -> 4
         >>> r = regularization.RegularizationCell() # Defaults to spike counting
         >>> data = torch.ones(5, 2)  # Batch size of 5
-        >>> s = cell.initial_state(5, device='cpu')
-        >>> z, s = cell(data, s)
+        >>> z, s = cell(data)
         >>> z, regularization_term = r(z, s)
         >>> ...
         >>> loss = ... + 1e-3 * regularization_term

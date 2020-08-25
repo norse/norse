@@ -99,13 +99,11 @@ More information and tasks are available [in our documentation](https://norse.gi
 The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
 ```python
 from norse.torch.module import LSNNLayer, LSNNCell
-# LSNNCell with 2 inputs and 10 outputs
+# LSNNCell with 2 input neurons and 10 output neurons
 layer = LSNNLayer(LSNNCell, 2, 10)
-# 5 batch size running on CPU
-state = layer.initial_state(5, "cpu")
-# Generate data (20 timesteps with 8 sequences simultaneously)
+# Generate data: 20 timesteps with 8 datapoints per batch for 2 neurons
 data  = torch.zeros(20, 8, 2)
-# Tuple of output data of shape (8, 2) and layer state
+# Tuple of (output data of shape (8, 2), layer state)
 output, new_state = layer.forward(data, state)
 ```
 
