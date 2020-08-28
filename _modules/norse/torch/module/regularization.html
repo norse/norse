@@ -63,8 +63,7 @@
 <span class="sd">        &gt;&gt;&gt; cell = lif.LIFCell(2, 4) # 2 -&gt; 4</span>
 <span class="sd">        &gt;&gt;&gt; r = regularization.RegularizationCell() # Defaults to spike counting</span>
 <span class="sd">        &gt;&gt;&gt; data = torch.ones(5, 2)  # Batch size of 5</span>
-<span class="sd">        &gt;&gt;&gt; s = cell.initial_state(5, device=&#39;cpu&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; z, s = cell(data, s)</span>
+<span class="sd">        &gt;&gt;&gt; z, s = cell(data)</span>
 <span class="sd">        &gt;&gt;&gt; z, regularization_term = r(z, s)</span>
 <span class="sd">        &gt;&gt;&gt; ...</span>
 <span class="sd">        &gt;&gt;&gt; loss = ... + 1e-3 * regularization_term</span>

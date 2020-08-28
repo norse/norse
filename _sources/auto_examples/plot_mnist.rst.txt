@@ -38,7 +38,6 @@ as seamlessly as possible into a traditional deep learning pipeline.
     class Net(torch.nn.Module):
         def __init__(
             self,
-            device="cpu",
             num_channels=1,
             feature_size=32,
             model="super",
@@ -62,30 +61,24 @@ as seamlessly as possible into a traditional deep learning pipeline.
                 (1024,), p=LIFParameters(method=model, alpha=100.0)
             )
             self.out = LICell(1024, 10)
-            self.device = device
             self.dtype = dtype
+            # One would normally also define the device here
+            # However, Norse has been built to infer the device type from the input data
+            # It is still possible to enforce the device type on initialisation
+            # More details are available in our documentation:
+            #   https://norse.github.io/norse/hardware.html
 
         def forward(self, x):
             seq_length = x.shape[0]
             seq_batch_size = x.shape[1]
 
             # specify the initial states
-            s0 = self.lif0.initial_state(
-                seq_batch_size, device=self.device, dtype=self.dtype
-            )
-            s1 = self.lif1.initial_state(
-                seq_batch_size, device=self.device, dtype=self.dtype
-            )
-            s2 = self.lif2.initial_state(
-                seq_batch_size, device=self.device, dtype=self.dtype
-            )
-            so = self.out.initial_state(
-                seq_batch_size, device=self.device, dtype=self.dtype
-            )
+            s0 = None
+            s1 = None
+            s2 = None
+            so = None
 
-            voltages = torch.zeros(
-                seq_length, seq_batch_size, 10, device=self.device, dtype=self.dtype
-            )
+            voltages = torch.zeros(seq_length, seq_batch_size, 10, dtype=self.dtype)
 
             for ts in range(seq_length):
                 z = self.conv1(x[ts, :])
@@ -155,53 +148,54 @@ the network on 16 timesteps and there is an explicit batch dimension
 
  .. code-block:: none
 
-    tensor([[[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+    tensor([[[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
+               0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
 
-            [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-               0.0000,  0.0000,  0.0000]],
+            [[-7.7426e-06,  2.0310e-03,  1.5986e-03, -3.6348e-03, -3.0259e-04,
+               1.0326e-03, -5.5463e-03, -6.6664e-04, -1.6617e-03,  3.3682e-03]],
 
-            [[-0.0035,  0.0042, -0.0011,  0.0051,  0.0040,  0.0019, -0.0013,
-               0.0042, -0.0036,  0.0018]]], grad_fn=<CopySlices>)
+            [[-3.8257e-03,  6.3998e-03, -1.3264e-03,  2.5992e-03,  4.1312e-03,
+              -7.6968e-03, -7.5748e-03, -8.0841e-04, -5.6269e-03,  1.9953e-03]]],
+           grad_fn=<CopySlices>)
 
 
 
@@ -234,7 +228,7 @@ backward computation expects a gradient for each timestep
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.502 seconds)
+   **Total running time of the script:** ( 0 minutes  0.525 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_mnist.py:

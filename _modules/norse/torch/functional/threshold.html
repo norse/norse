@@ -61,7 +61,10 @@
 
 <div class="viewcode-block" id="HeaviErfc.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.HeaviErfc.backward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="n">k</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
         <span class="n">derfc</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">k</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">derfc</span> <span class="o">*</span> <span class="n">dy</span><span class="p">,</span> <span class="kc">None</span></div></div>
 
@@ -83,7 +86,10 @@
 
 <div class="viewcode-block" id="HeaviTanh.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.HeaviTanh.backward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="n">k</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
         <span class="n">dtanh</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">tanh</span><span class="p">()</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">dtanh</span><span class="p">,</span> <span class="kc">None</span></div></div>
 
@@ -106,7 +112,10 @@
 
 <div class="viewcode-block" id="Logistic.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.Logistic.backward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="n">k</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
         <span class="n">dtanh</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">tanh</span><span class="p">()</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">dtanh</span><span class="p">,</span> <span class="kc">None</span></div></div>
 
@@ -129,7 +138,7 @@
 
 <div class="viewcode-block" id="HeaviCirc.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.HeaviCirc.backward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
 
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">dy</span>
@@ -156,7 +165,10 @@
 
 <div class="viewcode-block" id="CircDist.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.CircDist.backward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">dy</span>
             <span class="o">*</span> <span class="p">(</span>
@@ -180,7 +192,10 @@
 
 <div class="viewcode-block" id="HeaviTent.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.HeaviTent.backward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">dy</span><span class="p">,</span> <span class="kc">None</span></div></div>
 
 

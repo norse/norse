@@ -57,7 +57,7 @@
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that </span>
+<span class="sd">    Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that</span>
 <span class="sd">    occur during a number of timesteps/iterations (seq_length).</span>
 
 <span class="sd">    Example:</span>
@@ -65,10 +65,10 @@
 <span class="sd">        &gt;&gt;&gt; seq_length = 2 # Simulate two iterations</span>
 <span class="sd">        &gt;&gt;&gt; constant_current_lif_encode(data, seq_length)</span>
 <span class="sd">         # State in terms of membrane voltage</span>
-<span class="sd">        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   </span>
-<span class="sd">                 [0.3800, 0.7600, 0.0000, 0.0000]]), </span>
+<span class="sd">        (tensor([[0.2000, 0.4000, 0.8000, 0.0000],</span>
+<span class="sd">                 [0.3800, 0.7600, 0.0000, 0.0000]]),</span>
 <span class="sd">         # Spikes for each iteration</span>
-<span class="sd">         tensor([[0., 0., 0., 1.],                   </span>
+<span class="sd">         tensor([[0., 0., 0., 1.],</span>
 <span class="sd">                 [0., 0., 1., 1.]]))</span>
 
 <span class="sd">    Parameters:</span>
@@ -93,7 +93,7 @@
 <div class="viewcode-block" id="gaussian_rbf"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.gaussian_rbf">[docs]</a><span class="k">def</span> <span class="nf">gaussian_rbf</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A `gaussian radial basis kernel &lt;https://en.wikipedia.org/wiki/Radial_basis_function_kernel&gt;`_</span>
-<span class="sd">    that calculates the radial basis given a distance value (distance between :math:`x` and a data </span>
+<span class="sd">    that calculates the radial basis given a distance value (distance between :math:`x` and a data</span>
 <span class="sd">    value :math:`x&#39;`, or :math:`\|\mathbf{x} - \mathbf{x&#39;}\|^2` below).</span>
 
 <span class="sd">    .. math::</span>
@@ -165,7 +165,10 @@
 
 
 <div class="viewcode-block" id="poisson_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.poisson_encode">[docs]</a><span class="k">def</span> <span class="nf">poisson_encode</span><span class="p">(</span>
-    <span class="n">input_values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="n">input_values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Encodes a tensor of input values, which are assumed to be in the</span>
@@ -248,13 +251,13 @@
 
 <div class="viewcode-block" id="spike_latency_encode"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.encode.html#norse.torch.functional.encode.spike_latency_encode">[docs]</a><span class="k">def</span> <span class="nf">spike_latency_encode</span><span class="p">(</span><span class="n">input_spikes</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a </span>
+<span class="sd">    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a</span>
 <span class="sd">    neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes</span>
 <span class="sd">    fast.</span>
 
 <span class="sd">    See `R. Van Rullen &amp; S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex &lt;https://doi.org/10.1162/08997660152002852&gt;`_.</span>
 
-<span class="sd">    Spikes are identified by their unique position within each sequence. </span>
+<span class="sd">    Spikes are identified by their unique position within each sequence.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; data = torch.tensor([[0, 1, 1], [1, 1, 1]])</span>

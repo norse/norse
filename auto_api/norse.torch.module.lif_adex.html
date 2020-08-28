@@ -80,8 +80,7 @@ recurrent and input spikes respectively.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lif_ex</span> <span class="o">=</span> <span class="n">LIFAdExCell</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s0</span> <span class="o">=</span> <span class="n">lif_ex</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">,</span> <span class="n">s0</span> <span class="o">=</span> <span class="n">lif_ex</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">s0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">,</span> <span class="n">s0</span> <span class="o">=</span> <span class="n">lif_ex</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
@@ -96,20 +95,10 @@ strings are acceptable.</p>
 
 <dl class="method">
 <dt id="norse.torch.module.lif_adex.LIFAdExCell.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell.forward" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+b752209 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="norse.torch.module.lif_adex.LIFAdExCell.initial_state">
-<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param">batch_size</em>, <em class="sig-param">device</em>, <em class="sig-param">dtype=torch.float32</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell.initial_state" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+e68ee78 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -158,8 +147,7 @@ an arbitrary pytorch module (such as a convolution) to input spikes.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lif_ex</span> <span class="o">=</span> <span class="n">LIFExFeedForwardCell</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s0</span> <span class="o">=</span> <span class="n">lif_ex</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">,</span> <span class="n">s0</span> <span class="o">=</span> <span class="n">lif_ex</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">s0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">,</span> <span class="n">s0</span> <span class="o">=</span> <span class="n">lif_ex</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
@@ -174,20 +162,10 @@ strings are acceptable.</p>
 
 <dl class="method">
 <dt id="norse.torch.module.lif_adex.LIFAdExFeedForwardCell.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExFeedForwardCell.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExFeedForwardCell.forward" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+b752209 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="norse.torch.module.lif_adex.LIFAdExFeedForwardCell.initial_state">
-<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param">batch_size</em>, <em class="sig-param">device</em>, <em class="sig-param">dtype=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExFeedForwardCell.initial_state" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+e68ee78 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -212,25 +190,14 @@ After application, the layer returns a tuple containing</p>
 <p>Example:
 &gt;&gt;&gt; data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
 &gt;&gt;&gt; l = LIFAdExLayer(2, 4)
-&gt;&gt;&gt; s = l.initial_state(5, ‘cpu’)
-&gt;&gt;&gt; l(data, s) # Returns tuple of (Tensor(10, 5, 4), LIFExState)</p>
+&gt;&gt;&gt; l(data) # Returns tuple of (Tensor(10, 5, 4), LIFExState)</p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="method">
 <dt id="norse.torch.module.lif_adex.LIFAdExLayer.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExLayer.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExLayer.forward" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+b752209 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="norse.torch.module.lif_adex.LIFAdExLayer.initial_state">
-<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param">batch_size</em>, <em class="sig-param">device</em>, <em class="sig-param">dtype=torch.float32</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExLayer.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExLayer.initial_state" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+e68ee78 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>

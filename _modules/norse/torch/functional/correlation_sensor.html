@@ -62,8 +62,7 @@
 
 <span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">script</span>
 <span class="k">def</span> <span class="nf">post_pre_update</span><span class="p">(</span><span class="n">post_pre</span><span class="p">,</span> <span class="n">post_spike_mask</span><span class="p">,</span> <span class="n">pre_spike_mask</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Computes which synapses in the synapse array should be updated.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Computes which synapses in the synapse array should be updated.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">post_pre</span> <span class="o">+</span> <span class="n">post_spike_mask</span> <span class="o">-</span> <span class="n">pre_spike_mask</span><span class="p">)</span>
 
 

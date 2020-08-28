@@ -56,7 +56,7 @@
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that </span>
+<span class="sd">        Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that</span>
 <span class="sd">        occur during a number of timesteps/iterations (seq_length).</span>
 
 <span class="sd">        Example:</span>
@@ -64,7 +64,7 @@
 <span class="sd">            &gt;&gt;&gt; seq_length = 2 # Simulate two iterations</span>
 <span class="sd">            &gt;&gt;&gt; constant_current_lif_encode(data, seq_length)</span>
 <span class="sd">            (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage</span>
-<span class="sd">                    [0.3800, 0.7600, 0.0000, 0.0000]]), </span>
+<span class="sd">                    [0.3800, 0.7600, 0.0000, 0.0000]]),</span>
 <span class="sd">            tensor([[0., 0., 0., 1.],                   # Spikes for each iteration</span>
 <span class="sd">                    [0., 0., 1., 1.]]))</span>
 
@@ -80,7 +80,10 @@
 
 <div class="viewcode-block" id="ConstantCurrentLIFEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.ConstantCurrentLIFEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_currents</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">constant_current_lif_encode</span><span class="p">(</span>
-            <span class="n">input_currents</span><span class="p">,</span> <span class="n">seq_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+            <span class="n">input_currents</span><span class="p">,</span>
+            <span class="n">seq_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
+            <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
         <span class="p">)</span></div></div>
 
 
@@ -88,7 +91,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Encodes a tensor of input values, which are assumed to be in the</span>
-<span class="sd">        range [0,1] (if not signed, [-1,1] if signed) </span>
+<span class="sd">        range [0,1] (if not signed, [-1,1] if signed)</span>
 <span class="sd">        into a tensor of one dimension higher of binary values,</span>
 <span class="sd">        which represent input spikes.</span>
 
@@ -168,7 +171,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Encodes a tensor of input values, which are assumed to be in the</span>
-<span class="sd">        range [-1,1] (if not signed, [-1,1] if signed) </span>
+<span class="sd">        range [-1,1] (if not signed, [-1,1] if signed)</span>
 <span class="sd">        into a tensor of one dimension higher of binary values,</span>
 <span class="sd">        which represent input spikes.</span>
 
@@ -213,13 +216,13 @@
 
 <div class="viewcode-block" id="SpikeLatencyEncoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.encode.SpikeLatencyEncoder">[docs]</a><span class="k">class</span> <span class="nc">SpikeLatencyEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a </span>
+<span class="sd">    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a</span>
 <span class="sd">    neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes</span>
 <span class="sd">    fast.</span>
 
 <span class="sd">    See `R. Van Rullen &amp; S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex &lt;https://doi.org/10.1162/08997660152002852&gt;`_.</span>
 
-<span class="sd">    Spikes are identified by their unique position in the input array. </span>
+<span class="sd">    Spikes are identified by their unique position in the input array.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; data = torch.tensor([[0, 1, 1], [1, 1, 1]])</span>

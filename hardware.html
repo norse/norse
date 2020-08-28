@@ -60,22 +60,27 @@ Here is a tutorial describing how to use GPUs with the <code class="docutils lit
 <div class="section" id="accelerating-norse-nested-models">
 <h2><span class="section-number">3.2. </span>Accelerating Norse nested models<a class="headerlink" href="#accelerating-norse-nested-models" title="Permalink to this headline">¶</a></h2>
 <p>It might be necessary to sometimes build your own nested <cite>torch.nn</cite> modules.
-In that case it’s recommended to propagate a <code class="docutils literal notranslate"><span class="pre">device</span></code> parameter to inner modules, to ensure that data is
-moved to the GPU as soon as possible.</p>
-<p>Here is an example of a nested model that we will move to the GPU
-(taken and simplified from our <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py#L60">MNIST task example</a>):</p>
+We recommend that you adhere to the PyTorch
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">torch.nn.Module</a>
+idiosyncrasy, where you register possible nested tensors as either
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.register_parameter">Parameters</a>
+or
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.register_buffer">Buffers</a>
+.</p>
+<p>If things are setup correctly, it should be simple to move models and tensors to the GPU
+(the example is a simplified version of our
+<a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py#L60">MNIST task example</a>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LIFConvNet</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_features</span><span class="p">,</span>
         <span class="n">seq_length</span><span class="p">,</span>
         <span class="n">model</span><span class="o">=</span><span class="s2">&quot;super&quot;</span><span class="p">,</span>
-        <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIFConvNet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">constant_current_encoder</span> <span class="o">=</span> <span class="n">ConstantCurrentLIFEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="n">seq_length</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_features</span> <span class="o">=</span> <span class="n">input_features</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rsnn</span> <span class="o">=</span> <span class="n">ConvNet4</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rsnn</span> <span class="o">=</span> <span class="n">ConvNet4</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span> <span class="o">=</span> <span class="n">seq_length</span>
 
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -90,12 +95,12 @@ moved to the GPU as soon as possible.</p>
         <span class="k">return</span> <span class="n">log_p_y</span>
 </pre></div>
 </div>
-<p>We can now use this model in a <code class="docutils literal notranslate"><span class="pre">main</span></code> by initialising it with the correct device:</p>
+<p>We can now initialise the model and move it to the correct device:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="n">device</span> <span class="o">=</span> <span class="o">...</span>
     <span class="n">input_features</span> <span class="o">=</span> <span class="o">...</span>
     <span class="n">seq_length</span> <span class="o">=</span> <span class="o">...</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">LIFConvNet</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LIFConvNet</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="o">...</span>
 </pre></div>
 </div>

@@ -74,22 +74,26 @@ that represents the current values of the neuron (for instance membrane potentia
 Every time you call a neuron, the state will be returned along with the output (spikes).
 Typically as the second parameter.
 The reason for this is that you can then re-use the state in the next time step, to capture the neuron parameters.</p>
-<p>The initial value of such a state is found by invoking the <code class="docutils literal notranslate"><span class="pre">initial_state</span></code> of the cell/layer, like so:</p>
+<p>The initial value of such a state defaults to meaningful values for each neuron models, but can be
+also be manually configured if needed:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># 8 batches, 2 inputs</span>
 <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>     <span class="c1"># Shape 2 -&gt; 4</span>
-<span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="n">z</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>        <span class="c1"># Invoke with default state</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">z</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="c1"># Invoke with custom state</span>
 </pre></div>
 </div>
-<p>This informs the cell that there are 8 entries in the batches and that the data will be evaluated on the CPU.</p>
-<p>Here is an example on how to evaluate a sequence of inputs modified from the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/module/lif.py#L106">LIFLayer</a>.</p>
+<p>This informs the cell that there are 8 entries in a batch, each providing input to 2 neurons.</p>
+<p>Here is an example on how to evaluate a sequence of inputs modified from the
+<a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/module/lif.py#L106">LIFLayer</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span>
 <span class="n">inputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># Shape (timesteps, batch, input)</span>
 
 <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>           <span class="c1"># Shape (input, output)</span>
-<span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inputs</span><span class="p">)):</span>
         <span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">state</span><span class="p">)</span>
