@@ -25,13 +25,11 @@ jobs:
       run: |
         pip install nose
         pip install coverage
-        nosetests --with-coverage
+        nosetests --with-coverage --cover-package=norse --cover-xml
     - name: Upload Coverage
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
-        files: ./coverage1.xml,./coverage2.xml
-        directory: ./coverage/reports/
         flags: unittests
         env_vars: OS,PYTHON
         name: codecov-umbrella
