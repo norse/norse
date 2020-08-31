@@ -22,6 +22,9 @@ A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) wit
         <img src="https://img.shields.io/discord/723215296399147089"
             alt="chat on Discord"></a>
     <a href="https://www.codacy.com/gh/norse/norse?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=norse/norse&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/a9ab846fc6114afda4320badcb8a69c2"/></a>
+    <a href="https://codecov.io/gh/norse/norse">
+  <img src="https://codecov.io/gh/norse/norse/branch/master/graph/badge.svg" />
+</a>
 </p>
 
 This library aims to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
