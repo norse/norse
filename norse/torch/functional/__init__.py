@@ -15,6 +15,7 @@ from . import lif_mc
 from . import lif
 from . import lsnn
 from . import logical
+from . import regularization
 from . import stdp_sensor
 from . import superspike
 
@@ -32,6 +33,7 @@ __all__ = [
     lif,
     lsnn,
     logical,
+    regularization,
     stdp_sensor,
     superspike,
 ]

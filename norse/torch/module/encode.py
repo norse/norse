@@ -17,7 +17,7 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
         dt: float = 0.001,
     ):
         """
-        Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that 
+        Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that
         occur during a number of timesteps/iterations (seq_length).
 
         Example:
@@ -25,7 +25,7 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
             >>> seq_length = 2 # Simulate two iterations
             >>> constant_current_lif_encode(data, seq_length)
             (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage
-                    [0.3800, 0.7600, 0.0000, 0.0000]]), 
+                    [0.3800, 0.7600, 0.0000, 0.0000]]),
             tensor([[0., 0., 0., 1.],                   # Spikes for each iteration
                     [0., 0., 1., 1.]]))
 
@@ -41,7 +41,10 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
 
     def forward(self, input_currents):
         return encode.constant_current_lif_encode(
-            input_currents, seq_length=self.seq_length, p=self.p, dt=self.dt,
+            input_currents,
+            seq_length=self.seq_length,
+            p=self.p,
+            dt=self.dt,
         )
 
 
@@ -49,7 +52,7 @@ class PoissonEncoder(torch.nn.Module):
     def __init__(self, seq_length: int, f_max: float = 100, dt: float = 0.001):
         """
         Encodes a tensor of input values, which are assumed to be in the
-        range [0,1] (if not signed, [-1,1] if signed) 
+        range [0,1] (if not signed, [-1,1] if signed)
         into a tensor of one dimension higher of binary values,
         which represent input spikes.
 
@@ -129,7 +132,7 @@ class SignedPoissonEncoder(torch.nn.Module):
     def __init__(self, seq_length: int, f_max: float = 100, dt: float = 0.001):
         """
         Encodes a tensor of input values, which are assumed to be in the
-        range [-1,1] (if not signed, [-1,1] if signed) 
+        range [-1,1] (if not signed, [-1,1] if signed)
         into a tensor of one dimension higher of binary values,
         which represent input spikes.
 
@@ -174,13 +177,13 @@ class SpikeLatencyLIFEncoder(torch.nn.Module):
 
 class SpikeLatencyEncoder(torch.nn.Module):
     """
-    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a 
+    For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a
     neuron to spike *first*. Assuming that the inputs are constant, this makes sense in that strong inputs spikes
     fast.
 
     See `R. Van Rullen & S. J. Thorpe (2001): Rate Coding Versus Temporal Order Coding: What the Retinal Ganglion Cells Tell the Visual Cortex <https://doi.org/10.1162/08997660152002852>`_.
 
-    Spikes are identified by their unique position in the input array. 
+    Spikes are identified by their unique position in the input array.
 
     Example:
         >>> data = torch.tensor([[0, 1, 1], [1, 1, 1]])

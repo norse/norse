@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 import torch
@@ -53,8 +53,7 @@ class LIFAdExCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif_ex = LIFAdExCell(10, 20)
         >>> input = torch.randn(batch_size, 10)
-        >>> s0 = lif_ex.initial_state(batch_size)
-        >>> output, s0 = lif_ex(input, s0)
+        >>> output, s0 = lif_ex(input)
     """
 
     def __init__(
@@ -80,17 +79,31 @@ class LIFAdExCell(torch.nn.Module):
         s = f"{self.input_size}, {self.hidden_size}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFAdExState:
-        return LIFAdExState(
-            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            a=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFAdExState
+        self, input_tensor: torch.Tensor, state: Optional[LIFAdExState] = None
     ) -> Tuple[torch.Tensor, LIFAdExState]:
+        if state is None:
+            state = LIFAdExState(
+                z=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                a=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
         return lif_adex_step(
             input_tensor,
             state,
@@ -111,19 +124,15 @@ class LIFAdExLayer(torch.nn.Module):
     Example:
     >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
     >>> l = LIFAdExLayer(2, 4)
-    >>> s = l.initial_state(5, 'cpu')
-    >>> l(data, s) # Returns tuple of (Tensor(10, 5, 4), LIFExState)
+    >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFExState)
     """
 
     def __init__(self, *cell_args, **kw_args):
         super(LIFAdExLayer, self).__init__()
         self.cell = LIFAdExCell(*cell_args, **kw_args)
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFAdExState:
-        return self.cell.initial_state(batch_size, device, dtype)
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFAdExState
+        self, input_tensor: torch.Tensor, state: Optional[LIFAdExState] = None
     ) -> Tuple[torch.Tensor, LIFAdExState]:
         inputs = input_tensor.unbind(0)
         outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
@@ -171,8 +180,7 @@ class LIFAdExFeedForwardCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif_ex = LIFExFeedForwardCell((20, 30))
         >>> data = torch.randn(batch_size, 20, 30)
-        >>> s0 = lif_ex.initial_state(batch_size, "cpu")
-        >>> output, s0 = lif_ex(data, s0)
+        >>> output, s0 = lif_ex(data)
     """
 
     def __init__(
@@ -187,14 +195,23 @@ class LIFAdExFeedForwardCell(torch.nn.Module):
         s = f"{self.shape}, p={self.p}, dt={self.dt}"
         return s
 
-    def initial_state(self, batch_size, device, dtype=None) -> LIFAdExFeedForwardState:
-        return LIFAdExFeedForwardState(
-            v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            a=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, x: torch.Tensor, state: LIFAdExFeedForwardState
+        self, x: torch.Tensor, state: Optional[LIFAdExFeedForwardState] = None
     ) -> Tuple[torch.Tensor, LIFAdExFeedForwardState]:
+        if state is None:
+            state = LIFAdExFeedForwardState(
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    x.shape[0],
+                    *self.shape,
+                    device=x.device,
+                    dtype=x.dtype,
+                ),
+                a=torch.zeros(
+                    x.shape[0],
+                    *self.shape,
+                    device=x.device,
+                    dtype=x.dtype,
+                ),
+            )
         return lif_adex_feed_forward_step(x, state, p=self.p, dt=self.dt)

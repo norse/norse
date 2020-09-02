@@ -46,19 +46,24 @@ Every time you call a neuron, the state will be returned along with the output (
 Typically as the second parameter.
 The reason for this is that you can then re-use the state in the next time step, to capture the neuron parameters.
 
-The initial value of such a state is found by invoking the ``initial_state`` of the cell/layer, like so:
+The initial value of such a state defaults to meaningful values for each neuron models, but can be
+also be manually configured if needed:
 
 .. code:: python
 
     import torch
     from norse.torch.module.lif import LIFCell
-    data = torch.ones(2)
+    data = torch.ones(8, 2)  # 8 batches, 2 inputs
     cell = LIFCell(2, 4)     # Shape 2 -> 4
-    state = cell.initial_state(8, "cpu")
+    z, s = cell(data)        # Invoke with default state
 
-This informs the cell that there are 8 entries in the batches and that the data will be evaluated on the CPU.
+    state = cell.initial_state(8)
+    z, s = cell(data, state) # Invoke with custom state
 
-Here is an example on how to evaluate a sequence of inputs modified from the `LIFLayer <https://github.com/norse/norse/blob/master/norse/torch/module/lif.py#L106>`_.
+This informs the cell that there are 8 entries in a batch, each providing input to 2 neurons.
+
+Here is an example on how to evaluate a sequence of inputs modified from the
+`LIFLayer <https://github.com/norse/norse/blob/master/norse/torch/module/lif.py#L106>`_.
 
 
 .. code:: python
@@ -68,7 +73,6 @@ Here is an example on how to evaluate a sequence of inputs modified from the `LI
     inputs = torch.ones(100, 8, 2) # Shape (timesteps, batch, input)
     
     cell = LIFCell(2, 4)           # Shape (input, output)
-    state = cell.initial_state(8, "cpu")
     outputs = []
         for i in range(len(inputs)):
             out, state = self.cell(inputs[i], state)

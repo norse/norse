@@ -23,8 +23,7 @@ def post_mask(weights, z):
 
 @torch.jit.script
 def post_pre_update(post_pre, post_spike_mask, pre_spike_mask):
-    """Computes which synapses in the synapse array should be updated.
-    """
+    """Computes which synapses in the synapse array should be updated."""
     return heaviside(post_pre + post_spike_mask - pre_spike_mask)
 
 

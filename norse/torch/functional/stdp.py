@@ -29,7 +29,6 @@ class STDPParameters(NamedTuple):
     eta_minus: float = 1.0
 
 
-# TODO: can be merged with above, but redundant passing around of values
 class STDPConvParameters(NamedTuple):
     """Parameters of spike-timing-dependent plasticity (STDP). Same as STDPParameters except
     additional information on convolution (e.g., stride, padding, dilation)
@@ -150,7 +149,6 @@ def linear_soft_multiplicative_stdp_step(
     dw_plus = _A_plus_soft(w, p.w_max, p.eta_plus) * x_decayed * z_post[..., None]
     dw_minus = _A_minus_soft(w, p.w_min, p.eta_minus) * y_decayed[..., None] * z_pre
 
-    # TODO: what to do with batch dimension in an online rule? Sum? Nothing?
     dw = (dw_plus - dw_minus).sum(0)
 
     return dw, STDPState(x=x_decayed, y=y_decayed)
@@ -187,7 +185,6 @@ def linear_hard_multiplicative_stdp_step(
     dw_plus = _A_plus_hard(w, p.w_max, p.eta_plus) * x_decayed * z_post[..., None]
     dw_minus = _A_minus_hard(w, p.w_min, p.eta_minus) * y_decayed[..., None] * z_pre
 
-    # TODO: what to do with batch dimension in an online rule? Sum? Nothing?
     dw = (dw_plus - dw_minus).sum(0)
 
     return dw, STDPState(x=x_decayed, y=y_decayed)
@@ -223,7 +220,6 @@ def linear_additive_stdp_step(
     dw_plus = p.eta_plus * x_decayed * z_post[..., None]
     dw_minus = p.eta_minus * y_decayed[..., None] * z_pre
 
-    # TODO: what to do with batch dimension in an online rule? Sum? Nothing?
     dw = (dw_plus - dw_minus).sum(0)
 
     return dw, STDPState(x=x_decayed, y=y_decayed)
@@ -275,7 +271,6 @@ def conv2d_soft_multiplicative_stdp_step(
         stride=p.stride,
     )
 
-    # TODO: what to do with batch dimension in an online rule? Sum? Nothing?
     # Sum before reshape
     dw_plus = _A_plus_soft(w, p.w_max, p.eta_plus) * torch.bmm(
         z_post.view(batch_size, out_channels, -1), x_decayed_uf.permute((0, 2, 1))
@@ -335,7 +330,6 @@ def conv2d_hard_multiplicative_stdp_step(
         stride=p.stride,
     )
 
-    # TODO: what to do with batch dimension in an online rule? Sum? Nothing?
     # Sum before reshape
     dw_plus = _A_plus_hard(w, p.w_max, p.eta_plus) * torch.bmm(
         z_post.view(batch_size, out_channels, -1), x_decayed_uf.permute((0, 2, 1))
@@ -401,7 +395,6 @@ def conv2d_additive_stdp_step(
         y_decayed.view(batch_size, out_channels, -1), z_pre_uf.permute((0, 2, 1))
     )
 
-    # TODO: what to do with batch dimension in an online rule? Sum? Nothing?
     dw = (dw_plus - dw_minus).sum(0).view(w.shape)
 
     return dw, STDPState(x=x_decayed, y=y_decayed)

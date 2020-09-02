@@ -24,7 +24,16 @@ jobs:
     - name: Test with nose
       run: |
         pip install nose
-        nosetests
+        pip install coverage
+        nosetests --with-coverage --cover-package=norse --cover-xml
+    - name: Upload coverage
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        env_vars: OS,PYTHON
+        name: codecov-umbrella
+        fail_ci_if_error: true
     - name: Lint with black
       run: |
         pip install black

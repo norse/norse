@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 import numpy as np
 import torch
 
@@ -60,8 +60,7 @@ class LIFRefracCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif = LIFRefracCell(10, 20)
         >>> input = torch.randn(batch_size, 10)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> output, s0 = lif(input)
     """
 
     def __init__(
@@ -82,19 +81,33 @@ class LIFRefracCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFRefracState:
-        return LIFRefracState(
-            lif=LIFState(
-                z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-                v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-                i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            ),
-            rho=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFRefracState
+        self, input_tensor: torch.Tensor, state: Optional[LIFRefracState] = None
     ) -> Tuple[torch.Tensor, LIFRefracState]:
+        if state is None:
+            state = LIFRefracState(
+                LIFState(
+                    z=torch.zeros(
+                        input_tensor.shape[0],
+                        *self.shape,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype
+                    ),
+                    v=self.p.lif.v_leak,
+                    i=torch.zeros(
+                        input_tensor.shape[0],
+                        *self.shape,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype
+                    ),
+                ),
+                rho=torch.zeros(
+                    input_tensor.shape[0],
+                    *self.shape,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype
+                ),
+            )
         return lif_refrac_step(
             input_tensor,
             state,
@@ -143,28 +156,41 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif = LIFRefracFeedForwardCell((20, 30))
         >>> input = torch.randn(batch_size, 20, 30)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> output, s0 = lif(input)
     """
 
     def __init__(
-        self, shape, p: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001,
+        self,
+        shape,
+        p: LIFRefracParameters = LIFRefracParameters(),
+        dt: float = 0.001,
     ):
         super(LIFRefracFeedForwardCell, self).__init__()
         self.shape = shape
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype) -> LIFFeedForwardState:
-        return LIFRefracFeedForwardState(
-            LIFFeedForwardState(
-                v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-                i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            ),
-            rho=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input_tensor: torch.Tensor, state: LIFRefracFeedForwardState
+        self,
+        input_tensor: torch.Tensor,
+        state: Optional[LIFRefracFeedForwardState] = None,
     ) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
+        if state is None:
+            state = LIFRefracFeedForwardState(
+                LIFFeedForwardState(
+                    v=self.p.lif.v_leak,
+                    i=torch.zeros(
+                        input_tensor.shape[0],
+                        *self.shape,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype
+                    ),
+                ),
+                rho=torch.zeros(
+                    input_tensor.shape[0],
+                    *self.shape,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype
+                ),
+            )
         return lif_refrac_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

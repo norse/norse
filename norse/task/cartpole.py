@@ -54,13 +54,12 @@ class ANNPolicy(torch.nn.Module):
 
 
 class Policy(torch.nn.Module):
-    def __init__(self, device="cpu"):
+    def __init__(self):
         super(Policy, self).__init__()
         self.state_dim = 4
         self.input_features = 16
         self.hidden_features = 128
         self.output_features = 2
-        self.device = device
         self.constant_current_encoder = ConstantCurrentLIFEncoder(40)
         self.lif = LIFCell(
             2 * self.state_dim,
@@ -75,22 +74,17 @@ class Policy(torch.nn.Module):
 
     def forward(self, x):
         scale = 50
-        x = x.to(self.device)
         x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
         x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
         x = torch.cat([x_pos, x_neg], dim=2)
 
         seq_length, batch_size, _ = x.shape
 
-        # state for hidden layer
-        s1 = self.lif.initial_state(batch_size, device=self.device)
-        # state for output layer
-        so = self.readout.initial_state(batch_size, device=self.device)
-
         voltages = torch.zeros(
-            seq_length, batch_size, self.output_features, device=self.device
+            seq_length, batch_size, self.output_features, device=x.device
         )
 
+        s1 = so = None
         # sequential integration loop
         for ts in range(seq_length):
             z1, s1 = self.lif(x[ts, :, :], s1)
@@ -104,13 +98,12 @@ class Policy(torch.nn.Module):
 
 
 class LSNNPolicy(torch.nn.Module):
-    def __init__(self, device="cpu", model="super"):
+    def __init__(self, model="super"):
         super(LSNNPolicy, self).__init__()
         self.state_dim = 4
         self.input_features = 16
         self.hidden_features = 128
         self.output_features = 2
-        self.device = device
         # self.affine1 = torch.nn.Linear(self.state_dim, self.input_features)
         self.constant_current_encoder = ConstantCurrentLIFEncoder(40)
         self.lif_layer = LSNNCell(
@@ -133,12 +126,12 @@ class LSNNPolicy(torch.nn.Module):
         seq_length, batch_size, _ = x.shape
 
         # state for hidden layer
-        s1 = self.lif_layer.initial_state(batch_size, device=self.device)
+        s1 = None
         # state for output layer
-        so = self.readout.initial_state(batch_size, device=self.device)
+        so = None
 
         voltages = torch.zeros(
-            seq_length, batch_size, self.output_features, device=self.device
+            seq_length, batch_size, self.output_features, device=x.device
         )
 
         # sequential integration loop
@@ -206,7 +199,7 @@ def main(args):
     elif FLAGS.policy == "snn":
         policy = Policy()
     elif FLAGS.policy == "lsnn":
-        policy = LSNNPolicy(device=FLAGS.device, model=FLAGS.model).to(FLAGS.device)
+        policy = LSNNPolicy(model=FLAGS.model).to(FLAGS.device)
     optimizer = torch.optim.Adam(policy.parameters(), lr=FLAGS.learning_rate)
 
     running_rewards = []

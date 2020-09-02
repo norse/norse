@@ -22,6 +22,9 @@ A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) wit
         <img src="https://img.shields.io/discord/723215296399147089"
             alt="chat on Discord"></a>
     <a href="https://www.codacy.com/gh/norse/norse?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=norse/norse&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/a9ab846fc6114afda4320badcb8a69c2"/></a>
+    <a href="https://codecov.io/gh/norse/norse">
+  <img src="https://codecov.io/gh/norse/norse/branch/master/graph/badge.svg" />
+</a>
 </p>
 
 This library aims to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
@@ -99,13 +102,11 @@ More information and tasks are available [in our documentation](https://norse.gi
 The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
 ```python
 from norse.torch.module import LSNNLayer, LSNNCell
-# LSNNCell with 2 inputs and 10 outputs
+# LSNNCell with 2 input neurons and 10 output neurons
 layer = LSNNLayer(LSNNCell, 2, 10)
-# 5 batch size running on CPU
-state = layer.initial_state(5, "cpu")
-# Generate data (20 timesteps with 8 sequences simultaneously)
+# Generate data: 20 timesteps with 8 datapoints per batch for 2 neurons
 data  = torch.zeros(20, 8, 2)
-# Tuple of output data of shape (8, 2) and layer state
+# Tuple of (output data of shape (8, 2), layer state)
 output, new_state = layer.forward(data, state)
 ```
 
