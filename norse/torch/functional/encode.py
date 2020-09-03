@@ -22,7 +22,7 @@ def constant_current_lif_encode(
     occur during a number of timesteps/iterations (seq_length).
 
     Example:
-        >>> data = torch.tensor([2, 4, 8, 16])
+        >>> data = torch.as_tensor([2, 4, 8, 16])
         >>> seq_length = 2 # Simulate two iterations
         >>> constant_current_lif_encode(data, seq_length)
          # State in terms of membrane voltage
@@ -35,7 +35,7 @@ def constant_current_lif_encode(
     Parameters:
         input_current (torch.Tensor): The input tensor, representing LIF current
         seq_length (int): The number of iterations to simulate
-        p (LIFParameters): Initial neuronp. Defaults to zero.
+        p (LIFParameters): Initial neuron parameters.
         dt (float): Time delta between simulation steps
 
     Returns:
@@ -95,7 +95,7 @@ def population_encode(
     .. _Andrew K. Richardson: https://commons.wikimedia.org/wiki/File:PopulationCode.svg
 
     Example:
-        >>> data = torch.tensor(0, 0.5, 1)
+        >>> data = torch.as_tensor([0, 0.5, 1])
         >>> out_features = 3
         >>> population_encode(data, out_features)
         tensor([[1.0000, 0.8825, 0.6065],
@@ -221,7 +221,7 @@ def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     Spikes are identified by their unique position within each sequence.
 
     Example:
-        >>> data = torch.tensor([[0, 1, 1], [1, 1, 1]])
+        >>> data = torch.as_tensor([[0, 1, 1], [1, 1, 1]])
         >>> spike_latency_encode(data)
         tensor([[0, 1, 1],
                 [1, 0, 0]])

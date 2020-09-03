@@ -1,6 +1,6 @@
 import torch
 
-from .lif_adex import (
+from norse.torch.functional.lif_adex import (
     LIFAdExState,
     LIFAdExFeedForwardState,
     lif_adex_step,
@@ -9,7 +9,7 @@ from .lif_adex import (
 )
 
 
-def lif_adex_step_test():
+def test_lif_adex_step():
     x = torch.ones(20)
     s = LIFAdExState(
         z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10), a=torch.zeros(10)
@@ -21,7 +21,7 @@ def lif_adex_step_test():
         _, s = lif_adex_step(x, s, input_weights, recurrent_weights)
 
 
-def lif_adex_feed_forward_step_test():
+def test_lif_adex_feed_forward_step():
     x = torch.ones(10)
     s = LIFAdExFeedForwardState(v=torch.zeros(10), i=torch.zeros(10), a=torch.zeros(10))
 
@@ -29,7 +29,7 @@ def lif_adex_feed_forward_step_test():
         _, s = lif_adex_feed_forward_step(x, s)
 
 
-def lif_adex_current_encoder_test():
+def test_lif_adex_current_encoder():
     x = torch.ones(10)
     v = torch.zeros(10)
     a = torch.zeros(10)

@@ -1,5 +1,5 @@
 import torch
-import numpy as np
+
 from norse.torch.functional.tsodyks_makram import (
     stp_step,
     TsodyksMakramState,
@@ -34,7 +34,7 @@ def example(p):
     return xs, us, current
 
 
-def depressing_test():
+def test_depressing():
     p = TsodyksMakramParameters(
         tau_f_inv=1 / (50.0e-3),
         tau_s_inv=1 / (20.0e-3),
@@ -42,11 +42,11 @@ def depressing_test():
         U=0.45,
     )
     _, _, current = example(p)
-    np.testing.assert_almost_equal(current[100], p.U)
+    assert torch.allclose(current[100], torch.as_tensor(p.U))
     assert current[500:1000].max() < current[0:500].max()
 
 
-def facilitating_test():
+def test_facilitating():
     p = TsodyksMakramParameters(
         tau_f_inv=1 / (750.0e-3),
         tau_s_inv=1 / (20.0e-3),
@@ -54,5 +54,5 @@ def facilitating_test():
         U=0.15,
     )
     _, _, current = example(p)
-    np.testing.assert_almost_equal(current[100], p.U)
+    assert torch.allclose(current[100], torch.as_tensor(p.U))
     assert current[500:1000].max() > current[0:500].max()

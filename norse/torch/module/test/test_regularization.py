@@ -1,10 +1,11 @@
 import torch
-from .. import lif
-from ..regularization import RegularizationCell
+
+from norse.torch.module.lif import LIFFeedForwardCell
+from norse.torch.module.regularization import RegularizationCell
 
 
-def regularization_module_test():
-    cell = lif.LIFFeedForwardCell((2,))  # 2 -> 4
+def test_regularization_module():
+    cell = LIFFeedForwardCell((2,))  # 2 -> 4
     r = RegularizationCell()  # Defaults to spike counting
     data = torch.ones(5, 2) + 10  # Batch size of 5
     z, s = cell(data)

@@ -21,7 +21,7 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
         occur during a number of timesteps/iterations (seq_length).
 
         Example:
-            >>> data = torch.tensor([2, 4, 8, 16])
+            >>> data = torch.as_tensor([2, 4, 8, 16])
             >>> seq_length = 2 # Simulate two iterations
             >>> constant_current_lif_encode(data, seq_length)
             (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage
@@ -31,7 +31,7 @@ class ConstantCurrentLIFEncoder(torch.nn.Module):
 
         Parameters:
             seq_length (int): The number of iterations to simulate
-            p (LIFParameters): Initial neuronp. Defaults to zero.
+            p (LIFParameters): Initial neuron parameters.
             dt (float): Time delta between simulation steps
         """
         super(ConstantCurrentLIFEncoder, self).__init__()
@@ -96,9 +96,9 @@ class PopulationEncoder(torch.nn.Module):
         super(PopulationEncoder, self).__init__()mons.wikimedia.org/wiki/File:PopulationCode.svg
 
         Example:
-            >>> data = torch.tensor(0, 0.5, 1)
+            >>> data = torch.as_tensor([0, 0.5, 1])
             >>> out_features = 3
-            >>> PopulationEncoder(out_features).forward(out_features)
+            >>> PopulationEncoder(out_features).forward(data)
             tensor([[1.0000, 0.8825, 0.6065],
                     [0.8825, 1.0000, 0.8825],
                     [0.6065, 0.8825, 1.0000]])
@@ -186,7 +186,7 @@ class SpikeLatencyEncoder(torch.nn.Module):
     Spikes are identified by their unique position in the input array.
 
     Example:
-        >>> data = torch.tensor([[0, 1, 1], [1, 1, 1]])
+        >>> data = torch.as_tensor([[0, 1, 1], [1, 1, 1]])
         >>> encoder = torch.nn.Sequential(
                         ConstantCurrentLIFEncoder()
                         SpikeLatencyEncoder()

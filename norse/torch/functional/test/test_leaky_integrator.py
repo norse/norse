@@ -1,9 +1,13 @@
 import torch
 
-from .leaky_integrator import LIState, li_feed_forward_step, li_step
+from norse.torch.functional.leaky_integrator import (
+    LIState,
+    li_feed_forward_step,
+    li_step,
+)
 
 
-def lif_step_test():
+def test_lif_step():
     x = torch.ones(20)
     s = LIState(v=torch.zeros(10), i=torch.zeros(10))
     input_weights = torch.randn(10, 20).float()
@@ -12,7 +16,7 @@ def lif_step_test():
         _, s = li_step(x, s, input_weights)
 
 
-def lif_feed_forward_step_test():
+def test_lif_feed_forward_step():
     x = torch.ones(10)
     s = LIState(v=torch.zeros(10), i=torch.zeros(10))
 
