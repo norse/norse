@@ -30,7 +30,7 @@ def test_lif_step():
 
     for result in results:
         z, s = lif_step(x, s, input_weights, recurrent_weights)
-        assert torch.equal(z == result)
+        assert torch.equal(z, result)
 
 
 def test_lif_feed_forward_step():
