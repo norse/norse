@@ -61,7 +61,7 @@
 <span class="sd">    occur during a number of timesteps/iterations (seq_length).</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.tensor([2, 4, 8, 16])</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.as_tensor([2, 4, 8, 16])</span>
 <span class="sd">        &gt;&gt;&gt; seq_length = 2 # Simulate two iterations</span>
 <span class="sd">        &gt;&gt;&gt; constant_current_lif_encode(data, seq_length)</span>
 <span class="sd">         # State in terms of membrane voltage</span>
@@ -74,7 +74,7 @@
 <span class="sd">    Parameters:</span>
 <span class="sd">        input_current (torch.Tensor): The input tensor, representing LIF current</span>
 <span class="sd">        seq_length (int): The number of iterations to simulate</span>
-<span class="sd">        p (LIFParameters): Initial neuronp. Defaults to zero.</span>
+<span class="sd">        p (LIFParameters): Initial neuron parameters.</span>
 <span class="sd">        dt (float): Time delta between simulation steps</span>
 
 <span class="sd">    Returns:</span>
@@ -134,7 +134,7 @@
 <span class="sd">    .. _Andrew K. Richardson: https://commons.wikimedia.org/wiki/File:PopulationCode.svg</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.tensor(0, 0.5, 1)</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.as_tensor([0, 0.5, 1])</span>
 <span class="sd">        &gt;&gt;&gt; out_features = 3</span>
 <span class="sd">        &gt;&gt;&gt; population_encode(data, out_features)</span>
 <span class="sd">        tensor([[1.0000, 0.8825, 0.6065],</span>
@@ -260,7 +260,7 @@
 <span class="sd">    Spikes are identified by their unique position within each sequence.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.tensor([[0, 1, 1], [1, 1, 1]])</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.as_tensor([[0, 1, 1], [1, 1, 1]])</span>
 <span class="sd">        &gt;&gt;&gt; spike_latency_encode(data)</span>
 <span class="sd">        tensor([[0, 1, 1],</span>
 <span class="sd">                [1, 0, 0]])</span>

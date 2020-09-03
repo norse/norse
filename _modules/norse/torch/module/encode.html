@@ -60,7 +60,7 @@
 <span class="sd">        occur during a number of timesteps/iterations (seq_length).</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; data = torch.tensor([2, 4, 8, 16])</span>
+<span class="sd">            &gt;&gt;&gt; data = torch.as_tensor([2, 4, 8, 16])</span>
 <span class="sd">            &gt;&gt;&gt; seq_length = 2 # Simulate two iterations</span>
 <span class="sd">            &gt;&gt;&gt; constant_current_lif_encode(data, seq_length)</span>
 <span class="sd">            (tensor([[0.2000, 0.4000, 0.8000, 0.0000],   # State in terms of membrane voltage</span>
@@ -70,7 +70,7 @@
 
 <span class="sd">        Parameters:</span>
 <span class="sd">            seq_length (int): The number of iterations to simulate</span>
-<span class="sd">            p (LIFParameters): Initial neuronp. Defaults to zero.</span>
+<span class="sd">            p (LIFParameters): Initial neuron parameters.</span>
 <span class="sd">            dt (float): Time delta between simulation steps</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConstantCurrentLIFEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -135,9 +135,9 @@
 <span class="sd">        super(PopulationEncoder, self).__init__()mons.wikimedia.org/wiki/File:PopulationCode.svg</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">            &gt;&gt;&gt; data = torch.tensor(0, 0.5, 1)</span>
+<span class="sd">            &gt;&gt;&gt; data = torch.as_tensor([0, 0.5, 1])</span>
 <span class="sd">            &gt;&gt;&gt; out_features = 3</span>
-<span class="sd">            &gt;&gt;&gt; PopulationEncoder(out_features).forward(out_features)</span>
+<span class="sd">            &gt;&gt;&gt; PopulationEncoder(out_features).forward(data)</span>
 <span class="sd">            tensor([[1.0000, 0.8825, 0.6065],</span>
 <span class="sd">                    [0.8825, 1.0000, 0.8825],</span>
 <span class="sd">                    [0.6065, 0.8825, 1.0000]])</span>
@@ -225,7 +225,7 @@
 <span class="sd">    Spikes are identified by their unique position in the input array.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.tensor([[0, 1, 1], [1, 1, 1]])</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.as_tensor([[0, 1, 1], [1, 1, 1]])</span>
 <span class="sd">        &gt;&gt;&gt; encoder = torch.nn.Sequential(</span>
 <span class="sd">                        ConstantCurrentLIFEncoder()</span>
 <span class="sd">                        SpikeLatencyEncoder()</span>

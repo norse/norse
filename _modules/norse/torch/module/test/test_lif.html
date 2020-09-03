@@ -38,32 +38,32 @@
             
   <h1>Source code for norse.torch.module.test.test_lif</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">norse.torch.module.lif</span> <span class="k">as</span> <span class="nn">lif</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span><span class="p">,</span> <span class="n">LIFLayer</span><span class="p">,</span> <span class="n">LIFFeedForwardCell</span>
 
 
 <div class="viewcode-block" id="test_lif_cell"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif.html#norse.torch.module.test.test_lif.test_lif_cell">[docs]</a><span class="k">def</span> <span class="nf">test_lif_cell</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">lif</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]))</span></div>
+    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="test_lif_layer"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif.html#norse.torch.module.test.test_lif.test_lif_layer">[docs]</a><span class="k">def</span> <span class="nf">test_lif_layer</span><span class="p">():</span>
-    <span class="n">layer</span> <span class="o">=</span> <span class="n">lif</span><span class="o">.</span><span class="n">LIFLayer</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFLayer</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]))</span></div>
+    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="test_lif_feedforward_cell"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif.html#norse.torch.module.test.test_lif.test_lif_feedforward_cell">[docs]</a><span class="k">def</span> <span class="nf">test_lif_feedforward_cell</span><span class="p">():</span>
-    <span class="n">layer</span> <span class="o">=</span> <span class="n">lif</span><span class="o">.</span><span class="n">LIFFeedForwardCell</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFFeedForwardCell</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">]))</span></div>
+    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
