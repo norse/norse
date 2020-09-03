@@ -1,6 +1,6 @@
 import torch
 
-from .coba_lif import (
+from norse.torch.functional.coba_lif import (
     CobaLIFState,
     CobaLIFFeedForwardState,
     coba_lif_feed_forward_step,
@@ -8,7 +8,7 @@ from .coba_lif import (
 )
 
 
-def coba_lif_step_test():
+def test_coba_lif_step():
     x = torch.ones(20)
     s = CobaLIFState(
         z=torch.zeros(10), v=torch.zeros(10), g_e=torch.zeros(10), g_i=torch.zeros(10)
@@ -20,7 +20,7 @@ def coba_lif_step_test():
         _, s = coba_lif_step(x, s, input_weights, recurrent_weights)
 
 
-def coba_lif_feed_forward_step_test():
+def test_coba_lif_feed_forward_step():
     x = torch.ones(10)
     s = CobaLIFFeedForwardState(
         v=torch.zeros(10), g_e=torch.zeros(10), g_i=torch.zeros(10)

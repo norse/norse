@@ -1,6 +1,6 @@
 import torch
 
-from .lsnn import (
+from norse.torch.functional.lsnn import (
     LSNNState,
     LSNNFeedForwardState,
     lsnn_feed_forward_step,
@@ -9,7 +9,7 @@ from .lsnn import (
 )
 
 
-def lsnn_step_test():
+def test_lsnn_step():
     x = torch.ones(20)
     s = LSNNState(
         z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10), b=torch.zeros(10)
@@ -21,7 +21,7 @@ def lsnn_step_test():
         _, s = lsnn_step(x, s, input_weights, recurrent_weights)
 
 
-def lsnn_step_test_batch():
+def test_lsnn_step_batch():
     x = torch.ones(16, 20)
     s = LSNNState(
         z=torch.zeros(16, 10),
@@ -36,7 +36,7 @@ def lsnn_step_test_batch():
         _, s = lsnn_step(x, s, input_weights, recurrent_weights)
 
 
-def ada_lif_step_test():
+def test_ada_lif_step():
     x = torch.ones(20)
     s = LSNNState(
         z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10), b=torch.zeros(10)
@@ -48,7 +48,7 @@ def ada_lif_step_test():
         _, s = ada_lif_step(x, s, input_weights, recurrent_weights)
 
 
-def lsnn_feed_forward_step_test():
+def test_lsnn_feed_forward_step():
     x = torch.ones(10)
     s = LSNNFeedForwardState(v=torch.zeros(10), i=torch.zeros(10), b=torch.zeros(10))
 

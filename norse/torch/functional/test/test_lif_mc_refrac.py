@@ -1,11 +1,11 @@
 import torch
 
-from .lif import LIFFeedForwardState, LIFState
-from .lif_refrac import LIFRefracState, LIFRefracFeedForwardState
-from .lif_mc_refrac import lif_mc_refrac_step, lif_mc_refrac_feed_forward_step
+from norse.torch.functional.lif import LIFFeedForwardState, LIFState
+from norse.torch.functional.lif_refrac import LIFRefracState, LIFRefracFeedForwardState
+from norse.torch.functional.lif_mc_refrac import lif_mc_refrac_step, lif_mc_refrac_feed_forward_step
 
 
-def lif_refrac_step_test():
+def test_lif_refrac_step():
     input_tensor = torch.ones(20)
     s = LIFRefracState(
         lif=LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10)),
@@ -21,7 +21,7 @@ def lif_refrac_step_test():
         )
 
 
-def lif_refrac_feed_forward_step_test():
+def test_lif_refrac_feed_forward_step():
     input_tensor = torch.ones(10)
     s = LIFRefracFeedForwardState(
         lif=LIFFeedForwardState(v=torch.zeros(10), i=torch.zeros(10)),

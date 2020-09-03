@@ -1,7 +1,7 @@
 import torch
 
-from .lif import LIFState, LIFFeedForwardState
-from .lif_refrac import (
+from norse.torch.functional.lif import LIFState, LIFFeedForwardState
+from norse.torch.functional.lif_refrac import (
     LIFRefracState,
     LIFRefracFeedForwardState,
     lif_refrac_feed_forward_step,
@@ -9,7 +9,7 @@ from .lif_refrac import (
 )
 
 
-def lif_refrac_step_test():
+def test_lif_refrac_step():
     x = torch.ones(20)
     s = LIFRefracState(
         lif=LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10)),
@@ -22,7 +22,7 @@ def lif_refrac_step_test():
         _, s = lif_refrac_step(x, s, input_weights, recurrent_weights)
 
 
-def lif_refrac_feed_forward_step_test():
+def test_lif_refrac_feed_forward_step():
     x = torch.ones(10)
     s = LIFRefracFeedForwardState(
         lif=LIFFeedForwardState(v=torch.zeros(10), i=torch.zeros(10)),

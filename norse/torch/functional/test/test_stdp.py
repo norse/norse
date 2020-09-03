@@ -1,6 +1,6 @@
 import torch
 
-from .stdp import (
+from norse.torch.functional.stdp import (
     STDPState,
     linear_soft_multiplicative_stdp_step,
     linear_hard_multiplicative_stdp_step,

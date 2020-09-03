@@ -1,40 +1,34 @@
 import torch
-import norse.torch.module.lsnn as lsnn
-import numpy as np
+from pytest import raises
 
-from nose.tools import raises
-
+from norse.torch.module.lsnn import LSNNCell, LSNNLayer, LSNNState
 
 def test_lsnn_cell():
-    cell = lsnn.LSNNCell(2, 2)
+    cell = LSNNCell(2, 2)
     data = torch.ones(5, 2)
     z, state = cell(data)
-    np.testing.assert_equal(z.numpy(), np.zeros((5, 2)))
+    assert torch.equal(z, torch.zeros((5, 2)))
     z, state = cell(data, state)
-    np.testing.assert_raises(
-        AssertionError,
-        np.testing.assert_equal,
-        state.i.detach().numpy(),
-        np.zeros((5, 2)),
-    )
+    with raises(AssertionError):
+        assert torch.equal(state.i, torch.zeros((5, 2)))
 
 
-@raises(TypeError)
 def test_lsnn_cell_param_fail():
     # pylint: disable=E1120
-    _ = lsnn.LSNNCell()
+    with raises(TypeError):
+        _ = LSNNCell()
 
 
-@raises(RuntimeError)
 def test_lsnn_forward_shape_fail():
-    cell = lsnn.LSNNCell(2, 10)
-    data = torch.zeros(10)
-    cell.forward(data)
+    with raises(RuntimeError):
+        cell = LSNNCell(2, 10)
+        data = torch.zeros(10)
+        cell.forward(data)
 
 
 def test_lsnn_layer():
-    layer = lsnn.LSNNLayer(lsnn.LSNNCell, 2, 10)
+    layer = LSNNLayer(LSNNCell, 2, 10)
     data = torch.zeros(2, 5, 2)
     z, s = layer.forward(data)
-    np.testing.assert_equal(z.detach().numpy(), np.zeros((2, 5, 10)))
-    assert isinstance(s, lsnn.LSNNState)
+    assert torch.equal(z, torch.zeros((2, 5, 10)))
+    assert isinstance(s, LSNNState)

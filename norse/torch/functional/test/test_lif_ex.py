@@ -1,6 +1,6 @@
 import torch
 
-from .lif_ex import (
+from norse.torch.functional.lif_ex import (
     LIFExState,
     LIFExFeedForwardState,
     lif_ex_step,
@@ -9,7 +9,7 @@ from .lif_ex import (
 )
 
 
-def lif_ex_step_test():
+def test_lif_ex_step():
     x = torch.ones(20)
     s = LIFExState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10))
     input_weights = torch.randn(10, 20).float()
@@ -19,7 +19,7 @@ def lif_ex_step_test():
         _, s = lif_ex_step(x, s, input_weights, recurrent_weights)
 
 
-def lif_ex_feed_forward_step_test():
+def test_lif_ex_feed_forward_step():
     x = torch.ones(10)
     s = LIFExFeedForwardState(v=torch.zeros(10), i=torch.zeros(10))
 
@@ -27,7 +27,7 @@ def lif_ex_feed_forward_step_test():
         _, s = lif_ex_feed_forward_step(x, s)
 
 
-def lif_ex_current_encoder_test():
+def test_lif_ex_current_encoder():
     x = torch.ones(10)
     v = torch.zeros(10)
 
