@@ -126,7 +126,10 @@ def population_encode(
 
 
 def poisson_encode(
-    input_values: torch.Tensor, seq_length: int, f_max: float = 100, dt: float = 0.001,
+    input_values: torch.Tensor,
+    seq_length: int,
+    f_max: float = 100,
+    dt: float = 0.001,
 ) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
