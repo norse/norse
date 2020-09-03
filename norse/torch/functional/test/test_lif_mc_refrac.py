@@ -2,7 +2,10 @@ import torch
 
 from norse.torch.functional.lif import LIFFeedForwardState, LIFState
 from norse.torch.functional.lif_refrac import LIFRefracState, LIFRefracFeedForwardState
-from norse.torch.functional.lif_mc_refrac import lif_mc_refrac_step, lif_mc_refrac_feed_forward_step
+from norse.torch.functional.lif_mc_refrac import (
+    lif_mc_refrac_step,
+    lif_mc_refrac_feed_forward_step,
+)
 
 
 def test_lif_refrac_step():

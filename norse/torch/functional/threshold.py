@@ -22,10 +22,7 @@ class HeaviErfc(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            k,
-        ) = ctx.saved_tensors
+        (x, k,) = ctx.saved_tensors
         derfc = (2 * torch.exp(-k.pow(2) * x.pow(2))) / (torch.as_tensor(np.pi).sqrt())
         return derfc * dy, None
 
@@ -47,10 +44,7 @@ class HeaviTanh(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            k,
-        ) = ctx.saved_tensors
+        (x, k,) = ctx.saved_tensors
         dtanh = 1 - (x * k).tanh().pow(2)
         return dy * dtanh, None
 
@@ -73,10 +67,7 @@ class Logistic(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            k,
-        ) = ctx.saved_tensors
+        (x, k,) = ctx.saved_tensors
         dtanh = 1 - (x * k).tanh().pow(2)
         return dy * dtanh, None
 
@@ -126,10 +117,7 @@ class CircDist(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            alpha,
-        ) = ctx.saved_tensors
+        (x, alpha,) = ctx.saved_tensors
         return (
             dy
             * (
@@ -153,10 +141,7 @@ class HeaviTent(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            alpha,
-        ) = ctx.saved_tensors
+        (x, alpha,) = ctx.saved_tensors
         return torch.relu(1 - torch.abs(x)) * alpha * dy, None
 
 

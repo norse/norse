@@ -3,7 +3,12 @@ Test for the encoder module
 """
 import torch
 
-from norse.torch.functional.encode import population_encode, constant_current_lif_encode, spike_latency_lif_encode, spike_latency_encode
+from norse.torch.functional.encode import (
+    population_encode,
+    constant_current_lif_encode,
+    spike_latency_lif_encode,
+    spike_latency_encode,
+)
 
 # Fixes a linting error:
 # pylint: disable=E1102

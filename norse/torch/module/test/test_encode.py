@@ -4,7 +4,11 @@ Test for the stateful encoder module
 
 import torch
 
-from norse.torch.module.encode import PopulationEncoder, ConstantCurrentLIFEncoder, SpikeLatencyEncoder
+from norse.torch.module.encode import (
+    PopulationEncoder,
+    ConstantCurrentLIFEncoder,
+    SpikeLatencyEncoder,
+)
 
 # Fixes a linting error:
 # pylint: disable=E1102
@@ -32,9 +36,7 @@ def test_constant_current_lif_encode():
 
 def test_spike_latency_encode():
     data = torch.as_tensor([[0, 100, 100], [100, 100, 100]])
-    encoder = torch.nn.Sequential(
-        ConstantCurrentLIFEncoder(2), SpikeLatencyEncoder()
-    )
+    encoder = torch.nn.Sequential(ConstantCurrentLIFEncoder(2), SpikeLatencyEncoder())
     actual = encoder(data)
     expected = torch.zeros((2, 2, 3))
     expected[0] = torch.as_tensor([[0, 1, 1], [1, 1, 1]])
@@ -51,7 +53,5 @@ def test_spike_latency_encode_max_spikes():
 
 def test_spike_latency_encode_chain():
     data = torch.randn(7, 5) + 10
-    encoder = torch.nn.Sequential(
-        ConstantCurrentLIFEncoder(2), SpikeLatencyEncoder()
-    )
+    encoder = torch.nn.Sequential(ConstantCurrentLIFEncoder(2), SpikeLatencyEncoder())
     encoder(data)

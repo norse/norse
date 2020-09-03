@@ -20,8 +20,6 @@ def test_regularisation_voltage():
     x = torch.ones(5, 10)
     s = LIFState(torch.ones(10), torch.ones(10), torch.ones(10))
     z, s = lif_feed_forward_step(x, s)
-    zr, rs = regularize_step(
-        z, s, accumulator=voltage_accumulator
-    )
+    zr, rs = regularize_step(z, s, accumulator=voltage_accumulator)
     assert torch.all(torch.eq(z, zr))
     assert torch.all(torch.eq(s.v, rs))

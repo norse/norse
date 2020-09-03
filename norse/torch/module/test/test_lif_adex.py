@@ -1,6 +1,10 @@
 import torch
 
-from norse.torch.module.lif_adex import LIFAdExCell, LIFAdExLayer, LIFAdExFeedForwardCell
+from norse.torch.module.lif_adex import (
+    LIFAdExCell,
+    LIFAdExLayer,
+    LIFAdExFeedForwardCell,
+)
 
 
 def test_lif_adex_cell():

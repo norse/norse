@@ -160,10 +160,7 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     """
 
     def __init__(
-        self,
-        shape,
-        p: LIFRefracParameters = LIFRefracParameters(),
-        dt: float = 0.001,
+        self, shape, p: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001,
     ):
         super(LIFRefracFeedForwardCell, self).__init__()
         self.shape = shape

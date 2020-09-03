@@ -1,6 +1,10 @@
 import torch
 
-from norse.torch.functional.leaky_integrator import LIState, li_feed_forward_step, li_step
+from norse.torch.functional.leaky_integrator import (
+    LIState,
+    li_feed_forward_step,
+    li_step,
+)
 
 
 def test_lif_step():

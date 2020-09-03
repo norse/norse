@@ -10,7 +10,5 @@ def heaviside(data):
         H[n]=\\begin{cases} 0, & n <= 0, \\ 1, & n \g 0, \end{cases}
     """
     return torch.where(
-        data <= torch.zeros_like(data),
-        torch.zeros_like(data),
-        torch.ones_like(data),
+        data <= torch.zeros_like(data), torch.zeros_like(data), torch.ones_like(data),
     )

@@ -48,7 +48,18 @@ def test_lif_current_encoder():
     x = torch.ones(10)
     v = torch.zeros(10)
 
-    results = [0.1, 0.19, 0.2710, 0.3439, 0.4095, 0.4686, 0.5217, 0.5695, 0.6126, 0.6513]
+    results = [
+        0.1,
+        0.19,
+        0.2710,
+        0.3439,
+        0.4095,
+        0.4686,
+        0.5217,
+        0.5695,
+        0.6126,
+        0.6513,
+    ]
 
     for result in results:
         _, v = lif_current_encoder(x, v)

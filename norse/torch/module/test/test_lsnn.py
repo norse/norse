@@ -3,6 +3,7 @@ from pytest import raises
 
 from norse.torch.module.lsnn import LSNNCell, LSNNLayer, LSNNState
 
+
 def test_lsnn_cell():
     cell = LSNNCell(2, 2)
     data = torch.ones(5, 2)
