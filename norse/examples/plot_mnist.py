@@ -37,16 +37,12 @@ class Net(torch.nn.Module):
         self.conv2 = torch.nn.Conv2d(32, 64, 5, 1)
         self.fc1 = torch.nn.Linear(self.features * self.features * 64, 1024)
         self.lif0 = LIFFeedForwardCell(
-            (32, feature_size - 4, feature_size - 4),
             p=LIFParameters(method=model, alpha=100.0),
         )
         self.lif1 = LIFFeedForwardCell(
-            (64, int((feature_size - 4) / 2) - 4, int((feature_size - 4) / 2) - 4),
             p=LIFParameters(method=model, alpha=100.0),
         )
-        self.lif2 = LIFFeedForwardCell(
-            (1024,), p=LIFParameters(method=model, alpha=100.0)
-        )
+        self.lif2 = LIFFeedForwardCell(p=LIFParameters(method=model, alpha=100.0))
         self.out = LICell(1024, 10)
         self.dtype = dtype
         # One would normally also define the device here
@@ -59,7 +55,7 @@ class Net(torch.nn.Module):
         seq_length = x.shape[0]
         seq_batch_size = x.shape[1]
 
-        # specify the initial states
+        # Initialize state variables
         s0 = None
         s1 = None
         s2 = None
