@@ -24,7 +24,7 @@ copyright = "2020, Norse.ai"
 author = "Norse.ai"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.3"
+release = "4"
 
 
 # -- General configuration ---------------------------------------------------
