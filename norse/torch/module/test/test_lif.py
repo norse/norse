@@ -20,7 +20,7 @@ def test_lif_layer():
 
 
 def test_lif_feedforward_cell():
-    layer = LIFFeedForwardCell((2, 4))
+    layer = LIFFeedForwardCell()
     data = torch.randn(5, 2, 4)
     out, _ = layer(data)
 
