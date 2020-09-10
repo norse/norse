@@ -167,3 +167,7 @@ More information about Norse can be found [in our documentation](https://norse.g
 ## 7. License
 
 LGPLv3. See [LICENSE](LICENSE) for license details.
+
+## 8. Funding
+
+The research has received funding from the EC Horizon 2020 Framework Programme under Grant Agreements 785907 and 945539 (HBP).
