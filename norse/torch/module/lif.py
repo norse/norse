@@ -161,26 +161,24 @@ class LIFFeedForwardCell(torch.nn.Module):
     an arbitrary pytorch module (such as a convolution) to input spikes.
 
     Parameters:
-        shape: Shape of the feedforward state.
         p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
 
     Examples:
 
         >>> batch_size = 16
-        >>> lif = LIFFeedForwardCell((20, 30))
+        >>> lif = LIFFeedForwardCell()
         >>> data = torch.randn(batch_size, 20, 30)
         >>> output, s0 = lif(data)
     """
 
-    def __init__(self, shape, p: LIFParameters = LIFParameters(), dt: float = 0.001):
+    def __init__(self, p: LIFParameters = LIFParameters(), dt: float = 0.001):
         super(LIFFeedForwardCell, self).__init__()
-        self.shape = shape
         self.p = p
         self.dt = dt
 
     def extra_repr(self):
-        s = f"{self.shape}, p={self.p}, dt={self.dt}"
+        s = f"p={self.p}, dt={self.dt}"
         return s
 
     def forward(
@@ -189,6 +187,34 @@ class LIFFeedForwardCell(torch.nn.Module):
         if state is None:
             state = LIFFeedForwardState(
                 v=self.p.v_leak,
-                i=torch.zeros(x.shape[0], *self.shape, device=x.device, dtype=x.dtype),
+                i=torch.zeros(x.shape, device=x.device, dtype=x.dtype),
             )
         return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
+
+
+class LIFFeedForwardLayer(torch.nn.Module):
+    """
+    A neuron layer that wraps a recurrent LIFCell in time such
+    that the layer keeps track of temporal sequences of spikes.
+    After application, the layer returns a tuple containing
+      (spikes from all timesteps, state from the last timestep).
+
+    Example:
+    >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
+    >>> l = LIFLayer(2, 4)
+    >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
+    """
+
+    def __init__(self, *cell_args, **kw_args):
+        super(LIFFeedForwardLayer, self).__init__()
+        self.cell = LIFFeedForwardCell(*cell_args, **kw_args)
+
+    def forward(
+        self, input_tensor: torch.Tensor, state: Optional[LIFFeedForwardState] = None
+    ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
+        inputs = input_tensor.unbind(0)
+        outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
+        for _, input_step in enumerate(inputs):
+            out, state = self.cell(input_step, state)
+            outputs += [out]
+        return torch.stack(outputs), state
