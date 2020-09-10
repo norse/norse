@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>1.1. Spiking Neural Networks &#8212; norse 0.0.3 documentation</title>
+    <title>1.1. Spiking Neural Networks &#8212; norse 4 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
@@ -75,16 +75,12 @@ as seamlessly as possible into a traditional deep learning pipeline.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">*</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lif0</span> <span class="o">=</span> <span class="n">LIFFeedForwardCell</span><span class="p">(</span>
-            <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">feature_size</span> <span class="o">-</span> <span class="mi">4</span><span class="p">,</span> <span class="n">feature_size</span> <span class="o">-</span> <span class="mi">4</span><span class="p">),</span>
             <span class="n">p</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class"><span class="n">LIFParameters</span></a><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">100.0</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lif1</span> <span class="o">=</span> <span class="n">LIFFeedForwardCell</span><span class="p">(</span>
-            <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">feature_size</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">feature_size</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span><span class="p">),</span>
             <span class="n">p</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class"><span class="n">LIFParameters</span></a><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">100.0</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span> <span class="o">=</span> <span class="n">LIFFeedForwardCell</span><span class="p">(</span>
-            <span class="p">(</span><span class="mi">1024</span><span class="p">,),</span> <span class="n">p</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class"><span class="n">LIFParameters</span></a><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lif2</span> <span class="o">=</span> <span class="n">LIFFeedForwardCell</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class"><span class="n">LIFParameters</span></a><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">100.0</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">LICell</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
         <span class="c1"># One would normally also define the device here</span>
@@ -97,7 +93,7 @@ as seamlessly as possible into a traditional deep learning pipeline.</p>
         <span class="n">seq_length</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">seq_batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="c1"># specify the initial states</span>
+        <span class="c1"># Initialize state variables</span>
         <span class="n">s0</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">s1</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">s2</span> <span class="o">=</span> <span class="kc">None</span>
@@ -129,9 +125,9 @@ as seamlessly as possible into a traditional deep learning pipeline.</p>
   (conv1): Conv2d(1, 32, kernel_size=(5, 5), stride=(1, 1))
   (conv2): Conv2d(32, 64, kernel_size=(5, 5), stride=(1, 1))
   (fc1): Linear(in_features=1600, out_features=1024, bias=True)
-  (lif0): LIFFeedForwardCell((32, 28, 28), p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
-  (lif1): LIFFeedForwardCell((64, 10, 10), p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
-  (lif2): LIFFeedForwardCell((1024,), p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
+  (lif0): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
+  (lif1): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
+  (lif2): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
   (out): LICell()
 )
 </pre></div>
@@ -149,53 +145,37 @@ the network on 16 timesteps and there is an explicit batch dimension
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([[[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
-           0.0000,  0.0000,  0.0000]],
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
 
-        [[ 0.0008, -0.0034, -0.0018, -0.0020,  0.0024, -0.0026,  0.0023,
-           0.0027, -0.0004, -0.0017]]], grad_fn=&lt;CopySlices&gt;)
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]], grad_fn=&lt;CopySlices&gt;)
 </pre></div>
 </div>
 <p>Since the spiking neural network is implemented as a pytorch module, we
@@ -212,7 +192,7 @@ contrary to most other spiking neural network simulators <code class="docutils l
 always integrates several indepdentent sets of spiking neural
 networks at once.</p>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.447 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.502 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-mnist-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/f4267e394f05c422272daddce2ec6ab0/plot_mnist.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_mnist.py</span></code></a></p>

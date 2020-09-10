@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>norse.torch.module.lif &#8212; norse 0.0.3 documentation</title>
+    <title>norse.torch.module.lif &#8212; norse 4 documentation</title>
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
@@ -200,26 +200,24 @@
 <span class="sd">    an arbitrary pytorch module (such as a convolution) to input spikes.</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        shape: Shape of the feedforward state.</span>
 <span class="sd">        p (LIFParameters): Parameters of the LIF neuron model.</span>
 <span class="sd">        dt (float): Time step to use.</span>
 
 <span class="sd">    Examples:</span>
 
 <span class="sd">        &gt;&gt;&gt; batch_size = 16</span>
-<span class="sd">        &gt;&gt;&gt; lif = LIFFeedForwardCell((20, 30))</span>
+<span class="sd">        &gt;&gt;&gt; lif = LIFFeedForwardCell()</span>
 <span class="sd">        &gt;&gt;&gt; data = torch.randn(batch_size, 20, 30)</span>
 <span class="sd">        &gt;&gt;&gt; output, s0 = lif(data)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIFFeedForwardCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
 <div class="viewcode-block" id="LIFFeedForwardCell.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFFeedForwardCell.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.shape}</span><span class="s2">, p=</span><span class="si">{self.p}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;p=</span><span class="si">{self.p}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
 <div class="viewcode-block" id="LIFFeedForwardCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFFeedForwardCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
@@ -228,9 +226,37 @@
         <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span>
                 <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="p">,</span>
-                <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+                <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">lif_feed_forward_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="LIFFeedForwardLayer"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFFeedForwardLayer">[docs]</a><span class="k">class</span> <span class="nc">LIFFeedForwardLayer</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A neuron layer that wraps a recurrent LIFCell in time such</span>
+<span class="sd">    that the layer keeps track of temporal sequences of spikes.</span>
+<span class="sd">    After application, the layer returns a tuple containing</span>
+<span class="sd">      (spikes from all timesteps, state from the last timestep).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    &gt;&gt;&gt; data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons</span>
+<span class="sd">    &gt;&gt;&gt; l = LIFLayer(2, 4)</span>
+<span class="sd">    &gt;&gt;&gt; l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LIFFeedForwardLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">LIFFeedForwardCell</span><span class="p">(</span><span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LIFFeedForwardLayer.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.lif.LIFFeedForwardLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIFFeedForwardState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">]:</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="n">input_tensor</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># torch.jit.annotate(List[torch.Tensor], [])</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">input_step</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">input_step</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+            <span class="n">outputs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">out</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span> <span class="n">state</span></div></div>
 </pre></div>
 
           </div>
