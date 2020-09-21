@@ -26,6 +26,11 @@ flags.DEFINE_float("dt", 0.001, "Simulation timestep")
 flags.DEFINE_string("device", "cpu", "Device to use [cpu, cuda]")
 flags.DEFINE_integer("runs", 100, "Number of runs per simulation step")
 
+flags.DEFINE_bool("bindsnet", True, "Benchmark Bindsnet?")
+flags.DEFINE_bool("genn", True, "Benchmark GeNN?")
+flags.DEFINE_bool("norse", True, "Benchmark Norse?")
+flags.DEFINE_bool("pysnn", True, "Benchmark PySNN?")
+
 
 def benchmark(
     model: Callable[[BenchmarkParameters], float],
@@ -86,13 +91,22 @@ def collect(data: BenchmarkData, label: str) -> dict:
 
 
 def main(argv):
-    import bindsnet_lif
-    import norse_lif
-    import pysnn_lif
+    if FLAGS.bindsnet:
+        import bindsnet_lif
 
-    run_benchmark(bindsnet_lif.lif_feed_forward_benchmark, "bindsnet_lif")
-    run_benchmark(norse_lif.lif_feed_forward_benchmark, "norse_lif")
-    run_benchmark(pysnn_lif.lif_feed_forward_benchmark, "pysnn_lif")
+        run_benchmark(bindsnet_lif.lif_feed_forward_benchmark, "bindsnet_lif")
+    if FLAGS.genn:
+        import genn_lif
+
+        run_benchmark(genn_lif.lif_feed_forward_benchmark, "genn_lif")
+    if FLAGS.norse:
+        import norse_lif
+
+        run_benchmark(norse_lif.lif_feed_forward_benchmark, "norse_lif")
+    if FLAGS.pysnn:
+        import pysnn_lif
+
+        run_benchmark(pysnn_lif.lif_feed_forward_benchmark, "pysnn_lif")
 
 
 def run_benchmark(function, label):
