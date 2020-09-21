@@ -16,11 +16,13 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
         parameters.device
     )
     T = parameters.sequence_length
-    s = LIFFeedForwardState(
-        v=torch.zeros(parameters.batch_size, parameters.features).to(parameters.device),
-        i=torch.zeros(parameters.batch_size, parameters.features).to(parameters.device),
-    )
     p = LIFParameters(alpha=100.0, method="heaviside")
+    s = LIFFeedForwardState(
+        v=p.v_leak,
+        i=torch.zeros(
+            parameters.batch_size, parameters.features, device=parameters.device
+        ),
+    )
     input_spikes = PoissonEncoder(T, dt=parameters.dt)(
         0.3
         * torch.ones(
