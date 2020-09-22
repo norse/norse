@@ -2,6 +2,7 @@ import numpy as np
 import time
 from pygenn.genn_model import GeNNModel
 from pygenn.genn_wrapper import NO_DELAY
+from pygenn import genn_wrapper
 
 from benchmark import BenchmarkParameters
 
@@ -9,7 +10,7 @@ from benchmark import BenchmarkParameters
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     T = parameters.sequence_length / parameters.dt
 
-    model = GeNNModel("float", "pygenn")
+    model = GeNNModel("float", "pygenn", backend_log_level=genn_wrapper.debug)
     model.dT = parameters.dt
 
     run(["python3", __file__, shared_list.shm.name], stderr=STDOUT)
