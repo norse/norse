@@ -2,6 +2,7 @@ import numpy as np
 import time
 from pygenn.genn_model import GeNNModel
 from pygenn.genn_wrapper import NO_DELAY
+from pygenn import genn_wrapper
 
 from benchmark import BenchmarkParameters
 
@@ -9,7 +10,7 @@ from benchmark import BenchmarkParameters
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     T = parameters.sequence_length / parameters.dt
 
-    model = GeNNModel("float", "pygenn")
+    model = GeNNModel("float", "pygenn", backend_log_level=genn_wrapper.debug)
     model.dT = parameters.dt
 
     N = parameters.features * parameters.batch_size
@@ -45,29 +46,3 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     end = time.time()
     print(model.t)
     return end - start
-    # network = Network(batch_size=parameters.batch_size, dt=parameters.dt)
-
-    # network.add_layer(Input(n=parameters.features), name="Input")
-    # network.add_layer(LIFNodes(n=parameters.features), name="Neurons")
-    # network.add_connection(
-    #     Connection(source=network.layers["Input"], target=network.layers["Neurons"]),
-    #     source="Input",
-    #     target="Neurons",
-    # )
-
-    # input_spikes = (
-    #     PoissonEncoder(time=T, dt=parameters.dt)(
-    #         0.3 * torch.ones(parameters.batch_size, parameters.features)
-    #     )
-    #     .to(parameters.device)
-    #     .float()
-    # )
-
-    # input_data = {"Input": input_spikes}
-    # network.to(parameters.device)
-    # start = time.time()
-    # network.run(inputs=input_data, time=T)
-    # end = time.time()
-
-    # duration = end - start
-    # return duration

@@ -63,7 +63,9 @@ def benchmark(
                 logging.error(message)
 
             data = BenchmarkData(
-                config=config, durations=np.array(durations), parameters=parameters,
+                config=config,
+                durations=np.array(durations),
+                parameters=parameters,
             )
             result = collector(data)
 
