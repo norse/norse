@@ -8,7 +8,7 @@ class BenchmarkConfig(NamedTuple):
     Benchmark configurations for the benchmarking setup
     """
 
-    batch_sizes: List[int]
+    batch_size: int
     device: str
     dt: float
     label: str
