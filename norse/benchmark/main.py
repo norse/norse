@@ -25,6 +25,7 @@ flags.DEFINE_integer("sequence_length", 1000, "Number of timesteps to simulate")
 flags.DEFINE_float("dt", 0.001, "Simulation timestep")
 flags.DEFINE_string("device", "cpu", "Device to use [cpu, cuda]")
 flags.DEFINE_integer("runs", 100, "Number of runs per simulation step")
+flags.DEFINE_bool("profile", False, "Profile Norse benchmark? (Only works for Norse)")
 
 flags.DEFINE_bool("bindsnet", True, "Benchmark Bindsnet?")
 flags.DEFINE_bool("genn", True, "Benchmark GeNN?")
@@ -102,7 +103,13 @@ def main(argv):
     if FLAGS.norse:
         import norse_lif
 
-        run_benchmark(norse_lif.lif_feed_forward_benchmark, "norse_lif")
+        if FLAGS.profile:
+            import torch.autograd.profiler as profiler
+            with profiler.profile(profile_memory=True, use_cuda=(FLAGS.device == 'cuda')) as prof:
+                run_benchmark(norse_lif.lif_feed_forward_benchmark, "norse_lif")
+            prof.export_chrome_trace("trace.json")
+        else:
+            run_benchmark(norse_lif.lif_feed_forward_benchmark, "norse_lif")
     if FLAGS.pysnn:
         import pysnn_lif
 
@@ -120,6 +127,7 @@ def run_benchmark(function, label):
         start=FLAGS.start,
         stop=FLAGS.stop,
         step=FLAGS.step,
+        profile=FLAGS.profile
     )
 
     collector = partial(collect, label=label)

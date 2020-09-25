@@ -1,6 +1,6 @@
 import torch
 
-
+@torch.jit.script
 def heaviside(data):
     """
     A `heaviside step function <https://en.wikipedia.org/wiki/Heaviside_step_function>`_
