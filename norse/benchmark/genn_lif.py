@@ -19,8 +19,10 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     shared.shutdown()
     return duration
 
-    model.build()
-    model.load()
+if __name__ == "__main__":
+    # Assume we're running the genn benchmark and draw configs from the shared memory
+    parameter_list = ShareableList(sequence=None, name=sys.argv[1])
+    parameters = BenchmarkParameters(*parameter_list)
 
     model = GeNNModel("float", "pygenn")
     model.dT = parameters.dt
