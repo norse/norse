@@ -9,7 +9,6 @@ from benchmark import BenchmarkParameters
 
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
-    T = int(parameters.dt * parameters.sequence_length)
 
     # Default parameters from Norse neuron model
     tau_syn = torch.as_tensor(5e-3)

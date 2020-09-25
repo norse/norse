@@ -12,12 +12,14 @@ class SuperSpike(torch.autograd.Function):
     """
 
     @staticmethod
+    @torch.jit.ignore
     def forward(ctx, input_tensor: torch.Tensor, alpha: float) -> torch.Tensor:
         ctx.save_for_backward(input_tensor)
         ctx.alpha = alpha
         return heaviside(input_tensor)
 
     @staticmethod
+    @torch.jit.ignore
     def backward(ctx, grad_output):
         (inp,) = ctx.saved_tensors
         alpha = ctx.alpha

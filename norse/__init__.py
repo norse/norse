@@ -3,6 +3,11 @@
 
 from . import benchmark, dataset, task
 
+import torch
+from pathlib import Path
+
+torch.ops.load_library(Path(__file__).resolve().parent.parent / 'norse_op.so')
+
 from .torch import functional
 from .torch.models import conv
 from .torch.module import lif, lsnn

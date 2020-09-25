@@ -13,6 +13,7 @@ class BenchmarkConfig(NamedTuple):
     dt: float
     label: str
     runs: int
+    profile: bool
     sequence_length: int
     start: int
     stop: int
