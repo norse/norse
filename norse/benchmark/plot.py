@@ -4,27 +4,52 @@ import pandas as pd
 import sys
 
 
-def plot_frames(frames):
-    render_frames(frames)
+def plot_frames(frames, title):
+    render_frames(frames, title)
     plt.show()
 
 
-def render_frames(frames):
-    ax = plt.gca()
+def save_frames(frames, title, filename):
+    render_frames(frames, title)
+    plt.savefig(filename)
+
+
+def render_frames(frames, title):
+    ax = plt.gca(yscale="log")
     for frame in frames:
-        print(frame.keys())
-        frame.plot(y="duration_mean", x="input_features", ax=ax, label="")
+        label = frame["label"][0].replace("_lif", "")
+        plt.fill_between(
+            frame["input_features"],
+            frame["duration_mean"] - frame["duration_std"],
+            frame["duration_mean"] + frame["duration_std"],
+            alpha=0.2,
+        )
+        frame.plot(y="duration_mean", x="input_features", ax=ax, label=label)
+
+    ax.set_title(title)
+    ax.set_xlabel("No. of features")
+    ax.set_ylabel("Running time in seconds")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Plot a number of csv benchark files against each other"
     )
-    parser.add_argument("--files", type=argparse.FileType("r"), nargs="+")
+    parser.add_argument("files", type=argparse.FileType("r"), nargs="+")
+    parser.add_argument(
+        "--to",
+        type=str,
+        required=False,
+        help="Save to given file instead of displaying",
+    )
+    parser.add_argument("--title", type=str, default="", help="Figure title")
     args = parser.parse_args()
 
     files = args.files
     dfs = []
     for f in files:
         dfs.append(pd.read_csv(f))
-    plot_frames(dfs)
+    if args.to:
+        save_frames(dfs, args.title, args.to)
+    else:
+        plot_frames(dfs, args.title)
