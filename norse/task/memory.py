@@ -25,10 +25,7 @@ flags.DEFINE_enum(
     "Model to use for training.",
 )
 flags.DEFINE_enum(
-    "neuron_model",
-    "lsnn",
-    ["lsnn", "lif"],
-    "Neuron model to use in network.",
+    "neuron_model", "lsnn", ["lsnn", "lif"], "Neuron model to use in network.",
 )
 flags.DEFINE_enum(
     "optimizer", "adam", ["adam", "sgd"], "Optimizer to use for training."
@@ -59,9 +56,7 @@ flags.DEFINE_integer(
     "seq_steps", 24, "Number of steps in each experiment (should be at least 8)."
 )
 flags.DEFINE_integer(
-    "seq_repetitions",
-    24,
-    "Number of times a sequence is repeated.",
+    "seq_repetitions", 24, "Number of times a sequence is repeated.",
 )
 flags.DEFINE_float("weight_decay", 1e-5, "Weight decay (L2 regularisation penalty).")
 
@@ -259,13 +254,7 @@ def _plot_run(
 
 
 def train(
-    model,
-    data_loader,
-    optimizer,
-    epoch,
-    total_epochs,
-    log_interval=1e10,
-    writer=None,
+    model, data_loader, optimizer, epoch, total_epochs, log_interval=1e10, writer=None,
 ):
     model.train()
     losses = []

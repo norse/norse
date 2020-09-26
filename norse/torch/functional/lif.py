@@ -33,11 +33,7 @@ class LIFParameters(NamedTuple):
 
 
 default_bio_parameters = LIFParameters(
-    tau_syn_inv=1 / 0.5,
-    tau_mem_inv=1 / 20.0,
-    v_leak=-65.0,
-    v_th=-50.0,
-    v_reset=-65.0,
+    tau_syn_inv=1 / 0.5, tau_mem_inv=1 / 20.0, v_leak=-65.0, v_th=-50.0, v_reset=-65.0,
 )
 
 
@@ -133,6 +129,7 @@ def lif_step(
 
     return z_new, LIFState(z_new, v_new, i_new)
 
+
 class LIFParametersJIT(NamedTuple):
     """Parametrization of a LIF neuron
 
@@ -149,18 +146,19 @@ class LIFParametersJIT(NamedTuple):
         alpha (torch.Tensor): hyper parameter to use in surrogate gradient computation
     """
 
-    tau_syn_inv: torch.Tensor 
-    tau_mem_inv: torch.Tensor 
+    tau_syn_inv: torch.Tensor
+    tau_mem_inv: torch.Tensor
     v_leak: torch.Tensor
-    v_th: torch.Tensor 
+    v_th: torch.Tensor
     v_reset: torch.Tensor
     alpha: torch.Tensor
+
 
 @torch.jit.script
 def _lif_feed_forward_step_jit(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState,
-    p: LIFParametersJIT, 
+    p: LIFParametersJIT,
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
     # compute voltage updates
@@ -180,10 +178,19 @@ def _lif_feed_forward_step_jit(
 
     return z_new, LIFFeedForwardState(v_new, i_new)
 
+
 def lif_feed_forward_step(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState = LIFFeedForwardState(0, 0),
-    p: LIFParameters = LIFParameters(torch.as_tensor(1.0 / 5e-3), torch.as_tensor(1.0 / 1e-2), torch.as_tensor(0.0), torch.as_tensor(1.0), torch.as_tensor(0.0), "super", 0.0),
+    p: LIFParameters = LIFParameters(
+        torch.as_tensor(1.0 / 5e-3),
+        torch.as_tensor(1.0 / 1e-2),
+        torch.as_tensor(0.0),
+        torch.as_tensor(1.0),
+        torch.as_tensor(0.0),
+        "super",
+        0.0,
+    ),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
     r"""Computes a single euler-integration step for a lif neuron-model.
@@ -219,7 +226,9 @@ def lif_feed_forward_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    return _lif_feed_forward_step_jit(input_tensor, state=state, p=LIFParametersJIT(*p.todict().value()), dt=dt)
+    return _lif_feed_forward_step_jit(
+        input_tensor, state=state, p=LIFParametersJIT(*p.todict().value()), dt=dt
+    )
 
 
 def lif_current_encoder(
