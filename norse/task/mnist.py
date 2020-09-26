@@ -59,11 +59,7 @@ flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
 
 class LIFConvNet(torch.nn.Module):
     def __init__(
-        self,
-        input_features,
-        seq_length,
-        model="super",
-        only_first_spike=False,
+        self, input_features, seq_length, model="super", only_first_spike=False,
     ):
         super(LIFConvNet, self).__init__()
         self.constant_current_encoder = ConstantCurrentLIFEncoder(seq_length=seq_length)

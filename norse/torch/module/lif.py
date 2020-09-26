@@ -186,8 +186,7 @@ class LIFFeedForwardCell(torch.nn.Module):
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
         if state is None:
             state = LIFFeedForwardState(
-                v=self.p.v_leak,
-                i=torch.zeros(x.shape, device=x.device, dtype=x.dtype),
+                v=self.p.v_leak, i=torch.zeros(x.shape, device=x.device, dtype=x.dtype),
             )
         return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
 

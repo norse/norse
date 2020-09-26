@@ -20,11 +20,6 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
 
     run(["python3", __file__, shared_list.shm.name], stderr=STDOUT)
     duration = shared_list[0]
-<<<<<<< HEAD
-=======
-    print(duration)
-    print(shared_list[1])
->>>>>>> cda378ea67f60bc98f1501588fe638210daf7927
     shared_list.shm.close()
     shared.shutdown()
     return duration

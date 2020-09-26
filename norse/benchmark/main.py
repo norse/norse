@@ -14,9 +14,7 @@ from benchmark import *
 FLAGS = flags.FLAGS
 
 flags.DEFINE_integer(
-    "batch_size",
-    16,
-    "Number of data points per batch",
+    "batch_size", 16, "Number of data points per batch",
 )
 flags.DEFINE_integer("start", 250, "Start of the number of inputs to sweep")
 flags.DEFINE_integer("step", 250, "Steps in which to sweep over the number of inputs")
@@ -57,15 +55,11 @@ def benchmark(
                 duration = model(parameters)
                 durations.append(duration)
         except RuntimeError as e:
-            message = (
-                f"RuntimeError when running benchmark {config} {parameters}: {e}"
-            )
+            message = f"RuntimeError when running benchmark {config} {parameters}: {e}"
             logging.error(message)
 
         data = BenchmarkData(
-            config=config,
-            durations=np.array(durations),
-            parameters=parameters,
+            config=config, durations=np.array(durations), parameters=parameters,
         )
         result = collector(data)
 
@@ -104,7 +98,10 @@ def main(argv):
 
         if FLAGS.profile:
             import torch.autograd.profiler as profiler
-            with profiler.profile(profile_memory=True, use_cuda=(FLAGS.device == 'cuda')) as prof:
+
+            with profiler.profile(
+                profile_memory=True, use_cuda=(FLAGS.device == "cuda")
+            ) as prof:
                 run_benchmark(norse_lif.lif_feed_forward_benchmark, "norse_lif")
             prof.export_chrome_trace("trace.json")
         else:
@@ -126,7 +123,7 @@ def run_benchmark(function, label):
         start=FLAGS.start,
         stop=FLAGS.stop,
         step=FLAGS.step,
-        profile=FLAGS.profile
+        profile=FLAGS.profile,
     )
 
     collector = partial(collect, label=label)

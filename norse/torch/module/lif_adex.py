@@ -201,17 +201,7 @@ class LIFAdExFeedForwardCell(torch.nn.Module):
         if state is None:
             state = LIFAdExFeedForwardState(
                 v=self.p.v_leak,
-                i=torch.zeros(
-                    x.shape[0],
-                    *self.shape,
-                    device=x.device,
-                    dtype=x.dtype,
-                ),
-                a=torch.zeros(
-                    x.shape[0],
-                    *self.shape,
-                    device=x.device,
-                    dtype=x.dtype,
-                ),
+                i=torch.zeros(x.shape[0], *self.shape, device=x.device, dtype=x.dtype,),
+                a=torch.zeros(x.shape[0], *self.shape, device=x.device, dtype=x.dtype,),
             )
         return lif_adex_feed_forward_step(x, state, p=self.p, dt=self.dt)
