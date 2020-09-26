@@ -43,7 +43,7 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     ).to(parameters.device)
 
     input_spikes = (
-        PoissonEncoder(duration=T, dt=parameters.dt)(
+        PoissonEncoder(duration=parameters.sequence_length, dt=parameters.dt)(
             0.3 * torch.ones(parameters.batch_size, parameters.features)
         )
         .reshape(
