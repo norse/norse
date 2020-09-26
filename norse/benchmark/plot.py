@@ -2,6 +2,7 @@ import argparse
 import matplotlib.pyplot as plt
 import pandas as pd
 import sys
+import math
 
 
 def plot_frames(frames, title):
@@ -25,7 +26,11 @@ def render_frames(frames, title):
             alpha=0.2,
         )
         frame.plot(y="duration_mean", x="input_features", ax=ax, label=label)
-
+    
+    xmin = frame['input_features'].min()
+    xmax = frame['input_features'].max()
+    
+    ax.set_xlim(math.floor(xmin / 1000), math.ceil(xmax / 1000) * 1000)
     ax.set_title(title)
     ax.set_xlabel("No. of features")
     ax.set_ylabel("Running time in seconds")
