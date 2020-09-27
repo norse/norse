@@ -4,9 +4,16 @@ This module implements standard benchmarks for norse.
 import numpy as np
 
 
-def benchmark(function, parameters, value_range, device="cpu", n_runs=10, aggregration_function=np.mean):
+def benchmark(
+    function,
+    parameters,
+    value_range,
+    device="cpu",
+    n_runs=10,
+    aggregration_function=np.mean,
+):
     """
-    Benchmarks a given function where the list of parameters 
+    Benchmarks a given function where the list of parameters
     is set to the given value_range, iterated over the length of the range.
     Returns a dictionary of values and associated aggregated value.
 

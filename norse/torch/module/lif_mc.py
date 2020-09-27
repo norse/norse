@@ -44,6 +44,7 @@ class LIFMCCell(torch.nn.Module):
         p (LIFParameters): neuron parameters
         dt (float): Integration timestep to use
     """
+
     def __init__(
         self,
         input_size: int,

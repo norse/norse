@@ -40,7 +40,7 @@ def lif_refrac_step(
 ) -> Tuple[torch.Tensor, LIFRefracState]:
     r"""Computes a single euler-integration step of a recurrently connected
      LIF neuron-model with a refractory period.
-    
+
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
         s (LIFRefracState): state at the current time step

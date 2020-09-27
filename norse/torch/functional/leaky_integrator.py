@@ -11,6 +11,7 @@ class LIState(NamedTuple):
         v (torch.Tensor): membrane voltage
         i (torch.Tensor): input current
     """
+
     v: torch.Tensor
     i: torch.Tensor
 
@@ -24,6 +25,7 @@ class LIParameters(NamedTuple):
         v_leak (torch.Tensor): leak potential
         v_reset (torch.Tensor): reset potential
     """
+
     tau_syn_inv: torch.Tensor = torch.tensor(1.0 / 5e-3)
     tau_mem_inv: torch.Tensor = torch.tensor(1.0 / 1e-2)
     v_leak: torch.Tensor = torch.tensor(0.0)

@@ -13,7 +13,6 @@ from ..functional.lif import (
 )
 
 
-
 class LIFCell(torch.nn.Module):
     """Module that computes a single euler-integration step of a LIF neuron-model. 
     More specifically it implements one integration step of the following ODE
@@ -65,10 +64,10 @@ class LIFCell(torch.nn.Module):
     ):
         super(LIFCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, input_size) * np.sqrt(2/hidden_size)
+            torch.randn(hidden_size, input_size) * np.sqrt(2 / hidden_size)
         )
         self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) * np.sqrt(2/hidden_size)
+            torch.randn(hidden_size, hidden_size) * np.sqrt(2 / hidden_size)
         )
         self.input_size = input_size
         self.hidden_size = hidden_size

@@ -23,8 +23,7 @@ def post_mask(weights, z):
 
 @torch.jit.script
 def post_pre_update(post_pre, post_spike_mask, pre_spike_mask):
-    """Computes which synapses in the synapse array should be updated.
-    """
+    """Computes which synapses in the synapse array should be updated."""
     return heaviside(post_pre + post_spike_mask - pre_spike_mask)
 
 
@@ -87,9 +86,11 @@ def correlation_based_update(
     ts_frequency: int,
 ):
     if ts % ts_frequency == 0:
-        batch_size, input_features, hidden_features = (
-            correlation_state.correlation_trace.shape
-        )
+        (
+            batch_size,
+            input_features,
+            hidden_features,
+        ) = correlation_state.correlation_trace.shape
         # proposed weight update
         dw = torch.cat(
             (

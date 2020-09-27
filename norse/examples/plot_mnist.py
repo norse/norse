@@ -17,9 +17,7 @@ as possible into a traditional deep learning pipeline.
 """
 
 import torch
-from norse.torch.functional.lif import (
-    LIFParameters,
-)
+from norse.torch.functional.lif import LIFParameters
 
 from norse.torch.module.leaky_integrator import LICell
 from norse.torch.module.lif import LIFFeedForwardCell
@@ -27,12 +25,12 @@ from norse.torch.module.lif import LIFFeedForwardCell
 
 class Net(torch.nn.Module):
     def __init__(
-            self,
-            device="cpu",
-            num_channels=1,
-            feature_size=32,
-            model="super",
-            dtype=torch.float,
+        self,
+        device="cpu",
+        num_channels=1,
+        feature_size=32,
+        model="super",
+        dtype=torch.float,
     ):
         super(Net, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)

@@ -20,8 +20,12 @@ class LIFCorrelationState(NamedTuple):
 
 class LIFCorrelationParameters(NamedTuple):
     lif_parameters: LIFParameters = LIFParameters()
-    input_correlation_parameters: CorrelationSensorParameters = CorrelationSensorParameters()
-    recurrent_correlation_parameters: CorrelationSensorParameters = CorrelationSensorParameters()
+    input_correlation_parameters: CorrelationSensorParameters = (
+        CorrelationSensorParameters()
+    )
+    recurrent_correlation_parameters: CorrelationSensorParameters = (
+        CorrelationSensorParameters()
+    )
 
 
 def lif_correlation_step(

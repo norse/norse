@@ -8,7 +8,7 @@ from .threshhold import threshhold
 
 class LIFParameters(NamedTuple):
     """Parametrization of a LIF neuron
-    
+
     Parameters:
         tau_syn_inv (torch.Tensor): inverse synaptic time constant (:math:`1/\\tau_\\text{syn}`)
         tau_mem_inv (torch.Tensor): inverse membrane time constant (:math:`1/\\tau_\\text{mem}`)
