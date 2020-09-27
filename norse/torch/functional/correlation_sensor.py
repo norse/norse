@@ -87,7 +87,7 @@ def correlation_based_update(
 ):
     if ts % ts_frequency == 0:
         (
-            batch_size,
+            _,
             input_features,
             hidden_features,
         ) = correlation_state.correlation_trace.shape

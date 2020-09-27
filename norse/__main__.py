@@ -1,7 +1,6 @@
+import importlib
 from absl import app
 from absl import flags
-import importlib
-import os
 
 FLAGS = flags.FLAGS
 flags.DEFINE_enum("task", "mnist", ["cifar", "gym", "mnist"], "Task to run.")

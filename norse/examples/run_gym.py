@@ -26,9 +26,5 @@ flags.DEFINE_string("environment", "CartPole-v1", "Gym environment to use.")
 flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
 
 
-def main(argv):
-    app.run(cartpole.main)
-
-
 if __name__ == "__main__":
-    main()
+    app.run(cartpole.main)

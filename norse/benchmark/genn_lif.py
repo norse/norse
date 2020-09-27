@@ -7,7 +7,6 @@ from multiprocessing.managers import SharedMemoryManager
 
 from pygenn.genn_model import GeNNModel
 from pygenn.genn_wrapper import NO_DELAY
-from pygenn import genn_wrapper
 
 from benchmark import BenchmarkParameters
 

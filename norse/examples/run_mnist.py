@@ -39,9 +39,5 @@ flags.DEFINE_boolean("do_plot", False, "Do intermediate plots")
 flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
 
 
-def main(argv):
-    app.run(mnist.main)
-
-
 if __name__ == "__main__":
-    main()
+    app.run(mnist.main)

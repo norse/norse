@@ -8,7 +8,6 @@ A CIFAR classification task example
 
 import norse.task.cifar10 as cifar
 
-import torch
 from absl import app
 from absl import flags
 
