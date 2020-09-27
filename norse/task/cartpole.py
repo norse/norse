@@ -1,5 +1,6 @@
-# adapted from https://github.com/pytorch/examples/blob/master/reinforcement_learning/reinforce.py
-# for license see LICENSE.cartpole
+# Parts of this code were adapted from the pytorch example at
+# https://github.com/pytorch/examples/blob/master/reinforcement_learning/reinforce.py
+# which is licensed under the license found in LICENSE.cartpole
 
 import torch
 import numpy as np
@@ -10,16 +11,29 @@ import random
 import os
 import gym
 
-
 from norse.torch.functional.lif import LIFParameters
-from norse.torch.module.lif import LIFConstantCurrentEncoder, LIFCell
+from norse.torch.module.encode import ConstantCurrentLIFEncoder
+from norse.torch.module.lif import LIFCell
+from norse.torch.module.lsnn import LSNNCell, LSNNParameters
 from norse.torch.module.leaky_integrator import LICell
 
 FLAGS = flags.FLAGS
+flags.DEFINE_enum("device", "cpu", ["cpu", "cuda"], "Device to use by pytorch.")
+flags.DEFINE_integer("episodes", 100, "Number of training trials.")
+flags.DEFINE_float("learning_rate", 1e-3, "Learning rate to use.")
+flags.DEFINE_float("gamma", 0.99, "discount factor to use")
+flags.DEFINE_integer(
+    "log_interval", 10, "In which intervals to display learning progress."
+)
+flags.DEFINE_enum("model", "super", ["super"], "Model to use for training.")
+flags.DEFINE_enum("policy", "snn", ["snn", "lsnn", "ann"], "Select policy to use.")
+flags.DEFINE_boolean("render", False, "Render the environment")
+flags.DEFINE_string("environment", "CartPole-v1", "Gym environment to use.")
+flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
 
 
 class ANNPolicy(torch.nn.Module):
-    def __init__(self, device="cpu"):
+    def __init__(self):
         super(ANNPolicy, self).__init__()
         self.state_space = 4
         self.action_space = 2
@@ -40,16 +54,13 @@ class ANNPolicy(torch.nn.Module):
 
 
 class Policy(torch.nn.Module):
-    def __init__(self, device="cpu"):
+    def __init__(self):
         super(Policy, self).__init__()
         self.state_dim = 4
         self.input_features = 16
         self.hidden_features = 128
         self.output_features = 2
-        self.device = device
-        self.constant_current_encoder = LIFConstantCurrentEncoder(
-            40, device=self.device
-        )
+        self.constant_current_encoder = ConstantCurrentLIFEncoder(40)
         self.lif = LIFCell(
             2 * self.state_dim,
             self.hidden_features,
@@ -63,22 +74,17 @@ class Policy(torch.nn.Module):
 
     def forward(self, x):
         scale = 50
-        x = x.to(self.device)
-        _, x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
-        _, x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
+        x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
+        x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
         x = torch.cat([x_pos, x_neg], dim=2)
 
         seq_length, batch_size, _ = x.shape
 
-        # state for hidden layer
-        s1 = self.lif.initial_state(batch_size, device=self.device)
-        # state for output layer
-        so = self.readout.initial_state(batch_size, device=self.device)
-
         voltages = torch.zeros(
-            seq_length, batch_size, self.output_features, device=self.device
+            seq_length, batch_size, self.output_features, device=x.device
         )
 
+        s1 = so = None
         # sequential integration loop
         for ts in range(seq_length):
             z1, s1 = self.lif(x[ts, :, :], s1)
@@ -92,20 +98,21 @@ class Policy(torch.nn.Module):
 
 
 class LSNNPolicy(torch.nn.Module):
-    def __init__(self, device="cpu", model="super"):
+    def __init__(self, model="super"):
         super(LSNNPolicy, self).__init__()
         self.state_dim = 4
         self.input_features = 16
         self.hidden_features = 128
         self.output_features = 2
-        self.device = device
         # self.affine1 = torch.nn.Linear(self.state_dim, self.input_features)
-        self.constant_current_encoder = snn.LIFConstantCurrentEncoder(
-            40, device=self.device
+        self.constant_current_encoder = ConstantCurrentLIFEncoder(40)
+        self.lif_layer = LSNNCell(
+            2 * self.state_dim,
+            self.hidden_features,
+            p=LSNNParameters(model, alpha=100.0),
         )
-        self.lif_layer = snn.LSNNCell(2 * self.state_dim, self.hidden_features)
         self.dropout = torch.nn.Dropout(p=0.5)
-        self.readout = snn.LICell(self.hidden_features, self.output_features)
+        self.readout = LICell(self.hidden_features, self.output_features)
 
         self.saved_log_probs = []
         self.rewards = []
@@ -119,20 +126,20 @@ class LSNNPolicy(torch.nn.Module):
         seq_length, batch_size, _ = x.shape
 
         # state for hidden layer
-        s1 = self.lif_layer.initial_state(batch_size, device=self.device)
+        s1 = None
         # state for output layer
-        so = self.readout.initial_state(batch_size, device=self.device)
+        so = None
 
         voltages = torch.zeros(
-            seq_length, batch_size, self.output_features, device=self.device
+            seq_length, batch_size, self.output_features, device=x.device
         )
 
         # sequential integration loop
         for ts in range(seq_length):
-            z1, s1 = self.lif_layer(x[ts, :, :], z1, v1, i1, b1)
+            z1, s1 = self.lif_layer(x[ts, :, :], s1)
             z1 = self.dropout(z1)
-            so = self.readout(z1, so)
-            voltages[ts, :, :] = so.v
+            vo, so = self.readout(z1, so)
+            voltages[ts, :, :] = vo
 
         m, _ = torch.max(voltages, 0)
         p_y = torch.nn.functional.softmax(m, dim=1)
@@ -156,7 +163,7 @@ def finish_episode(policy, optimizer):
     for r in policy.rewards[::-1]:
         R = r + FLAGS.gamma * R
         returns.insert(0, R)
-    returns = torch.tensor(returns)
+    returns = torch.as_tensor(returns)
     returns = (returns - returns.mean()) / (returns.std() + eps)
     for log_prob, R in zip(policy.saved_log_probs, returns):
         policy_loss.append(-log_prob * R)
@@ -168,7 +175,7 @@ def finish_episode(policy, optimizer):
     del policy.saved_log_probs[:]
 
 
-def main(argv):
+def main(args):
     running_reward = 10
     torch.manual_seed(FLAGS.random_seed)
     random.seed(FLAGS.random_seed)
@@ -176,7 +183,7 @@ def main(argv):
     label = f"{FLAGS.policy}-{FLAGS.model}-{FLAGS.random_seed}"
     os.makedirs(f"runs/cartpole/{label}", exist_ok=True)
     os.chdir(f"runs/cartpole/{label}")
-    FLAGS.append_flags_into_file(f"flags.txt")
+    FLAGS.append_flags_into_file("flags.txt")
 
     np.random.seed(FLAGS.random_seed)
     if hasattr(torch, "cuda_is_available"):
@@ -192,7 +199,7 @@ def main(argv):
     elif FLAGS.policy == "snn":
         policy = Policy()
     elif FLAGS.policy == "lsnn":
-        policy = LSNNPolicy(device=FLAGS.device, model=FLAGS.model).to(FLAGS.device)
+        policy = LSNNPolicy(model=FLAGS.model).to(FLAGS.device)
     optimizer = torch.optim.Adam(policy.parameters(), lr=FLAGS.learning_rate)
 
     running_rewards = []
@@ -229,10 +236,10 @@ def main(argv):
             )
             break
 
-    np.save(f"running_rewards.npy", np.array(running_rewards))
-    np.save(f"episode_rewards.npy", np.array(episode_rewards))
-    torch.save(optimizer.state_dict(), f"optimizer.pt")
-    torch.save(policy.state_dict(), f"policy.pt")
+    np.save("running_rewards.npy", np.array(running_rewards))
+    np.save("episode_rewards.npy", np.array(episode_rewards))
+    torch.save(optimizer.state_dict(), "optimizer.pt")
+    torch.save(policy.state_dict(), "policy.pt")
 
 
 if __name__ == "__main__":

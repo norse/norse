@@ -5,6 +5,8 @@
 # from the environment for the first two.
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
+SPHINXAPI     ?= sphinx-apidoc
+CODEDIR       = ../norse
 SOURCEDIR     = source
 BUILDDIR      = build
 
@@ -16,7 +18,7 @@ help:
 
 # Listens for changes and updates any window titled 'Norse .* documentation'
 serve:
-	@ls $(SOURCEDIR)/** | entr -rs "$(SPHINXBUILD) -M html $(SOURCEDIR) $(BUILDDIR) && xdotool search 'Norse .* documentation' windowactivate key --clearmodifiers shift+ctrl+r"
+	@ls $(CODEDIR)/**/*.py | entr -rs '$(SPHINXAPI) -o $(SOURCEDIR)/auto_api -H Norse -f -e -M $(CODEDIR) $(SOURCEDIR) && $(SPHINXBUILD) -M html $(SOURCEDIR) $(BUILDDIR)'
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).

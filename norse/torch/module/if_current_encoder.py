@@ -1,6 +1,7 @@
 import torch
 
-from ..functional.if_current_encoder import if_current_encoder_step
+from ..functional.encode import constant_current_lif_encode
+from ..functional.lif import LIFParameters
 
 
 class IFConstantCurrentEncoder(torch.nn.Module):
@@ -11,29 +12,16 @@ class IFConstantCurrentEncoder(torch.nn.Module):
         v_th=1.0,
         v_reset=0.0,
         dt: float = 0.001,
-        device="cpu",
     ):
         super(IFConstantCurrentEncoder, self).__init__()
         self.seq_length = seq_length
         self.tau_mem_inv = tau_mem_inv
         self.v_th = v_th
         self.v_reset = v_reset
-        self.device = device
+        self.dt = dt
 
     def forward(self, x):
-        v = torch.zeros(*x.shape, device=self.device)
-        z = torch.zeros(*x.shape, device=self.device)
-        voltages = torch.zeros(self.seq_length, *x.shape, device=self.device)
-        spikes = torch.zeros(self.seq_length, *x.shape, device=self.device)
-
-        for ts in range(self.seq_length):
-            z, v = if_current_encoder_step(
-                input_current=x,
-                v=v,
-                tau_mem_inv=self.tau_mem_inv,
-                v_th=self.v_th,
-                v_reset=self.v_reset,
-            )
-            voltages[ts, :, :] = v
-            spikes[ts, :, :] = z
-        return spikes, voltages
+        lif_parameters = LIFParameters(
+            tau_mem_inv=self.tau_mem_inv, v_th=self.v_th, v_reset=self.v_reset
+        )
+        return constant_current_lif_encode(x, self.v, p=lif_parameters, dt=self.dt)

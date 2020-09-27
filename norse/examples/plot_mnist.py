@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-r"""
+"""
 Spiking Neural Networks
 =======================
 
@@ -12,8 +11,8 @@ is involved.
 How to define a Network
 -----------------------
 
-The spiking neural network primitives in norse are designed to fit in as seamlessly
-as possible into a traditional deep learning pipeline.
+The spiking neural network primitives in norse are designed to fit in
+as seamlessly as possible into a traditional deep learning pipeline.
 """
 
 import torch
@@ -39,33 +38,31 @@ class Net(torch.nn.Module):
         self.conv2 = torch.nn.Conv2d(32, 64, 5, 1)
         self.fc1 = torch.nn.Linear(self.features * self.features * 64, 1024)
         self.lif0 = LIFFeedForwardCell(
-            (32, feature_size - 4, feature_size - 4),
             p=LIFParameters(method=model, alpha=100.0),
         )
         self.lif1 = LIFFeedForwardCell(
-            (64, int((feature_size - 4) / 2) - 4, int((feature_size - 4) / 2) - 4),
             p=LIFParameters(method=model, alpha=100.0),
         )
-        self.lif2 = LIFFeedForwardCell(
-            (1024,), p=LIFParameters(method=model, alpha=100.0)
-        )
+        self.lif2 = LIFFeedForwardCell(p=LIFParameters(method=model, alpha=100.0))
         self.out = LICell(1024, 10)
-        self.device = device
         self.dtype = dtype
+        # One would normally also define the device here
+        # However, Norse has been built to infer the device type from the input data
+        # It is still possible to enforce the device type on initialisation
+        # More details are available in our documentation:
+        #   https://norse.github.io/norse/hardware.html
 
     def forward(self, x):
         seq_length = x.shape[0]
-        batch_size = x.shape[1]
+        seq_batch_size = x.shape[1]
 
-        # specify the initial states
-        s0 = self.lif0.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        s1 = self.lif1.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        s2 = self.lif2.initial_state(batch_size, device=self.device, dtype=self.dtype)
-        so = self.out.initial_state(batch_size, device=self.device, dtype=self.dtype)
+        # Initialize state variables
+        s0 = None
+        s1 = None
+        s2 = None
+        so = None
 
-        voltages = torch.zeros(
-            seq_length, batch_size, 10, device=self.device, dtype=self.dtype
-        )
+        voltages = torch.zeros(seq_length, seq_batch_size, 10, dtype=self.dtype)
 
         for ts in range(seq_length):
             z = self.conv1(x[ts, :])
@@ -94,8 +91,8 @@ print(net)
 
 timesteps = 16
 batch_size = 1
-input = torch.abs(torch.randn(timesteps, batch_size, 1, 32, 32))
-out = net(input)
+data = torch.abs(torch.randn(timesteps, batch_size, 1, 32, 32))
+out = net(data)
 print(out)
 
 
@@ -111,5 +108,6 @@ out.backward(torch.randn(timesteps, batch_size, 10))
 # .. note::
 #
 #     ``norse`` like pytorch only supports mini-batches. This means that
-#     contrary to most other spiking neural network simulators ```norse``` always
-#     integrates several indepdentent sets of spiking neural networks at once.
+#     contrary to most other spiking neural network simulators ```norse```
+#     always integrates several indepdentent sets of spiking neural
+#     networks at once.

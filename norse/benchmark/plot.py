@@ -1,8 +1,6 @@
 import argparse
 import matplotlib.pyplot as plt
-from matplotlib.patches import Ellipse
 import pandas as pd
-import sys
 import math
 
 

@@ -1,27 +1,30 @@
 import torch
 
-from ..functional.coba_lif import CobaLIFParameters, CobaLIFState, coba_lif_step
-
-from typing import Tuple
+from typing import Optional, Tuple
 import numpy as np
+
+from ..functional.coba_lif import CobaLIFParameters, CobaLIFState
+from ..functional.coba_lif import coba_lif_step
 
 
 class CobaLIFCell(torch.nn.Module):
     """Module that computes a single euler-integration step of a conductance based
-    LIF neuron-model. More specifically it implements one integration step of the following ODE
+    LIF neuron-model. More specifically it implements one integration step of
+    the following ODE
 
     .. math::
         \\begin{align*}
-            \dot{v} &= 1/c_{\\text{mem}} (g_l (v_{\\text{leak}} - v) + g_e (E_{\\text{rev_e}} - v) + g_i (E_{\\text{rev_i}} - v)) \\\\
+            \dot{v} &= 1/c_{\\text{mem}} (g_l (v_{\\text{leak}} - v) \
+              + g_e (E_{\\text{rev_e}} - v) + g_i (E_{\\text{rev_i}} - v)) \\\\
             \dot{g_e} &= -1/\\tau_{\\text{syn}} g_e \\\\
             \dot{g_i} &= -1/\\tau_{\\text{syn}} g_i
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
         z = \Theta(v - v_{\\text{th}})
-    
+
     and transition equations
 
     .. math::
@@ -33,8 +36,8 @@ class CobaLIFCell(torch.nn.Module):
             g_i &= g_i + \\text{relu}(-w_{\\text{rec}}) z_{\\text{rec}} \\\\
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input
-    spikes respectively.
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent
+    and input spikes respectively.
 
     Parameters:
         input_size (int): Size of the input.
@@ -47,8 +50,7 @@ class CobaLIFCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif = CobaLIFCell(10, 20)
         >>> input = torch.randn(batch_size, 10)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> output, s0 = lif(input)
     """
 
     def __init__(
@@ -68,21 +70,38 @@ class CobaLIFCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(
-        self, batch_size: int, device: torch.device, dtype=torch.float
-    ) -> CobaLIFState:
-        return CobaLIFState(
-            z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            g_e=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            g_i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input: torch.Tensor, state: CobaLIFState
+        self, input_tensor: torch.Tensor, state: Optional[CobaLIFState]
     ) -> Tuple[torch.Tensor, CobaLIFState]:
+        if state is None:
+            state = CobaLIFState(
+                z=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                v=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                g_e=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                g_i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
         return coba_lif_step(
-            input,
+            input_tensor,
             state,
             self.input_weights,
             self.recurrent_weights,

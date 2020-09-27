@@ -16,8 +16,6 @@ import matplotlib.pyplot as plt
 from norse.torch.models.conv import ConvNet, ConvNet4
 from norse.torch.module.if_current_encoder import IFConstantCurrentEncoder
 
-from torch.utils.tensorboard import SummaryWriter
-
 FLAGS = flags.FLAGS
 
 flags.DEFINE_bool(
@@ -44,6 +42,36 @@ flags.DEFINE_float("current_encoder_v_th", 1.0, "v_th for constant current encod
 flags.DEFINE_bool("learning_rate_schedule", False, "Use a learning rate schedule")
 flags.DEFINE_bool("find_learning_rate", False, "Find learning rate")
 
+flags.DEFINE_enum("device", "cpu", ["cpu", "cuda"], "Device to use by pytorch.")
+flags.DEFINE_integer("epochs", 10, "Number of training episodes to do.")
+flags.DEFINE_integer("seq_length", 200, "Number of timesteps to do.")
+flags.DEFINE_integer("batch_size", 32, "Number of examples in one minibatch.")
+flags.DEFINE_integer("hidden_size", 100, "Number of neurons in the hidden layer.")
+flags.DEFINE_enum(
+    "model",
+    "super",
+    ["super", "tanh", "circ", "logistic", "circ_dist"],
+    "Model to use for training.",
+)
+flags.DEFINE_enum(
+    "optimizer", "adam", ["adam", "sgd", "rms"], "Optimizer to use for training."
+)
+flags.DEFINE_float("learning_rate", 2e-3, "Learning rate to use.")
+flags.DEFINE_integer(
+    "log_interval", 10, "In which intervals to display learning progress."
+)
+flags.DEFINE_integer("model_save_interval", 50, "Save model every so many epochs.")
+flags.DEFINE_boolean("save_model", True, "Save the model after training.")
+flags.DEFINE_boolean("big_net", False, "Use bigger net...")
+flags.DEFINE_boolean("only_output", False, "Train only the last layer...")
+flags.DEFINE_boolean("do_plot", False, "Do intermediate plots")
+flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
+flags.DEFINE_integer("start_epoch", 1, "Which epoch are we in?")
+flags.DEFINE_string("resume", "", "File to resume from (if any)")
+flags.DEFINE_boolean(
+    "visualize_activations", False, "Should we visualize activations with visdom"
+)
+
 
 class PiecewiseLinear(namedtuple("PiecewiseLinear", ("batch_size", "knots", "vals"))):
     def step(self, optimizer, t):
@@ -54,7 +82,7 @@ class PiecewiseLinear(namedtuple("PiecewiseLinear", ("batch_size", "knots", "val
 
 def generate_poisson_trains(batch_size, num_trains, seq_length, freq):
     trains = np.random.rand(seq_length, batch_size, num_trains) < freq
-    return torch.tensor(trains).float()
+    return torch.from_numpy(trains).float()
 
 
 def add_luminance(images):
@@ -72,39 +100,31 @@ def add_luminance(images):
     )
 
 
-def poisson_train(images, seq_length, device, rel_fmax=0.2):
-    return (
-        torch.rand(seq_length, *images.shape).float().to(device) < rel_fmax * images
-    ).float()
+def poisson_train(images, seq_length, rel_fmax=0.2):
+    return (torch.rand(seq_length, *images.shape).float() < rel_fmax * images).float()
 
 
-def signed_poisson_train(images, seq_length, device, rel_fmax=0.2):
+def signed_poisson_train(images, seq_length, rel_fmax=0.2):
     return (
         torch.sign(images)
         * (
-            torch.rand(seq_length, *images.shape).float().to(device)
-            < rel_fmax * torch.abs(images)
+            torch.rand(seq_length, *images.shape).float() < rel_fmax * torch.abs(images)
         ).float()
     )
 
 
 class LIFConvNet(torch.nn.Module):
-    def __init__(self, num_channels, seq_length, model="super", device="cpu"):
+    def __init__(self, num_channels):
         super(LIFConvNet, self).__init__()
 
         if FLAGS.net == "convnet":
             dtype = torch.float
-            self.rsnn = ConvNet(
-                device=device, num_channels=num_channels, feature_size=32, dtype=dtype
-            )
+            self.rsnn = ConvNet(num_channels=num_channels, feature_size=32, dtype=dtype)
         elif FLAGS.net == "convnet4":
-            self.rsnn = ConvNet4(
-                device=device, num_channels=num_channels, feature_size=32
-            )
-        self.device = device
+            self.rsnn = ConvNet4(num_channels=num_channels, feature_size=32)
 
     def forward(self, x):
-        voltages = self.rsnn(x.to(self.device).permute(1, 0, 2, 3, 4))
+        voltages = self.rsnn(x).permute(1, 0, 2)
         m, _ = torch.max(voltages, 0)
         log_p_y = torch.nn.functional.log_softmax(m, dim=1)
         return log_p_y
@@ -120,8 +140,6 @@ def train(
 
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
-        if FLAGS.half_precision:
-            data = data.half()
         optimizer.zero_grad()
         output = model(data)
         loss = torch.nn.functional.nll_loss(output, target)
@@ -165,7 +183,7 @@ def train(
             _, axs = plt.subplots(4, 4, figsize=(15, 10), sharex=True, sharey=True)
             axs = axs.reshape(-1)  # flatten
             for nrn in range(10):
-                one_trace = voltages.detach().cpu().numpy()[:, 0, nrn]
+                one_trace = model.voltages.detach().cpu().numpy()[:, 0, nrn]
                 plt.sca(axs[nrn])
                 plt.plot(ts, one_trace)
             plt.xlabel("Time [s]")
@@ -197,7 +215,8 @@ def test(model, device, test_loader, epoch, writer=None):
 
     accuracy = 100.0 * correct / len(test_loader.dataset)
     logging.info(
-        f"\nTest set {FLAGS.model}: Average loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)} ({accuracy:.0f}%)\n"
+        f"\nTest set {FLAGS.model}: Average loss: {test_loss:.4f}, \
+            Accuracy: {correct}/{len(test_loader.dataset)} ({accuracy:.0f}%)\n"
     )
 
     if writer:
@@ -217,22 +236,21 @@ def save(path, model, optimizer):
     )
 
 
-def load(path, model, optimizer):
+def load(path, model, optimizer, device):
     checkpoint = torch.load(path)
     model.load_state_dict(checkpoint["model_state_dict"])
     optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
-    model.train()
+    model.train(device=device)
     return model, optimizer
 
 
-def compute_min(loader):
-    min = 0.0
-    for batch_idx, (data, target) in enumerate(loader):
-        print(torch.min(data))
+def main(args):
+    try:
+        from torch.utils.tensorboard import SummaryWriter
 
-
-def main(argv):
-    writer = SummaryWriter()
+        writer = SummaryWriter()
+    except ImportError:
+        writer = None
 
     torch.manual_seed(FLAGS.random_seed)
 
@@ -258,14 +276,11 @@ def main(argv):
         x, _ = constant_current_encoder(2 * x)
         return x
 
-    def identity_encoder(x):
-        return x
-
     def poisson_encoder(x):
-        return poisson_train(x, FLAGS.seq_length, "cpu")
+        return poisson_train(x, seq_length=FLAGS.seq_length)
 
     def signed_poisson_encoder(x):
-        return signed_poisson_train(x, FLAGS.seq_length, "cpu")
+        return signed_poisson_train(x, seq_length=FLAGS.seq_length)
 
     def signed_current_encoder(x):
         z, _ = constant_current_encoder(torch.abs(x))
@@ -284,32 +299,6 @@ def main(argv):
     elif FLAGS.encoding == "constant_polar":
         encoder = polar_current_encoder
         num_channels = 2 * num_channels
-
-    def compute_min_max(loader):
-
-        minimum = 0.0
-        maximum = 0.0
-        for data, _ in loader:
-            minimum = min(torch.min(data), minimum)
-            maximum = max(torch.max(data), maximum)
-        return minimum, maximum
-
-    def train_min_max():
-        transform_train = torchvision.transforms.Compose(
-            [torchvision.transforms.ToTensor(), add_luminance]
-        )
-        kwargs = (
-            {"num_workers": 4, "pin_memory": True} if FLAGS.device is "cuda" else {}
-        )
-        train_loader = torch.utils.data.DataLoader(
-            torchvision.datasets.CIFAR10(
-                root=".", train=True, download=True, transform=transform_train
-            ),
-            batch_size=FLAGS.batch_size,
-            shuffle=True,
-            **kwargs,
-        )
-        return compute_min_max(train_loader)
 
     luminance_transforms = [
         add_luminance,
@@ -332,7 +321,7 @@ def main(argv):
         [torchvision.transforms.ToTensor()] + luminance_transforms + [encoder]
     )
 
-    kwargs = {"num_workers": 0, "pin_memory": True} if FLAGS.device is "cuda" else {}
+    kwargs = {"num_workers": 0, "pin_memory": True} if FLAGS.device == "cuda" else {}
     train_loader = torch.utils.data.DataLoader(
         torchvision.datasets.CIFAR10(
             root=".", train=True, download=True, transform=transform_train
@@ -355,22 +344,14 @@ def main(argv):
 
     os.makedirs(rundir, exist_ok=True)
     os.chdir(rundir)
-    FLAGS.append_flags_into_file(f"flags.txt")
+    FLAGS.append_flags_into_file("flags.txt")
 
-    model = LIFConvNet(
-        num_channels=num_channels,
-        seq_length=FLAGS.seq_length,
-        model=FLAGS.model,
-        device=device,
-    ).to(device)
+    model = LIFConvNet(num_channels=num_channels).to(device)
 
     print(model)
 
-    if FLAGS.half_precision:
-        model = model.half()
-
-    model = torch.nn.DataParallel(model)
-    batch_size = FLAGS.batch_size
+    if device == "cuda":
+        model = torch.nn.DataParallel(model).to(device)
 
     if FLAGS.optimizer == "sgd":
         optimizer = torch.optim.SGD(
@@ -434,12 +415,13 @@ def main(argv):
     np.save("mean_losses.npy", np.array(mean_losses))
     np.save("test_losses.npy", np.array(test_losses))
     np.save("accuracies.npy", np.array(accuracies))
-    model_path = f"cifar10-final.pt"
+    model_path = "cifar10-final.pt"
     save(model_path, model, optimizer)
 
     logging.info(f"output saved to {rundir}")
     logging.info(f"{start - stop}")
-    writer.close()
+    if writer:
+        writer.close()
 
 
 if __name__ == "__main__":

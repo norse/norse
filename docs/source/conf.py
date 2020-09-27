@@ -20,11 +20,11 @@ sys.path.insert(0, os.path.abspath("../../"))
 # -- Project information -----------------------------------------------------
 
 project = "norse"
-copyright = "2019, Christian Pehle"
-author = "Christian Pehle"
+copyright = "2020, Norse.ai"
+author = "Norse.ai"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.2"
+release = "0.0.4"
 
 
 # -- General configuration ---------------------------------------------------
@@ -41,6 +41,7 @@ extensions = [
     "matplotlib.sphinxext.plot_directive",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
+    "sphinx.ext.githubpages",
     "sphinx_autodoc_typehints",
     "sphinx_gallery.gen_gallery",
 ]
@@ -67,13 +68,28 @@ pygments_style = "sphinx"
 #
 html_theme = "alabaster"
 
+html_theme_options = {
+    "logo": "logo.png",
+    "github_user": "norse",
+    "github_repo": "norse",
+    "github_button": "true",
+    "description": "A library to do deep learning with spiking neural networks.",
+    "page_width": "1100px",
+    "sidebar_width": "300px",
+}
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+html_css_files = ["custom.css"]
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/", None),
     "numpy": ("http://docs.scipy.org/doc/numpy/", None),
     "PyTorch": ("http://pytorch.org/docs/master/", None),
 }
+
+# Include __init__ docstrings
+autoclass_content = "both"

@@ -1,0 +1,28 @@
+name: Publish To Pypi
+
+on:
+  release:
+    types: [published]
+    
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x' 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pep517
+    - name: Build dist
+      run: |
+        python setup.py bdist_wheel
+    - name: publish-to-pypi
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        user: __token__
+        AnacondaToken: ${{ secrets.PYPI_PUBLISH_KEY }}

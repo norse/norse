@@ -5,7 +5,7 @@ from ..functional.lif import LIFState
 from ..functional.lif_mc_refrac import lif_mc_refrac_step
 
 import numpy as np
-from typing import Tuple
+from typing import Optional, Tuple
 
 
 class LIFMCRefracCell(torch.nn.Module):
@@ -28,23 +28,35 @@ class LIFMCRefracCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(
-        self, batch_size: int, device: torch.device, dtype: torch.float = torch.float
-    ) -> LIFRefracState:
-        return LIFRefracState(
-            lif=LIFState(
-                z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-                v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-                i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            ),
-            rho=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input: torch.Tensor, state: LIFRefracState
+        self, input_tensor: torch.Tensor, state: Optional[LIFRefracState] = None
     ) -> Tuple[torch.Tensor, LIFRefracState]:
+        if state is None:
+            state = LIFRefracState(
+                lif=LIFState(
+                    z=torch.zeros(
+                        input_tensor.shape[0],
+                        self.hidden_size,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ),
+                    v=self.p.lif.v_leak,
+                    i=torch.zeros(
+                        input_tensor.shape[0],
+                        self.hidden_size,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ),
+                ),
+                rho=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
         return lif_mc_refrac_step(
-            input,
+            input_tensor,
             state,
             self.input_weights,
             self.recurrent_weights,

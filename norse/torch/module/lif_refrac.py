@@ -1,8 +1,8 @@
-from typing import Tuple
+from typing import Optional, Tuple
 import numpy as np
 import torch
 
-from ..functional.lif import LIFState, LIFFeedForwardState, LIFParameters
+from ..functional.lif import LIFState, LIFFeedForwardState
 
 from ..functional.lif_refrac import (
     LIFRefracParameters,
@@ -14,13 +14,14 @@ from ..functional.lif_refrac import (
 
 
 class LIFRefracCell(torch.nn.Module):
-    """Module that computes a single euler-integration step of a LIF neuron-model
-    with absolute refractory period. More specifically it implements one integration 
-    step of the following ODE.
+    """Module that computes a single euler-integration step of a LIF
+    neuron-model with absolute refractory period. More specifically it
+    implements one integration step of the following ODE.
 
     .. math::
         \\begin{align*}
-            \dot{v} &= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) (v_{\\text{leak}} - v + i) \\\\
+            \dot{v} &= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) \
+            (v_{\\text{leak}} - v + i) \\\\
             \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
             \dot{\\rho} &= -1/\\tau_{\\text{refrac}} \Theta(\\rho)
         \end{align*}
@@ -40,11 +41,11 @@ class LIFRefracCell(torch.nn.Module):
             v &= (1-z) v + z v_{\\text{reset}} \\\\
             i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
             i &= i + w_{\\text{rec}} z_{\\text{rec}} \\\\
-            \\rho &= \\rho + z_r \\rho_{\\text{reset}} 
+            \\rho &= \\rho + z_r \\rho_{\\text{reset}}
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input
-    spikes respectively.
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
+    recurrent and input spikes respectively.
 
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
@@ -59,8 +60,7 @@ class LIFRefracCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif = LIFRefracCell(10, 20)
         >>> input = torch.randn(batch_size, 10)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> output, s0 = lif(input)
     """
 
     def __init__(
@@ -81,21 +81,35 @@ class LIFRefracCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LIFRefracState:
-        return LIFRefracState(
-            lif=LIFState(
-                z=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-                v=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-                i=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-            ),
-            rho=torch.zeros(batch_size, self.hidden_size, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input: torch.Tensor, state: LIFRefracState
+        self, input_tensor: torch.Tensor, state: Optional[LIFRefracState] = None
     ) -> Tuple[torch.Tensor, LIFRefracState]:
+        if state is None:
+            state = LIFRefracState(
+                LIFState(
+                    z=torch.zeros(
+                        input_tensor.shape[0],
+                        *self.shape,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype
+                    ),
+                    v=self.p.lif.v_leak,
+                    i=torch.zeros(
+                        input_tensor.shape[0],
+                        *self.shape,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype
+                    ),
+                ),
+                rho=torch.zeros(
+                    input_tensor.shape[0],
+                    *self.shape,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype
+                ),
+            )
         return lif_refrac_step(
-            input,
+            input_tensor,
             state,
             self.input_weights,
             self.recurrent_weights,
@@ -105,13 +119,14 @@ class LIFRefracCell(torch.nn.Module):
 
 
 class LIFRefracFeedForwardCell(torch.nn.Module):
-    """Module that computes a single euler-integration step of a LIF neuron-model
-    with absolute refractory period. More specifically it implements one integration 
-    step of the following ODE.
+    """Module that computes a single euler-integration step of a
+    LIF neuron-model with absolute refractory period. More specifically
+    it implements one integration step of the following ODE.
 
     .. math::
         \\begin{align*}
-            \dot{v} &= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) (v_{\\text{leak}} - v + i) \\\\
+            \dot{v} &= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) \
+            (v_{\\text{leak}} - v + i) \\\\
             \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
             \dot{\\rho} &= -1/\\tau_{\\text{refrac}} \Theta(\\rho)
         \end{align*}
@@ -129,7 +144,7 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
     .. math::
         \\begin{align*}
             v &= (1-z) v + z v_{\\text{reset}} \\\\
-            \\rho &= \\rho + z_r \\rho_{\\text{reset}} 
+            \\rho &= \\rho + z_r \\rho_{\\text{reset}}
         \end{align*}
 
     Parameters:
@@ -141,28 +156,41 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
         >>> batch_size = 16
         >>> lif = LIFRefracFeedForwardCell((20, 30))
         >>> input = torch.randn(batch_size, 20, 30)
-        >>> s0 = lif.initial_state(batch_size)
-        >>> output, s0 = lif(input, s0)
+        >>> output, s0 = lif(input)
     """
 
     def __init__(
-        self, shape, p: LIFRefracParameters = LIFRefracParameters(), dt: float = 0.001
+        self,
+        shape,
+        p: LIFRefracParameters = LIFRefracParameters(),
+        dt: float = 0.001,
     ):
         super(LIFRefracFeedForwardCell, self).__init__()
         self.shape = shape
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype) -> LIFFeedForwardState:
-        return LIFRefracFeedForwardState(
-            LIFFeedForwardState(
-                v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-                i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            ),
-            rho=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input: torch.Tensor, state: LIFRefracFeedForwardState
+        self,
+        input_tensor: torch.Tensor,
+        state: Optional[LIFRefracFeedForwardState] = None,
     ) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
-        return lif_refrac_feed_forward_step(input, state, p=self.p, dt=self.dt)
+        if state is None:
+            state = LIFRefracFeedForwardState(
+                LIFFeedForwardState(
+                    v=self.p.lif.v_leak,
+                    i=torch.zeros(
+                        input_tensor.shape[0],
+                        *self.shape,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype
+                    ),
+                ),
+                rho=torch.zeros(
+                    input_tensor.shape[0],
+                    *self.shape,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype
+                ),
+            )
+        return lif_refrac_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

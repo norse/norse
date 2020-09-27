@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Optional, Tuple
 
 import torch
 import numpy as np
@@ -13,8 +13,9 @@ from ..functional.lsnn import (
 
 
 class LSNNCell(torch.nn.Module):
-    """Module that computes a single euler-integration step of a LSNN neuron-model.
-    More specifically it implements one integration step of the following ODE
+    r"""Module that computes a single euler-integration step of a LSNN
+    neuron-model. More specifically it implements one integration step of
+    the following ODE
 
     .. math::
         \\begin{align*}
@@ -24,10 +25,10 @@ class LSNNCell(torch.nn.Module):
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
         z = \Theta(v - v_{\\text{th}} + b)
-    
+
     and transition equations
 
     .. math::
@@ -38,8 +39,8 @@ class LSNNCell(torch.nn.Module):
             b &= b + \\beta z
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent and input
-    spikes respectively.
+    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
+    recurrent and input spikes respectively.
 
     Parameters:
         input (torch.Tensor): the input spikes at the current time step
@@ -69,20 +70,33 @@ class LSNNCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
-        """return the initial state of an LSNN neuron"""
-        return LSNNState(
-            z=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
-            v=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
-            b=torch.zeros(batch_size, self.output_features, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input: torch.Tensor, state: LSNNState
+        self, input_tensor: torch.Tensor, state: Optional[LSNNState] = None
     ) -> Tuple[torch.Tensor, LSNNState]:
+        if state is None:
+            state = LSNNState(
+                z=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                b=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
         return lsnn_step(
-            input,
+            input_tensor,
             state,
             self.input_weights,
             self.recurrent_weights,
@@ -92,62 +106,73 @@ class LSNNCell(torch.nn.Module):
 
 
 class LSNNLayer(torch.nn.Module):
-    """A Long short-term memory neuron module adapted from https://arxiv.org/abs/1803.09574
+    r"""A Long short-term memory neuron module adapted from
+        https://arxiv.org/abs/1803.09574
 
     Usage:
       >>> from norse.torch.module import LSNNLayer, LSNNCell
-      >>> layer = LSNNLayer(LSNNCell, 2, 10)    // LSNNCell with 2 inputs and 10 outputs
-      >>> state = layer.initial_state(5, "cpu") // 5 batch size running on CPU
-      >>> data  = torch.zeros(2, 5, 2)          // Generate data of shape [5, 2, 10]
-      >>> output, new_state = layer.forward(data, state)
+      >>> layer = LSNNLayer(LSNNCell, 2, 10)    // LSNNCell of shape 2 -> 10
+      >>> data  = torch.zeros(2, 5, 2)          // Arbitrary data
+      >>> output, state = layer.forward(data)
 
     Parameters:
       cell (torch.nn.Module): the underling neuron module, uninitialized
-      \*cell_args: variable length input arguments for the underlying cell constructor
+      *cell_args: variable length input arguments for the underlying cell
+                  constructor
+      **cell_kwargs: variable length key-value arguments for the underlying cell constructor
     """
 
-    def __init__(self, cell, *cell_args):
+    def __init__(self, cell, *cell_args, **cell_kwargs):
         super(LSNNLayer, self).__init__()
-        self.cell = cell(*cell_args)
-
-    def initial_state(self, batch_size, device, dtype=torch.float) -> LSNNState:
-        """Return the initial state of the LSNN layer, as given by the internal LSNNCell"""
-        return self.cell.initial_state(batch_size, device, dtype)
+        self.cell = cell(*cell_args, **cell_kwargs)
 
     def forward(
-        self, input: torch.Tensor, state: LSNNState
+        self, input_tensor: torch.Tensor, state: Optional[LSNNState] = None
     ) -> Tuple[torch.Tensor, LSNNState]:
-        inputs = input.unbind(0)
+        """
+        Takes one step in the LSNN layer by simulating the layer for a number of timesteps.
+        Since the layer is recurrent, each simulation state (LSNNState) is used as the input for the next step.
+
+        The function expects inputs in the shape (simulation time steps, batch size, ...).
+
+        Parameters:
+        input_tensor (torch.Tensor): Input tensor with timesteps in the first dimension
+        state (Optional[LSNNState]): The input LSNN state. Defaults to None on the first timestep
+
+        Returns:
+        A tuple of 1) spikes from each timestep and 2) the LSNNState from the last timestep.
+        """
+        inputs = input_tensor.unbind(0)
         outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
-        for i in range(len(inputs)):
-            out, state = self.cell(inputs[i], state)
+        for input_step in inputs:
+            out, state = self.cell(input_step, state)
             outputs += [out]
         return torch.stack(outputs), state
 
 
 class LSNNFeedForwardCell(torch.nn.Module):
-    """Euler integration cell for LIF Neuron with threshhold adaptation.
+    r"""Euler integration cell for LIF Neuron with threshold adaptation.
     More specifically it implements one integration step of the following ODE
 
     .. math::
-        \\begin{align*}
-            \dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\
-            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
-            \dot{b} &= -1/\\tau_{b} b
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\\text{syn}} i \\
+            \dot{b} &= -1/\tau_{b} b
         \end{align*}
 
     together with the jump condition
-    
+
     .. math::
-        z = \Theta(v - v_{\\text{th}} + b)
-    
+        z = \Theta(v - v_{\text{th}} + b)
+
     and transition equations
 
     .. math::
-        \\begin{align*}
-            v &= (1-z) v + z v_{\\text{reset}} \\\\
-            i &= i + \\text{input} \\\\
-            b &= b + \\beta z
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            i &= i + \text{input} \\
+            b &= b + \beta z
         \end{align*}
 
     Parameters:
@@ -163,17 +188,23 @@ class LSNNFeedForwardCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
-    def initial_state(
-        self, batch_size, device, dtype=torch.float
-    ) -> LSNNFeedForwardState:
-        """return the initial state of an LSNN neuron"""
-        return LSNNFeedForwardState(
-            v=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            i=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-            b=torch.zeros(batch_size, *self.shape, device=device, dtype=dtype),
-        )
-
     def forward(
-        self, input: torch.Tensor, state: LSNNFeedForwardState
+        self, input_tensor: torch.Tensor, state: Optional[LSNNFeedForwardState] = None
     ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
-        return lsnn_feed_forward_step(input, state, p=self.p, dt=self.dt)
+        if state is None:
+            state = LSNNFeedForwardState(
+                v=self.p.v_leak,
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                b=torch.zeros(
+                    input_tensor.shape[0],
+                    self.output_features,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            )
+        return lsnn_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

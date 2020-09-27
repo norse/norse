@@ -1,5 +1,4 @@
 import os
-import datetime
 import uuid
 
 from absl import app
@@ -12,9 +11,8 @@ import matplotlib.pyplot as plt
 import torch
 import torchvision
 
-from torch.utils.tensorboard import SummaryWriter
 from norse.torch.models.conv import ConvNet4
-from norse.torch.module.lif import LIFConstantCurrentEncoder
+from norse.torch.module.encode import ConstantCurrentLIFEncoder
 
 FLAGS = flags.FLAGS
 
@@ -31,6 +29,32 @@ flags.DEFINE_float("input_scale", 1, "Scaling factor for input current.")
 flags.DEFINE_bool(
     "find_learning_rate", False, "Use learning rate finder to find learning rate."
 )
+flags.DEFINE_enum("device", "cpu", ["cpu", "cuda"], "Device to use by pytorch.")
+flags.DEFINE_integer("epochs", 10, "Number of training episodes to do.")
+flags.DEFINE_integer("seq_length", 200, "Number of timesteps to do.")
+flags.DEFINE_integer("batch_size", 32, "Number of examples in one minibatch.")
+flags.DEFINE_enum(
+    "model",
+    "super",
+    ["super", "tanh", "circ", "logistic", "circ_dist"],
+    "Model to use for training.",
+)
+flags.DEFINE_string("prefix", "", "Prefix to use for saving the results")
+flags.DEFINE_enum(
+    "optimizer", "adam", ["adam", "sgd"], "Optimizer to use for training."
+)
+flags.DEFINE_bool("clip_grad", False, "Clip gradient during backpropagation")
+flags.DEFINE_float("grad_clip_value", 1.0, "Gradient to clip at.")
+flags.DEFINE_float("learning_rate", 2e-3, "Learning rate to use.")
+flags.DEFINE_integer(
+    "log_interval", 10, "In which intervals to display learning progress."
+)
+flags.DEFINE_integer("model_save_interval", 50, "Save model every so many epochs.")
+flags.DEFINE_boolean("save_model", True, "Save the model after training.")
+flags.DEFINE_boolean("big_net", False, "Use bigger net...")
+flags.DEFINE_boolean("only_output", False, "Train only the last layer...")
+flags.DEFINE_boolean("do_plot", False, "Do intermediate plots")
+flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
 
 
 class LIFConvNet(torch.nn.Module):
@@ -39,23 +63,18 @@ class LIFConvNet(torch.nn.Module):
         input_features,
         seq_length,
         model="super",
-        device="cpu",
         only_first_spike=False,
-        refrac=False,
     ):
         super(LIFConvNet, self).__init__()
-        self.constant_current_encoder = LIFConstantCurrentEncoder(
-            seq_length=seq_length, device=device
-        )
+        self.constant_current_encoder = ConstantCurrentLIFEncoder(seq_length=seq_length)
         self.only_first_spike = only_first_spike
         self.input_features = input_features
-        self.rsnn = ConvNet4(device=device, model=model)
-        self.device = device
+        self.rsnn = ConvNet4(method=model)
         self.seq_length = seq_length
 
     def forward(self, x):
         batch_size = x.shape[0]
-        _, x = self.constant_current_encoder(
+        x = self.constant_current_encoder(
             x.view(-1, self.input_features) * FLAGS.input_scale
         )
         if self.only_first_spike:
@@ -67,7 +86,7 @@ class LIFConvNet(torch.nn.Module):
                 if spike_counter[batch, nrn] == 0:
                     zeros[t, batch, nrn] = 1
                     spike_counter[batch, nrn] += 1
-            x = torch.tensor(zeros).to(self.device)
+            x = torch.from_numpy(zeros).to(x.device)
 
         x = x.reshape(self.seq_length, batch_size, 1, 28, 28)
         voltages = self.rsnn(x)
@@ -125,7 +144,7 @@ def train(model, device, train_loader, optimizer, epoch, writer=None):
             fig, axs = plt.subplots(4, 4, figsize=(15, 10), sharex=True, sharey=True)
             axs = axs.reshape(-1)  # flatten
             for nrn in range(10):
-                one_trace = voltages.detach().cpu().numpy()[:, 0, nrn]
+                one_trace = model.voltages.detach().cpu().numpy()[:, 0, nrn]
                 fig.sca(axs[nrn])
                 fig.plot(ts, one_trace)
             fig.xlabel("Time [s]")
@@ -159,7 +178,8 @@ def test(model, device, test_loader, epoch, writer=None):
 
     accuracy = 100.0 * correct / len(test_loader.dataset)
     logging.info(
-        f"\nTest set {FLAGS.model}: Average loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)} ({accuracy:.0f}%)\n"
+        f"\nTest set {FLAGS.model}: Average loss: {test_loss:.4f}, \
+            Accuracy: {correct}/{len(test_loader.dataset)} ({accuracy:.0f}%)\n"
     )
     if writer:
         writer.add_scalar("Loss/test", test_loss, epoch)
@@ -189,7 +209,12 @@ def load(path, model, optimizer):
 
 
 def main(argv):
-    writer = SummaryWriter()
+    try:
+        from torch.utils.tensorboard import SummaryWriter
+
+        writer = SummaryWriter()
+    except ImportError:
+        writer = None
 
     torch.manual_seed(FLAGS.random_seed)
 
@@ -202,7 +227,7 @@ def main(argv):
 
     device = torch.device(FLAGS.device)
 
-    kwargs = {"num_workers": 1, "pin_memory": True} if FLAGS.device is "cuda" else {}
+    kwargs = {"num_workers": 1, "pin_memory": True} if FLAGS.device == "cuda" else {}
     train_loader = torch.utils.data.DataLoader(
         torchvision.datasets.MNIST(
             root=".",
@@ -210,7 +235,8 @@ def main(argv):
             download=True,
             transform=torchvision.transforms.Compose(
                 [
-                    #                    torchvision.transforms.RandomCrop(size=[28,28], padding=4),
+                    # torchvision.transforms.
+                    #    RandomCrop(size=[28,28], padding=4)
                     torchvision.transforms.ToTensor(),
                     torchvision.transforms.Normalize((0.1307,), (0.3081,)),
                 ]
@@ -243,17 +269,14 @@ def main(argv):
 
     os.makedirs(path, exist_ok=True)
     os.chdir(path)
-    FLAGS.append_flags_into_file(f"flags.txt")
+    FLAGS.append_flags_into_file("flags.txt")
 
     input_features = 28 * 28
-    output_features = 10
 
     model = LIFConvNet(
         input_features,
         FLAGS.seq_length,
         model=FLAGS.model,
-        device=device,
-        refrac=FLAGS.refrac,
         only_first_spike=FLAGS.only_first_spike,
     ).to(device)
 
@@ -297,7 +320,7 @@ def main(argv):
     np.save("mean_losses.npy", np.array(mean_losses))
     np.save("test_losses.npy", np.array(test_losses))
     np.save("accuracies.npy", np.array(accuracies))
-    model_path = f"mnist-final.pt"
+    model_path = "mnist-final.pt"
     save(
         model_path,
         epoch=epoch,
@@ -305,7 +328,8 @@ def main(argv):
         optimizer=optimizer,
         is_best=accuracy > max_accuracy,
     )
-    writer.close()
+    if writer:
+        writer.close()
 
 
 if __name__ == "__main__":
