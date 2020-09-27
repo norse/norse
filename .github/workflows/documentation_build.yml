@@ -22,5 +22,7 @@ jobs:
           docs-folder: "docs/"
           pre-build-command: |
             python -m pip install --upgrade pip
+            pip install -r requirements.txt
             pip install -r requirements-dev.txt
+            pip install -e .
             sphinx-apidoc -o docs/source/auto_api -H Norse -f -e -M norse/
