@@ -62,7 +62,13 @@ class LICell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
-        return li_step(input_tensor, state, self.input_weights, p=self.p, dt=self.dt,)
+        return li_step(
+            input_tensor,
+            state,
+            self.input_weights,
+            p=self.p,
+            dt=self.dt,
+        )
 
 
 class LIFeedForwardCell(torch.nn.Module):

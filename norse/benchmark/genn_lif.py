@@ -7,7 +7,6 @@ from multiprocessing.managers import SharedMemoryManager
 
 from pygenn.genn_model import GeNNModel
 from pygenn.genn_wrapper import NO_DELAY
-from pygenn import genn_wrapper
 
 from benchmark import BenchmarkParameters
 
@@ -24,6 +23,7 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     shared.shutdown()
     return duration
 
+
 if __name__ == "__main__":
     # Assume we're running the genn benchmark and draw configs from the shared memory
     parameter_list = ShareableList(sequence=None, name=sys.argv[1])
@@ -39,17 +39,21 @@ if __name__ == "__main__":
         # Note: weights, parameters and poisson rate are magic numbers that seem to generate reasonable spike activity
         weights = np.random.rand(parameters.features, parameters.features).flatten() * 8
         model.add_neuron_population(
-            f"PoissonNew{i}", parameters.features, "PoissonNew", {"rate": 100}, {"timeStepToSpike": 1}
+            f"PoissonNew{i}",
+            parameters.features,
+            "PoissonNew",
+            {"rate": 100},
+            {"timeStepToSpike": 1},
         )
         # From https://neuralensemble.org/docs/PyNN/reference/neuronmodels.html#pyNN.standardmodels.cells.IF_curr_exp
-        lif_params = { 
+        lif_params = {
             "C": 1.0,
             "TauM": 20.0,
             "Vrest": 0.0,
             "Vreset": 0.0,
             "Vthresh": 1.0,
             "Ioffset": 0.0,
-            "TauRefrac": 0.1
+            "TauRefrac": 0.1,
         }
         lif_vars = {"V": 0.0 * ones, "RefracTime": 0.0 * ones}
         layer = model.add_neuron_population(
@@ -57,8 +61,21 @@ if __name__ == "__main__":
         )
         layers.append(layer)
         # From https://github.com/genn-team/genn/blob/master/userproject/PoissonIzh_project/model/PoissonIzh.cc#L93
-        model.add_synapse_population(f"PL{i}", "DENSE_INDIVIDUALG", NO_DELAY, f"PoissonNew{i}", f"LIF{i}", 
-                                     "StaticPulse", {}, {"g": weights}, {}, {}, "DeltaCurr", {}, {})
+        model.add_synapse_population(
+            f"PL{i}",
+            "DENSE_INDIVIDUALG",
+            NO_DELAY,
+            f"PoissonNew{i}",
+            f"LIF{i}",
+            "StaticPulse",
+            {},
+            {"g": weights},
+            {},
+            {},
+            "DeltaCurr",
+            {},
+            {},
+        )
 
     model.build()
     model.load()
@@ -75,7 +92,7 @@ if __name__ == "__main__":
             timestep_spikes.append(np.copy(layer.current_spikes))
         layer_spikes.append(timestep_spikes)
     end = time.time()
-    
+
     parameter_list[0] = end - start
     parameter_list[1] = len(np.array(layer_spikes).flatten())
     parameter_list.shm.close()

@@ -86,7 +86,11 @@ def correlation_based_update(
     ts_frequency: int,
 ):
     if ts % ts_frequency == 0:
-        (_, input_features, hidden_features) = correlation_state.correlation_trace.shape
+        (
+            _,
+            input_features,
+            hidden_features,
+        ) = correlation_state.correlation_trace.shape
         # proposed weight update
         dw = torch.cat(
             (

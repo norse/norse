@@ -28,9 +28,12 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
         .to(parameters.device)
         .float()
     )
+    input_spikes.requires_grad = False
 
     input_data = {"Input": input_spikes}
     network.to(parameters.device)
+    for param in network.parameters():
+        param.requires_grad = False
     start = time.time()
     network.run(inputs=input_data, time=T)
     end = time.time()

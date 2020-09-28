@@ -24,7 +24,8 @@ def test_lift_sequential():
 
     data = torch.randn(seq_length, batch_size, in_channels, 20, 30)
     module = torch.nn.Sequential(
-        Lift(torch.nn.Conv2d(in_channels, out_channels, 5, 1)), LIFFeedForwardLayer(),
+        Lift(torch.nn.Conv2d(in_channels, out_channels, 5, 1)),
+        LIFFeedForwardLayer(),
     )
     output, _ = module(data)
 
