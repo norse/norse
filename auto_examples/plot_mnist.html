@@ -53,6 +53,52 @@ is involved.</p>
 <h2><span class="section-number">1.1.1. </span>How to define a Network<a class="headerlink" href="#how-to-define-a-network" title="Permalink to this headline">¶</a></h2>
 <p>The spiking neural network primitives in norse are designed to fit in
 as seamlessly as possible into a traditional deep learning pipeline.</p>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Net(
+  (conv1): Conv2d(1, 32, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d(32, 64, kernel_size=(5, 5), stride=(1, 1))
+  (fc1): Linear(in_features=1600, out_features=1024, bias=True)
+  (lif0): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
+  (lif1): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
+  (lif2): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
+  (out): LICell()
+)
+tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+
+        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]], grad_fn=&lt;CopySlices&gt;)
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.lif</span> <span class="kn">import</span> <a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class"><span class="n">LIFParameters</span></a>
 
@@ -116,100 +162,41 @@ as seamlessly as possible into a traditional deep learning pipeline.</p>
         <span class="k">return</span> <span class="n">voltages</span>
 
 
-<span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+
+    <span class="c1">########################################################################</span>
+    <span class="c1"># We can evaluate the network we just defined on an input of size 1x32x32.</span>
+    <span class="c1"># Note that in contrast to typical spiking neural network simulators time</span>
+    <span class="c1"># is just another dimension in the input tensor here we chose to evaluate</span>
+    <span class="c1"># the network on 16 timesteps and there is an explicit batch dimension</span>
+    <span class="c1"># (number of concurrently evaluated inputs with identical model parameters).</span>
+
+    <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timesteps</span></a> <span class="o">=</span> <span class="mi">16</span>
+    <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">batch_size</span></a> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timesteps</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">batch_size</span></a><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+    <span class="c1">##########################################################################</span>
+    <span class="c1"># Since the spiking neural network is implemented as a pytorch module, we</span>
+    <span class="c1"># can use the usual pytorch primitives for optimizing it. Note that the</span>
+    <span class="c1"># backward computation expects a gradient for each timestep</span>
+
+    <span class="n">net</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timesteps</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">batch_size</span></a><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+    <span class="c1">########################################################################</span>
+    <span class="c1"># .. note::</span>
+    <span class="c1">#</span>
+    <span class="c1">#     ``norse`` like pytorch only supports mini-batches. This means that</span>
+    <span class="c1">#     contrary to most other spiking neural network simulators ```norse```</span>
+    <span class="c1">#     always integrates several indepdentent sets of spiking neural</span>
+    <span class="c1">#     networks at once.</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Net(
-  (conv1): Conv2d(1, 32, kernel_size=(5, 5), stride=(1, 1))
-  (conv2): Conv2d(32, 64, kernel_size=(5, 5), stride=(1, 1))
-  (fc1): Linear(in_features=1600, out_features=1024, bias=True)
-  (lif0): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
-  (lif1): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
-  (lif2): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
-  (out): LICell()
-)
-</pre></div>
-</div>
-<p>We can evaluate the network we just defined on an input of size 1x32x32.
-Note that in contrast to typical spiking neural network simulators time
-is just another dimension in the input tensor here we chose to evaluate
-the network on 16 timesteps and there is an explicit batch dimension
-(number of concurrently evaluated inputs with identical model parameters).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timesteps</span></a> <span class="o">=</span> <span class="mi">16</span>
-<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">batch_size</span></a> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timesteps</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">batch_size</span></a><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
-<span class="n">out</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([[[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,
-           0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00]],
-
-        [[ 2.5704e-03, -6.4410e-03,  5.3098e-04,  3.1730e-03,  4.2308e-03,
-          -1.4496e-05, -4.8808e-03, -1.1516e-03, -4.0005e-03,  2.3648e-03]]],
-       grad_fn=&lt;CopySlices&gt;)
-</pre></div>
-</div>
-<p>Since the spiking neural network is implemented as a pytorch module, we
-can use the usual pytorch primitives for optimizing it. Note that the
-backward computation expects a gradient for each timestep</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-<span class="n">out</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timesteps</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">batch_size</span></a><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">norse</span></code> like pytorch only supports mini-batches. This means that
-contrary to most other spiking neural network simulators <code class="docutils literal notranslate"><span class="pre">`norse`</span></code>
-always integrates several indepdentent sets of spiking neural
-networks at once.</p>
-</div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.486 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.674 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-mnist-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/f4267e394f05c422272daddce2ec6ab0/plot_mnist.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_mnist.py</span></code></a></p>

@@ -135,6 +135,72 @@ constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span
 </dd></dl>
 
 <dl class="class">
+<dt id="norse.torch.functional.lif.LIFParametersJIT">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.lif.</code><code class="sig-name descname">LIFParametersJIT</code><a class="reference internal" href="../_modules/norse/torch/functional/lif.html#LIFParametersJIT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lif.LIFParametersJIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<p>Parametrization of a LIF neuron</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+125df29 ))"><em>torch.Tensor</em></a>) – inverse synaptic time
+constant (<span class="math notranslate nohighlight">\(1/\tau_\text{syn}\)</span>) in 1/ms</p></li>
+<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+125df29 ))"><em>torch.Tensor</em></a>) – inverse membrane time
+constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span>) in 1/ms</p></li>
+<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+125df29 ))"><em>torch.Tensor</em></a>) – leak potential in mV</p></li>
+<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+125df29 ))"><em>torch.Tensor</em></a>) – threshold potential in mV</p></li>
+<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+125df29 ))"><em>torch.Tensor</em></a>) – reset potential in mV</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – method to determine the spike threshold
+(relevant for surrogate gradients)</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+125df29 ))"><em>torch.Tensor</em></a>) – hyper parameter to use in surrogate gradient computation</p></li>
+</ul>
+</dd>
+</dl>
+<p>Create new instance of LIFParametersJIT(tau_syn_inv, tau_mem_inv, v_leak, v_th, v_reset, method, alpha)</p>
+<dl class="attribute">
+<dt id="norse.torch.functional.lif.LIFParametersJIT.alpha">
+<code class="sig-name descname">alpha</code><a class="headerlink" href="#norse.torch.functional.lif.LIFParametersJIT.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 6</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.lif.LIFParametersJIT.method">
+<code class="sig-name descname">method</code><a class="headerlink" href="#norse.torch.functional.lif.LIFParametersJIT.method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.lif.LIFParametersJIT.tau_mem_inv">
+<code class="sig-name descname">tau_mem_inv</code><a class="headerlink" href="#norse.torch.functional.lif.LIFParametersJIT.tau_mem_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.lif.LIFParametersJIT.tau_syn_inv">
+<code class="sig-name descname">tau_syn_inv</code><a class="headerlink" href="#norse.torch.functional.lif.LIFParametersJIT.tau_syn_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.lif.LIFParametersJIT.v_leak">
+<code class="sig-name descname">v_leak</code><a class="headerlink" href="#norse.torch.functional.lif.LIFParametersJIT.v_leak" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.lif.LIFParametersJIT.v_reset">
+<code class="sig-name descname">v_reset</code><a class="headerlink" href="#norse.torch.functional.lif.LIFParametersJIT.v_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.functional.lif.LIFParametersJIT.v_th">
+<code class="sig-name descname">v_th</code><a class="headerlink" href="#norse.torch.functional.lif.LIFParametersJIT.v_th" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="norse.torch.functional.lif.LIFState">
 <em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.lif.</code><code class="sig-name descname">LIFState</code><a class="reference internal" href="../_modules/norse/torch/functional/lif.html#LIFState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lif.LIFState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
@@ -171,7 +237,7 @@ constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span
 
 <dl class="function">
 <dt id="norse.torch.functional.lif.lif_current_encoder">
-<code class="sig-prename descclassname">norse.torch.functional.lif.</code><code class="sig-name descname">lif_current_encoder</code><span class="sig-paren">(</span><em class="sig-param">input_current</em>, <em class="sig-param">voltage</em>, <em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=0.0)</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/lif.html#lif_current_encoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lif.lif_current_encoder" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">norse.torch.functional.lif.</code><code class="sig-name descname">lif_current_encoder</code><span class="sig-paren">(</span><em class="sig-param">input_current</em>, <em class="sig-param">voltage</em>, <em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=tensor(0.))</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/lif.html#lif_current_encoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lif.lif_current_encoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a single euler-integration step of a leaky integrator. More
 specifically it implements one integration step of the following ODE</p>
 <div class="math notranslate nohighlight">
@@ -196,7 +262,7 @@ specifically it implements one integration step of the following ODE</p>
 
 <dl class="function">
 <dt id="norse.torch.functional.lif.lif_feed_forward_step">
-<code class="sig-prename descclassname">norse.torch.functional.lif.</code><code class="sig-name descname">lif_feed_forward_step</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=LIFFeedForwardState(v=0</em>, <em class="sig-param">i=0)</em>, <em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=0.0)</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/lif.html#lif_feed_forward_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lif.lif_feed_forward_step" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">norse.torch.functional.lif.</code><code class="sig-name descname">lif_feed_forward_step</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=LIFFeedForwardState(v=0</em>, <em class="sig-param">i=0)</em>, <em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=tensor(0.))</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/lif.html#lif_feed_forward_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lif.lif_feed_forward_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a single euler-integration step for a lif neuron-model.
 It takes as input the input current as generated by an arbitrary torch
 module or function. More specifically it implements one integration
@@ -234,7 +300,7 @@ arbitrary pytorch module (such as a convolution) to input spikes.</p>
 
 <dl class="function">
 <dt id="norse.torch.functional.lif.lif_step">
-<code class="sig-prename descclassname">norse.torch.functional.lif.</code><code class="sig-name descname">lif_step</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state</em>, <em class="sig-param">input_weights</em>, <em class="sig-param">recurrent_weights</em>, <em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=0.0)</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/lif.html#lif_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lif.lif_step" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">norse.torch.functional.lif.</code><code class="sig-name descname">lif_step</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state</em>, <em class="sig-param">input_weights</em>, <em class="sig-param">recurrent_weights</em>, <em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=tensor(0.))</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/lif.html#lif_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lif.lif_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a single euler-integration step of a LIF neuron-model. More
 specifically it implements one integration step of the following ODE</p>
 <div class="math notranslate nohighlight">

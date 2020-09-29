@@ -42,16 +42,16 @@
 <span id="norse-torch-module-lif-module"></span><h1>norse.torch.module.lif module<a class="headerlink" href="#module-norse.torch.module.lif" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="norse.torch.module.lif.LIFCell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif.</code><code class="sig-name descname">LIFCell</code><span class="sig-paren">(</span><em class="sig-param">input_size</em>, <em class="sig-param">hidden_size</em>, <em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=0.0)</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif.LIFCell" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif.</code><code class="sig-name descname">LIFCell</code><span class="sig-paren">(</span><em class="sig-param">input_size</em>, <em class="sig-param">hidden_size</em>, <em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=tensor(0.))</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif.LIFCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Module that computes a single euler-integration step of a
 LIF neuron-model with recurrence.
 More specifically it implements one integration step
 of the following ODE</p>
 <div class="math notranslate nohighlight">
-\[egin{align*}
-    \dot{v} &amp;= 1/       au_{    ext{mem}} (v_{  ext{leak}} - v + i) \
-    \dot{i} &amp;= -1/      au_{    ext{syn}} i
+\[\begin{align*}
+    \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \
+    \dot{i} &amp;= -1/\tau_{\text{syn}} i
 \end{align*}\]</div>
 <p>together with the jump condition</p>
 <div class="math notranslate nohighlight">
@@ -60,8 +60,8 @@ of the following ODE</p>
 <div class="math notranslate nohighlight">
 \[\begin{align*}
     v &amp;= (1-z) v + z v_{\text{reset}} \
-    i &amp;= i + w_{\text{input}} z_{       ext{in}} \
-    i &amp;= i + w_{\text{rec}} z_{ ext{rec}}
+    i &amp;= i + w_{\text{input}} z_{\text{in}} \
+    i &amp;= i + w_{\text{rec}} z_{\text{rec}}
 \end{align*}\]</div>
 <p>where <span class="math notranslate nohighlight">\(z_{\text{rec}}\)</span> and <span class="math notranslate nohighlight">\(z_{\text{in}}\)</span> are the
 recurrent and input spikes respectively.</p>
@@ -111,7 +111,7 @@ strings are acceptable.</p>
 
 <dl class="class">
 <dt id="norse.torch.module.lif.LIFFeedForwardCell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif.</code><code class="sig-name descname">LIFFeedForwardCell</code><span class="sig-paren">(</span><em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=0.0)</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFFeedForwardCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif.LIFFeedForwardCell" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif.</code><code class="sig-name descname">LIFFeedForwardCell</code><span class="sig-paren">(</span><em class="sig-param">p=LIFParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.)</em>, <em class="sig-param">v_th=tensor(1.)</em>, <em class="sig-param">v_reset=tensor(0.)</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">alpha=tensor(0.))</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFFeedForwardCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif.LIFFeedForwardCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Module that computes a single euler-integration step of a LIF neuron.
 It takes as input the input current as generated by an arbitrary torch
