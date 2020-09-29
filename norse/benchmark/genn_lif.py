@@ -1,5 +1,10 @@
 import numpy as np
 import time
+import sys
+from subprocess import run, STDOUT
+from multiprocessing.shared_memory import ShareableList
+from multiprocessing.managers import SharedMemoryManager
+
 from pygenn.genn_model import GeNNModel
 from pygenn.genn_wrapper import NO_DELAY
 
@@ -7,10 +12,10 @@ from benchmark import BenchmarkParameters
 
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
-    T = parameters.sequence_length / parameters.dt
-
-    model = GeNNModel("float", "pygenn", backend_log_level=genn_wrapper.debug)
-    model.dT = parameters.dt
+    shared = SharedMemoryManager()
+    shared.start()
+    params = list(parameters._asdict().values())
+    shared_list = shared.ShareableList(params)
 
     run(["python3", __file__, shared_list.shm.name], stderr=STDOUT)
     duration = shared_list[0]

@@ -9,7 +9,9 @@ if getattr(norse, "IS_OPS_LOADED"):
     superspike_fn = torch.ops.norse_op.superfun
 else:
     from .superspike import super_fn
+
     superspike_fn = super_fn
+
 
 class HeaviErfc(torch.autograd.Function):
     r"""Approximation of the heaviside step function as
@@ -27,7 +29,10 @@ class HeaviErfc(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (x, k,) = ctx.saved_tensors
+        (
+            x,
+            k,
+        ) = ctx.saved_tensors
         derfc = (2 * torch.exp(-k.pow(2) * x.pow(2))) / (torch.as_tensor(np.pi).sqrt())
         return derfc * dy, None
 
@@ -49,12 +54,17 @@ class HeaviTanh(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (x, k,) = ctx.saved_tensors
+        (
+            x,
+            k,
+        ) = ctx.saved_tensors
         dtanh = 1 - (x * k).tanh().pow(2)
         return dy * dtanh, None
 
 
-heavi_tanh_fn = HeaviTanh.apply
+@torch.jit.ignore
+def heavi_tanh_fn(x: torch.Tensor, k: float):
+    return HeaviTanh.apply(x, k)
 
 
 class Logistic(torch.autograd.Function):
@@ -72,12 +82,17 @@ class Logistic(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (x, k,) = ctx.saved_tensors
+        (
+            x,
+            k,
+        ) = ctx.saved_tensors
         dtanh = 1 - (x * k).tanh().pow(2)
         return dy * dtanh, None
 
 
-logistic_fn = Logistic.apply
+@torch.jit.ignore
+def logistic_fn(x: torch.Tensor, k: float):
+    return Logistic.apply(x, k)
 
 
 class HeaviCirc(torch.autograd.Function):
@@ -109,7 +124,9 @@ class HeaviCirc(torch.autograd.Function):
         )
 
 
-heavi_circ_fn = HeaviCirc.apply
+@torch.jit.ignore
+def heavi_circ_fn(x: torch.Tensor, k: float):
+    return HeaviCirc.apply(x, k)
 
 
 class CircDist(torch.autograd.Function):
@@ -122,7 +139,10 @@ class CircDist(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (x, alpha,) = ctx.saved_tensors
+        (
+            x,
+            alpha,
+        ) = ctx.saved_tensors
         return (
             dy
             * (
@@ -135,7 +155,9 @@ class CircDist(torch.autograd.Function):
         )
 
 
-circ_dist_fn = CircDist.apply
+@torch.jit.ignore
+def circ_dist_fn(x: torch.Tensor, k: float):
+    return CircDist.apply(x, k)
 
 
 class HeaviTent(torch.autograd.Function):
@@ -146,11 +168,16 @@ class HeaviTent(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dy):
-        (x, alpha,) = ctx.saved_tensors
+        (
+            x,
+            alpha,
+        ) = ctx.saved_tensors
         return torch.relu(1 - torch.abs(x)) * alpha * dy, None
 
 
-heavi_tent_fn = HeaviTent.apply
+@torch.jit.ignore
+def heavi_tent_fn(x: torch.Tensor, k: float):
+    return HeaviTent.apply(x, k)
 
 
 def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:

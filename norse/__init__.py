@@ -7,12 +7,15 @@ from . import benchmark, dataset, task
 try:
     import torch
     from pathlib import Path
+
     torch.ops.load_library(Path(__file__).resolve().parent.parent / "norse_op.so")
     import sys
-    setattr(sys.modules[__name__], 'IS_OPS_LOADED', True)
+
+    setattr(sys.modules[__name__], "IS_OPS_LOADED", True)
 except:
     import sys
-    setattr(sys.modules[__name__], 'IS_OPS_LOADED', False)
+
+    setattr(sys.modules[__name__], "IS_OPS_LOADED", False)
 
 from .torch import functional
 from .torch.models import conv

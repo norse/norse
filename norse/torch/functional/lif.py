@@ -29,11 +29,15 @@ class LIFParameters(NamedTuple):
     v_th: torch.Tensor = torch.as_tensor(1.0)
     v_reset: torch.Tensor = torch.as_tensor(0.0)
     method: str = "super"
-    alpha: float = 0.0
+    alpha: float = torch.as_tensor(0.0)
 
 
 default_bio_parameters = LIFParameters(
-    tau_syn_inv=1 / 0.5, tau_mem_inv=1 / 20.0, v_leak=-65.0, v_th=-50.0, v_reset=-65.0,
+    tau_syn_inv=1 / 0.5,
+    tau_mem_inv=1 / 20.0,
+    v_leak=-65.0,
+    v_th=-50.0,
+    v_reset=-65.0,
 )
 
 
@@ -151,6 +155,7 @@ class LIFParametersJIT(NamedTuple):
     v_leak: torch.Tensor
     v_th: torch.Tensor
     v_reset: torch.Tensor
+    method: str
     alpha: torch.Tensor
 
 
@@ -170,7 +175,7 @@ def _lif_feed_forward_step_jit(
     i_decayed = state.i + di
 
     # compute new spikes
-    z_new = torch.ops.norse_op.superfun(v_decayed - p.v_th, p.alpha)
+    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
     # compute current jumps
@@ -189,7 +194,7 @@ def lif_feed_forward_step(
         torch.as_tensor(1.0),
         torch.as_tensor(0.0),
         "super",
-        0.0,
+        torch.as_tensor(0.0),
     ),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
@@ -226,9 +231,16 @@ def lif_feed_forward_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    return _lif_feed_forward_step_jit(
-        input_tensor, state=state, p=LIFParametersJIT(*p.todict().value()), dt=dt
+    jit_params = norse.torch.functional.lif.LIFParametersJIT(
+        tau_syn_inv=p.tau_syn_inv,
+        tau_mem_inv=p.tau_mem_inv,
+        v_leak=p.v_leak,
+        v_th=p.v_th,
+        v_reset=p.v_reset,
+        method=p.method,
+        alpha=p.alpha,
     )
+    return _lif_feed_forward_step_jit(input_tensor, state=state, p=jit_params, dt=dt)
 
 
 def lif_current_encoder(

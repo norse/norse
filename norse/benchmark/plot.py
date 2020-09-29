@@ -1,8 +1,6 @@
 import argparse
 import matplotlib.pyplot as plt
-from matplotlib.patches import Ellipse
 import pandas as pd
-import sys
 import math
 
 
@@ -28,15 +26,20 @@ def render_frames(frames, title):
         )
         frame.plot(y="duration_mean", x="input_features", ax=ax, label=label)
         # Plot the crash, if any
-        is_na = frame['duration_mean'].isnull()
+        is_na = frame["duration_mean"].isnull()
         if is_na.any():
             last_index = is_na[is_na == True].index[0] - 1
             last_value = frame.loc[last_index]
-            plt.scatter(x=[last_value['input_features']], y=[last_value['duration_mean']], color=ax.lines[-1].get_color(), s=60)
-    
-    xmin = frame['input_features'].min()
-    xmax = frame['input_features'].max()
-    
+            plt.scatter(
+                x=[last_value["input_features"]],
+                y=[last_value["duration_mean"]],
+                color=ax.lines[-1].get_color(),
+                s=60,
+            )
+
+    xmin = frame["input_features"].min()
+    xmax = frame["input_features"].max()
+
     ax.set_xlim(math.floor(xmin / 1000), math.ceil(xmax / 1000) * 1000)
     ax.set_title(title)
     ax.set_xlabel("No. of features")

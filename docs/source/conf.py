@@ -69,14 +69,13 @@ pygments_style = "sphinx"
 html_theme = "alabaster"
 
 html_theme_options = {
-    'logo': 'logo.png',
-    'github_user': 'norse',
-    'github_repo': 'norse',
-    'github_button': 'true',
-    'description': 'A library to do deep learning with spiking neural networks.',
-
-    'page_width': '1100px',
-    'sidebar_width': '300px'
+    "logo": "logo.png",
+    "github_user": "norse",
+    "github_repo": "norse",
+    "github_button": "true",
+    "description": "A library to do deep learning with spiking neural networks.",
+    "page_width": "1100px",
+    "sidebar_width": "300px",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
