@@ -30,5 +30,6 @@ class SuperSpike(torch.autograd.Function):
         return grad, None
 
 
+@torch.jit.ignore
 def super_fn(x: torch.Tensor, alpha: float = 100.0) -> torch.Tensor:
     return SuperSpike.apply(x, alpha)

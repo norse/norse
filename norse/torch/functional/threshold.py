@@ -1,10 +1,15 @@
 import torch
 import torch.jit
-
-from .heaviside import heaviside
-from .superspike import super_fn
 import numpy as np
 
+import norse
+from .heaviside import heaviside
+
+if getattr(norse, "IS_OPS_LOADED"):
+    superspike_fn = torch.ops.norse_op.superfun
+else:
+    from .superspike import super_fn
+    superspike_fn = super_fn
 
 class HeaviErfc(torch.autograd.Function):
     r"""Approximation of the heaviside step function as
@@ -152,10 +157,7 @@ def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
     if method == "heaviside":
         return heaviside(x)
     elif method == "super":
-        try:
-            return torch.ops.norse_op.superfun(x, torch.as_tensor(alpha))
-        except:
-            return super_fn(x, alpha)
+        return superspike_fn(x, torch.as_tensor(alpha))
     elif method == "tanh":
         return heavi_tanh_fn(x, alpha)
     elif method == "tent":
