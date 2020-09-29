@@ -21,9 +21,7 @@ class ConvNet(torch.nn.Module):
         self.lif1 = LIFFeedForwardCell(
             p=LIFParameters(method=method, alpha=100.0),
         )
-        self.lif2 = LIFFeedForwardCell(
-            p=LIFParameters(method=method, alpha=100.0)
-        )
+        self.lif2 = LIFFeedForwardCell(p=LIFParameters(method=method, alpha=100.0))
         self.dtype = dtype
 
     def forward(self, x):
@@ -71,9 +69,7 @@ class ConvNet4(torch.nn.Module):
         self.lif1 = LIFFeedForwardCell(
             p=LIFParameters(method=method, alpha=100.0),
         )
-        self.lif2 = LIFFeedForwardCell(
-            p=LIFParameters(method=method, alpha=100.0)
-        )
+        self.lif2 = LIFFeedForwardCell(p=LIFParameters(method=method, alpha=100.0))
         self.out = LICell(1024, 10)
         self.dtype = dtype
 
