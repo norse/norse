@@ -12,7 +12,7 @@ try:
     import sys
 
     setattr(sys.modules[__name__], "IS_OPS_LOADED", True)
-except:
+except OSError:
     import sys
 
     setattr(sys.modules[__name__], "IS_OPS_LOADED", False)
