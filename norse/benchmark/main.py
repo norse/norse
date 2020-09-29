@@ -14,7 +14,7 @@ from benchmark import *
 FLAGS = flags.FLAGS
 
 flags.DEFINE_integer(
-    "batch_size", 64, "Number of data points per batch",
+    "batch_size", 32, "Number of data points per batch",
 )
 flags.DEFINE_integer("start", 250, "Start of the number of inputs to sweep")
 flags.DEFINE_integer("step", 250, "Steps in which to sweep over the number of inputs")
@@ -28,7 +28,6 @@ flags.DEFINE_bool("profile", False, "Profile Norse benchmark? (Only works for No
 flags.DEFINE_bool("bindsnet", True, "Benchmark Bindsnet?")
 flags.DEFINE_bool("genn", True, "Benchmark GeNN?")
 flags.DEFINE_bool("norse", True, "Benchmark Norse?")
-flags.DEFINE_bool("pysnn", True, "Benchmark PySNN?")
 
 
 def benchmark(
@@ -106,10 +105,6 @@ def main(argv):
             prof.export_chrome_trace("trace.json")
         else:
             run_benchmark(norse_lif.lif_feed_forward_benchmark, "Norse_lif")
-    if FLAGS.pysnn:
-        import pysnn_lif
-
-        run_benchmark(pysnn_lif.lif_feed_forward_benchmark, "PySNN_lif")
 
 
 def run_benchmark(function, label):

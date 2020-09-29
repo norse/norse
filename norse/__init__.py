@@ -6,7 +6,10 @@ from . import benchmark, dataset, task
 import torch
 from pathlib import Path
 
-torch.ops.load_library(Path(__file__).resolve().parent.parent / "norse_op.so")
+try:
+    torch.ops.load_library(Path(__file__).resolve().parent.parent / "norse_op.so")
+except:
+    pass
 
 from .torch import functional
 from .torch.models import conv

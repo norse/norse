@@ -1,5 +1,6 @@
 import argparse
 import matplotlib.pyplot as plt
+from matplotlib.patches import Ellipse
 import pandas as pd
 import sys
 import math
@@ -21,11 +22,17 @@ def render_frames(frames, title):
         label = frame["label"][0].replace("_lif", "")
         plt.fill_between(
             frame["input_features"],
-            frame["duration_mean"] - frame["duration_std"],
-            frame["duration_mean"] + frame["duration_std"],
+            frame["duration_mean"] - frame["duration_std"] * 2,
+            frame["duration_mean"] + frame["duration_std"] * 2,
             alpha=0.2,
         )
         frame.plot(y="duration_mean", x="input_features", ax=ax, label=label)
+        # Plot the crash, if any
+        is_na = frame['duration_mean'].isnull()
+        if is_na.any():
+            last_index = is_na[is_na == True].index[0] - 1
+            last_value = frame.loc[last_index]
+            plt.scatter(x=[last_value['input_features']], y=[last_value['duration_mean']], color=ax.lines[-1].get_color(), s=60)
     
     xmin = frame['input_features'].min()
     xmax = frame['input_features'].max()

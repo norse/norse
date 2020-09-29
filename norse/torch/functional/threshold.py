@@ -152,7 +152,10 @@ def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
     if method == "heaviside":
         return heaviside(x)
     elif method == "super":
-        return torch.ops.norse_op.superfun(x, torch.as_tensor(alpha))
+        try:
+            return torch.ops.norse_op.superfun(x, torch.as_tensor(alpha))
+        except:
+            return super_fn(x, alpha)
     elif method == "tanh":
         return heavi_tanh_fn(x, alpha)
     elif method == "tent":
