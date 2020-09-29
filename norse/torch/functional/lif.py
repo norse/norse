@@ -238,7 +238,7 @@ def lif_feed_forward_step(
         v_th=p.v_th,
         v_reset=p.v_reset,
         method=p.method,
-        alpha=p.alpha,
+        alpha=torch.as_tensor(p.alpha),
     )
     return _lif_feed_forward_step_jit(input_tensor, state=state, p=jit_params, dt=dt)
 
