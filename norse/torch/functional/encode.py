@@ -55,10 +55,10 @@ def gaussian_rbf(tensor: torch.Tensor, sigma: float = 1):
     """
     A `gaussian radial basis kernel <https://en.wikipedia.org/wiki/Radial_basis_function_kernel>`_
     that calculates the radial basis given a distance value (distance between :math:`x` and a data
-    value :math:`x'`, or :math:`\|\mathbf{x} - \mathbf{x'}\|^2` below).
+    value :math:`x'`, or :math:`\\|\\mathbf{x} - \\mathbf{x'}\\|^2` below).
 
     .. math::
-        K(\mathbf{x}, \mathbf{x'}) = \exp\left(- \\frac{\|\mathbf{x} - \mathbf{x'}\|^2}{2\sigma^2}\\right)
+        K(\\mathbf{x}, \\mathbf{x'}) = \\exp\\left(- \\frac{\\|\\mathbf{x} - \\mathbf{x'}\\|^2}{2\\sigma^2}\\right)
 
     Parameters:
         tensor (torch.Tensor): The tensor containing distance values to convert to radial bases

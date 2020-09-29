@@ -3,6 +3,8 @@ from setuptools import setup
 
 from os import path
 
+from torch.utils.cpp_extension import BuildExtension, CppExtension
+
 pwd = path.abspath(path.dirname(__file__))
 
 with open(path.join(pwd, "requirements.txt")) as fp:
@@ -37,4 +39,8 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     keywords="machine learning spiking neural networks",
+    ext_modules=[
+        CppExtension("norse_op", ["norse/csrc/op.cpp"], extra_compile_args=["-O3"])
+    ],
+    cmdclass={"build_ext": BuildExtension.with_options(no_python_abi_suffix=True)},
 )

@@ -78,35 +78,35 @@ class Net(torch.nn.Module):
         return voltages
 
 
-net = Net()
-print(net)
+if __name__ == "__main__":
+    net = Net()
+    print(net)
 
-########################################################################
-# We can evaluate the network we just defined on an input of size 1x32x32.
-# Note that in contrast to typical spiking neural network simulators time
-# is just another dimension in the input tensor here we chose to evaluate
-# the network on 16 timesteps and there is an explicit batch dimension
-# (number of concurrently evaluated inputs with identical model parameters).
+    ########################################################################
+    # We can evaluate the network we just defined on an input of size 1x32x32.
+    # Note that in contrast to typical spiking neural network simulators time
+    # is just another dimension in the input tensor here we chose to evaluate
+    # the network on 16 timesteps and there is an explicit batch dimension
+    # (number of concurrently evaluated inputs with identical model parameters).
 
-timesteps = 16
-batch_size = 1
-data = torch.abs(torch.randn(timesteps, batch_size, 1, 32, 32))
-out = net(data)
-print(out)
+    timesteps = 16
+    batch_size = 1
+    data = torch.abs(torch.randn(timesteps, batch_size, 1, 32, 32))
+    out = net(data)
+    print(out)
 
+    ##########################################################################
+    # Since the spiking neural network is implemented as a pytorch module, we
+    # can use the usual pytorch primitives for optimizing it. Note that the
+    # backward computation expects a gradient for each timestep
 
-##########################################################################
-# Since the spiking neural network is implemented as a pytorch module, we
-# can use the usual pytorch primitives for optimizing it. Note that the
-# backward computation expects a gradient for each timestep
+    net.zero_grad()
+    out.backward(torch.randn(timesteps, batch_size, 10))
 
-net.zero_grad()
-out.backward(torch.randn(timesteps, batch_size, 10))
-
-########################################################################
-# .. note::
-#
-#     ``norse`` like pytorch only supports mini-batches. This means that
-#     contrary to most other spiking neural network simulators ```norse```
-#     always integrates several indepdentent sets of spiking neural
-#     networks at once.
+    ########################################################################
+    # .. note::
+    #
+    #     ``norse`` like pytorch only supports mini-batches. This means that
+    #     contrary to most other spiking neural network simulators ```norse```
+    #     always integrates several indepdentent sets of spiking neural
+    #     networks at once.
