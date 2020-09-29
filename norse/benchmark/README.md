@@ -17,7 +17,7 @@ area indicates where ~95% of the runtimes fell.
 BindsNET ran out of memory in > 4500 neuron layers, indicated by the orange circle.
 
 The benchmark indicates that for single-layer LIF neurons of size < 4500, Norse outperforms both competitors.
-The overtaking of GeNN is likely due to the fact that they do not have matrix multiplications, which scales quadratically with size in Norse and BindsNET.
+The overtaking of GeNN is likely due to the fact that they do not use matrix multiplications, which scales quadratically with size in Norse and BindsNET.
 This is fairly straight-forward to overcome and that we will work in 
 going forward, although it is rare to see that many neurons in a single layer.
 
