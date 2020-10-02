@@ -1,6 +1,11 @@
 import torch
 
-from norse.torch.module.lif import LIFCell, LIFLayer, LIFFeedForwardCell
+from norse.torch.module.lif import (
+    LIFCell,
+    LIFLayer,
+    LIFFeedForwardCell,
+    LIFFeedForwardLayer,
+)
 
 
 def test_lif_cell():
@@ -37,7 +42,18 @@ def test_lif_cell_sequence():
 
 def test_lif_feedforward_cell():
     layer = LIFFeedForwardCell()
-    data = torch.randn(5, 2, 4)
-    out, _ = layer(data)
+    data = torch.randn(5, 4)
+    out, s = layer(data)
 
-    assert out.shape == (5, 2, 4)
+    assert out.shape == (5, 4)
+    for x in s:
+        assert x.shape == (5, 4)
+
+
+def test_lif_feedforward_layer():
+    layer = LIFFeedForwardLayer()
+    data = torch.randn(10, 5, 4)
+    out, s = layer(data)
+    assert out.shape == (10, 5, 4)
+    for x in s:
+        assert x.shape == (5, 4)
