@@ -47,6 +47,9 @@
     <span class="n">PopulationEncoder</span><span class="p">,</span>
     <span class="n">ConstantCurrentLIFEncoder</span><span class="p">,</span>
     <span class="n">SpikeLatencyEncoder</span><span class="p">,</span>
+    <span class="n">PoissonEncoder</span><span class="p">,</span>
+    <span class="n">SignedPoissonEncoder</span><span class="p">,</span>
+    <span class="n">SpikeLatencyLIFEncoder</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># Fixes a linting error:</span>
@@ -80,6 +83,30 @@
     <span class="n">expected</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
     <span class="n">expected</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
     <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_signed_poisson_encoder"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_encode.html#norse.torch.module.test.test_encode.test_signed_poisson_encoder">[docs]</a><span class="k">def</span> <span class="nf">test_signed_poisson_encoder</span><span class="p">():</span>
+    <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SignedPoissonEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="n">seq_length</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="n">seq_length</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="test_poisson_encoder"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_encode.html#norse.torch.module.test.test_encode.test_poisson_encoder">[docs]</a><span class="k">def</span> <span class="nf">test_poisson_encoder</span><span class="p">():</span>
+    <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="n">PoissonEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="n">seq_length</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="n">seq_length</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="test_spike_latency_lif_encoder"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_encode.html#norse.torch.module.test.test_encode.test_spike_latency_lif_encoder">[docs]</a><span class="k">def</span> <span class="nf">test_spike_latency_lif_encoder</span><span class="p">():</span>
+    <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SpikeLatencyLIFEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="n">seq_length</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="n">seq_length</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="test_spike_latency_encode_max_spikes"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_encode.html#norse.torch.module.test.test_encode.test_spike_latency_encode_max_spikes">[docs]</a><span class="k">def</span> <span class="nf">test_spike_latency_encode_max_spikes</span><span class="p">():</span>

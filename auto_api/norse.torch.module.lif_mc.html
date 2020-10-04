@@ -47,21 +47,22 @@
 <p>Computes a single euler-integration step of a LIF multi-compartment
 neuron-model.</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align*}
-    \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}}             - g_{\text{coupling}} v + i) \\
-    \dot{i} &amp;= -1/\tau_{\text{syn}} i
-\end{align*}\end{split}\]</div>
+\[\begin{split}\\begin{align*}
+    \\dot{v} &amp;= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} \
+    - g_{\\text{coupling}} v + i) \\\\
+    \\dot{i} &amp;= -1/\\tau_{\\text{syn}} i
+\\end{align*}\end{split}\]</div>
 <p>together with the jump condition</p>
 <div class="math notranslate nohighlight">
-\[z = \Theta(v - v_{\text{th}})\]</div>
+\[\begin{split}z = \Theta(v - v_{\\text{th}})\end{split}\]</div>
 <p>and transition equations</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align*}
-    v &amp;= (1-z) v + z v_{\text{reset}} \\
-    i &amp;= i + w_{\text{input}} z_{\text{in}} \\
-    i &amp;= i + w_{\text{rec}} z_{\text{rec}}
+\[\begin{split}\\begin{align*}
+    v &amp;= (1-z) v + z v_{\\text{reset}} \\\\
+    i &amp;= i + w_{\\text{input}} z_{\\text{in}} \\\\
+    i &amp;= i + w_{\\text{rec}} z_{\\text{rec}}
 \end{align*}\end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(z_{\text{rec}}\)</span> and <span class="math notranslate nohighlight">\(z_{\text{in}}\)</span> are the
+<p>where <span class="math notranslate nohighlight">\(z_{\\text{rec}}\)</span> and <span class="math notranslate nohighlight">\(z_{\\text{in}}\)</span> are the
 recurrent and input spikes respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
