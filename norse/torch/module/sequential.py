@@ -1,6 +1,6 @@
 import inspect
 import torch
-from typing import Any, Union
+from typing import Union
 
 
 class SequentialState(torch.nn.Sequential):
