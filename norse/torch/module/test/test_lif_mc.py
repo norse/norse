@@ -16,5 +16,5 @@ def test_lif_mc_cell():
 def test_lif_mc_cell_backward():
     cell = LIFMCCell(2, 4)
     data = torch.randn(5, 2)
-    out, s = cell(data)
+    out, _ = cell(data)
     out.sum().backward()

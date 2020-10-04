@@ -6,7 +6,7 @@ that gradients are properly propagated
 import torch
 
 from norse.torch.module.encode import PoissonEncoder
-from norse.torch.module.lif import LIFCell, LIFState
+from norse.torch.module.lif import LIFCell
 
 
 class SNNetwork(torch.nn.Module):

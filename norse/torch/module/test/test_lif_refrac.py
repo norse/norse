@@ -17,8 +17,9 @@ def test_lif_refrac_cell():
 def test_lif_refrac_cell_backward():
     cell = LIFRefracCell(2, 4)
     data = torch.randn(5, 2)
-    out, s = cell(data)
+    out, _ = cell(data)
     out.sum().backward()
+
 
 def test_lif_refrac_feedforward():
     batch_size = 16

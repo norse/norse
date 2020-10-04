@@ -13,6 +13,16 @@ def test_li_cell():
     assert out.shape == (5, 4)
 
 
+def test_li_cell_state():
+    cell = LICell(2, 4)
+    data = torch.randn(5, 2)
+    out, s = cell(data, LIState(torch.ones(5, 4), torch.ones(5, 4)))
+
+    for x in s:
+        assert x.shape == (5, 4)
+    assert out.shape == (5, 4)
+
+
 def test_cell_backward():
     model = LICell(12, 1)
     data = torch.ones(100, 12)
