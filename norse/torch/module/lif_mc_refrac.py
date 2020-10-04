@@ -63,7 +63,6 @@ class LIFMCRefracCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
-            state.lif.v.requires_grad = True
         return lif_mc_refrac_step(
             input_tensor,
             state,
