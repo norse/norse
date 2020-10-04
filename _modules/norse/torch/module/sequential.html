@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.module.sequential &#8212; norse 0.0.4 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for norse.torch.module.sequential</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+
+<div class="viewcode-block" id="SequentialState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.sequential.html#norse.torch.module.sequential.SequentialState">[docs]</a><span class="k">class</span> <span class="nc">SequentialState</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A sequential model that works exactly like PyTorch&#39;s ``Sequential`` with the</span>
+<span class="sd">    addition that it handles neuron states.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    &gt;&gt;&gt; import torch</span>
+<span class="sd">    &gt;&gt;&gt; from norse.torch.module.lift import LIFT</span>
+<span class="sd">    &gt;&gt;&gt; from norse.torch.module.sequential import SequentialState</span>
+<span class="sd">    &gt;&gt;&gt; from norse.torch.module.lif import LIFLayer</span>
+<span class="sd">    &gt;&gt;&gt; data = torch.ones(1, 16, 8, 4)     # Single timestep</span>
+<span class="sd">    &gt;&gt;&gt; model = SequentialState(</span>
+<span class="sd">    &gt;&gt;&gt;   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)</span>
+<span class="sd">    &gt;&gt;&gt;   torch.nn.Flatten(2),             # (1, 8, 12)</span>
+<span class="sd">    &gt;&gt;&gt;   LIFLayer(12, 6),                 # (1, 8, 6)</span>
+<span class="sd">    &gt;&gt;&gt;   LIFLayer(6, 1)                   # (1, 8, 1)</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    &gt;&gt;&gt; model(data)</span>
+
+<span class="sd">    Example with recurrent layers:</span>
+<span class="sd">    &gt;&gt;&gt; import torch</span>
+<span class="sd">    &gt;&gt;&gt; from norse.torch.module.lift import Lift</span>
+<span class="sd">    &gt;&gt;&gt; from norse.torch.module.sequential import SequentialState</span>
+<span class="sd">    &gt;&gt;&gt; from norse.torch.module.lif import LIFCell, LIFLayer</span>
+<span class="sd">    &gt;&gt;&gt; from norse.torch.module.lsnn import LSNNCell, LSNNLayer</span>
+<span class="sd">    &gt;&gt;&gt; data = torch.ones(1, 16, 8, 4)     # Single timestep</span>
+<span class="sd">    &gt;&gt;&gt; model = SequentialState(</span>
+<span class="sd">    &gt;&gt;&gt;   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)</span>
+<span class="sd">    &gt;&gt;&gt;   torch.nn.Flatten(2),             # (1, 8, 12)</span>
+<span class="sd">    &gt;&gt;&gt;   LSNNLayer(LSNNCell, 12, 6),      # (1, 8, 6)</span>
+<span class="sd">    &gt;&gt;&gt;   torch.nn.RNN(6, 4, 2),           # (1, 6, 4) with 2 recurrent layers</span>
+<span class="sd">    &gt;&gt;&gt;   LIFLayer(LIFCell,4, 1)           # (1, 4, 1)</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    &gt;&gt;&gt; model(data)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SequentialState</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stateful_layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_module</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="n">module</span><span class="p">)</span>
+            <span class="c1"># Identify all the stateful layers</span>
+            <span class="n">signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">forward</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stateful_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s2">&quot;state&quot;</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">RNNBase</span><span class="p">)</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="SequentialState.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.sequential.html#norse.torch.module.sequential.SequentialState.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Feeds the input to the modules with the given state-list.</span>
+<span class="sd">        If the state is None, the initial state is set to None for each of the modules.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            input_tensor: The input tensor too feed into the first module</span>
+<span class="sd">            state: Either a list of states for each module or None. If None, the modules</span>
+<span class="sd">                   will initialise their own default state</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A tuple of (output tensor, state list)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span> <span class="k">else</span> <span class="n">state</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateful_layers</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+                <span class="n">input_tensor</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+                <span class="n">state</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">input_tensor</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A library to do deep learning with spiking neural networks.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=norse&repo=norse&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../hardware.html">3. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../spiking.html">4. Introduction to spiking neural networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../learning.html">5. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../working.html">6. Working with Norse</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../experiments.html">2. Running Experiments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.task.html">norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.torch.html">norse.torch package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

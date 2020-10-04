@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>norse.torch.module.sequential module &#8212; norse 0.0.4 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="norse.torch.module.regularization module" href="norse.torch.module.regularization.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-norse.torch.module.sequential">
+<span id="norse-torch-module-sequential-module"></span><h1>norse.torch.module.sequential module<a class="headerlink" href="#module-norse.torch.module.sequential" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="norse.torch.module.sequential.SequentialState">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.sequential.</code><code class="sig-name descname">SequentialState</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/sequential.html#SequentialState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.sequential.SequentialState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
+<p>A sequential model that works exactly like PyTorch’s <code class="docutils literal notranslate"><span class="pre">Sequential</span></code> with the
+addition that it handles neuron states.</p>
+<p>Example:
+&gt;&gt;&gt; import torch
+&gt;&gt;&gt; from norse.torch.module.lift import LIFT
+&gt;&gt;&gt; from norse.torch.module.sequential import SequentialState
+&gt;&gt;&gt; from norse.torch.module.lif import LIFLayer
+&gt;&gt;&gt; data = torch.ones(1, 16, 8, 4)     # Single timestep
+&gt;&gt;&gt; model = SequentialState(
+&gt;&gt;&gt;   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)
+&gt;&gt;&gt;   torch.nn.Flatten(2),             # (1, 8, 12)
+&gt;&gt;&gt;   LIFLayer(12, 6),                 # (1, 8, 6)
+&gt;&gt;&gt;   LIFLayer(6, 1)                   # (1, 8, 1)
+&gt;&gt;&gt; )
+&gt;&gt;&gt; model(data)</p>
+<p>Example with recurrent layers:
+&gt;&gt;&gt; import torch
+&gt;&gt;&gt; from norse.torch.module.lift import Lift
+&gt;&gt;&gt; from norse.torch.module.sequential import SequentialState
+&gt;&gt;&gt; from norse.torch.module.lif import LIFCell, LIFLayer
+&gt;&gt;&gt; from norse.torch.module.lsnn import LSNNCell, LSNNLayer
+&gt;&gt;&gt; data = torch.ones(1, 16, 8, 4)     # Single timestep
+&gt;&gt;&gt; model = SequentialState(
+&gt;&gt;&gt;   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)
+&gt;&gt;&gt;   torch.nn.Flatten(2),             # (1, 8, 12)
+&gt;&gt;&gt;   LSNNLayer(LSNNCell, 12, 6),      # (1, 8, 6)
+&gt;&gt;&gt;   torch.nn.RNN(6, 4, 2),           # (1, 6, 4) with 2 recurrent layers
+&gt;&gt;&gt;   LIFLayer(LIFCell,4, 1)           # (1, 4, 1)
+&gt;&gt;&gt; )
+&gt;&gt;&gt; model(data)</p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="method">
+<dt id="norse.torch.module.sequential.SequentialState.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/sequential.html#SequentialState.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.sequential.SequentialState.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feeds the input to the modules with the given state-list.
+If the state is None, the initial state is set to None for each of the modules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b553723 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>) – The input tensor too feed into the first module</p></li>
+<li><p><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]) – Either a list of states for each module or None. If None, the modules
+will initialise their own default state</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of (output tensor, state list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.module.sequential.SequentialState.training">
+<code class="sig-name descname">training</code><em class="property"> = None</em><a class="headerlink" href="#norse.torch.module.sequential.SequentialState.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A library to do deep learning with spiking neural networks.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=norse&repo=norse&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">3. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spiking.html">4. Introduction to spiking neural networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../learning.html">5. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../working.html">6. Working with Norse</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">1. Beginner tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">2. Running Experiments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="norse.task.html">norse.task package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="norse.torch.html">norse.torch package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.functional.html">norse.torch.functional package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="norse.torch.module.html">norse.torch.module package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="norse.torch.html">norse.torch package</a><ul>
+  <li><a href="norse.torch.module.html">norse.torch.module package</a><ul>
+      <li>Previous: <a href="norse.torch.module.regularization.html" title="previous chapter">norse.torch.module.regularization module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/auto_api/norse.torch.module.sequential.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
