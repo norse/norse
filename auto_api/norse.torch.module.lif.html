@@ -140,8 +140,8 @@ an arbitrary pytorch module (such as a convolution) to input spikes.</p>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lif</span> <span class="o">=</span> <span class="n">LIFFeedForwardCell</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lif</span> <span class="o">=</span> <span class="n">LIFFeedForwardCell</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">,</span> <span class="n">s0</span> <span class="o">=</span> <span class="n">lif</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -184,8 +184,16 @@ After application, the layer returns a tuple containing</p>
 </div></blockquote>
 <p>Example:
 &gt;&gt;&gt; data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-&gt;&gt;&gt; l = LIFLayer(2, 4)
+&gt;&gt;&gt; l = LIFFeedForwardLayer()
 &gt;&gt;&gt; l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell_args</strong> (<em>Any</em>) – Arguments to pass on to the LIFCell</p></li>
+<li><p><strong>kw_args</strong> (<em>Any</em>) – Key-value arguments po pass on to the LIFCell</p></li>
+</ul>
+</dd>
+</dl>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="method">
 <dt id="norse.torch.module.lif.LIFFeedForwardLayer.forward">
