@@ -1,0 +1,49 @@
+import torch
+
+from ..lsnn import LSNNCell, LSNNLayer
+from ..lif import LIFCell, LIFLayer
+from ..lift import Lift
+from ..sequential import SequentialState
+
+
+def test_state_sequence():
+    d = torch.ones(10, 1, 20)
+    l = LIFLayer(20, 6)
+    z, s = SequentialState(l)(d)
+    assert z.shape == (10, 1, 6)
+    assert s[0].v.shape == (1, 6)
+
+
+def test_state_sequence_norse():
+    d = torch.ones(10, 2, 10)
+    l1 = LIFLayer(10, 5)
+    l2 = LSNNLayer(LIFCell, 5, 1)
+    z, (s1, s2) = SequentialState(l1, l2)(d)
+    assert z.shape == (10, 2, 1)
+    assert s1.v.shape == (2, 5)
+    assert s2.v.shape == (2, 1)
+
+
+def test_state_sequence_mix():
+    d = torch.ones(10, 3, 20)
+    l1 = LIFLayer(20, 10)
+    l2 = torch.nn.RNN(10, 4, 2)  # 2 layers
+    l3 = LSNNLayer(LSNNCell, 4, 1)
+    state = [None, torch.randn(2, 3, 4), None]
+    z, (s1, s2, s3) = SequentialState(l1, l2, l3)(d, state)
+    assert z.shape == (10, 3, 1)
+    assert s1.v.shape == (3, 10)
+    assert s2.shape == (2, 3, 4)
+    assert s3.v.shape == (3, 1)
+
+
+def test_state_sequence_conv():
+    data = torch.ones(1, 8, 16, 4, 4)  # (timestep, minibatch, channels, x, y)
+    model = SequentialState(
+        Lift(torch.nn.Conv2d(16, 8, 3)),  # (1, 8, 8, 2, 2)
+        torch.nn.Flatten(2),  # (1, 8, 32)
+        LSNNLayer(LSNNCell, 32, 6),  # (1, 8, 6)
+        torch.nn.RNN(6, 4, 2),  # (1, 6, 4) with 2 recurrent layers
+        LIFLayer(4, 1),  # (1, 4, 1)
+    )
+    model(data)
