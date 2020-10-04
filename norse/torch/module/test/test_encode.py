@@ -8,6 +8,9 @@ from norse.torch.module.encode import (
     PopulationEncoder,
     ConstantCurrentLIFEncoder,
     SpikeLatencyEncoder,
+    PoissonEncoder,
+    SignedPoissonEncoder,
+    SpikeLatencyLIFEncoder,
 )
 
 # Fixes a linting error:
@@ -41,6 +44,30 @@ def test_spike_latency_encode():
     expected = torch.zeros((2, 2, 3))
     expected[0] = torch.as_tensor([[0, 1, 1], [1, 1, 1]])
     assert torch.equal(actual, expected)
+
+
+def test_signed_poisson_encoder():
+    seq_length = 100
+    encoder = SignedPoissonEncoder(seq_length=seq_length)
+    x = torch.randn(10, 10)
+    out = encoder(x)
+    assert out.shape == torch.Size([seq_length, 10, 10])
+
+
+def test_poisson_encoder():
+    seq_length = 100
+    encoder = PoissonEncoder(seq_length=seq_length)
+    x = torch.randn(10, 10)
+    out = encoder(x)
+    assert out.shape == torch.Size([seq_length, 10, 10])
+
+
+def test_spike_latency_lif_encoder():
+    seq_length = 100
+    encoder = SpikeLatencyLIFEncoder(seq_length=seq_length)
+    x = torch.randn(10, 10)
+    out = encoder(x)
+    assert out.shape == torch.Size([seq_length, 10, 10])
 
 
 def test_spike_latency_encode_max_spikes():
