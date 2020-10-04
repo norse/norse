@@ -11,3 +11,10 @@ def test_lif_mc_cell():
     assert s.i.shape == (5, 4)
     assert s.z.shape == (5, 4)
     assert out.shape == (5, 4)
+
+
+def test_lif_mc_cell_backward():
+    cell = LIFMCCell(2, 4)
+    data = torch.randn(5, 2)
+    out, s = cell(data)
+    out.sum().backward()

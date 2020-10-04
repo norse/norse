@@ -20,19 +20,19 @@ class LIFRefracCell(torch.nn.Module):
 
     .. math::
         \\begin{align*}
-            \dot{v} &= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) \
+            \\dot{v} &= 1/\\tau_{\\text{mem}} (1-\\Theta(\\rho)) \
             (v_{\\text{leak}} - v + i) \\\\
-            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
-            \dot{\\rho} &= -1/\\tau_{\\text{refrac}} \Theta(\\rho)
-        \end{align*}
+            \\dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
+            \\dot{\\rho} &= -1/\\tau_{\\text{refrac}} \\Theta(\\rho)
+        \\end{align*}
 
     together with the jump condition
 
     .. math::
         \\begin{align*}
-            z &= \Theta(v - v_{\\text{th}}) \\\\
-            z_r &= \Theta(-\\rho)
-        \end{align*}
+            z &= \\Theta(v - v_{\\text{th}}) \\\\
+            z_r &= \\Theta(-\\rho)
+        \\end{align*}
 
     and transition equations
 
@@ -42,7 +42,7 @@ class LIFRefracCell(torch.nn.Module):
             i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
             i &= i + w_{\\text{rec}} z_{\\text{rec}} \\\\
             \\rho &= \\rho + z_r \\rho_{\\text{reset}}
-        \end{align*}
+        \\end{align*}
 
     where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
     recurrent and input spikes respectively.
@@ -108,6 +108,7 @@ class LIFRefracCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.lif.v.requires_grad = True
         return lif_refrac_step(
             input_tensor,
             state,
@@ -125,19 +126,19 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
 
     .. math::
         \\begin{align*}
-            \dot{v} &= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) \
+            \\dot{v} &= 1/\\tau_{\\text{mem}} (1-\\Theta(\\rho)) \
             (v_{\\text{leak}} - v + i) \\\\
-            \dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
-            \dot{\\rho} &= -1/\\tau_{\\text{refrac}} \Theta(\\rho)
-        \end{align*}
+            \\dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
+            \\dot{\\rho} &= -1/\\tau_{\\text{refrac}} \\Theta(\\rho)
+        \\end{align*}
 
     together with the jump condition
 
     .. math::
         \\begin{align*}
-            z &= \Theta(v - v_{\\text{th}}) \\\\
-            z_r &= \Theta(-\\rho)
-        \end{align*}
+            z &= \\Theta(v - v_{\\text{th}}) \\\\
+            z_r &= \\Theta(-\\rho)
+        \\end{align*}
 
     and transition equations
 
@@ -145,7 +146,7 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
         \\begin{align*}
             v &= (1-z) v + z v_{\\text{reset}} \\\\
             \\rho &= \\rho + z_r \\rho_{\\text{reset}}
-        \end{align*}
+        \\end{align*}
 
     Parameters:
         shape: Shape of the processed spike input
@@ -189,4 +190,5 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.lif.v.requires_grad = True
         return lif_refrac_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)
