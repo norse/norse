@@ -8,7 +8,7 @@ from ..functional.lif_mc import lif_mc_step
 
 
 class LIFMCCell(torch.nn.Module):
-    """Computes a single euler-integration step of a LIF multi-compartment
+    r"""Computes a single euler-integration step of a LIF multi-compartment
     neuron-model.
 
     .. math::
@@ -16,7 +16,7 @@ class LIFMCCell(torch.nn.Module):
             \\dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} \
             - g_{\\text{coupling}} v + i) \\\\
             \\dot{i} &= -1/\\tau_{\\text{syn}} i
-        \end{align*}
+        \\end{align*}
 
     together with the jump condition
 
@@ -53,6 +53,8 @@ class LIFMCCell(torch.nn.Module):
         p: LIFParameters = LIFParameters(),
         dt: float = 0.001,
     ):
+        super(LIFMCCell, self).__init__()
+
         self.input_weights = torch.nn.Parameter(
             torch.randn(hidden_size, input_size) / np.sqrt(input_size)
         )
@@ -62,6 +64,7 @@ class LIFMCCell(torch.nn.Module):
         self.g_coupling = torch.nn.Parameter(
             torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
         )
+        self.hidden_size = hidden_size
         self.p = p
         self.dt = dt
 
@@ -74,14 +77,20 @@ class LIFMCCell(torch.nn.Module):
                     input_tensor.shape[0],
                     self.hidden_size,
                     device=input_tensor.device,
-                    dtype=input_tensor,
+                    dtype=input_tensor.dtype,
                 ),
-                v=self.p.v_leak,
+                v=self.p.v_leak
+                * torch.ones(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
                 i=torch.zeros(
                     input_tensor.shape[0],
                     self.hidden_size,
                     device=input_tensor.device,
-                    dtype=input_tensor,
+                    dtype=input_tensor.dtype,
                 ),
             )
         return lif_mc_step(
