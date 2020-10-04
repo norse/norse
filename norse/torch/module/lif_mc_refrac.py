@@ -16,6 +16,7 @@ class LIFMCRefracCell(torch.nn.Module):
         p: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
     ):
+        super(LIFMCRefracCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
             torch.randn(hidden_size, input_size) / np.sqrt(input_size)
         )
@@ -27,6 +28,7 @@ class LIFMCRefracCell(torch.nn.Module):
         )
         self.p = p
         self.dt = dt
+        self.hidden_size = hidden_size
 
     def forward(
         self, input_tensor: torch.Tensor, state: Optional[LIFRefracState] = None
@@ -40,7 +42,13 @@ class LIFMCRefracCell(torch.nn.Module):
                         device=input_tensor.device,
                         dtype=input_tensor.dtype,
                     ),
-                    v=self.p.lif.v_leak,
+                    v=self.p.lif.v_leak
+                    * torch.ones(
+                        input_tensor.shape[0],
+                        self.hidden_size,
+                        device=input_tensor.device,
+                        dtype=input_tensor.dtype,
+                    ),
                     i=torch.zeros(
                         input_tensor.shape[0],
                         self.hidden_size,
