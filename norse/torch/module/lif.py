@@ -97,6 +97,7 @@ class LIFCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.v.requires_grad = True
         return lif_step(
             input_tensor,
             state,

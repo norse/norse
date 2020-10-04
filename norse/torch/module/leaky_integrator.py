@@ -62,6 +62,7 @@ class LICell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.v.requires_grad = True
         return li_step(
             input_tensor,
             state,
@@ -113,4 +114,5 @@ class LIFeedForwardCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.v.requires_grad = True
         return li_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

@@ -8,6 +8,19 @@ from norse.torch.module.lif import (
 )
 
 
+class SNNetwork(torch.nn.Module):
+    def __init__(self):
+        super(SNNetwork, self).__init__()
+        self.l0 = LIFCell(12, 6)
+        self.l1 = LIFCell(6, 1)
+        self.s0 = self.s1 = None
+
+    def forward(self, spikes):
+        spikes, self.s0 = self.l0(spikes, self.s0)
+        _, self.s1 = self.l1(spikes, self.s1)
+        return self.s1.v.squeeze()
+
+
 def test_lif_cell():
     cell = LIFCell(2, 4)
     data = torch.randn(5, 2)
@@ -57,3 +70,29 @@ def test_lif_feedforward_layer():
     assert out.shape == (10, 5, 4)
     for x in s:
         assert x.shape == (5, 4)
+
+
+def test_backward():
+    model = LIFCell(12, 1)
+    data = torch.ones(100, 12)
+    out, _ = model(data)
+    loss = out.sum()
+    loss.backward()
+
+
+def test_backward_iteration():
+    # Tests that gradient variables can be used in subsequent applications
+    model = LIFCell(6, 6)
+    data = torch.ones(100, 6)
+    out, s = model(data)
+    out, _ = model(out, s)
+    loss = out.sum()
+    loss.backward()
+
+
+def test_backward_model():
+    model = SNNetwork()
+    data = torch.ones(100, 12)
+    out = model(data)
+    loss = out.sum()
+    loss.backward()

@@ -104,6 +104,7 @@ class LIFAdExCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.v.requires_grad = True
         return lif_adex_step(
             input_tensor,
             state,
@@ -214,4 +215,5 @@ class LIFAdExFeedForwardCell(torch.nn.Module):
                     dtype=x.dtype,
                 ),
             )
+            state.v.requires_grad = True
         return lif_adex_feed_forward_step(x, state, p=self.p, dt=self.dt)

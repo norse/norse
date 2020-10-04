@@ -67,11 +67,13 @@ class CobaLIFCell(torch.nn.Module):
         self.recurrent_weights = torch.nn.Parameter(
             torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
         )
+        self.input_size = input_size
+        self.hidden_size = hidden_size
         self.p = p
         self.dt = dt
 
     def forward(
-        self, input_tensor: torch.Tensor, state: Optional[CobaLIFState]
+        self, input_tensor: torch.Tensor, state: Optional[CobaLIFState] = None
     ) -> Tuple[torch.Tensor, CobaLIFState]:
         if state is None:
             state = CobaLIFState(
@@ -100,6 +102,7 @@ class CobaLIFCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.v.requires_grad = True
         return coba_lif_step(
             input_tensor,
             state,

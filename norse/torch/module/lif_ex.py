@@ -96,6 +96,7 @@ class LIFExCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.v.requires_grad = True
         return lif_ex_step(
             input_tensor,
             state,
@@ -194,4 +195,5 @@ class LIFExFeedForwardCell(torch.nn.Module):
                 v=self.p.v_leak,
                 i=torch.zeros(x.shape[0], *self.shape, device=x.device, dtype=x.dtype),
             )
+            state.v.requires_grad = True
         return lif_ex_feed_forward_step(x, state, p=self.p, dt=self.dt)

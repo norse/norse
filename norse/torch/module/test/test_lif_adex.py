@@ -15,6 +15,13 @@ def test_lif_adex_cell():
     assert out.shape == (5, 4)
 
 
+def test_lif_adex_cell_backward():
+    cell = LIFAdExCell(2, 4)
+    data = torch.randn(5, 2)
+    out, _ = cell(data)
+    out.sum().backward()
+
+
 def test_lif_adex_layer():
     layer = LIFAdExLayer(2, 4)
     data = torch.randn(10, 5, 2)
@@ -29,3 +36,10 @@ def test_lif_adex_feedforward_cell():
     out, _ = layer(data)
 
     assert out.shape == (5, 2, 4)
+
+
+def test_lif_adex_feedforward_cell_backward():
+    cell = LIFAdExFeedForwardCell((2, 4))
+    data = torch.randn(5, 2, 4)
+    out, _ = cell(data)
+    out.sum().backward()
