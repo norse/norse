@@ -51,7 +51,7 @@ class LICell(torch.nn.Module):
         self.output_features = output_features
 
     def forward(
-        self, input_tensor: torch.Tensor, state: Optional[LIState]
+        self, input_tensor: torch.Tensor, state: Optional[LIState] = None
     ) -> Tuple[torch.Tensor, LIState]:
         if state is None:
             state = LIState(
@@ -101,7 +101,7 @@ class LIFeedForwardCell(torch.nn.Module):
         self.shape = shape
 
     def forward(
-        self, input_tensor: torch.Tensor, state: Optional[LIState]
+        self, input_tensor: torch.Tensor, state: Optional[LIState] = None
     ) -> Tuple[torch.Tensor, LIState]:
         if state is None:
             state = LIState(
@@ -110,7 +110,7 @@ class LIFeedForwardCell(torch.nn.Module):
                     input_tensor.shape[0],
                     *self.shape,
                     device=input_tensor.device,
-                    dtype=input_tensor.dtype
+                    dtype=input_tensor.dtype,
                 ),
             )
-        return li_feed_forward_step(input_tensor, s, p=self.p, dt=self.dt)
+        return li_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

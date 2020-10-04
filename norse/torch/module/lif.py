@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 
 import numpy as np
 import torch
@@ -167,8 +167,8 @@ class LIFFeedForwardCell(torch.nn.Module):
     Examples:
 
         >>> batch_size = 16
-        >>> lif = LIFFeedForwardCell()
-        >>> data = torch.randn(batch_size, 20, 30)
+        >>> lif = LIFFeedForwardCell(20, 30)
+        >>> data = torch.randn(batch_size, 20)
         >>> output, s0 = lif(data)
     """
 
@@ -201,11 +201,15 @@ class LIFFeedForwardLayer(torch.nn.Module):
 
     Example:
     >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-    >>> l = LIFLayer(2, 4)
+    >>> l = LIFFeedForwardLayer()
     >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
+
+    Arguments:
+        cell_args (Any): Arguments to pass on to the LIFCell
+        kw_args (Any): Key-value arguments po pass on to the LIFCell
     """
 
-    def __init__(self, *cell_args, **kw_args):
+    def __init__(self, *cell_args: Any, **kw_args: Any):
         super(LIFFeedForwardLayer, self).__init__()
         self.cell = LIFFeedForwardCell(*cell_args, **kw_args)
 
