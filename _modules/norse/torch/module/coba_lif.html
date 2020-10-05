@@ -53,16 +53,16 @@
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \\begin{align*}</span>
-<span class="sd">            \dot{v} &amp;= 1/c_{\\text{mem}} (g_l (v_{\\text{leak}} - v) \</span>
+<span class="sd">            \\dot{v} &amp;= 1/c_{\\text{mem}} (g_l (v_{\\text{leak}} - v) \</span>
 <span class="sd">              + g_e (E_{\\text{rev_e}} - v) + g_i (E_{\\text{rev_i}} - v)) \\\\</span>
-<span class="sd">            \dot{g_e} &amp;= -1/\\tau_{\\text{syn}} g_e \\\\</span>
-<span class="sd">            \dot{g_i} &amp;= -1/\\tau_{\\text{syn}} g_i</span>
-<span class="sd">        \end{align*}</span>
+<span class="sd">            \\dot{g_e} &amp;= -1/\\tau_{\\text{syn}} g_e \\\\</span>
+<span class="sd">            \\dot{g_i} &amp;= -1/\\tau_{\\text{syn}} g_i</span>
+<span class="sd">        \\end{align*}</span>
 
 <span class="sd">    together with the jump condition</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        z = \Theta(v - v_{\\text{th}})</span>
+<span class="sd">        z = \\Theta(v - v_{\\text{th}})</span>
 
 <span class="sd">    and transition equations</span>
 
@@ -73,7 +73,7 @@
 <span class="sd">            g_e &amp;= g_e + \\text{relu}(w_{\\text{rec}}) z_{\\text{rec}} \\\\</span>
 <span class="sd">            g_i &amp;= g_i + \\text{relu}(-w_{\\text{input}}) z_{\\text{in}} \\\\</span>
 <span class="sd">            g_i &amp;= g_i + \\text{relu}(-w_{\\text{rec}}) z_{\\text{rec}} \\\\</span>
-<span class="sd">        \end{align*}</span>
+<span class="sd">        \\end{align*}</span>
 
 <span class="sd">    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent</span>
 <span class="sd">    and input spikes respectively.</span>
@@ -106,11 +106,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
 <div class="viewcode-block" id="CobaLIFCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.coba_lif.html#norse.torch.module.coba_lif.CobaLIFCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CobaLIFState</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CobaLIFState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">CobaLIFState</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">CobaLIFState</span><span class="p">(</span>
@@ -139,6 +141,7 @@
                     <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">)</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">coba_lif_step</span><span class="p">(</span>
             <span class="n">input_tensor</span><span class="p">,</span>
             <span class="n">state</span><span class="p">,</span>

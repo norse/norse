@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>norse.torch.module.test.test_lif_mc &#8212; norse 0.0.4 documentation</title>
+    <title>norse.torch.module.test.test_coba &#8212; norse 0.0.4 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
@@ -36,27 +36,25 @@
 
           <div class="body" role="main">
             
-  <h1>Source code for norse.torch.module.test.test_lif_mc</h1><div class="highlight"><pre>
+  <h1>Source code for norse.torch.module.test.test_coba</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.module.lif_mc</span> <span class="kn">import</span> <span class="n">LIFMCCell</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.coba_lif</span> <span class="kn">import</span> <span class="n">CobaLIFCell</span>
 
 
-<div class="viewcode-block" id="test_lif_mc_cell"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_mc.html#norse.torch.module.test.test_lif_mc.test_lif_mc_cell">[docs]</a><span class="k">def</span> <span class="nf">test_lif_mc_cell</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFMCCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">out</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></div>
+<div class="viewcode-block" id="test_coba"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_coba.html#norse.torch.module.test.test_coba.test_coba">[docs]</a><span class="k">def</span> <span class="nf">test_coba</span><span class="p">():</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">CobaLIFCell</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">spikes</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">spikes</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="test_lif_mc_cell_backward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_mc.html#norse.torch.module.test.test_lif_mc.test_lif_mc_cell_backward">[docs]</a><span class="k">def</span> <span class="nf">test_lif_mc_cell_backward</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFMCCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></div>
+<div class="viewcode-block" id="test_coba_backward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_coba.html#norse.torch.module.test.test_coba.test_coba_backward">[docs]</a><span class="k">def</span> <span class="nf">test_coba_backward</span><span class="p">():</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">CobaLIFCell</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">spikes</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">spikes</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></div>
 </pre></div>
 
           </div>

@@ -59,19 +59,19 @@
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \\begin{align*}</span>
-<span class="sd">            \dot{v} &amp;= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) \</span>
+<span class="sd">            \\dot{v} &amp;= 1/\\tau_{\\text{mem}} (1-\\Theta(\\rho)) \</span>
 <span class="sd">            (v_{\\text{leak}} - v + i) \\\\</span>
-<span class="sd">            \dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\</span>
-<span class="sd">            \dot{\\rho} &amp;= -1/\\tau_{\\text{refrac}} \Theta(\\rho)</span>
-<span class="sd">        \end{align*}</span>
+<span class="sd">            \\dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\</span>
+<span class="sd">            \\dot{\\rho} &amp;= -1/\\tau_{\\text{refrac}} \\Theta(\\rho)</span>
+<span class="sd">        \\end{align*}</span>
 
 <span class="sd">    together with the jump condition</span>
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \\begin{align*}</span>
-<span class="sd">            z &amp;= \Theta(v - v_{\\text{th}}) \\\\</span>
-<span class="sd">            z_r &amp;= \Theta(-\\rho)</span>
-<span class="sd">        \end{align*}</span>
+<span class="sd">            z &amp;= \\Theta(v - v_{\\text{th}}) \\\\</span>
+<span class="sd">            z_r &amp;= \\Theta(-\\rho)</span>
+<span class="sd">        \\end{align*}</span>
 
 <span class="sd">    and transition equations</span>
 
@@ -81,7 +81,7 @@
 <span class="sd">            i &amp;= i + w_{\\text{input}} z_{\\text{in}} \\\\</span>
 <span class="sd">            i &amp;= i + w_{\\text{rec}} z_{\\text{rec}} \\\\</span>
 <span class="sd">            \\rho &amp;= \\rho + z_r \\rho_{\\text{reset}}</span>
-<span class="sd">        \end{align*}</span>
+<span class="sd">        \\end{align*}</span>
 
 <span class="sd">    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the</span>
 <span class="sd">    recurrent and input spikes respectively.</span>
@@ -147,6 +147,7 @@
                     <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">)</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">lif_refrac_step</span><span class="p">(</span>
             <span class="n">input_tensor</span><span class="p">,</span>
             <span class="n">state</span><span class="p">,</span>
@@ -164,19 +165,19 @@
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \\begin{align*}</span>
-<span class="sd">            \dot{v} &amp;= 1/\\tau_{\\text{mem}} (1-\Theta(\\rho)) \</span>
+<span class="sd">            \\dot{v} &amp;= 1/\\tau_{\\text{mem}} (1-\\Theta(\\rho)) \</span>
 <span class="sd">            (v_{\\text{leak}} - v + i) \\\\</span>
-<span class="sd">            \dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\</span>
-<span class="sd">            \dot{\\rho} &amp;= -1/\\tau_{\\text{refrac}} \Theta(\\rho)</span>
-<span class="sd">        \end{align*}</span>
+<span class="sd">            \\dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\</span>
+<span class="sd">            \\dot{\\rho} &amp;= -1/\\tau_{\\text{refrac}} \\Theta(\\rho)</span>
+<span class="sd">        \\end{align*}</span>
 
 <span class="sd">    together with the jump condition</span>
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \\begin{align*}</span>
-<span class="sd">            z &amp;= \Theta(v - v_{\\text{th}}) \\\\</span>
-<span class="sd">            z_r &amp;= \Theta(-\\rho)</span>
-<span class="sd">        \end{align*}</span>
+<span class="sd">            z &amp;= \\Theta(v - v_{\\text{th}}) \\\\</span>
+<span class="sd">            z_r &amp;= \\Theta(-\\rho)</span>
+<span class="sd">        \\end{align*}</span>
 
 <span class="sd">    and transition equations</span>
 
@@ -184,7 +185,7 @@
 <span class="sd">        \\begin{align*}</span>
 <span class="sd">            v &amp;= (1-z) v + z v_{\\text{reset}} \\\\</span>
 <span class="sd">            \\rho &amp;= \\rho + z_r \\rho_{\\text{reset}}</span>
-<span class="sd">        \end{align*}</span>
+<span class="sd">        \\end{align*}</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        shape: Shape of the processed spike input</span>
@@ -228,6 +229,7 @@
                     <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">)</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">lif_refrac_feed_forward_step</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
 </pre></div>
 

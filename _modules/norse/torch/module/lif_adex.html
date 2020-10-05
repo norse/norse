@@ -143,6 +143,7 @@
                     <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">)</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">lif_adex_step</span><span class="p">(</span>
             <span class="n">input_tensor</span><span class="p">,</span>
             <span class="n">state</span><span class="p">,</span>
@@ -253,6 +254,7 @@
                     <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">)</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">lif_adex_feed_forward_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
 </pre></div>
 
