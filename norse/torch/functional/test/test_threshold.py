@@ -10,7 +10,7 @@ def test_threshold_throws():
     x = torch.ones(10)
 
     with raises(ValueError):
-        out = threshold(x, "noasd", alpha)
+        _ = threshold(x, "noasd", alpha)
 
 
 def test_threshold_backward():
