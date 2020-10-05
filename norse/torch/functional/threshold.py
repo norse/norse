@@ -24,16 +24,16 @@ class HeaviErfc(torch.autograd.Function):
 
     @staticmethod
     def forward(ctx, x, k):
-        ctx.save_for_backward(x, k)
+        ctx.save_for_backward(x)
+        ctx.k = k
         return heaviside(x)  # 0 + 0.5 * torch.erfc(k * x)
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            k,
-        ) = ctx.saved_tensors
-        derfc = (2 * torch.exp(-k.pow(2) * x.pow(2))) / (torch.as_tensor(np.pi).sqrt())
+        (x,) = ctx.saved_tensors
+        derfc = (2 * torch.exp(-ctx.k.pow(2) * x.pow(2))) / (
+            torch.as_tensor(np.pi).sqrt()
+        )
         return derfc * dy, None
 
 
@@ -49,16 +49,14 @@ class HeaviTanh(torch.autograd.Function):
 
     @staticmethod
     def forward(ctx, x, k):
-        ctx.save_for_backward(x, k)
+        ctx.save_for_backward(x)
+        ctx.k = k
         return heaviside(x)  # 0.5 + 0.5 * torch.tanh(k * x)
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            k,
-        ) = ctx.saved_tensors
-        dtanh = 1 - (x * k).tanh().pow(2)
+        (x,) = ctx.saved_tensors
+        dtanh = 1 - (x * ctx.k).tanh().pow(2)
         return dy * dtanh, None
 
 
@@ -76,17 +74,15 @@ class Logistic(torch.autograd.Function):
 
     @staticmethod
     def forward(ctx, x, k):
-        ctx.save_for_backward(x, k)
+        ctx.k = k
+        ctx.save_for_backward(x)
         p = 0.5 + 0.5 * torch.tanh(k * x)
         return torch.distributions.bernoulli.Bernoulli(probs=p).sample()
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            k,
-        ) = ctx.saved_tensors
-        dtanh = 1 - (x * k).tanh().pow(2)
+        (x,) = ctx.saved_tensors
+        dtanh = 1 - (x * ctx.k).tanh().pow(2)
         return dy * dtanh, None
 
 
@@ -105,12 +101,14 @@ class HeaviCirc(torch.autograd.Function):
 
     @staticmethod
     def forward(ctx, x, alpha):
-        ctx.save_for_backward(x, alpha)
+        ctx.save_for_backward(x)
+        ctx.alpha = alpha
         return heaviside(x)  # 0.5 + 0.5 * (x / (x.pow(2) + alpha ** 2).sqrt())
 
     @staticmethod
     def backward(ctx, dy):
-        (x, alpha) = ctx.saved_tensors
+        (x,) = ctx.saved_tensors
+        alpha = ctx.alpha
 
         return (
             dy
@@ -120,7 +118,7 @@ class HeaviCirc(torch.autograd.Function):
             )
             * 2
             * alpha,
-            torch.zeros_like(x),
+            None,
         )
 
 
@@ -163,15 +161,14 @@ def circ_dist_fn(x: torch.Tensor, k: float):
 class HeaviTent(torch.autograd.Function):
     @staticmethod
     def forward(ctx, x, alpha):
-        ctx.save_for_backward(x, alpha)
+        ctx.alpha = alpha
+        ctx.save_for_backward(x)
         return heaviside(x)
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            alpha,
-        ) = ctx.saved_tensors
+        (x,) = ctx.saved_tensors
+        alpha = ctx.alpha
         return torch.relu(1 - torch.abs(x)) * alpha * dy, None
 
 
