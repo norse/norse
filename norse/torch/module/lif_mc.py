@@ -93,7 +93,6 @@ class LIFMCCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
-            state.v.requires_grade = True
         return lif_mc_step(
             input_tensor,
             state,

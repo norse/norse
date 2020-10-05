@@ -14,16 +14,16 @@ class CobaLIFCell(torch.nn.Module):
 
     .. math::
         \\begin{align*}
-            \dot{v} &= 1/c_{\\text{mem}} (g_l (v_{\\text{leak}} - v) \
+            \\dot{v} &= 1/c_{\\text{mem}} (g_l (v_{\\text{leak}} - v) \
               + g_e (E_{\\text{rev_e}} - v) + g_i (E_{\\text{rev_i}} - v)) \\\\
-            \dot{g_e} &= -1/\\tau_{\\text{syn}} g_e \\\\
-            \dot{g_i} &= -1/\\tau_{\\text{syn}} g_i
-        \end{align*}
+            \\dot{g_e} &= -1/\\tau_{\\text{syn}} g_e \\\\
+            \\dot{g_i} &= -1/\\tau_{\\text{syn}} g_i
+        \\end{align*}
 
     together with the jump condition
 
     .. math::
-        z = \Theta(v - v_{\\text{th}})
+        z = \\Theta(v - v_{\\text{th}})
 
     and transition equations
 
@@ -34,7 +34,7 @@ class CobaLIFCell(torch.nn.Module):
             g_e &= g_e + \\text{relu}(w_{\\text{rec}}) z_{\\text{rec}} \\\\
             g_i &= g_i + \\text{relu}(-w_{\\text{input}}) z_{\\text{in}} \\\\
             g_i &= g_i + \\text{relu}(-w_{\\text{rec}}) z_{\\text{rec}} \\\\
-        \end{align*}
+        \\end{align*}
 
     where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the recurrent
     and input spikes respectively.
