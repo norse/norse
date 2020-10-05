@@ -11,6 +11,13 @@ def test_lif_ex_cell():
     assert out.shape == (5, 4)
 
 
+def test_lif_ex_cell_backward():
+    cell = LIFExCell(2, 4)
+    data = torch.randn(5, 2)
+    out, _ = cell(data)
+    out.sum().backward()
+
+
 def test_lif_ex_layer():
     layer = LIFExLayer(2, 4)
     data = torch.randn(10, 5, 2)
@@ -25,3 +32,10 @@ def test_lif_ex_feedforward_cell():
     out, _ = layer(data)
 
     assert out.shape == (5, 2, 4)
+
+
+def test_lif_ex_feedforward_cell_backward():
+    layer = LIFExFeedForwardCell((2, 4))
+    data = torch.randn(5, 2, 4)
+    out, _ = layer(data)
+    out.sum().backward()

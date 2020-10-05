@@ -95,6 +95,7 @@ class LSNNCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.v.requires_grad = True
         return lsnn_step(
             input_tensor,
             state,
@@ -196,15 +197,16 @@ class LSNNFeedForwardCell(torch.nn.Module):
                 v=self.p.v_leak,
                 i=torch.zeros(
                     input_tensor.shape[0],
-                    self.output_features,
+                    *self.shape,
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
                 b=torch.zeros(
                     input_tensor.shape[0],
-                    self.output_features,
+                    *self.shape,
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
             )
+            state.v.requires_grad = True
         return lsnn_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)
