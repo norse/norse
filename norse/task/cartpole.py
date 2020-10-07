@@ -186,20 +186,21 @@ def main(args):
     FLAGS.append_flags_into_file("flags.txt")
 
     np.random.seed(FLAGS.random_seed)
-    if hasattr(torch, "cuda_is_available"):
-        if torch.cuda_is_available():
-            torch.cuda.manual_seed(FLAGS.random_seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(FLAGS.random_seed)
+
+    device = torch.device(FLAGS.device)
 
     env = gym.make(FLAGS.environment)
     env.reset()
     env.seed(FLAGS.random_seed)
 
     if FLAGS.policy == "ann":
-        policy = ANNPolicy()
+        policy = ANNPolicy().to(device)
     elif FLAGS.policy == "snn":
-        policy = Policy()
+        policy = Policy().to(device)
     elif FLAGS.policy == "lsnn":
-        policy = LSNNPolicy(model=FLAGS.model).to(FLAGS.device)
+        policy = LSNNPolicy(model=FLAGS.model).to(device)
     optimizer = torch.optim.Adam(policy.parameters(), lr=FLAGS.learning_rate)
 
     running_rewards = []
@@ -209,7 +210,7 @@ def main(args):
         state, ep_reward = env.reset(), 0
 
         for t in range(1, 10000):  # Don't infinite loop while learning
-            action = select_action(state, policy, device=FLAGS.device)
+            action = select_action(state, policy, device=device)
             state, reward, done, _ = env.step(action)
             if FLAGS.render:
                 env.render()

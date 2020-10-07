@@ -255,11 +255,10 @@ def main(args):
     torch.manual_seed(FLAGS.random_seed)
 
     np.random.seed(FLAGS.random_seed)
-    if hasattr(torch, "cuda_is_available"):
-        if torch.cuda_is_available():
-            torch.cuda.manual_seed(FLAGS.random_seed)
-            torch.backends.cudnn.enabled = True
-            torch.backends.cudnn.benchmark = True
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(FLAGS.random_seed)
+        torch.backends.cudnn.enabled = True
+        torch.backends.cudnn.benchmark = True
 
     device = torch.device(FLAGS.device)
 
