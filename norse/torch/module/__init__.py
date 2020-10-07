@@ -1,5 +1,4 @@
 from . import coba_lif
-from . import if_current_encoder
 from . import leaky_integrator
 from . import lif_adex
 from . import lif_correlation
@@ -11,7 +10,6 @@ from . import lsnn
 
 __all__ = [
     coba_lif,
-    if_current_encoder,
     leaky_integrator,
     lif,
     lif_adex,

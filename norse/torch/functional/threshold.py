@@ -31,13 +31,13 @@ class HeaviErfc(torch.autograd.Function):
     @staticmethod
     def backward(ctx, dy):
         (x,) = ctx.saved_tensors
-        derfc = (2 * torch.exp(-ctx.k.pow(2) * x.pow(2))) / (
-            torch.as_tensor(np.pi).sqrt()
-        )
+        derfc = (2 * torch.exp(-(ctx.k * x).pow(2))) / (torch.as_tensor(np.pi).sqrt())
         return derfc * dy, None
 
 
-heavi_erfc_fn = HeaviErfc.apply
+@torch.jit.ignore
+def heavi_erfc_fn(x: torch.Tensor, k: float):
+    return HeaviErfc.apply(x, k)
 
 
 class HeaviTanh(torch.autograd.Function):
@@ -130,17 +130,17 @@ def heavi_circ_fn(x: torch.Tensor, k: float):
 class CircDist(torch.autograd.Function):
     @staticmethod
     def forward(ctx, x, alpha):
-        ctx.save_for_backward(x, alpha)
+        ctx.save_for_backward(x)
+        ctx.alpha = alpha
+
         return torch.distributions.bernoulli.Bernoulli(
             0.5 + 0.5 * (x / (x.pow(2) + alpha ** 2).sqrt())
         ).sample()
 
     @staticmethod
     def backward(ctx, dy):
-        (
-            x,
-            alpha,
-        ) = ctx.saved_tensors
+        (x,) = ctx.saved_tensors
+        alpha = ctx.alpha
         return (
             dy
             * (
@@ -188,13 +188,13 @@ def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
         return heavi_tent_fn(x, alpha)
     elif method == "circ":
         return heavi_circ_fn(x, alpha)
-    elif method == "logistic":
-        return logistic_fn(x, alpha)
+    elif method == "heavi_erfc":
+        return heavi_erfc_fn(x, alpha)
     else:
         raise ValueError(
             f"Attempted to apply threshold function {method}, but no such "
             + "function exist. We currently support heaviside, super, "
-            + "tanh, tent, circ, and logistic."
+            + "tanh, tent, circ, and heavi_erfc."
         )
 
 
