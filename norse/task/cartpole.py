@@ -109,7 +109,7 @@ class LSNNPolicy(torch.nn.Module):
         self.lif_layer = LSNNCell(
             2 * self.state_dim,
             self.hidden_features,
-            p=LSNNParameters(model, alpha=100.0),
+            p=LSNNParameters(method=model, alpha=100.0),
         )
         self.dropout = torch.nn.Dropout(p=0.5)
         self.readout = LICell(self.hidden_features, self.output_features)
@@ -119,8 +119,8 @@ class LSNNPolicy(torch.nn.Module):
 
     def forward(self, x):
         scale = 50
-        _, x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
-        _, x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
+        x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
+        x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
         x = torch.cat([x_pos, x_neg], dim=2)
 
         seq_length, batch_size, _ = x.shape
@@ -186,20 +186,21 @@ def main(args):
     FLAGS.append_flags_into_file("flags.txt")
 
     np.random.seed(FLAGS.random_seed)
-    if hasattr(torch, "cuda_is_available"):
-        if torch.cuda_is_available():
-            torch.cuda.manual_seed(FLAGS.random_seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(FLAGS.random_seed)
+
+    device = torch.device(FLAGS.device)
 
     env = gym.make(FLAGS.environment)
     env.reset()
     env.seed(FLAGS.random_seed)
 
     if FLAGS.policy == "ann":
-        policy = ANNPolicy()
+        policy = ANNPolicy().to(device)
     elif FLAGS.policy == "snn":
-        policy = Policy()
+        policy = Policy().to(device)
     elif FLAGS.policy == "lsnn":
-        policy = LSNNPolicy(model=FLAGS.model).to(FLAGS.device)
+        policy = LSNNPolicy(model=FLAGS.model).to(device)
     optimizer = torch.optim.Adam(policy.parameters(), lr=FLAGS.learning_rate)
 
     running_rewards = []
@@ -209,7 +210,7 @@ def main(args):
         state, ep_reward = env.reset(), 0
 
         for t in range(1, 10000):  # Don't infinite loop while learning
-            action = select_action(state, policy, device=FLAGS.device)
+            action = select_action(state, policy, device=device)
             state, reward, done, _ = env.step(action)
             if FLAGS.render:
                 env.render()
