@@ -2,6 +2,7 @@
 # https://github.com/pytorch/examples/blob/master/reinforcement_learning/reinforce.py
 # which is licensed under the license found in LICENSE.cartpole
 
+import pdb
 import torch
 import numpy as np
 from absl import app
@@ -109,7 +110,7 @@ class LSNNPolicy(torch.nn.Module):
         self.lif_layer = LSNNCell(
             2 * self.state_dim,
             self.hidden_features,
-            p=LSNNParameters(model, alpha=100.0),
+            p=LSNNParameters(method=model, alpha=100.0),
         )
         self.dropout = torch.nn.Dropout(p=0.5)
         self.readout = LICell(self.hidden_features, self.output_features)
@@ -119,8 +120,8 @@ class LSNNPolicy(torch.nn.Module):
 
     def forward(self, x):
         scale = 50
-        _, x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
-        _, x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
+        x_pos = self.constant_current_encoder(torch.nn.functional.relu(scale * x))
+        x_neg = self.constant_current_encoder(torch.nn.functional.relu(-scale * x))
         x = torch.cat([x_pos, x_neg], dim=2)
 
         seq_length, batch_size, _ = x.shape
