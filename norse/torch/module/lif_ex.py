@@ -97,6 +97,9 @@ class LIFExCell(torch.nn.Module):
                 ),
             )
             state.v.requires_grad = True
+        else:
+            v = state.v.detach()
+            state = LIFExState(z=state.z, v=v, i=state.i)
         return lif_ex_step(
             input_tensor,
             state,
@@ -196,4 +199,7 @@ class LIFExFeedForwardCell(torch.nn.Module):
                 i=torch.zeros(x.shape[0], *self.shape, device=x.device, dtype=x.dtype),
             )
             state.v.requires_grad = True
+        else:
+            v = state.v.detach()
+            state = LIFExFeedForwardState(v=v, i=state.i)
         return lif_ex_feed_forward_step(x, state, p=self.p, dt=self.dt)

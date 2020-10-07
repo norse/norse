@@ -109,6 +109,13 @@ class LIFRefracCell(torch.nn.Module):
                 ),
             )
             state.lif.v.requires_grad = True
+        else:
+            v = state.lif.v.detach()
+            rho = state.rho.detach()
+            state = LIFRefracState(
+                lif=LIFState(z=state.lif.z, v=v, i=state.lif.i), rho=rho
+            )
+
         return lif_refrac_step(
             input_tensor,
             state,
@@ -191,4 +198,10 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
                 ),
             )
             state.lif.v.requires_grad = True
+        else:
+            v = state.lif.v.detach()
+            rho = state.rho.detach()
+            state = LIFRefracFeedForwardState(
+                lif=LIFFeedForwardState(v=v, i=state.lif.i), rho=rho
+            )
         return lif_refrac_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

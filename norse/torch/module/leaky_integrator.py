@@ -63,6 +63,10 @@ class LICell(torch.nn.Module):
                 ),
             )
             state.v.requires_grad = True
+        else:
+            v = state.v.detach()
+            state = LIState(v, state.i)
+
         return li_step(
             input_tensor,
             state,
@@ -115,4 +119,8 @@ class LIFeedForwardCell(torch.nn.Module):
                 ),
             )
             state.v.requires_grad = True
+        else:
+            v = state.v.detach()
+            state = LIState(v, state.i)
+
         return li_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

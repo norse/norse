@@ -18,7 +18,9 @@ def test_lif_adex_cell():
 def test_lif_adex_cell_backward():
     cell = LIFAdExCell(2, 4)
     data = torch.randn(5, 2)
-    out, _ = cell(data)
+    out, s = cell(data)
+    out.sum().backward()
+    out, _ = cell(data, s)
     out.sum().backward()
 
 
@@ -41,5 +43,7 @@ def test_lif_adex_feedforward_cell():
 def test_lif_adex_feedforward_cell_backward():
     cell = LIFAdExFeedForwardCell((2, 4))
     data = torch.randn(5, 2, 4)
-    out, _ = cell(data)
+    out, s = cell(data)
+    out.sum().backward()
+    out, _ = cell(data, s)
     out.sum().backward()

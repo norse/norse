@@ -14,5 +14,7 @@ def test_coba():
 def test_coba_backward():
     cell = CobaLIFCell(4, 3)
     data = torch.ones(5, 4)
-    spikes, _ = cell(data)
+    spikes, s = cell(data)
+    spikes.sum().backward()
+    spikes, _ = cell(data, s)
     spikes.sum().backward()

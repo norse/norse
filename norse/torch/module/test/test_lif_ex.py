@@ -14,7 +14,10 @@ def test_lif_ex_cell():
 def test_lif_ex_cell_backward():
     cell = LIFExCell(2, 4)
     data = torch.randn(5, 2)
-    out, _ = cell(data)
+    out, s = cell(data)
+    out.sum().backward()
+    data = torch.randn(5, 2)
+    out, _ = cell(data, s)
     out.sum().backward()
 
 
@@ -37,5 +40,7 @@ def test_lif_ex_feedforward_cell():
 def test_lif_ex_feedforward_cell_backward():
     layer = LIFExFeedForwardCell((2, 4))
     data = torch.randn(5, 2, 4)
-    out, _ = layer(data)
+    out, s = layer(data)
+    out.sum().backward()
+    out, _ = layer(data, s)
     out.sum().backward()

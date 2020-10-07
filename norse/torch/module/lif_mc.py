@@ -93,6 +93,9 @@ class LIFMCCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+        else:
+            v = state.v.detach()
+            state = LIFState(z=state.z, v=v, i=state.i)
         return lif_mc_step(
             input_tensor,
             state,

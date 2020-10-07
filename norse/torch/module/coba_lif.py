@@ -103,6 +103,13 @@ class CobaLIFCell(torch.nn.Module):
                 ),
             )
             state.v.requires_grad = True
+        else:
+            v = state.v.detach()
+            z = state.z.detach()
+            g_e = state.g_e.detach()
+            g_i = state.g_i.detach()
+            state = CobaLIFState(z=z, v=v, g_e=g_e, g_i=g_i)
+
         return coba_lif_step(
             input_tensor,
             state,

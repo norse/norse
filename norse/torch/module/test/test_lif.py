@@ -75,7 +75,10 @@ def test_lif_feedforward_layer():
 def test_backward():
     model = LIFCell(12, 1)
     data = torch.ones(100, 12)
-    out, _ = model(data)
+    out, s = model(data)
+    loss = out.sum()
+    loss.backward()
+    out, _ = model(data, s)
     loss = out.sum()
     loss.backward()
 

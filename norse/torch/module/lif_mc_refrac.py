@@ -63,6 +63,12 @@ class LIFMCRefracCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                 ),
             )
+        else:
+            v = state.lif.v.detach()
+            rho = state.rho.detach()
+            state = LIFRefracState(
+                lif=LIFState(z=state.lif.z, v=v, i=state.lif.i), rho=rho
+            )
         return lif_mc_refrac_step(
             input_tensor,
             state,

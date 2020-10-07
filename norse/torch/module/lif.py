@@ -98,6 +98,10 @@ class LIFCell(torch.nn.Module):
                 ),
             )
             state.v.requires_grad = True
+        else:
+            v = state.v.detach()
+            state = LIFState(state.z, v, state.i)
+
         return lif_step(
             input_tensor,
             state,

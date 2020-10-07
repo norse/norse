@@ -96,6 +96,10 @@ class LSNNCell(torch.nn.Module):
                 ),
             )
             state.v.requires_grad = True
+        else:
+            v = state.v.detach()
+            b = state.b.detach()
+            state = LSNNState(z=state.z, v=v, i=state.i, b=b)
         return lsnn_step(
             input_tensor,
             state,
@@ -209,4 +213,8 @@ class LSNNFeedForwardCell(torch.nn.Module):
                 ),
             )
             state.v.requires_grad = True
+        else:
+            v = state.v.detach()
+            b = state.b.detach()
+            state = LSNNFeedForwardState(v=v, i=state.i, b=b)
         return lsnn_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

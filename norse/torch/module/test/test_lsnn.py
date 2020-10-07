@@ -17,7 +17,9 @@ def test_lsnn_cell():
 def test_lsnn_cell_backward():
     cell = LSNNCell(2, 2)
     data = torch.ones(5, 2)
-    z, _ = cell(data)
+    z, s = cell(data)
+    z.sum().backward()
+    z, _ = cell(data, s)
     z.sum().backward()
 
 
@@ -47,7 +49,9 @@ def test_lsnn_ff_cell():
 def test_lsnn_cell_ff_backward():
     cell = LSNNFeedForwardCell((2, 1))
     data = torch.ones(1, 2, 2)
-    z, _ = cell(data)
+    z, s = cell(data)
+    z.sum().backward()
+    z, _ = cell(data, s)
     z.sum().backward()
 
 
