@@ -70,13 +70,13 @@
 <div class="viewcode-block" id="HeaviErfc.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.HeaviErfc.backward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
         <span class="p">(</span><span class="n">x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
-        <span class="n">derfc</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">ctx</span><span class="o">.</span><span class="n">k</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
-        <span class="p">)</span>
+        <span class="n">derfc</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">k</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">derfc</span> <span class="o">*</span> <span class="n">dy</span><span class="p">,</span> <span class="kc">None</span></div></div>
 
 
-<span class="n">heavi_erfc_fn</span> <span class="o">=</span> <span class="n">HeaviErfc</span><span class="o">.</span><span class="n">apply</span>
+<div class="viewcode-block" id="heavi_erfc_fn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.heavi_erfc_fn">[docs]</a><span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">ignore</span>
+<span class="k">def</span> <span class="nf">heavi_erfc_fn</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HeaviErfc</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="HeaviTanh"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.HeaviTanh">[docs]</a><span class="k">class</span> <span class="nc">HeaviTanh</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
@@ -169,17 +169,17 @@
 <div class="viewcode-block" id="CircDist"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.CircDist">[docs]</a><span class="k">class</span> <span class="nc">CircDist</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
 <div class="viewcode-block" id="CircDist.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.CircDist.forward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
-        <span class="n">ctx</span><span class="o">.</span><span class="n">save_for_backward</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">save_for_backward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">bernoulli</span><span class="o">.</span><span class="n">Bernoulli</span><span class="p">(</span>
             <span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
         <span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="CircDist.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold.CircDist.backward">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
-        <span class="p">(</span>
-            <span class="n">x</span><span class="p">,</span>
-            <span class="n">alpha</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="p">(</span><span class="n">x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">alpha</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">dy</span>
             <span class="o">*</span> <span class="p">(</span>
@@ -227,13 +227,13 @@
         <span class="k">return</span> <span class="n">heavi_tent_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;circ&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">heavi_circ_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;logistic&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">logistic_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;heavi_erfc&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">heavi_erfc_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Attempted to apply threshold function </span><span class="si">{method}</span><span class="s2">, but no such &quot;</span>
             <span class="o">+</span> <span class="s2">&quot;function exist. We currently support heaviside, super, &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;tanh, tent, circ, and logistic.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;tanh, tent, circ, and heavi_erfc.&quot;</span>
         <span class="p">)</span></div>
 
 

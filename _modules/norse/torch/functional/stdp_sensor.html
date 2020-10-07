@@ -77,7 +77,7 @@
     <span class="n">state</span><span class="p">:</span> <span class="n">STDPSensorState</span><span class="p">,</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">STDPSensorParameters</span> <span class="o">=</span> <span class="n">STDPSensorParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">STDPSensorState</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">STDPSensorState</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Event driven STDP rule.</span>
 
 <span class="sd">    Parameters:</span>
@@ -96,8 +96,7 @@
     <span class="n">a_pre_new</span> <span class="o">=</span> <span class="n">a_pre_decayed</span> <span class="o">+</span> <span class="n">z_pre</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_p</span>
     <span class="n">a_post_new</span> <span class="o">=</span> <span class="n">a_post_decayed</span> <span class="o">+</span> <span class="n">z_post</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_m</span>
 
-    <span class="n">dw</span> <span class="o">=</span> <span class="n">z_pre</span> <span class="o">*</span> <span class="n">a_pre_new</span> <span class="o">+</span> <span class="n">z_post</span> <span class="o">*</span> <span class="n">a_post_new</span>
-    <span class="k">return</span> <span class="n">dw</span><span class="p">,</span> <span class="n">STDPSensorState</span><span class="p">(</span><span class="n">a_pre_new</span><span class="p">,</span> <span class="n">a_post_new</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">STDPSensorState</span><span class="p">(</span><span class="n">a_pre_new</span><span class="p">,</span> <span class="n">a_post_new</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
