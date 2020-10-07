@@ -38,7 +38,7 @@ def stdp_sensor_step(
     state: STDPSensorState,
     p: STDPSensorParameters = STDPSensorParameters(),
     dt: float = 0.001,
-) -> Tuple[torch.Tensor, STDPSensorState]:
+) -> STDPSensorState:
     """Event driven STDP rule.
 
     Parameters:
@@ -57,5 +57,4 @@ def stdp_sensor_step(
     a_pre_new = a_pre_decayed + z_pre * p.eta_p
     a_post_new = a_post_decayed + z_post * p.eta_m
 
-    dw = z_pre * a_pre_new + z_post * a_post_new
-    return dw, STDPSensorState(a_pre_new, a_post_new)
+    return STDPSensorState(a_pre_new, a_post_new)
