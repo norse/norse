@@ -15,18 +15,24 @@ class STDPState:
         t_pre (torch.Tensor): presynaptic spike trace
         t_post (torch.Tensor): postsynaptic spike trace
     """
+
     def __init__(self, t_pre, t_post):
         self.t_pre = t_pre
         self.t_post = t_post
 
-    def decay(self,
-        z_pre, z_post,
-        tau_pre_inv, tau_post_inv,
-        a_pre, a_post,
+    def decay(
+        self,
+        z_pre,
+        z_post,
+        tau_pre_inv,
+        tau_post_inv,
+        a_pre,
+        a_post,
         dt,
     ):
-        self.t_pre +=  ( dt * tau_pre_inv  * (-self.t_pre  + a_pre*z_pre  ) )
-        self.t_post += ( dt * tau_post_inv * (-self.t_post + a_post*z_post) )
+        self.t_pre += dt * tau_pre_inv * (-self.t_pre + a_pre * z_pre)
+        self.t_post += dt * tau_post_inv * (-self.t_post + a_post * z_post)
+
 
 # STDP parameters class
 class STDPParameters:
@@ -48,20 +54,24 @@ class STDPParameters:
         padding (int): Padding for convolution
         dilation (int): Dilation for convolution
     """
-    def __init__(self,
-        a_pre = torch.as_tensor(1.0),
-        a_post = torch.as_tensor(1.0),
-        tau_pre_inv = torch.as_tensor(1.0 / 50e-3),
-        tau_post_inv = torch.as_tensor(1.0 / 50e-3),
-        w_min = 0.0,
-        w_max = 1.0,
-        eta_plus = 1e-3,
-        eta_minus = 1e-3,
-        stdp_algorithm = "additive",
-        mu = 0.0,
-        hardbound = True,
-        convolutional = False,
-        stride = 1, padding = 0, dilation = 1,
+
+    def __init__(
+        self,
+        a_pre=torch.as_tensor(1.0),
+        a_post=torch.as_tensor(1.0),
+        tau_pre_inv=torch.as_tensor(1.0 / 50e-3),
+        tau_post_inv=torch.as_tensor(1.0 / 50e-3),
+        w_min=0.0,
+        w_max=1.0,
+        eta_plus=1e-3,
+        eta_minus=1e-3,
+        stdp_algorithm="additive",
+        mu=0.0,
+        hardbound=True,
+        convolutional=False,
+        stride=1,
+        padding=0,
+        dilation=1,
     ):
         self.a_pre = a_pre
         self.a_post = a_post
@@ -73,26 +83,30 @@ class STDPParameters:
         self.eta_minus = eta_minus
         self.stdp_algorithm = stdp_algorithm
 
-        if (self.stdp_algorithm == "additive"):
+        if self.stdp_algorithm == "additive":
             self.mu = torch.tensor(0.0)
             self.A_plus = lambda w: self.eta_plus
             self.A_minus = lambda w: self.eta_minus
-        elif (self.stdp_algorithm == "additive_step"):
+        elif self.stdp_algorithm == "additive_step":
             self.mu = torch.tensor(0.0)
-            self.A_plus = lambda w: self.eta_plus*heaviside(self.w_max - w)
-            self.A_minus = lambda w: self.eta_minus*heaviside(w - self.w_min)
-        elif (self.stdp_algorithm == "multiplicative_pow"):
+            self.A_plus = lambda w: self.eta_plus * heaviside(self.w_max - w)
+            self.A_minus = lambda w: self.eta_minus * heaviside(w - self.w_min)
+        elif self.stdp_algorithm == "multiplicative_pow":
             self.mu = torch.tensor(mu)
-            self.A_plus = lambda w: self.eta_plus*exponentiate(self.w_max - w, self.mu)
-            self.A_minus = lambda w: self.eta_minus*exponentiate(w - self.w_min, self.mu)
-        elif (self.stdp_algorithm == "multiplicative_relu"):
+            self.A_plus = lambda w: self.eta_plus * exponentiate(
+                self.w_max - w, self.mu
+            )
+            self.A_minus = lambda w: self.eta_minus * exponentiate(
+                w - self.w_min, self.mu
+            )
+        elif self.stdp_algorithm == "multiplicative_relu":
             self.mu = torch.tensor(1.0)
-            self.A_plus = lambda w: self.eta_plus*relu(self.w_max - w)
-            self.A_minus = lambda w: self.eta_minus*relu(w - self.w_min)
+            self.A_plus = lambda w: self.eta_plus * relu(self.w_max - w)
+            self.A_minus = lambda w: self.eta_minus * relu(w - self.w_min)
 
         # Hard bounds
         self.hardbound = hardbound
-        if (self.hardbound):
+        if self.hardbound:
             self.bounding_func = lambda w: clamp(w, w_min, w_max)
         else:
             self.bounding_func = lambda w: w
@@ -104,6 +118,7 @@ class STDPParameters:
             self.padding = padding
             self.dilation = dilation
 
+
 # %% Linear stepper
 def lif_linear_stdp_step(
     z_pre: torch.Tensor,
@@ -113,8 +128,7 @@ def lif_linear_stdp_step(
     state_stdp: STDPState = STDPState,
     p_stdp: STDPParameters = STDPParameters(),
     dt: float = 0.001,
-) -> Tuple[ torch.Tensor, LIFFeedForwardState,
-            torch.Tensor, STDPState ]:
+) -> Tuple[torch.Tensor, LIFFeedForwardState, torch.Tensor, STDPState]:
     """STDP step for a FF LIF layer.
     Input:
         z_pre (torch.tensor): Presynaptic activity z: {0,1} -> {no spike, spike}
@@ -133,36 +147,34 @@ def lif_linear_stdp_step(
 
     # Update post-synaptic layer
     z_post, state_post = lif_feed_forward_step(
-        torch.nn.functional.linear(z_pre, w), # Integrate into LIF FF class
-        state_post, p_post, dt
+        torch.nn.functional.linear(z_pre, w),  # Integrate into LIF FF class
+        state_post,
+        p_post,
+        dt,
     )
 
     # Update STDP traces
     state_stdp.decay(
-        z_pre,z_post,
-        p_stdp.tau_pre_inv,p_stdp.tau_post_inv,
-        p_stdp.a_pre, p_stdp.a_post,
-        dt
+        z_pre,
+        z_post,
+        p_stdp.tau_pre_inv,
+        p_stdp.tau_post_inv,
+        p_stdp.a_pre,
+        p_stdp.a_post,
+        dt,
     )
 
     # STDP weight update
-    dw_plus = p_stdp.A_plus(w) * torch.einsum(
-        'bi,bj->ij',
-        z_post, state_stdp.t_pre
-    )
-    dw_minus = p_stdp.A_minus(w) * torch.einsum(
-        'bi,bj->ij',
-        state_stdp.t_post, z_pre
-    )
+    dw_plus = p_stdp.A_plus(w) * torch.einsum("bi,bj->ij", z_post, state_stdp.t_pre)
+    dw_minus = p_stdp.A_minus(w) * torch.einsum("bi,bj->ij", state_stdp.t_post, z_pre)
 
-    w += (dw_plus - dw_minus)
+    w += dw_plus - dw_minus
 
     # Bound checking
     w = p_stdp.bounding_func(w)
 
-    return (z_post, state_post,
-            w, state_stdp
-    )
+    return (z_post, state_post, w, state_stdp)
+
 
 # %% Conv2D stepper
 def lif_conv2d_stdp_step(
@@ -173,8 +185,7 @@ def lif_conv2d_stdp_step(
     state_stdp: STDPState = STDPState,
     p_stdp: STDPParameters = STDPParameters(),
     dt: float = 0.001,
-) -> Tuple[ torch.Tensor, LIFFeedForwardState,
-            torch.Tensor, STDPState ]:
+) -> Tuple[torch.Tensor, LIFFeedForwardState, torch.Tensor, STDPState]:
     """STDP step for a conv2d LIF layer.
     Input:
         z_pre (torch.tensor): Presynaptic activity z: {0,1} -> {no spike, spike}
@@ -194,20 +205,26 @@ def lif_conv2d_stdp_step(
     # Update post-synaptic layer
     z_post, state_post = lif_feed_forward_step(
         torch.nn.functional.conv2d(
-                z_pre, w,
-                stride = p_stdp.stride,
-                padding = p_stdp.padding,
-                dilation = p_stdp.dilation,
-            ), # Integrate into LIF FF class
-        state_post, p_post, dt
+            z_pre,
+            w,
+            stride=p_stdp.stride,
+            padding=p_stdp.padding,
+            dilation=p_stdp.dilation,
+        ),  # Integrate into LIF FF class
+        state_post,
+        p_post,
+        dt,
     )
 
     # Update STDP traces
     state_stdp.decay(
-        z_pre,z_post,
-        p_stdp.tau_pre_inv,p_stdp.tau_post_inv,
-        p_stdp.a_pre,p_stdp.a_post,
-        dt
+        z_pre,
+        z_post,
+        p_stdp.tau_pre_inv,
+        p_stdp.tau_post_inv,
+        p_stdp.a_pre,
+        p_stdp.a_post,
+        dt,
     )
 
     # Unfolding the convolution
@@ -219,36 +236,41 @@ def lif_conv2d_stdp_step(
     state_stdp_t_pre_uf = torch.nn.functional.unfold(
         state_stdp.t_pre,
         (kernel_h, kernel_w),
-        dilation = p_stdp.dilation,
-        padding = p_stdp.padding,
-        stride = p_stdp.stride,
+        dilation=p_stdp.dilation,
+        padding=p_stdp.padding,
+        stride=p_stdp.stride,
     )
     # Unfold presynaptic receptive fields
     z_pre_uf = torch.nn.functional.unfold(
         z_pre,
         (kernel_h, kernel_w),
-        dilation = p_stdp.dilation,
-        padding = p_stdp.padding,
-        stride = p_stdp.stride,
+        dilation=p_stdp.dilation,
+        padding=p_stdp.padding,
+        stride=p_stdp.stride,
     )
 
     # STDP weight update
-    dw_plus = p_stdp.A_plus(w) * torch.einsum(
-        'bik,bjk->ij',
-        z_post.view(batch_size, out_channels, -1),
-        state_stdp_t_pre_uf,
-    ).view(w.shape)
+    dw_plus = (
+        p_stdp.A_plus(w)
+        * torch.einsum(
+            "bik,bjk->ij",
+            z_post.view(batch_size, out_channels, -1),
+            state_stdp_t_pre_uf,
+        ).view(w.shape)
+    )
 
-    dw_minus = p_stdp.A_minus(w) * torch.einsum(
-        'bik,bjk->ij',
-        state_stdp.t_post.view(batch_size, out_channels, -1), z_pre_uf,
-    ).view(w.shape)
+    dw_minus = (
+        p_stdp.A_minus(w)
+        * torch.einsum(
+            "bik,bjk->ij",
+            state_stdp.t_post.view(batch_size, out_channels, -1),
+            z_pre_uf,
+        ).view(w.shape)
+    )
 
-    w += (dw_plus - dw_minus)
+    w += dw_plus - dw_minus
 
     # Bound checking
     w = p_stdp.bounding_func(w)
 
-    return (z_post, state_post,
-            w, state_stdp
-    )
+    return (z_post, state_post, w, state_stdp)
