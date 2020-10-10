@@ -9,7 +9,7 @@ from .lif import LIFFeedForwardState, LIFParameters, lif_feed_forward_step
 
 
 # STDP state class
-class STDPState:    
+class STDPState:
     """State of spike-timing-dependent plasticity (STDP)
     Parameters:
         t_pre (torch.Tensor): presynaptic spike trace
@@ -57,7 +57,7 @@ class STDPParameters:
         w_max = 1.0,
         eta_plus = 1e-3,
         eta_minus = 1e-3,
-        stdp_algorithm = "additive", 
+        stdp_algorithm = "additive",
         mu = 0.0,
         hardbound = True,
         convolutional = False,
@@ -72,7 +72,7 @@ class STDPParameters:
         self.eta_plus = eta_plus
         self.eta_minus = eta_minus
         self.stdp_algorithm = stdp_algorithm
-      
+
         if (self.stdp_algorithm == "additive"):
             self.mu = torch.tensor(0.0)
             self.A_plus = lambda w: self.eta_plus
@@ -113,7 +113,7 @@ def lif_linear_stdp_step(
     state_stdp: STDPState = STDPState,
     p_stdp: STDPParameters = STDPParameters(),
     dt: float = 0.001,
-) -> Tuple[ torch.Tensor, LIFFeedForwardState, 
+) -> Tuple[ torch.Tensor, LIFFeedForwardState,
             torch.Tensor, STDPState ]:
     """STDP step for a FF LIF layer.
     Input:

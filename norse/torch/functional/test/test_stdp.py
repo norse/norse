@@ -28,7 +28,7 @@ def test_linear_stdp_stepper(bounds = False):
     z_pre = (torch.rand((time, n_batches, pre)) > 0.1).float()
 
     # Post synaptic state + parameters
-    state_post0 = LIFFeedForwardState( 
+    state_post0 = LIFFeedForwardState(
         v = torch.zeros(n_batches,post),
         i = torch.zeros(n_batches,post),
     )
@@ -55,7 +55,7 @@ def test_linear_stdp_stepper(bounds = False):
     state_stdp = copy.deepcopy(state_stdp0)
     w = copy.deepcopy(w0)
     for i in range(time):
-        z_post, state_post, w, state_stdp = lif_linear_stdp_step(
+        _, state_post, w, state_stdp = lif_linear_stdp_step(
                                                 z_pre[i], w,
                                                 state_post, p_post,
                                                 state_stdp, p_stdp)
@@ -73,7 +73,7 @@ def test_linear_stdp_stepper(bounds = False):
     state_stdp = copy.deepcopy(state_stdp0)
     w = copy.deepcopy(w0)
     for i in range(time):
-        z_post, state_post, w, state_stdp = lif_linear_stdp_step(
+        _, state_post, w, state_stdp = lif_linear_stdp_step(
                                                 z_pre[i], w,
                                                 state_post, p_post,
                                                 state_stdp, p_stdp)
@@ -91,7 +91,7 @@ def test_linear_stdp_stepper(bounds = False):
     state_stdp = copy.deepcopy(state_stdp0)
     w = copy.deepcopy(w0)
     for i in range(time):
-        z_post, state_post, w, state_stdp = lif_linear_stdp_step(
+        _, state_post, w, state_stdp = lif_linear_stdp_step(
                                                 z_pre[i], w,
                                                 state_post, p_post,
                                                 state_stdp, p_stdp)
@@ -109,7 +109,7 @@ def test_linear_stdp_stepper(bounds = False):
     state_stdp = copy.deepcopy(state_stdp0)
     w = copy.deepcopy(w0)
     for i in range(time):
-        z_post, state_post, w, state_stdp = lif_linear_stdp_step(
+        _, state_post, w, state_stdp = lif_linear_stdp_step(
                                                 z_pre[i], w,
                                                 state_post, p_post,
                                                 state_stdp, p_stdp)
