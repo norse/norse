@@ -1,5 +1,5 @@
 # adapted from https://github.com/pytorch/vision/blob/master/torchvision/models/vgg.py
-# licensed under BSD 3-Clause License, see LICENSE.vgg for license details
+# licensed under BSD 3-Clause License, see LICENSE.torchvision for license details
 
 import torch
 import torch.nn as nn
