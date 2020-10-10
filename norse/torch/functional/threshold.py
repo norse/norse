@@ -7,7 +7,7 @@ from .heaviside import heaviside
 
 if getattr(norse, "IS_OPS_LOADED"):
     superspike_fn = torch.ops.norse_op.superfun
-else:
+else:  #  pragma: no cover
     from .superspike import super_fn
 
     superspike_fn = super_fn

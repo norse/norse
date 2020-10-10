@@ -38,6 +38,16 @@ def test_vgg11_bn():
     assert isinstance(model, vgg.VGG)
 
 
+def test_vgg13():
+    model = vgg.vgg13()
+    assert isinstance(model, vgg.VGG)
+
+
+def test_vgg13_bn():
+    model = vgg.vgg13_bn()
+    assert isinstance(model, vgg.VGG)
+
+
 def test_vgg16():
     model = vgg.vgg16()
     assert isinstance(model, vgg.VGG)
@@ -56,8 +66,3 @@ def test_vgg19():
 def test_vgg19_bn():
     model = vgg.vgg19_bn()
     assert isinstance(model, vgg.VGG)
-
-
-if __name__ == "__main__":
-    test_vgg11_forward()
-    test_vgg11_forward_pretrained()

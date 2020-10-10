@@ -28,6 +28,21 @@ def test_encode_population():
     assert torch.allclose(actual, expected)
 
 
+def test_encode_population_scale():
+    data = torch.as_tensor([0, 0.5, 1])
+    out_features = 3
+    scale = data.max()
+    actual = population_encode(data, out_features, scale=scale)
+    expected = torch.as_tensor(
+        [
+            [1.0000, 0.8824969, 0.6065307],
+            [0.8824969, 1.0000, 0.8824969],
+            [0.6065307, 0.8824969, 1.0000],
+        ]
+    )
+    assert torch.allclose(actual, expected)
+
+
 def test_encode_population_batch():
     data = torch.as_tensor([[0, 0, 0], [0.5, 0.5, 0.5], [1, 1, 1]])
     out_features = 3
