@@ -165,7 +165,7 @@ def _lif_feed_forward_step_jit(
     state: LIFFeedForwardState,
     p: LIFParametersJIT,
     dt: float = 0.001,
-) -> Tuple[torch.Tensor, LIFFeedForwardState]:
+) -> Tuple[torch.Tensor, LIFFeedForwardState]:  # pragma: no cover
     # compute voltage updates
     dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
     v_decayed = state.v + dv

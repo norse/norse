@@ -53,6 +53,14 @@ def test_lif_cell_sequence():
     assert z.shape == (10, 1)
 
 
+def test_lif_cell_repr():
+    cell = LIFCell(8, 6)
+    assert (
+        str(cell)
+        == "LIFCell(8, 6, p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0., requires_grad=True), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=tensor(0.)), dt=0.001)"
+    )
+
+
 def test_lif_feedforward_cell():
     layer = LIFFeedForwardCell()
     data = torch.randn(5, 4)

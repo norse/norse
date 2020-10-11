@@ -13,7 +13,7 @@ model_urls = {
 }
 
 
-def _make_divisible(v, divisor, min_value=None):
+def _make_divisible(v, divisor):
     """
     This function is taken from the original tf repo.
     It ensures that all layers have a channel number that is divisible by 8
@@ -21,11 +21,11 @@ def _make_divisible(v, divisor, min_value=None):
     https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet/mobilenet.py
     :param v:
     :param divisor:
-    :param min_value:
+
     :return:
     """
-    if min_value is None:
-        min_value = divisor
+    min_value = divisor
+
     new_v = max(min_value, int(v + divisor / 2) // divisor * divisor)
     # Make sure that round down does not go down by more than 10%.
     if new_v < 0.9 * v:
@@ -35,11 +35,10 @@ def _make_divisible(v, divisor, min_value=None):
 
 class ConvBNReLU(nn.Sequential):
     def __init__(
-        self, in_planes, out_planes, kernel_size=3, stride=1, groups=1, norm_layer=None
+        self, in_planes, out_planes, norm_layer, kernel_size=3, stride=1, groups=1
     ):
         padding = (kernel_size - 1) // 2
-        if norm_layer is None:
-            norm_layer = nn.BatchNorm2d
+
         super(ConvBNReLU, self).__init__(
             Lift(
                 nn.Conv2d(
@@ -58,13 +57,10 @@ class ConvBNReLU(nn.Sequential):
 
 
 class InvertedResidual(nn.Module):
-    def __init__(self, inp, oup, stride, expand_ratio, norm_layer=None):
+    def __init__(self, inp, oup, stride, expand_ratio, norm_layer):
         super(InvertedResidual, self).__init__()
         self.stride = stride
         assert stride in [1, 2]
-
-        if norm_layer is None:
-            norm_layer = nn.BatchNorm2d
 
         hidden_dim = int(round(inp * expand_ratio))
         self.use_res_connect = self.stride == 1 and inp == oup
@@ -195,8 +191,7 @@ class MobileNetV2(nn.Module):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode="fan_out")
-                if m.bias is not None:
-                    nn.init.zeros_(m.bias)
+                assert m.bias is None
             elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
                 nn.init.ones_(m.weight)
                 nn.init.zeros_(m.bias)

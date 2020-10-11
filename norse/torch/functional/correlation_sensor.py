@@ -10,7 +10,9 @@ from .heaviside import heaviside
 def pre_mask(weights, z):
     """Computes the mask produced by the pre-synaptic spikes on
     the synapse array."""
-    return torch.transpose(torch.transpose(torch.zeros_like(weights), 1, 2) + z, 1, 2)
+    return torch.transpose(
+        torch.transpose(torch.zeros_like(weights), 1, 2) + z, 1, 2
+    )  # pragma: no cover
 
 
 @torch.jit.script
@@ -18,13 +20,13 @@ def post_mask(weights, z):
     """Computes the mask produced by post-synaptic spikes on
     the synapse array.
     """
-    return torch.zeros_like(weights) + z
+    return torch.zeros_like(weights) + z  # pragma: no cover
 
 
 @torch.jit.script
 def post_pre_update(post_pre, post_spike_mask, pre_spike_mask):
     """Computes which synapses in the synapse array should be updated."""
-    return heaviside(post_pre + post_spike_mask - pre_spike_mask)
+    return heaviside(post_pre + post_spike_mask - pre_spike_mask)  # pragma: no cover
 
 
 class CorrelationSensorParameters(NamedTuple):

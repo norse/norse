@@ -33,15 +33,25 @@ def test_cell_backward():
 
 def test_li_feedforward_cell():
     layer = LIFeedForwardCell((2, 4))
-    data = torch.randn(10, 2, 4)  # 10 timesteps
+    data = torch.randn(10, 2, 4)
     out, _ = layer(data)
 
     assert out.shape == (10, 2, 4)
 
 
+def test_li_feedforward_cell_state():
+    layer = LIFeedForwardCell((2, 4))
+    data = torch.randn(2, 4)
+    out, s = layer(data, LIState(torch.ones(2, 4), torch.ones(2, 4)))
+
+    for x in s:
+        assert x.shape == (2, 4)
+    assert out.shape == (2, 4)
+
+
 def test_ff_backward():
     model = LIFeedForwardCell((12, 1))
-    data = torch.ones(10, 12, 1)  # 10 timesteps
+    data = torch.ones(10, 12, 1)
     out, _ = model(data)
     loss = out.sum()
     loss.backward()
