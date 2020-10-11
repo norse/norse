@@ -49,7 +49,9 @@
 <span class="k">def</span> <span class="nf">pre_mask</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Computes the mask produced by the pre-synaptic spikes on</span>
 <span class="sd">    the synapse array.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+    <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
 
 <span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">script</span>
@@ -57,13 +59,13 @@
     <span class="sd">&quot;&quot;&quot;Computes the mask produced by post-synaptic spikes on</span>
 <span class="sd">    the synapse array.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span>  <span class="c1"># pragma: no cover</span>
 
 
 <span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">script</span>
 <span class="k">def</span> <span class="nf">post_pre_update</span><span class="p">(</span><span class="n">post_pre</span><span class="p">,</span> <span class="n">post_spike_mask</span><span class="p">,</span> <span class="n">pre_spike_mask</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Computes which synapses in the synapse array should be updated.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">post_pre</span> <span class="o">+</span> <span class="n">post_spike_mask</span> <span class="o">-</span> <span class="n">pre_spike_mask</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">post_pre</span> <span class="o">+</span> <span class="n">post_spike_mask</span> <span class="o">-</span> <span class="n">pre_spike_mask</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
 
 <div class="viewcode-block" id="CorrelationSensorParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.correlation_sensor.html#norse.torch.functional.correlation_sensor.CorrelationSensorParameters">[docs]</a><span class="k">class</span> <span class="nc">CorrelationSensorParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>

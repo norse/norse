@@ -67,6 +67,21 @@
     <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="test_encode_population_scale"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_encode.html#norse.torch.functional.test.test_encode.test_encode_population_scale">[docs]</a><span class="k">def</span> <span class="nf">test_encode_population_scale</span><span class="p">():</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">out_features</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">actual</span> <span class="o">=</span> <span class="n">population_encode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">out_features</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="mf">1.0000</span><span class="p">,</span> <span class="mf">0.8824969</span><span class="p">,</span> <span class="mf">0.6065307</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.8824969</span><span class="p">,</span> <span class="mf">1.0000</span><span class="p">,</span> <span class="mf">0.8824969</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.6065307</span><span class="p">,</span> <span class="mf">0.8824969</span><span class="p">,</span> <span class="mf">1.0000</span><span class="p">],</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="test_encode_population_batch"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_encode.html#norse.torch.functional.test.test_encode.test_encode_population_batch">[docs]</a><span class="k">def</span> <span class="nf">test_encode_population_batch</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
     <span class="n">out_features</span> <span class="o">=</span> <span class="mi">3</span>

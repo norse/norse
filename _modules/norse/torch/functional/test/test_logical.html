@@ -39,7 +39,12 @@
   <h1>Source code for norse.torch.functional.test.test_logical</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.functional.logical</span> <span class="kn">import</span> <span class="n">logical_and</span><span class="p">,</span> <span class="n">logical_or</span><span class="p">,</span> <span class="n">logical_xor</span>
+<span class="kn">from</span> <span class="nn">norse.torch.functional.logical</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">logical_and</span><span class="p">,</span>
+    <span class="n">logical_or</span><span class="p">,</span>
+    <span class="n">logical_xor</span><span class="p">,</span>
+    <span class="n">muller_c</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.logical</span> <span class="kn">import</span> <span class="n">posedge_detector</span>
 
 
@@ -56,6 +61,15 @@
 <div class="viewcode-block" id="test_logical_xor"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_logical.html#norse.torch.functional.test.test_logical.test_logical_xor">[docs]</a><span class="k">def</span> <span class="nf">test_logical_xor</span><span class="p">():</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">logical_xor</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
     <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="test_muller_c"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_logical.html#norse.torch.functional.test.test_logical.test_muller_c">[docs]</a><span class="k">def</span> <span class="nf">test_muller_c</span><span class="p">():</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">muller_c</span><span class="p">(</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span></div>
 
 
 <div class="viewcode-block" id="test_posedge_detector"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_logical.html#norse.torch.functional.test.test_logical.test_posedge_detector">[docs]</a><span class="k">def</span> <span class="nf">test_posedge_detector</span><span class="p">():</span>
