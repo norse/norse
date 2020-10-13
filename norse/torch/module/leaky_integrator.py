@@ -29,26 +29,26 @@ class LICell(torch.nn.Module):
         i = i + w i_{\text{in}}
 
     Parameters:
-        input_features (int); Input feature dimension
-        output_features (int): Output feature dimension
+        input_size (int); Input feature dimension size
+        output_size (int): Output feature dimension size
         p (LIParameters): parameters of the leaky integrator
         dt (float): integration timestep to use
     """
 
     def __init__(
         self,
-        input_features: int,
-        output_features: int,
+        input_size: int,
+        output_size: int,
         p: LIParameters = LIParameters(),
         dt: float = 0.001,
     ):
         super(LICell, self).__init__()
         self.input_weights = torch.nn.Parameter(
-            torch.randn(output_features, input_features) / np.sqrt(input_features)
+            torch.randn(output_size, input_size) / np.sqrt(input_size)
         )
         self.p = p
         self.dt = dt
-        self.output_features = output_features
+        self.output_size = output_size
 
     def forward(
         self, input_tensor: torch.Tensor, state: Optional[LIState] = None
@@ -57,7 +57,7 @@ class LICell(torch.nn.Module):
             state = LIState(
                 v=self.p.v_leak,
                 i=torch.zeros(
-                    (input_tensor.shape[0], self.output_features),
+                    (input_tensor.shape[0], self.output_size),
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
@@ -90,16 +90,14 @@ class LIFeedForwardCell(torch.nn.Module):
         i = i + w i_{\text{in}}
 
     Parameters:
-        shape: Shape of the preprocessed input spikes
         p (LIParameters): parameters of the leaky integrator
         dt (float): integration timestep to use
     """
 
-    def __init__(self, shape, p: LIParameters = LIParameters(), dt: float = 0.001):
+    def __init__(self, p: LIParameters = LIParameters(), dt: float = 0.001):
         super(LIFeedForwardCell, self).__init__()
         self.p = p
         self.dt = dt
-        self.shape = shape
 
     def forward(
         self, input_tensor: torch.Tensor, state: Optional[LIState] = None
@@ -108,8 +106,7 @@ class LIFeedForwardCell(torch.nn.Module):
             state = LIState(
                 v=self.p.v_leak,
                 i=torch.zeros(
-                    input_tensor.shape[0],
-                    *self.shape,
+                    *input_tensor.shape,
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),

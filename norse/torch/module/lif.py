@@ -57,8 +57,8 @@ class LIFCell(torch.nn.Module):
 
     def __init__(
         self,
-        input_size,
-        hidden_size,
+        input_size: int,
+        hidden_size: int,
         p: LIFParameters = LIFParameters(),
         dt: float = 0.001,
     ):
@@ -188,7 +188,7 @@ class LIFFeedForwardCell(torch.nn.Module):
         if state is None:
             state = LIFFeedForwardState(
                 v=self.p.v_leak,
-                i=torch.zeros(x.shape, device=x.device, dtype=x.dtype),
+                i=torch.zeros(*x.shape, device=x.device, dtype=x.dtype),
             )
         return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
 
