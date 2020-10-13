@@ -58,8 +58,8 @@ class LIFAdExCell(torch.nn.Module):
 
     def __init__(
         self,
-        input_size,
-        hidden_size,
+        input_size: int,
+        hidden_size: int,
         p: LIFAdExParameters = LIFAdExParameters(),
         dt: float = 0.001,
     ):
@@ -172,28 +172,24 @@ class LIFAdExFeedForwardCell(torch.nn.Module):
     an arbitrary pytorch module (such as a convolution) to input spikes.
 
     Parameters:
-        shape: Shape of the feedforward state.
         p (LIFExParameters): Parameters of the LIFEx neuron model.
         dt (float): Time step to use.
 
     Examples:
 
         >>> batch_size = 16
-        >>> lif_ex = LIFExFeedForwardCell((20, 30))
+        >>> lif_ex = LIFExFeedForwardCell()
         >>> data = torch.randn(batch_size, 20, 30)
         >>> output, s0 = lif_ex(data)
     """
 
-    def __init__(
-        self, shape, p: LIFAdExParameters = LIFAdExParameters(), dt: float = 0.001
-    ):
+    def __init__(self, p: LIFAdExParameters = LIFAdExParameters(), dt: float = 0.001):
         super(LIFAdExFeedForwardCell, self).__init__()
-        self.shape = shape
         self.p = p
         self.dt = dt
 
     def extra_repr(self):
-        s = f"{self.shape}, p={self.p}, dt={self.dt}"
+        s = f"p={self.p}, dt={self.dt}"
         return s
 
     def forward(
@@ -203,14 +199,12 @@ class LIFAdExFeedForwardCell(torch.nn.Module):
             state = LIFAdExFeedForwardState(
                 v=self.p.v_leak,
                 i=torch.zeros(
-                    x.shape[0],
-                    *self.shape,
+                    *x.shape,
                     device=x.device,
                     dtype=x.dtype,
                 ),
                 a=torch.zeros(
-                    x.shape[0],
-                    *self.shape,
+                    *x.shape,
                     device=x.device,
                     dtype=x.dtype,
                 ),

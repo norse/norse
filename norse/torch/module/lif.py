@@ -42,8 +42,8 @@ class LIFCell(torch.nn.Module):
     recurrent and input spikes respectively.
 
     Parameters:
-        input_size (int): Size of the input.
-        hidden_size (int): Size of the hidden state.
+        input_size (int): Size of the input. Also known as the number of input features.
+        hidden_size (int): Size of the hidden state. Also known as the number of input features.
         p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
 

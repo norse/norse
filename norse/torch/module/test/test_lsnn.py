@@ -35,17 +35,16 @@ def test_lsnn_forward_shape_fail():
 
 
 def test_lsnn_ff_cell():
-    cell = LSNNFeedForwardCell((2, 1))
+    cell = LSNNFeedForwardCell()
     data = torch.ones(1, 2, 2)
     z, state = cell(data)
-    assert torch.equal(z, torch.zeros((1, 2, 1)))
+    assert torch.equal(z, torch.zeros((1, 2, 2)))
     z, state = cell(data, state)
-    with raises(AssertionError):
-        assert torch.equal(state.i, torch.zeros((1, 2)))
+    assert torch.equal(state.i, torch.ones((1, 2, 2)) * 1.8)
 
 
 def test_lsnn_cell_ff_backward():
-    cell = LSNNFeedForwardCell((2, 1))
+    cell = LSNNFeedForwardCell()
     data = torch.ones(1, 2, 2)
     z, _ = cell(data)
     z.sum().backward()

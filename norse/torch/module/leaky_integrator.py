@@ -29,8 +29,8 @@ class LICell(torch.nn.Module):
         i = i + w i_{\text{in}}
 
     Parameters:
-        input_size (int); Input feature dimension size
-        output_size (int): Output feature dimension size
+        input_size (int): Size of the input. Also known as the number of input features.
+        hidden_size (int): Size of the hidden state. Also known as the number of input features.
         p (LIParameters): parameters of the leaky integrator
         dt (float): integration timestep to use
     """

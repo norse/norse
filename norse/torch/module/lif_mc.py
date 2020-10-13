@@ -37,10 +37,8 @@ class LIFMCCell(torch.nn.Module):
 
 
     Parameters:
-        input (torch.Tensor): the input spikes at the current time step
-        s (LIFState): current state of the neuron
-        input_weights (torch.Tensor): synaptic weights for incoming spikes
-        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
+        input_size (int): Size of the input. Also known as the number of input features.
+        hidden_size (int): Size of the hidden state. Also known as the number of input features.
         g_coupling (torch.Tensor): conductances between the neuron compartments
         p (LIFParameters): neuron parameters
         dt (float): Integration timestep to use

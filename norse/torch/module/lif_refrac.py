@@ -48,10 +48,8 @@ class LIFRefracCell(torch.nn.Module):
     recurrent and input spikes respectively.
 
     Parameters:
-        input (torch.Tensor): the input spikes at the current time step
-        s (LIFRefracState): state at the current time step
-        input_weights (torch.Tensor): synaptic weights for incoming spikes
-        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
+        input_size (int): Size of the input. Also known as the number of input features.
+        hidden_size (int): Size of the hidden state. Also known as the number of input features.
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
 
@@ -65,8 +63,8 @@ class LIFRefracCell(torch.nn.Module):
 
     def __init__(
         self,
-        input_size,
-        hidden_size,
+        input_size: int,
+        hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
     ):
@@ -149,7 +147,6 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
         \\end{align*}
 
     Parameters:
-        shape: Shape of the processed spike input
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
 

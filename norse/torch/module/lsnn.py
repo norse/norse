@@ -43,30 +43,28 @@ class LSNNCell(torch.nn.Module):
     recurrent and input spikes respectively.
 
     Parameters:
-        input (torch.Tensor): the input spikes at the current time step
-        s (LSNNState): current state of the lsnn unit
-        input_weights (torch.Tensor): synaptic weights for input spikes
-        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes
+        input_size (int): Size of the input. Also known as the number of input features.
+        hidden_size (int): Size of the hidden state. Also known as the number of input features.
         p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use
     """
 
     def __init__(
         self,
-        input_features,
-        output_features,
+        input_size: int,
+        hidden_size: int,
         p: LSNNParameters = LSNNParameters(),
         dt: float = 0.001,
     ):
         super(LSNNCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
-            torch.randn(output_features, input_features) / np.sqrt(input_features)
+            torch.randn(hidden_size, input_size) / np.sqrt(input_size)
         )
         self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(output_features, output_features)
+            torch.randn(hidden_size, hidden_size)
         )
-        self.input_features = input_features
-        self.output_features = output_features
+        self.input_size = input_size
+        self.hidden_size = hidden_size
         self.p = p
         self.dt = dt
 
@@ -77,20 +75,20 @@ class LSNNCell(torch.nn.Module):
             state = LSNNState(
                 z=torch.zeros(
                     input_tensor.shape[0],
-                    self.output_features,
+                    self.hidden_size,
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
                 v=self.p.v_leak,
                 i=torch.zeros(
                     input_tensor.shape[0],
-                    self.output_features,
+                    self.hidden_size,
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
                 b=torch.zeros(
                     input_tensor.shape[0],
-                    self.output_features,
+                    self.hidden_size,
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
@@ -137,11 +135,11 @@ class LSNNLayer(torch.nn.Module):
         The function expects inputs in the shape (simulation time steps, batch size, ...).
 
         Parameters:
-        input_tensor (torch.Tensor): Input tensor with timesteps in the first dimension
-        state (Optional[LSNNState]): The input LSNN state. Defaults to None on the first timestep
+            input_tensor (torch.Tensor): Input tensor with timesteps in the first dimension
+            state (Optional[LSNNState]): The input LSNN state. Defaults to None on the first timestep
 
         Returns:
-        A tuple of 1) spikes from each timestep and 2) the LSNNState from the last timestep.
+            A tuple of 1) spikes from each timestep and 2) the LSNNState from the last timestep.
         """
         inputs = input_tensor.unbind(0)
         outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
@@ -177,15 +175,13 @@ class LSNNFeedForwardCell(torch.nn.Module):
         \end{align*}
 
     Parameters:
-        input (torch.Tensor): the input spikes at the current time step
         s (LSNNFeedForwardState): current state of the lsnn unit
         p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use
     """
 
-    def __init__(self, shape, p: LSNNParameters = LSNNParameters(), dt: float = 0.001):
+    def __init__(self, p: LSNNParameters = LSNNParameters(), dt: float = 0.001):
         super(LSNNFeedForwardCell, self).__init__()
-        self.shape = shape
         self.p = p
         self.dt = dt
 
@@ -196,14 +192,12 @@ class LSNNFeedForwardCell(torch.nn.Module):
             state = LSNNFeedForwardState(
                 v=self.p.v_leak,
                 i=torch.zeros(
-                    input_tensor.shape[0],
-                    *self.shape,
+                    *input_tensor.shape,
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
                 b=torch.zeros(
-                    input_tensor.shape[0],
-                    *self.shape,
+                    *input_tensor.shape,
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
