@@ -63,7 +63,7 @@ from .regularization import RegularizationCell
 from .sequential import SequentialState
 
 __all__ = [
-    "CobaLIFState",
+    "CobaLIFCell",
     "CobaLIFState",
     "CobaLIFParameters",
     "ConstantCurrentLIFEncoder",
