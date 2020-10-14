@@ -43,7 +43,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
 
 
-<div class="viewcode-block" id="LSNNParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNParameters">[docs]</a><span class="k">class</span> <span class="nc">LSNNParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LSNNParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LSNNParameters">[docs]</a><span class="k">class</span> <span class="nc">LSNNParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Parameters of an LSNN neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -70,7 +70,7 @@
     <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.0</span></div>
 
 
-<div class="viewcode-block" id="LSNNState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState">[docs]</a><span class="k">class</span> <span class="nc">LSNNState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LSNNState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LSNNState">[docs]</a><span class="k">class</span> <span class="nc">LSNNState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;State of an LSNN neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -86,7 +86,7 @@
     <span class="n">b</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
 
 
-<div class="viewcode-block" id="lsnn_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.lsnn_step">[docs]</a><span class="k">def</span> <span class="nf">lsnn_step</span><span class="p">(</span>
+<div class="viewcode-block" id="lsnn_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn_step">[docs]</a><span class="k">def</span> <span class="nf">lsnn_step</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LSNNState</span><span class="p">,</span>
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -157,7 +157,7 @@
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">,</span> <span class="n">b_new</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ada_lif_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.ada_lif_step">[docs]</a><span class="k">def</span> <span class="nf">ada_lif_step</span><span class="p">(</span>
+<div class="viewcode-block" id="ada_lif_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.ada_lif_step">[docs]</a><span class="k">def</span> <span class="nf">ada_lif_step</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LSNNState</span><span class="p">,</span>
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -215,7 +215,7 @@
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="LSNNFeedForwardState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">LSNNFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LSNNFeedForwardState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LSNNFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">LSNNFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Integration state kept for a lsnn module</span>
 
 <span class="sd">    Parameters:</span>
@@ -229,7 +229,7 @@
     <span class="n">b</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
 
 
-<div class="viewcode-block" id="lsnn_feed_forward_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.lsnn_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">lsnn_feed_forward_step</span><span class="p">(</span>
+<div class="viewcode-block" id="lsnn_feed_forward_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lsnn.html#norse.torch.functional.lsnn_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">lsnn_feed_forward_step</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LSNNFeedForwardState</span><span class="p">,</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>

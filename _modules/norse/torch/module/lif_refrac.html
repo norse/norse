@@ -52,7 +52,7 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="LIFRefracCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.lif_refrac.LIFRefracCell">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFRefracCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracCell">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a LIF</span>
 <span class="sd">    neuron-model with absolute refractory period. More specifically it</span>
 <span class="sd">    implements one integration step of the following ODE.</span>
@@ -120,7 +120,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
-<div class="viewcode-block" id="LIFRefracCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.lif_refrac.LIFRefracCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+<div class="viewcode-block" id="LIFRefracCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIFRefracState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -158,7 +158,7 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="LIFRefracFeedForwardCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.lif_refrac.LIFRefracFeedForwardCell">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracFeedForwardCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFRefracFeedForwardCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracFeedForwardCell">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracFeedForwardCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a</span>
 <span class="sd">    LIF neuron-model with absolute refractory period. More specifically</span>
 <span class="sd">    it implements one integration step of the following ODE.</span>
@@ -208,7 +208,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
-<div class="viewcode-block" id="LIFRefracFeedForwardCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.lif_refrac.LIFRefracFeedForwardCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+<div class="viewcode-block" id="LIFRefracFeedForwardCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracFeedForwardCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIFRefracFeedForwardState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>

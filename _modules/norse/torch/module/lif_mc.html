@@ -46,7 +46,7 @@
 <span class="kn">from</span> <span class="nn">..functional.lif_mc</span> <span class="kn">import</span> <span class="n">lif_mc_step</span>
 
 
-<div class="viewcode-block" id="LIFMCCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_mc.html#norse.torch.module.lif_mc.LIFMCCell">[docs]</a><span class="k">class</span> <span class="nc">LIFMCCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFMCCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_mc.html#norse.torch.module.LIFMCCell">[docs]</a><span class="k">class</span> <span class="nc">LIFMCCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes a single euler-integration step of a LIF multi-compartment</span>
 <span class="sd">    neuron-model.</span>
 
@@ -107,7 +107,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
-<div class="viewcode-block" id="LIFMCCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_mc.html#norse.torch.module.lif_mc.LIFMCCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+<div class="viewcode-block" id="LIFMCCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_mc.html#norse.torch.module.LIFMCCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIFState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

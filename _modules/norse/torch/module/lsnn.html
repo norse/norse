@@ -51,7 +51,7 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="LSNNCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.lsnn.LSNNCell">[docs]</a><span class="k">class</span> <span class="nc">LSNNCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LSNNCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNCell">[docs]</a><span class="k">class</span> <span class="nc">LSNNCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a LSNN</span>
 <span class="sd">    neuron-model. More specifically it implements one integration step of</span>
 <span class="sd">    the following ODE</span>
@@ -109,7 +109,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
-<div class="viewcode-block" id="LSNNCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.lsnn.LSNNCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+<div class="viewcode-block" id="LSNNCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LSNNState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -145,7 +145,7 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="LSNNLayer"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.lsnn.LSNNLayer">[docs]</a><span class="k">class</span> <span class="nc">LSNNLayer</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LSNNLayer"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNLayer">[docs]</a><span class="k">class</span> <span class="nc">LSNNLayer</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A Long short-term memory neuron module adapted from</span>
 <span class="sd">        https://arxiv.org/abs/1803.09574</span>
 
@@ -166,7 +166,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">LSNNLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">cell_kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LSNNLayer.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.lsnn.LSNNLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+<div class="viewcode-block" id="LSNNLayer.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LSNNState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -190,7 +190,7 @@
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span> <span class="n">state</span></div></div>
 
 
-<div class="viewcode-block" id="LSNNFeedForwardCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.lsnn.LSNNFeedForwardCell">[docs]</a><span class="k">class</span> <span class="nc">LSNNFeedForwardCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LSNNFeedForwardCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNFeedForwardCell">[docs]</a><span class="k">class</span> <span class="nc">LSNNFeedForwardCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Euler integration cell for LIF Neuron with threshold adaptation.</span>
 <span class="sd">    More specifically it implements one integration step of the following ODE</span>
 
@@ -228,7 +228,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
-<div class="viewcode-block" id="LSNNFeedForwardCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.lsnn.LSNNFeedForwardCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+<div class="viewcode-block" id="LSNNFeedForwardCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNFeedForwardCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LSNNFeedForwardState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNFeedForwardState</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

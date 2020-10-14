@@ -52,7 +52,7 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="RegularizationCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.regularization.html#norse.torch.module.regularization.RegularizationCell">[docs]</a><span class="k">class</span> <span class="nc">RegularizationCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="RegularizationCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.regularization.html#norse.torch.module.RegularizationCell">[docs]</a><span class="k">class</span> <span class="nc">RegularizationCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A regularisation cell that accumulates some state (for instance number of spikes)</span>
 <span class="sd">    for each forward step, which can later be applied to a loss term.</span>
@@ -80,7 +80,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">accumulator</span> <span class="o">=</span> <span class="n">accumulator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
 
-<div class="viewcode-block" id="RegularizationCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.regularization.html#norse.torch.module.regularization.RegularizationCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="RegularizationCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.regularization.html#norse.torch.module.RegularizationCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">regularize_step</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">accumulator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
         <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span></div></div>

@@ -46,7 +46,7 @@
 <span class="kn">from</span> <span class="nn">.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
 
 
-<div class="viewcode-block" id="LIFParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif.LIFParameters">[docs]</a><span class="k">class</span> <span class="nc">LIFParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LIFParameters">[docs]</a><span class="k">class</span> <span class="nc">LIFParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Parametrization of a LIF neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -80,7 +80,7 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="LIFState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState">[docs]</a><span class="k">class</span> <span class="nc">LIFState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LIFState">[docs]</a><span class="k">class</span> <span class="nc">LIFState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;State of a LIF neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -97,7 +97,7 @@
 <span class="n">default_bio_initial_state</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">v</span><span class="o">=-</span><span class="mf">65.0</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="LIFFeedForwardState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif.LIFFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">LIFFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFFeedForwardState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LIFFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">LIFFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;State of a feed forward LIF neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -109,7 +109,7 @@
     <span class="n">i</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
 
 
-<div class="viewcode-block" id="lif_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif.lif_step">[docs]</a><span class="k">def</span> <span class="nf">lif_step</span><span class="p">(</span>
+<div class="viewcode-block" id="lif_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif_step">[docs]</a><span class="k">def</span> <span class="nf">lif_step</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LIFState</span><span class="p">,</span>
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -173,7 +173,7 @@
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="LIFParametersJIT"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif.LIFParametersJIT">[docs]</a><span class="k">class</span> <span class="nc">LIFParametersJIT</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFParametersJIT"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.LIFParametersJIT">[docs]</a><span class="k">class</span> <span class="nc">LIFParametersJIT</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Parametrization of a LIF neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -223,7 +223,7 @@
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="lif_feed_forward_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif.lif_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">lif_feed_forward_step</span><span class="p">(</span>
+<div class="viewcode-block" id="lif_feed_forward_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">lif_feed_forward_step</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span> <span class="o">=</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(</span>
@@ -282,7 +282,7 @@
     <span class="k">return</span> <span class="n">_lif_feed_forward_step_jit</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">jit_params</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="lif_current_encoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif.lif_current_encoder">[docs]</a><span class="k">def</span> <span class="nf">lif_current_encoder</span><span class="p">(</span>
+<div class="viewcode-block" id="lif_current_encoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif_current_encoder">[docs]</a><span class="k">def</span> <span class="nf">lif_current_encoder</span><span class="p">(</span>
     <span class="n">input_current</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">voltage</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>

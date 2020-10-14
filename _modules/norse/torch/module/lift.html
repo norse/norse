@@ -43,7 +43,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 
 
-<div class="viewcode-block" id="Lift"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lift.html#norse.torch.module.lift.Lift">[docs]</a><span class="k">class</span> <span class="nc">Lift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="Lift"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lift.html#norse.torch.module.Lift">[docs]</a><span class="k">class</span> <span class="nc">Lift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Lift applies a given torch.nn.Module over</span>
 <span class="sd">       a temporal sequence. In other words this module</span>
 <span class="sd">       applies the given torch.nn.Module N times, where N</span>
@@ -75,7 +75,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Lift</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lifted_module</span> <span class="o">=</span> <span class="n">module</span>
 
-<div class="viewcode-block" id="Lift.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lift.html#norse.torch.module.lift.Lift.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+<div class="viewcode-block" id="Lift.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lift.html#norse.torch.module.Lift.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Apply the module over the input along the 0-th (time) dimension</span>
