@@ -6,7 +6,7 @@ from typing import Union, Callable
 import torch
 
 from norse.torch.functional import lif
-import norse.torch.functional.encode as encode
+from norse.torch.functional import encode
 
 
 class ConstantCurrentLIFEncoder(torch.nn.Module):
