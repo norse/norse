@@ -5,4 +5,5 @@ network functionality.
 """
 
 from .functional import *
+from .models import *
 from .module import *

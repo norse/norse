@@ -13,8 +13,9 @@ import torchvision
 import numpy as np
 import matplotlib.pyplot as plt
 
-from norse.torch.models.conv import ConvNet, ConvNet4
-from norse.torch.module.if_current_encoder import IFConstantCurrentEncoder
+from norse.torch import LIFParameters
+from norse.torch import ConvNet, ConvNet4
+from norse.torch import ConstantCurrentLIFEncoder
 
 FLAGS = flags.FLAGS
 
@@ -262,8 +263,8 @@ def main(args):
 
     device = torch.device(FLAGS.device)
 
-    constant_current_encoder = IFConstantCurrentEncoder(
-        seq_length=FLAGS.seq_length, v_th=FLAGS.current_encoder_v_th
+    constant_current_encoder = ConstantCurrentLIFEncoder(
+        seq_length=FLAGS.seq_length, p=LIFParameters(v_th=FLAGS.current_encoder_v_th)
     )
 
     def polar_current_encoder(x):
