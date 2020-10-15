@@ -1,6 +1,6 @@
 import torch
 
-from norse.torch.module.lif import LIFFeedForwardLayer, LIFCell
+from norse.torch.module.lif import LIFFeedForwardLayer
 from norse.torch.module.lift import Lift
 
 
