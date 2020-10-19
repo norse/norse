@@ -4,6 +4,7 @@ Test for the stateful encoder module
 
 import torch
 
+from ..lif import LIFLayer
 from norse.torch.module.encode import (
     PopulationEncoder,
     ConstantCurrentLIFEncoder,
@@ -70,12 +71,36 @@ def test_spike_latency_lif_encoder():
     assert out.shape == torch.Size([seq_length, 10, 10])
 
 
+def test_spike_latency_lif_encoder_backward():
+    timesteps = 20
+    data = torch.randn(7, 5) + 10
+    encoder = SpikeLatencyLIFEncoder(timesteps)
+    layer = LIFLayer(5, 2)
+    encoded = encoder(data)
+    out, _ = layer(encoded)
+    out.sum().backward()
+
+
 def test_spike_latency_encode_max_spikes():
     encoder = torch.nn.Sequential(
         ConstantCurrentLIFEncoder(seq_length=128), SpikeLatencyEncoder()
     )
     spikes = encoder(1.1 * torch.ones(10))
     assert torch.sum(spikes).data == 10
+
+
+def test_spike_latency_encode_backward():
+    torch.autograd.set_detect_anomaly(True)
+    timesteps = 20
+    data = torch.randn(7, 5) + 10
+    encoder = torch.nn.Sequential(
+        ConstantCurrentLIFEncoder(seq_length=timesteps), SpikeLatencyEncoder()
+    )
+    layer = LIFLayer(5, 2)
+    encoded = encoder(data)
+    out, _ = layer(encoded)
+    out = out.sum()
+    out.backward()
 
 
 def test_spike_latency_encode_chain():
