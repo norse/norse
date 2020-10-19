@@ -89,13 +89,7 @@ class LIFCell(torch.nn.Module):
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
-                v=torch.ones(
-                    input_tensor.shape[0],
-                    self.hidden_size,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                )
-                * self.p.v_leak.detach(),
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(
                     input_tensor.shape[0],
                     self.hidden_size,
@@ -193,7 +187,7 @@ class LIFFeedForwardCell(torch.nn.Module):
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
         if state is None:
             state = LIFFeedForwardState(
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(*x.shape, device=x.device, dtype=x.dtype),
             )
         return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)

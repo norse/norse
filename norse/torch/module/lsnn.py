@@ -79,7 +79,7 @@ class LSNNCell(torch.nn.Module):
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(
                     input_tensor.shape[0],
                     self.hidden_size,
@@ -190,7 +190,7 @@ class LSNNFeedForwardCell(torch.nn.Module):
     ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
         if state is None:
             state = LSNNFeedForwardState(
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(
                     *input_tensor.shape,
                     device=input_tensor.device,

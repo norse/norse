@@ -88,7 +88,7 @@ class LIFExCell(torch.nn.Module):
                     dtype=input_tensor.dtype,
                     device=input_tensor.device,
                 ),
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(
                     input_tensor.shape[0],
                     self.hidden_size,
@@ -188,7 +188,7 @@ class LIFExFeedForwardCell(torch.nn.Module):
     ) -> Tuple[torch.Tensor, LIFExFeedForwardState]:
         if state is None:
             state = LIFExFeedForwardState(
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(*x.shape, device=x.device, dtype=x.dtype),
             )
             state.v.requires_grad = True

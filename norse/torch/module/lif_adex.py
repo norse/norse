@@ -90,7 +90,7 @@ class LIFAdExCell(torch.nn.Module):
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(
                     input_tensor.shape[0],
                     self.hidden_size,
@@ -197,7 +197,7 @@ class LIFAdExFeedForwardCell(torch.nn.Module):
     ) -> Tuple[torch.Tensor, LIFAdExFeedForwardState]:
         if state is None:
             state = LIFAdExFeedForwardState(
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(
                     *x.shape,
                     device=x.device,

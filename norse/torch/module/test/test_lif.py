@@ -71,6 +71,16 @@ def test_lif_feedforward_cell():
         assert x.shape == (5, 4)
 
 
+def test_lif_feedforward_cell_backward():
+    # Tests that gradient variables can be used in subsequent applications
+    cell = LIFFeedForwardCell()
+    data = torch.randn(5, 4)
+    out, s = cell(data)
+    out, _ = cell(out, s)
+    loss = out.sum()
+    loss.backward()
+
+
 def test_lif_feedforward_layer():
     layer = LIFFeedForwardLayer()
     data = torch.randn(10, 5, 4)

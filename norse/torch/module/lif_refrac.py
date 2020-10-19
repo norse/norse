@@ -91,7 +91,7 @@ class LIFRefracCell(torch.nn.Module):
                         device=input_tensor.device,
                         dtype=input_tensor.dtype,
                     ),
-                    v=self.p.lif.v_leak,
+                    v=self.p.lif.v_leak.detach(),
                     i=torch.zeros(
                         input_tensor.shape[0],
                         self.hidden_size,
@@ -174,7 +174,7 @@ class LIFRefracFeedForwardCell(torch.nn.Module):
         if state is None:
             state = LIFRefracFeedForwardState(
                 LIFFeedForwardState(
-                    v=self.p.lif.v_leak,
+                    v=self.p.lif.v_leak.detach(),
                     i=torch.zeros(
                         input_tensor.shape,
                         device=input_tensor.device,

@@ -77,7 +77,7 @@ class LIFMCCell(torch.nn.Module):
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
-                v=self.p.v_leak
+                v=self.p.v_leak.detach()
                 * torch.ones(
                     input_tensor.shape[0],
                     self.hidden_size,

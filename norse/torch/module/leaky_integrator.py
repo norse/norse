@@ -55,7 +55,7 @@ class LICell(torch.nn.Module):
     ) -> Tuple[torch.Tensor, LIState]:
         if state is None:
             state = LIState(
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(
                     (input_tensor.shape[0], self.output_size),
                     device=input_tensor.device,
@@ -104,7 +104,7 @@ class LIFeedForwardCell(torch.nn.Module):
     ) -> Tuple[torch.Tensor, LIState]:
         if state is None:
             state = LIState(
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(
                     *input_tensor.shape,
                     device=input_tensor.device,

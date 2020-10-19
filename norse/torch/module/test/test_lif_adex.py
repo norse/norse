@@ -20,7 +20,7 @@ def test_lif_adex_repr():
     cell = LIFAdExCell(2, 4)
     assert (
         str(cell)
-        == "LIFAdExCell(2, 4, p=LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0., requires_grad=True), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=0.0), dt=0.001)"
+        == "LIFAdExCell(2, 4, p=LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=0.0), dt=0.001)"
     )
 
 
@@ -70,7 +70,7 @@ def test_lif_adex_feedforward_repr():
     cell = LIFAdExFeedForwardCell()
     assert (
         str(cell)
-        == "LIFAdExFeedForwardCell(p=LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0., requires_grad=True), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=0.0), dt=0.001)"
+        == "LIFAdExFeedForwardCell(p=LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=0.0), dt=0.001)"
     )
 
 

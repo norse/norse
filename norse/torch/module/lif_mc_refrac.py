@@ -42,7 +42,7 @@ class LIFMCRefracCell(torch.nn.Module):
                         device=input_tensor.device,
                         dtype=input_tensor.dtype,
                     ),
-                    v=self.p.lif.v_leak
+                    v=self.p.lif.v_leak.detach()
                     * torch.ones(
                         input_tensor.shape[0],
                         self.hidden_size,
