@@ -87,10 +87,8 @@
 <span class="sd">    recurrent and input spikes respectively.</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
-<span class="sd">        s (LIFRefracState): state at the current time step</span>
-<span class="sd">        input_weights (torch.Tensor): synaptic weights for incoming spikes</span>
-<span class="sd">        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes</span>
+<span class="sd">        input_size (int): Size of the input. Also known as the number of input features.</span>
+<span class="sd">        hidden_size (int): Size of the hidden state. Also known as the number of input features.</span>
 <span class="sd">        p (LIFRefracParameters): parameters of the lif neuron</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
 
@@ -104,8 +102,8 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">input_size</span><span class="p">,</span>
-        <span class="n">hidden_size</span><span class="p">,</span>
+        <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
     <span class="p">):</span>
@@ -132,7 +130,7 @@
                         <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                         <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                     <span class="p">),</span>
-                    <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="p">,</span>
+                    <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
                     <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                         <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
@@ -188,7 +186,6 @@
 <span class="sd">        \\end{align*}</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        shape: Shape of the processed spike input</span>
 <span class="sd">        p (LIFRefracParameters): parameters of the lif neuron</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
 
@@ -216,7 +213,7 @@
         <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracFeedForwardState</span><span class="p">(</span>
                 <span class="n">LIFFeedForwardState</span><span class="p">(</span>
-                    <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="p">,</span>
+                    <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
                     <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                         <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                         <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>

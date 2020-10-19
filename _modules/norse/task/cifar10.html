@@ -52,8 +52,9 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.models.conv</span> <span class="kn">import</span> <span class="n">ConvNet</span><span class="p">,</span> <span class="n">ConvNet4</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.if_current_encoder</span> <span class="kn">import</span> <span class="n">IFConstantCurrentEncoder</span>
+<span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">LIFParameters</span>
+<span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">ConvNet</span><span class="p">,</span> <span class="n">ConvNet4</span>
+<span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">ConstantCurrentLIFEncoder</span>
 
 <span class="n">FLAGS</span> <span class="o">=</span> <span class="n">flags</span><span class="o">.</span><span class="n">FLAGS</span>
 
@@ -301,8 +302,8 @@
 
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
-    <span class="n">constant_current_encoder</span> <span class="o">=</span> <span class="n">IFConstantCurrentEncoder</span><span class="p">(</span>
-        <span class="n">seq_length</span><span class="o">=</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">v_th</span><span class="o">=</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">current_encoder_v_th</span>
+    <span class="n">constant_current_encoder</span> <span class="o">=</span> <span class="n">ConstantCurrentLIFEncoder</span><span class="p">(</span>
+        <span class="n">seq_length</span><span class="o">=</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">LIFParameters</span><span class="p">(</span><span class="n">v_th</span><span class="o">=</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">current_encoder_v_th</span><span class="p">)</span>
     <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">polar_current_encoder</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>

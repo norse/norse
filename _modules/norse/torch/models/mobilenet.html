@@ -134,7 +134,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="MobileNetV2"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.mobilenet.html#norse.torch.models.mobilenet.MobileNetV2">[docs]</a><span class="k">class</span> <span class="nc">MobileNetV2</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="MobileNetV2"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.mobilenet.html#norse.torch.models.MobileNetV2">[docs]</a><span class="k">class</span> <span class="nc">MobileNetV2</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
@@ -248,11 +248,11 @@
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
 
-<div class="viewcode-block" id="MobileNetV2.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.mobilenet.html#norse.torch.models.mobilenet.MobileNetV2.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="MobileNetV2.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.mobilenet.html#norse.torch.models.MobileNetV2.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_impl</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="mobilenet_v2"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.mobilenet.html#norse.torch.models.mobilenet.mobilenet_v2">[docs]</a><span class="k">def</span> <span class="nf">mobilenet_v2</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="mobilenet_v2"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.mobilenet.html#norse.torch.models.mobilenet_v2">[docs]</a><span class="k">def</span> <span class="nf">mobilenet_v2</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Constructs a MobileNetV2 architecture from</span>
 <span class="sd">    `&quot;MobileNetV2: Inverted Residuals and Linear Bottlenecks&quot; &lt;https://arxiv.org/abs/1801.04381&gt;`_.</span>

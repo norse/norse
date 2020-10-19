@@ -76,10 +76,8 @@
 
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        input (torch.Tensor): the input spikes at the current time step</span>
-<span class="sd">        s (LIFState): current state of the neuron</span>
-<span class="sd">        input_weights (torch.Tensor): synaptic weights for incoming spikes</span>
-<span class="sd">        recurrent_weights (torch.Tensor): synaptic weights for recurrent spikes</span>
+<span class="sd">        input_size (int): Size of the input. Also known as the number of input features.</span>
+<span class="sd">        hidden_size (int): Size of the hidden state. Also known as the number of input features.</span>
 <span class="sd">        g_coupling (torch.Tensor): conductances between the neuron compartments</span>
 <span class="sd">        p (LIFParameters): neuron parameters</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
@@ -118,7 +116,7 @@
                     <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                 <span class="p">),</span>
-                <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span>
+                <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
                 <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
                     <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>

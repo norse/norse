@@ -71,7 +71,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="VGG"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.VGG">[docs]</a><span class="k">class</span> <span class="nc">VGG</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="VGG"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.VGG">[docs]</a><span class="k">class</span> <span class="nc">VGG</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">init_weights</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">VGG</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">features</span>
@@ -88,7 +88,7 @@
         <span class="k">if</span> <span class="n">init_weights</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_weights</span><span class="p">()</span>
 
-<div class="viewcode-block" id="VGG.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.VGG.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="VGG.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.VGG.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avgpool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -195,7 +195,7 @@
     <span class="k">return</span> <span class="n">model</span>
 
 
-<div class="viewcode-block" id="vgg11"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.vgg11">[docs]</a><span class="k">def</span> <span class="nf">vgg11</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="vgg11"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg11">[docs]</a><span class="k">def</span> <span class="nf">vgg11</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;VGG 11-layer model (configuration &quot;A&quot;) from</span>
 <span class="sd">    `&quot;Very Deep Convolutional Networks For Large-Scale Image Recognition&quot; &lt;https://arxiv.org/pdf/1409.1556.pdf&gt;`_</span>
 <span class="sd">    Args:</span>
@@ -205,7 +205,7 @@
     <span class="k">return</span> <span class="n">_vgg</span><span class="p">(</span><span class="s2">&quot;vgg11&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">pretrained</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vgg11_bn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.vgg11_bn">[docs]</a><span class="k">def</span> <span class="nf">vgg11_bn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="vgg11_bn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg11_bn">[docs]</a><span class="k">def</span> <span class="nf">vgg11_bn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;VGG 11-layer model (configuration &quot;A&quot;) with batch normalization</span>
 <span class="sd">    `&quot;Very Deep Convolutional Networks For Large-Scale Image Recognition&quot; &lt;https://arxiv.org/pdf/1409.1556.pdf&gt;`_</span>
 <span class="sd">    Args:</span>
@@ -215,7 +215,7 @@
     <span class="k">return</span> <span class="n">_vgg</span><span class="p">(</span><span class="s2">&quot;vgg11_bn&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">pretrained</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vgg13"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.vgg13">[docs]</a><span class="k">def</span> <span class="nf">vgg13</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="vgg13"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg13">[docs]</a><span class="k">def</span> <span class="nf">vgg13</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;VGG 13-layer model (configuration &quot;B&quot;)</span>
 <span class="sd">    `&quot;Very Deep Convolutional Networks For Large-Scale Image Recognition&quot; &lt;https://arxiv.org/pdf/1409.1556.pdf&gt;`_</span>
 <span class="sd">    Args:</span>
@@ -225,7 +225,7 @@
     <span class="k">return</span> <span class="n">_vgg</span><span class="p">(</span><span class="s2">&quot;vgg13&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">pretrained</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vgg13_bn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.vgg13_bn">[docs]</a><span class="k">def</span> <span class="nf">vgg13_bn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="vgg13_bn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg13_bn">[docs]</a><span class="k">def</span> <span class="nf">vgg13_bn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;VGG 13-layer model (configuration &quot;B&quot;) with batch normalization</span>
 <span class="sd">    `&quot;Very Deep Convolutional Networks For Large-Scale Image Recognition&quot; &lt;https://arxiv.org/pdf/1409.1556.pdf&gt;`_</span>
 <span class="sd">    Args:</span>
@@ -235,7 +235,7 @@
     <span class="k">return</span> <span class="n">_vgg</span><span class="p">(</span><span class="s2">&quot;vgg13_bn&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">pretrained</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vgg16"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.vgg16">[docs]</a><span class="k">def</span> <span class="nf">vgg16</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="vgg16"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg16">[docs]</a><span class="k">def</span> <span class="nf">vgg16</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;VGG 16-layer model (configuration &quot;D&quot;)</span>
 <span class="sd">    `&quot;Very Deep Convolutional Networks For Large-Scale Image Recognition&quot; &lt;https://arxiv.org/pdf/1409.1556.pdf&gt;`_</span>
 <span class="sd">    Args:</span>
@@ -245,7 +245,7 @@
     <span class="k">return</span> <span class="n">_vgg</span><span class="p">(</span><span class="s2">&quot;vgg16&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">pretrained</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vgg16_bn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.vgg16_bn">[docs]</a><span class="k">def</span> <span class="nf">vgg16_bn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="vgg16_bn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg16_bn">[docs]</a><span class="k">def</span> <span class="nf">vgg16_bn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;VGG 16-layer model (configuration &quot;D&quot;) with batch normalization</span>
 <span class="sd">    `&quot;Very Deep Convolutional Networks For Large-Scale Image Recognition&quot; &lt;https://arxiv.org/pdf/1409.1556.pdf&gt;`_</span>
 <span class="sd">    Args:</span>
@@ -255,7 +255,7 @@
     <span class="k">return</span> <span class="n">_vgg</span><span class="p">(</span><span class="s2">&quot;vgg16_bn&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">pretrained</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vgg19"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.vgg19">[docs]</a><span class="k">def</span> <span class="nf">vgg19</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="vgg19"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg19">[docs]</a><span class="k">def</span> <span class="nf">vgg19</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;VGG 19-layer model (configuration &quot;E&quot;)</span>
 <span class="sd">    `&quot;Very Deep Convolutional Networks For Large-Scale Image Recognition&quot; &lt;https://arxiv.org/pdf/1409.1556.pdf&gt;`_</span>
 <span class="sd">    Args:</span>
@@ -265,7 +265,7 @@
     <span class="k">return</span> <span class="n">_vgg</span><span class="p">(</span><span class="s2">&quot;vgg19&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">pretrained</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vgg19_bn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg.vgg19_bn">[docs]</a><span class="k">def</span> <span class="nf">vgg19_bn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="vgg19_bn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.models.vgg.html#norse.torch.models.vgg19_bn">[docs]</a><span class="k">def</span> <span class="nf">vgg19_bn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;VGG 19-layer model (configuration &#39;E&#39;) with batch normalization</span>
 <span class="sd">    `&quot;Very Deep Convolutional Networks For Large-Scale Image Recognition&quot; &lt;https://arxiv.org/pdf/1409.1556.pdf&gt;`_</span>
 <span class="sd">    Args:</span>

@@ -40,6 +40,194 @@
             
   <div class="section" id="module-norse.torch.models">
 <span id="norse-torch-models-package"></span><h1>norse.torch.models package<a class="headerlink" href="#module-norse.torch.models" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="norse.torch.models.ConvNet">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">ConvNet</code><span class="sig-paren">(</span><em class="sig-param">num_channels=1</em>, <em class="sig-param">feature_size=28</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">dtype=torch.float32</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/conv.html#ConvNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.ConvNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="method">
+<dt id="norse.torch.models.ConvNet.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/conv.html#ConvNet.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.ConvNet.forward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.models.ConvNet.training">
+<code class="sig-name descname">training</code><em class="property"> = None</em><a class="headerlink" href="#norse.torch.models.ConvNet.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="norse.torch.models.ConvNet4">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">ConvNet4</code><span class="sig-paren">(</span><em class="sig-param">num_channels=1</em>, <em class="sig-param">feature_size=28</em>, <em class="sig-param">method='super'</em>, <em class="sig-param">dtype=torch.float32</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/conv.html#ConvNet4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.ConvNet4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="method">
+<dt id="norse.torch.models.ConvNet4.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/conv.html#ConvNet4.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.ConvNet4.forward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.models.ConvNet4.training">
+<code class="sig-name descname">training</code><em class="property"> = None</em><a class="headerlink" href="#norse.torch.models.ConvNet4.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="norse.torch.models.VGG">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">VGG</code><span class="sig-paren">(</span><em class="sig-param">features</em>, <em class="sig-param">num_classes=1000</em>, <em class="sig-param">init_weights=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#VGG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.VGG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="method">
+<dt id="norse.torch.models.VGG.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#VGG.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.VGG.forward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.models.VGG.training">
+<code class="sig-name descname">training</code><em class="property"> = None</em><a class="headerlink" href="#norse.torch.models.VGG.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.models.vgg11">
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">vgg11</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#vgg11"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.vgg11" title="Permalink to this definition">¶</a></dt>
+<dd><p>VGG 11-layer model (configuration “A”) from
+<a class="reference external" href="https://arxiv.org/pdf/1409.1556.pdf">“Very Deep Convolutional Networks For Large-Scale Image Recognition”</a>
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.models.vgg11_bn">
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">vgg11_bn</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#vgg11_bn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.vgg11_bn" title="Permalink to this definition">¶</a></dt>
+<dd><p>VGG 11-layer model (configuration “A”) with batch normalization
+<a class="reference external" href="https://arxiv.org/pdf/1409.1556.pdf">“Very Deep Convolutional Networks For Large-Scale Image Recognition”</a>
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.models.vgg13">
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">vgg13</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#vgg13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.vgg13" title="Permalink to this definition">¶</a></dt>
+<dd><p>VGG 13-layer model (configuration “B”)
+<a class="reference external" href="https://arxiv.org/pdf/1409.1556.pdf">“Very Deep Convolutional Networks For Large-Scale Image Recognition”</a>
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.models.vgg13_bn">
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">vgg13_bn</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#vgg13_bn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.vgg13_bn" title="Permalink to this definition">¶</a></dt>
+<dd><p>VGG 13-layer model (configuration “B”) with batch normalization
+<a class="reference external" href="https://arxiv.org/pdf/1409.1556.pdf">“Very Deep Convolutional Networks For Large-Scale Image Recognition”</a>
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.models.vgg16">
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">vgg16</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#vgg16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.vgg16" title="Permalink to this definition">¶</a></dt>
+<dd><p>VGG 16-layer model (configuration “D”)
+<a class="reference external" href="https://arxiv.org/pdf/1409.1556.pdf">“Very Deep Convolutional Networks For Large-Scale Image Recognition”</a>
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.models.vgg16_bn">
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">vgg16_bn</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#vgg16_bn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.vgg16_bn" title="Permalink to this definition">¶</a></dt>
+<dd><p>VGG 16-layer model (configuration “D”) with batch normalization
+<a class="reference external" href="https://arxiv.org/pdf/1409.1556.pdf">“Very Deep Convolutional Networks For Large-Scale Image Recognition”</a>
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.models.vgg19">
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">vgg19</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#vgg19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.vgg19" title="Permalink to this definition">¶</a></dt>
+<dd><p>VGG 19-layer model (configuration “E”)
+<a class="reference external" href="https://arxiv.org/pdf/1409.1556.pdf">“Very Deep Convolutional Networks For Large-Scale Image Recognition”</a>
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">vgg19</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#vgg19"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>VGG 19-layer model (configuration “E”)
+<a class="reference external" href="https://arxiv.org/pdf/1409.1556.pdf">“Very Deep Convolutional Networks For Large-Scale Image Recognition”</a>
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.models.vgg19_bn">
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">vgg19_bn</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/vgg.html#vgg19_bn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.vgg19_bn" title="Permalink to this definition">¶</a></dt>
+<dd><p>VGG 19-layer model (configuration ‘E’) with batch normalization
+<a class="reference external" href="https://arxiv.org/pdf/1409.1556.pdf">“Very Deep Convolutional Networks For Large-Scale Image Recognition”</a>
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="norse.torch.models.MobileNetV2">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">MobileNetV2</code><span class="sig-paren">(</span><em class="sig-param">num_classes=1000</em>, <em class="sig-param">width_mult=1.0</em>, <em class="sig-param">inverted_residual_setting=None</em>, <em class="sig-param">round_nearest=8</em>, <em class="sig-param">block=None</em>, <em class="sig-param">norm_layer=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/mobilenet.html#MobileNetV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.MobileNetV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>MobileNet V2 main class
+:param num_classes: Number of classes
+:type num_classes: int
+:param width_mult: Width multiplier - adjusts number of channels in each layer by this amount
+:type width_mult: float
+:param inverted_residual_setting: Network structure
+:param round_nearest: Round the number of channels in each layer to be a multiple of this number
+:type round_nearest: int
+:param Set to 1 to turn off rounding:
+:param block: Module specifying inverted residual building block for mobilenet
+:param norm_layer: Module specifying the normalization layer to use</p>
+<dl class="method">
+<dt id="norse.torch.models.MobileNetV2.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/mobilenet.html#MobileNetV2.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.MobileNetV2.forward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="norse.torch.models.MobileNetV2.training">
+<code class="sig-name descname">training</code><em class="property"> = None</em><a class="headerlink" href="#norse.torch.models.MobileNetV2.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="norse.torch.models.mobilenet_v2">
+<code class="sig-prename descclassname">norse.torch.models.</code><code class="sig-name descname">mobilenet_v2</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/mobilenet.html#mobilenet_v2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.mobilenet_v2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a MobileNetV2 architecture from
+<a class="reference external" href="https://arxiv.org/abs/1801.04381">“MobileNetV2: Inverted Residuals and Linear Bottlenecks”</a>.
+:param pretrained: If True, returns a model pre-trained on ImageNet
+:type pretrained: bool
+:param progress: If True, displays a progress bar of the download to stderr
+:type progress: bool</p>
+</dd></dl>
+
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">

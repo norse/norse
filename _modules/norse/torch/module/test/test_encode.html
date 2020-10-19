@@ -43,6 +43,7 @@
 
 <span class="kn">import</span> <span class="nn">torch</span>
 
+<span class="kn">from</span> <span class="nn">..lif</span> <span class="kn">import</span> <span class="n">LIFLayer</span>
 <span class="kn">from</span> <span class="nn">norse.torch.module.encode</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">PopulationEncoder</span><span class="p">,</span>
     <span class="n">ConstantCurrentLIFEncoder</span><span class="p">,</span>
@@ -109,12 +110,36 @@
     <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="n">seq_length</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span></div>
 
 
+<div class="viewcode-block" id="test_spike_latency_lif_encoder_backward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_encode.html#norse.torch.module.test.test_encode.test_spike_latency_lif_encoder_backward">[docs]</a><span class="k">def</span> <span class="nf">test_spike_latency_lif_encoder_backward</span><span class="p">():</span>
+    <span class="n">timesteps</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SpikeLatencyLIFEncoder</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFLayer</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></div>
+
+
 <div class="viewcode-block" id="test_spike_latency_encode_max_spikes"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_encode.html#norse.torch.module.test.test_encode.test_spike_latency_encode_max_spikes">[docs]</a><span class="k">def</span> <span class="nf">test_spike_latency_encode_max_spikes</span><span class="p">():</span>
     <span class="n">encoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
         <span class="n">ConstantCurrentLIFEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="mi">128</span><span class="p">),</span> <span class="n">SpikeLatencyEncoder</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">spikes</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="mf">1.1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
     <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="mi">10</span></div>
+
+
+<div class="viewcode-block" id="test_spike_latency_encode_backward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_encode.html#norse.torch.module.test.test_encode.test_spike_latency_encode_backward">[docs]</a><span class="k">def</span> <span class="nf">test_spike_latency_encode_backward</span><span class="p">():</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">set_detect_anomaly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">timesteps</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+        <span class="n">ConstantCurrentLIFEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="n">timesteps</span><span class="p">),</span> <span class="n">SpikeLatencyEncoder</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFLayer</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="test_spike_latency_encode_chain"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_encode.html#norse.torch.module.test.test_encode.test_spike_latency_encode_chain">[docs]</a><span class="k">def</span> <span class="nf">test_spike_latency_encode_chain</span><span class="p">():</span>
