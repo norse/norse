@@ -42,8 +42,8 @@ class LIFCell(torch.nn.Module):
     recurrent and input spikes respectively.
 
     Parameters:
-        input_size (int): Size of the input.
-        hidden_size (int): Size of the hidden state.
+        input_size (int): Size of the input. Also known as the number of input features.
+        hidden_size (int): Size of the hidden state. Also known as the number of input features.
         p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
 
@@ -57,8 +57,8 @@ class LIFCell(torch.nn.Module):
 
     def __init__(
         self,
-        input_size,
-        hidden_size,
+        input_size: int,
+        hidden_size: int,
         p: LIFParameters = LIFParameters(),
         dt: float = 0.001,
     ):
@@ -89,7 +89,7 @@ class LIFCell(torch.nn.Module):
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
-                v=self.p.v_leak,
+                v=self.p.v_leak.detach(),
                 i=torch.zeros(
                     input_tensor.shape[0],
                     self.hidden_size,
@@ -187,8 +187,8 @@ class LIFFeedForwardCell(torch.nn.Module):
     ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
         if state is None:
             state = LIFFeedForwardState(
-                v=self.p.v_leak,
-                i=torch.zeros(x.shape, device=x.device, dtype=x.dtype),
+                v=self.p.v_leak.detach(),
+                i=torch.zeros(*x.shape, device=x.device, dtype=x.dtype),
             )
         return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
 

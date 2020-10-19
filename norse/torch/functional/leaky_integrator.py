@@ -23,13 +23,11 @@ class LIParameters(NamedTuple):
         tau_syn_inv (torch.Tensor): inverse synaptic time constant
         tau_mem_inv (torch.Tensor): inverse membrane time constant
         v_leak (torch.Tensor): leak potential
-        v_reset (torch.Tensor): reset potential
     """
 
     tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
     tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
     v_leak: torch.Tensor = torch.as_tensor(0.0)
-    v_reset: torch.Tensor = torch.as_tensor(0.0)
 
 
 def li_step(
