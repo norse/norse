@@ -1,5 +1,5 @@
 # Includes
-from typing import Tuple
+from typing import Tuple, Callable
 import torch
 from .heaviside import heaviside
 
@@ -61,6 +61,13 @@ class STDPParameters:
         dilation (int): Dilation for convolution
     """
 
+    def Additive(self):
+        return (
+            torch.tensor(0.0),
+            lambda w: self.eta_plus,
+            lambda w: self.eta_minus,
+        )
+    
     def __init__(
         self,
         a_pre: torch.Tensor = torch.as_tensor(1.0),
@@ -87,8 +94,8 @@ class STDPParameters:
         self.w_max = w_max
         self.eta_plus = eta_plus
         self.eta_minus = eta_minus
-        self.stdp_algorithm = stdp_algorithm
 
+        self.stdp_algorithm = stdp_algorithm
         if self.stdp_algorithm == "additive":
             self.mu = torch.tensor(0.0)
             self.A_plus = lambda w: self.eta_plus
@@ -123,7 +130,7 @@ class STDPParameters:
             self.dilation = dilation
 
 # %% Linear stepper
-def lif_linear_stdp_step(
+def stdp_step_linear(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,
     w: torch.Tensor,
@@ -166,9 +173,8 @@ def lif_linear_stdp_step(
 
     return (w, state_stdp)
 
-
 # %% Conv2D stepper
-def lif_conv2d_stdp_step(
+def stdp_step_conv2d(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,
     w: torch.Tensor,

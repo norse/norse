@@ -4,8 +4,8 @@ import torch
 from ...functional.stdp import (
     STDPParameters,
     STDPState,
-    lif_linear_stdp_step,
-    lif_conv2d_stdp_step,
+    stdp_step_linear,
+    stdp_step_conv2d,
 )
 
 
@@ -77,7 +77,7 @@ def test_linear_stdp_stepper(initialise_for_linear_stdp):
     t_post = 0.0
     for n_t in range(n_time):
         w0 = w
-        w, state_stdp = lif_linear_stdp_step(
+        w, state_stdp = stdp_step_linear(
             z_pre[n_t], z_post[n_t], w,
             state_stdp, p_stdp,
             dt = 0.001,
@@ -190,7 +190,7 @@ def test_conv2d_stdp_stepper(initialise_for_conv2d_stdp):
     t_post = 0.0
     for n_t in range(n_time):
         w0 = w
-        w, state_stdp = lif_conv2d_stdp_step(
+        w, state_stdp = stdp_step_conv2d(
             z_pre[n_t], z_post[n_t], w,
             state_stdp, p_stdp,
             dt = 0.001,
