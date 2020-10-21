@@ -1,113 +1,261 @@
+import pytest
 import torch
 
-from norse.torch.functional.stdp import (
+from ...functional.stdp import (
+    STDPParameters,
     STDPState,
-    linear_soft_multiplicative_stdp_step,
-    linear_hard_multiplicative_stdp_step,
-    linear_additive_stdp_step,
-    conv2d_soft_multiplicative_stdp_step,
-    conv2d_hard_multiplicative_stdp_step,
-    conv2d_additive_stdp_step,
+    stdp_step_linear,
+    stdp_step_conv2d,
 )
 
 
-def test_linear_soft_multiplicative_stdp_step():
-    time = 100
-    pre, post = 2, 3
-    w = torch.rand(post, pre)  # weights between 0 and 1 as default
-    z_pre = torch.ones((time, 1, pre))
-    z_post = (torch.randn(time, 1, post) > 0).float()
-    s = STDPState(x=torch.zeros(1, pre), y=torch.zeros(1, post))
-
-    for i in range(time):
-        dw, s = linear_soft_multiplicative_stdp_step(w, z_pre[i], z_post[i], s)
-        w += dw
+def create_id(param):
+    return param[0]
 
 
-def test_linear_hard_multiplicative_stdp_step():
-    time = 100
-    pre, post = 2, 3
-    w = torch.rand(post, pre)  # weights between 0 and 1 as default
-    z_pre = torch.ones((time, 1, pre))
-    z_post = (torch.randn(time, 1, post) > 0).float()
-    s = STDPState(x=torch.zeros(1, pre), y=torch.zeros(1, post))
-
-    for i in range(time):
-        dw, s = linear_hard_multiplicative_stdp_step(w, z_pre[i], z_post[i], s)
-        w += dw
-
-
-def test_linear_additive_stdp_step():
-    time = 100
-    pre, post = 2, 3
-    w = torch.rand(post, pre)  # weights between 0 and 1 as default
-    z_pre = torch.ones((time, 1, pre))
-    z_post = (torch.randn(time, 1, post) > 0).float()
-    s = STDPState(x=torch.zeros(1, pre), y=torch.zeros(1, post))
-
-    for i in range(time):
-        dw, s = linear_additive_stdp_step(w, z_pre[i], z_post[i], s)
-        w += dw
-
-
-def test_conv2d_soft_multiplicative_stdp_step():
-    time = 100
-    batch = 1
-    in_channels, out_channels = 3, 2
-    in_hw, out_hw = (10, 10), (7, 7)
-    kernel = (4, 4)
-    # stride, padding, dilation = (1, 0, 1) as default
-    w = torch.nn.Conv2d(in_channels, out_channels, kernel).weight.clone()
-    torch.nn.init.uniform_(w)  # weights between 0 and 1 as default
-    z_pre = torch.ones((time, batch, in_channels, *in_hw))
-    z_post = (torch.randn(time, batch, out_channels, *out_hw) > 0).float()
-    s = STDPState(
-        x=torch.zeros(batch, in_channels, *in_hw),
-        y=torch.zeros(batch, out_channels, *out_hw),
+# Linear STDP
+@pytest.fixture(
+    scope="function",
+    params=[
+        ["additive", 0.0],
+        ["additive_step", 0.0],
+        ["multiplicative_pow", 0.75],
+        ["multiplicative_relu", 1.0],
+    ],
+    ids=create_id,
+)
+def initialise_for_linear_stdp(request):
+    stdp_algorithm = request.param[0]
+    n_batches = 1
+    n_pre, n_post = 2, 3
+    w0 = 0.5 * torch.ones(n_post, n_pre)
+    z_pre = torch.tensor(
+        [
+            [[1.0, 1.0]],
+            [[0.0, 0.0]],
+            [[1.0, 1.0]],
+        ]
+    ).float()
+    z_post = torch.tensor(
+        [
+            [[0.0, 0.0, 0.0]],
+            [[1.0, 1.0, 1.0]],
+            [[0.0, 0.0, 0.0]],
+        ]
+    ).float()
+    state_stdp = STDPState(
+        t_pre=torch.zeros(n_batches, n_pre),
+        t_post=torch.zeros(n_batches, n_post),
+    )
+    p_stdp = STDPParameters(
+        eta_minus=1e-1,
+        eta_plus=3e-1,  # Best to check with large, asymmetric learning-rates
+        stdp_algorithm=stdp_algorithm,
+        mu=request.param[1],
+        hardbound=False,
+        convolutional=False,
     )
 
-    for i in range(time):
-        dw, s = conv2d_soft_multiplicative_stdp_step(w, z_pre[i], z_post[i], s)
-        w += dw
-
-
-def test_conv2d_hard_multiplicative_stdp_step():
-    time = 1000
-    batch = 1
-    in_channels, out_channels = 3, 2
-    in_hw, out_hw = (10, 10), (7, 7)
-    kernel = (4, 4)
-    # stride, padding, dilation = (1, 0, 1) as default
-    w = torch.nn.Conv2d(in_channels, out_channels, kernel).weight.clone()
-    torch.nn.init.uniform_(w)  # weights between 0 and 1 as default
-    z_pre = torch.ones((time, batch, in_channels, *in_hw))
-    z_post = (torch.randn(time, batch, out_channels, *out_hw) > 0).float()
-    s = STDPState(
-        x=torch.zeros(batch, in_channels, *in_hw),
-        y=torch.zeros(batch, out_channels, *out_hw),
+    return (
+        stdp_algorithm,
+        n_batches,
+        n_pre,
+        n_post,
+        w0,
+        z_pre,
+        z_post,
+        state_stdp,
+        p_stdp,
     )
 
-    for i in range(time):
-        dw, s = conv2d_hard_multiplicative_stdp_step(w, z_pre[i], z_post[i], s)
-        w += dw
+
+def test_linear_stdp_stepper(initialise_for_linear_stdp):
+    (
+        _,
+        n_batches,
+        n_pre,
+        n_post,
+        w,
+        z_pre,
+        z_post,
+        state_stdp,
+        p_stdp,
+    ) = initialise_for_linear_stdp
+
+    n_time = z_pre.shape[0]
+
+    t_pre = 0.0
+    t_post = 0.0
+    for n_t in range(n_time):
+        w0 = w
+        w, state_stdp = stdp_step_linear(
+            z_pre[n_t],
+            z_post[n_t],
+            w,
+            state_stdp,
+            p_stdp,
+            dt=0.001,
+        )
+
+        # Calculating the gradient for one synapse
+        t_pre += (
+            0.001 * (p_stdp.tau_pre_inv) * (-t_pre + p_stdp.a_pre * z_pre[n_t][0][0])
+        )
+        t_post += (
+            0.001
+            * (p_stdp.tau_post_inv)
+            * (-t_post + p_stdp.a_post * z_post[n_t][0][0])
+        )
+
+        # Check potentiation
+        if n_t == 1:
+            assert torch.allclose(
+                torch.abs(w - w0) / torch.pow(p_stdp.w_max - w0, p_stdp.mu),
+                p_stdp.eta_plus * t_pre,
+                atol=1e-6,
+                rtol=0.0,
+            )
+        # Check depression
+        if n_t == 2:
+            assert torch.allclose(
+                torch.abs(w - w0) / torch.pow(w0, p_stdp.mu),
+                p_stdp.eta_minus * t_post,
+                atol=1e-6,
+                rtol=0.0,
+            )
+
+    # Shape checks
+    assert state_stdp.t_pre.shape == (n_batches, n_pre)
+    assert state_stdp.t_post.shape == (n_batches, n_post)
+    assert w.shape == (n_post, n_pre)
 
 
-def test_conv2d_additive_stdp_step():
-    time = 100
-    batch = 1
-    in_channels, out_channels = 3, 2
-    in_hw, out_hw = (10, 10), (7, 7)
-    kernel = (4, 4)
-    # stride, padding, dilation = (1, 0, 1) as default
-    w = torch.nn.Conv2d(in_channels, out_channels, kernel).weight.clone()
-    torch.nn.init.uniform_(w)  # weights between 0 and 1 as default
-    z_pre = torch.ones((time, batch, in_channels, *in_hw))
-    z_post = (torch.randn(time, batch, out_channels, *out_hw) > 0).float()
-    s = STDPState(
-        x=torch.zeros(batch, in_channels, *in_hw),
-        y=torch.zeros(batch, out_channels, *out_hw),
+# Conv2D STDP
+@pytest.fixture(
+    scope="function",
+    params=[
+        ["additive", 0.0],
+        ["additive_step", 0.0],
+        ["multiplicative_pow", 0.75],
+        ["multiplicative_relu", 1.0],
+    ],
+    ids=create_id,
+)
+def initialise_for_conv2d_stdp(request):
+    stdp_algorithm = request.param[0]
+    n_batches = 1
+    c_pre, c_post = 3, 2
+    hw_pre, hw_post = (10, 10), (8, 8)
+    hw_kern = (3, 3)
+    w0 = torch.nn.Conv2d(c_pre, c_post, *hw_kern).weight.detach()
+    torch.nn.init.constant_(w0, 0.5)
+    z_pre = torch.stack(
+        (
+            torch.ones(n_batches, c_pre, *hw_pre),
+            torch.zeros(n_batches, c_pre, *hw_pre),
+            torch.ones(n_batches, c_pre, *hw_pre),
+        ),
+        dim=0,
+    )
+    z_post = torch.stack(
+        (
+            torch.zeros(n_batches, c_post, *hw_post),
+            torch.ones(n_batches, c_post, *hw_post),
+            torch.zeros(n_batches, c_post, *hw_post),
+        ),
+        dim=0,
+    )
+    state_stdp = STDPState(
+        t_pre=torch.zeros(n_batches, c_pre, *hw_pre),
+        t_post=torch.zeros(n_batches, c_post, *hw_post),
+    )
+    p_stdp = STDPParameters(
+        eta_minus=1e-2,
+        eta_plus=3e-2,  # Best to check with large, asymmetric learning-rates
+        stdp_algorithm=stdp_algorithm,
+        mu=request.param[1],
+        hardbound=False,
+        convolutional=True,
     )
 
-    for i in range(time):
-        dw, s = conv2d_additive_stdp_step(w, z_pre[i], z_post[i], s)
-        w += dw
+    return (
+        stdp_algorithm,
+        n_batches,
+        c_pre,
+        c_post,
+        hw_pre,
+        hw_post,
+        hw_kern,
+        w0,
+        z_pre,
+        z_post,
+        state_stdp,
+        p_stdp,
+    )
+
+
+def test_conv2d_stdp_stepper(initialise_for_conv2d_stdp):
+    (
+        _,
+        n_batches,
+        c_pre,
+        c_post,
+        hw_pre,
+        hw_post,
+        hw_kern,
+        w,
+        z_pre,
+        z_post,
+        state_stdp,
+        p_stdp,
+    ) = initialise_for_conv2d_stdp
+
+    n_time = z_pre.shape[0]
+
+    t_pre = 0.0
+    t_post = 0.0
+    for n_t in range(n_time):
+        w0 = w
+        w, state_stdp = stdp_step_conv2d(
+            z_pre[n_t],
+            z_post[n_t],
+            w,
+            state_stdp,
+            p_stdp,
+            dt=0.001,
+        )
+
+        # Calculating the gradient for one synapse
+        t_pre += (
+            0.001
+            * p_stdp.tau_pre_inv
+            * (-t_pre + p_stdp.a_pre * z_pre[n_t][0][0][0][0])
+        )
+        t_post += (
+            0.001
+            * p_stdp.tau_post_inv
+            * (-t_post + p_stdp.a_post * z_post[n_t][0][0][0][0])
+        )
+
+        # Check potentiation
+        if n_t == 1:
+            assert torch.allclose(
+                torch.abs(w - w0) / torch.pow(p_stdp.w_max - w0, p_stdp.mu),
+                hw_post[0] * hw_post[1] * p_stdp.eta_plus * t_pre,
+                atol=1e-6,
+                rtol=0.0,
+            )
+
+        # Check depression
+        if n_t == 2:
+            assert torch.allclose(
+                torch.abs(w - w0) / torch.pow(w0 - p_stdp.w_min, p_stdp.mu),
+                hw_post[0] * hw_post[1] * p_stdp.eta_minus * t_post,
+                atol=1e-6,
+                rtol=0.0,
+            )
+
+    # Shape checks
+    assert state_stdp.t_pre.shape == (n_batches, c_pre, *hw_pre)
+    assert state_stdp.t_post.shape == (n_batches, c_post, *hw_post)
+    assert w.shape == (c_post, c_pre, *hw_kern)
