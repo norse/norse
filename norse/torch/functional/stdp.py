@@ -40,6 +40,7 @@ class STDPState:
             dt * tau_post_inv * (-self.t_post + a_post * z_post)
         )
 
+
 # STDP parameters class
 class STDPParameters:
     """STDP parameters.
@@ -67,7 +68,7 @@ class STDPParameters:
             lambda w: self.eta_plus,
             lambda w: self.eta_minus,
         )
-    
+
     def __init__(
         self,
         a_pre: torch.Tensor = torch.as_tensor(1.0),
@@ -110,10 +111,12 @@ class STDPParameters:
             self.A_minus = lambda w: self.eta_minus * torch.pow(w - self.w_min, self.mu)
         elif self.stdp_algorithm == "multiplicative_relu":
             self.mu = torch.tensor(1.0)
-            self.A_plus = lambda w: \
-                self.eta_plus * torch.nn.functional.relu(self.w_max - w)
-            self.A_minus = lambda w: \
-                self.eta_minus * torch.nn.functional.relu(w - self.w_min)
+            self.A_plus = lambda w: self.eta_plus * torch.nn.functional.relu(
+                self.w_max - w
+            )
+            self.A_minus = lambda w: self.eta_minus * torch.nn.functional.relu(
+                w - self.w_min
+            )
 
         # Hard bounds
         self.hardbound = hardbound
@@ -128,6 +131,7 @@ class STDPParameters:
             self.stride = stride
             self.padding = padding
             self.dilation = dilation
+
 
 # %% Linear stepper
 def stdp_step_linear(
@@ -172,6 +176,7 @@ def stdp_step_linear(
     w = p_stdp.bounding_func(w)
 
     return (w, state_stdp)
+
 
 # %% Conv2D stepper
 def stdp_step_conv2d(
@@ -229,17 +234,23 @@ def stdp_step_conv2d(
     )
 
     # STDP weight update
-    dw_plus = p_stdp.A_plus(w) * torch.einsum(
-        "bik,bjk->ij",
-        z_post.view(batch_size, out_channels, -1),
-        state_stdp_t_pre_uf,
-    ).view(w.shape)
+    dw_plus = (
+        p_stdp.A_plus(w)
+        * torch.einsum(
+            "bik,bjk->ij",
+            z_post.view(batch_size, out_channels, -1),
+            state_stdp_t_pre_uf,
+        ).view(w.shape)
+    )
 
-    dw_minus = p_stdp.A_minus(w) * torch.einsum(
-        "bik,bjk->ij",
-        state_stdp.t_post.view(batch_size, out_channels, -1),
-        z_pre_uf,
-    ).view(w.shape)
+    dw_minus = (
+        p_stdp.A_minus(w)
+        * torch.einsum(
+            "bik,bjk->ij",
+            state_stdp.t_post.view(batch_size, out_channels, -1),
+            z_pre_uf,
+        ).view(w.shape)
+    )
 
     w = w + (dw_plus - dw_minus)
 

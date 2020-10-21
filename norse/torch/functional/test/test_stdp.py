@@ -12,6 +12,7 @@ from ...functional.stdp import (
 def create_id(param):
     return param[0]
 
+
 # Linear STDP
 @pytest.fixture(
     scope="function",
@@ -57,18 +58,28 @@ def initialise_for_linear_stdp(request):
 
     return (
         stdp_algorithm,
-        n_batches, n_pre, n_post,
-        w0, z_pre, z_post,
-        state_stdp, p_stdp,
+        n_batches,
+        n_pre,
+        n_post,
+        w0,
+        z_pre,
+        z_post,
+        state_stdp,
+        p_stdp,
     )
 
 
 def test_linear_stdp_stepper(initialise_for_linear_stdp):
     (
         _,
-        n_batches, n_pre, n_post,
-        w, z_pre, z_post,
-        state_stdp, p_stdp,
+        n_batches,
+        n_pre,
+        n_post,
+        w,
+        z_pre,
+        z_post,
+        state_stdp,
+        p_stdp,
     ) = initialise_for_linear_stdp
 
     n_time = z_pre.shape[0]
@@ -78,21 +89,22 @@ def test_linear_stdp_stepper(initialise_for_linear_stdp):
     for n_t in range(n_time):
         w0 = w
         w, state_stdp = stdp_step_linear(
-            z_pre[n_t], z_post[n_t], w,
-            state_stdp, p_stdp,
-            dt = 0.001,
+            z_pre[n_t],
+            z_post[n_t],
+            w,
+            state_stdp,
+            p_stdp,
+            dt=0.001,
         )
 
         # Calculating the gradient for one synapse
-        t_pre += ( 
-            0.001 *
-            (p_stdp.tau_pre_inv) *
-            (-t_pre + p_stdp.a_pre * z_pre[n_t][0][0])
+        t_pre += (
+            0.001 * (p_stdp.tau_pre_inv) * (-t_pre + p_stdp.a_pre * z_pre[n_t][0][0])
         )
         t_post += (
-            0.001 *
-            (p_stdp.tau_post_inv) *
-            (-t_post + p_stdp.a_post * z_post[n_t][0][0])
+            0.001
+            * (p_stdp.tau_post_inv)
+            * (-t_post + p_stdp.a_post * z_post[n_t][0][0])
         )
 
         # Check potentiation
@@ -168,20 +180,34 @@ def initialise_for_conv2d_stdp(request):
 
     return (
         stdp_algorithm,
-        n_batches, c_pre, c_post,
-        hw_pre, hw_post, hw_kern,
-        w0, z_pre, z_post,
-        state_stdp, p_stdp,
+        n_batches,
+        c_pre,
+        c_post,
+        hw_pre,
+        hw_post,
+        hw_kern,
+        w0,
+        z_pre,
+        z_post,
+        state_stdp,
+        p_stdp,
     )
 
 
 def test_conv2d_stdp_stepper(initialise_for_conv2d_stdp):
     (
         _,
-        n_batches, c_pre, c_post,
-        hw_pre, hw_post, hw_kern,
-        w, z_pre, z_post,
-        state_stdp, p_stdp,
+        n_batches,
+        c_pre,
+        c_post,
+        hw_pre,
+        hw_post,
+        hw_kern,
+        w,
+        z_pre,
+        z_post,
+        state_stdp,
+        p_stdp,
     ) = initialise_for_conv2d_stdp
 
     n_time = z_pre.shape[0]
@@ -191,9 +217,12 @@ def test_conv2d_stdp_stepper(initialise_for_conv2d_stdp):
     for n_t in range(n_time):
         w0 = w
         w, state_stdp = stdp_step_conv2d(
-            z_pre[n_t], z_post[n_t], w,
-            state_stdp, p_stdp,
-            dt = 0.001,
+            z_pre[n_t],
+            z_post[n_t],
+            w,
+            state_stdp,
+            p_stdp,
+            dt=0.001,
         )
 
         # Calculating the gradient for one synapse
