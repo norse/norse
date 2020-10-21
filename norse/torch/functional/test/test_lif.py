@@ -3,8 +3,10 @@ import torch
 from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
+    LIFParametersJIT,
     lif_step,
     lif_feed_forward_step,
+    _lif_feed_forward_step_jit,
     lif_current_encoder,
 )
 
@@ -41,6 +43,27 @@ def test_lif_feed_forward_step():
 
     for result in results:
         _, s = lif_feed_forward_step(x, s)
+        assert torch.allclose(torch.as_tensor(result), s.v, atol=1e-4)
+
+
+def test_lif_feed_forward_step_jit():
+    x = torch.ones(10)
+    s = LIFFeedForwardState(v=torch.zeros(10), i=torch.zeros(10))
+
+    p = LIFParametersJIT(
+        torch.as_tensor(1.0 / 5e-3),
+        torch.as_tensor(1.0 / 1e-2),
+        torch.as_tensor(0.0),
+        torch.as_tensor(1.0),
+        torch.as_tensor(0.0),
+        "super",
+        torch.as_tensor(0.0),
+    )
+
+    results = [0.0, 0.1, 0.27, 0.487, 0.7335, 0.9963, 0.0, 0.3951, 0.7717, 0.0]
+
+    for result in results:
+        _, s = _lif_feed_forward_step_jit(x, s, p)
         assert torch.allclose(torch.as_tensor(result), s.v, atol=1e-4)
 
 

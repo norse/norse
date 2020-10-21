@@ -23,3 +23,13 @@ def test_regularisation_voltage():
     zr, rs = regularize_step(z, s, accumulator=voltage_accumulator)
     assert torch.equal(z, zr)
     assert torch.equal(s.v, rs)
+
+
+def test_regularisation_voltage_state():
+    x = torch.ones(5, 10)
+    state = torch.zeros(10)
+    s = LIFFeedForwardState(torch.ones(10), torch.ones(10))
+    z, s = lif_feed_forward_step(x, s)
+    zr, rs = regularize_step(z, s, accumulator=voltage_accumulator, state=state)
+    assert torch.equal(z, zr)
+    assert torch.equal(s.v, rs)

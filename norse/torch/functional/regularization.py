@@ -53,7 +53,7 @@ def voltage_accumulator(
     Returns:
         A new RegularizationState containing the aggregated data
     """
-    if not state:
+    if state is None:
         state = torch.zeros_like(s.v)
     return state + s.v
 
@@ -77,6 +77,6 @@ def regularize_step(
     Return:
         A tuple of (spikes, regularizer state)
     """
-    if not state:
+    if state is None:
         return z, accumulator(z, s)
     return z, accumulator(z, s, state)

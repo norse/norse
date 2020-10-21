@@ -17,16 +17,6 @@ except OSError:
 
     setattr(sys.modules[__name__], "IS_OPS_LOADED", False)
 
-from .torch import functional
-from .torch.models import conv
-from .torch.module import lif, lsnn
+from .torch import functional, models, module
 
-__all__ = [
-    "task",
-    "benchmark",
-    "dataset",
-    "functional",
-    "conv",
-    "lif",
-    "lsnn",
-]
+__all__ = ["task", "benchmark", "dataset", "functional", "models", "module"]

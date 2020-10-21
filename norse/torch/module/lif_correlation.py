@@ -44,7 +44,7 @@ class LIFCorrelation(torch.nn.Module):
                         device=input_tensor.device,
                         dtype=input_tensor.dtype,
                     ),
-                    v=self.p.lif_parameters.v_leak,
+                    v=self.p.lif_parameters.v_leak.detach(),
                     i=torch.zeros(
                         batch_size,
                         hidden_features,

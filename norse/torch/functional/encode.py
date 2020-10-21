@@ -232,9 +232,6 @@ def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     Returns:
         A tensor where the first spike (1) is retained in the sequence
     """
-    if len(input_spikes.size()) == 1:
-        return input_spikes
-
     mask = torch.zeros(input_spikes.size()[1:], device=input_spikes.device).byte()
     spikes = []
     zero_spikes = torch.zeros_like(input_spikes[0])

@@ -55,8 +55,8 @@ class CobaLIFCell(torch.nn.Module):
 
     def __init__(
         self,
-        input_size,
-        hidden_size,
+        input_size: int,
+        hidden_size: int,
         p: CobaLIFParameters = CobaLIFParameters(),
         dt: float = 0.001,
     ):

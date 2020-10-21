@@ -4,7 +4,6 @@ This package contains modules that extends PyTorch with spiking neural
 network functionality.
 """
 
-from . import functional
-from . import module
-
-__all__ = [functional, module]
+from .functional import *
+from .models import *
+from .module import *
