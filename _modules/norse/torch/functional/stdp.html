@@ -37,406 +37,266 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.functional.stdp</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
-
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Union</span>
-
+<span></span><span class="c1"># Includes</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">.heaviside</span> <span class="kn">import</span> <span class="n">heaviside</span>
 
-
-<div class="viewcode-block" id="STDPParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.STDPParameters">[docs]</a><span class="k">class</span> <span class="nc">STDPParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parameters of spike-timing-dependent plasticity (STDP)</span>
-
+<span class="c1"># STDP state class</span>
+<div class="viewcode-block" id="STDPState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.STDPState">[docs]</a><span class="k">class</span> <span class="nc">STDPState</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;State of spike-timing-dependent plasticity (STDP).</span>
 <span class="sd">    Parameters:</span>
-<span class="sd">        a_pre (float): contribution of presynaptic spikes to trace</span>
-<span class="sd">        a_post (float): contribution of postsynaptic spikes to trace</span>
-<span class="sd">        tau_pre_inv (float): inverse decay time constant of presynaptic spike trace in 1/ms</span>
-<span class="sd">        tau_post_inv (float): inverse decay time constant of postsynaptic spike trace in 1/ms</span>
-<span class="sd">        w_min (float): lower bound on synaptic weight (should be &lt; w_max)</span>
-<span class="sd">        w_max (float): upper bound on synaptic weight (should be &gt; w_min)</span>
-<span class="sd">        eta_plus (float): contribution of pre-post activity to synaptic weight (should be &gt;= 0)</span>
-<span class="sd">        eta_minus (float): contribution of post-pre activity to synaptic weight (should be &gt;= 0)</span>
+<span class="sd">        t_pre (torch.Tensor): presynaptic spike trace</span>
+<span class="sd">        t_post (torch.Tensor): postsynaptic spike trace</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">a_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="n">a_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="n">tau_pre_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">100e-3</span><span class="p">)</span>
-    <span class="n">tau_post_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">100e-3</span><span class="p">)</span>
-    <span class="n">w_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">w_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">eta_plus</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">eta_minus</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">t_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_pre</span> <span class="o">=</span> <span class="n">t_pre</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_post</span> <span class="o">=</span> <span class="n">t_post</span>
+
+<div class="viewcode-block" id="STDPState.decay"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.STDPState.decay">[docs]</a>    <span class="k">def</span> <span class="nf">decay</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">tau_pre_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">tau_post_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">a_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">a_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Decay function for STDP traces.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            z_pre (torch.Tensor): presynaptic spikes</span>
+<span class="sd">            z_post (torch.Tensor): postsynaptic spikes</span>
+<span class="sd">            tau_pre_inv (torch.Tensor): inverse time-constant for the presynaptic trace</span>
+<span class="sd">            tau_post (torch.Tensor): inverse time-constant for the postsynaptic trace</span>
+<span class="sd">            a_pre (torch.Tensor): presynaptic trace</span>
+<span class="sd">            a_post (torch.Tensor): postsynaptic trace</span>
+<span class="sd">            dt (float): time-resolution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_pre</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_pre</span> <span class="o">+</span> <span class="p">(</span><span class="n">dt</span> <span class="o">*</span> <span class="n">tau_pre_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t_pre</span> <span class="o">+</span> <span class="n">a_pre</span> <span class="o">*</span> <span class="n">z_pre</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_post</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_post</span> <span class="o">+</span> <span class="p">(</span>
+            <span class="n">dt</span> <span class="o">*</span> <span class="n">tau_post_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t_post</span> <span class="o">+</span> <span class="n">a_post</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">)</span>
+        <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="STDPConvParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.STDPConvParameters">[docs]</a><span class="k">class</span> <span class="nc">STDPConvParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parameters of spike-timing-dependent plasticity (STDP). Same as STDPParameters except</span>
-<span class="sd">    additional information on convolution (e.g., stride, padding, dilation)</span>
-
+<span class="c1"># STDP parameters class</span>
+<div class="viewcode-block" id="STDPParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.STDPParameters">[docs]</a><span class="k">class</span> <span class="nc">STDPParameters</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;STDP parameters.</span>
 <span class="sd">    Parameters:</span>
-<span class="sd">        a_pre (float): contribution of presynaptic spikes to trace</span>
-<span class="sd">        a_post (float): contribution of postsynaptic spikes to trace</span>
-<span class="sd">        tau_pre_inv (float): inverse decay time constant of presynaptic spike trace in 1/ms</span>
-<span class="sd">        tau_post_inv (float): inverse decay time constant of postsynaptic spike trace in 1/ms</span>
-<span class="sd">        w_min (float): lower bound on synaptic weight (should be &lt; w_max)</span>
-<span class="sd">        w_max (float): upper bound on synaptic weight (should be &gt; w_min)</span>
-<span class="sd">        eta_plus (float): contribution of pre-post activity to synaptic weight (should be &gt;= 0)</span>
-<span class="sd">        eta_minus (float): contribution of post-pre activity to synaptic weight (should be &gt;= 0)</span>
-<span class="sd">        stride (int or tuple): convolutional stride, defaults to 1 like nn.Conv2d</span>
-<span class="sd">        padding (int or tuple): convolutional padding, defaults to 0 like nn.Conv2d</span>
-<span class="sd">        dilation (int or tuple): convolutional dilation, defaults to 1 like nn.Conv2d</span>
+<span class="sd">        a_pre (torch.Tensor): Contribution of presynaptic spikes to trace</span>
+<span class="sd">        a_post (torch.Tensor): Contribution of postsynaptic spikes to trace</span>
+<span class="sd">        tau_pre_inv (torch.Tensor): Inverse decay time constant of presynaptic spike trace in 1/s</span>
+<span class="sd">        tau_post_inv (torch.Tensor): Inverse decay time constant of postsynaptic spike trace in 1/s</span>
+<span class="sd">        w_min (torch.Tensor): Lower bound on synaptic weights (should be &lt; w_max)</span>
+<span class="sd">        w_max (torch.Tensor): Upper bound on synaptic weight (should be &gt; w_min)</span>
+<span class="sd">        eta_plus (torch.Tensor): Learning rate for synaptic potentiation (0 &lt; eta_plus &lt;&lt; 1)</span>
+<span class="sd">        eta_minus (torch.Tensor): Learning rate for synaptic depression (0 &lt; eta_minus &lt;&lt; 1)</span>
+<span class="sd">        stdp_algorithm (string): Algorithm for STDP updates. Options in {&quot;additive&quot;,&quot;additive_step&quot;,&quot;multiplicative_pow&quot;,&quot;multiplicative_relu&quot;}</span>
+<span class="sd">        mu (torch.Tensor): Exponent for multiplicative STDP (0 &lt;= mu &lt;= 1)</span>
+<span class="sd">        hardbound (boolean): Impose hardbounds by clipping (recommended unles eta_* &lt;&lt; 1)</span>
+<span class="sd">        convolutional (boolean): Convolutional weighting kernel</span>
+<span class="sd">        stride (int): Stride for convolution</span>
+<span class="sd">        padding (int): Padding for convolution</span>
+<span class="sd">        dilation (int): Dilation for convolution</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">a_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="n">a_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="n">tau_pre_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">100e-3</span><span class="p">)</span>
-    <span class="n">tau_post_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">100e-3</span><span class="p">)</span>
-    <span class="n">w_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">w_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">eta_plus</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">eta_minus</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">stride</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">padding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">dilation</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span></div>
+<div class="viewcode-block" id="STDPParameters.Additive"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.STDPParameters.Additive">[docs]</a>    <span class="k">def</span> <span class="nf">Additive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_plus</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_minus</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">a_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">a_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">tau_pre_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">50e-3</span><span class="p">),</span>
+        <span class="n">tau_post_inv</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">50e-3</span><span class="p">),</span>
+        <span class="n">w_min</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">w_max</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">eta_plus</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">eta_minus</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">stdp_algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;additive&quot;</span><span class="p">,</span>
+        <span class="n">mu</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">hardbound</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">convolutional</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">stride</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">padding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">dilation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">=</span> <span class="n">a_pre</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a_post</span> <span class="o">=</span> <span class="n">a_post</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau_pre_inv</span> <span class="o">=</span> <span class="n">tau_pre_inv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau_post_inv</span> <span class="o">=</span> <span class="n">tau_post_inv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_min</span> <span class="o">=</span> <span class="n">w_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_max</span> <span class="o">=</span> <span class="n">w_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_plus</span> <span class="o">=</span> <span class="n">eta_plus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta_minus</span> <span class="o">=</span> <span class="n">eta_minus</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdp_algorithm</span> <span class="o">=</span> <span class="n">stdp_algorithm</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdp_algorithm</span> <span class="o">==</span> <span class="s2">&quot;additive&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">A_plus</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_plus</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">A_minus</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_minus</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdp_algorithm</span> <span class="o">==</span> <span class="s2">&quot;additive_step&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">A_plus</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_plus</span> <span class="o">*</span> <span class="n">heaviside</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_max</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">A_minus</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_minus</span> <span class="o">*</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_min</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdp_algorithm</span> <span class="o">==</span> <span class="s2">&quot;multiplicative_pow&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">A_plus</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_plus</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_max</span> <span class="o">-</span> <span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">A_minus</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_minus</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdp_algorithm</span> <span class="o">==</span> <span class="s2">&quot;multiplicative_relu&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">A_plus</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_plus</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">w_max</span> <span class="o">-</span> <span class="n">w</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">A_minus</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_minus</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span>
+                <span class="n">w</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_min</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Hard bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hardbound</span> <span class="o">=</span> <span class="n">hardbound</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hardbound</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounding_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w_min</span><span class="p">,</span> <span class="n">w_max</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounding_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="n">w</span>
+
+        <span class="c1"># Conv2D</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convolutional</span> <span class="o">=</span> <span class="n">convolutional</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">convolutional</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">=</span> <span class="n">stride</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">padding</span> <span class="o">=</span> <span class="n">padding</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dilation</span> <span class="o">=</span> <span class="n">dilation</span></div>
 
 
-<div class="viewcode-block" id="STDPState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.STDPState">[docs]</a><span class="k">class</span> <span class="nc">STDPState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;State of spike-timing-dependent plasticity (STDP)</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        x (torch.Tensor): presynaptic spike trace</span>
-<span class="sd">        y (torch.Tensor): postsynaptic spike trace</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
-    <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
-
-
-<span class="k">def</span> <span class="nf">_A_plus_soft</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w_max</span><span class="p">,</span> <span class="n">eta_plus</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Soft upper bound for multiplicative STDP</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        w_max (float): upper bound on synaptic weight (should be &gt; w_min)</span>
-<span class="sd">        eta_plus (float): contribution of pre-post activity to synaptic weight (should be &gt;= 0)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># ReLU to ensure weights outside [w_min, w_max] move towards it (when wrongly initialized)</span>
-    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">w_max</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">eta_plus</span>
-
-
-<span class="k">def</span> <span class="nf">_A_plus_hard</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w_max</span><span class="p">,</span> <span class="n">eta_plus</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Hard upper bound for multiplicative STDP</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        w_max (float): upper bound on synaptic weight (should be &gt; w_min)</span>
-<span class="sd">        eta_plus (float): contribution of pre-post activity to synaptic weight (should be &gt;= 0)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">w_max</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">eta_plus</span>
-
-
-<span class="k">def</span> <span class="nf">_A_minus_soft</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w_min</span><span class="p">,</span> <span class="n">eta_minus</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Soft lower bound for multiplicative STDP</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        w_min (float): lower bound on synaptic weight (should be &lt; w_max)</span>
-<span class="sd">        eta_minus (float): contribution of post-pre activity to synaptic weight (should be &gt;= 0)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># ReLU to ensure weights outside [w_min, w_max] move towards it (when wrongly initialized)</span>
-    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">w_min</span><span class="p">)</span> <span class="o">*</span> <span class="n">eta_minus</span>
-
-
-<span class="k">def</span> <span class="nf">_A_minus_hard</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w_min</span><span class="p">,</span> <span class="n">eta_minus</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Hard lower bound for multiplicative STDP</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        w_min (float): lower bound on synaptic weight (should be &lt; w_max)</span>
-<span class="sd">        eta_minus (float): contribution of post-pre activity to synaptic weight (should be &gt;= 0)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">w_min</span><span class="p">)</span> <span class="o">*</span> <span class="n">eta_minus</span>
-
-
-<div class="viewcode-block" id="linear_soft_multiplicative_stdp_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.linear_soft_multiplicative_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">linear_soft_multiplicative_stdp_step</span><span class="p">(</span>
-    <span class="n">w</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+<span class="c1"># %% Linear stepper</span>
+<div class="viewcode-block" id="stdp_step_linear"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.stdp_step_linear">[docs]</a><span class="k">def</span> <span class="nf">stdp_step_linear</span><span class="p">(</span>
     <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">state</span><span class="p">:</span> <span class="n">STDPState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">STDPParameters</span> <span class="o">=</span> <span class="n">STDPParameters</span><span class="p">(),</span>
+    <span class="n">w</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state_stdp</span><span class="p">:</span> <span class="n">STDPState</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">,</span>
+    <span class="n">p_stdp</span><span class="p">:</span> <span class="n">STDPParameters</span> <span class="o">=</span> <span class="n">STDPParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Soft-bound multiplicative STDP step for nn.Linear layer, meaning change in</span>
-<span class="sd">    synaptic weight is dependent on current synaptic weight. Based on online implementation</span>
-<span class="sd">    from http://www.scholarpedia.org/article/Spike-timing_dependent_plasticity</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        z_pre (torch.Tensor): presynaptic spikes</span>
-<span class="sd">        z_post (torch.Tensor): postsynaptic spikes</span>
-<span class="sd">        state (STDPState): STDP state</span>
-<span class="sd">        p (STDPParameters): STDP parameters</span>
-<span class="sd">        dt (float): integration time step</span>
+    <span class="sd">&quot;&quot;&quot;STDP step for a FF LIF layer.</span>
+<span class="sd">    Input:</span>
+<span class="sd">        z_pre (torch.Tensor): Presynaptic activity z: {0,1} -&gt; {no spike, spike}</span>
+<span class="sd">        z_post (torch.Tensor): Postsynaptic activity z: {0,1} -&gt; {no spike, spike}</span>
+<span class="sd">        w (torch.Tensor): Weight tensor connecting the pre- and postsynaptic layers</span>
+<span class="sd">        state_stdp (STDPState): STDP state</span>
+<span class="sd">        p_stdp (STDPParameters): Parameters of STDP</span>
+<span class="sd">        dt (float): Time-resolution</span>
+<span class="sd">    Output:</span>
+<span class="sd">        w (torch.tensor): Updated synaptic weights</span>
+<span class="sd">        state_stdp (STDPState): Updated STDP state</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_pre_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">*</span> <span class="n">z_pre</span><span class="p">)</span>
-    <span class="n">x_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span>
 
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_post_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_post</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">)</span>
-    <span class="n">y_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span>
+    <span class="c1"># Update STDP traces</span>
+    <span class="n">state_stdp</span><span class="o">.</span><span class="n">decay</span><span class="p">(</span>
+        <span class="n">z_pre</span><span class="p">,</span>
+        <span class="n">z_post</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">tau_pre_inv</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">tau_post_inv</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">a_pre</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">a_post</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    <span class="c1"># w has shape (post, pre), so spikes/trace for postsynaptic neuron have to be transposed</span>
-    <span class="c1"># Pre- and postsynaptic neurons can be any 2-4D (BCHW) shape</span>
-    <span class="n">dw_plus</span> <span class="o">=</span> <span class="n">_A_plus_soft</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">w_max</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_plus</span><span class="p">)</span> <span class="o">*</span> <span class="n">x_decayed</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
-    <span class="n">dw_minus</span> <span class="o">=</span> <span class="n">_A_minus_soft</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">w_min</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_minus</span><span class="p">)</span> <span class="o">*</span> <span class="n">y_decayed</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">z_pre</span>
+    <span class="c1"># STDP weight update</span>
+    <span class="n">dw_plus</span> <span class="o">=</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">A_plus</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bi,bj-&gt;ij&quot;</span><span class="p">,</span> <span class="n">z_post</span><span class="p">,</span> <span class="n">state_stdp</span><span class="o">.</span><span class="n">t_pre</span><span class="p">)</span>
+    <span class="n">dw_minus</span> <span class="o">=</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">A_minus</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;bi,bj-&gt;ij&quot;</span><span class="p">,</span> <span class="n">state_stdp</span><span class="o">.</span><span class="n">t_post</span><span class="p">,</span> <span class="n">z_pre</span><span class="p">)</span>
 
-    <span class="n">dw</span> <span class="o">=</span> <span class="p">(</span><span class="n">dw_plus</span> <span class="o">-</span> <span class="n">dw_minus</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">w</span> <span class="o">+</span> <span class="p">(</span><span class="n">dw_plus</span> <span class="o">-</span> <span class="n">dw_minus</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">dw</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_decayed</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_decayed</span><span class="p">)</span></div>
+    <span class="c1"># Bound checking</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">bounding_func</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">state_stdp</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="linear_hard_multiplicative_stdp_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.linear_hard_multiplicative_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">linear_hard_multiplicative_stdp_step</span><span class="p">(</span>
-    <span class="n">w</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+<span class="c1"># %% Conv2D stepper</span>
+<div class="viewcode-block" id="stdp_step_conv2d"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.stdp_step_conv2d">[docs]</a><span class="k">def</span> <span class="nf">stdp_step_conv2d</span><span class="p">(</span>
     <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">state</span><span class="p">:</span> <span class="n">STDPState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">STDPParameters</span> <span class="o">=</span> <span class="n">STDPParameters</span><span class="p">(),</span>
-    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Hard-bound multiplicative STDP step for nn.Linear layer, meaning change in</span>
-<span class="sd">    synaptic weight is dependent on current synaptic weight. Based on online implementation</span>
-<span class="sd">    from http://www.scholarpedia.org/article/Spike-timing_dependent_plasticity</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        z_pre (torch.Tensor): presynaptic spikes</span>
-<span class="sd">        z_post (torch.Tensor): postsynaptic spikes</span>
-<span class="sd">        state (STDPState): STDP state</span>
-<span class="sd">        p (STDPParameters): STDP parameters</span>
-<span class="sd">        dt (float): integration time step</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_pre_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">*</span> <span class="n">z_pre</span><span class="p">)</span>
-    <span class="n">x_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span>
-
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_post_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_post</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">)</span>
-    <span class="n">y_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span>
-
-    <span class="c1"># w has shape (post, pre), so spikes/trace for postsynaptic neuron have to be transposed</span>
-    <span class="c1"># Pre- and postsynaptic neurons can be any 2-4D (BCHW) shape</span>
-    <span class="n">dw_plus</span> <span class="o">=</span> <span class="n">_A_plus_hard</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">w_max</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_plus</span><span class="p">)</span> <span class="o">*</span> <span class="n">x_decayed</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
-    <span class="n">dw_minus</span> <span class="o">=</span> <span class="n">_A_minus_hard</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">w_min</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_minus</span><span class="p">)</span> <span class="o">*</span> <span class="n">y_decayed</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">z_pre</span>
-
-    <span class="n">dw</span> <span class="o">=</span> <span class="p">(</span><span class="n">dw_plus</span> <span class="o">-</span> <span class="n">dw_minus</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">dw</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_decayed</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_decayed</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="linear_additive_stdp_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.linear_additive_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">linear_additive_stdp_step</span><span class="p">(</span>
     <span class="n">w</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">state</span><span class="p">:</span> <span class="n">STDPState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">STDPParameters</span> <span class="o">=</span> <span class="n">STDPParameters</span><span class="p">(),</span>
+    <span class="n">state_stdp</span><span class="p">:</span> <span class="n">STDPState</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">,</span>
+    <span class="n">p_stdp</span><span class="p">:</span> <span class="n">STDPParameters</span> <span class="o">=</span> <span class="n">STDPParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Additive STDP step for nn.Linear layer. Based on online implementation</span>
-<span class="sd">    from http://www.scholarpedia.org/article/Spike-timing_dependent_plasticity</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        z_pre (torch.Tensor): presynaptic spikes</span>
-<span class="sd">        z_post (torch.Tensor): postsynaptic spikes</span>
-<span class="sd">        state (STDPState): STDP state</span>
-<span class="sd">        p (STDPParameters): STDP parameters</span>
-<span class="sd">        dt (float): integration time step</span>
+    <span class="sd">&quot;&quot;&quot;STDP step for a conv2d LIF layer.</span>
+<span class="sd">    Input:</span>
+<span class="sd">        z_pre (torch.tensor): Presynaptic activity z: {0,1} -&gt; {no spike, spike}</span>
+<span class="sd">        z_post (torch.tensor): Postsynaptic activity z: {0,1} -&gt; {no spike, spike}</span>
+<span class="sd">        w (torch.Tensor): Weight tensor connecting the pre- and postsynaptic layers</span>
+<span class="sd">        state_stdp (STDPState): STDP state</span>
+<span class="sd">        p_stdp (STDPParameters): Parameters of STDP</span>
+<span class="sd">        dt (float): Time-resolution</span>
+<span class="sd">    Output:</span>
+<span class="sd">        w (torch.tensor): Updated synaptic weights</span>
+<span class="sd">        state_stdp (STDPState): Updated STDP state</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_pre_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">*</span> <span class="n">z_pre</span><span class="p">)</span>
-    <span class="n">x_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span>
 
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_post_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_post</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">)</span>
-    <span class="n">y_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span>
+    <span class="c1"># Update STDP traces</span>
+    <span class="n">state_stdp</span><span class="o">.</span><span class="n">decay</span><span class="p">(</span>
+        <span class="n">z_pre</span><span class="p">,</span>
+        <span class="n">z_post</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">tau_pre_inv</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">tau_post_inv</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">a_pre</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">a_post</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    <span class="c1"># w has shape (post, pre), so spikes/trace for postsynaptic neuron have to be transposed</span>
-    <span class="c1"># Pre- and postsynaptic neurons can be any 2-4D (BCHW) shape</span>
-    <span class="n">dw_plus</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_plus</span> <span class="o">*</span> <span class="n">x_decayed</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
-    <span class="n">dw_minus</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_minus</span> <span class="o">*</span> <span class="n">y_decayed</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">z_pre</span>
-
-    <span class="n">dw</span> <span class="o">=</span> <span class="p">(</span><span class="n">dw_plus</span> <span class="o">-</span> <span class="n">dw_minus</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">dw</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_decayed</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_decayed</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="conv2d_soft_multiplicative_stdp_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.conv2d_soft_multiplicative_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">conv2d_soft_multiplicative_stdp_step</span><span class="p">(</span>
-    <span class="n">w</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">state</span><span class="p">:</span> <span class="n">STDPState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">STDPConvParameters</span> <span class="o">=</span> <span class="n">STDPConvParameters</span><span class="p">(),</span>
-    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Soft-bound multiplicative STDP step for nn.Conv2d layer, meaning change in</span>
-<span class="sd">    synaptic weight is dependent on current synaptic weight. Based on online implementation</span>
-<span class="sd">    from http://www.scholarpedia.org/article/Spike-timing_dependent_plasticity</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        z_pre (torch.Tensor): presynaptic spikes</span>
-<span class="sd">        z_post (torch.Tensor): postsynaptic spikes</span>
-<span class="sd">        state (STDPState): STDP state</span>
-<span class="sd">        p (STDPConvParameters): STDP and convolutional parameters</span>
-<span class="sd">        dt (float): integration time step</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_pre_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">*</span> <span class="n">z_pre</span><span class="p">)</span>
-    <span class="n">x_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span>
-
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_post_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_post</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">)</span>
-    <span class="n">y_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span>
-
+    <span class="c1"># Unfolding the convolution</span>
     <span class="c1"># Get shape information</span>
     <span class="n">batch_size</span> <span class="o">=</span> <span class="n">z_pre</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">out_channels</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">kernel_h</span><span class="p">,</span> <span class="n">kernel_w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span>
 
-    <span class="c1"># Unfold presynaptic neurons to get receptive field per postsynaptic neuron</span>
-    <span class="n">x_decayed_uf</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span>
-        <span class="n">x_decayed</span><span class="p">,</span>
+    <span class="c1"># Unfold presynaptic trace</span>
+    <span class="n">state_stdp_t_pre_uf</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span>
+        <span class="n">state_stdp</span><span class="o">.</span><span class="n">t_pre</span><span class="p">,</span>
         <span class="p">(</span><span class="n">kernel_h</span><span class="p">,</span> <span class="n">kernel_w</span><span class="p">),</span>
-        <span class="n">dilation</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">dilation</span><span class="p">,</span>
-        <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
-        <span class="n">stride</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
+        <span class="n">dilation</span><span class="o">=</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">dilation</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
+        <span class="n">stride</span><span class="o">=</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="c1"># Unfold presynaptic receptive fields</span>
     <span class="n">z_pre_uf</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span>
         <span class="n">z_pre</span><span class="p">,</span>
         <span class="p">(</span><span class="n">kernel_h</span><span class="p">,</span> <span class="n">kernel_w</span><span class="p">),</span>
-        <span class="n">dilation</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">dilation</span><span class="p">,</span>
-        <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
-        <span class="n">stride</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
+        <span class="n">dilation</span><span class="o">=</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">dilation</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
+        <span class="n">stride</span><span class="o">=</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># Sum before reshape</span>
-    <span class="n">dw_plus</span> <span class="o">=</span> <span class="n">_A_plus_soft</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">w_max</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_plus</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span>
-        <span class="n">z_post</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">x_decayed_uf</span><span class="o">.</span><span class="n">permute</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">dw_minus</span> <span class="o">=</span> <span class="n">_A_minus_soft</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">w_min</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_minus</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span>
-        <span class="n">y_decayed</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">z_pre_uf</span><span class="o">.</span><span class="n">permute</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-    <span class="n">dw</span> <span class="o">=</span> <span class="n">dw_plus</span> <span class="o">-</span> <span class="n">dw_minus</span>
-
-    <span class="k">return</span> <span class="n">dw</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_decayed</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_decayed</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="conv2d_hard_multiplicative_stdp_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.conv2d_hard_multiplicative_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">conv2d_hard_multiplicative_stdp_step</span><span class="p">(</span>
-    <span class="n">w</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">state</span><span class="p">:</span> <span class="n">STDPState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">STDPConvParameters</span> <span class="o">=</span> <span class="n">STDPConvParameters</span><span class="p">(),</span>
-    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Hard-bound multiplicative STDP step for nn.Conv2d layer, meaning change in</span>
-<span class="sd">    synaptic weight is dependent on current synaptic weight. Based on online implementation</span>
-<span class="sd">    from http://www.scholarpedia.org/article/Spike-timing_dependent_plasticity</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        z_pre (torch.Tensor): presynaptic spikes</span>
-<span class="sd">        z_post (torch.Tensor): postsynaptic spikes</span>
-<span class="sd">        state (STDPState): STDP state</span>
-<span class="sd">        p (STDPConvParameters): STDP and convolutional parameters</span>
-<span class="sd">        dt (float): integration time step</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_pre_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">*</span> <span class="n">z_pre</span><span class="p">)</span>
-    <span class="n">x_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span>
-
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_post_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_post</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">)</span>
-    <span class="n">y_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span>
-
-    <span class="c1"># Get shape information</span>
-    <span class="n">batch_size</span> <span class="o">=</span> <span class="n">z_pre</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">out_channels</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">kernel_h</span><span class="p">,</span> <span class="n">kernel_w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span>
-
-    <span class="c1"># Unfold presynaptic neurons to get receptive field per postsynaptic neuron</span>
-    <span class="n">x_decayed_uf</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span>
-        <span class="n">x_decayed</span><span class="p">,</span>
-        <span class="p">(</span><span class="n">kernel_h</span><span class="p">,</span> <span class="n">kernel_w</span><span class="p">),</span>
-        <span class="n">dilation</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">dilation</span><span class="p">,</span>
-        <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
-        <span class="n">stride</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">z_pre_uf</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span>
-        <span class="n">z_pre</span><span class="p">,</span>
-        <span class="p">(</span><span class="n">kernel_h</span><span class="p">,</span> <span class="n">kernel_w</span><span class="p">),</span>
-        <span class="n">dilation</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">dilation</span><span class="p">,</span>
-        <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
-        <span class="n">stride</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
+    <span class="c1"># STDP weight update</span>
+    <span class="n">dw_plus</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">A_plus</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s2">&quot;bik,bjk-&gt;ij&quot;</span><span class="p">,</span>
+            <span class="n">z_post</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">state_stdp_t_pre_uf</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="c1"># Sum before reshape</span>
-    <span class="n">dw_plus</span> <span class="o">=</span> <span class="n">_A_plus_hard</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">w_max</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_plus</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span>
-        <span class="n">z_post</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">x_decayed_uf</span><span class="o">.</span><span class="n">permute</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">dw_minus</span> <span class="o">=</span> <span class="n">_A_minus_hard</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">w_min</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_minus</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span>
-        <span class="n">y_decayed</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">z_pre_uf</span><span class="o">.</span><span class="n">permute</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-    <span class="n">dw</span> <span class="o">=</span> <span class="n">dw_plus</span> <span class="o">-</span> <span class="n">dw_minus</span>
-
-    <span class="k">return</span> <span class="n">dw</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_decayed</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_decayed</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="conv2d_additive_stdp_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.stdp.html#norse.torch.functional.stdp.conv2d_additive_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">conv2d_additive_stdp_step</span><span class="p">(</span>
-    <span class="n">w</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">z_pre</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">z_post</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">state</span><span class="p">:</span> <span class="n">STDPState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">STDPConvParameters</span> <span class="o">=</span> <span class="n">STDPConvParameters</span><span class="p">(),</span>
-    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Additive STDP step for nn.Conv2d layer. Based on online implementation</span>
-<span class="sd">    from http://www.scholarpedia.org/article/Spike-timing_dependent_plasticity</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        w (torch.Tensor): synaptic weight</span>
-<span class="sd">        z_pre (torch.Tensor): presynaptic spikes</span>
-<span class="sd">        z_post (torch.Tensor): postsynaptic spikes</span>
-<span class="sd">        state (STDPState): STDP state</span>
-<span class="sd">        p (STDPConvParameters): STDP and convolutional parameters</span>
-<span class="sd">        dt (float): integration time step</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_pre_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">*</span> <span class="n">z_pre</span><span class="p">)</span>
-    <span class="n">x_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span>
-
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_post_inv</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">a_post</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">)</span>
-    <span class="n">y_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span>
-
-    <span class="c1"># Get shape information</span>
-    <span class="n">batch_size</span> <span class="o">=</span> <span class="n">z_pre</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">out_channels</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">kernel_h</span><span class="p">,</span> <span class="n">kernel_w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span>
-
-    <span class="c1"># Unfold presynaptic neurons to get receptive field per postsynaptic neuron</span>
-    <span class="n">x_decayed_uf</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span>
-        <span class="n">x_decayed</span><span class="p">,</span>
-        <span class="p">(</span><span class="n">kernel_h</span><span class="p">,</span> <span class="n">kernel_w</span><span class="p">),</span>
-        <span class="n">dilation</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">dilation</span><span class="p">,</span>
-        <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
-        <span class="n">stride</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">z_pre_uf</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span>
-        <span class="n">z_pre</span><span class="p">,</span>
-        <span class="p">(</span><span class="n">kernel_h</span><span class="p">,</span> <span class="n">kernel_w</span><span class="p">),</span>
-        <span class="n">dilation</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">dilation</span><span class="p">,</span>
-        <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
-        <span class="n">stride</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
+    <span class="n">dw_minus</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">p_stdp</span><span class="o">.</span><span class="n">A_minus</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s2">&quot;bik,bjk-&gt;ij&quot;</span><span class="p">,</span>
+            <span class="n">state_stdp</span><span class="o">.</span><span class="n">t_post</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">z_pre_uf</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="n">dw_plus</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_plus</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span>
-        <span class="n">z_post</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">x_decayed_uf</span><span class="o">.</span><span class="n">permute</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="p">)</span>
-    <span class="n">dw_minus</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">eta_minus</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span>
-        <span class="n">y_decayed</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">z_pre_uf</span><span class="o">.</span><span class="n">permute</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">w</span> <span class="o">+</span> <span class="p">(</span><span class="n">dw_plus</span> <span class="o">-</span> <span class="n">dw_minus</span><span class="p">)</span>
 
-    <span class="n">dw</span> <span class="o">=</span> <span class="p">(</span><span class="n">dw_plus</span> <span class="o">-</span> <span class="n">dw_minus</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># Bound checking</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">bounding_func</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">dw</span><span class="p">,</span> <span class="n">STDPState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_decayed</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_decayed</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">state_stdp</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
