@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 from norse.torch import LIFParameters
 from norse.torch import ConvNet, ConvNet4
-from norse.torch import ConstantCurrentLIFEncoder
+from norse.torch import ConstantCurrentLIFEncoder, PoissonEncoder, SignedPoissonEncoder
 
 FLAGS = flags.FLAGS
 
@@ -29,7 +29,7 @@ flags.DEFINE_integer(
 flags.DEFINE_string("prefix", "", "Prefix for save path to use.")
 flags.DEFINE_enum(
     "encoding",
-    "poisson",
+    "constant",
     ["poisson", "constant", "constant_polar", "signed_poisson", "signed_constant"],
     "Encoding to use for input",
 )
@@ -100,20 +100,6 @@ def add_luminance(images):
         0,
     )
 
-
-def poisson_train(images, seq_length, rel_fmax=0.2):
-    return (torch.rand(seq_length, *images.shape).float() < rel_fmax * images).float()
-
-
-def signed_poisson_train(images, seq_length, rel_fmax=0.2):
-    return (
-        torch.sign(images)
-        * (
-            torch.rand(seq_length, *images.shape).float() < rel_fmax * torch.abs(images)
-        ).float()
-    )
-
-
 class LIFConvNet(torch.nn.Module):
     def __init__(self, num_channels):
         super(LIFConvNet, self).__init__()
@@ -180,7 +166,7 @@ def train(
                 writer.add_histogram(tag + "/grad", value.grad.data.cpu().numpy(), step)
 
         if FLAGS.do_plot and batch_idx % FLAGS.plot_interval == 0:
-            ts = np.arange(0, FLAGS.seq_length) * FLAGS.dt
+            ts = np.arange(0, FLAGS.seq_length)
             _, axs = plt.subplots(4, 4, figsize=(15, 10), sharex=True, sharey=True)
             axs = axs.reshape(-1)  # flatten
             for nrn in range(10):
@@ -268,44 +254,31 @@ def main(args):
     )
 
     def polar_current_encoder(x):
-        x_p, _ = constant_current_encoder(2 * torch.nn.functional.relu(x))
-        x_m, _ = constant_current_encoder(2 * torch.nn.functional.relu(-x))
+        x_p = constant_current_encoder(2 * torch.nn.functional.relu(x))
+        x_m = constant_current_encoder(2 * torch.nn.functional.relu(-x))
         return torch.cat((x_p, x_m), 1)
 
     def current_encoder(x):
-        x, _ = constant_current_encoder(2 * x)
+        x = constant_current_encoder(2 * x)
         return x
 
-    def poisson_encoder(x):
-        return poisson_train(x, seq_length=FLAGS.seq_length)
-
-    def signed_poisson_encoder(x):
-        return signed_poisson_train(x, seq_length=FLAGS.seq_length)
-
     def signed_current_encoder(x):
-        z, _ = constant_current_encoder(torch.abs(x))
+        z = constant_current_encoder(torch.abs(x))
         return torch.sign(x) * z
 
     num_channels = 4
 
     if FLAGS.encoding == "poisson":
-        encoder = poisson_encoder
+        encoder = PoissonEncoder(seq_length=FLAGS.seq_length, f_max=200)
     elif FLAGS.encoding == "constant":
         encoder = current_encoder
     elif FLAGS.encoding == "signed_poisson":
-        encoder = signed_poisson_encoder
+        encoder = SignedPoissonEncoder(seq_length=FLAGS.seq_length, f_max=200)
     elif FLAGS.encoding == "signed_constant":
         encoder = signed_current_encoder
     elif FLAGS.encoding == "constant_polar":
         encoder = polar_current_encoder
         num_channels = 2 * num_channels
-
-    luminance_transforms = [
-        add_luminance,
-        torchvision.transforms.Normalize(
-            (0.4914, 0.4822, 0.4465, 0.4816), (0.2023, 0.1994, 0.2010, 0.20013)
-        ),
-    ]
 
     transform_train = torchvision.transforms.Compose(
         [
@@ -313,12 +286,11 @@ def main(args):
             torchvision.transforms.RandomHorizontalFlip(),
             torchvision.transforms.ToTensor(),
         ]
-        + luminance_transforms
-        + [encoder]
+        + [add_luminance, encoder]
     )
 
     transform_test = torchvision.transforms.Compose(
-        [torchvision.transforms.ToTensor()] + luminance_transforms + [encoder]
+        [torchvision.transforms.ToTensor()] + [add_luminance, encoder]
     )
 
     kwargs = {"num_workers": 0, "pin_memory": True} if FLAGS.device == "cuda" else {}
@@ -347,8 +319,6 @@ def main(args):
     FLAGS.append_flags_into_file("flags.txt")
 
     model = LIFConvNet(num_channels=num_channels).to(device)
-
-    print(model)
 
     if device == "cuda":
         model = torch.nn.DataParallel(model).to(device)
