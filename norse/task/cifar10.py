@@ -39,7 +39,7 @@ flags.DEFINE_enum(
 )
 flags.DEFINE_integer("plot_interval", 10, "Interval for plotting.")
 flags.DEFINE_float("input_scale", 1, "Scaling factor for input current.")
-flags.DEFINE_float("current_encoder_v_th", 1.0, "v_th for constant current encoder")
+flags.DEFINE_float("current_encoder_v_th", 0.7, "v_th for constant current encoder")
 flags.DEFINE_bool("learning_rate_schedule", False, "Use a learning rate schedule")
 flags.DEFINE_bool("find_learning_rate", False, "Find learning rate")
 
