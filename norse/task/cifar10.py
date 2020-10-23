@@ -100,6 +100,7 @@ def add_luminance(images):
         0,
     )
 
+
 class LIFConvNet(torch.nn.Module):
     def __init__(self, num_channels):
         super(LIFConvNet, self).__init__()
