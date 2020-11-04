@@ -89,9 +89,18 @@ and input spikes respectively.</p>
 <dl class="method">
 <dt id="norse.torch.module.CobaLIFCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/coba_lif.html#CobaLIFCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.CobaLIFCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.CobaLIFState" title="norse.torch.functional.coba_lif.CobaLIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.CobaLIFState" title="norse.torch.functional.coba_lif.CobaLIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -111,10 +120,10 @@ and input spikes respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>g_e</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – excitatory input conductance</p></li>
-<li><p><strong>g_i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inhibitory input conductance</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>g_e</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – excitatory input conductance</p></li>
+<li><p><strong>g_i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inhibitory input conductance</p></li>
 </ul>
 </dd>
 </dl>
@@ -153,17 +162,17 @@ and input spikes respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tau_syn_exc_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse excitatory synaptic input
+<li><p><strong>tau_syn_exc_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse excitatory synaptic input
 time constant</p></li>
-<li><p><strong>tau_syn_inh_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse inhibitory synaptic input
+<li><p><strong>tau_syn_inh_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse inhibitory synaptic input
 time constant</p></li>
-<li><p><strong>c_m_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse membrane capacitance</p></li>
-<li><p><strong>g_l</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – leak conductance</p></li>
-<li><p><strong>e_rev_I</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inhibitory reversal potential</p></li>
-<li><p><strong>e_rev_E</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – excitatory reversal potential</p></li>
-<li><p><strong>v_rest</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – rest membrane potential</p></li>
-<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – reset membrane potential</p></li>
-<li><p><strong>v_thresh</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – threshold membrane potential</p></li>
+<li><p><strong>c_m_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse membrane capacitance</p></li>
+<li><p><strong>g_l</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – leak conductance</p></li>
+<li><p><strong>e_rev_I</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inhibitory reversal potential</p></li>
+<li><p><strong>e_rev_E</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – excitatory reversal potential</p></li>
+<li><p><strong>v_rest</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – rest membrane potential</p></li>
+<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – reset membrane potential</p></li>
+<li><p><strong>v_thresh</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – threshold membrane potential</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – method to determine the spike threshold
 (relevant for surrogate gradients)</p></li>
 <li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – hyper parameter to use in surrogate gradient computation</p></li>
@@ -267,7 +276,16 @@ occur during a number of timesteps/iterations (seq_length).</p>
 <dl class="method">
 <dt id="norse.torch.module.ConstantCurrentLIFEncoder.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_currents</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/encode.html#ConstantCurrentLIFEncoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.ConstantCurrentLIFEncoder.forward" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="norse.torch.module.ConstantCurrentLIFEncoder.training">
@@ -287,7 +305,7 @@ which represent input spikes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
 <li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
 <li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Maximal frequency (in Hertz) which will be emitted.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
@@ -297,7 +315,16 @@ which represent input spikes.</p>
 <dl class="method">
 <dt id="norse.torch.module.PoissonEncoder.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/encode.html#PoissonEncoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.PoissonEncoder.forward" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="norse.torch.module.PoissonEncoder.training">
@@ -332,19 +359,28 @@ if a number gets close to its “receptive field”.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of output <em>per</em> input value</p></li>
-<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
+<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
 Can also be set for each individual sample.</p></li>
-<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
+<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
 (which changes for each index in the output tensor) and the actual data value to encode respectively.z
 Defaults to gaussian radial basis kernel function.</p></li>
-<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
+<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="method">
 <dt id="norse.torch.module.PopulationEncoder.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/encode.html#PopulationEncoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.PopulationEncoder.forward" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="norse.torch.module.PopulationEncoder.training">
@@ -373,7 +409,16 @@ which represent input spikes.</p>
 <dl class="method">
 <dt id="norse.torch.module.SignedPoissonEncoder.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/encode.html#SignedPoissonEncoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.SignedPoissonEncoder.forward" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="norse.torch.module.SignedPoissonEncoder.training">
@@ -406,7 +451,16 @@ fast.</p>
 <dl class="method">
 <dt id="norse.torch.module.SpikeLatencyEncoder.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_spikes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/encode.html#SpikeLatencyEncoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.SpikeLatencyEncoder.forward" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="norse.torch.module.SpikeLatencyEncoder.training">
@@ -435,7 +489,16 @@ thought to have an infinite refractory period.</p>
 <dl class="method">
 <dt id="norse.torch.module.SpikeLatencyLIFEncoder.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_current</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/encode.html#SpikeLatencyLIFEncoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.SpikeLatencyLIFEncoder.forward" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="norse.torch.module.SpikeLatencyLIFEncoder.training">
@@ -472,9 +535,18 @@ More specifically it implements a discretized version of the ODE</p>
 <dl class="method">
 <dt id="norse.torch.module.LICell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LICell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LICell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.leaky_integrator.html#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.leaky_integrator.html#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -512,9 +584,18 @@ More specifically it implements a discretized version of the ODE</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFeedForwardCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LIFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFeedForwardCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.leaky_integrator.html#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.leaky_integrator.html#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -534,9 +615,9 @@ More specifically it implements a discretized version of the ODE</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse synaptic time constant</p></li>
-<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse membrane time constant</p></li>
-<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – leak potential</p></li>
+<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse synaptic time constant</p></li>
+<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse membrane time constant</p></li>
+<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – leak potential</p></li>
 </ul>
 </dd>
 </dl>
@@ -569,8 +650,8 @@ More specifically it implements a discretized version of the ODE</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane voltage</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – input current</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane voltage</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – input current</p></li>
 </ul>
 </dd>
 </dl>
@@ -636,7 +717,7 @@ recurrent and input spikes respectively.</p>
 <dt id="norse.torch.module.LIFCell.extra_repr">
 <code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFCell.extra_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFCell.extra_repr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should reimplement
+<p>To print customized extra information, you should re-implement
 this method in your own modules. Both single-line and multi-line
 strings are acceptable.</p>
 </dd></dl>
@@ -644,9 +725,18 @@ strings are acceptable.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -676,9 +766,18 @@ After application, the layer returns a tuple containing</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFLayer.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFLayer.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -731,7 +830,7 @@ an arbitrary pytorch module (such as a convolution) to input spikes.</p>
 <dt id="norse.torch.module.LIFFeedForwardCell.extra_repr">
 <code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFFeedForwardCell.extra_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFFeedForwardCell.extra_repr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should reimplement
+<p>To print customized extra information, you should re-implement
 this method in your own modules. Both single-line and multi-line
 strings are acceptable.</p>
 </dd></dl>
@@ -739,9 +838,18 @@ strings are acceptable.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFFeedForwardCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif.html#LIFFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFFeedForwardCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFFeedForwardState" title="norse.torch.functional.lif.LIFFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFFeedForwardState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFFeedForwardState" title="norse.torch.functional.lif.LIFFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -761,8 +869,8 @@ strings are acceptable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
 </ul>
 </dd>
 </dl>
@@ -789,13 +897,13 @@ strings are acceptable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse synaptic time
+<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse synaptic time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{syn}\)</span>) in 1/ms</p></li>
-<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse membrane time
+<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse membrane time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span>) in 1/ms</p></li>
-<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – leak potential in mV</p></li>
-<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – threshold potential in mV</p></li>
-<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – reset potential in mV</p></li>
+<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – leak potential in mV</p></li>
+<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – threshold potential in mV</p></li>
+<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – reset potential in mV</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – method to determine the spike threshold
 (relevant for surrogate gradients)</p></li>
 <li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – hyper parameter to use in surrogate gradient computation</p></li>
@@ -855,9 +963,9 @@ constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
 </ul>
 </dd>
 </dl>
@@ -930,7 +1038,7 @@ recurrent and input spikes respectively.</p>
 <dt id="norse.torch.module.LIFAdExCell.extra_repr">
 <code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.extra_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFAdExCell.extra_repr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should reimplement
+<p>To print customized extra information, you should re-implement
 this method in your own modules. Both single-line and multi-line
 strings are acceptable.</p>
 </dd></dl>
@@ -938,9 +1046,18 @@ strings are acceptable.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFAdExCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFAdExCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -996,7 +1113,7 @@ an arbitrary pytorch module (such as a convolution) to input spikes.</p>
 <dt id="norse.torch.module.LIFAdExFeedForwardCell.extra_repr">
 <code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell.extra_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFAdExFeedForwardCell.extra_repr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should reimplement
+<p>To print customized extra information, you should re-implement
 this method in your own modules. Both single-line and multi-line
 strings are acceptable.</p>
 </dd></dl>
@@ -1004,9 +1121,18 @@ strings are acceptable.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFAdExFeedForwardCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFAdExFeedForwardCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1026,9 +1152,9 @@ strings are acceptable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
-<li><p><strong>a</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential adaptation factor</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>a</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential adaptation factor</p></li>
 </ul>
 </dd>
 </dl>
@@ -1062,18 +1188,18 @@ strings are acceptable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>adaptation_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – adaptation coupling parameter in nS</p></li>
-<li><p><strong>adaptation_spike</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – spike triggered adaptation parameter in nA</p></li>
-<li><p><strong>delta_T</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – sharpness or speed of the exponential growth in mV</p></li>
-<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse adaptation time
+<li><p><strong>adaptation_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – adaptation coupling parameter in nS</p></li>
+<li><p><strong>adaptation_spike</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – spike triggered adaptation parameter in nA</p></li>
+<li><p><strong>delta_T</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – sharpness or speed of the exponential growth in mV</p></li>
+<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse adaptation time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{ada}\)</span>) in 1/ms</p></li>
 <li><p><strong>tau_syn_inv</strong> – inverse synaptic time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{syn}\)</span>) in 1/ms</p></li>
-<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse membrane time
+<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse membrane time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span>) in 1/ms</p></li>
-<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – leak potential in mV</p></li>
-<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – threshold potential in mV</p></li>
-<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – reset potential in mV</p></li>
+<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – leak potential in mV</p></li>
+<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – threshold potential in mV</p></li>
+<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – reset potential in mV</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – method to determine the spike threshold
 (relevant for surrogate gradients)</p></li>
 <li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – hyper parameter to use in surrogate gradient computation</p></li>
@@ -1157,10 +1283,10 @@ constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
-<li><p><strong>a</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential adaptation factor</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>a</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential adaptation factor</p></li>
 </ul>
 </dd>
 </dl>
@@ -1209,9 +1335,18 @@ After application, the layer returns a tuple containing</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFAdExLayer.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFAdExLayer.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1271,7 +1406,7 @@ recurrent and input spikes respectively.</p>
 <dt>
 <code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.extra_repr"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should reimplement
+<p>To print customized extra information, you should re-implement
 this method in your own modules. Both single-line and multi-line
 strings are acceptable.</p>
 </dd></dl>
@@ -1279,9 +1414,18 @@ strings are acceptable.</p>
 <dl class="method">
 <dt>
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.forward"><span class="viewcode-link">[source]</span></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1337,7 +1481,7 @@ an arbitrary pytorch module (such as a convolution) to input spikes.</p>
 <dt>
 <code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell.extra_repr"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should reimplement
+<p>To print customized extra information, you should re-implement
 this method in your own modules. Both single-line and multi-line
 strings are acceptable.</p>
 </dd></dl>
@@ -1345,9 +1489,18 @@ strings are acceptable.</p>
 <dl class="method">
 <dt>
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1367,9 +1520,9 @@ strings are acceptable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
-<li><p><strong>a</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential adaptation factor</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>a</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential adaptation factor</p></li>
 </ul>
 </dd>
 </dl>
@@ -1403,18 +1556,18 @@ strings are acceptable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>adaptation_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – adaptation coupling parameter in nS</p></li>
-<li><p><strong>adaptation_spike</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – spike triggered adaptation parameter in nA</p></li>
-<li><p><strong>delta_T</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – sharpness or speed of the exponential growth in mV</p></li>
-<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse adaptation time
+<li><p><strong>adaptation_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – adaptation coupling parameter in nS</p></li>
+<li><p><strong>adaptation_spike</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – spike triggered adaptation parameter in nA</p></li>
+<li><p><strong>delta_T</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – sharpness or speed of the exponential growth in mV</p></li>
+<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse adaptation time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{ada}\)</span>) in 1/ms</p></li>
 <li><p><strong>tau_syn_inv</strong> – inverse synaptic time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{syn}\)</span>) in 1/ms</p></li>
-<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse membrane time
+<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse membrane time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span>) in 1/ms</p></li>
-<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – leak potential in mV</p></li>
-<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – threshold potential in mV</p></li>
-<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – reset potential in mV</p></li>
+<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – leak potential in mV</p></li>
+<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – threshold potential in mV</p></li>
+<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – reset potential in mV</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – method to determine the spike threshold
 (relevant for surrogate gradients)</p></li>
 <li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – hyper parameter to use in surrogate gradient computation</p></li>
@@ -1498,10 +1651,10 @@ constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
-<li><p><strong>a</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential adaptation factor</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>a</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential adaptation factor</p></li>
 </ul>
 </dd>
 </dl>
@@ -1540,9 +1693,18 @@ constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span
 <dl class="method">
 <dt id="norse.torch.module.LIFCorrelation.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">input_weights</em>, <em class="sig-param">recurrent_weights</em>, <em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_correlation.html#LIFCorrelation.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFCorrelation.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_correlation.html#norse.torch.functional.lif_correlation.LIFCorrelationState" title="norse.torch.functional.lif_correlation.LIFCorrelationState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFCorrelationState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_correlation.html#norse.torch.functional.lif_correlation.LIFCorrelationState" title="norse.torch.functional.lif_correlation.LIFCorrelationState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFCorrelationState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1651,7 +1813,7 @@ recurrent and input spikes respectively.</p>
 <dt id="norse.torch.module.LIFExCell.extra_repr">
 <code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExCell.extra_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFExCell.extra_repr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should reimplement
+<p>To print customized extra information, you should re-implement
 this method in your own modules. Both single-line and multi-line
 strings are acceptable.</p>
 </dd></dl>
@@ -1659,9 +1821,18 @@ strings are acceptable.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFExCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFExCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExState" title="norse.torch.functional.lif_ex.LIFExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExState" title="norse.torch.functional.lif_ex.LIFExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1716,7 +1887,7 @@ an arbitrary pytorch module (such as a convolution) to input spikes.</p>
 <dt id="norse.torch.module.LIFExFeedForwardCell.extra_repr">
 <code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExFeedForwardCell.extra_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFExFeedForwardCell.extra_repr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should reimplement
+<p>To print customized extra information, you should re-implement
 this method in your own modules. Both single-line and multi-line
 strings are acceptable.</p>
 </dd></dl>
@@ -1724,9 +1895,18 @@ strings are acceptable.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFExFeedForwardCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFExFeedForwardCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExFeedForwardState" title="norse.torch.functional.lif_ex.LIFExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExFeedForwardState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExFeedForwardState" title="norse.torch.functional.lif_ex.LIFExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1746,8 +1926,8 @@ strings are acceptable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
 </ul>
 </dd>
 </dl>
@@ -1784,9 +1964,18 @@ After application, the layer returns a tuple containing</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFExLayer.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFExLayer.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExState" title="norse.torch.functional.lif_ex.LIFExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExState" title="norse.torch.functional.lif_ex.LIFExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1806,14 +1995,14 @@ After application, the layer returns a tuple containing</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>delta_T</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – sharpness or speed of the exponential growth in mV</p></li>
-<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse synaptic time
+<li><p><strong>delta_T</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – sharpness or speed of the exponential growth in mV</p></li>
+<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse synaptic time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{syn}\)</span>) in 1/ms</p></li>
-<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse membrane time
+<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse membrane time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span>) in 1/ms</p></li>
-<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – leak potential in mV</p></li>
-<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – threshold potential in mV</p></li>
-<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – reset potential in mV</p></li>
+<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – leak potential in mV</p></li>
+<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – threshold potential in mV</p></li>
+<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – reset potential in mV</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – method to determine the spike threshold
 (relevant for surrogate gradients)</p></li>
 <li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – hyper parameter to use in surrogate gradient computation</p></li>
@@ -1879,9 +2068,9 @@ constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
 </ul>
 </dd>
 </dl>
@@ -1935,7 +2124,7 @@ recurrent and input spikes respectively.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Size of the input. Also known as the number of input features.</p></li>
 <li><p><strong>hidden_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Size of the hidden state. Also known as the number of input features.</p></li>
-<li><p><strong>g_coupling</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – conductances between the neuron compartments</p></li>
+<li><p><strong>g_coupling</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – conductances between the neuron compartments</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFParameters" title="norse.torch.functional.lif.LIFParameters"><em>LIFParameters</em></a>) – neuron parameters</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration timestep to use</p></li>
 </ul>
@@ -1945,9 +2134,18 @@ recurrent and input spikes respectively.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFMCCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_mc.html#LIFMCCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFMCCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1967,9 +2165,18 @@ recurrent and input spikes respectively.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFMCRefracCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_mc_refrac.html#LIFMCRefracCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFMCRefracCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1990,7 +2197,7 @@ recurrent and input spikes respectively.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lif</strong> (<a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFParameters" title="norse.torch.functional.lif.LIFParameters"><em>LIFParameters</em></a>) – parameters of the LIF neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2018,7 +2225,7 @@ recurrent and input spikes respectively.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lif</strong> (<a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><em>LIFState</em></a>) – state of the LIF neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2045,9 +2252,18 @@ recurrent and input spikes respectively.</p>
 <dl class="method">
 <dt>
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_mc_refrac.html#LIFMCRefracCell.forward"><span class="viewcode-link">[source]</span></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2068,7 +2284,7 @@ recurrent and input spikes respectively.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lif</strong> (<a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFParameters" title="norse.torch.functional.lif.LIFParameters"><em>LIFParameters</em></a>) – parameters of the LIF neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2096,7 +2312,7 @@ recurrent and input spikes respectively.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lif</strong> (<a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><em>LIFState</em></a>) – state of the LIF neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2165,9 +2381,18 @@ recurrent and input spikes respectively.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFRefracCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_refrac.html#LIFRefracCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFRefracCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2223,9 +2448,18 @@ it implements one integration step of the following ODE.</p>
 <dl class="method">
 <dt id="norse.torch.module.LIFRefracFeedForwardCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_refrac.html#LIFRefracFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LIFRefracFeedForwardCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracFeedForwardState" title="norse.torch.functional.lif_refrac.LIFRefracFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracFeedForwardState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracFeedForwardState" title="norse.torch.functional.lif_refrac.LIFRefracFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2247,7 +2481,7 @@ it implements one integration step of the following ODE.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lif</strong> (<a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFFeedForwardState" title="norse.torch.functional.lif.LIFFeedForwardState"><em>LIFFeedForwardState</em></a>) – state of the feed forward LIF
 neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2275,7 +2509,7 @@ neuron integration</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lif</strong> (<a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFParameters" title="norse.torch.functional.lif.LIFParameters"><em>LIFParameters</em></a>) – parameters of the LIF neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2303,7 +2537,7 @@ neuron integration</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lif</strong> (<a class="reference internal" href="norse.torch.functional.lif.html#norse.torch.functional.lif.LIFState" title="norse.torch.functional.lif.LIFState"><em>LIFState</em></a>) – state of the LIF neuron integration</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – refractory state (count towards zero)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2363,7 +2597,7 @@ is the outer dimension in the provided tensor.</p>
 and accumulate the outputs in an output tensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]]) – Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]</p>
+<dd class="field-odd"><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]]) – Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -2372,7 +2606,7 @@ and accumulate the outputs in an output tensor.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2424,9 +2658,18 @@ recurrent and input spikes respectively.</p>
 <dl class="method">
 <dt id="norse.torch.module.LSNNCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LSNNCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2473,9 +2716,18 @@ More specifically it implements one integration step of the following ODE</p>
 <dl class="method">
 <dt id="norse.torch.module.LSNNFeedForwardCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.LSNNFeedForwardCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNFeedForwardState" title="norse.torch.functional.lsnn.LSNNFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNFeedForwardState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNFeedForwardState" title="norse.torch.functional.lsnn.LSNNFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2495,9 +2747,9 @@ More specifically it implements one integration step of the following ODE</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
-<li><p><strong>b</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – threshold adaptation</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>b</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – threshold adaptation</p></li>
 </ul>
 </dd>
 </dl>
@@ -2530,16 +2782,16 @@ More specifically it implements one integration step of the following ODE</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse synaptic time
+<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse synaptic time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{syn}\)</span>)</p></li>
-<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse membrane time
+<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse membrane time
 constant (<span class="math notranslate nohighlight">\(1/\tau_\text{mem}\)</span>)</p></li>
-<li><p><strong>tau_adapt_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – inverse adaptation time
+<li><p><strong>tau_adapt_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – inverse adaptation time
 constant (<span class="math notranslate nohighlight">\(1/\tau_b\)</span>)</p></li>
-<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – leak potential</p></li>
-<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – threshold potential</p></li>
-<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – reset potential</p></li>
-<li><p><strong>beta</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – adaptation constant</p></li>
+<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – leak potential</p></li>
+<li><p><strong>v_th</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – threshold potential</p></li>
+<li><p><strong>v_reset</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – reset potential</p></li>
+<li><p><strong>beta</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – adaptation constant</p></li>
 </ul>
 </dd>
 </dl>
@@ -2618,7 +2870,7 @@ constant (<span class="math notranslate nohighlight">\(1/\tau_b\)</span>)</p></l
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cell</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.nn.Module</em></a>) – the underling neuron module, uninitialized</p></li>
+<li><p><strong>cell</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.nn.Module</em></a>) – the underling neuron module, uninitialized</p></li>
 <li><p><strong>*cell_args</strong> – variable length input arguments for the underlying cell
 constructor</p></li>
 <li><p><strong>**cell_kwargs</strong> – variable length key-value arguments for the underlying cell constructor</p></li>
@@ -2635,12 +2887,12 @@ Since the layer is recurrent, each simulation state (LSNNState) is used as the i
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – Input tensor with timesteps in the first dimension</p></li>
+<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – Input tensor with timesteps in the first dimension</p></li>
 <li><p><strong>state</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><em>LSNNState</em></a><em>]</em>) – The input LSNN state. Defaults to None on the first timestep</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a>]</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tuple of 1) spikes from each timestep and 2) the LSNNState from the last timestep.</p>
@@ -2663,10 +2915,10 @@ Since the layer is recurrent, each simulation state (LSNNState) is used as the i
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
-<li><p><strong>b</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><em>torch.Tensor</em></a>) – threshold adaptation</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – recurrent spikes</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – membrane potential</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – synaptic input current</p></li>
+<li><p><strong>b</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><em>torch.Tensor</em></a>) – threshold adaptation</p></li>
 </ul>
 </dd>
 </dl>
@@ -2728,7 +2980,16 @@ be included in an error term.</p></li>
 <dl class="method">
 <dt id="norse.torch.module.RegularizationCell.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">z</em>, <em class="sig-param">s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/regularization.html#RegularizationCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.RegularizationCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="norse.torch.module.RegularizationCell.training">
@@ -2780,7 +3041,7 @@ If the state is None, the initial state is set to None for each of the modules.<
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+11c8a58 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>) – The input tensor too feed into the first module</p></li>
+<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+6071dc7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>) – The input tensor too feed into the first module</p></li>
 <li><p><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]) – Either a list of states for each module or None. If None, the modules
 will initialise their own default state</p></li>
 </ul>
