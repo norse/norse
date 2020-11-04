@@ -22,13 +22,13 @@ class LIFBenchmark(torch.jit.ScriptModule):
         self, input_spikes: torch.Tensor, p: LIFParametersJIT, s: LIFFeedForwardState
     ):
         sequence_length, batch_size, features = input_spikes.shape
-
-        inputs = input_spikes.unbind(0)
         # spikes = torch.jit.annotate(List[Tensor], [])
-        spikes = torch.empty((sequence_length, batch_size, features))
+        spikes = torch.empty(
+            (sequence_length, batch_size, features), device=input_spikes.device
+        )
 
-        for ts in range(len(inputs)):
-            x = self.fc(inputs[ts])
+        for ts in range(sequence_length):
+            x = self.fc(input_spikes[ts])
             z, s = _lif_feed_forward_step_jit(input_tensor=x, state=s, p=p, dt=self.dt)
             spikes[ts] = z
 

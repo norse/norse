@@ -62,6 +62,8 @@ def benchmark(
                 gc.collect()
                 with torch.no_grad():
                     torch.cuda.empty_cache()
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt()
         except RuntimeError as e:
             message = f"RuntimeError when running benchmark {config} {parameters}: {e}"
             logging.error(message)

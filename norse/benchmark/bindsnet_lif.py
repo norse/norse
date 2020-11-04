@@ -47,7 +47,8 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
         input_data = {
             "Input": poisson(
                 datum=torch.rand(
-                    (parameters.batch_size, parameters.features), device=parameters.device
+                    (parameters.batch_size, parameters.features),
+                    device=parameters.device,
                 ).contiguous(),
                 time=parameters.sequence_length,
                 device=parameters.device,
