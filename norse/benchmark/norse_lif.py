@@ -36,33 +36,33 @@ class LIFBenchmark(torch.jit.ScriptModule):
 
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
-    model = LIFBenchmark(parameters).to(parameters.device)
-    input_spikes = PoissonEncoder(parameters.sequence_length, dt=parameters.dt)(
-        0.3
-        * torch.ones(
-            parameters.batch_size, parameters.features, device=parameters.device
-        )
-    )
-    p = LIFParametersJIT(
-        tau_syn_inv=torch.as_tensor(1.0 / 5e-3),
-        tau_mem_inv=torch.as_tensor(1.0 / 1e-2),
-        v_leak=torch.as_tensor(0.0),
-        v_th=torch.as_tensor(1.0),
-        v_reset=torch.as_tensor(0.0),
-        method="super",
-        alpha=torch.as_tensor(0.0),
-    )
-    s = LIFFeedForwardState(
-        v=p.v_leak,
-        i=torch.zeros(
-            parameters.batch_size,
-            parameters.features,
-            device=parameters.device,
-        ),
-    )
     with torch.no_grad():
+        model = LIFBenchmark(parameters).to(parameters.device)
+        input_spikes = PoissonEncoder(parameters.sequence_length, dt=parameters.dt)(
+            0.3
+            * torch.ones(
+                parameters.batch_size, parameters.features, device=parameters.device
+            )
+        ).contiguous()
+        p = LIFParametersJIT(
+            tau_syn_inv=torch.as_tensor(1.0 / 5e-3),
+            tau_mem_inv=torch.as_tensor(1.0 / 1e-2),
+            v_leak=torch.as_tensor(0.0),
+            v_th=torch.as_tensor(1.0),
+            v_reset=torch.as_tensor(0.0),
+            method="super",
+            alpha=torch.as_tensor(0.0),
+        )
+        s = LIFFeedForwardState(
+            v=p.v_leak,
+            i=torch.zeros(
+                parameters.batch_size,
+                parameters.features,
+                device=parameters.device,
+            ),
+        )
         start = time.time()
         model(input_spikes, p, s)
         end = time.time()
-    duration = end - start
-    return duration
+        duration = end - start
+        return duration
