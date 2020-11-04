@@ -5,6 +5,7 @@ from bindsnet.network import Network
 from bindsnet.network.topology import Connection
 from bindsnet.network.nodes import LIFNodes, Input
 from bindsnet.encoding import PoissonEncoder
+from bindsnet.encoding import poisson
 
 from benchmark import BenchmarkParameters
 
@@ -21,22 +22,22 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
         target="Neurons",
     )
 
-    input_spikes = (
-        PoissonEncoder(time=T, dt=parameters.dt)(
-            0.3 * torch.ones(parameters.batch_size, parameters.features)
+    input_data = {
+        "Input": poisson(
+            datum=torch.rand(
+                (parameters.batch_size, parameters.features), device=parameters.device
+            ),
+            time=T * parameters.sequence_length,
+            device=parameters.device,
         )
-        .to(parameters.device)
-        .float()
-    )
-    input_spikes.requires_grad = False
+    }
 
-    input_data = {"Input": input_spikes}
     network.to(parameters.device)
-    for param in network.parameters():
-        param.requires_grad = False
-    start = time.time()
-    network.run(inputs=input_data, time=T)
-    end = time.time()
+
+    with torch.no_grad():
+        start = time.time()
+        network.run(inputs=input_data, time=T)
+        end = time.time()
 
     duration = end - start
     return duration

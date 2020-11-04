@@ -60,8 +60,9 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
             device=parameters.device,
         ),
     )
-    start = time.time()
-    model(input_spikes, p, s)
-    end = time.time()
+    with torch.no_grad():
+        start = time.time()
+        model(input_spikes, p, s)
+        end = time.time()
     duration = end - start
     return duration
