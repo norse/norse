@@ -190,6 +190,7 @@ class LIFFeedForwardCell(torch.nn.Module):
                 v=self.p.v_leak.detach(),
                 i=torch.zeros(*x.shape, device=x.device, dtype=x.dtype),
             )
+            state.v.requires_grad = True
         return lif_feed_forward_step(x, state, p=self.p, dt=self.dt)
 
 
