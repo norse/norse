@@ -10,8 +10,4 @@ def heaviside(data):
     .. math::
         H[n]=\\begin{cases} 0, & n <= 0, \\ 1, & n \\g 0, \\end{cases}
     """
-    return torch.where(  # pragma: no cover
-        data <= torch.zeros_like(data),
-        torch.zeros_like(data),
-        torch.ones_like(data),
-    )
+    return torch.gt(data, torch.as_tensor(0.0)).to(data.dtype)
