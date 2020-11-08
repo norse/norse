@@ -54,7 +54,7 @@
 
 <span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">LIFParameters</span>
 <span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">ConvNet</span><span class="p">,</span> <span class="n">ConvNet4</span>
-<span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">ConstantCurrentLIFEncoder</span>
+<span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">ConstantCurrentLIFEncoder</span><span class="p">,</span> <span class="n">PoissonEncoder</span><span class="p">,</span> <span class="n">SignedPoissonEncoder</span>
 
 <span class="n">FLAGS</span> <span class="o">=</span> <span class="n">flags</span><span class="o">.</span><span class="n">FLAGS</span>
 
@@ -68,7 +68,7 @@
 <span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_string</span><span class="p">(</span><span class="s2">&quot;prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Prefix for save path to use.&quot;</span><span class="p">)</span>
 <span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_enum</span><span class="p">(</span>
     <span class="s2">&quot;encoding&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;poisson&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;constant&quot;</span><span class="p">,</span>
     <span class="p">[</span><span class="s2">&quot;poisson&quot;</span><span class="p">,</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="s2">&quot;constant_polar&quot;</span><span class="p">,</span> <span class="s2">&quot;signed_poisson&quot;</span><span class="p">,</span> <span class="s2">&quot;signed_constant&quot;</span><span class="p">],</span>
     <span class="s2">&quot;Encoding to use for input&quot;</span><span class="p">,</span>
 <span class="p">)</span>
@@ -78,7 +78,7 @@
 <span class="p">)</span>
 <span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_integer</span><span class="p">(</span><span class="s2">&quot;plot_interval&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;Interval for plotting.&quot;</span><span class="p">)</span>
 <span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_float</span><span class="p">(</span><span class="s2">&quot;input_scale&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Scaling factor for input current.&quot;</span><span class="p">)</span>
-<span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_float</span><span class="p">(</span><span class="s2">&quot;current_encoder_v_th&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;v_th for constant current encoder&quot;</span><span class="p">)</span>
+<span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_float</span><span class="p">(</span><span class="s2">&quot;current_encoder_v_th&quot;</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s2">&quot;v_th for constant current encoder&quot;</span><span class="p">)</span>
 <span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_bool</span><span class="p">(</span><span class="s2">&quot;learning_rate_schedule&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Use a learning rate schedule&quot;</span><span class="p">)</span>
 <span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_bool</span><span class="p">(</span><span class="s2">&quot;find_learning_rate&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Find learning rate&quot;</span><span class="p">)</span>
 
@@ -137,19 +137,6 @@
             <span class="p">),</span>
         <span class="p">),</span>
         <span class="mi">0</span><span class="p">,</span>
-    <span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="poisson_train"><a class="viewcode-back" href="../../../auto_api/norse.task.cifar10.html#norse.task.cifar10.poisson_train">[docs]</a><span class="k">def</span> <span class="nf">poisson_train</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">rel_fmax</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">rel_fmax</span> <span class="o">*</span> <span class="n">images</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="signed_poisson_train"><a class="viewcode-back" href="../../../auto_api/norse.task.cifar10.html#norse.task.cifar10.signed_poisson_train">[docs]</a><span class="k">def</span> <span class="nf">signed_poisson_train</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">rel_fmax</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span>
-        <span class="n">torch</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
-        <span class="o">*</span> <span class="p">(</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">seq_length</span><span class="p">,</span> <span class="o">*</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">rel_fmax</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
     <span class="p">)</span></div>
 
 
@@ -219,7 +206,7 @@
                 <span class="n">writer</span><span class="o">.</span><span class="n">add_histogram</span><span class="p">(</span><span class="n">tag</span> <span class="o">+</span> <span class="s2">&quot;/grad&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">step</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">do_plot</span> <span class="ow">and</span> <span class="n">batch_idx</span> <span class="o">%</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">plot_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">seq_length</span><span class="p">)</span> <span class="o">*</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">dt</span>
+            <span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">seq_length</span><span class="p">)</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># flatten</span>
             <span class="k">for</span> <span class="n">nrn</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
@@ -307,44 +294,31 @@
     <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">polar_current_encoder</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="n">x_p</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">constant_current_encoder</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="n">x_m</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">constant_current_encoder</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x_p</span> <span class="o">=</span> <span class="n">constant_current_encoder</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x_m</span> <span class="o">=</span> <span class="n">constant_current_encoder</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">x_p</span><span class="p">,</span> <span class="n">x_m</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">current_encoder</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">constant_current_encoder</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">constant_current_encoder</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
 
-    <span class="k">def</span> <span class="nf">poisson_encoder</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">poisson_train</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">seq_length</span><span class="o">=</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">seq_length</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">signed_poisson_encoder</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">signed_poisson_train</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">seq_length</span><span class="o">=</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">seq_length</span><span class="p">)</span>
-
     <span class="k">def</span> <span class="nf">signed_current_encoder</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="n">z</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">constant_current_encoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">constant_current_encoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">z</span>
 
     <span class="n">num_channels</span> <span class="o">=</span> <span class="mi">4</span>
 
     <span class="k">if</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">encoding</span> <span class="o">==</span> <span class="s2">&quot;poisson&quot;</span><span class="p">:</span>
-        <span class="n">encoder</span> <span class="o">=</span> <span class="n">poisson_encoder</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="n">PoissonEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">encoding</span> <span class="o">==</span> <span class="s2">&quot;constant&quot;</span><span class="p">:</span>
         <span class="n">encoder</span> <span class="o">=</span> <span class="n">current_encoder</span>
     <span class="k">elif</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">encoding</span> <span class="o">==</span> <span class="s2">&quot;signed_poisson&quot;</span><span class="p">:</span>
-        <span class="n">encoder</span> <span class="o">=</span> <span class="n">signed_poisson_encoder</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="n">SignedPoissonEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">encoding</span> <span class="o">==</span> <span class="s2">&quot;signed_constant&quot;</span><span class="p">:</span>
         <span class="n">encoder</span> <span class="o">=</span> <span class="n">signed_current_encoder</span>
     <span class="k">elif</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">encoding</span> <span class="o">==</span> <span class="s2">&quot;constant_polar&quot;</span><span class="p">:</span>
         <span class="n">encoder</span> <span class="o">=</span> <span class="n">polar_current_encoder</span>
         <span class="n">num_channels</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">num_channels</span>
-
-    <span class="n">luminance_transforms</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">add_luminance</span><span class="p">,</span>
-        <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
-            <span class="p">(</span><span class="mf">0.4914</span><span class="p">,</span> <span class="mf">0.4822</span><span class="p">,</span> <span class="mf">0.4465</span><span class="p">,</span> <span class="mf">0.4816</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2023</span><span class="p">,</span> <span class="mf">0.1994</span><span class="p">,</span> <span class="mf">0.2010</span><span class="p">,</span> <span class="mf">0.20013</span><span class="p">)</span>
-        <span class="p">),</span>
-    <span class="p">]</span>
 
     <span class="n">transform_train</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span>
         <span class="p">[</span>
@@ -352,12 +326,11 @@
             <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">RandomHorizontalFlip</span><span class="p">(),</span>
             <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
         <span class="p">]</span>
-        <span class="o">+</span> <span class="n">luminance_transforms</span>
-        <span class="o">+</span> <span class="p">[</span><span class="n">encoder</span><span class="p">]</span>
+        <span class="o">+</span> <span class="p">[</span><span class="n">add_luminance</span><span class="p">,</span> <span class="n">encoder</span><span class="p">]</span>
     <span class="p">)</span>
 
     <span class="n">transform_test</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()]</span> <span class="o">+</span> <span class="n">luminance_transforms</span> <span class="o">+</span> <span class="p">[</span><span class="n">encoder</span><span class="p">]</span>
+        <span class="p">[</span><span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()]</span> <span class="o">+</span> <span class="p">[</span><span class="n">add_luminance</span><span class="p">,</span> <span class="n">encoder</span><span class="p">]</span>
     <span class="p">)</span>
 
     <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;num_workers&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;pin_memory&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">if</span> <span class="n">FLAGS</span><span class="o">.</span><span class="n">device</span> <span class="o">==</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">else</span> <span class="p">{}</span>
@@ -386,8 +359,6 @@
     <span class="n">FLAGS</span><span class="o">.</span><span class="n">append_flags_into_file</span><span class="p">(</span><span class="s2">&quot;flags.txt&quot;</span><span class="p">)</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">LIFConvNet</span><span class="p">(</span><span class="n">num_channels</span><span class="o">=</span><span class="n">num_channels</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s2">&quot;cuda&quot;</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
