@@ -136,10 +136,11 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; data = torch.as_tensor([0, 0.5, 1])</span>
 <span class="sd">        &gt;&gt;&gt; out_features = 3</span>
-<span class="sd">        &gt;&gt;&gt; population_encode(data, out_features)</span>
+<span class="sd">        &gt;&gt;&gt; pop_encoded = population_encode(data, out_features)</span>
 <span class="sd">        tensor([[1.0000, 0.8825, 0.6065],</span>
 <span class="sd">                [0.8825, 1.0000, 0.8825],</span>
 <span class="sd">                [0.6065, 0.8825, 1.0000]])</span>
+<span class="sd">        &gt;&gt;&gt; spikes = poisson_encode(pop_encoded, 1).squeeze() # Convert to spikes</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        input_values (torch.Tensor): The input data as numerical values to be encoded to population codes</span>
@@ -152,7 +153,8 @@
 <span class="sd">        distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).</span>
+<span class="sd">        A tensor with an extra dimension of size `seq_length` containing population encoded values of the input stimulus.</span>
+<span class="sd">        Note: An extra step is required to convert the values to spikes, see above.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py</span>
     <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_values</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">out_features</span><span class="p">)</span> <span class="o">+</span> <span class="n">input_values</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
