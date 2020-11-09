@@ -97,10 +97,11 @@ def population_encode(
     Example:
         >>> data = torch.as_tensor([0, 0.5, 1])
         >>> out_features = 3
-        >>> population_encode(data, out_features)
+        >>> pop_encoded = population_encode(data, out_features)
         tensor([[1.0000, 0.8825, 0.6065],
                 [0.8825, 1.0000, 0.8825],
                 [0.6065, 0.8825, 1.0000]])
+        >>> spikes = poisson_encode(pop_encoded, 1).squeeze() # Convert to spikes
 
     Parameters:
         input_values (torch.Tensor): The input data as numerical values to be encoded to population codes
@@ -113,7 +114,8 @@ def population_encode(
         distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.
 
     Returns:
-        A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
+        A tensor with an extra dimension of size `seq_length` containing population encoded values of the input stimulus.
+        Note: An extra step is required to convert the values to spikes, see above.
     """
     # Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py
     size = (input_values.size(0), out_features) + input_values.size()[1:]
