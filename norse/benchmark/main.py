@@ -8,6 +8,8 @@ from absl import logging
 import numpy as np
 import pandas as pd
 import time
+import gc
+import torch
 
 from benchmark import *
 
@@ -55,6 +57,13 @@ def benchmark(
             for _ in range(config.runs):
                 duration = model(parameters)
                 durations.append(duration)
+                # Clean up by GC and empty cache
+                # Thanks to https://github.com/BindsNET/bindsnet/issues/425#issuecomment-721780231
+                gc.collect()
+                with torch.no_grad():
+                    torch.cuda.empty_cache()
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt()
         except RuntimeError as e:
             message = f"RuntimeError when running benchmark {config} {parameters}: {e}"
             logging.error(message)
