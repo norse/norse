@@ -48,9 +48,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+e9dd9f3 ))"><em>torch.Tensor</em></a>) – inverse synaptic time constant</p></li>
-<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+e9dd9f3 ))"><em>torch.Tensor</em></a>) – inverse membrane time constant</p></li>
-<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+e9dd9f3 ))"><em>torch.Tensor</em></a>) – leak potential</p></li>
+<li><p><strong>tau_syn_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+1ca45fa ))"><em>torch.Tensor</em></a>) – inverse synaptic time constant</p></li>
+<li><p><strong>tau_mem_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+1ca45fa ))"><em>torch.Tensor</em></a>) – inverse membrane time constant</p></li>
+<li><p><strong>v_leak</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+1ca45fa ))"><em>torch.Tensor</em></a>) – leak potential</p></li>
 </ul>
 </dd>
 </dl>
@@ -83,8 +83,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+e9dd9f3 ))"><em>torch.Tensor</em></a>) – membrane voltage</p></li>
-<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+e9dd9f3 ))"><em>torch.Tensor</em></a>) – input current</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+1ca45fa ))"><em>torch.Tensor</em></a>) – membrane voltage</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+1ca45fa ))"><em>torch.Tensor</em></a>) – input current</p></li>
 </ul>
 </dd>
 </dl>
@@ -108,7 +108,7 @@
 <code class="sig-prename descclassname">norse.torch.functional.leaky_integrator.</code><code class="sig-name descname">li_feed_forward_step</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state</em>, <em class="sig-param">p=LIParameters(tau_syn_inv=tensor(200.)</em>, <em class="sig-param">tau_mem_inv=tensor(100.)</em>, <em class="sig-param">v_leak=tensor(0.))</em>, <em class="sig-param">dt=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/leaky_integrator.html#li_feed_forward_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.leaky_integrator.li_feed_forward_step" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+e9dd9f3 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+1ca45fa ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -129,15 +129,15 @@ More specifically it implements a discretized version of the ODE</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+e9dd9f3 ))"><em>torch.Tensor</em></a>) – </p></li>
+<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+1ca45fa ))"><em>torch.Tensor</em></a>) – </p></li>
 <li><p><strong>s</strong> (<a class="reference internal" href="#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><em>LIState</em></a>) – state of the leaky integrator</p></li>
-<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+e9dd9f3 ))"><em>torch.Tensor</em></a>) – weights for incoming spikes</p></li>
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+1ca45fa ))"><em>torch.Tensor</em></a>) – weights for incoming spikes</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.leaky_integrator.LIParameters" title="norse.torch.functional.leaky_integrator.LIParameters"><em>LIParameters</em></a>) – parameters of the leaky integrator</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – integration timestep to use</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+e9dd9f3 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+1ca45fa ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
