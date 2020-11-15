@@ -4,7 +4,7 @@ import torch
 from torch import Tensor
 from norse.torch.functional.lif import lif_feed_forward_step
 from norse.torch.functional.lift import lift
-from norse.torch.module.encode import PoissonEncoder
+from norse.torch.module.encode import SpikeLatencyLIFEncoder
 
 
 class SpikingTransformerEncoderLayer(torch.nn.Module):
@@ -19,7 +19,7 @@ class SpikingTransformerEncoderLayer(torch.nn.Module):
         dim_feedforward=2048,
         dropout=0.1,
         activation=lif_feed_forward_step,
-        seq_length=100,
+        seq_length=10,
     ):
         super(SpikingTransformerEncoderLayer, self).__init__()
         self.self_attn = torch.nn.MultiheadAttention(d_model, nhead, dropout=dropout)
@@ -33,7 +33,7 @@ class SpikingTransformerEncoderLayer(torch.nn.Module):
         self.dropout1 = torch.nn.Dropout(dropout)
         self.dropout2 = torch.nn.Dropout(dropout)
 
-        self.poisson = PoissonEncoder(seq_length, f_max=1000)
+        self.encoder = SpikeLatencyLIFEncoder(seq_length)
         self.activation = lift(activation)
 
     def forward(
@@ -47,8 +47,10 @@ class SpikingTransformerEncoderLayer(torch.nn.Module):
         )[0]
         src = src + self.dropout1(src2)
         src = self.norm1(src)
-        lin_src, _ = self.activation(self.linear1(self.poisson(src)))
-        lin_src = lin_src.mean(0)
+        encoded = self.encoder(src).detach()
+        lin_in = self.linear1(encoded)
+        lin_src, _ = self.activation(lin_in)
+        lin_src = lin_src.sum(0)
         src2 = self.linear2(self.dropout(lin_src))
         src = src + self.dropout2(src2)
         src = self.norm2(src)

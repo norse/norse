@@ -8,7 +8,7 @@ import torch
 
 class _Lifted:
     """
-    Helper class for the :func:`lift`_ function to allow for pickling.
+    Helper class for the :func:`lift`_ function to allow pickling.
     Used in distributed execution, like PyTorch Lightning
     """
 

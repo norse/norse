@@ -173,21 +173,6 @@ def load_data(args):
         (train_txt, val_txt, test_txt), batch_size=args.batch_size, bptt_len=args.bptt
     )
     return train_iter, val_iter, test_iter, len(TEXT.vocab.stoi)
-    # def batchify(data, bsz):
-    #     data = TEXT.numericalize([data.examples[0].text])
-    #     # Divide the dataset into bsz parts.
-    #     nbatch = data.size(0) // bsz
-    #     # Trim off any extra elements that wouldn't cleanly fit (remainders).
-    #     data = data.narrow(0, 0, nbatch * bsz)
-    #     # Evenly divide the data across the bsz batches.
-    #     data = data.view(bsz, -1).t().contiguous()
-    #     return data
-
-    # train_data = batchify(train_txt, args.batch_size)
-    # val_data = batchify(val_txt, args.batch_size)
-    # test_data = batchify(test_txt, args.batch_size)
-    # return train_data, val_data, test_data, len(TEXT.vocab.stoi)
-
 
 ######################################################################
 # Initiate PyTorch Lightning training
@@ -226,7 +211,7 @@ class PLModel(pl.LightningModule):
     #
 
     def configure_optimizers(self):
-        optimizer = torch.optim.SGD(self.model.parameters(), lr=0.01)
+        optimizer = torch.optim.SGD(self.model.parameters(), lr=0.1)
         self.scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.95)
         return optimizer
 
@@ -245,21 +230,33 @@ class PLModel(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         ntokens = self.ntokens
         src_mask = self.model.generate_square_subsequent_mask(self.bptt).to(self.device)
-        data, targets = batch.text, batch.target
+        data, targets = batch.text.to(self.device), batch.target.to(self.device)
         output = self.model(data, src_mask)
         loss = self.loss_function(output.view(-1, ntokens), targets.view(-1))
-        self.scheduler.step()  # Step the scheduler manually
+        self.logger.experiment.add_scalar('train/loss', loss)
         return loss
 
-    def test_step(self, batch, batch_idx):
+    def training_epoch_end(self, outputs):
+        self.scheduler.step()  # Step the scheduler manually
+
+    def test_step(self, batch, _):
         ntokens = self.ntokens
         src_mask = self.model.generate_square_subsequent_mask(self.bptt).to(self.device)
         with torch.no_grad():
-            data, targets = batch.text, batch.target
+            data, targets = batch.text.to(self.device), batch.target.to(self.device)
             output = self.model(data, src_mask)
             output_flat = output.view(-1, ntokens)
-            return len(data) * self.loss_function(output_flat, targets.view(-1)).item()
+            loss = len(data) * self.loss_function(output_flat, targets.view(-1)).item()
+            return loss
 
+    def validation_step(self, batch, _):
+        ntokens = self.ntokens
+        src_mask = self.model.generate_square_subsequent_mask(self.bptt).to(self.device)
+        data, targets = batch.text.to(self.device), batch.target.to(self.device)
+        output = self.model(data, src_mask)
+        output_flat = output.view(-1, ntokens)
+        loss = len(data) * self.loss_function(output_flat, targets.view(-1)).item()
+        return loss
 
 ######################################################################
 # Run the model
@@ -271,7 +268,8 @@ def main(args):
 
     ######################################################################
     # Train the model via PyTorch Lightning
-
+    
+    torch.autograd.set_detect_anomaly(True)
     data_train, data_val, data_test, ntokens = load_data(args)
     trainer = pl.Trainer.from_argparse_args(args)
     model = PLModel(ntokens, args.bptt)
@@ -283,7 +281,7 @@ def main(args):
     #
     # Apply the best model to check the result with the test dataset.
 
-    test_loss = trainer.test()
+    test_loss = trainer.test(test_dataloader=data_test)
     print("=" * 89)
     print(
         "| End of training | test loss {:5.2f} | test ppl {:8.2f}".format(
@@ -299,5 +297,4 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", default=32)
     parser.add_argument("--bptt", default=35)
     args = parser.parse_args()
-    args.device = "cuda" if "gpus" in args else "cpu"
     main(args)

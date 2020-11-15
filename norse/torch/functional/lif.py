@@ -28,7 +28,7 @@ class LIFParameters(NamedTuple):
     v_th: torch.Tensor = torch.as_tensor(1.0)
     v_reset: torch.Tensor = torch.as_tensor(0.0)
     method: str = "super"
-    alpha: float = torch.as_tensor(0.0)
+    alpha: float = torch.as_tensor(100.0)
 
 
 default_bio_parameters = LIFParameters(

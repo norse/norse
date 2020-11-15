@@ -198,18 +198,18 @@ def spike_latency_lif_encode(
         dt (float): Integration time step (should coincide with the integration time step used in the model)
     """
     voltage = torch.zeros_like(input_current)
-    z = torch.zeros_like(input_current)
-    mask = torch.zeros_like(input_current).byte()
-    spikes = []
+    zeros = torch.zeros_like(input_current)
+    mask = torch.zeros_like(input_current, dtype=torch.uint8)
+    spikes = torch.empty(seq_length, *zeros.shape, device=input_current.device)
 
-    for _ in range(seq_length):
+    for i in range(seq_length):
         z, voltage = lif_current_encoder(
             input_current=input_current, voltage=voltage, p=p, dt=dt
         )
-        spikes += [torch.where(mask, torch.zeros_like(z), z)]
+        spikes[i] = torch.where(mask, zeros.clone(), z)
         mask[z.bool()] = 1
 
-    return torch.stack(spikes)
+    return spikes
 
 
 def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
