@@ -3,7 +3,6 @@ from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
-import norse
 from .threshold import threshold
 
 
@@ -181,12 +180,12 @@ def _lif_feed_forward_step_jit(
     # compute current jumps
     i_new = i_decayed + input_tensor
 
-    return z_new, LIFFeedForwardState(v_new, i_new)
+    return z_new, LIFFeedForwardState(v=v_new, i=i_new)
 
 
 def lif_feed_forward_step(
     input_tensor: torch.Tensor,
-    state: LIFFeedForwardState = LIFFeedForwardState(0, 0),
+    state: LIFFeedForwardState = None,
     p: LIFParameters = LIFParameters(
         torch.as_tensor(1.0 / 5e-3),
         torch.as_tensor(1.0 / 1e-2),
@@ -231,7 +230,7 @@ def lif_feed_forward_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    jit_params = norse.torch.functional.lif.LIFParametersJIT(
+    jit_params = LIFParametersJIT(
         tau_syn_inv=p.tau_syn_inv,
         tau_mem_inv=p.tau_mem_inv,
         v_leak=p.v_leak,
@@ -240,6 +239,14 @@ def lif_feed_forward_step(
         method=p.method,
         alpha=torch.as_tensor(p.alpha),
     )
+    # Because input tensors are not directly used in the first pass (no
+    # broadcasting takes place) we need to set the state values to the
+    # same shape as the input.
+    if state is None:
+        state = LIFFeedForwardState(
+            v=torch.full_like(input_tensor, jit_params.v_reset),
+            i=torch.zeros_like(input_tensor),
+        )
     return _lif_feed_forward_step_jit(input_tensor, state=state, p=jit_params, dt=dt)
 
 
