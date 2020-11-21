@@ -14,6 +14,16 @@ def test_state_sequence():
     assert s[0].v.shape == (1, 6)
 
 
+def test_state_sequence_list():
+    d = torch.ones(10, 1, 20)
+    l1 = LIFLayer(20, 6)
+    l2 = LIFLayer(6, 2)
+    s = [None, None]
+    z, s = SequentialState(l1, l2)(d, s)
+    assert z.shape == (10, 1, 2)
+    assert s[1].v.shape == (1, 2)
+
+
 def test_state_sequence_norse():
     d = torch.ones(10, 2, 10)
     l1 = LIFLayer(10, 5)
