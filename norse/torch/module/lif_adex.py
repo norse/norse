@@ -33,7 +33,7 @@ class LIFAdExCell(torch.nn.Module):
     and transition equations
 
     .. math::
-        \\begin{align*}
+        \begin{align*}
             v &= (1-z) v + z v_{\text{reset}} \\
             i &= i + w_{\text{input}} z_{\text{in}} \\
             i &= i + w_{\text{rec}} z_{\text{rec}}
@@ -123,9 +123,9 @@ class LIFAdExLayer(torch.nn.Module):
 
 
     Example:
-    >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-    >>> l = LIFAdExLayer(2, 4)
-    >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFExState)
+        >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
+        >>> l = LIFAdExLayer(2, 4)
+        >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFExState)
     """
 
     def __init__(self, *cell_args, **kw_args):
