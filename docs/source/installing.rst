@@ -12,12 +12,16 @@ primary dependency.
 This has the benefit that your models are hardware accelerated, providing the 
 `prerequisites are met <https://pytorch.org/get-started/locally/>`_.
 
+Required dependencies
+=====================
+
+Because we are relying on optimised C++ for some of the hotspots in the library, you will need
+to download and install `CMake <https://cmake.org/>`_ and `PyTorch <https://pytorch.org/get-started/locally/>`_
+*before* you can install Norse.
 For that reason, we recommend `following the PyTorch "Get Started" guide <https://pytorch.org/get-started/locally/>`_ as the first step.
 
-After installing the Torch prerequisite, the primary dependencies can be done in the following three ways:
-
-Installing from PyPi
-====================
+Installation steps
+==================
 
 This requires command-line access to 
 
@@ -37,12 +41,15 @@ This requires command-line access to
 
     git clone https://github.com/norse/norse
     cd norse
-    pip install -e norse
+    python setup.py install
+
 
 
 Optional dependencies
 =====================
 
-Norse runs well with the above installation, but some of the tasks integrates with the visualization
-tool `Tensorboard <https://pytorch.org/docs/stable/tensorboard.html>`_ to make it easier to
-introspect models and results.
+Some of the tasks require additional dependencies like 
+`Torchtext <https://pytorch.org/text/stable/index.html>`_ and 
+`Torchvision <https://pytorch.org/docs/stable/torchvision/index.html>`_.
+We also offer support for `Tensorboard <https://pytorch.org/docs/stable/tensorboard.html>`_ 
+to make it easier to visualise the training and introspect models.

@@ -1,7 +1,7 @@
 .. _page-spiking:
 
-Introduction to spiking neural networks
----------------------------------------
+Introduction to spikes
+----------------------
 
 Regular neural networks consist of neuron layers, that basically takes input vectors
 and sends it through a function (typically sigmoidal).

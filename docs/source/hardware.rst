@@ -1,7 +1,7 @@
 .. _page-hardware:
 
 Hardware acceleration
--------------------
+---------------------
 
 Norse is built on top of `PyTorch <https://pytorch.org>`_ which has excellent support for hardware acceleration. 
 This article will cover how Norse can be accelerated with GPUs through the `CUDA platform <https://en.wikipedia.org/wiki/CUDA>`_.
