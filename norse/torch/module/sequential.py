@@ -64,7 +64,7 @@ class SequentialState(torch.nn.Sequential):
         Returns:
             A tuple of (output tensor, state list)
         """
-        state = [None] * len(self) if not state else state
+        state = [None] * len(self) if state is None else state
         for index, module in enumerate(self):
             if self.stateful_layers[index]:
                 input_tensor, s = module(input_tensor, state[index])
