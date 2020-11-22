@@ -26,6 +26,10 @@ jobs:
       run: |
         pip install pytest pytest-cov
         pytest norse --cov=norse/torch --cov-config=.coveragerc --cov-report=xml
+    - name: Test with PyType
+      run: |
+        pip install pytype
+        pytype norse
     - name: Upload coverage
       uses: codecov/codecov-action@v1
       with:
