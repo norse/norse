@@ -1,5 +1,5 @@
 import torch
-from .heaviside import heaviside
+from norse.torch.functional.heaviside import heaviside
 
 
 class SuperSpike(torch.autograd.Function):

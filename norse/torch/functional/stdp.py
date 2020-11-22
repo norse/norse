@@ -1,9 +1,10 @@
-# Includes
-from typing import Tuple, Callable
-import torch
-from .heaviside import heaviside
+from typing import Tuple
 
-# STDP state class
+import torch
+
+from norse.torch.functional.heaviside import heaviside
+
+
 class STDPState:
     """State of spike-timing-dependent plasticity (STDP).
     Parameters:
@@ -41,7 +42,6 @@ class STDPState:
         )
 
 
-# STDP parameters class
 class STDPParameters:
     """STDP parameters.
     Parameters:
@@ -133,7 +133,6 @@ class STDPParameters:
             self.dilation = dilation
 
 
-# %% Linear stepper
 def stdp_step_linear(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,
@@ -178,7 +177,6 @@ def stdp_step_linear(
     return (w, state_stdp)
 
 
-# %% Conv2D stepper
 def stdp_step_conv2d(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,

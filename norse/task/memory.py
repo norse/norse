@@ -3,6 +3,7 @@ import datetime
 import logging
 import numpy as np
 import torch
+import torch.utils.data
 
 from norse.torch.functional.encode import poisson_encode
 from norse.torch.module.leaky_integrator import LICell

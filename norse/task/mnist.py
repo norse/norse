@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import torch
+import torch.utils.data
 import torchvision
 
 from norse.torch.models.conv import ConvNet4

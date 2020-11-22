@@ -3,8 +3,7 @@ from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
-import norse
-from .threshold import threshold
+from norse.torch.functional.threshold import threshold
 
 
 class LIFParameters(NamedTuple):
@@ -231,7 +230,7 @@ def lif_feed_forward_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    jit_params = norse.torch.functional.lif.LIFParametersJIT(
+    jit_params = LIFParametersJIT(
         tau_syn_inv=p.tau_syn_inv,
         tau_mem_inv=p.tau_mem_inv,
         v_leak=p.v_leak,
@@ -241,6 +240,9 @@ def lif_feed_forward_step(
         alpha=torch.as_tensor(p.alpha),
     )
     return _lif_feed_forward_step_jit(input_tensor, state=state, p=jit_params, dt=dt)
+
+
+3
 
 
 def lif_current_encoder(

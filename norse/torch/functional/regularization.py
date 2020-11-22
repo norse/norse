@@ -10,19 +10,18 @@ regularization in an error term later.
 
 Read more on `Wikipedia <https://en.wikipedia.org/wiki/Regularization_%28mathematics%29>`_.
 """
-from typing import Any, Callable, NewType, Optional, TypeVar
-import torch
+from typing import Any, Callable, NewType, Optional, Tuple
 
-# The type of regularisation state, e. g. ints for accumulating spikes or
-# torch.Tensor for accumulating membrane potential.
-T = TypeVar("T")
+import torch
 
 # An accumulator that can take some cell output, cell state, and regularization state
 # and return an updated regularization state
-Accumulator = NewType("Accumulator", Callable[[torch.Tensor, Any, Optional[T]], T])
+Accumulator = NewType("Accumulator", Callable[[torch.Tensor, Any, Optional[Any]], Any])
 
 
-def spike_accumulator(z: torch.Tensor, s: Any, state: int = 0) -> int:
+def spike_accumulator(
+    z: torch.Tensor, _: Any, state: Optional[torch.Tensor] = None
+) -> int:
     """
     A spike accumulator that aggregates spikes and returns the total sum as an integer.
 
@@ -34,6 +33,8 @@ def spike_accumulator(z: torch.Tensor, s: Any, state: int = 0) -> int:
     Returns:
         A new RegularizationState containing the aggregated data
     """
+    if state is None:
+        state = 0
     return state + z.sum()
 
 
@@ -42,7 +43,7 @@ def voltage_accumulator(
 ) -> int:
     """
     A spike accumulator that aggregates membrane potentials over time. Requires that the
-    input state ``s`` has a ``v`` property.
+    input state ``s`` has a ``v`` property (for voltage).
 
     Parameters:
         z (torch.Tensor): Spikes from some cell
@@ -62,8 +63,8 @@ def regularize_step(
     z: torch.Tensor,
     s: Any,
     accumulator: Accumulator = spike_accumulator,
-    state: T = None,
-) -> (torch.Tensor, T):
+    state: Any = None,
+) -> Tuple[torch.Tensor, Any]:
     """
     Takes one step for a regularizer that aggregates some information (based on the
     spike_accumulator function), which is pushed forward and returned for future
@@ -72,11 +73,11 @@ def regularize_step(
     Parameters:
         z (torch.Tensor): Spikes from a cell
         s (Any): Neuron state
-        state (Optional[T]): The regularization state to be aggregated to of any type T. Defaults to None
+        state (Optional[Any]): The regularization state to be aggregated. Typically some numerical value like a count. Defaults to None
 
     Return:
         A tuple of (spikes, regularizer state)
     """
     if state is None:
-        return z, accumulator(z, s)
+        return z, accumulator(z, s, None)
     return z, accumulator(z, s, state)

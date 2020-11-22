@@ -3,7 +3,7 @@ from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
-from .threshold import threshold
+from norse.torch.functional.threshold import threshold
 
 
 class LIFExParameters(NamedTuple):

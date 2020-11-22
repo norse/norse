@@ -11,7 +11,7 @@ import time
 import gc
 import torch
 
-from benchmark import *
+from .benchmark import *
 
 FLAGS = flags.FLAGS
 
@@ -97,6 +97,7 @@ def collect(data: BenchmarkData, label: str) -> dict:
 
 
 def main(argv):
+    # pytype: disable=import-error
     if FLAGS.bindsnet:
         import bindsnet_lif
 
@@ -118,6 +119,7 @@ def main(argv):
             prof.export_chrome_trace("trace.json")
         else:
             run_benchmark(norse_lif.lif_feed_forward_benchmark, "Norse_lif")
+    # pytype: enable=import-error
 
 
 def run_benchmark(function, label):

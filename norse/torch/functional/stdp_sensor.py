@@ -1,6 +1,6 @@
-import torch
+from typing import NamedTuple
 
-from typing import NamedTuple, Tuple
+import torch
 
 
 class STDPSensorParameters(NamedTuple):

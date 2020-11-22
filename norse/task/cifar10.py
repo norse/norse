@@ -7,6 +7,7 @@ from absl import flags
 from absl import logging
 
 import torch
+import torch.utils.data
 
 from collections import namedtuple
 import torchvision

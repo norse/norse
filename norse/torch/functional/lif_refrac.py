@@ -1,15 +1,15 @@
+from typing import NamedTuple, Tuple, overload
+
 import torch
 
-from .lif import (
+from norse.torch.functional.lif import (
     LIFParameters,
     LIFState,
     LIFFeedForwardState,
     lif_step,
     lif_feed_forward_step,
 )
-from .threshold import threshold
-
-from typing import NamedTuple, Tuple
+from norse.torch.functional.threshold import threshold
 
 
 class LIFRefracState(NamedTuple):
@@ -36,8 +36,41 @@ class LIFRefracParameters(NamedTuple):
     rho_reset: torch.Tensor = torch.as_tensor(5.0)
 
 
+class LIFRefracFeedForwardState(NamedTuple):
+    """State of a feed forward LIF neuron with absolute refractory period.
+
+    Parameters:
+        lif (LIFFeedForwardState): state of the feed forward LIF
+                                   neuron integration
+        rho (torch.Tensor): refractory state (count towards zero)
+    """
+
+    lif: LIFFeedForwardState
+    rho: torch.Tensor
+
+
+@overload
 def compute_refractory_update(
     state: LIFRefracState,
+    z_new: torch.Tensor,
+    v_new: torch.Tensor,
+    p: LIFRefracParameters = LIFRefracParameters(),
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    ...
+
+
+@overload
+def compute_refractory_update(
+    state: LIFRefracFeedForwardState,
+    z_new: torch.Tensor,
+    v_new: torch.Tensor,
+    p: LIFRefracParameters = LIFRefracParameters(),
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    ...
+
+
+def compute_refractory_update(
+    state,
     z_new: torch.Tensor,
     v_new: torch.Tensor,
     p: LIFRefracParameters = LIFRefracParameters(),
@@ -87,19 +120,6 @@ def lif_refrac_step(
     v_new, z_new, rho_new = compute_refractory_update(state, z_new, s_new.v, p)
 
     return z_new, LIFRefracState(LIFState(z_new, v_new, s_new.i), rho_new)
-
-
-class LIFRefracFeedForwardState(NamedTuple):
-    """State of a feed forward LIF neuron with absolute refractory period.
-
-    Parameters:
-        lif (LIFFeedForwardState): state of the feed forward LIF
-                                   neuron integration
-        rho (torch.Tensor): refractory state (count towards zero)
-    """
-
-    lif: LIFFeedForwardState
-    rho: torch.Tensor
 
 
 def lif_refrac_feed_forward_step(

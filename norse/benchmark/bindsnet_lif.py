@@ -7,7 +7,7 @@ from bindsnet.network.nodes import LIFNodes, Input
 from bindsnet.encoding import poisson
 from bindsnet.network.monitors import Monitor
 
-from benchmark import BenchmarkParameters
+from .benchmark import BenchmarkParameters
 
 
 class BindsNetModule(torch.nn.Module):
