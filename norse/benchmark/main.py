@@ -6,7 +6,11 @@ from absl import flags
 from absl import logging
 
 import numpy as np
+
+# pytype: disable=import-error
 import pandas as pd
+
+# pytype: enable=import-error
 import time
 import gc
 import torch

@@ -242,9 +242,6 @@ def lif_feed_forward_step(
     return _lif_feed_forward_step_jit(input_tensor, state=state, p=jit_params, dt=dt)
 
 
-3
-
-
 def lif_current_encoder(
     input_current: torch.Tensor,
     voltage: torch.Tensor,

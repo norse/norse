@@ -1,11 +1,14 @@
 import time
 import torch
 
+# pytype: disable=import-error
 from bindsnet.network import Network
 from bindsnet.network.topology import Connection
 from bindsnet.network.nodes import LIFNodes, Input
 from bindsnet.encoding import poisson
 from bindsnet.network.monitors import Monitor
+
+# pytype: enable=import-error
 
 from .benchmark import BenchmarkParameters
 
