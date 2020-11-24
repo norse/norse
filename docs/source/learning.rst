@@ -29,6 +29,8 @@ Here we will only cover the *surrogate gradient* approach, and
 illustrate how  it is implement in norse.
 
 Our approach builds on the SuperSpike method proposed by 
+`Steven K. Esser et al. (Convolutional networks for fast, energy-efficient neuromorphic computing)<https://www.pnas.org/content/113/41/11441>`_ and
+further elaborated in
 `Friedemann Zenke and Surya Ganguli <https://www.mitpressjournals.org/doi/pdf/10.1162/neco_a_01086>`_.
 
 Neurons work in the way that they update their membrane equations with
