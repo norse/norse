@@ -37,18 +37,18 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.functional.lif_refrac</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">overload</span>
 
-<span class="kn">from</span> <span class="nn">.lif</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">norse.torch.functional.lif</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">LIFParameters</span><span class="p">,</span>
     <span class="n">LIFState</span><span class="p">,</span>
     <span class="n">LIFFeedForwardState</span><span class="p">,</span>
     <span class="n">lif_step</span><span class="p">,</span>
     <span class="n">lif_feed_forward_step</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
-
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
 
 
 <div class="viewcode-block" id="LIFRefracState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LIFRefracState">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -75,8 +75,41 @@
     <span class="n">rho_reset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="compute_refractory_update"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif_refrac.html#norse.torch.functional.compute_refractory_update">[docs]</a><span class="k">def</span> <span class="nf">compute_refractory_update</span><span class="p">(</span>
+<div class="viewcode-block" id="LIFRefracFeedForwardState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LIFRefracFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;State of a feed forward LIF neuron with absolute refractory period.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        lif (LIFFeedForwardState): state of the feed forward LIF</span>
+<span class="sd">                                   neuron integration</span>
+<span class="sd">        rho (torch.Tensor): refractory state (count towards zero)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">lif</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span>
+    <span class="n">rho</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">compute_refractory_update</span><span class="p">(</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LIFRefracState</span><span class="p">,</span>
+    <span class="n">z_new</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">v_new</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">compute_refractory_update</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LIFRefracFeedForwardState</span><span class="p">,</span>
+    <span class="n">z_new</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">v_new</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+    <span class="o">...</span>
+
+
+<div class="viewcode-block" id="compute_refractory_update"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif_refrac.html#norse.torch.functional.compute_refractory_update">[docs]</a><span class="k">def</span> <span class="nf">compute_refractory_update</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
     <span class="n">z_new</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">v_new</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
@@ -126,19 +159,6 @@
     <span class="n">v_new</span><span class="p">,</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">rho_new</span> <span class="o">=</span> <span class="n">compute_refractory_update</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">s_new</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">(</span><span class="n">LIFState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">s_new</span><span class="o">.</span><span class="n">i</span><span class="p">),</span> <span class="n">rho_new</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="LIFRefracFeedForwardState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LIFRefracFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;State of a feed forward LIF neuron with absolute refractory period.</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        lif (LIFFeedForwardState): state of the feed forward LIF</span>
-<span class="sd">                                   neuron integration</span>
-<span class="sd">        rho (torch.Tensor): refractory state (count towards zero)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">lif</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span>
-    <span class="n">rho</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
 
 
 <div class="viewcode-block" id="lif_refrac_feed_forward_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">lif_refrac_feed_forward_step</span><span class="p">(</span>

@@ -59,11 +59,11 @@ inclusion in an error term.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><em>torch.Tensor</em></a>) – Spikes from a cell</p></li>
 <li><p><strong>s</strong> (<em>Any</em>) – Neuron state</p></li>
-<li><p><strong>state</strong> (<em>Optional</em><em>[</em><em>T</em><em>]</em>) – The regularization state to be aggregated to of any type T. Defaults to None</p></li>
+<li><p><strong>state</strong> (<em>Optional</em><em>[</em><em>Any</em><em>]</em>) – The regularization state to be aggregated. Typically some numerical value like a count. Defaults to None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(&lt;class ‘torch.Tensor’&gt;, ~T)</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tuple of (spikes, regularizer state)</p>
@@ -73,7 +73,7 @@ inclusion in an error term.</p>
 
 <dl class="function">
 <dt id="norse.torch.functional.regularization.spike_accumulator">
-<code class="sig-prename descclassname">norse.torch.functional.regularization.</code><code class="sig-name descname">spike_accumulator</code><span class="sig-paren">(</span><em class="sig-param">z</em>, <em class="sig-param">s</em>, <em class="sig-param">state=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/regularization.html#spike_accumulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.regularization.spike_accumulator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">norse.torch.functional.regularization.</code><code class="sig-name descname">spike_accumulator</code><span class="sig-paren">(</span><em class="sig-param">z</em>, <em class="sig-param">_</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/regularization.html#spike_accumulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.regularization.spike_accumulator" title="Permalink to this definition">¶</a></dt>
 <dd><p>A spike accumulator that aggregates spikes and returns the total sum as an integer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -96,7 +96,7 @@ inclusion in an error term.</p>
 <dt id="norse.torch.functional.regularization.voltage_accumulator">
 <code class="sig-prename descclassname">norse.torch.functional.regularization.</code><code class="sig-name descname">voltage_accumulator</code><span class="sig-paren">(</span><em class="sig-param">z</em>, <em class="sig-param">s</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/regularization.html#voltage_accumulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.regularization.voltage_accumulator" title="Permalink to this definition">¶</a></dt>
 <dd><p>A spike accumulator that aggregates membrane potentials over time. Requires that the
-input state <code class="docutils literal notranslate"><span class="pre">s</span></code> has a <code class="docutils literal notranslate"><span class="pre">v</span></code> property.</p>
+input state <code class="docutils literal notranslate"><span class="pre">s</span></code> has a <code class="docutils literal notranslate"><span class="pre">v</span></code> property (for voltage).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

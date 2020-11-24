@@ -42,7 +42,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.jit</span>
 
-<span class="kn">from</span> <span class="nn">.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
+<span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
 
 
 <div class="viewcode-block" id="LIFAdExParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LIFAdExParameters">[docs]</a><span class="k">class</span> <span class="nc">LIFAdExParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -261,7 +261,7 @@
     <span class="n">adaptation</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LIFAdExParameters</span> <span class="o">=</span> <span class="n">LIFAdExParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes a single euler-integration step of an adaptive exponential LIF neuron-model</span>
 <span class="sd">    adapted from http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model.</span>
 <span class="sd">    More specifically it implements one integration step of the following ODE</span>

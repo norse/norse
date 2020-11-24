@@ -241,12 +241,12 @@ More specifically it implements one integration step of the following ODE</p>
 <li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><em>torch.Tensor</em></a>) – the input current at the current time step</p></li>
 <li><p><strong>voltage</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><em>torch.Tensor</em></a>) – current state of the LIFAdEx neuron</p></li>
 <li><p><strong>adaptation</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><em>torch.Tensor</em></a>) – membrane adaptation parameter in nS</p></li>
-<li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.lif_adex.LIFAdExParameters" title="norse.torch.functional.lif_adex.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – parameters of a leaky integrate and fire neuron</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFAdExParameters" title="norse.torch.functional.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – parameters of a leaky integrate and fire neuron</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration timestep to use</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -282,8 +282,8 @@ arbitrary pytorch module (such as a convolution) to input spikes.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><em>torch.Tensor</em></a>) – the input spikes at the current time step</p></li>
-<li><p><strong>state</strong> (<a class="reference internal" href="#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><em>LIFAdExFeedForwardState</em></a>) – current state of the LIF neuron</p></li>
-<li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.lif_adex.LIFAdExParameters" title="norse.torch.functional.lif_adex.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – parameters of a leaky integrate and fire neuron</p></li>
+<li><p><strong>state</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFAdExFeedForwardState" title="norse.torch.functional.LIFAdExFeedForwardState"><em>LIFAdExFeedForwardState</em></a>) – current state of the LIF neuron</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFAdExParameters" title="norse.torch.functional.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – parameters of a leaky integrate and fire neuron</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration timestep to use</p></li>
 </ul>
 </dd>
@@ -322,10 +322,10 @@ and input spikes respectively.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><em>torch.Tensor</em></a>) – the input spikes at the current time step</p></li>
-<li><p><strong>s</strong> (<a class="reference internal" href="#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><em>LIFAdExState</em></a>) – current state of the LIF neuron</p></li>
+<li><p><strong>s</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFAdExState" title="norse.torch.functional.LIFAdExState"><em>LIFAdExState</em></a>) – current state of the LIF neuron</p></li>
 <li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><em>torch.Tensor</em></a>) – synaptic weights for incoming spikes</p></li>
 <li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+168b022 ))"><em>torch.Tensor</em></a>) – synaptic weights for recurrent spikes</p></li>
-<li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.lif_adex.LIFAdExParameters" title="norse.torch.functional.lif_adex.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – parameters of a leaky integrate and fire neuron</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFAdExParameters" title="norse.torch.functional.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – parameters of a leaky integrate and fire neuron</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration timestep to use</p></li>
 </ul>
 </dd>
