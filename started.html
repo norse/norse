@@ -118,7 +118,7 @@ timestep):</p>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">Lift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
-    <span class="n">norse</span><span class="o">.</span><span class="n">LSNNCell</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">LSNNLayer</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">Lift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 <span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># (time, batch, input)</span>

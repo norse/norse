@@ -100,7 +100,7 @@ timestep):
 
     model = SequentialState(
         norse.Lift(torch.nn.Linear(10, 5)),
-        norse.LSNNCell(5, 5),
+        norse.LSNNLayer(5, 5),
         norse.Lift(torch.nn.Linear(5, 1))
     )
     data = torch.ones(100, 8, 10) # (time, batch, input)
