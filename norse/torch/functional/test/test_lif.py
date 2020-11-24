@@ -46,6 +46,14 @@ def test_lif_feed_forward_step():
         assert torch.allclose(torch.as_tensor(result), s.v, atol=1e-4)
 
 
+def test_lif_feed_forward_step_batch():
+    x = torch.ones(2, 1)
+    s = LIFFeedForwardState(v=torch.zeros(2, 1), i=torch.zeros(2, 1))
+
+    z, s = lif_feed_forward_step(x, s)
+    assert z.shape == (2, 1)
+
+
 def test_lif_feed_forward_step_jit():
     x = torch.ones(10)
     s = LIFFeedForwardState(v=torch.zeros(10), i=torch.zeros(10))
