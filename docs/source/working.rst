@@ -4,10 +4,11 @@ Working with Norse
 -------------------
 
 For us, Norse is a tool to accelerate our own work within spiking neural networks.
-This page serves to describe the fundamental ideas behind the Python code in Norse.
+This page serves to describe the fundamental ideas behind the Python code in Norse and
+provide you with hints as to how you can apply it in your own work
+.
 We will start by explaining some basic terminology, describe a *suggestion* to how Norse
 can be approach, and finally provide examples on how to work with Norse.
-
 
 Fundamental concepts
 =======================
@@ -16,68 +17,11 @@ Functional vs. module packaging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As with PyTorch, the package is organised into a *functional* and *module* part. 
-The *functional* package contains functions and classes that are considered atomic. If you use this package, you are expected to piece the code together yourself. The *module* package contains PyTorch modules on a slightly higher level. This is the abstraction we will work with in this document.
+The *functional* package contains functions and classes that are considered atomic. 
+If you use this package, you are expected to piece the code together yourself. 
+The *module* package contains PyTorch modules on a slightly higher level.
 
-Cell parameters
-^^^^^^^^^^^^^^^^^^^
-
-All cells and layers use neuron parameters to describe information about the neurons (for instance the membrane potential and leak).
-Norse is designed such that all neurons require parameters for each forward pass.
-In practice this looks like
-
-.. code:: python
-
-    import torch
-    from norse.torch.module.lif import LIFParameters, LIFCell
-    data = torch.ones(2)
-    p    = LIFParameters(v_leak=1.0) # Default values except for v_leak
-    cell = LIFCell(2, 4, p=p)     # Shape 2 -> 4
-
-All future executions with that cell will then use the neuron parameters.
-
-Layer and cell states
-^^^^^^^^^^^^^^^^^^^^^^^^^
-Because we are working with temporal data, neuron parameters change over time. 
-That is encoded in a state class (e.g. `LIFState <https://github.com/norse/norse/blob/012a97bb23ea6b6ec0cb47866c62b3711b0c53da/norse/torch/functional/lif.py#L39>`_) 
-that represents the current values of the neuron (for instance membrane potential and leak).
-
-Neurons and states **are immutable**. 
-Every time you call a neuron, the state will be returned along with the output (spikes). 
-Typically as the second parameter.
-The reason for this is that you can then re-use the state in the next time step, to capture the neuron parameters.
-
-The initial value of such a state defaults to meaningful values for each neuron models, but can be
-also be manually configured if needed:
-
-.. code:: python
-
-    import torch
-    from norse.torch.module.lif import LIFCell
-    data = torch.ones(8, 2)  # 8 batches, 2 inputs
-    cell = LIFCell(2, 4)     # Shape 2 -> 4
-    z, s = cell(data)        # Invoke with default state
-
-    state = cell.initial_state(8)
-    z, s = cell(data, state) # Invoke with custom state
-
-This informs the cell that there are 8 entries in a batch, each providing input to 2 neurons.
-
-Here is an example on how to evaluate a sequence of inputs modified from the
-`LIFLayer <https://github.com/norse/norse/blob/master/norse/torch/module/lif.py#L106>`_.
-
-
-.. code:: python
-
-    import torch
-    from norse.torch.module.lif import LIFCell
-    inputs = torch.ones(100, 8, 2) # Shape (timesteps, batch, input)
-    
-    cell = LIFCell(2, 4)           # Shape (input, output)
-    outputs = []
-        for i in range(len(inputs)):
-            out, state = self.cell(inputs[i], state)
-            outputs += [out]
-        return torch.stack(outputs), state
+This is the abstraction we will work with in this document.
 
 How to approach Norse
 ========================

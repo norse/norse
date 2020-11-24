@@ -9,34 +9,34 @@ class SequentialState(torch.nn.Sequential):
     addition that it handles neuron states.
 
     Example:
-    >>> import torch
-    >>> from norse.torch.module.lift import LIFT
-    >>> from norse.torch.module.sequential import SequentialState
-    >>> from norse.torch.module.lif import LIFLayer
-    >>> data = torch.ones(1, 16, 8, 4)     # Single timestep
-    >>> model = SequentialState(
-    >>>   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)
-    >>>   torch.nn.Flatten(2),             # (1, 8, 12)
-    >>>   LIFLayer(12, 6),                 # (1, 8, 6)
-    >>>   LIFLayer(6, 1)                   # (1, 8, 1)
-    >>> )
-    >>> model(data)
+        >>> import torch
+        >>> from norse.torch.module.lift import LIFT
+        >>> from norse.torch.module.sequential import SequentialState
+        >>> from norse.torch.module.lif import LIFLayer
+        >>> data = torch.ones(1, 16, 8, 4)     # Single timestep
+        >>> model = SequentialState(
+        >>>   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)
+        >>>   torch.nn.Flatten(2),             # (1, 8, 12)
+        >>>   LIFLayer(12, 6),                 # (1, 8, 6)
+        >>>   LIFLayer(6, 1)                   # (1, 8, 1)
+        >>> )
+        >>> model(data)
 
     Example with recurrent layers:
-    >>> import torch
-    >>> from norse.torch.module.lift import Lift
-    >>> from norse.torch.module.sequential import SequentialState
-    >>> from norse.torch.module.lif import LIFCell, LIFLayer
-    >>> from norse.torch.module.lsnn import LSNNCell, LSNNLayer
-    >>> data = torch.ones(1, 16, 8, 4)     # Single timestep
-    >>> model = SequentialState(
-    >>>   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)
-    >>>   torch.nn.Flatten(2),             # (1, 8, 12)
-    >>>   LSNNLayer(LSNNCell, 12, 6),      # (1, 8, 6)
-    >>>   torch.nn.RNN(6, 4, 2),           # (1, 6, 4) with 2 recurrent layers
-    >>>   LIFLayer(LIFCell,4, 1)           # (1, 4, 1)
-    >>> )
-    >>> model(data)
+        >>> import torch
+        >>> from norse.torch.module.lift import Lift
+        >>> from norse.torch.module.sequential import SequentialState
+        >>> from norse.torch.module.lif import LIFCell, LIFLayer
+        >>> from norse.torch.module.lsnn import LSNNCell, LSNNLayer
+        >>> data = torch.ones(1, 16, 8, 4)     # Single timestep
+        >>> model = SequentialState(
+        >>>   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)
+        >>>   torch.nn.Flatten(2),             # (1, 8, 12)
+        >>>   LSNNLayer(LSNNCell, 12, 6),      # (1, 8, 6)
+        >>>   torch.nn.RNN(6, 4, 2),           # (1, 6, 4) with 2 recurrent layers
+        >>>   LIFLayer(LIFCell,4, 1)           # (1, 4, 1)
+        >>> )
+        >>> model(data)
 
     """
 

@@ -37,7 +37,7 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 
 To try Norse, the best option is to run one of the [jupyter notebooks](https://github.com/norse/notebooks/tree/master/) on Google collab. 
 
-Alternatively, [you can install Norse](#installation) and run one of the [included tasks](https://norse.github.io/norse/experiments.html) such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database):
+Alternatively, [you can install Norse](#installation) and run one of the [included tasks](https://norse.github.io/norse/tasks.html) such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database):
 ```bash
 python -m norse.task.mnist
 ```
@@ -81,9 +81,9 @@ pip install -qU git+https://github.com/norse/norse
 
 ### 2.2. Running examples
 
-Norse is bundled with a number of example experiments, serving as short, self contained, correct examples ([SSCCE](http://www.sscce.org/)).
+Norse is bundled with a number of example tasks, serving as short, self contained, correct examples ([SSCCE](http://www.sscce.org/)).
 They can be run by invoking the `norse` module from the base directory.
-More information and tasks are available [in our documentation](https://norse.github.io/norse/experiments.html) and in your console by typing: `python -m norse.task.<task> --help`, where `<task>` is one of the task names.
+More information and tasks are available [in our documentation](https://norse.github.io/norse/tasks.html) and in your console by typing: `python -m norse.task.<task> --help`, where `<task>` is one of the task names.
 
 - To train an MNIST classification network, invoke
     ```bash

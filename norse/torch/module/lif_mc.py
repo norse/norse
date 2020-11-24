@@ -12,27 +12,27 @@ class LIFMCCell(torch.nn.Module):
     neuron-model.
 
     .. math::
-        \\begin{align*}
-            \\dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} \
-            - g_{\\text{coupling}} v + i) \\\\
-            \\dot{i} &= -1/\\tau_{\\text{syn}} i
-        \\end{align*}
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} \
+            - g_{\text{coupling}} v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
+        \end{align*}
 
     together with the jump condition
 
     .. math::
-        z = \Theta(v - v_{\\text{th}})
+        z = \Theta(v - v_{\text{th}})
 
     and transition equations
 
     .. math::
-        \\begin{align*}
-            v &= (1-z) v + z v_{\\text{reset}} \\\\
-            i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
-            i &= i + w_{\\text{rec}} z_{\\text{rec}}
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            i &= i + w_{\text{input}} z_{\text{in}} \\
+            i &= i + w_{\text{rec}} z_{\text{rec}}
         \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
+    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the
     recurrent and input spikes respectively.
 
 

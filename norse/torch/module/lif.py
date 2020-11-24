@@ -116,9 +116,9 @@ class LIFLayer(torch.nn.Module):
       (spikes from all timesteps, state from the last timestep).
 
     Example:
-    >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-    >>> l = LIFLayer(2, 4)
-    >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
+        >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
+        >>> l = LIFLayer(2, 4)
+        >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
     """
 
     def __init__(self, *cell_args, **kw_args):
@@ -204,9 +204,9 @@ class LIFFeedForwardLayer(torch.nn.Module):
       (spikes from all timesteps, state from the last timestep).
 
     Example:
-    >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-    >>> l = LIFFeedForwardLayer()
-    >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
+        >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
+        >>> l = LIFFeedForwardLayer()
+        >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
 
     Arguments:
         cell_args (Any): Arguments to pass on to the LIFCell
