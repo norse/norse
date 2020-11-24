@@ -219,12 +219,12 @@
     <span class="c1"># compute current jumps</span>
     <span class="n">i_new</span> <span class="o">=</span> <span class="n">i_decayed</span> <span class="o">+</span> <span class="n">input_tensor</span>
 
-    <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">v_new</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i_new</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="lif_feed_forward_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">lif_feed_forward_step</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">state</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span> <span class="o">=</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">5e-3</span><span class="p">),</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">1e-2</span><span class="p">),</span>
@@ -278,6 +278,14 @@
         <span class="n">method</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">),</span>
     <span class="p">)</span>
+    <span class="c1"># Because input tensors are not directly used in the first pass (no</span>
+    <span class="c1"># broadcasting takes place) we need to set the state values to the</span>
+    <span class="c1"># same shape as the input.</span>
+    <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span>
+            <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">jit_params</span><span class="o">.</span><span class="n">v_reset</span><span class="p">),</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">),</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">_lif_feed_forward_step_jit</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">jit_params</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span></div>
 
 
