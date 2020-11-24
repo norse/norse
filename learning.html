@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>5. Learning with spikes &#8212; norse 0.0.4 documentation</title>
+    <title>4. Learning with spikes &#8212; norse 0.0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css" />
@@ -20,8 +20,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="6. Working with Norse" href="working.html" />
-    <link rel="prev" title="4. Introduction to spiking neural networks" href="spiking.html" />
+    <link rel="next" title="5. Working with Norse" href="working.html" />
+    <link rel="prev" title="3. Introduction to spikes" href="spiking.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -39,12 +39,74 @@
           <div class="body" role="main">
             
   <div class="section" id="learning-with-spikes">
-<span id="page-spike-learning"></span><h1><span class="section-number">5. </span>Learning with spikes<a class="headerlink" href="#learning-with-spikes" title="Permalink to this headline">¶</a></h1>
-<p>To be able to learn in spiking neural networks one needs to update the
-weights between neurons, as in all types of neural networks.</p>
-<p>TBD, but for now we can refer to the excellent paper on
-<a class="reference external" href="https://arxiv.org/abs/1901.09948">Surrogate Gradient Learning in Spiking Neural Networks</a> by
-Emre O. Neftci, Hesham Mostafa, and Friedemann Zenke.</p>
+<span id="page-spike-learning"></span><h1><span class="section-number">4. </span>Learning with spikes<a class="headerlink" href="#learning-with-spikes" title="Permalink to this headline">¶</a></h1>
+<p>To be able to learn in spiking neural networks (SNN) one needs to
+update the weights between neurons, as in all types of neural networks.
+As you probably know, you need smooth, differentiable functions to
+apply popular algorithms like gradient descent and backpropagation.</p>
+<p>However, spiking neurons do not have smooth activation functions
+(a spike either happens or doesn’t).
+This page aims to explain - in an informan manner - how we can train
+SNNs in Norse irregardless of their non-differentiable nature.
+The general approach is described in better detail by
+<a class="reference external" href="https://arxiv.org/abs/1901.09948">Emre O. Neftci, Hesham Mostafa, and Friedemann Zenke</a>.</p>
+<p>Before you read further though, make sure you are familiar
+with how PyTorch
+<a class="reference external" href="https://pytorch.org/tutorials/beginner/pytorch_with_examples.html#autograd">works with Autograd and backpropagation</a>.
+Norse is basically applying the same principle.</p>
+<div class="section" id="training-spiking-neural-networks">
+<h2><span class="section-number">4.1. </span>Training Spiking Neural Networks<a class="headerlink" href="#training-spiking-neural-networks" title="Permalink to this headline">¶</a></h2>
+<p>Many solutions have been attempted to solve this problem with varying
+success.
+Here we will only cover the <em>surrogate gradient</em> approach, and
+illustrate how  it is implement in norse.</p>
+<p>Our approach builds on the SuperSpike method proposed by
+<a href="#id1"><span class="problematic" id="id2">`Steven K. Esser et al. (Convolutional networks for fast, energy-efficient neuromorphic computing)&lt;https://www.pnas.org/content/113/41/11441&gt;`_</span></a> and
+further elaborated in
+<a class="reference external" href="https://www.mitpressjournals.org/doi/pdf/10.1162/neco_a_01086">Friedemann Zenke and Surya Ganguli</a>.</p>
+<p>Neurons work in the way that they update their membrane equations with
+incoming currents from pre-synaptic neurons.
+If the incoming currents exceed a threshold, the post-synaptic
+neuron releases a spike.
+Hhis can easily be expressed in code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>if membrane &gt; threshold: spike!
+</pre></div>
+</div>
+<p>However, what happens when you take the gradient of that? It will be
+zero for the most part because <code class="docutils literal notranslate"><span class="pre">membrane</span> <span class="pre">&lt;</span> <span class="pre">threshold</span></code>, meaning that
+the neuron does not influence the output at all.
+But sometimes the current goes above the threshold, you get an
+activation, and the gradient changes!
+To account for that, we can “pretend” that the gradient doesn’t
+have this awkward sudden shift.
+Instead, we can look at the numerical state of the neuron and then
+use that as an indicator for how much the neuron influenced the
+output.</p>
+<p>Given the neuron membrane potential (<span class="math notranslate nohighlight">\(U\)</span>) and the neuron firing
+threshold (<span class="math notranslate nohighlight">\(v\)</span>), then this is a simplified version of the
+SuperSpike surrogate partial derivative for some activation
+function (<span class="math notranslate nohighlight">\(\sigma\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\sigma '(U_i) = \left(1 + |U_i - v| \right)^{-2}\]</div>
+<p>In the SuperSpike algorithm, we look at the <em>difference</em> between the
+neuron membrane and the firing threshold.
+If, say, the neuron membrane voltage is much higher than the
+firing threshold, we know that the neuron <cite>will</cite> fire.
+But too far away from that threshold indicates that the contribution
+of the neuron is unimportant because it would require a large
+modification to that particular neuron to <em>not</em> impact the output.</p>
+<p>Conversely, if the the neuron membrane voltage is much lower
+than the threshold, the neuron is probably not
+going to fire, and the gradient contribution is equally low.</p>
+<p>And that’s it! SuperSpike permits the calculation of gradients for
+non-differentiable functions.
+Which, in turn, permits us to use the native autograd properties
+of PyTorch.</p>
+<p>An implementation of the SuperSpike algorithm in Norse can be found
+in the
+<a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/functional/threshold.py">threshold.py</a>
+module.</p>
+</div>
 </div>
 
 
@@ -78,19 +140,36 @@ Emre O. Neftci, Hesham Mostafa, and Friedemann Zenke.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<p class="caption"><span class="caption-text">First steps</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">∇ Home</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#installing-norse">Installing Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#running-tasks">Running Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-uses-and-opimizations">Advanced uses and opimizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#about-norse">About Norse</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#table-of-contents">Table of contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="started.html">1. Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="about.html">1. About Norse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hardware.html">3. Hardware acceleration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="spiking.html">4. Introduction to spiking neural networks</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Learning with spikes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working.html">6. Working with Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">2. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spiking.html">3. Introduction to spikes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Learning with spikes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#training-spiking-neural-networks">4.1. Training Spiking Neural Networks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">5. Working with Norse</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="experiments.html">2. Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
@@ -103,8 +182,8 @@ Emre O. Neftci, Hesham Mostafa, and Friedemann Zenke.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="spiking.html" title="previous chapter"><span class="section-number">4. </span>Introduction to spiking neural networks</a></li>
-      <li>Next: <a href="working.html" title="next chapter"><span class="section-number">6. </span>Working with Norse</a></li>
+      <li>Previous: <a href="spiking.html" title="previous chapter"><span class="section-number">3. </span>Introduction to spikes</a></li>
+      <li>Next: <a href="working.html" title="next chapter"><span class="section-number">5. </span>Working with Norse</a></li>
   </ul></li>
 </ul>
 </div>

@@ -20,8 +20,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="3. Hardware acceleration" href="hardware.html" />
-    <link rel="prev" title="1. About Norse" href="about.html" />
+    <link rel="next" title="1. About Norse" href="about.html" />
+    <link rel="prev" title="1. Getting started" href="started.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -47,10 +47,15 @@ If this is a problem, it is recommended to install Norse from a Docker image usi
 primary dependency.
 This has the benefit that your models are hardware accelerated, providing the
 <a class="reference external" href="https://pytorch.org/get-started/locally/">prerequisites are met</a>.</p>
-<p>For that reason, we recommend <a class="reference external" href="https://pytorch.org/get-started/locally/">following the PyTorch “Get Started” guide</a> as the first step.</p>
-<p>After installing the Torch prerequisite, the primary dependencies can be done in the following three ways:</p>
-<div class="section" id="installing-from-pypi">
-<h2><span class="section-number">2.1. </span>Installing from PyPi<a class="headerlink" href="#installing-from-pypi" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="required-dependencies">
+<h2><span class="section-number">2.1. </span>Required dependencies<a class="headerlink" href="#required-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Because we are relying on optimised C++ for some of the hotspots in the library, you will need
+to download and install <a class="reference external" href="https://cmake.org/">CMake</a> and <a class="reference external" href="https://pytorch.org/get-started/locally/">PyTorch</a>
+<em>before</em> you can install Norse.
+For that reason, we recommend <a class="reference external" href="https://pytorch.org/get-started/locally/">following the PyTorch “Get Started” guide</a> as the first step.</p>
+</div>
+<div class="section" id="installation-steps">
+<h2><span class="section-number">2.2. </span>Installation steps<a class="headerlink" href="#installation-steps" title="Permalink to this headline">¶</a></h2>
 <p>This requires command-line access to</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install norse
 </pre></div>
@@ -66,15 +71,17 @@ This has the benefit that your models are hardware accelerated, providing the
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/norse/norse
 <span class="nb">cd</span> norse
-pip install -e norse
+python setup.py install
 </pre></div>
 </div>
 </div>
 <div class="section" id="optional-dependencies">
-<h2><span class="section-number">2.2. </span>Optional dependencies<a class="headerlink" href="#optional-dependencies" title="Permalink to this headline">¶</a></h2>
-<p>Norse runs well with the above installation, but some of the tasks integrates with the visualization
-tool <a class="reference external" href="https://pytorch.org/docs/stable/tensorboard.html">Tensorboard</a> to make it easier to
-introspect models and results.</p>
+<h2><span class="section-number">2.3. </span>Optional dependencies<a class="headerlink" href="#optional-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Some of the tasks require additional dependencies like
+<a class="reference external" href="https://pytorch.org/text/stable/index.html">Torchtext</a> and
+<a class="reference external" href="https://pytorch.org/docs/stable/torchvision/index.html">Torchvision</a>.
+We also offer support for <a class="reference external" href="https://pytorch.org/docs/stable/tensorboard.html">Tensorboard</a>
+to make it easier to visualise the training and introspect models.</p>
 </div>
 </div>
 
@@ -109,23 +116,38 @@ introspect models and results.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<p class="caption"><span class="caption-text">First steps</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="about.html">1. About Norse</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installing Norse</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installing-from-pypi">2.1. Installing from PyPi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#optional-dependencies">2.2. Optional dependencies</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">∇ Home</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#installing-norse">Installing Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#running-tasks">Running Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#advanced-uses-and-opimizations">Advanced uses and opimizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#about-norse">About Norse</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#table-of-contents">Table of contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="hardware.html">3. Hardware acceleration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="spiking.html">4. Introduction to spiking neural networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="learning.html">5. Learning with spikes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working.html">6. Working with Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="started.html">1. Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installing Norse</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#required-dependencies">2.1. Required dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-steps">2.2. Installation steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-dependencies">2.3. Optional dependencies</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Usage docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">2. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spiking.html">3. Introduction to spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">5. Working with Norse</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="experiments.html">2. Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
@@ -138,8 +160,8 @@ introspect models and results.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="about.html" title="previous chapter"><span class="section-number">1. </span>About Norse</a></li>
-      <li>Next: <a href="hardware.html" title="next chapter"><span class="section-number">3. </span>Hardware acceleration</a></li>
+      <li>Previous: <a href="started.html" title="previous chapter"><span class="section-number">1. </span>Getting started</a></li>
+      <li>Next: <a href="about.html" title="next chapter"><span class="section-number">1. </span>About Norse</a></li>
   </ul></li>
 </ul>
 </div>

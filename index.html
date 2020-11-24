@@ -20,7 +20,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. About Norse" href="about.html" />
+    <link rel="next" title="1. Getting started" href="started.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -44,67 +44,76 @@
 with
 <a class="reference external" href="https://en.wikipedia.org/wiki/Spiking_neural_network">spiking neural networks</a>.</p>
 <a class="reference external image-reference" href="https://github.com/norse/norse/actions"><img alt="https://github.com/norse/norse/workflows/Python%20package/badge.svg" src="https://github.com/norse/norse/workflows/Python%20package/badge.svg" /></a>
+<a class="reference external image-reference" href="https://pypi.org/project/norse/"><img alt="https://img.shields.io/pypi/v/norse" src="https://img.shields.io/pypi/v/norse" /></a>
+<a class="reference external image-reference" href="https://anaconda.org/norse"><img alt="https://img.shields.io/conda/v/norse/norse" src="https://img.shields.io/conda/v/norse/norse" /></a>
+<a class="reference external image-reference" href="https://discord.gg/7fGN359"><img alt="https://img.shields.io/discord/723215296399147089" src="https://img.shields.io/discord/723215296399147089" /></a>
+<a class="reference external image-reference" href="https://www.codacy.com/gh/norse/norse?utm_source=github.com&amp;amp;utm_medium=referral&amp;amp;utm_content=norse/norse&amp;amp;utm_campaign=Badge_Grade"><img alt="https://app.codacy.com/project/badge/Grade/a9ab846fc6114afda4320badcb8a69c2" src="https://app.codacy.com/project/badge/Grade/a9ab846fc6114afda4320badcb8a69c2" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/norse/norse"><img alt="https://codecov.io/gh/norse/norse/branch/master/graph/badge.svg" src="https://codecov.io/gh/norse/norse/branch/master/graph/badge.svg" /></a>
 <p>The purpose of this library is to exploit the advantages of <a class="reference external" href="https://en.wikipedia.org/wiki/Spiking_neural_network">bio-inspired neural components</a>, who are sparse and event-driven - a fundamental difference from artificial neural networks.
 Norse expands on <a class="reference external" href="https://pytorch.org/">PyTorch</a>, bringing you two advantages: a modern and proven infrastructure and deep learning-compatible components.</p>
-<p>Read more in the <a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spiking neural networks</span></a> and <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a>.</p>
+<p>Read more in the <a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spikes</span></a> and <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a>.</p>
 <div class="section" id="getting-started">
 <h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
-<p>To try Norse, the best option is to run one of the <a class="reference external" href="https://github.com/norse/notebooks/">Jupyter Notebooks</a> on Google collab.</p>
-<p>Alternatively, you can install run one of the <a class="reference internal" href="experiments.html#page-experiments"><span class="std std-ref">Running Experiments</span></a> such as <a class="reference external" href="https://en.wikipedia.org/wiki/MNIST_database">MNIST</a>:</p>
+<p>To try Norse, the best option is to run our <a class="reference external" href="https://github.com/norse/notebooks/">Jupyter Notebook Tutorials</a> online.</p>
+<p>Alternatively, install Norse and run one of the <a class="reference external" href="https://norse.github.io/norse/tasks.html">included tasks</a> such as
+<a class="reference external" href="https://en.wikipedia.org/wiki/MNIST_database">MNIST</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m norse.task.mnist
 </pre></div>
 </div>
+<p>The <a class="reference internal" href="started.html#page-started"><span class="std std-ref">Getting started</span></a> and <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a> pages show how to build your own models with Norse while explaining a few
+fundamental concepts around spiking neural networks.</p>
 </div>
 <div class="section" id="installing-norse">
 <h2>Installing Norse<a class="headerlink" href="#installing-norse" title="Permalink to this headline">¶</a></h2>
 <p>Note that we assume you are using Python version 3.7+, are in a terminal friendly environment, and have installed the necessary requirements,
 depending on your installation method.
 More detailed installation instructions are available here: <a class="reference internal" href="installing.html#page-installing"><span class="std std-ref">Installing Norse</span></a>.</p>
-<ul class="simple">
-<li><p>Installing from PyPi</p></li>
-</ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install norse
-</pre></div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 52%" />
+<col style="width: 34%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Method</p></td>
+<td><p>Instructions</p></td>
+<td><p>Prerequisite</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>From PyPi</strong></p></td>
+<td><p><code class="code bash docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">norse</span></code></p></td>
+<td><p><a class="reference external" href="https://pypi.org/">Pip</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>From Conda</strong></p></td>
+<td><p><code class="code bash docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">norse</span> <span class="pre">norse</span></code></p></td>
+<td><p><a class="reference external" href="https://docs.anaconda.com/anaconda/install/">Conda</a></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>From Source</strong></p></td>
+<td><p><code class="code bash docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/norse/norse</span> <span class="operator"><span class="pre">&amp;&amp;</span></span> <span class="pre">python</span> <span class="pre">norse/setup.py</span> <span class="pre">install</span></code></p></td>
+<td><p><a class="reference external" href="https://www.python.org/">Python</a></p></td>
+</tr>
+</tbody>
+</table>
 </div>
-<ul class="simple">
-<li><p>Installing from Conda</p></li>
-</ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install -c norse norse
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Installing from source</p></li>
-</ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/norse/norse
-<span class="nb">cd</span> norse
-pip install -e norse
-</pre></div>
-</div>
-</div>
-<div class="section" id="running-experiments">
-<h2>Running experiments<a class="headerlink" href="#running-experiments" title="Permalink to this headline">¶</a></h2>
-<p>Norse is bundled with a number of example experiments, serving as short, self contained, correct examples <a class="reference external" href="http://www.sscce.org/">SSCCE</a>.
+<div class="section" id="running-tasks">
+<h2>Running Tasks<a class="headerlink" href="#running-tasks" title="Permalink to this headline">¶</a></h2>
+<p>Norse comes with a number of example tasks, serving as short, self contained, correct examples <a class="reference external" href="http://www.sscce.org/">SSCCE</a>.
 They can be run by invoking the <code class="docutils literal notranslate"><span class="pre">norse</span></code> module from the base directory.
-More information and tasks are available at <a class="reference internal" href="experiments.html#page-experiments"><span class="std std-ref">Running Experiments</span></a> and in your console by typing: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">norse.task.&lt;task&gt;</span> <span class="pre">--help</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;task&gt;</span></code> is one of the task names.</p>
+More information and tasks are available at <a class="reference internal" href="tasks.html#page-tasks"><span class="std std-ref">Running Tasks</span></a> and in your console by typing: <code class="code bash docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">norse.task.&lt;task&gt;</span> <span class="pre">--help</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">&lt;task&gt;</span></code> is one of the task names.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 -m norse.task.mnist
 </pre></div>
 </div>
-<p>This will run an MNIST experiment with default parameters.
-See <a class="reference internal" href="experiments.html"><span class="doc">Running Experiments</span></a> for detailed instructions.</p>
+<p>Read more in our <a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spikes</span></a> and visit our <a class="reference external" href="https://github.com/norse/notebooks">Jupyter Notebook examples</a>.</p>
 </div>
-<div class="section" id="tutorials-and-understanding-spikes">
-<h2>Tutorials and understanding spikes<a class="headerlink" href="#tutorials-and-understanding-spikes" title="Permalink to this headline">¶</a></h2>
-<p>In biology, neural networks are living things that change over time and where sparseness plays a critical role.
-We have prepared some introductory texts and tutorials that will help you understand why we use spiking neural networks in our work.</p>
-<p>Read more in our <a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spiking neural networks</span></a> and visit our <a class="reference external" href="https://github.com/norse/notebooks">Jupyter Notebook examples</a>.</p>
-</div>
-<div class="section" id="using-norse-in-your-own-work">
-<h2>Using Norse in your own work<a class="headerlink" href="#using-norse-in-your-own-work" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="advanced-uses-and-opimizations">
+<h2>Advanced uses and opimizations<a class="headerlink" href="#advanced-uses-and-opimizations" title="Permalink to this headline">¶</a></h2>
 <p>Norse is meant to be used as a library for spiking neural networks in customized deep learning models.
 This typically means porting other models to the spiking/temporal domain,
 extending existing models,
 or starting completely from scratch.
 All three use cases are motivated and briefly described in <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a>.</p>
+<p>Unfortunately, spiking neural networks are resource intensive.
+The page on <a class="reference internal" href="hardware.html#page-hardware"><span class="std std-ref">Hardware acceleration</span></a> explains how to accelerate the simulations using dedicated hardware.</p>
 </div>
 <div class="section" id="about-norse">
 <h2>About Norse<a class="headerlink" href="#about-norse" title="Permalink to this headline">¶</a></h2>
@@ -114,82 +123,73 @@ Read more about why we created Norse in <a class="reference internal" href="abou
 <div class="section" id="table-of-contents">
 <h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<p class="caption"><span class="caption-text">First steps</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">∇ Home</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-norse">Installing Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tasks">Running Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-uses-and-opimizations">Advanced uses and opimizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#about-norse">About Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#table-of-contents">Table of contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="started.html">1. Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="started.html#running-off-the-shelf-code">1.1. Running off-the-shelf code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="started.html#building-neural-networks-with-state">1.2. Building neural networks with state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="started.html#using-norse-neurons-as-pytorch-layers">1.3. Using Norse neurons as PyTorch layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="started.html#using-norse-in-time">1.4. Using Norse in time</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installing.html#required-dependencies">2.1. Required dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing.html#installation-steps">2.2. Installation steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installing.html#optional-dependencies">2.3. Optional dependencies</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">1. About Norse</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="about.html#contact">1.1. Contact</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installing.html#installing-from-pypi">2.1. Installing from PyPi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installing.html#optional-dependencies">2.2. Optional dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">2. Hardware acceleration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#accelerating-norse-models-with-to">2.1. Accelerating Norse models with <code class="docutils literal notranslate"><span class="pre">.to</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#accelerating-norse-nested-models">2.2. Accelerating Norse nested models</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="hardware.html">3. Hardware acceleration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hardware.html#accelerating-norse-models-with-to">3.1. Accelerating Norse models with <code class="docutils literal notranslate"><span class="pre">.to</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware.html#accelerating-norse-nested-models">3.2. Accelerating Norse nested models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spiking.html">3. Introduction to spikes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spiking.html#examples-of-real-tasks">3.1. Examples of real tasks</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="spiking.html">4. Introduction to spiking neural networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="learning.html">5. Learning with spikes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working.html">6. Working with Norse</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="working.html#fundamental-concepts">6.1. Fundamental concepts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="working.html#how-to-approach-norse">6.2. How to approach Norse</a></li>
-<li class="toctree-l2"><a class="reference internal" href="working.html#examples-on-working-with-norse">6.3. Examples on working with Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">4. Learning with spikes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="learning.html#training-spiking-neural-networks">4.1. Training Spiking Neural Networks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">5. Working with Norse</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="working.html#fundamental-concepts">5.1. Fundamental concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="working.html#how-to-approach-norse">5.2. How to approach Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="working.html#examples-on-working-with-norse">5.3. Examples on working with Norse</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
-</div>
-<div class="section" id="id1">
-<h1>Norse<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Norse is a library to do
-<a class="reference external" href="https://en.wikipedia.org/wiki/Deep_learning">deep learning</a>
-with
-<a class="reference external" href="https://en.wikipedia.org/wiki/Spiking_neural_network">spiking neural networks</a>.</p>
-<p>The purpose of this library is to exploit the advantages of <a class="reference external" href="https://en.wikipedia.org/wiki/Spiking_neural_network">bio-inspired neural components</a>, who are sparse and event-driven - a fundamental difference from artificial neural networks.
-Norse expands <a class="reference external" href="https://pytorch.org/">PyTorch</a> with primitives for bio-inspired neural components,
-bringing you two advantages: a modern and proven infrastructure based on PyTorch and deep learning-compatible spiking neural network components.</p>
-<div class="section" id="id6">
-<h2>Getting started<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
-<p>Norse is a library that you can either install via <a class="reference external" href="https://pypi.org/project/norse/">PyPi</a> or from source. Note that <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a> is required.</p>
-<ul class="simple">
-<li><p>Installing from PyPi:</p></li>
-</ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install norse
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Installing from source:</p></li>
-</ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/norse/norse
-pip install -e norse
-</pre></div>
-</div>
-</div>
-<div class="section" id="id7">
-<h2>Running experiments<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
-<p>Running experiments is as easy as running</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 -m norse
-</pre></div>
-</div>
-<p>This will run a simple MNIST experiment with default parameters. See <a class="reference internal" href="experiments.html"><span class="doc">Running Experiments</span></a> for detailed instructions.</p>
-</div>
-<div class="section" id="writing-your-own-experiments">
-<h2>Writing your own experiments<a class="headerlink" href="#writing-your-own-experiments" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="experiments.html">2. Running Experiments</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="experiments.html#parameters">2.1. Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiments.html#cartpole">2.2. Cartpole</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiments.html#cifar10">2.3. Cifar10</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiments.html#correlation-experiment">2.4. Correlation experiment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiments.html#memory-task">2.5. Memory task</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiments.html#mnist">2.6. MNIST</a></li>
-<li class="toctree-l2"><a class="reference internal" href="experiments.html#speech-command-recognition-task">2.7. Speech Command recognition task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">2. Running Tasks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html#parameters">2.1. Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html#cartpole">2.2. Cartpole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html#cifar10">2.3. Cifar10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html#correlation-experiment">2.4. Correlation experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html#memory-task">2.5. Memory task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html#mnist">2.6. MNIST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html#speech-command-recognition-task">2.7. Speech Command recognition task</a></li>
 </ul>
 </li>
 </ul>
@@ -215,9 +215,93 @@ pip install -e norse
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_api/norse.torch.html">norse.torch package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.functional.html">norse.torch.functional package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.models.html">norse.torch.models package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.module.html">norse.torch.module package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.functional.html">norse.torch.functional package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.test.html">norse.torch.functional.test package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_coba_lif.html">norse.torch.functional.test.test_coba_lif module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_encode.html">norse.torch.functional.test.test_encode module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_heaviside.html">norse.torch.functional.test.test_heaviside module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_leaky_integrator.html">norse.torch.functional.test.test_leaky_integrator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_lif.html">norse.torch.functional.test.test_lif module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_lif_adex.html">norse.torch.functional.test.test_lif_adex module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_lif_ex.html">norse.torch.functional.test.test_lif_ex module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_lif_mc.html">norse.torch.functional.test.test_lif_mc module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_lif_mc_refrac.html">norse.torch.functional.test.test_lif_mc_refrac module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_lif_refrac.html">norse.torch.functional.test.test_lif_refrac module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_lift.html">norse.torch.functional.test.test_lift module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_logical.html">norse.torch.functional.test.test_logical module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_lsnn.html">norse.torch.functional.test.test_lsnn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_regularization.html">norse.torch.functional.test.test_regularization module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_stdp.html">norse.torch.functional.test.test_stdp module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_stdp_sensor.html">norse.torch.functional.test.test_stdp_sensor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_superspike.html">norse.torch.functional.test.test_superspike module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_threshold.html">norse.torch.functional.test.test_threshold module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.functional.test.test_tsodyks_makram.html">norse.torch.functional.test.test_tsodyks_makram module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.coba_lif.html">norse.torch.functional.coba_lif module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.correlation_sensor.html">norse.torch.functional.correlation_sensor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.encode.html">norse.torch.functional.encode module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.heaviside.html">norse.torch.functional.heaviside module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.leaky_integrator.html">norse.torch.functional.leaky_integrator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.lif.html">norse.torch.functional.lif module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.lif_adex.html">norse.torch.functional.lif_adex module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.lif_correlation.html">norse.torch.functional.lif_correlation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.lif_ex.html">norse.torch.functional.lif_ex module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.lif_mc.html">norse.torch.functional.lif_mc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.lif_mc_refrac.html">norse.torch.functional.lif_mc_refrac module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.lif_refrac.html">norse.torch.functional.lif_refrac module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.lift.html">norse.torch.functional.lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.logical.html">norse.torch.functional.logical module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.lsnn.html">norse.torch.functional.lsnn module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.regularization.html">norse.torch.functional.regularization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.stdp.html">norse.torch.functional.stdp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.stdp_sensor.html">norse.torch.functional.stdp_sensor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.superspike.html">norse.torch.functional.superspike module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.threshold.html">norse.torch.functional.threshold module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.functional.tsodyks_makram.html">norse.torch.functional.tsodyks_makram module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.models.html">norse.torch.models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.models.conv.html">norse.torch.models.conv module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.models.mobilenet.html">norse.torch.models.mobilenet module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.models.vgg.html">norse.torch.models.vgg module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_api/norse.torch.module.html">norse.torch.module package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.test.html">norse.torch.module.test package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_coba.html">norse.torch.module.test.test_coba module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_encode.html">norse.torch.module.test.test_encode module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_leaky_integrator.html">norse.torch.module.test.test_leaky_integrator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_lif.html">norse.torch.module.test.test_lif module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_lif_adex.html">norse.torch.module.test.test_lif_adex module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_lif_correlation.html">norse.torch.module.test.test_lif_correlation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_lif_ex.html">norse.torch.module.test.test_lif_ex module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_lif_mc.html">norse.torch.module.test.test_lif_mc module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_lif_mc_refrac.html">norse.torch.module.test.test_lif_mc_refrac module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_lif_refrac.html">norse.torch.module.test.test_lif_refrac module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_lift.html">norse.torch.module.test.test_lift module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_lsnn.html">norse.torch.module.test.test_lsnn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_regularization.html">norse.torch.module.test.test_regularization module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_sequential.html">norse.torch.module.test.test_sequential module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_api/norse.torch.module.test.test_training.html">norse.torch.module.test.test_training module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.coba_lif.html">norse.torch.module.coba_lif module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.encode.html">norse.torch.module.encode module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.leaky_integrator.html">norse.torch.module.leaky_integrator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.lif.html">norse.torch.module.lif module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.lif_adex.html">norse.torch.module.lif_adex module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.lif_correlation.html">norse.torch.module.lif_correlation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.lif_ex.html">norse.torch.module.lif_ex module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.lif_mc.html">norse.torch.module.lif_mc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.lif_mc_refrac.html">norse.torch.module.lif_mc_refrac module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.lif_refrac.html">norse.torch.module.lif_refrac module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.lift.html">norse.torch.module.lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.lsnn.html">norse.torch.module.lsnn module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.regularization.html">norse.torch.module.regularization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_api/norse.torch.module.sequential.html">norse.torch.module.sequential module</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -264,19 +348,33 @@ pip install -e norse
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<p class="caption"><span class="caption-text">First steps</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">∇ Home</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-norse">Installing Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tasks">Running Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-uses-and-opimizations">Advanced uses and opimizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#about-norse">About Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#table-of-contents">Table of contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="started.html">1. Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">1. About Norse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hardware.html">3. Hardware acceleration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="spiking.html">4. Introduction to spiking neural networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="learning.html">5. Learning with spikes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working.html">6. Working with Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">2. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spiking.html">3. Introduction to spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working.html">5. Working with Norse</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="experiments.html">2. Running Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
@@ -289,7 +387,7 @@ pip install -e norse
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="about.html" title="next chapter"><span class="section-number">1. </span>About Norse</a></li>
+      <li>Next: <a href="started.html" title="next chapter"><span class="section-number">1. </span>Getting started</a></li>
   </ul></li>
 </ul>
 </div>
