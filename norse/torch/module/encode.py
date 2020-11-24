@@ -78,7 +78,7 @@ class PopulationEncoder(torch.nn.Module):
         scale: Union[int, torch.Tensor] = None,
         kernel: Callable[[torch.Tensor], torch.Tensor] = encode.gaussian_rbf,
         distance_function: Callable[
-            [torch.Tensor], torch.Tensor
+            [torch.Tensor, torch.Tensor], torch.Tensor
         ] = encode.euclidean_distance,
     ):
         """

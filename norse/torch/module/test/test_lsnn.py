@@ -23,8 +23,10 @@ def test_lsnn_cell_backward():
 
 def test_lsnn_cell_param_fail():
     # pylint: disable=E1120
+    # pytype: disable=missing-parameter
     with raises(TypeError):
         _ = LSNNCell()
+    # pytype: enable=missing-parameter
 
 
 def test_lsnn_forward_shape_fail():

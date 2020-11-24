@@ -5,10 +5,13 @@ from subprocess import run, STDOUT
 from multiprocessing.shared_memory import ShareableList
 from multiprocessing.managers import SharedMemoryManager
 
+# pytype: disable=import-error
 from pygenn.genn_model import GeNNModel
 from pygenn.genn_wrapper import NO_DELAY
 
-from benchmark import BenchmarkParameters
+# pytype: enable=import-error
+
+from .benchmark import BenchmarkParameters
 
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):

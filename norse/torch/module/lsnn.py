@@ -146,7 +146,9 @@ class LSNNLayer(torch.nn.Module):
         for input_step in inputs:
             out, state = self.cell(input_step, state)
             outputs += [out]
+        # pytype: disable=bad-return-type
         return torch.stack(outputs), state
+        # pytype: enable=bad-return-type
 
 
 class LSNNFeedForwardCell(torch.nn.Module):

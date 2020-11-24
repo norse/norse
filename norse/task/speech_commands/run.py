@@ -1,9 +1,17 @@
 import torch
+
+# pytype: disable=import-error
 import torchaudio
+
+# pytype: enable=import-error
 import argparse
 
 from norse.dataset.speech_commands import SpeechCommands, prepare_dataset
+
+# pytype: disable=import-error
 from norse.task.speech_commands.model import LSTMModel, lsnn_model, lif_model
+
+# pytype: enable=import-error
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--learning_rate", default=0.0001)

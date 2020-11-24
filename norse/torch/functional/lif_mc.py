@@ -1,7 +1,8 @@
-import torch
 from typing import Tuple
 
-from .lif import (
+import torch
+
+from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
     LIFParameters,

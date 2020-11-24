@@ -79,7 +79,9 @@ def population_encode(
     out_features: int,
     scale: Union[int, torch.Tensor] = None,
     kernel: Callable[[torch.Tensor], torch.Tensor] = gaussian_rbf,
-    distance_function: Callable[[torch.Tensor], torch.Tensor] = euclidean_distance,
+    distance_function: Callable[
+        [torch.Tensor, torch.Tensor], torch.Tensor
+    ] = euclidean_distance,
 ) -> torch.Tensor:
     """
     Encodes a set of input values into population codes, such that each singular input value is represented by

@@ -5,10 +5,11 @@ membrane parameters, or other properties over time.
 """
 import torch
 
+from typing import Any
+
 from norse.torch.functional.regularization import (
     regularize_step,
     spike_accumulator,
-    T,
     Accumulator,
 )
 
@@ -36,7 +37,7 @@ class RegularizationCell(torch.nn.Module):
         state (Optional[T]): The regularization state to be aggregated to of any type T. Defaults to None.
     """
 
-    def __init__(self, accumulator: Accumulator = spike_accumulator, state: T = None):
+    def __init__(self, accumulator: Accumulator = spike_accumulator, state: Any = None):
         super(RegularizationCell, self).__init__()
         self.accumulator = accumulator
         self.state = state

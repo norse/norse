@@ -3,7 +3,7 @@ import torch.jit
 import numpy as np
 
 import norse
-from .heaviside import heaviside
+from norse.torch.functional.heaviside import heaviside
 
 if getattr(norse, "IS_OPS_LOADED"):
     superspike_fn = torch.ops.norse_op.superfun

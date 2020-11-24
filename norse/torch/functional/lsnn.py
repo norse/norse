@@ -1,7 +1,8 @@
+from typing import NamedTuple, Tuple
+
 import torch
 
-from .threshold import threshold
-from typing import NamedTuple, Tuple
+from norse.torch.functional.threshold import threshold
 
 
 class LSNNParameters(NamedTuple):

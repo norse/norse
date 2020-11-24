@@ -132,7 +132,9 @@ class LIFExLayer(torch.nn.Module):
         for _, input_step in enumerate(inputs):
             out, state = self.cell(input_step, state)
             outputs += [out]
+        # pytype: disable=bad-return-type
         return torch.stack(outputs), state
+        # pytype: enable=bad-return-type
 
 
 class LIFExFeedForwardCell(torch.nn.Module):

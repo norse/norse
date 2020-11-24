@@ -1,11 +1,11 @@
+from typing import Tuple
+
 import torch
 
-from .lif_refrac import LIFRefracState, LIFRefracFeedForwardState
-from .lif_refrac import LIFRefracParameters
-from .lif import LIFState, LIFFeedForwardState
-from .threshold import threshold
-
-from typing import Tuple
+from norse.torch.functional.lif_refrac import LIFRefracState, LIFRefracFeedForwardState
+from norse.torch.functional.lif_refrac import LIFRefracParameters
+from norse.torch.functional.lif import LIFState, LIFFeedForwardState
+from norse.torch.functional.threshold import threshold
 
 
 def lif_mc_refrac_step(
@@ -51,11 +51,11 @@ def lif_mc_refrac_step(
 
 def lif_mc_refrac_feed_forward_step(
     input_tensor: torch.Tensor,
-    state: LIFRefracState,
+    state: LIFRefracFeedForwardState,
     g_coupling: torch.Tensor,
     p: LIFRefracParameters = LIFRefracParameters(),
     dt: float = 0.001,
-) -> Tuple[torch.Tensor, LIFRefracState]:
+) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
     # compute whether neurons are refractory or not
     refrac_mask = threshold(state.rho, p.lif.method, p.lif.alpha)
     # compute voltage

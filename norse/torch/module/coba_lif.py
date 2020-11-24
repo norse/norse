@@ -3,8 +3,8 @@ import torch
 from typing import Optional, Tuple
 import numpy as np
 
-from ..functional.coba_lif import CobaLIFParameters, CobaLIFState
-from ..functional.coba_lif import coba_lif_step
+from norse.torch.functional.coba_lif import CobaLIFParameters, CobaLIFState
+from norse.torch.functional.coba_lif import coba_lif_step
 
 
 class CobaLIFCell(torch.nn.Module):

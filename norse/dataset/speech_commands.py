@@ -1,7 +1,11 @@
 """This module provides a wrapper around the torchaudio.SPEECHCOMMANDS dataset.
 """
 import torch
+
+# pytype: disable=import-error
 import torchaudio
+
+# pytype: enable=import-error
 import os
 import glob
 

@@ -1,6 +1,6 @@
 import torch
 
-from .superspike import super_fn
+from norse.torch.functional.superspike import super_fn
 
 
 def logical_and(x, y):

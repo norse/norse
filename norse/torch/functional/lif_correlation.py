@@ -1,15 +1,14 @@
+from typing import NamedTuple, Tuple
+
 import torch
 import torch.jit
 
-from .lif import LIFState, LIFParameters, lif_step
-
-from .correlation_sensor import (
+from norse.torch.functional.lif import LIFState, LIFParameters, lif_step
+from norse.torch.functional.correlation_sensor import (
     CorrelationSensorState,
     CorrelationSensorParameters,
     correlation_sensor_step,
 )
-
-from typing import NamedTuple, Tuple
 
 
 class LIFCorrelationState(NamedTuple):

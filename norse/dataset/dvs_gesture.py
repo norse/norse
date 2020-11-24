@@ -1,5 +1,9 @@
 import torch
+
+# pytype: disable=import-error
 import aedat
+
+# pytype: enable=import-error
 import os
 
 import logging

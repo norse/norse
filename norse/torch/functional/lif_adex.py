@@ -3,7 +3,7 @@ from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
-from .threshold import threshold
+from norse.torch.functional.threshold import threshold
 
 
 class LIFAdExParameters(NamedTuple):
@@ -222,7 +222,7 @@ def lif_adex_current_encoder(
     adaptation: torch.Tensor,
     p: LIFAdExParameters = LIFAdExParameters(),
     dt: float = 0.001,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     r"""Computes a single euler-integration step of an adaptive exponential LIF neuron-model
     adapted from http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model.
     More specifically it implements one integration step of the following ODE

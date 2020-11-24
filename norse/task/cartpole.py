@@ -9,7 +9,11 @@ from absl import flags
 from absl import logging
 import random
 import os
+
+# pytype: disable=import-error
 import gym
+
+# pytype: enable=import-error
 
 from norse.torch.functional.lif import LIFParameters
 from norse.torch.module.encode import ConstantCurrentLIFEncoder
