@@ -78,8 +78,8 @@ def test_backprop_works():
     state = None
     for x in data:
         out, state = model(x, state)
-        state = [s.detach() if s is not None else None for s in state]
         loss = loss_func(out, target)
         optimizer.zero_grad()  # clear gradients for this training step
         loss.backward()  # backpropagation, compute gradients
         optimizer.step()
+        state = [s.detach() if s is not None else None for s in state]
