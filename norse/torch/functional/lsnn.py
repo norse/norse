@@ -51,7 +51,9 @@ class LSNNState(NamedTuple):
         return LSNNState(self.z.clone(), self.v.clone(), self.i.clone(), self.b.clone())
 
     def detach(self):
-        return LSNNState(self.z.detach(), self.v.detach(), self.i.detach(), self.b.detach())
+        return LSNNState(
+            self.z.detach(), self.v.detach(), self.i.detach(), self.b.detach()
+        )
 
 
 def lsnn_step(
