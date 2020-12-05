@@ -1,8 +1,8 @@
-from typing import NamedTuple, Tuple
+from typing import NamedTuple, Optional, Tuple
 
 import torch
 import torch.jit
-
+import norse
 from norse.torch.functional.threshold import threshold
 
 
@@ -69,6 +69,62 @@ class LIFFeedForwardState(NamedTuple):
     i: torch.Tensor
 
 
+class LIFParametersJIT(NamedTuple):
+    """Parametrization of a LIF neuron
+
+    Parameters:
+        tau_syn_inv (torch.Tensor): inverse synaptic time
+                                    constant (:math:`1/\\tau_\\text{syn}`) in 1/ms
+        tau_mem_inv (torch.Tensor): inverse membrane time
+                                    constant (:math:`1/\\tau_\\text{mem}`) in 1/ms
+        v_leak (torch.Tensor): leak potential in mV
+        v_th (torch.Tensor): threshold potential in mV
+        v_reset (torch.Tensor): reset potential in mV
+        method (str): method to determine the spike threshold
+                      (relevant for surrogate gradients)
+        alpha (torch.Tensor): hyper parameter to use in surrogate gradient computation
+    """
+
+    tau_syn_inv: torch.Tensor
+    tau_mem_inv: torch.Tensor
+    v_leak: torch.Tensor
+    v_th: torch.Tensor
+    v_reset: torch.Tensor
+    method: str
+    alpha: torch.Tensor
+
+
+@torch.jit.script
+def _lif_step_jit(
+    input_tensor: torch.Tensor,
+    state: LIFState,
+    input_weights: torch.Tensor,
+    recurrent_weights: torch.Tensor,
+    p: LIFParametersJIT,
+    dt: float = 0.001,
+) -> Tuple[torch.Tensor, LIFState]:  # pragma: no cover
+    # compute voltage updates
+    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
+    v_decayed = state.v + dv
+
+    # compute current updates
+    di = -dt * p.tau_syn_inv * state.i
+    i_decayed = state.i + di
+
+    # compute new spikes
+    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+    # compute reset
+    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    # compute current jumps
+    i_new = (
+        i_decayed
+        + torch.nn.functional.linear(input_tensor, input_weights)
+        + torch.nn.functional.linear(state.z, recurrent_weights)
+    )
+
+    return z_new, LIFState(z_new, v_new, i_new)
+
+
 def lif_step(
     input_tensor: torch.Tensor,
     state: LIFState,
@@ -111,51 +167,33 @@ def lif_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
-    v_decayed = state.v + dv
-
-    # compute current updates
-    di = -dt * p.tau_syn_inv * state.i
-    i_decayed = state.i + di
-
-    # compute new spikes
-    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
-    # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
-    # compute current jumps
-    i_new = (
-        i_decayed
-        + torch.nn.functional.linear(input_tensor, input_weights)
-        + torch.nn.functional.linear(state.z, recurrent_weights)
-    )
-
-    return z_new, LIFState(z_new, v_new, i_new)
-
-
-class LIFParametersJIT(NamedTuple):
-    """Parametrization of a LIF neuron
-
-    Parameters:
-        tau_syn_inv (torch.Tensor): inverse synaptic time
-                                    constant (:math:`1/\\tau_\\text{syn}`) in 1/ms
-        tau_mem_inv (torch.Tensor): inverse membrane time
-                                    constant (:math:`1/\\tau_\\text{mem}`) in 1/ms
-        v_leak (torch.Tensor): leak potential in mV
-        v_th (torch.Tensor): threshold potential in mV
-        v_reset (torch.Tensor): reset potential in mV
-        method (str): method to determine the spike threshold
-                      (relevant for surrogate gradients)
-        alpha (torch.Tensor): hyper parameter to use in surrogate gradient computation
-    """
-
-    tau_syn_inv: torch.Tensor
-    tau_mem_inv: torch.Tensor
-    v_leak: torch.Tensor
-    v_th: torch.Tensor
-    v_reset: torch.Tensor
-    method: str
-    alpha: torch.Tensor
+    if p.method == "super" and getattr(norse, "IS_OPS_LOADED"):
+        # Order: [v_leak, v_th, v_reset, tau_mem_inv, tau_syn_inv, alpha]
+        cpp_params = (
+            p.v_leak,
+            p.v_th,
+            p.v_reset,
+            p.tau_mem_inv,
+            p.tau_syn_inv,
+            torch.as_tensor(p.alpha),
+        )
+        z, v, i = torch.ops.norse_op.lif_super_step(
+            input_tensor, state, input_weights, recurrent_weights, cpp_params, dt
+        )
+        return z, LIFState(z=z, v=v, i=i)
+    else:
+        jit_params = LIFParametersJIT(
+            tau_syn_inv=p.tau_syn_inv,
+            tau_mem_inv=p.tau_mem_inv,
+            v_leak=p.v_leak,
+            v_th=p.v_th,
+            v_reset=p.v_reset,
+            method=p.method,
+            alpha=torch.as_tensor(p.alpha),
+        )
+        return _lif_step_jit(
+            input_tensor, state, input_weights, recurrent_weights, jit_params, dt
+        )
 
 
 @torch.jit.script
@@ -185,16 +223,8 @@ def _lif_feed_forward_step_jit(
 
 def lif_feed_forward_step(
     input_tensor: torch.Tensor,
-    state: LIFFeedForwardState = None,
-    p: LIFParameters = LIFParameters(
-        torch.as_tensor(1.0 / 5e-3),
-        torch.as_tensor(1.0 / 1e-2),
-        torch.as_tensor(0.0),
-        torch.as_tensor(1.0),
-        torch.as_tensor(0.0),
-        "super",
-        torch.as_tensor(0.0),
-    ),
+    state: Optional[LIFFeedForwardState] = None,
+    p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
     r"""Computes a single euler-integration step for a lif neuron-model.

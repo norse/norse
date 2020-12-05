@@ -1,8 +1,10 @@
 import torch
-
+import norse
+import norse.torch.functional.lif as lif_module
 from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
+    LIFParameters,
     LIFParametersJIT,
     lif_step,
     lif_feed_forward_step,
@@ -11,7 +13,7 @@ from norse.torch.functional.lif import (
 )
 
 
-def test_lif_step():
+def test_lif_cpp_and_jit_step():
     x = torch.ones(20)
     s = LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10))
     input_weights = torch.linspace(0, 0.5, 200).view(10, 20)
@@ -30,9 +32,35 @@ def test_lif_step():
         torch.as_tensor([0, 0, 0, 0, 0, 1, 1, 0, 0, 1]),
     ]
 
+    cpp_results = []
+    cpp_states = []
     for result in results:
         z, s = lif_step(x, s, input_weights, recurrent_weights)
+        cpp_results.append(z)
+        cpp_states.append(s)
+
+    s = LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10))
+    setattr(norse, "IS_OPS_LOADED", False)  # Disable cpp
+
+    for i, result in enumerate(results):
+        z, s = lif_step(x, s, input_weights, recurrent_weights)
         assert torch.equal(z, result.float())
+        assert torch.equal(z, cpp_results[i])
+        assert torch.equal(s.v, cpp_states[i].v)
+        assert torch.equal(s.z, cpp_states[i].z)
+        assert torch.equal(s.i, cpp_states[i].i)
+
+
+def test_lif_heavi():
+    x = torch.ones(2, 1)
+    s = LIFState(z=torch.ones(2, 1), v=torch.zeros(2, 1), i=torch.zeros(2, 1))
+    input_weights = torch.ones(1, 1) * 10
+    recurrent_weights = torch.ones(1, 1)
+    p = LIFParameters(method="heaviside")
+    _, s = lif_step(x, s, input_weights, recurrent_weights, p)
+    z, s = lif_step(x, s, input_weights, recurrent_weights, p)
+    assert z.max() > 0
+    assert z.shape == (2, 1)
 
 
 def test_lif_feed_forward_step():
