@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>norse.torch.functional.regularization module &#8212; norse 0.0.4 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
@@ -16,7 +17,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -48,7 +49,7 @@ forward step. The collection depends on the output of the layer which, by
 default, simply just counts spikes. It is the job of the user to include the
 regularization in an error term later.</p>
 <p>Read more on <a class="reference external" href="https://en.wikipedia.org/wiki/Regularization_%28mathematics%29">Wikipedia</a>.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="norse.torch.functional.regularization.regularize_step">
 <code class="sig-prename descclassname">norse.torch.functional.regularization.</code><code class="sig-name descname">regularize_step</code><span class="sig-paren">(</span><em class="sig-param">z</em>, <em class="sig-param">s</em>, <em class="sig-param">accumulator=&lt;function spike_accumulator&gt;</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/regularization.html#regularize_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.regularization.regularize_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes one step for a regularizer that aggregates some information (based on the
@@ -57,13 +58,13 @@ inclusion in an error term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+d3dbcaf ))"><em>torch.Tensor</em></a>) – Spikes from a cell</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – Spikes from a cell</p></li>
 <li><p><strong>s</strong> (<em>Any</em>) – Neuron state</p></li>
 <li><p><strong>state</strong> (<em>Optional</em><em>[</em><em>Any</em><em>]</em>) – The regularization state to be aggregated. Typically some numerical value like a count. Defaults to None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+d3dbcaf ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tuple of (spikes, regularizer state)</p>
@@ -71,14 +72,14 @@ inclusion in an error term.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="norse.torch.functional.regularization.spike_accumulator">
-<code class="sig-prename descclassname">norse.torch.functional.regularization.</code><code class="sig-name descname">spike_accumulator</code><span class="sig-paren">(</span><em class="sig-param">z</em>, <em class="sig-param">_</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/regularization.html#spike_accumulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.regularization.spike_accumulator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">norse.torch.functional.regularization.</code><code class="sig-name descname">spike_accumulator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span></em>, <em class="sig-param"><span class="n">_</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/regularization.html#spike_accumulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.regularization.spike_accumulator" title="Permalink to this definition">¶</a></dt>
 <dd><p>A spike accumulator that aggregates spikes and returns the total sum as an integer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+d3dbcaf ))"><em>torch.Tensor</em></a>) – Spikes from some cell</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – Spikes from some cell</p></li>
 <li><p><strong>s</strong> (<em>Any</em>) – Cell state</p></li>
 <li><p><strong>state</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – The regularization state to be aggregated to. Defaults to 0.</p></li>
 </ul>
@@ -92,17 +93,17 @@ inclusion in an error term.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="norse.torch.functional.regularization.voltage_accumulator">
-<code class="sig-prename descclassname">norse.torch.functional.regularization.</code><code class="sig-name descname">voltage_accumulator</code><span class="sig-paren">(</span><em class="sig-param">z</em>, <em class="sig-param">s</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/regularization.html#voltage_accumulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.regularization.voltage_accumulator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">norse.torch.functional.regularization.</code><code class="sig-name descname">voltage_accumulator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span></em>, <em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/regularization.html#voltage_accumulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.regularization.voltage_accumulator" title="Permalink to this definition">¶</a></dt>
 <dd><p>A spike accumulator that aggregates membrane potentials over time. Requires that the
 input state <code class="docutils literal notranslate"><span class="pre">s</span></code> has a <code class="docutils literal notranslate"><span class="pre">v</span></code> property (for voltage).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+d3dbcaf ))"><em>torch.Tensor</em></a>) – Spikes from some cell</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – Spikes from some cell</p></li>
 <li><p><strong>s</strong> (<em>Any</em>) – Cell state</p></li>
-<li><p><strong>state</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+d3dbcaf ))"><em>torch.Tensor</em></a><em>]</em>) – The regularization state to be aggregated to.</p></li>
+<li><p><strong>state</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a><em>]</em>) – The regularization state to be aggregated to.</p></li>
 <li><p><strong>to zeros for all entries.</strong> (<em>Defaults</em>) – </p></li>
 </ul>
 </dd>
@@ -251,7 +252,7 @@ input state <code class="docutils literal notranslate"><span class="pre">s</span
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

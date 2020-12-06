@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>norse.torch.models.mobilenet module &#8212; norse 0.0.4 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
@@ -16,7 +17,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -40,9 +41,9 @@
             
   <div class="section" id="module-norse.torch.models.mobilenet">
 <span id="norse-torch-models-mobilenet-module"></span><h1>norse.torch.models.mobilenet module<a class="headerlink" href="#module-norse.torch.models.mobilenet" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="norse.torch.models.mobilenet.MobileNetV2">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.models.mobilenet.</code><code class="sig-name descname">MobileNetV2</code><span class="sig-paren">(</span><em class="sig-param">num_classes=1000</em>, <em class="sig-param">width_mult=1.0</em>, <em class="sig-param">inverted_residual_setting=None</em>, <em class="sig-param">round_nearest=8</em>, <em class="sig-param">block=None</em>, <em class="sig-param">norm_layer=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/mobilenet.html#MobileNetV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.mobilenet.MobileNetV2" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.models.mobilenet.</code><code class="sig-name descname">MobileNetV2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_classes</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">width_mult</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">inverted_residual_setting</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">round_nearest</span><span class="o">=</span><span class="default_value">8</span></em>, <em class="sig-param"><span class="n">block</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">norm_layer</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/mobilenet.html#MobileNetV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.mobilenet.MobileNetV2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>MobileNet V2 main class
 :param num_classes: Number of classes
@@ -55,9 +56,9 @@
 :param Set to 1 to turn off rounding:
 :param block: Module specifying inverted residual building block for mobilenet
 :param norm_layer: Module specifying the normalization layer to use</p>
-<dl class="method">
+<dl class="py method">
 <dt id="norse.torch.models.mobilenet.MobileNetV2.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/mobilenet.html#MobileNetV2.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.mobilenet.MobileNetV2.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/mobilenet.html#MobileNetV2.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.mobilenet.MobileNetV2.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -69,16 +70,16 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="norse.torch.models.mobilenet.MobileNetV2.training">
-<code class="sig-name descname">training</code><em class="property"> = None</em><a class="headerlink" href="#norse.torch.models.mobilenet.MobileNetV2.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.models.mobilenet.MobileNetV2.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="norse.torch.models.mobilenet.mobilenet_v2">
-<code class="sig-prename descclassname">norse.torch.models.mobilenet.</code><code class="sig-name descname">mobilenet_v2</code><span class="sig-paren">(</span><em class="sig-param">pretrained=False</em>, <em class="sig-param">progress=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/mobilenet.html#mobilenet_v2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.mobilenet.mobilenet_v2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">norse.torch.models.mobilenet.</code><code class="sig-name descname">mobilenet_v2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pretrained</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/models/mobilenet.html#mobilenet_v2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.models.mobilenet.mobilenet_v2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a MobileNetV2 architecture from
 <a class="reference external" href="https://arxiv.org/abs/1801.04381">“MobileNetV2: Inverted Residuals and Linear Bottlenecks”</a>.
 :param pretrained: If True, returns a model pre-trained on ImageNet
@@ -204,7 +205,7 @@ registered hooks while the latter silently ignores them.</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

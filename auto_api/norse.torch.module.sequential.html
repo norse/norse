@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>norse.torch.module.sequential module &#8212; norse 0.0.4 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
@@ -16,7 +17,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -39,9 +40,9 @@
             
   <div class="section" id="module-norse.torch.module.sequential">
 <span id="norse-torch-module-sequential-module"></span><h1>norse.torch.module.sequential module<a class="headerlink" href="#module-norse.torch.module.sequential" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="norse.torch.module.sequential.SequentialState">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.sequential.</code><code class="sig-name descname">SequentialState</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/sequential.html#SequentialState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.sequential.SequentialState" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.sequential.</code><code class="sig-name descname">SequentialState</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/sequential.html#SequentialState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.sequential.SequentialState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
 <p>A sequential model that works exactly like PyTorch’s <code class="docutils literal notranslate"><span class="pre">Sequential</span></code> with the
 addition that it handles neuron states.</p>
@@ -80,15 +81,15 @@ addition that it handles neuron states.</p>
 </dd>
 </dl>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="norse.torch.module.sequential.SequentialState.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input_tensor</em>, <em class="sig-param">state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/sequential.html#SequentialState.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.sequential.SequentialState.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/sequential.html#SequentialState.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.sequential.SequentialState.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Feeds the input to the modules with the given state-list.
 If the state is None, the initial state is set to None for each of the modules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+d3dbcaf ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>) – The input tensor too feed into the first module</p></li>
+<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>) – The input tensor too feed into the first module</p></li>
 <li><p><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]) – Either a list of states for each module or None. If None, the modules
 will initialise their own default state</p></li>
 </ul>
@@ -99,9 +100,9 @@ will initialise their own default state</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="norse.torch.module.sequential.SequentialState.training">
-<code class="sig-name descname">training</code><em class="property"> = None</em><a class="headerlink" href="#norse.torch.module.sequential.SequentialState.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.sequential.SequentialState.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -234,7 +235,7 @@ will initialise their own default state</p></li>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

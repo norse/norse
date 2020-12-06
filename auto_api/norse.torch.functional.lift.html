@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>norse.torch.functional.lift module &#8212; norse 0.0.4 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
@@ -16,7 +17,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -42,9 +43,9 @@
 <span id="norse-torch-functional-lift-module"></span><h1>norse.torch.functional.lift module<a class="headerlink" href="#module-norse.torch.functional.lift" title="Permalink to this headline">¶</a></h1>
 <p>A module for lifting neuron activation functions in time.
 Simlar to the <a href="#id1"><span class="problematic" id="id2">:module:`.lift`_</span></a> module.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="norse.torch.functional.lift.lift">
-<code class="sig-prename descclassname">norse.torch.functional.lift.</code><code class="sig-name descname">lift</code><span class="sig-paren">(</span><em class="sig-param">activation</em>, <em class="sig-param">p=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/lift.html#lift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lift.lift" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">norse.torch.functional.lift.</code><code class="sig-name descname">lift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">activation</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/lift.html#lift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.lift.lift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a lifted version of the given activation function which
 applies the activation function in the temporal domain. The returned
 callable can be applied later as if it was a regular activation function,
@@ -52,7 +53,7 @@ but the input is now assumed to be a tensor whose first dimension is time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>activation</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+d3dbcaf ))"><em>torch.Tensor</em></a><em>, </em><em>Any</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>Tuple</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+d3dbcaf ))"><em>torch.Tensor</em></a><em>, </em><em>Any</em><em>]</em><em>]</em>) – The activation function that takes an input tensor, an optional state, and an
+<li><p><strong>activation</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a><em>, </em><em>Any</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>Tuple</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a><em>, </em><em>Any</em><em>]</em><em>]</em>) – The activation function that takes an input tensor, an optional state, and an
 optional parameter object and returns a tuple of (spiking output, neuron state).
 The returned spiking output includes the time domain.</p></li>
 <li><p><strong>p</strong> (<em>Any</em>) – An optional parameter object to hand to the activation function.</p></li>
@@ -202,7 +203,7 @@ a tensor of shape (time, …).</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

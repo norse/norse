@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>norse.torch.functional.test.test_lif &#8212; norse 0.0.4 documentation</title>
-    <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-binder.css" />
@@ -16,7 +17,7 @@
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
     <script src="../../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../../../../../about.html" />
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -38,10 +39,12 @@
             
   <h1>Source code for norse.torch.functional.test.test_lif</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-
+<span class="kn">import</span> <span class="nn">norse</span>
+<span class="kn">import</span> <span class="nn">norse.torch.functional.lif</span> <span class="k">as</span> <span class="nn">lif_module</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.lif</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">LIFState</span><span class="p">,</span>
     <span class="n">LIFFeedForwardState</span><span class="p">,</span>
+    <span class="n">LIFParameters</span><span class="p">,</span>
     <span class="n">LIFParametersJIT</span><span class="p">,</span>
     <span class="n">lif_step</span><span class="p">,</span>
     <span class="n">lif_feed_forward_step</span><span class="p">,</span>
@@ -50,7 +53,7 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="test_lif_step"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_lif.html#norse.torch.functional.test.test_lif.test_lif_step">[docs]</a><span class="k">def</span> <span class="nf">test_lif_step</span><span class="p">():</span>
+<div class="viewcode-block" id="test_lif_cpp_and_jit_step"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_lif.html#norse.torch.functional.test.test_lif.test_lif_cpp_and_jit_step">[docs]</a><span class="k">def</span> <span class="nf">test_lif_cpp_and_jit_step</span><span class="p">():</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
     <span class="n">input_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -69,9 +72,35 @@
         <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
     <span class="p">]</span>
 
+    <span class="n">cpp_results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cpp_states</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
         <span class="n">z</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lif_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">float</span><span class="p">())</span></div>
+        <span class="n">cpp_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">cpp_states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">norse</span><span class="p">,</span> <span class="s2">&quot;IS_OPS_LOADED&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>  <span class="c1"># Disable cpp</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+        <span class="n">z</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lif_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">float</span><span class="p">())</span>
+        <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">cpp_results</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">cpp_states</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">cpp_states</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">cpp_states</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">i</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_lif_heavi"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_lif.html#norse.torch.functional.test.test_lif.test_lif_heavi">[docs]</a><span class="k">def</span> <span class="nf">test_lif_heavi</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">input_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
+    <span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;heaviside&quot;</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lif_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="n">z</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lif_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="test_lif_feed_forward_step"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_lif.html#norse.torch.functional.test.test_lif.test_lif_feed_forward_step">[docs]</a><span class="k">def</span> <span class="nf">test_lif_feed_forward_step</span><span class="p">():</span>
@@ -227,7 +256,7 @@
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
