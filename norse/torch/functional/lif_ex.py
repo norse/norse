@@ -30,7 +30,7 @@ class LIFExParameters(NamedTuple):
     v_th: torch.Tensor = torch.as_tensor(1.0)
     v_reset: torch.Tensor = torch.as_tensor(0.0)
     method: str = "super"
-    alpha: float = 0.0
+    alpha: float = 100.0
 
 
 class LIFExState(NamedTuple):
