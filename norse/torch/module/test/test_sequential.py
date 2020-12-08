@@ -62,19 +62,18 @@ def test_state_sequence_conv():
 
 def test_backprop_works():
     model = SequentialState(
-        norse.LSNNLayer(norse.LSNNCell, 12, 32),
-        norse.LSNNLayer(norse.LSNNCell, 32, 64),
-        norse.LSNNLayer(norse.LSNNCell, 64, 64),
-        norse.LSNNLayer(norse.LSNNCell, 64, 32),
-        norse.LSNNLayer(norse.LSNNCell, 32, 10),
+        norse.LSNNLayer(norse.LSNNCell, 1, 2),
+        norse.LSNNLayer(norse.LSNNCell, 2, 3),
+        norse.LSNNLayer(norse.LSNNCell, 3, 3),
+        norse.LSNNLayer(norse.LSNNCell, 3, 2),
         nn.Flatten(),
-        norse.Lift(torch.nn.Linear(2000, 256)),
-        norse.Lift(torch.nn.Linear(256, 10)),
+        norse.Lift(torch.nn.Linear(4, 2)),
+        norse.Lift(torch.nn.Linear(2, 1)),
     )
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
     loss_func = nn.MSELoss()
-    data = torch.ones(3, 16, 200, 12)
-    target = torch.ones(16, 10)
+    data = torch.ones(3, 1, 2, 1)
+    target = torch.ones(1, 2)
     state = None
     for x in data:
         out, state = model(x, state)
