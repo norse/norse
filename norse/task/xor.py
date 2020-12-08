@@ -1,7 +1,3 @@
-"""
-This is a rework of the TorchDYN neural ODE problem presented here: 
-https://towardsdatascience.com/neural-odes-with-pytorch-lightning-and-torchdyn-87ca4a7c6ffd
-"""
 from argparse import ArgumentParser
 
 import torch
@@ -25,7 +21,7 @@ class XORModel(pl.LightningModule):
 
     def forward(self, x):
         state = None
-        for i in range(10):  # Simulate for some timesteps
+        for _ in range(10):  # Simulate for some timesteps
             out, state = self.model(x, state)
         return out
 
