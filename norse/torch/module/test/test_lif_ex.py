@@ -88,7 +88,7 @@ def test_lif_ex_feedforward_cell_repr():
     model = LIFExFeedForwardCell()
     assert (
         str(model)
-        == "LIFExFeedForwardCell(p=LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=0.0), dt=0.001)"
+        == "LIFExFeedForwardCell(p=LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0), dt=0.001)"
     )
 
 
@@ -96,5 +96,5 @@ def test_lif_ex_cell_repr():
     model = LIFExCell(2, 4)
     assert (
         str(model)
-        == "LIFExCell(2, 4, p=LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=0.0), dt=0.001)"
+        == "LIFExCell(2, 4, p=LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0), dt=0.001)"
     )
