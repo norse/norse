@@ -85,6 +85,10 @@ Norse is bundled with a number of example tasks, serving as short, self containe
 They can be run by invoking the `norse` module from the base directory.
 More information and tasks are available [in our documentation](https://norse.github.io/norse/tasks.html) and in your console by typing: `python -m norse.task.<task> --help`, where `<task>` is one of the task names.
 
+- To train an XOR classification network, invoke
+    ```bash
+    python -m norse.task.xor
+    ```
 - To train an MNIST classification network, invoke
     ```bash
     python -m norse.task.mnist
@@ -98,9 +102,38 @@ More information and tasks are available [in our documentation](https://norse.gi
     python -m norse.task.cartpole
     ```
 
-### 2.3. Example on using the library: Long short-term spiking neural networks
-The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
+### 2.3. Example: Spiking convolutional classifier 
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/norse/notebooks/blob/master/norse_tutorial.ipynb)
+
+This classifier is a taken from our [tutorial on training a spiking MNIST classifier](https://colab.research.google.com/github/norse/notebooks/blob/master/norse_tutorial.ipynb) and achieves >99% accuracy.
+
 ```python
+import torch, torch.nn as nn
+from norse.torch import LICell             # Leaky integrator
+from norse.torch import LIFFeedForwardCell # Leaky integrate-and-fire
+from norse.torch import SequentialState    # Stateful sequential layers
+
+model = SequentialState(
+    nn.Conv2d(3, 20, 5, 1),      # Convolve from 3 -> 20 channels
+    LIFFeedForwardCell(),        # Spiking activation layer
+    nn.MaxPool2d(2, 2),
+    nn.Conv2d(20, 50, 5, 1),     # Convolve from 20 -> 50 channels
+    LIFFeedForwardCell(),
+    nn.MaxPool2d(2, 2),
+    nn.Flatten(),                # Flatten to 800 units
+    nn.Linear(800, 500),
+    LICell(500, 10),             # Non-spiking integrator layer
+)
+
+data = torch.randn(8, 3, 28, 28) # 8 batches, 3 channels, 28x28 pixels
+output, state = model(data)      # Provides a tuple (tensor (8, 10), neuron state)
+```
+
+### 2.4. Example: Long short-term spiking neural networks
+The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is another interesting way to apply norse: 
+```python
+import torch
 from norse.torch import LSNNLayer, LSNNCell
 # LSNNCell with 2 input neurons and 10 output neurons
 layer = LSNNLayer(LSNNCell, 2, 10)
