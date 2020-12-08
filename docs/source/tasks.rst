@@ -100,3 +100,18 @@ The corresponding example task can be run like so:
 .. code:: bash
 
     python -m norse.task.speech_commands.run
+
+XOR PyTorch Lightning task
+==========================
+
+The classical `XOR problem <https://en.wikipedia.org/wiki/XOR_gate>`_ is shown to be 
+solved by a spiking neural network. The interesting part of this task, however, is the
+use of `PyTorch Lightning <https://pytorch-lightning.readthedocs.io/en/stable/>`_ as a
+method to build, train, and verify a model with almost no overhead.
+
+**Note** that the task depends on an installation of PyTorch Lightning: 
+``pip install pytorch-lightning``
+
+.. code:: bash
+
+    python -m norse.task.xor

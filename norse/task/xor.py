@@ -2,6 +2,7 @@
 This is a rework of the TorchDYN neural ODE problem presented here: 
 https://towardsdatascience.com/neural-odes-with-pytorch-lightning-and-torchdyn-87ca4a7c6ffd
 """
+# pytype: skip-file
 from argparse import ArgumentParser
 
 import torch

@@ -85,10 +85,6 @@ Norse is bundled with a number of example tasks, serving as short, self containe
 They can be run by invoking the `norse` module from the base directory.
 More information and tasks are available [in our documentation](https://norse.github.io/norse/tasks.html) and in your console by typing: `python -m norse.task.<task> --help`, where `<task>` is one of the task names.
 
-- To train an XOR classification network, invoke
-    ```bash
-    python -m norse.task.xor
-    ```
 - To train an MNIST classification network, invoke
     ```bash
     python -m norse.task.mnist
@@ -100,6 +96,14 @@ More information and tasks are available [in our documentation](https://norse.gi
 - To train the cartpole balancing task with Policy gradient, invoke
     ```bash
     python -m norse.task.cartpole
+    ```
+
+Norse is compatible with [PyTorch Lightning](https://pytorch-lightning.readthedocs.io/en/stable/),
+as demonstrated in the XOR task:
+
+- Install PyTorch Lightning to run the XOR task
+    ```bash
+    python -m norse.task.xor
     ```
 
 ### 2.3. Example: Spiking convolutional classifier 
