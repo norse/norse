@@ -42,18 +42,17 @@ Alternatively, [you can install Norse](#installation) and run one of the [includ
 python -m norse.task.mnist
 ```
 
-
 ## 2. Using Norse
 
-Norse is generally meant as a library for customized use in specific deep learning tasks. This has been detailed in our documentation: [working with Norse](https://norse.github.io/norse/working.html).
-
-Here we briefly explain how to install Norse and start to apply it in your own work. 
+Norse presents plug-and-play components for deep learning with spiking neural networks.
+Here, we describe how to install Norse and start to apply it in your own work.
+[Read more in our documentation](https://norse.github.io/norse/working.html).
 
 ### 2.1. Installation
 <a name="installation"></a>
 
-Note that we assume you are using Python version 3.7+, are in a terminal friendly environment, and have installed the necessary requirements. 
-[More detailed installation instructions are available in the documentation](https://norse.github.io/norse/installing.html).
+We assume you are using Python version 3.7+, are in a terminal friendly environment, and have installed the necessary requirements. 
+[Read more in our documentation](https://norse.github.io/norse/installing.html).
 
 <table>
 <thead>
@@ -99,12 +98,11 @@ More information and tasks are available [in our documentation](https://norse.gi
     ```
 
 Norse is compatible with [PyTorch Lightning](https://pytorch-lightning.readthedocs.io/en/stable/),
-as demonstrated in the XOR task:
+as demonstrated in the [PyTorch Lightning MNIST task variant](https://github.com/norse/norse/blob/master/norse/task/mnist_pl.py) (requires PyTorch lightning):
 
-- Install PyTorch Lightning to run the XOR task
-    ```bash
-    python -m norse.task.xor
-    ```
+```bash
+python -m norse.task.mnist_pl
+```
 
 ### 2.3. Example: Spiking convolutional classifier 
 

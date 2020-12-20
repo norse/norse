@@ -10,6 +10,14 @@ All tasks have CLI interfaces with elaborate help descriptions using the `--help
 python -m norse.task.mnist
 ```
 
+Or, using [PyTorch Lightning](https://pytorchlightning.ai/) to scale to multiple GPUs and simplify a lot of the
+boilerplate code around logging, checkpointing, etc. **Note** that this requires you to install PyTorch Lightning
+(`pip install pytorch-lightning`).
+
+```bash
+python -m norse.task.mnist_pl
+```
+
 ## CIFAR-10
 ```bash
 python -m norse.task.cifar10
@@ -37,14 +45,3 @@ by running
 ```bash
 python -m norse.task.speech_commands.run
 ```
-
-## XOR
-
-A really simple task to learn the XOR pattern. 
-Serves to illustrate the use of [Pytorch Lightning](https://pytorch-lightning.readthedocs.io/) with Norse.
-
-```bash
-python -m norse.task.xor
-```
-
-
