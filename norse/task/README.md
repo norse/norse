@@ -15,7 +15,7 @@ boilerplate code around logging, checkpointing, etc. **Note** that this requires
 (`pip install pytorch-lightning`).
 
 ```bash
-python -m norse.task.mnist_pl
+python -m norse.task.mnist_pl --gpus=4
 ```
 
 ## CIFAR-10

@@ -101,7 +101,7 @@ Norse is compatible with [PyTorch Lightning](https://pytorch-lightning.readthedo
 as demonstrated in the [PyTorch Lightning MNIST task variant](https://github.com/norse/norse/blob/master/norse/task/mnist_pl.py) (requires PyTorch lightning):
 
 ```bash
-python -m norse.task.mnist_pl
+python -m norse.task.mnist_pl --gpus=4
 ```
 
 ### 2.3. Example: Spiking convolutional classifier 
