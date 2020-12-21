@@ -10,6 +10,14 @@ All tasks have CLI interfaces with elaborate help descriptions using the `--help
 python -m norse.task.mnist
 ```
 
+Or, using [PyTorch Lightning](https://pytorchlightning.ai/) to scale to multiple GPUs and simplify a lot of the
+boilerplate code around logging, checkpointing, etc. **Note** that this requires you to install PyTorch Lightning
+(`pip install pytorch-lightning`).
+
+```bash
+python -m norse.task.mnist_pl --gpus=4
+```
+
 ## CIFAR-10
 ```bash
 python -m norse.task.cifar10
@@ -28,7 +36,6 @@ python -m norse.task.correlation_experiment
 ```
 
 ## Speech Commands experiment
-
 
 This task requires you to install the ```torchaudio``` library.
 You can then train a model to classify speech commands (based on the

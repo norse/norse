@@ -42,18 +42,17 @@ Alternatively, [you can install Norse](#installation) and run one of the [includ
 python -m norse.task.mnist
 ```
 
-
 ## 2. Using Norse
 
-Norse is generally meant as a library for customized use in specific deep learning tasks. This has been detailed in our documentation: [working with Norse](https://norse.github.io/norse/working.html).
-
-Here we briefly explain how to install Norse and start to apply it in your own work. 
+Norse presents plug-and-play components for deep learning with spiking neural networks.
+Here, we describe how to install Norse and start to apply it in your own work.
+[Read more in our documentation](https://norse.github.io/norse/working.html).
 
 ### 2.1. Installation
 <a name="installation"></a>
 
-Note that we assume you are using Python version 3.7+, are in a terminal friendly environment, and have installed the necessary requirements. 
-[More detailed installation instructions are available in the documentation](https://norse.github.io/norse/installing.html).
+We assume you are using Python version 3.7+, are in a terminal friendly environment, and have installed the necessary requirements. 
+[Read more in our documentation](https://norse.github.io/norse/installing.html).
 
 <table>
 <thead>
@@ -98,9 +97,45 @@ More information and tasks are available [in our documentation](https://norse.gi
     python -m norse.task.cartpole
     ```
 
-### 2.3. Example on using the library: Long short-term spiking neural networks
-The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is one interesting way to apply norse: 
+Norse is compatible with [PyTorch Lightning](https://pytorch-lightning.readthedocs.io/en/stable/),
+as demonstrated in the [PyTorch Lightning MNIST task variant](https://github.com/norse/norse/blob/master/norse/task/mnist_pl.py) (requires PyTorch lightning):
+
+```bash
+python -m norse.task.mnist_pl --gpus=4
+```
+
+### 2.3. Example: Spiking convolutional classifier 
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/norse/notebooks/blob/master/norse_tutorial.ipynb)
+
+This classifier is a taken from our [tutorial on training a spiking MNIST classifier](https://colab.research.google.com/github/norse/notebooks/blob/master/norse_tutorial.ipynb) and achieves >99% accuracy.
+
 ```python
+import torch, torch.nn as nn
+from norse.torch import LICell             # Leaky integrator
+from norse.torch import LIFFeedForwardCell # Leaky integrate-and-fire
+from norse.torch import SequentialState    # Stateful sequential layers
+
+model = SequentialState(
+    nn.Conv2d(3, 20, 5, 1),      # Convolve from 3 -> 20 channels
+    LIFFeedForwardCell(),        # Spiking activation layer
+    nn.MaxPool2d(2, 2),
+    nn.Conv2d(20, 50, 5, 1),     # Convolve from 20 -> 50 channels
+    LIFFeedForwardCell(),
+    nn.MaxPool2d(2, 2),
+    nn.Flatten(),                # Flatten to 800 units
+    nn.Linear(800, 500),
+    LICell(500, 10),             # Non-spiking integrator layer
+)
+
+data = torch.randn(8, 3, 28, 28) # 8 batches, 3 channels, 28x28 pixels
+output, state = model(data)      # Provides a tuple (tensor (8, 10), neuron state)
+```
+
+### 2.4. Example: Long short-term spiking neural networks
+The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is another interesting way to apply norse: 
+```python
+import torch
 from norse.torch import LSNNLayer, LSNNCell
 # LSNNCell with 2 input neurons and 10 output neurons
 layer = LSNNLayer(LSNNCell, 2, 10)

@@ -1,4 +1,6 @@
 import torch
+import pytest
+
 import norse
 import norse.torch.functional.lif as lif_module
 from norse.torch.functional.lif import (
@@ -11,6 +13,16 @@ from norse.torch.functional.lif import (
     _lif_feed_forward_step_jit,
     lif_current_encoder,
 )
+
+
+@pytest.fixture(autouse=True)
+def cpp_fixture():
+    setattr(norse, "IS_OPS_LOADED", True)  # Enable cpp
+
+
+@pytest.fixture()
+def jit_fixture():
+    setattr(norse, "IS_OPS_LOADED", False)  # Disable cpp
 
 
 def test_lif_cpp_and_jit_step():
@@ -49,6 +61,28 @@ def test_lif_cpp_and_jit_step():
         assert torch.equal(s.v, cpp_states[i].v)
         assert torch.equal(s.z, cpp_states[i].z)
         assert torch.equal(s.i, cpp_states[i].i)
+
+
+def test_lif_cpp_back(cpp_fixture):
+    x = torch.ones(2)
+    s = LIFState(z=torch.zeros(1), v=torch.zeros(1), i=torch.zeros(1))
+    s.v.requires_grad = True
+    input_weights = torch.ones(2)
+    recurrent_weights = torch.ones(1)
+    _, s = lif_step(x, s, input_weights, recurrent_weights)
+    z, s = lif_step(x, s, input_weights, recurrent_weights)
+    z.sum().backward()
+
+
+def test_lif_jit_back(jit_fixture):
+    x = torch.ones(2)
+    s = LIFState(z=torch.zeros(1), v=torch.zeros(1), i=torch.zeros(1))
+    s.v.requires_grad = True
+    input_weights = torch.ones(2)
+    recurrent_weights = torch.ones(1)
+    _, s = lif_step(x, s, input_weights, recurrent_weights)
+    z, s = lif_step(x, s, input_weights, recurrent_weights)
+    z.sum().backward()
 
 
 def test_lif_heavi():
