@@ -12,11 +12,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -43,42 +43,42 @@
 <span id="norse-torch-functional-stdp-sensor-module"></span><h1>norse.torch.functional.stdp_sensor module<a class="headerlink" href="#module-norse.torch.functional.stdp_sensor" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="norse.torch.functional.stdp_sensor.STDPSensorParameters">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.stdp_sensor.</code><code class="sig-name descname">STDPSensorParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eta_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></span> <span class="o">=</span> <span class="default_value">tensor(1.)</span></em>, <em class="sig-param"><span class="n">eta_m</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></span> <span class="o">=</span> <span class="default_value">tensor(1.)</span></em>, <em class="sig-param"><span class="n">tau_ac_inv</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></span> <span class="o">=</span> <span class="default_value">tensor(10.)</span></em>, <em class="sig-param"><span class="n">tau_c_inv</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></span> <span class="o">=</span> <span class="default_value">tensor(10.)</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/stdp_sensor.html#STDPSensorParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.stdp_sensor.</code><code class="sig-name descname">STDPSensorParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eta_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></span> <span class="o">=</span> <span class="default_value">tensor(1.)</span></em>, <em class="sig-param"><span class="n">eta_m</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></span> <span class="o">=</span> <span class="default_value">tensor(1.)</span></em>, <em class="sig-param"><span class="n">tau_ac_inv</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></span> <span class="o">=</span> <span class="default_value">tensor(10.)</span></em>, <em class="sig-param"><span class="n">tau_c_inv</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></span> <span class="o">=</span> <span class="default_value">tensor(10.)</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/stdp_sensor.html#STDPSensorParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 <p>Parameters of an STDP sensor as it is used for event driven
 plasticity rules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>eta_p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – correlation state</p></li>
-<li><p><strong>eta_m</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – anti correlation state</p></li>
-<li><p><strong>tau_ac_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – anti-correlation sensor time constant</p></li>
-<li><p><strong>tau_c_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – correlation sensor time constant</p></li>
+<li><p><strong>eta_p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.Tensor</em></a>) – correlation state</p></li>
+<li><p><strong>eta_m</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.Tensor</em></a>) – anti correlation state</p></li>
+<li><p><strong>tau_ac_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.Tensor</em></a>) – anti-correlation sensor time constant</p></li>
+<li><p><strong>tau_c_inv</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.Tensor</em></a>) – correlation sensor time constant</p></li>
 </ul>
 </dd>
 </dl>
 <p>Create new instance of STDPSensorParameters(eta_p, eta_m, tau_ac_inv, tau_c_inv)</p>
 <dl class="py attribute">
 <dt id="norse.torch.functional.stdp_sensor.STDPSensorParameters.eta_m">
-<code class="sig-name descname">eta_m</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters.eta_m" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">eta_m</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters.eta_m" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="norse.torch.functional.stdp_sensor.STDPSensorParameters.eta_p">
-<code class="sig-name descname">eta_p</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters.eta_p" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">eta_p</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters.eta_p" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="norse.torch.functional.stdp_sensor.STDPSensorParameters.tau_ac_inv">
-<code class="sig-name descname">tau_ac_inv</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters.tau_ac_inv" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tau_ac_inv</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters.tau_ac_inv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 2</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="norse.torch.functional.stdp_sensor.STDPSensorParameters.tau_c_inv">
-<code class="sig-name descname">tau_c_inv</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters.tau_c_inv" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tau_c_inv</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters.tau_c_inv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 3</p>
 </dd></dl>
 
@@ -86,27 +86,27 @@ plasticity rules.</p>
 
 <dl class="py class">
 <dt id="norse.torch.functional.stdp_sensor.STDPSensorState">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.stdp_sensor.</code><code class="sig-name descname">STDPSensorState</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a_pre</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></span></em>, <em class="sig-param"><span class="n">a_post</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/stdp_sensor.html#STDPSensorState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorState" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.stdp_sensor.</code><code class="sig-name descname">STDPSensorState</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a_pre</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></span></em>, <em class="sig-param"><span class="n">a_post</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/stdp_sensor.html#STDPSensorState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 <p>State of an event driven STDP sensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>a_pre</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – presynaptic STDP sensor state.</p></li>
-<li><p><strong>a_post</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – postsynaptic STDP sensor state.</p></li>
+<li><p><strong>a_pre</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.Tensor</em></a>) – presynaptic STDP sensor state.</p></li>
+<li><p><strong>a_post</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.Tensor</em></a>) – postsynaptic STDP sensor state.</p></li>
 </ul>
 </dd>
 </dl>
 <p>Create new instance of STDPSensorState(a_pre, a_post)</p>
 <dl class="py attribute">
 <dt id="norse.torch.functional.stdp_sensor.STDPSensorState.a_post">
-<code class="sig-name descname">a_post</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorState.a_post" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">a_post</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorState.a_post" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="norse.torch.functional.stdp_sensor.STDPSensorState.a_pre">
-<code class="sig-name descname">a_pre</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorState.a_pre" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">a_pre</code><em class="property">: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))">torch.Tensor</a></em><a class="headerlink" href="#norse.torch.functional.stdp_sensor.STDPSensorState.a_pre" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
@@ -119,10 +119,10 @@ plasticity rules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>z_pre</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – pre-synaptic spikes</p></li>
-<li><p><strong>z_post</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – post-synaptic spikes</p></li>
-<li><p><strong>s</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.STDPSensorState" title="norse.torch.functional.STDPSensorState"><em>STDPSensorState</em></a>) – state of the STDP sensor</p></li>
-<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.STDPSensorParameters" title="norse.torch.functional.STDPSensorParameters"><em>STDPSensorParameters</em></a>) – STDP sensor parameters</p></li>
+<li><p><strong>z_pre</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.Tensor</em></a>) – pre-synaptic spikes</p></li>
+<li><p><strong>z_post</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.Tensor</em></a>) – post-synaptic spikes</p></li>
+<li><p><strong>s</strong> (<a class="reference internal" href="#norse.torch.functional.stdp_sensor.STDPSensorState" title="norse.torch.functional.stdp_sensor.STDPSensorState"><em>STDPSensorState</em></a>) – state of the STDP sensor</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="#norse.torch.functional.stdp_sensor.STDPSensorParameters" title="norse.torch.functional.stdp_sensor.STDPSensorParameters"><em>STDPSensorParameters</em></a>) – STDP sensor parameters</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – integration time step</p></li>
 </ul>
 </dd>
@@ -268,7 +268,7 @@ plasticity rules.</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

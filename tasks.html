@@ -12,11 +12,11 @@
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -109,8 +109,19 @@ the task is to learn to classify each image as one of the 10 digits.</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="mnist-in-pytorch-lightning">
+<h2><span class="section-number">2.7. </span>MNIST in PyTorch Lightning<a class="headerlink" href="#mnist-in-pytorch-lightning" title="Permalink to this headline">¶</a></h2>
+<p>As the MNIST task above, but built with <a class="reference external" href="https://pytorch-lightning.readthedocs.io/en/stable/">PyTorch Lightning</a>.
+PyTorch Lightning is a library to build, train, and verify a model with little overhead.
+It also provides GPU parallelisation, logging with e. g. Tensorboard, model checkpointing, and much more.</p>
+<p><strong>Note</strong> that the task depends on an installation of PyTorch Lightning:
+<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pytorch-lightning</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m norse.task.mnist_pl
+</pre></div>
+</div>
+</div>
 <div class="section" id="speech-command-recognition-task">
-<h2><span class="section-number">2.7. </span>Speech Command recognition task<a class="headerlink" href="#speech-command-recognition-task" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.8. </span>Speech Command recognition task<a class="headerlink" href="#speech-command-recognition-task" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="https://arxiv.org/abs/1804.03209">speech commands dataset</a> as described
 in linked article serves as an example of a temporal classification task.
 The corresponding example task can be run like so:</p>
@@ -184,7 +195,8 @@ The corresponding example task can be run like so:</p>
 <li class="toctree-l2"><a class="reference internal" href="#correlation-experiment">2.4. Correlation experiment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#memory-task">2.5. Memory task</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mnist">2.6. MNIST</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#speech-command-recognition-task">2.7. Speech Command recognition task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mnist-in-pytorch-lightning">2.7. MNIST in PyTorch Lightning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#speech-command-recognition-task">2.8. Speech Command recognition task</a></li>
 </ul>
 </li>
 </ul>
@@ -230,7 +242,7 @@ The corresponding example task can be run like so:</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

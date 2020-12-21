@@ -12,11 +12,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -92,7 +92,7 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -150,7 +150,7 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNFeedForwardState" title="norse.torch.functional.lsnn.LSNNFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNFeedForwardState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNFeedForwardState" title="norse.torch.functional.lsnn.LSNNFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNFeedForwardState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -180,7 +180,7 @@ registered hooks while the latter silently ignores them.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cell</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.nn.Module</em></a>) – the underling neuron module, uninitialized</p></li>
+<li><p><strong>cell</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.nn.Module</em></a>) – the underling neuron module, uninitialized</p></li>
 <li><p><strong>*cell_args</strong> – variable length input arguments for the underlying cell
 constructor</p></li>
 <li><p><strong>**cell_kwargs</strong> – variable length key-value arguments for the underlying cell constructor</p></li>
@@ -197,12 +197,12 @@ Since the layer is recurrent, each simulation state (LSNNState) is used as the i
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><em>torch.Tensor</em></a>) – Input tensor with timesteps in the first dimension</p></li>
+<li><p><strong>input_tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><em>torch.Tensor</em></a>) – Input tensor with timesteps in the first dimension</p></li>
 <li><p><strong>state</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LSNNState" title="norse.torch.functional.LSNNState"><em>LSNNState</em></a><em>]</em>) – The input LSNN state. Defaults to None on the first timestep</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+c58b37f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+b8f60df ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a>]</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tuple of 1) spikes from each timestep and 2) the LSNNState from the last timestep.</p>
@@ -346,7 +346,7 @@ Since the layer is recurrent, each simulation state (LSNNState) is used as the i
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
