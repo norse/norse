@@ -1,5 +1,6 @@
 import torch
-
+from torch import nn
+import norse.torch as norse
 from ..lsnn import LSNNCell, LSNNLayer
 from ..lif import LIFCell, LIFLayer
 from ..lift import Lift
@@ -57,3 +58,27 @@ def test_state_sequence_conv():
         LIFLayer(4, 1),  # (1, 4, 1)
     )
     model(data)
+
+
+def test_backprop_works():
+    model = SequentialState(
+        norse.LSNNLayer(norse.LSNNCell, 1, 2),
+        norse.LSNNLayer(norse.LSNNCell, 2, 3),
+        norse.LSNNLayer(norse.LSNNCell, 3, 3),
+        norse.LSNNLayer(norse.LSNNCell, 3, 2),
+        nn.Flatten(),
+        norse.Lift(torch.nn.Linear(4, 2)),
+        norse.Lift(torch.nn.Linear(2, 1)),
+    )
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+    loss_func = nn.MSELoss()
+    data = torch.ones(3, 1, 2, 1)
+    target = torch.ones(1, 2)
+    state = None
+    for x in data:
+        out, state = model(x, state)
+        loss = loss_func(out, target)
+        optimizer.zero_grad()  # clear gradients for this training step
+        loss.backward()  # backpropagation, compute gradients
+        optimizer.step()
+        state = [s.detach() if s is not None else None for s in state]
