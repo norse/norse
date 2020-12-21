@@ -90,6 +90,20 @@ The task can be run without any additional dependencies like so:
 
     python3 -m norse.task.mnist
 
+MNIST in PyTorch Lightning
+==========================
+
+As the MNIST task above, but built with `PyTorch Lightning <https://pytorch-lightning.readthedocs.io/en/stable/>`_.
+PyTorch Lightning is a library to build, train, and verify a model with little overhead.
+It also provides GPU parallelisation, logging with e. g. Tensorboard, model checkpointing, and much more.
+
+**Note** that the task depends on an installation of PyTorch Lightning: 
+``pip install pytorch-lightning``
+
+.. code:: bash
+
+    python -m norse.task.mnist_pl
+
 Speech Command recognition task
 ===============================
 
@@ -100,18 +114,3 @@ The corresponding example task can be run like so:
 .. code:: bash
 
     python -m norse.task.speech_commands.run
-
-XOR PyTorch Lightning task
-==========================
-
-The classical `XOR problem <https://en.wikipedia.org/wiki/XOR_gate>`_ is shown to be 
-solved by a spiking neural network. The interesting part of this task, however, is the
-use of `PyTorch Lightning <https://pytorch-lightning.readthedocs.io/en/stable/>`_ as a
-method to build, train, and verify a model with almost no overhead.
-
-**Note** that the task depends on an installation of PyTorch Lightning: 
-``pip install pytorch-lightning``
-
-.. code:: bash
-
-    python -m norse.task.xor

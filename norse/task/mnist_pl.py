@@ -1,6 +1,6 @@
 r"""
-In this task, we train a spiking convolutional network to learn the 
-MNIST digit recognition task. 
+In this task, we train a spiking convolutional network to learn the
+MNIST digit recognition task.
 
 This version uses the `PyTorch Lightning <https://pytorchlightning.ai/>`_ library
 to reduce the amount of boilerplate code around logging, checkpointing, training, etc.
