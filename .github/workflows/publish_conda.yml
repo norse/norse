@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Set env
-      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+      run: echo "name=RELEASE_VERSION" >> $GITHUB_ENV
     - name: publish-to-conda
       uses: jegp/conda-package-publish-action@v1.2
       with:
