@@ -39,7 +39,8 @@
             
   <h1>Source code for norse.torch.module.test.test_sequential</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
 <span class="kn">from</span> <span class="nn">..lsnn</span> <span class="kn">import</span> <span class="n">LSNNCell</span><span class="p">,</span> <span class="n">LSNNLayer</span>
 <span class="kn">from</span> <span class="nn">..lif</span> <span class="kn">import</span> <span class="n">LIFCell</span><span class="p">,</span> <span class="n">LIFLayer</span>
 <span class="kn">from</span> <span class="nn">..lift</span> <span class="kn">import</span> <span class="n">Lift</span>
@@ -97,6 +98,30 @@
         <span class="n">LIFLayer</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>  <span class="c1"># (1, 4, 1)</span>
     <span class="p">)</span>
     <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_backprop_works"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_sequential.html#norse.torch.module.test.test_sequential.test_backprop_works">[docs]</a><span class="k">def</span> <span class="nf">test_backprop_works</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">SequentialState</span><span class="p">(</span>
+        <span class="n">norse</span><span class="o">.</span><span class="n">LSNNLayer</span><span class="p">(</span><span class="n">norse</span><span class="o">.</span><span class="n">LSNNCell</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="n">norse</span><span class="o">.</span><span class="n">LSNNLayer</span><span class="p">(</span><span class="n">norse</span><span class="o">.</span><span class="n">LSNNCell</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="n">norse</span><span class="o">.</span><span class="n">LSNNLayer</span><span class="p">(</span><span class="n">norse</span><span class="o">.</span><span class="n">LSNNCell</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="n">norse</span><span class="o">.</span><span class="n">LSNNLayer</span><span class="p">(</span><span class="n">norse</span><span class="o">.</span><span class="n">LSNNCell</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span><span class="p">(),</span>
+        <span class="n">norse</span><span class="o">.</span><span class="n">Lift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+        <span class="n">norse</span><span class="o">.</span><span class="n">Lift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+    <span class="p">)</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span>
+    <span class="n">loss_func</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_func</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>  <span class="c1"># clear gradients for this training step</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>  <span class="c1"># backpropagation, compute gradients</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">state</span><span class="p">]</span></div>
 </pre></div>
 
           </div>
