@@ -76,7 +76,13 @@ conda install -c norse norse
 pip install -qU git+https://github.com/norse/norse
 </pre></div></td><td><a href="https://pypi.org/" title="PyPi">Pip</a>, <a href="https://pytorch.org/get-started/locally/" title="PyTorch">PyTorch</a></td>
 </tr>
+<tr>
+<td>With Docker</td><td><div class="highlight highlight-source-shell"><pre>
+docker pull quay.io/norse/norse
+</pre></div></td><td><a href="https://www.docker.com/get-started" title="Docker">Docker</a></td>
+</tr>
 </table>
+
 
 ### 2.2. Running examples
 
