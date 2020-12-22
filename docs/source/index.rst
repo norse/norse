@@ -68,6 +68,7 @@ More detailed installation instructions are available here: :ref:`page-installin
 **From PyPi**             :bash:`pip install norse`                                                          `Pip <https://pypi.org/>`_
 **From Conda**            :bash:`conda install -c norse norse`                                               `Conda <https://docs.anaconda.com/anaconda/install/>`_
 **From Source**           :bash:`git clone https://github.com/norse/norse && python norse/setup.py install`  `Python <https://www.python.org/>`_
+**With Docker**           :bash:`docker pull quay.io/norse/norse`                                            `Docker <https://www.docker.com/get-started>`_
 ======================== =================================================================================== ====================
 
 Running Tasks
