@@ -77,7 +77,8 @@ def euclidean_distance(x, y):
 def population_encode(
     input_values: torch.Tensor,
     out_features: int,
-    scale: Union[int, torch.Tensor] = None,
+    min_value: int = 0,
+    max_value: int = 1,
     kernel: Callable[[torch.Tensor], torch.Tensor] = gaussian_rbf,
     distance_function: Callable[
         [torch.Tensor, torch.Tensor], torch.Tensor
@@ -105,13 +106,20 @@ def population_encode(
                 [0.6065, 0.8825, 1.0000]])
         >>> spikes = poisson_encode(pop_encoded, 1).squeeze() # Convert to spikes
 
+    Example for 4-d:
+        >>> data = torch.randn(2, 4) # two points in 4d
+        >>> out_features = 8         # 8 neurons _per_ dimension
+        >>> encoded = population_encode(data, out_features)
+        torch.Size([2, 4, 8])
+
+
     Parameters:
         input_values (torch.Tensor): The input data as numerical values to be encoded to population codes
         out_features (int): The number of output *per* input value
-        scale (torch.Tensor): The scaling factor for the kernels. Defaults to the maximum value of the input.
-                              Can also be set for each individual sample.
+        min_value (int): The minimum value of the population space. Defaults to 0.
+        max_value (int): The maximum value of the population space. Defaults to 1.
         kernel: A function that takes two inputs and returns a tensor. The two inputs represent the center value
-                (which changes for each index in the output tensor) and the actual data value to encode respectively.z
+                (which changes for each index in the output tensor) and the actual data value to encode, respectively.
                 Defaults to gaussian radial basis kernel function.
         distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.
 
@@ -119,13 +127,10 @@ def population_encode(
         A tensor with an extra dimension of size `seq_length` containing population encoded values of the input stimulus.
         Note: An extra step is required to convert the values to spikes, see above.
     """
-    # Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py
-    size = (input_values.size(0), out_features) + input_values.size()[1:]
-    if not scale:
-        scale = input_values.max()
-    centres = torch.linspace(0, scale, out_features).expand(size)
-    x = input_values.unsqueeze(1).expand(size)
-    distances = distance_function(x, centres) * scale
+    size = (*input_values.size(), out_features)
+    centres = torch.linspace(min_value, max_value, out_features).expand(size)
+    x = input_values.unsqueeze(-1).expand(size)
+    distances = distance_function(x, centres)
     return kernel(distances)
 
 

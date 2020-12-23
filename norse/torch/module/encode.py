@@ -75,7 +75,8 @@ class PopulationEncoder(torch.nn.Module):
     def __init__(
         self,
         out_features: int,
-        scale: Union[int, torch.Tensor] = None,
+        min_value: int = 0,
+        max_value: int = 1,
         kernel: Callable[[torch.Tensor], torch.Tensor] = encode.gaussian_rbf,
         distance_function: Callable[
             [torch.Tensor, torch.Tensor], torch.Tensor
@@ -92,8 +93,7 @@ class PopulationEncoder(torch.nn.Module):
 
             Gaussian curves representing different neuron "receptive fields". Image credit: `Andrew K. Richardson`_.
 
-        .. _Andrew K. Richardson: https://com
-        super(PopulationEncoder, self).__init__()mons.wikimedia.org/wiki/File:PopulationCode.svg
+        .. _Andrew K. Richardson: https://commons.wikimedia.org/wiki/File:PopulationCode.svg
 
         Example:
             >>> data = torch.as_tensor([0, 0.5, 1])
@@ -102,19 +102,32 @@ class PopulationEncoder(torch.nn.Module):
             tensor([[1.0000, 0.8825, 0.6065],
                     [0.8825, 1.0000, 0.8825],
                     [0.6065, 0.8825, 1.0000]])
+            >>> spikes = poisson_encode(pop_encoded, 1).squeeze() # Convert to spikes
+
+        Example for 4-d:
+            >>> data = torch.randn(2, 4) # two points in 4d
+            >>> out_features = 8         # 8 neurons _per_ dimension
+            >>> encoded = PopulationEncoder(out_features).forward(data)
+            torch.Size([2, 4, 8])
 
         Parameters:
+            input_values (torch.Tensor): The input data as numerical values to be encoded to population codes
             out_features (int): The number of output *per* input value
-            scale (torch.Tensor): The scaling factor for the kernels. Defaults to the maximum value of the input.
-                                Can also be set for each individual sample.
+            min_value (int): The minimum value of the population space. Defaults to 0.
+            max_value (int): The maximum value of the population space. Defaults to 1.
             kernel: A function that takes two inputs and returns a tensor. The two inputs represent the center value
-                    (which changes for each index in the output tensor) and the actual data value to encode respectively.z
+                    (which changes for each index in the output tensor) and the actual data value to encode, respectively.
                     Defaults to gaussian radial basis kernel function.
             distance_function: A function that calculates the distance between two numbers. Defaults to euclidean.
+
+        Returns:
+            A tensor with an extra dimension of size `seq_length` containing population encoded values of the input stimulus.
+            Note: An extra step is required to convert the values to spikes, see above.
         """
         super(PopulationEncoder, self).__init__()
         self.out_features = out_features
-        self.scale = scale
+        self.min_value = min_value
+        self.max_value = max_value
         self.kernel = kernel
         self.distance_function = distance_function
 
@@ -122,7 +135,8 @@ class PopulationEncoder(torch.nn.Module):
         return encode.population_encode(
             input_tensor,
             self.out_features,
-            self.scale,
+            self.min_value,
+            self.max_value,
             self.kernel,
             self.distance_function,
         )

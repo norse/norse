@@ -28,16 +28,33 @@ def test_encode_population():
     assert torch.allclose(actual, expected)
 
 
-def test_encode_population_scale():
+def test_encode_population_augment():
+    data = torch.tensor([[0, 1], [1, 0]])
+    out_features = 8
+    actual = population_encode(data, out_features)
+    assert actual.shape == (2, 2, 8)
+    assert actual[0].argmax() == 0
+    assert actual[1].argmax() == 7
+
+
+def test_encode_population_kernel():
     data = torch.as_tensor([0, 0.5, 1])
     out_features = 3
-    scale = data.max()
-    actual = population_encode(data, out_features, scale=scale)
+    distance_function = lambda x, y: x - y
+    kernel = lambda x: x
+    actual = population_encode(
+        data,
+        out_features,
+        min_value=-2,
+        max_value=2,
+        distance_function=distance_function,
+        kernel=kernel,
+    )
     expected = torch.as_tensor(
         [
-            [1.0000, 0.8824969, 0.6065307],
-            [0.8824969, 1.0000, 0.8824969],
-            [0.6065307, 0.8824969, 1.0000],
+            [2, 0, -2],
+            [2.5, 0.5, -1.5],
+            [3, 1, -1],
         ]
     )
     assert torch.allclose(actual, expected)
