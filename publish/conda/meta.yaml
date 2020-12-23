@@ -14,10 +14,14 @@ build:
     - python -m pip install --no-deps --ignore-installed .
     
 requirements:
+  build:
+    - cmake
+    - {{ compiler('c') }} # For windows
   host:
     - python
     - pip
     - pytorch>=1.5.0
+    - ninja
   run:
     - python
     - pytorch>=1.5.0
@@ -25,6 +29,7 @@ requirements:
     - matplotlib
     - numpy
     - absl-py
+    - ninja
 
 about:
   home: https://norse.ai/docs
