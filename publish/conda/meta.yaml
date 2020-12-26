@@ -15,18 +15,40 @@ build:
     
 requirements:
   build:
-    - pip
-    - python {{ python }}
-    - pytorch>=1.5.0
-    - typing_extensions
-    - {{ compiler('cxx') }} # For windows
+    - cmake
+    - gxx_linux-64
+    - {{ compiler('cxx') }} # [win]
   host:
-    - python {{ python }}
+    - python
+    - numpy>=1.12
+    - setuptools
+    - pytorch>=1.6.0
+    - typing_extensions
+    - dataclasses
+    - ninja
+    - libuv
+    - pkg-config
+    - pip
   run:
     - python
+    - pip
     - pytorch>=1.5.0
     - torchvision
     - absl-py
+    - dataclasses
+    - ninja
+    - typing_extensions
+
+test:
+  requires:
+    - pytest
+  imports:
+    - norse
+    - torch
+  source_files:
+    - "**/*.py"
+  commands:
+    - pytest
 
 about:
   home: https://norse.ai/docs
