@@ -128,7 +128,9 @@ def population_encode(
         Note: An extra step is required to convert the values to spikes, see above.
     """
     size = (*input_values.size(), out_features)
-    centres = torch.linspace(min_value, max_value, out_features).expand(size)
+    centres = torch.linspace(
+        min_value, max_value, out_features, device=input_values.device
+    ).expand(size)
     x = input_values.unsqueeze(-1).expand(size)
     distances = distance_function(x, centres)
     return kernel(distances)
