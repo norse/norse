@@ -11,8 +11,20 @@ source:
 build:
   number: 0
   script: 
-    - python -m pip install --no-deps --ignore-installed .
+    - python -m pip install --no-deps --ignore-installed -e .
     
+outputs:
+  - name: norse
+    files:
+      - norse/
+      - LICENSE
+      - logo.png
+      - norse_op.so
+      - pyproject.toml
+      - README.md
+      - requirements.txt
+      - setup.py
+
 requirements:
   build:
     - cmake
@@ -47,8 +59,9 @@ test:
     - torch
   source_files:
     - "**/*.py"
+    - "*.so"
   commands:
-    - pytest
+    - pytest -vv
 
 about:
   home: https://norse.ai/docs
