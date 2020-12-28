@@ -17,6 +17,7 @@ outputs:
   - name: norse
     files:
       - norse/
+      - CMakeLists.txt
       - LICENSE
       - logo.png
       - norse_op.so
@@ -51,17 +52,18 @@ requirements:
     - ninja
     - typing_extensions
 
-test:
-  requires:
-    - pytest
-  imports:
-    - norse
-    - torch
-  source_files:
-    - "**/*.py"
-    - "*.so"
-  commands:
-    - pytest -vv
+      #test:
+      #  requires:
+      #    - pytest
+      #    - pytest-xdist
+      #  imports:
+      #    - norse
+      #    - torch
+      #  source_files:
+      #    - "**/*.py"
+      #    - "*.so"
+      #  commands:
+      #    - pytest -n 4 -vv
 
 about:
   home: https://norse.ai/docs
