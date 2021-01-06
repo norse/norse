@@ -2,7 +2,7 @@
 <img src="https://raw.githubusercontent.com/norse/norse/master/logo.png">
 </p>
 
-A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) with [spiking neural networks](https://en.wikipedia.org/wiki/Spiking_neural_network).
+A [deep learning](https://en.wikipedia.org/wiki/Deep_learning) library for [spiking neural networks](https://en.wikipedia.org/wiki/Spiking_neural_network).
 
 
 
@@ -22,9 +22,8 @@ A library to do [deep learning](https://en.wikipedia.org/wiki/Deep_learning) wit
         <img src="https://img.shields.io/discord/723215296399147089"
             alt="chat on Discord"></a>
     <a href="https://www.codacy.com/gh/norse/norse?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=norse/norse&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/a9ab846fc6114afda4320badcb8a69c2"/></a>
-    <a href="https://codecov.io/gh/norse/norse">
-  <img src="https://codecov.io/gh/norse/norse/branch/master/graph/badge.svg" />
-</a>
+    <a href="https://codecov.io/gh/norse/norse"><img src="https://codecov.io/gh/norse/norse/branch/master/graph/badge.svg" /></a>
+    <a href="https://doi.org/10.5281/zenodo.4422025"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4422025.svg" alt="DOI"></a>
 </p>
 
 This library aims to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
@@ -202,6 +201,26 @@ Norse is created by
 
 More information about Norse can be found [in our documentation](https://norse.github.io/norse/about.html). The research has received funding from the EC Horizon 2020 Framework Programme under Grant Agreements 785907 and 945539 (HBP).
 
-## 7. License
+## 7. Citation
+
+If you use Norse in your work, please cite it as follows:
+
+```BibTex
+@software{pehle_christian_gernot_2021_4422025,
+  author       = {Pehle, Christian-Gernot and
+                  Pedersen, Jens Egholm},
+  title        = {{Norse -  A deep learning library for spiking 
+                   neural networks}},
+  month        = jan,
+  year         = 2021,
+  note         = {Documentation: https://norse.ai/docs/},
+  publisher    = {Zenodo},
+  version      = {0.0.5},
+  doi          = {10.5281/zenodo.4422025},
+  url          = {https://doi.org/10.5281/zenodo.4422025}
+}
+```
+
+## 8. License
 
 LGPLv3. See [LICENSE](LICENSE) for license details.
