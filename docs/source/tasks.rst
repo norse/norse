@@ -93,9 +93,10 @@ The task can be run without any additional dependencies like so:
 MNIST in PyTorch Lightning
 ==========================
 
-As the MNIST task above, but built with `PyTorch Lightning <https://pytorch-lightning.readthedocs.io/en/stable/>`_.
-PyTorch Lightning is a library to build, train, and verify a model with little overhead.
+This task is similar to the MNIST task above, but built with `PyTorch Lightning <https://pytorch-lightning.readthedocs.io/en/stable/>`_.
+PyTorch Lightning is a library to build, train, scale, and verify a model with little overhead.
 It also provides GPU parallelisation, logging with e. g. Tensorboard, model checkpointing, and much more.
+We have successfully used PyTorch and Norse on the `JUWELS HPC <http://www.fz-juelich.de/ias/jsc/juwels>`_.
 
 **Note** that the task depends on an installation of PyTorch Lightning: 
 ``pip install pytorch-lightning``

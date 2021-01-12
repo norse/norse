@@ -123,6 +123,7 @@ Table of contents
    hardware
    spiking
    learning
+   papers
    working
 
 .. toctree::

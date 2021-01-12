@@ -44,7 +44,10 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx_autodoc_typehints",
     "sphinx_gallery.gen_gallery",
+    "sphinxcontrib.bibtex",
 ]
+
+bibtex_bibfiles = ['bibliography.bib']
 
 sphinx_gallery_conf = {
     "examples_dirs": "../../norse/examples",  # path to your example scripts

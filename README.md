@@ -4,8 +4,6 @@
 
 A [deep learning](https://en.wikipedia.org/wiki/Deep_learning) library for [spiking neural networks](https://en.wikipedia.org/wiki/Spiking_neural_network).
 
-
-
 <p align="center">
     <a href="https://github.com/norse/norse/actions">
         <img src="https://github.com/norse/norse/workflows/Python%20package/badge.svg" alt="Test status"></a>
@@ -26,7 +24,7 @@ A [deep learning](https://en.wikipedia.org/wiki/Deep_learning) library for [spik
     <a href="https://doi.org/10.5281/zenodo.4422025"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4422025.svg" alt="DOI"></a>
 </p>
 
-This library aims to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
+Norse aims to exploit the advantages of bio-inspired neural components, which are sparse and event-driven - a fundamental difference from artificial neural networks.
 Norse expands [PyTorch](https://pytorch.org/) with primitives for bio-inspired neural components, 
 bringing you two advantages: a modern and proven infrastructure based on PyTorch and deep learning-compatible spiking neural network components.
 
@@ -149,22 +147,17 @@ output, new_state = layer.forward(data)
 Norse was created for two reasons: to 1) apply findings from decades of research in practical settings
 and to 2) accelerate our own research within bio-inspired learning.
 
-A number of projects exist that attempts to leverage the strength of bio-inspired neural networks, 
-however only few of them integrate with modern machine-learning libraries such as 
-PyTorch or [Tensorflow](https://www.tensorflow.org/) and many of them are no longer actively developed.
-
-We are passionate about Norse and believe it has significant potential outside our own research.
-Primarily because we strive to follow best practices and promise to maintain this library for the
+We are passionate about Norse: we strive to follow best practices and promise to maintain this library for the
 simple reason that we depend on it ourselves.
-Second, we have implemented a number of neuron models, synapse dynamics, encoding and decoding algorithms, 
-dataset integrations, tasks, and examples. While we are far from the comprehensive coverage of 
-simulators used in computational neuroscience such as Brian, NEST or NEURON, we expect to close this gap as
-we continue to develop the library.
+We have implemented a number of neuron models, synapse dynamics, encoding and decoding algorithms, 
+dataset integrations, tasks, and examples.
+Combined with the PyTorch infrastructure and our high coding standards, we have found Norse to be an excellent tool for modelling *scaleable* experiments and [Norse is actively being used in research](https://norse.github.io/norse/papers.html).
 
 Finally, we are working to keep Norse as performant as possible. 
-Preliminary benchmarks suggest that on small networks of up to ~10000 neurons [Norse achieves excellent performance](https://github.com/norse/norse/tree/master/norse/benchmark). We aim to create a library
-that scales from a single laptop to several nodes on a HPC cluster. We expect to be significantly
-helped in that endeavour by the preexisting investment in scalable training and inference with PyTorch.
+Preliminary benchmarks suggest that Norse [achieves excellent performance on small networks of up to ~5000 neurons per layer](https://github.com/norse/norse/tree/master/norse/benchmark). 
+Aided by the preexisting investment in scalable training and inference with PyTorch, Norse scales from a single laptop to several nodes on an HPC cluster with little effort.
+As illustrated by our [PyTorch Lightning example task](https://norse.github.io/norse/tasks.html#mnist-in-pytorch-lightning).
+
 
 [Read more about Norse in our documentation](https://norse.github.io/norse/about.html).
 
@@ -220,6 +213,8 @@ If you use Norse in your work, please cite it as follows:
   url          = {https://doi.org/10.5281/zenodo.4422025}
 }
 ```
+
+Norse is actively applied and cited in the literature. We are keeping track of the papers cited by Norse [in our documentation](https://norse.github.io/norse/papers.html).
 
 ## 8. License
 
