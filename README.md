@@ -199,8 +199,8 @@ More information about Norse can be found [in our documentation](https://norse.g
 If you use Norse in your work, please cite it as follows:
 
 ```BibTex
-@software{pehle_christian_gernot_2021_4422025,
-  author       = {Pehle, Christian-Gernot and
+@software{norse2021,
+  author       = {Pehle, Christian and
                   Pedersen, Jens Egholm},
   title        = {{Norse -  A deep learning library for spiking 
                    neural networks}},
