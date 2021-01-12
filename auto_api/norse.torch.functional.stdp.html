@@ -46,34 +46,34 @@
 <em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.stdp.</code><code class="sig-name descname">STDPParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a_pre</span><span class="o">=</span><span class="default_value">tensor(1.)</span></em>, <em class="sig-param"><span class="n">a_post</span><span class="o">=</span><span class="default_value">tensor(1.)</span></em>, <em class="sig-param"><span class="n">tau_pre_inv</span><span class="o">=</span><span class="default_value">tensor(20.)</span></em>, <em class="sig-param"><span class="n">tau_post_inv</span><span class="o">=</span><span class="default_value">tensor(20.)</span></em>, <em class="sig-param"><span class="n">w_min</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">w_max</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">eta_plus</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">eta_minus</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">stdp_algorithm</span><span class="o">=</span><span class="default_value">'additive'</span></em>, <em class="sig-param"><span class="n">mu</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">hardbound</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">convolutional</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">stride</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/stdp.html#STDPParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.stdp.STDPParameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>STDP parameters.
-:type a_pre: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type a_pre: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param a_pre: Contribution of presynaptic spikes to trace
 :type a_pre: torch.Tensor
-:type a_post: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type a_post: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param a_post: Contribution of postsynaptic spikes to trace
 :type a_post: torch.Tensor
-:type tau_pre_inv: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type tau_pre_inv: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param tau_pre_inv: Inverse decay time constant of presynaptic spike trace in 1/s
 :type tau_pre_inv: torch.Tensor
-:type tau_post_inv: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type tau_post_inv: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param tau_post_inv: Inverse decay time constant of postsynaptic spike trace in 1/s
 :type tau_post_inv: torch.Tensor
-:type w_min: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type w_min: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param w_min: Lower bound on synaptic weights (should be &lt; w_max)
 :type w_min: torch.Tensor
-:type w_max: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type w_max: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param w_max: Upper bound on synaptic weight (should be &gt; w_min)
 :type w_max: torch.Tensor
-:type eta_plus: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type eta_plus: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param eta_plus: Learning rate for synaptic potentiation (0 &lt; eta_plus &lt;&lt; 1)
 :type eta_plus: torch.Tensor
-:type eta_minus: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type eta_minus: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param eta_minus: Learning rate for synaptic depression (0 &lt; eta_minus &lt;&lt; 1)
 :type eta_minus: torch.Tensor
 :type stdp_algorithm: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
 :param stdp_algorithm: Algorithm for STDP updates. Options in {“additive”,”additive_step”,”multiplicative_pow”,”multiplicative_relu”}
 :type stdp_algorithm: string
-:type mu: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type mu: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param mu: Exponent for multiplicative STDP (0 &lt;= mu &lt;= 1)
 :type mu: torch.Tensor
 :type hardbound: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>
@@ -103,31 +103,31 @@
 <em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.stdp.</code><code class="sig-name descname">STDPState</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t_pre</span></em>, <em class="sig-param"><span class="n">t_post</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/stdp.html#STDPState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.stdp.STDPState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>State of spike-timing-dependent plasticity (STDP).
-:type t_pre: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type t_pre: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param t_pre: presynaptic spike trace
 :type t_pre: torch.Tensor
-:type t_post: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type t_post: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param t_post: postsynaptic spike trace
 :type t_post: torch.Tensor</p>
 <dl class="py method">
 <dt id="norse.torch.functional.stdp.STDPState.decay">
 <code class="sig-name descname">decay</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z_pre</span></em>, <em class="sig-param"><span class="n">z_post</span></em>, <em class="sig-param"><span class="n">tau_pre_inv</span></em>, <em class="sig-param"><span class="n">tau_post_inv</span></em>, <em class="sig-param"><span class="n">a_pre</span></em>, <em class="sig-param"><span class="n">a_post</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/stdp.html#STDPState.decay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.stdp.STDPState.decay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decay function for STDP traces.
-:type z_pre: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type z_pre: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param z_pre: presynaptic spikes
 :type z_pre: torch.Tensor
-:type z_post: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type z_post: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param z_post: postsynaptic spikes
 :type z_post: torch.Tensor
-:type tau_pre_inv: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type tau_pre_inv: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param tau_pre_inv: inverse time-constant for the presynaptic trace
 :type tau_pre_inv: torch.Tensor
 :param tau_post: inverse time-constant for the postsynaptic trace
 :type tau_post: torch.Tensor
-:type a_pre: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type a_pre: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param a_pre: presynaptic trace
 :type a_pre: torch.Tensor
-:type a_post: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
+:type a_post: <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>
 :param a_post: postsynaptic trace
 :type a_post: torch.Tensor
 :type dt: <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>
@@ -157,7 +157,7 @@ state_stdp (STDPState): Updated STDP state</p>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.stdp.STDPState" title="norse.torch.functional.stdp.STDPState"><code class="xref py py-class docutils literal notranslate"><span class="pre">STDPState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.stdp.STDPState" title="norse.torch.functional.stdp.STDPState"><code class="xref py py-class docutils literal notranslate"><span class="pre">STDPState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -182,7 +182,7 @@ state_stdp (STDPState): Updated STDP state</p>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+396c67b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.stdp.STDPState" title="norse.torch.functional.stdp.STDPState"><code class="xref py py-class docutils literal notranslate"><span class="pre">STDPState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+538bf13 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="#norse.torch.functional.stdp.STDPState" title="norse.torch.functional.stdp.STDPState"><code class="xref py py-class docutils literal notranslate"><span class="pre">STDPState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -241,7 +241,8 @@ state_stdp (STDPState): Updated STDP state</p>
 <li class="toctree-l1"><a class="reference internal" href="../hardware.html">2. Hardware acceleration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../spiking.html">3. Introduction to spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../learning.html">4. Learning with spikes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../working.html">5. Working with Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../papers.html">5. Papers citing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../working.html">6. Working with Norse</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -323,7 +324,7 @@ state_stdp (STDPState): Updated STDP state</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

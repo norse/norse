@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>5. Working with Norse &#8212; norse 0.0.5 documentation</title>
+    <title>6. Working with Norse &#8212; norse 0.0.5 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css" />
@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="1. Beginner tutorials" href="auto_examples/index.html" />
-    <link rel="prev" title="4. Learning with spikes" href="learning.html" />
+    <link rel="prev" title="5. Papers citing Norse" href="papers.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -40,7 +40,7 @@
           <div class="body" role="main">
             
   <div class="section" id="working-with-norse">
-<span id="page-working"></span><h1><span class="section-number">5. </span>Working with Norse<a class="headerlink" href="#working-with-norse" title="Permalink to this headline">¶</a></h1>
+<span id="page-working"></span><h1><span class="section-number">6. </span>Working with Norse<a class="headerlink" href="#working-with-norse" title="Permalink to this headline">¶</a></h1>
 <p>For us, Norse is a tool to accelerate our own work within spiking neural networks.
 This page serves to describe the fundamental ideas behind the Python code in Norse and
 provide you with hints as to how you can apply it in your own work
@@ -48,9 +48,9 @@ provide you with hints as to how you can apply it in your own work
 We will start by explaining some basic terminology, describe a <em>suggestion</em> to how Norse
 can be approach, and finally provide examples on how to work with Norse.</p>
 <div class="section" id="fundamental-concepts">
-<h2><span class="section-number">5.1. </span>Fundamental concepts<a class="headerlink" href="#fundamental-concepts" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.1. </span>Fundamental concepts<a class="headerlink" href="#fundamental-concepts" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="functional-vs-module-packaging">
-<h3><span class="section-number">5.1.1. </span>Functional vs. module packaging<a class="headerlink" href="#functional-vs-module-packaging" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.1.1. </span>Functional vs. module packaging<a class="headerlink" href="#functional-vs-module-packaging" title="Permalink to this headline">¶</a></h3>
 <p>As with PyTorch, the package is organised into a <em>functional</em> and <em>module</em> part.
 The <em>functional</em> package contains functions and classes that are considered atomic.
 If you use this package, you are expected to piece the code together yourself.
@@ -59,7 +59,7 @@ The <em>module</em> package contains PyTorch modules on a slightly higher level.
 </div>
 </div>
 <div class="section" id="how-to-approach-norse">
-<h2><span class="section-number">5.2. </span>How to approach Norse<a class="headerlink" href="#how-to-approach-norse" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.2. </span>How to approach Norse<a class="headerlink" href="#how-to-approach-norse" title="Permalink to this headline">¶</a></h2>
 <p>Norse is meant to be used as a library. Specifically, that means taking parts of it and
 remixing to fit the needs of a specific task.
 We have tried to provide useful, documented, and correct features from the spiking neural network domain, such
@@ -73,37 +73,37 @@ Apart from that, Norse works like you would expect any PyTorch module to work.</
 <li><p>What learning/plasticity models you need</p></li>
 </ol>
 <div class="section" id="deciding-on-neuron-models">
-<h3><span class="section-number">5.2.1. </span>Deciding on neuron models<a class="headerlink" href="#deciding-on-neuron-models" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.2.1. </span>Deciding on neuron models<a class="headerlink" href="#deciding-on-neuron-models" title="Permalink to this headline">¶</a></h3>
 <p>The choice of neuron model depends on the task.
 The <a class="reference external" href="https://neuronaldynamics.epfl.ch/online/Ch5.S2.html">leaky integrate-and-fire neuron model</a> is one of the
 most common.
 In Norse, this is implemented as a recurrent cell in <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/module/lif.py#L15">lif.py</a>.</p>
 </div>
 <div class="section" id="deciding-on-learning-plasiticy-models">
-<h3><span class="section-number">5.2.2. </span>Deciding on learning/plasiticy models<a class="headerlink" href="#deciding-on-learning-plasiticy-models" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.2.2. </span>Deciding on learning/plasiticy models<a class="headerlink" href="#deciding-on-learning-plasiticy-models" title="Permalink to this headline">¶</a></h3>
 <p>This is an area of active development and will be expanded upon soon.</p>
 <p>Optimisation is mainly done using PyTorch’s optimizers, as seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py#L100">MNIST task</a>.</p>
 </div>
 </div>
 <div class="section" id="examples-on-working-with-norse">
-<h2><span class="section-number">5.3. </span>Examples on working with Norse<a class="headerlink" href="#examples-on-working-with-norse" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.3. </span>Examples on working with Norse<a class="headerlink" href="#examples-on-working-with-norse" title="Permalink to this headline">¶</a></h2>
 <p>We have put considerable effort into streamlining it for three scenarios:
 1) porting deep learning models to the spiking/temporal domain,
 2) extending existing models,
 3) exploring novel ideas.</p>
 <div class="section" id="porting-deep-learning-models">
-<h3><span class="section-number">5.3.1. </span>Porting deep learning models<a class="headerlink" href="#porting-deep-learning-models" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.1. </span>Porting deep learning models<a class="headerlink" href="#porting-deep-learning-models" title="Permalink to this headline">¶</a></h3>
 <p>A classical example of this can be seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py">MNIST</a>
 where convolutions are brought into Norse.</p>
 </div>
 <div class="section" id="extending-existing-models">
-<h3><span class="section-number">5.3.2. </span>Extending existing models<a class="headerlink" href="#extending-existing-models" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.2. </span>Extending existing models<a class="headerlink" href="#extending-existing-models" title="Permalink to this headline">¶</a></h3>
 <p>An example of this can be seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/memory.py">memory task</a>,
 where <a class="reference external" href="https://github.com/IGITUGraz/LSNN-official">adaptive long short-term spiking neural networks</a>
 are added to</p>
 </div>
 <div class="section" id="exploring-novel-ideas">
-<h3><span class="section-number">5.3.3. </span>Exploring novel ideas<a class="headerlink" href="#exploring-novel-ideas" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.3. </span>Exploring novel ideas<a class="headerlink" href="#exploring-novel-ideas" title="Permalink to this headline">¶</a></h3>
 <p>This is an area of active development and will be expanded upon soon.</p>
 </div>
 </div>
@@ -161,10 +161,11 @@ are added to</p>
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">2. Hardware acceleration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="spiking.html">3. Introduction to spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="learning.html">4. Learning with spikes</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Working with Norse</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#fundamental-concepts">5.1. Fundamental concepts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-approach-norse">5.2. How to approach Norse</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples-on-working-with-norse">5.3. Examples on working with Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="papers.html">5. Papers citing Norse</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Working with Norse</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fundamental-concepts">6.1. Fundamental concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-approach-norse">6.2. How to approach Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples-on-working-with-norse">6.3. Examples on working with Norse</a></li>
 </ul>
 </li>
 </ul>
@@ -184,7 +185,7 @@ are added to</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="learning.html" title="previous chapter"><span class="section-number">4. </span>Learning with spikes</a></li>
+      <li>Previous: <a href="papers.html" title="previous chapter"><span class="section-number">5. </span>Papers citing Norse</a></li>
       <li>Next: <a href="auto_examples/index.html" title="next chapter"><span class="section-number">1. </span>Beginner tutorials</a></li>
   </ul></li>
 </ul>
@@ -215,7 +216,7 @@ are added to</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
