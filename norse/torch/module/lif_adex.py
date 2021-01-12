@@ -11,6 +11,8 @@ from ..functional.lif_adex import (
     lif_adex_feed_forward_step,
 )
 
+from .util import remove_autopses
+
 
 class LIFAdExCell(torch.nn.Module):
     r"""Computes a single euler-integration step of a recurrent adaptive exponential
@@ -47,6 +49,7 @@ class LIFAdExCell(torch.nn.Module):
         hidden_size (int): Size of the hidden state.
         p (LIFExParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
+        autopses (bool): Allow self-connections in the recurrence? Defaults to False.
 
     Examples:
 
@@ -62,13 +65,17 @@ class LIFAdExCell(torch.nn.Module):
         hidden_size: int,
         p: LIFAdExParameters = LIFAdExParameters(),
         dt: float = 0.001,
+        autopses: bool = False,
     ):
         super(LIFAdExCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
             torch.randn(hidden_size, input_size) * np.sqrt(2 / hidden_size)
         )
+        recurrent_weights = torch.randn(hidden_size, hidden_size) * np.sqrt(
+            2 / hidden_size
+        )
         self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) * np.sqrt(2 / hidden_size)
+            recurrent_weights if autopses else remove_autopses(recurrent_weights)
         )
         self.input_size = input_size
         self.hidden_size = hidden_size

@@ -1,5 +1,6 @@
 import torch
 
+from norse.torch.functional.lif import LIFState
 from norse.torch.module.lif import (
     LIFCell,
     LIFLayer,
@@ -29,6 +30,42 @@ def test_lif_cell():
     for x in s:
         assert x.shape == (5, 4)
     assert out.shape == (5, 4)
+
+
+def test_lif_cell_autopses():
+    cell = LIFCell(2, 2, autopses=True)
+    assert not torch.allclose(
+        torch.zeros(2),
+        (cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)).sum(0),
+    )
+    s1 = LIFState(z=torch.ones(1, 2), v=torch.zeros(1, 2), i=torch.zeros(1, 2))
+    z, s_full = cell(torch.zeros(1, 2), s1)
+    s2 = LIFState(
+        z=torch.tensor([[0, 1]], dtype=torch.float32),
+        v=torch.zeros(1, 2),
+        i=torch.zeros(1, 2),
+    )
+    z, s_part = cell(torch.zeros(1, 2), s2)
+
+    assert not s_full.i[0, 0] == s_part.i[0, 0]
+
+
+def test_lif_cell_no_autopses():
+    cell = LIFCell(2, 2, autopses=False)
+    assert (
+        cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)
+    ).sum() == 0
+
+    s1 = LIFState(z=torch.ones(1, 2), v=torch.zeros(1, 2), i=torch.zeros(1, 2))
+    z, s_full = cell(torch.zeros(1, 2), s1)
+    s2 = LIFState(
+        z=torch.tensor([[0, 1]], dtype=torch.float32),
+        v=torch.zeros(1, 2),
+        i=torch.zeros(1, 2),
+    )
+    z, s_part = cell(torch.zeros(1, 2), s2)
+
+    assert s_full.i[0, 0] == s_part.i[0, 0]
 
 
 def test_lif_layer():

@@ -6,6 +6,7 @@ from ..functional.lif_mc_refrac import lif_mc_refrac_step
 
 import numpy as np
 from typing import Optional, Tuple
+from .util import remove_autopses
 
 
 class LIFMCRefracCell(torch.nn.Module):
@@ -15,13 +16,15 @@ class LIFMCRefracCell(torch.nn.Module):
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
+        autopses: bool = False,
     ):
         super(LIFMCRefracCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
             torch.randn(hidden_size, input_size) / np.sqrt(input_size)
         )
+        recurrent_weights = torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
         self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
+            recurrent_weights if autopses else remove_autopses(recurrent_weights)
         )
         self.g_coupling = torch.nn.Parameter(
             torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
