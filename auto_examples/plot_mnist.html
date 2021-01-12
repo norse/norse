@@ -65,37 +65,53 @@ as seamlessly as possible into a traditional deep learning pipeline.</p>
   (lif2): LIFFeedForwardCell(p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method=&#39;super&#39;, alpha=100.0), dt=0.001)
   (out): LICell()
 )
-tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+tensor([[[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,  0.0000,
+           0.0000,  0.0000,  0.0000]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
+        [[ 0.0040,  0.0029, -0.0015, -0.0020,  0.0023,  0.0076,  0.0060,
+          -0.0007, -0.0051, -0.0019]],
 
-        [[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]], grad_fn=&lt;CopySlices&gt;)
+        [[ 0.0160,  0.0130, -0.0197, -0.0095,  0.0038,  0.0022, -0.0034,
+           0.0027, -0.0038,  0.0112]]], grad_fn=&lt;CopySlices&gt;)
 /usr/local/lib/python3.8/site-packages/torch/autograd/__init__.py:130: UserWarning: CUDA initialization: Found no NVIDIA driver on your system. Please check that you have an NVIDIA GPU and installed a driver from http://www.nvidia.com/Download/index.aspx (Triggered internally at  /pytorch/c10/cuda/CUDAFunctions.cpp:100.)
   Variable._execution_engine.run_backward(
 </pre></div>
@@ -200,7 +216,7 @@ tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]],
     <span class="c1">#     networks at once.</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.583 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.547 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-mnist-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/f4267e394f05c422272daddce2ec6ab0/plot_mnist.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_mnist.py</span></code></a></p>
