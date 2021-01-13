@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 import numpy as np
 import torch
 
-from ..functional.lif_adex import (
+from norse.torch.functional.lif_adex import (
     LIFAdExState,
     LIFAdExFeedForwardState,
     LIFAdExParameters,
@@ -11,7 +11,7 @@ from ..functional.lif_adex import (
     lif_adex_feed_forward_step,
 )
 
-from .util import remove_autopses
+from norse.torch.module.util import remove_autopses
 
 
 class LIFAdExCell(torch.nn.Module):

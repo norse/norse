@@ -3,14 +3,14 @@ from typing import Optional, Tuple
 import numpy as np
 import torch
 
-from ..functional.lif_ex import (
+from norse.torch.functional.lif_ex import (
     LIFExState,
     LIFExFeedForwardState,
     LIFExParameters,
     lif_ex_step,
     lif_ex_feed_forward_step,
 )
-from .util import remove_autopses
+from norse.torch.module.util import remove_autopses
 
 
 class LIFExCell(torch.nn.Module):

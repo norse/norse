@@ -3,14 +3,14 @@ from typing import Any, Optional, Tuple
 import numpy as np
 import torch
 
-from ..functional.lif import (
+from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
     LIFParameters,
     lif_step,
     lif_feed_forward_step,
 )
-from .util import remove_autopses
+from norse.torch.module.util import remove_autopses
 
 
 class LIFCell(torch.nn.Module):

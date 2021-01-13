@@ -3,14 +3,14 @@ from typing import Optional, Tuple
 import torch
 import numpy as np
 
-from ..functional.lsnn import (
+from norse.torch.functional.lsnn import (
     LSNNParameters,
     LSNNState,
     LSNNFeedForwardState,
     lsnn_step,
     lsnn_feed_forward_step,
 )
-from .util import remove_autopses
+from norse.torch.module.util import remove_autopses
 
 
 class LSNNCell(torch.nn.Module):

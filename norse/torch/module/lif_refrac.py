@@ -4,14 +4,14 @@ import torch
 
 from ..functional.lif import LIFState, LIFFeedForwardState
 
-from ..functional.lif_refrac import (
+from norse.torch.functional.lif_refrac import (
     LIFRefracParameters,
     LIFRefracState,
     LIFRefracFeedForwardState,
     lif_refrac_step,
     lif_refrac_feed_forward_step,
 )
-from .util import remove_autopses
+from norse.torch.module.util import remove_autopses
 
 
 class LIFRefracCell(torch.nn.Module):
