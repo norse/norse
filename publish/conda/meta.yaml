@@ -1,5 +1,5 @@
 {% set name = "norse" %}
-{% set version = "v0.0.5" %}
+{% set version = "0.0.5" %}
 
 package:
   name: "{{ name|lower }}"
@@ -11,20 +11,59 @@ source:
 build:
   number: 0
   script: 
-    - python -m pip install --no-deps --ignore-installed .
+    - python -m pip install --no-deps --ignore-installed -e .
     
+outputs:
+  - name: norse
+    files:
+      - norse/
+      - CMakeLists.txt
+      - LICENSE
+      - logo.png
+      - norse_op.so
+      - pyproject.toml
+      - README.md
+      - requirements.txt
+      - setup.py
+
 requirements:
+  build:
+    - cmake
+    - gxx_linux-64
+    - {{ compiler('cxx') }} # [win]
   host:
+    - python
+    - numpy>=1.12
+    - setuptools
+    - pytorch>=1.6.0
+    - typing_extensions
+    - dataclasses
+    - ninja
+    - libuv
+    - pkg-config
+    - pip
+  run:
     - python
     - pip
     - pytorch>=1.5.0
-  run:
-    - python
-    - pytorch>=1.5.0
     - torchvision
-    - matplotlib
-    - numpy
     - absl-py
+    - dataclasses
+    - ninja
+    - typing_extensions
+
+      #test:
+      #  requires:
+      #    - pytest
+      #    - pytest-xdist
+      #  imports:
+      #    - norse
+      #    - torch
+      #  source_files:
+      #    - "**/*.py"
+      #    - "*.so"
+      #  commands:
+      #    - pytest -n 4 -vv
 
 about:
   home: https://norse.ai/docs

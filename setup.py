@@ -16,7 +16,7 @@ with open(path.join(pwd, "README.md"), encoding="utf-8") as fp:
 setup(
     install_requires=install_requires,
     name="norse",
-    version="0.0.5",
+    version="0.0.5-1",
     description="A library for deep learning with spiking neural networks",
     long_description=readme_text,
     long_description_content_type="text/markdown",
