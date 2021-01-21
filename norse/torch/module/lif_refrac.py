@@ -4,13 +4,14 @@ import torch
 
 from ..functional.lif import LIFState, LIFFeedForwardState
 
-from ..functional.lif_refrac import (
+from norse.torch.functional.lif_refrac import (
     LIFRefracParameters,
     LIFRefracState,
     LIFRefracFeedForwardState,
     lif_refrac_step,
     lif_refrac_feed_forward_step,
 )
+from norse.torch.module.util import remove_autopses
 
 
 class LIFRefracCell(torch.nn.Module):
@@ -52,6 +53,7 @@ class LIFRefracCell(torch.nn.Module):
         hidden_size (int): Size of the hidden state. Also known as the number of input features.
         p (LIFRefracParameters): parameters of the lif neuron
         dt (float): Integration timestep to use
+        autopses (bool): Allow self-connections in the recurrence? Defaults to False.
 
     Examples:
 
@@ -67,13 +69,15 @@ class LIFRefracCell(torch.nn.Module):
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
+        autopses: bool = False,
     ):
         super(LIFRefracCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
             torch.randn(hidden_size, input_size) / np.sqrt(input_size)
         )
+        recurrent_weights = torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
         self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
+            recurrent_weights if autopses else remove_autopses(recurrent_weights)
         )
         self.hidden_size = hidden_size
         self.p = p

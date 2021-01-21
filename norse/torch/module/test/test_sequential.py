@@ -73,7 +73,7 @@ def test_backprop_works():
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
     loss_func = nn.MSELoss()
     data = torch.ones(3, 1, 2, 1)
-    target = torch.ones(1, 2)
+    target = torch.ones(1, 1)
     state = None
     for x in data:
         out, state = model(x, state)

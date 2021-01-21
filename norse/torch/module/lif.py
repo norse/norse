@@ -3,13 +3,14 @@ from typing import Any, Optional, Tuple
 import numpy as np
 import torch
 
-from ..functional.lif import (
+from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
     LIFParameters,
     lif_step,
     lif_feed_forward_step,
 )
+from norse.torch.module.util import remove_autopses
 
 
 class LIFCell(torch.nn.Module):
@@ -46,6 +47,7 @@ class LIFCell(torch.nn.Module):
         hidden_size (int): Size of the hidden state. Also known as the number of input features.
         p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
+        autopses (bool): Allow self-connections in the recurrence? Defaults to False.
 
     Examples:
 
@@ -61,13 +63,17 @@ class LIFCell(torch.nn.Module):
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
         dt: float = 0.001,
+        autopses: bool = False,
     ):
         super(LIFCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
             torch.randn(hidden_size, input_size) * np.sqrt(2 / hidden_size)
         )
+        recurrent_weights = torch.randn(hidden_size, hidden_size) * np.sqrt(
+            2 / hidden_size
+        )
         self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) * np.sqrt(2 / hidden_size)
+            recurrent_weights if autopses else remove_autopses(recurrent_weights)
         )
         self.input_size = input_size
         self.hidden_size = hidden_size

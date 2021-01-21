@@ -3,13 +3,14 @@ from typing import Optional, Tuple
 import torch
 import numpy as np
 
-from ..functional.lsnn import (
+from norse.torch.functional.lsnn import (
     LSNNParameters,
     LSNNState,
     LSNNFeedForwardState,
     lsnn_step,
     lsnn_feed_forward_step,
 )
+from norse.torch.module.util import remove_autopses
 
 
 class LSNNCell(torch.nn.Module):
@@ -55,13 +56,15 @@ class LSNNCell(torch.nn.Module):
         hidden_size: int,
         p: LSNNParameters = LSNNParameters(),
         dt: float = 0.001,
+        autopses: bool = False,
     ):
         super(LSNNCell, self).__init__()
         self.input_weights = torch.nn.Parameter(
             torch.randn(hidden_size, input_size) / np.sqrt(input_size)
         )
+        recurrent_weights = torch.randn(hidden_size, hidden_size)
         self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size)
+            recurrent_weights if autopses else remove_autopses(recurrent_weights)
         )
         self.input_size = input_size
         self.hidden_size = hidden_size

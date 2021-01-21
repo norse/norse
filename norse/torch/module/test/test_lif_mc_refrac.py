@@ -47,6 +47,54 @@ def test_lif_mc_refrac_state():
     assert out.shape == (5, 4)
 
 
+def test_lif_mc_cell_autopses():
+    cell = LIFMCRefracCell(2, 2, autopses=True)
+    assert not torch.allclose(
+        torch.zeros(2),
+        (cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)).sum(0),
+    )
+    s1 = LIFRefracState(
+        rho=torch.zeros(1, 2),
+        lif=LIFState(z=torch.ones(1, 2), v=torch.zeros(1, 2), i=torch.zeros(1, 2)),
+    )
+    z, s_full = cell(torch.zeros(1, 2), s1)
+    s2 = LIFRefracState(
+        rho=torch.zeros(1, 2),
+        lif=LIFState(
+            z=torch.tensor([[0, 1]], dtype=torch.float32),
+            v=torch.zeros(1, 2),
+            i=torch.zeros(1, 2),
+        ),
+    )
+    z, s_part = cell(torch.zeros(1, 2), s2)
+
+    assert not s_full.lif.i[0, 0] == s_part.lif.i[0, 0]
+
+
+def test_lif_mc_cell_no_autopses():
+    cell = LIFMCRefracCell(2, 2, autopses=False)
+    assert (
+        cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)
+    ).sum() == 0
+
+    s1 = LIFRefracState(
+        rho=torch.zeros(1, 2),
+        lif=LIFState(z=torch.ones(1, 2), v=torch.zeros(1, 2), i=torch.zeros(1, 2)),
+    )
+    z, s_full = cell(torch.zeros(1, 2), s1)
+    s2 = LIFRefracState(
+        rho=torch.zeros(1, 2),
+        lif=LIFState(
+            z=torch.tensor([[0, 1]], dtype=torch.float32),
+            v=torch.zeros(1, 2),
+            i=torch.zeros(1, 2),
+        ),
+    )
+    z, s_part = cell(torch.zeros(1, 2), s2)
+
+    assert s_full.lif.i[0, 0] == s_part.lif.i[0, 0]
+
+
 def test_lif_mc_cell_backward():
     cell = LIFMCRefracCell(2, 4)
     data = torch.randn(5, 2)
