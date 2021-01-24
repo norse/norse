@@ -43,7 +43,7 @@ class Lift(torch.nn.Module):
         and accumulate the outputs in an output tensor.
 
         Parameters:
-            x : Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]
+            x : Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]
 
         Note:
             If the input is a tuple of two tensors, the second tuple entry will be ignored.
