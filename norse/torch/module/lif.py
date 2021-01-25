@@ -3,9 +3,7 @@ Leaky integrate-and-fire neurons is a popular neuron model
 for spiking neural networks because they are simple and
 fast while still being biologically interesting.
 """
-from typing import Any, Optional, Tuple
 
-import numpy as np
 import torch
 
 from norse.torch.functional.lif import (
@@ -15,16 +13,12 @@ from norse.torch.functional.lif import (
     lif_step,
     lif_feed_forward_step,
 )
-from norse.torch.module.snn import FeedforwardSNN, SNNCell, RecurrentSNN
-from norse.torch.module.util import remove_autopses
+from norse.torch.module.snn import FeedforwardSNNCell, SNNCell, SNN
 
 
-class FeedforwardLIF(FeedforwardSNN):
-    """
-    A neuron layer that wraps a recurrent LIFCell in time such
-    that the layer keeps track of temporal sequences of spikes.
-    After application, the layer returns a tuple containing
-      (spikes from all timesteps, state from the last timestep).
+class FeedforwardLIFCell(FeedforwardSNNCell):
+    """Module that computes a single euler-integration step of a
+    LIF neuron-model *without* recurrence.
 
     Example:
         >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
@@ -36,8 +30,8 @@ class FeedforwardLIF(FeedforwardSNN):
         dt (float): Time step to use. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFParameters = LIFParameters(), dt: float = 0.001):
-        super().__init__(lif_feed_forward_step, self.initial_state, p, dt)
+    def __init__(self, *args, **kwargs):
+        super().__init__(lif_feed_forward_step, self.initial_state, *args, **kwargs)
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
         state = LIFFeedForwardState(
@@ -52,9 +46,9 @@ class FeedforwardLIF(FeedforwardSNN):
         return state
 
 
-class RecurrentLIFCell(RecurrentSNNCell):
+class LIFCell(SNNCell):
     """Module that computes a single euler-integration step of a
-    LIF neuron-model with recurrence.
+    LIF neuron-model *with* recurrence.
     More specifically it implements one integration step
     of the following ODE
 
@@ -96,22 +90,9 @@ class RecurrentLIFCell(RecurrentSNNCell):
         >>> output, s0 = lif(input)
     """
 
-    def __init__(
-        self,
-        input_size: int,
-        hidden_size: int,
-        p: LIFParameters = LIFParameters(),
-        dt: float = 0.001,
-        autopses: bool = False,
-    ):
+    def __init__(self, *args, **kwargs):
         super().__init__(
-            input_size,
-            hidden_size,
-            activation=lif_step,
-            state_fallback=self.initial_state,
-            p=p,
-            dt=dt,
-            autopses=autopses,
+            activation=lif_step, state_fallback=self.initial_state, *args, **kwargs
         )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
@@ -134,12 +115,25 @@ class RecurrentLIFCell(RecurrentSNNCell):
         return state
 
 
-class RecurrentLIF(RecurrentSNN):
+class LIF(SNN):
     """
     A neuron layer that wraps a recurrent LIFCell in time such
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
+
+    Parameters:
+        input_size (int): The number of input neurons
+        hidden_size (int): The number of hidden neurons
+        p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
+            to configure neuron parameters as optimizable. Defaults to None.
+        input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
+            matrix normalized to the number of hidden neurons.
+        recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
+            matrix normalized to the number of hidden neurons.
+        autopses (bool): Allow self-connections in the recurrence? Defaults to False. Will also
+            remove autopses in custom recurrent weights, if set above.
+        dt (float): Time step to use in integration. Defaults to 0.001.
 
     Example:
         >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
@@ -147,22 +141,9 @@ class RecurrentLIF(RecurrentSNN):
         >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
     """
 
-    def __init__(
-        self,
-        input_size: int,
-        hidden_size: int,
-        p: LIFParameters = LIFParameters(),
-        dt: float = 0.001,
-        autopses: bool = False,
-    ):
+    def __init__(self, *args, **kwargs):
         super().__init__(
-            input_size,
-            hidden_size,
-            activation=lif_step,
-            state_fallback=self.initial_state,
-            p=p,
-            dt=dt,
-            autopses=autopses,
+            activation=lif_step, state_fallback=self.initial_state, *args, **kwargs
         )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
