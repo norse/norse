@@ -86,7 +86,7 @@ class RecurrentSNNCell(torch.nn.Module):
         p: torch.nn.Module,
         input_weights: Optional[torch.Tensor] = None,
         recurrent_weights: Optional[torch.Tensor] = None,
-        autopses: bool = False,
+        autapses: bool = False,
         dt: float = 0.001,
     ):
         super().__init__()
@@ -101,15 +101,17 @@ class RecurrentSNNCell(torch.nn.Module):
             self.input_weights = torch.nn.Parameter(
                 torch.randn(hidden_size, input_size) * torch.sqrt(2 / hidden_size)
             )
+            
         if recurrent_weights is not None:
             self.recurrent_weights = recurrent_weights
         else:
-            self.recurrent_weights = torch.randn(hidden_size, hidden_size) * torch.sqrt(
-                2 / hidden_size
+            self.recurrent_weights = torch.nn.Parameter(
+                torch.randn(hidden_size, hidden_size) * torch.sqrt(2 / hidden_size)
             )
-        self.recurrent_weights = torch.nn.Parameter(
-            recurrent_weights if autopses else remove_autopses(recurrent_weights)
-        )
+
+        if not autapses:
+            with torch.no_grad():
+                self.recurrent_weights.fill_diagonal_(0.0)
 
     def forward(self, input_tensor: torch.Tensor, state: Optional[torch.Tensor]):
         state = state if state is not None else self.state_fallback(input_tensor)
