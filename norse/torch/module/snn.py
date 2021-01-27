@@ -18,9 +18,9 @@ RecurrentActivation = Callable[
 ]
 
 
-class FeedforwardSNNCell(torch.nn.Module):
+class SNNCell(torch.nn.Module):
     """
-    Initializes a feedforward spiking cell *without* time.
+    Initializes a feedforward neuron cell *without* time.
 
     Parameters:
         activation (FeedforwardActivation): The activation function accepting an input tensor, state
@@ -51,9 +51,9 @@ class FeedforwardSNNCell(torch.nn.Module):
         return self.activation(input_tensor, state, self.p, self.dt)
 
 
-class SNNCell(torch.nn.Module):
+class SNNRecurrentCell(torch.nn.Module):
     """
-    The base module for recurrent spiking neural networks (RSNN) *without* time.
+    The base module for recurrent neuron cell *without* time.
 
     Parameters:
         activation (RecurrentActivation): The activation function accepting an input tensor, state
@@ -125,6 +125,59 @@ class SNNCell(torch.nn.Module):
 
 class SNN(torch.nn.Module):
     """
+    The base module for spiking neural networks (RSNN) *with* time (*without* recurrence).
+
+    Parameters:
+        activation (RecurrentActivation): The activation function accepting an input tensor, state
+            tensor, input weights, recurrent weights, and parameters module, and returning a tuple
+            of (output spikes (one per timestep), state).
+        state_fallback (Callable[[torch.Tensor], torch.Tensor]): A function that can return a
+            default state with the correct dimensions, in case no state is provided in the
+            forward pass.
+        input_size (int): The number of input neurons
+        hidden_size (int): The number of hidden neurons
+        p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
+            to configure neuron parameters as optimizable. Defaults to None.
+        dt (float): Time step to use in integration. Defaults to 0.001.
+    """
+
+    def __init__(
+        self,
+        activation: FeedforwardActivation,
+        state_fallback: Callable[[torch.Tensor], torch.Tensor],
+        input_size: int,
+        hidden_size: int,
+        p: Optional[torch.nn.Module] = None,
+        dt: float = 0.001,
+    ):
+        super().__init__()
+        self.activation = activation
+        self.state_fallback = state_fallback
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        self.p = p
+        self.dt = dt
+
+    def forward(self, input_tensor: torch.Tensor, state: torch.Tensor):
+        state = state if state is not None else self.state_fallback(input_tensor)
+
+        T = input_tensor.shape[0]
+        outputs = []
+
+        for ts in range(T):
+            out, state = self.activation(
+                input_tensor[ts],
+                state,
+                self.p,
+                self.dt,
+            )
+            outputs += [out]
+
+        return torch.stack(outputs)
+
+
+class SNNRecurrent(torch.nn.Module):
+    """
     The base module for recurrent spiking neural networks (RSNN) *with* time.
 
     Parameters:
@@ -142,7 +195,7 @@ class SNN(torch.nn.Module):
             matrix normalized to the number of hidden neurons.
         recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
             matrix normalized to the number of hidden neurons.
-        autopses (bool): Allow self-connections in the recurrence? Defaults to False. Will also
+        autapses (bool): Allow self-connections in the recurrence? Defaults to False. Will also
             remove autopses in custom recurrent weights, if set above.
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
