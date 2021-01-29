@@ -113,6 +113,7 @@ def main(args):
 
     # Set seeds
     torch.manual_seed(args.manual_seed)
+<<<<<<< HEAD
 
     # Setup encoding
     num_channels = 3
@@ -140,10 +141,56 @@ def main(args):
             x_m = constant_encoder(2 * torch.nn.functional.relu(-x))
             return torch.cat((x_p, x_m), 1)
 
+=======
+
+    # Setup encoding
+    num_channels = 4
+    p = LIFParameters(v_th=torch.as_tensor(args.current_encoder_v_th))
+    constant_encoder = ConstantCurrentLIFEncoder(seq_length=args.seq_length, p=p)
+    if args.encoding == "poisson":
+        encoder = PoissonEncoder(seq_length=args.seq_length, f_max=200)
+    elif args.encoding == "constant":
+        encoder = constant_encoder
+    elif args.encoding == "constant_first":
+        encoder = SpikeLatencyLIFEncoder(seq_length=args.seq_length, p=p)
+    elif args.encoding == "signed_poisson":
+        encoder = SignedPoissonEncoder(seq_length=args.seq_length, f_max=200)
+    elif args.encoding == "signed_constant":
+
+        def signed_current_encoder(x):
+            z = constant_encoder(torch.abs(x))
+            return torch.sign(x) * z
+
+        encoder = signed_current_encoder
+    elif args.encoding == "constant_polar":
+
+        def polar_current_encoder(x):
+            x_p = constant_encoder(2 * torch.nn.functional.relu(x))
+            x_m = constant_encoder(2 * torch.nn.functional.relu(-x))
+            return torch.cat((x_p, x_m), 1)
+
+>>>>>>> 63779cc... Added regularization and attempted to address #160
         encoder = polar_current_encoder
         num_channels = 2 * num_channels
 
     # Load datasets
+<<<<<<< HEAD
+=======
+    def add_luminance(images):
+        return torch.cat(
+            (
+                images,
+                torch.unsqueeze(
+                    0.2126 * images[0, :, :]
+                    + 0.7152 * images[1, :, :]
+                    + 0.0722 * images[2, :, :],
+                    0,
+                ),
+            ),
+            0,
+        )
+
+>>>>>>> 63779cc... Added regularization and attempted to address #160
     transform_train = torchvision.transforms.Compose(
         [
             torchvision.transforms.RandomCrop(32, padding=4),
@@ -170,6 +217,7 @@ def main(args):
 
     # Define and train the model
     model = LIFConvNet(
+<<<<<<< HEAD
         seq_length=args.seq_length,
         num_channels=num_channels,
         lr=args.lr,
@@ -179,6 +227,13 @@ def main(args):
     trainer = pl.Trainer.from_argparse_args(args)
     trainer.fit(model, train_loader)
     trainer.test(model, test_dataloaders=test_loader)
+=======
+        num_channels=num_channels, lr=args.lr, optimizer=args.optimizer, p=p
+    )
+    trainer = pl.Trainer.from_argparse_args(args)
+    trainer.fit(model, train_loader)
+    trainer.test(test_dataloader=test_loader)
+>>>>>>> 63779cc... Added regularization and attempted to address #160
 
 
 if __name__ == "__main__":
@@ -190,6 +245,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--batch_size", default=32, type=int, help="Number of examples in one minibatch"
     )
+<<<<<<< HEAD
     parser.add_argument("--lr", type=float, default=2e-3, help="Learning rate to use.")
     parser.add_argument(
         "--lr_step",
@@ -197,6 +253,9 @@ if __name__ == "__main__":
         default=True,
         help="Use a stepper to reduce learning weight.",
     )
+=======
+    parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate to use.")
+>>>>>>> 63779cc... Added regularization and attempted to address #160
     parser.add_argument(
         "--current_encoder_v_th",
         type=float,
