@@ -11,8 +11,6 @@ from norse.torch.functional.lif_adex import (
     lif_adex_feed_forward_step,
 )
 
-from norse.torch.module.util import remove_autopses
-
 
 class LIFAdExCell(torch.nn.Module):
     r"""Computes a single euler-integration step of a recurrent adaptive exponential

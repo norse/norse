@@ -10,7 +10,6 @@ from norse.torch.functional.lsnn import (
     lsnn_step,
     lsnn_feed_forward_step,
 )
-from norse.torch.module.util import remove_autopses
 
 
 class LSNNCell(torch.nn.Module):

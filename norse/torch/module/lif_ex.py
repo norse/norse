@@ -10,7 +10,6 @@ from norse.torch.functional.lif_ex import (
     lif_ex_step,
     lif_ex_feed_forward_step,
 )
-from norse.torch.module.util import remove_autopses
 
 
 class LIFExCell(torch.nn.Module):

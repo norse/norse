@@ -6,7 +6,6 @@ from ..functional.lif_mc_refrac import lif_mc_refrac_step
 
 import numpy as np
 from typing import Optional, Tuple
-from norse.torch.module.util import remove_autopses
 
 
 class LIFMCRefracCell(torch.nn.Module):

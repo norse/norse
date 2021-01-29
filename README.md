@@ -116,15 +116,15 @@ This classifier is a taken from our [tutorial on training a spiking MNIST classi
 ```python
 import torch, torch.nn as nn
 from norse.torch import LICell             # Leaky integrator
-from norse.torch import LIFFeedForwardCell # Leaky integrate-and-fire
+from norse.torch import LIFCell            # Leaky integrate-and-fire
 from norse.torch import SequentialState    # Stateful sequential layers
 
 model = SequentialState(
     nn.Conv2d(3, 20, 5, 1),      # Convolve from 3 -> 20 channels
-    LIFFeedForwardCell(),        # Spiking activation layer
+    LIFCell(),                   # Spiking activation layer
     nn.MaxPool2d(2, 2),
     nn.Conv2d(20, 50, 5, 1),     # Convolve from 20 -> 50 channels
-    LIFFeedForwardCell(),
+    LIFCell(),
     nn.MaxPool2d(2, 2),
     nn.Flatten(),                # Flatten to 800 units
     nn.Linear(800, 500),

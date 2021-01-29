@@ -5,7 +5,6 @@ from typing import Optional, Tuple
 
 from norse.torch.functional.lif import LIFState, LIFParameters
 from norse.torch.functional.lif_mc import lif_mc_step
-from norse.torch.module.util import remove_autopses
 
 
 class LIFMCCell(torch.nn.Module):

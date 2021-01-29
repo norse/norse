@@ -14,11 +14,11 @@ from .encode import (
 from .leaky_integrator import LICell, LIFeedForwardCell, LIParameters, LIState
 from .lif import (
     LIFCell,
-    LIFFeedForwardCell,
+    LIF,
     LIFFeedForwardState,
     LIFParameters,
     LIFState,
-    LIFLayer,
+    LIFRecurrent,
 )
 from .lif_adex import (
     LIFAdExCell,
@@ -77,8 +77,8 @@ __all__ = [
     "LIParameters",
     "LIState",
     "LIFCell",
-    "LIFLayer",
-    "LIFFeedForwardCell",
+    "LIFRecurrent",
+    "LIF",
     "LIFFeedForwardState",
     "LIFParameters",
     "LIFState",

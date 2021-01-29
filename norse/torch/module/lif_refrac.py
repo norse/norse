@@ -11,7 +11,6 @@ from norse.torch.functional.lif_refrac import (
     lif_refrac_step,
     lif_refrac_feed_forward_step,
 )
-from norse.torch.module.util import remove_autopses
 
 
 class LIFRefracCell(torch.nn.Module):

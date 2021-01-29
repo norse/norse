@@ -27,7 +27,7 @@ class Lift(torch.nn.Module):
         >>> data = torch.randn(seq_length, batch_size, in_channels, 20, 30)
         >>> module = torch.nn.Sequential(
         >>>     Lift(torch.nn.Conv2d(in_channels, out_channels, 5, 1)),
-        >>>     LIFFeedForwardLayer(),
+        >>>     LIF(),
         >>> )
         >>> output, _ = module(data)
     """

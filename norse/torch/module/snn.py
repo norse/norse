@@ -2,7 +2,7 @@
 Base module for spiking neural network (SNN) modules.
 """
 
-from typing import Callable, Optional, Tuple
+from typing import Any, Callable, Optional, Tuple
 import torch
 
 FeedforwardActivation = Callable[
@@ -25,9 +25,14 @@ class SNNCell(torch.nn.Module):
     Parameters:
         activation (FeedforwardActivation): The activation function accepting an input tensor, state
             tensor, and parameters module, and returning a tuple of (output spikes, state).
-        state_fallback (Callable[[torch.Tensor], torch.Tensor]): A function that can return a
+        state_fallback (Callable[[torch.Tensor], Any]): A function that can return a
             default state with the correct dimensions, in case no state is provided in the
             forward pass.
+        input_size (int): The number of input neurons. If not set, the shape will be inferred from the
+            input tensor in the forward pass. Defaults to None.
+        hidden_size (int): The number of hidden neurons. If not set, the shape will be inferred from the
+            input tensor in the forward pass and will be equal to the hidden shape (that typically means
+            that input == output). Defaults to None.
         p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
         dt (float): Time step to use in integration. Defaults to 0.001.
@@ -38,15 +43,19 @@ class SNNCell(torch.nn.Module):
         activation: FeedforwardActivation,
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
         p: torch.nn.Module,
+        input_size: Optional[int] = None,
+        hidden_size: Optional[int] = None,
         dt: float = 0.001,
     ):
         super().__init__()
         self.activation = activation
         self.state_fallback = state_fallback
+        self.input_size = input_size
+        self.hidden_size = hidden_size
         self.p = p
         self.dt = dt
 
-    def forward(self, input_tensor: torch.Tensor, state: Optional[torch.Tensor]):
+    def forward(self, input_tensor: torch.Tensor, state: Optional[Any] = None):
         state = state if state is not None else self.state_fallback(input_tensor)
         return self.activation(input_tensor, state, self.p, self.dt)
 
@@ -59,7 +68,7 @@ class SNNRecurrentCell(torch.nn.Module):
         activation (RecurrentActivation): The activation function accepting an input tensor, state
             tensor, input weights, recurrent weights, and parameters module, and returning a tuple
             of (output spikes (one per timestep), state).
-        state_fallback (Callable[[torch.Tensor], torch.Tensor]): A function that can return a
+        state_fallback (Callable[[torch.Tensor], Any]): A function that can return a
             default state with the correct dimensions, in case no state is provided in the
             forward pass.
         input_size (int): The number of input neurons
@@ -92,26 +101,30 @@ class SNNRecurrentCell(torch.nn.Module):
         self.state_fallback = state_fallback
         self.p = p
         self.dt = dt
+        self.input_size = torch.as_tensor(input_size)
+        self.hidden_size = torch.as_tensor(hidden_size)
 
         if input_weights is not None:
             self.input_weights = input_weights
         else:
             self.input_weights = torch.nn.Parameter(
-                torch.randn(hidden_size, input_size) * torch.sqrt(2 / hidden_size)
+                torch.randn(self.hidden_size, self.input_size)
+                * torch.sqrt(2 / self.hidden_size)
             )
 
         if recurrent_weights is not None:
             self.recurrent_weights = recurrent_weights
         else:
             self.recurrent_weights = torch.nn.Parameter(
-                torch.randn(hidden_size, hidden_size) * torch.sqrt(2 / hidden_size)
+                torch.randn(self.hidden_size, self.hidden_size)
+                * torch.sqrt(2 / self.hidden_size)
             )
 
         if not autapses:
             with torch.no_grad():
                 self.recurrent_weights.fill_diagonal_(0.0)
 
-    def forward(self, input_tensor: torch.Tensor, state: Optional[torch.Tensor]):
+    def forward(self, input_tensor: torch.Tensor, state: Optional[Any] = None):
         state = state if state is not None else self.state_fallback(input_tensor)
         return self.activation(
             input_tensor,
@@ -134,10 +147,8 @@ class SNN(torch.nn.Module):
         state_fallback (Callable[[torch.Tensor], torch.Tensor]): A function that can return a
             default state with the correct dimensions, in case no state is provided in the
             forward pass.
-        input_size (int): The number of input neurons
-        hidden_size (int): The number of hidden neurons
         p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
-            to configure neuron parameters as optimizable. Defaults to None.
+            to configure neuron parameters as optimizable.
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
@@ -145,20 +156,16 @@ class SNN(torch.nn.Module):
         self,
         activation: FeedforwardActivation,
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
-        input_size: int,
-        hidden_size: int,
-        p: Optional[torch.nn.Module] = None,
+        p: torch.nn.Module,
         dt: float = 0.001,
     ):
         super().__init__()
         self.activation = activation
         self.state_fallback = state_fallback
-        self.input_size = input_size
-        self.hidden_size = hidden_size
         self.p = p
         self.dt = dt
 
-    def forward(self, input_tensor: torch.Tensor, state: torch.Tensor):
+    def forward(self, input_tensor: torch.Tensor, state: Optional[Any] = None):
         state = state if state is not None else self.state_fallback(input_tensor)
 
         T = input_tensor.shape[0]
@@ -171,9 +178,9 @@ class SNN(torch.nn.Module):
                 self.p,
                 self.dt,
             )
-            outputs += [out]
+            outputs.append(out)
 
-        return torch.stack(outputs)
+        return torch.stack(outputs), state
 
 
 class SNNRecurrent(torch.nn.Module):
@@ -190,7 +197,7 @@ class SNNRecurrent(torch.nn.Module):
         input_size (int): The number of input neurons
         hidden_size (int): The number of hidden neurons
         p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
-            to configure neuron parameters as optimizable. Defaults to None.
+            to configure neuron parameters as optimizable.
         input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
             matrix normalized to the number of hidden neurons.
         recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
@@ -206,7 +213,7 @@ class SNNRecurrent(torch.nn.Module):
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
         input_size: int,
         hidden_size: int,
-        p: Optional[torch.nn.Module] = None,
+        p: torch.nn.Module,
         input_weights: Optional[torch.Tensor] = None,
         recurrent_weights: Optional[torch.Tensor] = None,
         autapses: bool = False,
@@ -217,24 +224,28 @@ class SNNRecurrent(torch.nn.Module):
         self.state_fallback = state_fallback
         self.p = p
         self.dt = dt
+        self.input_size = torch.as_tensor(input_size)
+        self.hidden_size = torch.as_tensor(hidden_size)
 
         if input_weights is not None:
             self.input_weights = input_weights
         else:
             self.input_weights = torch.nn.Parameter(
-                torch.randn(hidden_size, input_size) * torch.sqrt(2 / hidden_size)
+                torch.randn(self.hidden_size, self.input_size)
+                * torch.sqrt(2 / self.hidden_size)
             )
         if recurrent_weights is not None:
             self.recurrent_weights = recurrent_weights
         else:
             self.recurrent_weights = torch.nn.Parameter(
-                torch.randn(hidden_size, hidden_size) * torch.sqrt(2 / hidden_size)
+                torch.randn(self.hidden_size, self.hidden_size)
+                * torch.sqrt(2 / self.hidden_size)
             )
         if not autapses:
             with torch.no_grad():
                 self.recurrent_weights.fill_diagonal_(0.0)
 
-    def forward(self, input_tensor: torch.Tensor, state: torch.Tensor):
+    def forward(self, input_tensor: torch.Tensor, state: Optional[Any] = None):
         state = state if state is not None else self.state_fallback(input_tensor)
 
         T = input_tensor.shape[0]
@@ -249,6 +260,6 @@ class SNNRecurrent(torch.nn.Module):
                 self.p,
                 self.dt,
             )
-            outputs += [out]
+            outputs.append(out)
 
-        return torch.stack(outputs)
+        return torch.stack(outputs), state

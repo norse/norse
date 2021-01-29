@@ -2,7 +2,7 @@ import torch
 
 from norse.torch.functional.lif import LIFParameters
 from norse.torch.module.leaky_integrator import LICell
-from norse.torch.module.lif import LIFFeedForwardCell
+from norse.torch.module.lif import LIF
 
 
 class ConvNet(torch.nn.Module):
@@ -15,13 +15,13 @@ class ConvNet(torch.nn.Module):
         self.conv2 = torch.nn.Conv2d(20, 50, 5, 1)
         self.fc1 = torch.nn.Linear(self.features * self.features * 50, 500)
         self.out = LICell(500, 10)
-        self.lif0 = LIFFeedForwardCell(
+        self.lif0 = LIF(
             p=LIFParameters(method=method, alpha=100.0),
         )
-        self.lif1 = LIFFeedForwardCell(
+        self.lif1 = LIF(
             p=LIFParameters(method=method, alpha=100.0),
         )
-        self.lif2 = LIFFeedForwardCell(p=LIFParameters(method=method, alpha=100.0))
+        self.lif2 = LIF(p=LIFParameters(method=method, alpha=100.0))
         self.dtype = dtype
 
     def forward(self, x):
@@ -63,13 +63,13 @@ class ConvNet4(torch.nn.Module):
         self.conv1 = torch.nn.Conv2d(num_channels, 32, 5, 1)
         self.conv2 = torch.nn.Conv2d(32, 64, 5, 1)
         self.fc1 = torch.nn.Linear(self.features * self.features * 64, 1024)
-        self.lif0 = LIFFeedForwardCell(
+        self.lif0 = LIF(
             p=LIFParameters(method=method, alpha=100.0),
         )
-        self.lif1 = LIFFeedForwardCell(
+        self.lif1 = LIF(
             p=LIFParameters(method=method, alpha=100.0),
         )
-        self.lif2 = LIFFeedForwardCell(p=LIFParameters(method=method, alpha=100.0))
+        self.lif2 = LIF(p=LIFParameters(method=method, alpha=100.0))
         self.out = LICell(1024, 10)
         self.dtype = dtype
 

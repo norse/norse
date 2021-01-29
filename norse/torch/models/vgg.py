@@ -4,7 +4,7 @@
 import torch
 import torch.nn as nn
 from torch.hub import load_state_dict_from_url
-from norse.torch.module.lif import LIFFeedForwardLayer
+from norse.torch.module.lif import LIF
 from norse.torch.module.lift import Lift
 
 __all__ = [
@@ -39,10 +39,10 @@ class VGG(nn.Module):
         self.avgpool = Lift(nn.AdaptiveAvgPool2d((7, 7)))
         self.classifier = nn.Sequential(
             Lift(nn.Linear(512 * 7 * 7, 4096)),
-            LIFFeedForwardLayer(),
+            LIF(),
             Lift(nn.Dropout()),
             Lift(nn.Linear(4096, 4096)),
-            LIFFeedForwardLayer(),
+            LIF(),
             Lift(nn.Dropout()),
             Lift(nn.Linear(4096, num_classes)),
         )
@@ -79,9 +79,9 @@ def make_layers(cfg, batch_norm=False):
         else:
             conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=1)
             if batch_norm:
-                layers += [Lift(conv2d), Lift(nn.BatchNorm2d(v)), LIFFeedForwardLayer()]
+                layers += [Lift(conv2d), Lift(nn.BatchNorm2d(v)), LIF()]
             else:
-                layers += [Lift(conv2d), LIFFeedForwardLayer()]
+                layers += [Lift(conv2d), LIF()]
             in_channels = v
     return nn.Sequential(*layers)
 

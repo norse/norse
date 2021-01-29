@@ -3,12 +3,14 @@ Leaky integrate-and-fire neurons is a popular neuron model
 for spiking neural networks because they are simple and
 fast while still being biologically interesting.
 """
+from typing import Optional
 
 import torch
 
 from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
+    LIFParameters,
     lif_step,
     lif_feed_forward_step,
 )
@@ -17,7 +19,28 @@ from norse.torch.module.snn import SNN, SNNCell, SNNRecurrent, SNNRecurrentCell
 
 class LIFCell(SNNCell):
     """Module that computes a single euler-integration step of a
-    LIF neuron-model *without* recurrence and *without* time.
+    leaky integrate-and-fire (LIF) neuron-model *without* recurrence and *without* time.
+
+    More specifically it implements one integration step
+    of the following ODE
+
+    .. math::
+        \\begin{align*}
+            \\dot{v} &= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\
+            \\dot{i} &= -1/\\tau_{\\text{syn}} i
+        \\end{align*}
+
+    together with the jump condition
+
+    .. math::
+        z = \\Theta(v - v_{\\text{th}})
+
+    and transition equations
+
+    .. math::
+        \\begin{align*}
+            v &= (1-z) v + z v_{\\text{reset}}
+        \\end{align*}
 
     Example:
         >>> data = torch.zeros(5, 2) # 5 batches, 2 neurons
@@ -25,16 +48,27 @@ class LIFCell(SNNCell):
         >>> l(data) # Returns tuple of (Tensor(5, 4), LIFState)
 
     Arguments:
-        p (LIFParameters): Parameters of the LIF neuron model.
+        p (LIFParameters): Parameters of the LIF neuron model. Defaults to None.
         dt (float): Time step to use. Defaults to 0.001.
     """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(lif_feed_forward_step, self.initial_state, *args, **kwargs)
+    def __init__(self, p: Optional[LIFParameters] = None, *args, **kwargs):
+        super().__init__(
+            lif_feed_forward_step,
+            self.initial_state,
+            p=p if p is not None else LIFParameters(),
+            *args,
+            **kwargs,
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
         state = LIFFeedForwardState(
-            v=self.p.v_leak.detach(),
+            v=torch.full(
+                input_tensor.shape,
+                self.p.v_leak.detach(),
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ),
             i=torch.zeros(
                 *input_tensor.shape,
                 device=input_tensor.device,
@@ -47,7 +81,7 @@ class LIFCell(SNNCell):
 
 class LIFRecurrentCell(SNNRecurrentCell):
     """Module that computes a single euler-integration step of a
-    LIF neuron-model *with* recurrence but *without* time.
+    leaky integrate-and-fire (LIF) neuron-model *with* recurrence but *without* time.
     More specifically it implements one integration step
     of the following ODE
 
@@ -74,6 +108,11 @@ class LIFRecurrentCell(SNNRecurrentCell):
     where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
     recurrent and input spikes respectively.
 
+    Example:
+        >>> data = torch.zeros(5, 2) # 5 batches, 2 neurons
+        >>> l = LIFRecurrentCell(2, 4)
+        >>> l(data) # Returns tuple of (Tensor(5, 4), LIFState)
+
     Parameters:
         input_size (int): Size of the input. Also known as the number of input features.
         hidden_size (int): Size of the hidden state. Also known as the number of input features.
@@ -85,30 +124,42 @@ class LIFRecurrentCell(SNNRecurrentCell):
         autapses (bool): Allow self-connections in the recurrence? Defaults to False. Will also
             remove autapses in custom recurrent weights, if set above.
         dt (float): Time step to use.
-
-    Examples:
-        >>> data = torch.zeros(5, 2) # 5 batches, 2 neurons
-        >>> l = LIFRecurrentCell(2, 4)
-        >>> l(data) # Returns tuple of (Tensor(5, 4), LIFState)
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(
+        self,
+        input_size: int,
+        hidden_size: int,
+        p: Optional[LIFParameters] = None,
+        *args,
+        **kwargs
+    ):
         super().__init__(
-            activation=lif_step, state_fallback=self.initial_state, *args, **kwargs
+            activation=lif_step,
+            state_fallback=self.initial_state,
+            p=p if p is not None else LIFParameters(),
+            input_size=input_size,
+            hidden_size=hidden_size,
+            *args,
+            **kwargs,
         )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
+        dims = (*input_tensor.shape[:-1], self.hidden_size)
         state = LIFState(
             z=torch.zeros(
-                input_tensor.shape[0],
-                self.hidden_size,
+                *dims,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
-            v=self.p.v_leak.detach(),
+            v=torch.full(
+                dims,
+                self.p.v_leak.detach(),
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ),
             i=torch.zeros(
-                input_tensor.shape[0],
-                self.hidden_size,
+                *dims,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
@@ -119,44 +170,41 @@ class LIFRecurrentCell(SNNRecurrentCell):
 
 class LIF(SNN):
     """
-    A neuron layer that wraps a LIFCell in time such
+    A neuron layer that wraps a :class:`LIFCell` in time such
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
 
     Parameters:
-        input_size (int): The number of input neurons
-        hidden_size (int): The number of hidden neurons
         p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable. Defaults to None.
         dt (float): Time step to use in integration. Defaults to 0.001.
 
     Example:
         >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-        >>> l = LIF(2, 4)
-        >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
+        >>> l = LIF()
+        >>> l(data) # Returns tuple of (Tensor(10, 5, 2), LIFState)
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, p: Optional[LIFParameters] = None, *args, **kwargs):
         super().__init__(
             activation=lif_feed_forward_step,
             state_fallback=self.initial_state,
+            p=p if p is not None else LIFParameters(),
             *args,
             **kwargs,
         )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
-        state = LIFState(
-            z=torch.zeros(
-                input_tensor.shape[0],
-                self.hidden_size,
+        state = LIFFeedForwardState(
+            v=torch.full(
+                input_tensor.shape[1:],  # Assume first dimension is time
+                self.p.v_leak.detach(),
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
-            v=self.p.v_leak.detach(),
             i=torch.zeros(
-                input_tensor.shape[0],
-                self.hidden_size,
+                *input_tensor.shape[1:],
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
@@ -167,10 +215,15 @@ class LIF(SNN):
 
 class LIFRecurrent(SNNRecurrent):
     """
-    A neuron layer that wraps a LIFRecurrentCell in time such
+    A neuron layer that wraps a :class:`LIFRecurrentCell` in time such
     that the layer keeps track of temporal sequences of spikes.
-    After application, the layer returns a tuple containing
+    After application, the module returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
+
+    Example:
+        >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
+        >>> l = LIFRecurrent(2, 4)
+        >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
 
     Parameters:
         input_size (int): The number of input neurons
@@ -184,30 +237,45 @@ class LIFRecurrent(SNNRecurrent):
         autapses (bool): Allow self-connections in the recurrence? Defaults to False. Will also
             remove autapses in custom recurrent weights, if set above.
         dt (float): Time step to use in integration. Defaults to 0.001.
-
-    Example:
-        >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-        >>> l = LIFLayer(2, 4)
-        >>> l(data) # Returns tuple of (Tensor(10, 5, 4), LIFState)
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(
+        self,
+        input_size: int,
+        hidden_size: int,
+        p: Optional[LIFParameters] = None,
+        *args,
+        **kwargs
+    ):
         super().__init__(
-            activation=lif_step, state_fallback=self.initial_state, *args, **kwargs
+            activation=lif_step,
+            state_fallback=self.initial_state,
+            input_size=input_size,
+            hidden_size=hidden_size,
+            p=p if p is not None else LIFParameters(),
+            *args,
+            **kwargs,
         )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
+        dims = (  # Remove first dimension (time)
+            *input_tensor.shape[1:-1],
+            self.hidden_size,
+        )
         state = LIFState(
             z=torch.zeros(
-                input_tensor.shape[0],
-                self.hidden_size,
+                *dims,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
-            v=self.p.v_leak.detach(),
+            v=torch.full(
+                dims,
+                self.p.v_leak.detach(),
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ),
             i=torch.zeros(
-                input_tensor.shape[0],
-                self.hidden_size,
+                *dims,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
