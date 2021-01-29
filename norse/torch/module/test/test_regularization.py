@@ -1,7 +1,18 @@
 import torch
 
 from norse.torch.module.lif import LIFCell
-from norse.torch.module.regularization import RegularizationCell
+from norse.torch.module.regularization import RegularizationCell, RegularizationWrapper
+
+
+def test_regularization_wrapper():
+    r = RegularizationWrapper(LIFCell())  # Defaults to spike counting
+    data = torch.ones(5, 2) + 10  # Batch size of 5
+    z, rs = r(data, None)
+    assert z.shape == (5, 2)
+    assert rs.count == 0
+    z, rs = r(z, rs)
+    assert rs.count == 10
+    assert hasattr(rs, 'state')
 
 
 def test_regularization_module():

@@ -29,10 +29,7 @@ class ConvNet(torch.nn.Module):
         batch_size = x.shape[1]
 
         # specify the initial states
-        s0 = None
-        s1 = None
-        s2 = None
-        so = None
+        s0, s1, s2, so = None, None, None, None
 
         voltages = torch.zeros(
             seq_length, batch_size, 10, device=x.device, dtype=self.dtype
@@ -63,11 +60,11 @@ class ConvNet4(torch.nn.Module):
         self.conv1 = torch.nn.Conv2d(num_channels, 32, 5, 1)
         self.conv2 = torch.nn.Conv2d(32, 64, 5, 1)
         self.fc1 = torch.nn.Linear(self.features * self.features * 64, 1024)
-        self.lif0 = LIFCell(
-            p=LIFParameters(method=method, alpha=100.0),
+        self.lif0 = LIFFeedForwardCell(
+            p=LIFParameters(method=method, alpha=100.0, v_th=torch.as_tensor(0.7)),
         )
-        self.lif1 = LIFCell(
-            p=LIFParameters(method=method, alpha=100.0),
+        self.lif1 = LIFFeedForwardCell(
+            p=LIFParameters(method=method, alpha=100.0, v_th=torch.as_tensor(0.7)),
         )
         self.lif2 = LIFCell(p=LIFParameters(method=method, alpha=100.0))
         self.out = LILinearCell(1024, 10)
@@ -78,10 +75,7 @@ class ConvNet4(torch.nn.Module):
         batch_size = x.shape[1]
 
         # specify the initial states
-        s0 = None
-        s1 = None
-        s2 = None
-        so = None
+        s0, s1, s2, so = None, None, None, None
 
         voltages = torch.zeros(
             seq_length, batch_size, 10, device=x.device, dtype=self.dtype

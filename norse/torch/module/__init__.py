@@ -62,7 +62,7 @@ from .lsnn import (
     LSNNParameters,
     LSNNState,
 )
-from .regularization import RegularizationCell
+from .regularization import RegularizationCell, RegularizationWrapper
 from .sequential import SequentialState
 
 __all__ = [
@@ -121,5 +121,6 @@ __all__ = [
     "LSNNParameters",
     "LSNNState",
     "RegularizationCell",
+    "RegularizationWrapper",
     "SequentialState",
 ]
