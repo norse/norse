@@ -17,9 +17,9 @@ import gym
 
 from norse.torch.functional.lif import LIFParameters
 from norse.torch.module.encode import ConstantCurrentLIFEncoder
-from norse.torch.module.lif import LIFCell
-from norse.torch.module.lsnn import LSNNCell, LSNNParameters
-from norse.torch.module.leaky_integrator import LICell
+from norse.torch.module.lif import LIFRecurrentCell
+from norse.torch.module.lsnn import LSNNRecurrentCell, LSNNParameters
+from norse.torch.module.leaky_integrator import LILinearCell
 
 FLAGS = flags.FLAGS
 flags.DEFINE_enum("device", "cpu", ["cpu", "cuda"], "Device to use by pytorch.")
@@ -65,13 +65,13 @@ class Policy(torch.nn.Module):
         self.hidden_features = 128
         self.output_features = 2
         self.constant_current_encoder = ConstantCurrentLIFEncoder(40)
-        self.lif = LIFCell(
+        self.lif = LIFRecurrentCell(
             2 * self.state_dim,
             self.hidden_features,
             p=LIFParameters(method="super", alpha=100.0),
         )
         self.dropout = torch.nn.Dropout(p=0.5)
-        self.readout = LICell(self.hidden_features, self.output_features)
+        self.readout = LILinearCell(self.hidden_features, self.output_features)
 
         self.saved_log_probs = []
         self.rewards = []
@@ -110,13 +110,13 @@ class LSNNPolicy(torch.nn.Module):
         self.output_features = 2
         # self.affine1 = torch.nn.Linear(self.state_dim, self.input_features)
         self.constant_current_encoder = ConstantCurrentLIFEncoder(40)
-        self.lif_layer = LSNNCell(
+        self.lif_layer = LSNNRecurrentCell(
             2 * self.state_dim,
             self.hidden_features,
             p=LSNNParameters(method=model, alpha=100.0),
         )
         self.dropout = torch.nn.Dropout(p=0.5)
-        self.readout = LICell(self.hidden_features, self.output_features)
+        self.readout = LILinearCell(self.hidden_features, self.output_features)
 
         self.saved_log_probs = []
         self.rewards = []
