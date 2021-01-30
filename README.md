@@ -128,7 +128,8 @@ model = SequentialState(
     nn.MaxPool2d(2, 2),
     nn.Flatten(),                # Flatten to 800 units
     nn.Linear(800, 500),
-    LICell(500, 10),             # Non-spiking integrator layer
+    nn.Linear(500, 10),
+    LICell(),                    # Non-spiking integrator layer
 )
 
 data = torch.randn(8, 3, 28, 28) # 8 batches, 3 channels, 28x28 pixels
@@ -139,9 +140,9 @@ output, state = model(data)      # Provides a tuple (tensor (8, 10), neuron stat
 The long short-term spiking neural networks from the paper by [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)](https://arxiv.org/abs/1803.09574) is another interesting way to apply norse: 
 ```python
 import torch
-from norse.torch import LSNNLayer, LSNNCell
+from norse.torch import LSNN
 # LSNNCell with 2 input neurons and 10 output neurons
-layer = LSNNLayer(LSNNCell, 2, 10)
+layer = LSNN(2, 10)
 # Generate data: 20 timesteps with 8 datapoints per batch for 2 neurons
 data  = torch.zeros(20, 8, 2)
 # Tuple of (output spikes of shape (8, 2), layer state)

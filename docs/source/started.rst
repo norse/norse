@@ -42,7 +42,7 @@ If you do not, the neuron will never spike and the output will be zero!
     import torch
     import norse.torch as norse
 
-    cell = norse.LIFFeedForwardCell()
+    cell = norse.LIF()
     data = norse.ones(1)
     spikes, state = cell(data)
 
@@ -73,7 +73,7 @@ Luckily, we offer our own `SequentialState <https://norse.github.io/norse/auto_a
 
     model = SequentialState(
         torch.nn.Linear(10, 5),
-        norse.LIFFeedForwardCell(),
+        norse.LIF(),
         torch.nn.Linear(5, 1)
     )
 
