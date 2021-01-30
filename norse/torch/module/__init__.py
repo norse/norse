@@ -36,9 +36,10 @@ from .lif_correlation import (
 )
 from .lif_ex import (
     LIFExCell,
-    LIFExFeedForwardCell,
+    LIFExRecurrentCell,
+    LIFEx,
+    LIFExRecurrent,
     LIFExFeedForwardState,
-    LIFExLayer,
     LIFExParameters,
     LIFExState,
 )
@@ -97,9 +98,10 @@ __all__ = [
     "LIFCorrelationParameters",
     "LIFCorrelationState",
     "LIFExCell",
-    "LIFExFeedForwardCell",
+    "LIFExRecurrentCell",
+    "LIFEx",
+    "LIFExRecurrent",
     "LIFExFeedForwardState",
-    "LIFExLayer",
     "LIFExParameters",
     "LIFExState",
     "LIFMCCell",

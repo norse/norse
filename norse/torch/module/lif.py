@@ -195,7 +195,7 @@ class LIF(SNN):
             **kwargs,
         )
 
-    def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
+    def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
         state = LIFFeedForwardState(
             v=torch.full(
                 input_tensor.shape[1:],  # Assume first dimension is time
