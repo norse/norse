@@ -48,15 +48,15 @@ class LIFCell(SNNCell):
         >>> l(data) # Returns tuple of (Tensor(5, 4), LIFState)
 
     Arguments:
-        p (LIFParameters): Parameters of the LIF neuron model. Defaults to None.
+        p (LIFParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use. Defaults to 0.001.
     """
 
-    def __init__(self, p: Optional[LIFParameters] = None, *args, **kwargs):
+    def __init__(self, p: LIFParameters = LIFParameters(), *args, **kwargs):
         super().__init__(
             lif_feed_forward_step,
             self.initial_state,
-            p=p if p is not None else LIFParameters(),
+            p=p,
             *args,
             **kwargs,
         )
@@ -130,14 +130,14 @@ class LIFRecurrentCell(SNNRecurrentCell):
         self,
         input_size: int,
         hidden_size: int,
-        p: Optional[LIFParameters] = None,
+        p: LIFParameters = LIFParameters(),
         *args,
         **kwargs
     ):
         super().__init__(
             activation=lif_step,
             state_fallback=self.initial_state,
-            p=p if p is not None else LIFParameters(),
+            p=p,
             input_size=input_size,
             hidden_size=hidden_size,
             *args,
@@ -182,15 +182,15 @@ class LIF(SNN):
 
     Parameters:
         p (LIFParameters): The neuron parameters as a torch Module, which allows the module
-            to configure neuron parameters as optimizable. Defaults to None.
+            to configure neuron parameters as optimizable.
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, p: Optional[LIFParameters] = None, *args, **kwargs):
+    def __init__(self, p: LIFParameters = LIFParameters(), *args, **kwargs):
         super().__init__(
             activation=lif_feed_forward_step,
             state_fallback=self.initial_state,
-            p=p if p is not None else LIFParameters(),
+            p=p,
             *args,
             **kwargs,
         )
@@ -229,7 +229,7 @@ class LIFRecurrent(SNNRecurrent):
         input_size (int): The number of input neurons
         hidden_size (int): The number of hidden neurons
         p (LIFParameters): The neuron parameters as a torch Module, which allows the module
-            to configure neuron parameters as optimizable. Defaults to None.
+            to configure neuron parameters as optimizable.
         input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
             matrix normalized to the number of hidden neurons.
         recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
@@ -243,7 +243,7 @@ class LIFRecurrent(SNNRecurrent):
         self,
         input_size: int,
         hidden_size: int,
-        p: Optional[LIFParameters] = None,
+        p: LIFParameters = LIFParameters(),
         *args,
         **kwargs
     ):
@@ -252,7 +252,7 @@ class LIFRecurrent(SNNRecurrent):
             state_fallback=self.initial_state,
             input_size=input_size,
             hidden_size=hidden_size,
-            p=p if p is not None else LIFParameters(),
+            p=p,
             *args,
             **kwargs,
         )

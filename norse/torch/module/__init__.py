@@ -43,7 +43,7 @@ from .lif_ex import (
     LIFExParameters,
     LIFExState,
 )
-from .lif_mc import LIFMCCell
+from .lif_mc import LIFMCRecurrentCell
 from .lif_mc_refrac import LIFMCRefracCell
 from .lif_refrac import (
     LIFRefracCell,
@@ -104,7 +104,7 @@ __all__ = [
     "LIFExFeedForwardState",
     "LIFExParameters",
     "LIFExState",
-    "LIFMCCell",
+    "LIFMCRecurrentCell",
     "LIFMCRefracCell",
     "LIFRefracParameters",
     "LIFRefracState",

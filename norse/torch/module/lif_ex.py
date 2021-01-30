@@ -56,11 +56,11 @@ class LIFExCell(SNNCell):
         >>> output, s0 = lif_ex(input)
     """
 
-    def __init__(self, p: Optional[LIFExParameters] = None, *args, **kwargs):
+    def __init__(self, p: LIFExParameters = LIFExParameters(), *args, **kwargs):
         super().__init__(
             lif_ex_feed_forward_step,
             self.initial_state,
-            p=p if p is not None else LIFExParameters(),
+            p=p,
             *args,
             **kwargs,
         )
@@ -131,14 +131,14 @@ class LIFExRecurrentCell(SNNRecurrentCell):
         self,
         input_size: int,
         hidden_size: int,
-        p: Optional[LIFExParameters] = None,
+        p: LIFExParameters = LIFExParameters(),
         *args,
         **kwargs,
     ):
         super().__init__(
             activation=lif_ex_step,
             state_fallback=self.initial_state,
-            p=p if p is not None else LIFExParameters(),
+            p=p,
             input_size=input_size,
             hidden_size=hidden_size,
             *args,
@@ -187,11 +187,11 @@ class LIFEx(SNN):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, p: Optional[LIFExParameters] = None, *args, **kwargs):
+    def __init__(self, p: LIFExParameters = LIFExParameters(), *args, **kwargs):
         super().__init__(
             activation=lif_ex_feed_forward_step,
             state_fallback=self.initial_state,
-            p=p if p is not None else LIFExParameters(),
+            p=p,
             *args,
             **kwargs,
         )
@@ -244,7 +244,7 @@ class LIFExRecurrent(SNNRecurrent):
         self,
         input_size: int,
         hidden_size: int,
-        p: Optional[LIFExParameters] = None,
+        p: LIFExParameters = LIFExParameters(),
         *args,
         **kwargs,
     ):
@@ -253,7 +253,7 @@ class LIFExRecurrent(SNNRecurrent):
             state_fallback=self.initial_state,
             input_size=input_size,
             hidden_size=hidden_size,
-            p=p if p is not None else LIFExParameters(),
+            p=p,
             *args,
             **kwargs,
         )

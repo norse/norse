@@ -1,11 +1,11 @@
 import torch
 
 from norse.torch.functional.lif import LIFState
-from norse.torch.module.lif_mc import LIFMCCell
+from norse.torch.module.lif_mc import LIFMCRecurrentCell
 
 
 def test_lif_mc_cell():
-    cell = LIFMCCell(2, 4)
+    cell = LIFMCRecurrentCell(2, 4)
     data = torch.randn(5, 2)
     out, s = cell(data)
     assert s.v.shape == (5, 4)
@@ -15,7 +15,7 @@ def test_lif_mc_cell():
 
 
 def test_lif_mc_cell_state():
-    cell = LIFMCCell(2, 4)
+    cell = LIFMCRecurrentCell(2, 4)
 
     input_tensor = torch.randn(5, 2)
 
@@ -43,7 +43,7 @@ def test_lif_mc_cell_state():
 
 
 def test_lif_mc_cell_autopses():
-    cell = LIFMCCell(2, 2, autopses=True)
+    cell = LIFMCRecurrentCell(2, 2, autapses=True)
     assert not torch.allclose(
         torch.zeros(2),
         (cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)).sum(0),
@@ -61,7 +61,7 @@ def test_lif_mc_cell_autopses():
 
 
 def test_lif_mc_cell_no_autopses():
-    cell = LIFMCCell(2, 2, autopses=False)
+    cell = LIFMCRecurrentCell(2, 2, autapses=False)
     assert (
         cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)
     ).sum() == 0
@@ -79,7 +79,7 @@ def test_lif_mc_cell_no_autopses():
 
 
 def test_lif_mc_cell_backward():
-    cell = LIFMCCell(2, 4)
+    cell = LIFMCRecurrentCell(2, 4)
     data = torch.randn(5, 2)
     out, _ = cell(data)
     out.sum().backward()
