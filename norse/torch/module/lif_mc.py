@@ -44,14 +44,14 @@ class LIFMCRecurrentCell(SNNRecurrentCell):
         g_coupling (torch.Tensor): conductances between the neuron compartments
         p (LIFParameters): neuron parameters
         dt (float): Integration timestep to use
-        autopses (bool): Allow self-connections in the recurrence? Defaults to False.
+        autapses (bool): Allow self-connections in the recurrence? Defaults to False.
     """
 
     def __init__(
         self,
         input_size: int,
         hidden_size: int,
-        p: Optional[LIFParameters] = LIFParameters(),
+        p: LIFParameters = LIFParameters(),
         g_coupling: Optional[torch.Tensor] = None,
         *args,
         **kwargs
@@ -61,11 +61,10 @@ class LIFMCRecurrentCell(SNNRecurrentCell):
             state_fallback=self.initial_state,
             input_size=input_size,
             hidden_size=hidden_size,
-            p=p if p is not None else LIFParameters(),
+            p=p,
             *args,
             **kwargs
         )
-
         self.g_coupling = (
             g_coupling
             if g_coupling is not None

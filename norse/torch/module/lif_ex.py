@@ -46,7 +46,7 @@ class LIFExCell(SNNCell):
         hidden_size (int): Size of the hidden state.
         p (LIFExParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
-        autopses (bool): Allow self-connections in the recurrence? Defaults to False.
+        autapses (bool): Allow self-connections in the recurrence? Defaults to False.
 
     Examples:
 
@@ -117,7 +117,7 @@ class LIFExRecurrentCell(SNNRecurrentCell):
         hidden_size (int): Size of the hidden state.
         p (LIFExParameters): Parameters of the LIF neuron model.
         dt (float): Time step to use.
-        autopses (bool): Allow self-connections in the recurrence? Defaults to False.
+        a (bool): Allow self-connections in the recurrence? Defaults to False.
 
     Examples:
 

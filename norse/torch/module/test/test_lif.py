@@ -60,7 +60,7 @@ def test_lif_recurrent_cell_autapses():
     assert not s_full.i[0, 0] == s_part.i[0, 0]
 
 
-def test_lif_recurrent_cell_no_autopses():
+def test_lif_recurrent_cell_no_autapses():
     cell = LIFRecurrentCell(2, 2, autapses=False)
     assert (
         cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)

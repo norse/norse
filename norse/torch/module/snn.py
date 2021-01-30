@@ -203,7 +203,7 @@ class SNNRecurrent(torch.nn.Module):
         recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
             matrix normalized to the number of hidden neurons.
         autapses (bool): Allow self-connections in the recurrence? Defaults to False. Will also
-            remove autopses in custom recurrent weights, if set above.
+            remove autapses in custom recurrent weights, if set above.
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 

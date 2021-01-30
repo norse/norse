@@ -42,7 +42,7 @@ def test_lif_mc_cell_state():
     assert out.shape == (5, 4)
 
 
-def test_lif_mc_cell_autopses():
+def test_lif_mc_cell_autapses():
     cell = LIFMCRecurrentCell(2, 2, autapses=True)
     assert not torch.allclose(
         torch.zeros(2),
@@ -60,7 +60,7 @@ def test_lif_mc_cell_autopses():
     assert not s_full.i[0, 0] == s_part.i[0, 0]
 
 
-def test_lif_mc_cell_no_autopses():
+def test_lif_mc_cell_no_autapses():
     cell = LIFMCRecurrentCell(2, 2, autapses=False)
     assert (
         cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)
