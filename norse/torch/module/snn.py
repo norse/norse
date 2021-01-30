@@ -42,7 +42,7 @@ class SNNCell(torch.nn.Module):
         self,
         activation: FeedforwardActivation,
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
-        p: torch.nn.Module,
+        p: Any,
         input_size: Optional[int] = None,
         hidden_size: Optional[int] = None,
         dt: float = 0.001,
@@ -156,7 +156,7 @@ class SNN(torch.nn.Module):
         self,
         activation: FeedforwardActivation,
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
-        p: torch.nn.Module,
+        p: Any,
         dt: float = 0.001,
     ):
         super().__init__()
@@ -213,7 +213,7 @@ class SNNRecurrent(torch.nn.Module):
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
         input_size: int,
         hidden_size: int,
-        p: torch.nn.Module,
+        p: Any,
         input_weights: Optional[torch.Tensor] = None,
         recurrent_weights: Optional[torch.Tensor] = None,
         autapses: bool = False,

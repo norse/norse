@@ -22,11 +22,12 @@ from .lif import (
 )
 from .lif_adex import (
     LIFAdExCell,
-    LIFAdExFeedForwardCell,
+    LIFAdExRecurrentCell,
+    LIFAdEx,
+    LIFAdExRecurrent,
     LIFAdExFeedForwardState,
     LIFAdExParameters,
     LIFAdExState,
-    LIFAdExLayer,
 )
 from .lif_correlation import (
     LIFCorrelation,
@@ -82,15 +83,14 @@ __all__ = [
     "LIFFeedForwardState",
     "LIFParameters",
     "LIFState",
+    "LIFAdEx",
     "LIFAdExCell",
-    "LIFAdExFeedForwardCell",
     "LIFAdExFeedForwardState",
     "LIFAdExParameters",
     "LIFAdExState",
-    "LIFAdExLayer",
     "LIFAdExCell",
-    "LIFAdExFeedForwardCell",
-    "LIFAdExFeedForwardState",
+    "LIFAdExRecurrentCell",
+    "LIFAdExRecurrent",
     "LIFAdExParameters",
     "LIFAdExState",
     "LIFCorrelation",

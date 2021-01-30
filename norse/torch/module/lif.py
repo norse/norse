@@ -175,15 +175,15 @@ class LIF(SNN):
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
 
-    Parameters:
-        p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
-            to configure neuron parameters as optimizable. Defaults to None.
-        dt (float): Time step to use in integration. Defaults to 0.001.
-
     Example:
         >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
         >>> l = LIF()
         >>> l(data) # Returns tuple of (Tensor(10, 5, 2), LIFState)
+
+    Parameters:
+        p (LIFParameters): The neuron parameters as a torch Module, which allows the module
+            to configure neuron parameters as optimizable. Defaults to None.
+        dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
     def __init__(self, p: Optional[LIFParameters] = None, *args, **kwargs):
@@ -228,7 +228,7 @@ class LIFRecurrent(SNNRecurrent):
     Parameters:
         input_size (int): The number of input neurons
         hidden_size (int): The number of hidden neurons
-        p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
+        p (LIFParameters): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable. Defaults to None.
         input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
             matrix normalized to the number of hidden neurons.
