@@ -2,11 +2,11 @@ import torch
 
 from norse.torch.functional.lif import LIFState, LIFFeedForwardState
 from norse.torch.functional.lif_refrac import LIFRefracState, LIFRefracFeedForwardState
-from norse.torch.module.lif_refrac import LIFRefracCell, LIFRefracFeedForwardCell
+from norse.torch.module.lif_refrac import LIFRefracCell, LIFRefracRecurrentCell
 
 
 def test_lif_refrac_cell():
-    cell = LIFRefracCell(2, 4)
+    cell = LIFRefracRecurrentCell(2, 4)
     data = torch.randn(5, 2)
     out, s = cell(data)
     assert s.rho.shape == (5, 4)
@@ -17,7 +17,7 @@ def test_lif_refrac_cell():
 
 
 def test_lif_refrac_cell_state():
-    cell = LIFRefracCell(2, 4)
+    cell = LIFRefracRecurrentCell(2, 4)
     input_tensor = torch.randn(5, 2)
 
     state = LIFRefracState(
@@ -51,7 +51,7 @@ def test_lif_refrac_cell_state():
 
 
 def test_lif_refrac_cell_backward():
-    cell = LIFRefracCell(2, 4)
+    cell = LIFRefracRecurrentCell(2, 4)
     data = torch.randn(5, 2)
     out, _ = cell(data)
     out.sum().backward()
@@ -59,7 +59,7 @@ def test_lif_refrac_cell_backward():
 
 def test_lif_refrac_feedforward():
     batch_size = 16
-    cell = LIFRefracFeedForwardCell()
+    cell = LIFRefracCell()
     x = torch.randn(batch_size, 20, 30)
     out, s = cell(x)
     assert out.shape == (batch_size, 20, 30)
@@ -70,7 +70,7 @@ def test_lif_refrac_feedforward():
 
 def test_lif_refrac_feedforward_cell():
     batch_size = 16
-    cell = LIFRefracFeedForwardCell()
+    cell = LIFRefracCell()
     input_tensor = torch.randn(batch_size, 20, 30)
 
     state = LIFRefracFeedForwardState(
@@ -92,8 +92,8 @@ def test_lif_refrac_feedforward_cell():
     assert s.rho.shape == (batch_size, 20, 30)
 
 
-def test_lif_refrac_cell_autopses():
-    cell = LIFRefracCell(2, 2, autopses=True)
+def test_lif_refrac_cell_autapses():
+    cell = LIFRefracRecurrentCell(2, 2, autapses=True)
     assert not torch.allclose(
         torch.zeros(2),
         (cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)).sum(0),
@@ -116,8 +116,8 @@ def test_lif_refrac_cell_autopses():
     assert not s_full.lif.i[0, 0] == s_part.lif.i[0, 0]
 
 
-def test_lif_refrac_cell_no_autopses():
-    cell = LIFRefracCell(2, 2, autopses=False)
+def test_lif_refrac_cell_no_autapses():
+    cell = LIFRefracRecurrentCell(2, 2, autapses=False)
     assert (
         cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)
     ).sum() == 0
@@ -142,7 +142,7 @@ def test_lif_refrac_cell_no_autopses():
 
 def test_lif_refrac_feedforward_backward():
     batch_size = 16
-    cell = LIFRefracFeedForwardCell()
+    cell = LIFRefracCell()
     x = torch.randn(batch_size, 20, 30)
     out, _ = cell(x)
     out.sum().backward()
