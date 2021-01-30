@@ -55,11 +55,12 @@ from .lif_refrac import (
 from .lift import Lift
 from .lsnn import (
     LSNNCell,
-    LSNNFeedForwardCell,
+    LSNNRecurrentCell,
+    LSNN,
+    LSNNRecurrent,
     LSNNFeedForwardState,
     LSNNParameters,
     LSNNState,
-    LSNNLayer,
 )
 from .regularization import RegularizationCell
 from .sequential import SequentialState
@@ -113,10 +114,11 @@ __all__ = [
     "LIFRefracState",
     "Lift",
     "LSNNCell",
-    "LSNNFeedForwardCell",
+    "LSNNRecurrentCell",
+    "LSNN",
+    "LSNNRecurrentCell",
     "LSNNFeedForwardState",
     "LSNNParameters",
-    "LSNNLayer",
     "LSNNState",
     "RegularizationCell",
     "SequentialState",

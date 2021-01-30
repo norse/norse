@@ -52,12 +52,11 @@ class LIFCell(SNNCell):
         dt (float): Time step to use. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFParameters = LIFParameters(), *args, **kwargs):
+    def __init__(self, p: LIFParameters = LIFParameters(), **kwargs):
         super().__init__(
             lif_feed_forward_step,
             self.initial_state,
             p=p,
-            *args,
             **kwargs,
         )
 
@@ -131,7 +130,6 @@ class LIFRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
-        *args,
         **kwargs
     ):
         super().__init__(
@@ -140,7 +138,6 @@ class LIFRecurrentCell(SNNRecurrentCell):
             p=p,
             input_size=input_size,
             hidden_size=hidden_size,
-            *args,
             **kwargs,
         )
 
@@ -186,12 +183,11 @@ class LIF(SNN):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFParameters = LIFParameters(), *args, **kwargs):
+    def __init__(self, p: LIFParameters = LIFParameters(), **kwargs):
         super().__init__(
             activation=lif_feed_forward_step,
             state_fallback=self.initial_state,
             p=p,
-            *args,
             **kwargs,
         )
 

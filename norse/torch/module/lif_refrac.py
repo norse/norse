@@ -54,12 +54,11 @@ class LIFRefracCell(SNNCell):
         >>> output, s0 = lif(input)
     """
 
-    def __init__(self, p: LIFRefracParameters = LIFRefracParameters(), *args, **kwargs):
+    def __init__(self, p: LIFRefracParameters = LIFRefracParameters(), **kwargs):
         super().__init__(
             lif_refrac_feed_forward_step,
             self.initial_state,
             p=p,
-            *args,
             **kwargs,
         )
 
@@ -140,7 +139,6 @@ class LIFRefracRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
-        *args,
         **kwargs
     ):
         super().__init__(
@@ -149,7 +147,6 @@ class LIFRefracRecurrentCell(SNNRecurrentCell):
             input_size=input_size,
             hidden_size=hidden_size,
             p=p,
-            *args,
             **kwargs,
         )
 

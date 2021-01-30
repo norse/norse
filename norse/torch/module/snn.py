@@ -28,11 +28,6 @@ class SNNCell(torch.nn.Module):
         state_fallback (Callable[[torch.Tensor], Any]): A function that can return a
             default state with the correct dimensions, in case no state is provided in the
             forward pass.
-        input_size (int): The number of input neurons. If not set, the shape will be inferred from the
-            input tensor in the forward pass. Defaults to None.
-        hidden_size (int): The number of hidden neurons. If not set, the shape will be inferred from the
-            input tensor in the forward pass and will be equal to the hidden shape (that typically means
-            that input == output). Defaults to None.
         p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
         dt (float): Time step to use in integration. Defaults to 0.001.
@@ -43,15 +38,11 @@ class SNNCell(torch.nn.Module):
         activation: FeedforwardActivation,
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
         p: Any,
-        input_size: Optional[int] = None,
-        hidden_size: Optional[int] = None,
         dt: float = 0.001,
     ):
         super().__init__()
         self.activation = activation
         self.state_fallback = state_fallback
-        self.input_size = input_size
-        self.hidden_size = hidden_size
         self.p = p
         self.dt = dt
 

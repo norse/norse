@@ -56,12 +56,11 @@ class LIFExCell(SNNCell):
         >>> output, s0 = lif_ex(input)
     """
 
-    def __init__(self, p: LIFExParameters = LIFExParameters(), *args, **kwargs):
+    def __init__(self, p: LIFExParameters = LIFExParameters(), **kwargs):
         super().__init__(
             lif_ex_feed_forward_step,
             self.initial_state,
             p=p,
-            *args,
             **kwargs,
         )
 
@@ -132,7 +131,6 @@ class LIFExRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFExParameters = LIFExParameters(),
-        *args,
         **kwargs,
     ):
         super().__init__(
@@ -141,7 +139,6 @@ class LIFExRecurrentCell(SNNRecurrentCell):
             p=p,
             input_size=input_size,
             hidden_size=hidden_size,
-            *args,
             **kwargs,
         )
 
@@ -187,12 +184,11 @@ class LIFEx(SNN):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFExParameters = LIFExParameters(), *args, **kwargs):
+    def __init__(self, p: LIFExParameters = LIFExParameters(), **kwargs):
         super().__init__(
             activation=lif_ex_feed_forward_step,
             state_fallback=self.initial_state,
             p=p,
-            *args,
             **kwargs,
         )
 
@@ -245,7 +241,6 @@ class LIFExRecurrent(SNNRecurrent):
         input_size: int,
         hidden_size: int,
         p: LIFExParameters = LIFExParameters(),
-        *args,
         **kwargs,
     ):
         super().__init__(
@@ -254,7 +249,6 @@ class LIFExRecurrent(SNNRecurrent):
             input_size=input_size,
             hidden_size=hidden_size,
             p=p,
-            *args,
             **kwargs,
         )
 

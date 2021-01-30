@@ -17,7 +17,6 @@ class LIFMCRefracRecurrentCell(SNNRecurrentCell):
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
         g_coupling: Optional[torch.Tensor] = None,
-        *args,
         **kwargs
     ):
         super().__init__(
@@ -26,7 +25,6 @@ class LIFMCRefracRecurrentCell(SNNRecurrentCell):
             input_size=input_size,
             hidden_size=hidden_size,
             p=p,
-            *args,
             **kwargs
         )
 

@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import norse.torch as norse
-from ..lsnn import LSNNCell, LSNNLayer
+from ..lsnn import LSNNCell, LSNN
 from ..lif import LIFCell, LIFRecurrent
 from ..lift import Lift
 from ..sequential import SequentialState
@@ -28,7 +28,7 @@ def test_state_sequence_list():
 def test_state_sequence_norse():
     d = torch.ones(10, 2, 10)
     l1 = LIFRecurrent(10, 5)
-    l2 = LSNNLayer(LIFCell, 5, 1)
+    l2 = LSNN(5, 1)
     z, (s1, s2) = SequentialState(l1, l2)(d)
     assert z.shape == (10, 2, 1)
     assert s1.v.shape == (2, 5)
@@ -39,7 +39,7 @@ def test_state_sequence_mix():
     d = torch.ones(10, 3, 20)
     l1 = LIFRecurrent(20, 10)
     l2 = torch.nn.RNN(10, 4, 2)  # 2 layers
-    l3 = LSNNLayer(LSNNCell, 4, 1)
+    l3 = LSNNRecurrent(4, 1)
     state = [None, torch.randn(2, 3, 4), None]
     z, (s1, s2, s3) = SequentialState(l1, l2, l3)(d, state)
     assert z.shape == (10, 3, 1)
@@ -53,7 +53,7 @@ def test_state_sequence_conv():
     model = SequentialState(
         Lift(torch.nn.Conv2d(16, 8, 3)),  # (1, 8, 8, 2, 2)
         torch.nn.Flatten(2),  # (1, 8, 32)
-        LSNNLayer(LSNNCell, 32, 6),  # (1, 8, 6)
+        LSNNRecurrent(32, 6),  # (1, 8, 6)
         torch.nn.RNN(6, 4, 2),  # (1, 6, 4) with 2 recurrent layers
         LIFRecurrent(4, 1),  # (1, 4, 1)
     )

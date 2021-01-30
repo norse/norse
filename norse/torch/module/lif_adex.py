@@ -53,12 +53,11 @@ class LIFAdExCell(SNNCell):
         >>> output, s0 = lif_ex(data)
     """
 
-    def __init__(self, p: LIFAdExParameters = LIFAdExParameters(), *args, **kwargs):
+    def __init__(self, p: LIFAdExParameters = LIFAdExParameters(), **kwargs):
         super().__init__(
             lif_adex_feed_forward_step,
             self.initial_state,
             p=p,
-            *args,
             **kwargs,
         )
 
@@ -135,7 +134,6 @@ class LIFAdExRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFAdExParameters = LIFAdExParameters(),
-        *args,
         **kwargs,
     ):
         super().__init__(
@@ -144,7 +142,6 @@ class LIFAdExRecurrentCell(SNNRecurrentCell):
             p=p,
             input_size=input_size,
             hidden_size=hidden_size,
-            *args,
             **kwargs,
         )
 
@@ -194,12 +191,11 @@ class LIFAdEx(SNN):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFAdExParameters = LIFAdExParameters(), *args, **kwargs):
+    def __init__(self, p: LIFAdExParameters = LIFAdExParameters(), **kwargs):
         super().__init__(
             activation=lif_adex_feed_forward_step,
             state_fallback=self.initial_state,
             p=p,
-            *args,
             **kwargs,
         )
 
@@ -256,7 +252,6 @@ class LIFAdExRecurrent(SNNRecurrent):
         input_size: int,
         hidden_size: int,
         p: LIFAdExParameters = LIFAdExParameters(),
-        *args,
         **kwargs,
     ):
         super().__init__(
@@ -265,7 +260,6 @@ class LIFAdExRecurrent(SNNRecurrent):
             input_size=input_size,
             hidden_size=hidden_size,
             p=p,
-            *args,
             **kwargs,
         )
 
