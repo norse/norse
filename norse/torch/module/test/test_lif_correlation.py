@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 
-from norse.torch.module.leaky_integrator import LICell
+from norse.torch.module.leaky_integrator import LILinearCell
 from norse.torch.module.lif_correlation import LIFCorrelation
 from norse.torch.functional.correlation_sensor import correlation_based_update
 
@@ -54,7 +54,7 @@ def test_lif_correlation_training():
     ).float()
 
     lif_correlation = LIFCorrelation(input_features, hidden_features)
-    out = LICell(hidden_features, output_features).to(device)
+    out = LILinearCell(hidden_features, output_features).to(device)
     log_softmax_fn = torch.nn.LogSoftmax(dim=1)
     loss_fn = torch.nn.NLLLoss()
 

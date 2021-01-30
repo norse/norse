@@ -11,7 +11,7 @@ from .encode import (
     SpikeLatencyEncoder,
     SpikeLatencyLIFEncoder,
 )
-from .leaky_integrator import LICell, LIFeedForwardCell, LIParameters, LIState
+from .leaky_integrator import LICell, LILinearCell, LIParameters, LIState
 from .lif import (
     LIFCell,
     LIF,
@@ -76,7 +76,7 @@ __all__ = [
     "SpikeLatencyEncoder",
     "SpikeLatencyLIFEncoder",
     "LICell",
-    "LIFeedForwardCell",
+    "LILinearCell",
     "LIParameters",
     "LIState",
     "LIFCell",
