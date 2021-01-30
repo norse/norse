@@ -116,7 +116,7 @@ __all__ = [
     "LSNNCell",
     "LSNNRecurrentCell",
     "LSNN",
-    "LSNNRecurrentCell",
+    "LSNNRecurrent",
     "LSNNFeedForwardState",
     "LSNNParameters",
     "LSNNState",

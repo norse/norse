@@ -1,6 +1,6 @@
 import torch
 import pytest
-import norse.torch.models.mobilenet as mobilenet
+from norse.torch.models import mobilenet
 
 
 def test_mobilenet_forward():
