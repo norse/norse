@@ -30,9 +30,9 @@ def test_lif_correlation_training():
         y_data = torch.tensor(1 * (np.random.rand(batch_size) < 0.5), device=device)
         return x_data, y_data
 
-    seq_length = 500
+    seq_length = 50
     batch_size = 1
-    input_features = 100
+    input_features = 10
     hidden_features = 8
     output_features = 2
 
@@ -58,7 +58,7 @@ def test_lif_correlation_training():
     log_softmax_fn = torch.nn.LogSoftmax(dim=1)
     loss_fn = torch.nn.NLLLoss()
 
-    linear_update = torch.nn.Linear(2 * 100 * 8, 100 * 8)
+    linear_update = torch.nn.Linear(2 * 10 * 8, 10 * 8)
     rec_linear_update = torch.nn.Linear(2 * 8 * 8, 8 * 8)
 
     optimizer = torch.optim.Adam(
