@@ -77,7 +77,7 @@ class SNNRecurrentCell(torch.nn.Module):
 
     def __init__(
         self,
-        activation: FeedforwardActivation,
+        activation: RecurrentActivation,
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
         input_size: int,
         hidden_size: int,
@@ -200,7 +200,7 @@ class SNNRecurrent(torch.nn.Module):
 
     def __init__(
         self,
-        activation: FeedforwardActivation,
+        activation: RecurrentActivation,
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
         input_size: int,
         hidden_size: int,

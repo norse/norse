@@ -1,7 +1,7 @@
 import torch
-from norse.torch.module.lif import LIFCell
-from norse.torch.module.lsnn import LSNNCell
-from norse.torch.module.leaky_integrator import LICell
+from norse.torch.module.lif import LIFRecurrentCell
+from norse.torch.module.lsnn import LSNNRecurrentCell
+from norse.torch.module.leaky_integrator import LILinearCell
 
 
 class SNNModel(torch.nn.Module):
@@ -11,7 +11,7 @@ class SNNModel(torch.nn.Module):
         self.n_input = n_input
         self.n_output = n_output
         self.cell = cell(self.n_input, self.n_features)
-        self.readout = LICell(self.n_features, self.n_output)
+        self.readout = LILinearCell(self.n_features, self.n_output)
 
     def forward(self, x):
         seq_length = x.shape[0]
@@ -29,11 +29,11 @@ class SNNModel(torch.nn.Module):
 
 
 def lsnn_model(n_features=128, n_input=80, n_output=10):
-    return SNNModel(LSNNCell, n_features, n_input, n_output)
+    return SNNModel(LSNNRecurrentCell, n_features, n_input, n_output)
 
 
 def lif_model(n_features=128, n_input=80, n_output=10):
-    return SNNModel(LIFCell, n_features, n_input, n_output)
+    return SNNModel(LIFRecurrentCell, n_features, n_input, n_output)
 
 
 class LSTMModel(torch.nn.Module):

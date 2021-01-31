@@ -285,6 +285,11 @@ class LIFAdExRecurrent(SNNRecurrent):
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
+            a=torch.zeros(
+                *dims,
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ),
         )
         state.v.requires_grad = True
         return state

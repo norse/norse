@@ -36,7 +36,7 @@ class LIFMCRefracRecurrentCell(SNNRecurrentCell):
             )
         )
 
-    def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
+    def initial_state(self, input_tensor: torch.Tensor) -> LIFRefracState:
         state = LIFRefracState(
             lif=LIFState(
                 z=torch.zeros(
