@@ -4,7 +4,7 @@ Test for the stateful encoder module
 
 import torch
 
-from ..lif import LIFLayer
+from ..lif import LIFRecurrent
 from norse.torch.module.encode import (
     PopulationEncoder,
     ConstantCurrentLIFEncoder,
@@ -75,7 +75,7 @@ def test_spike_latency_lif_encoder_backward():
     timesteps = 20
     data = torch.randn(7, 5) + 10
     encoder = SpikeLatencyLIFEncoder(timesteps)
-    layer = LIFLayer(5, 2)
+    layer = LIFRecurrent(5, 2)
     encoded = encoder(data)
     out, _ = layer(encoded)
     out.sum().backward()
@@ -96,7 +96,7 @@ def test_spike_latency_encode_backward():
     encoder = torch.nn.Sequential(
         ConstantCurrentLIFEncoder(seq_length=timesteps), SpikeLatencyEncoder()
     )
-    layer = LIFLayer(5, 2)
+    layer = LIFRecurrent(5, 2)
     encoded = encoder(data)
     out, _ = layer(encoded)
     out = out.sum()

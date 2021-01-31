@@ -27,7 +27,7 @@ class Lift(torch.nn.Module):
         >>> data = torch.randn(seq_length, batch_size, in_channels, 20, 30)
         >>> module = torch.nn.Sequential(
         >>>     Lift(torch.nn.Conv2d(in_channels, out_channels, 5, 1)),
-        >>>     LIFFeedForwardLayer(),
+        >>>     LIF(),
         >>> )
         >>> output, _ = module(data)
     """
@@ -43,7 +43,7 @@ class Lift(torch.nn.Module):
         and accumulate the outputs in an output tensor.
 
         Parameters:
-            x : Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]
+            x : Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]
 
         Note:
             If the input is a tuple of two tensors, the second tuple entry will be ignored.

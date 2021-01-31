@@ -6,9 +6,9 @@ import torch
 import torch.utils.data
 
 from norse.torch.functional.encode import poisson_encode
-from norse.torch.module.leaky_integrator import LICell
-from norse.torch.module.lsnn import LSNNCell, LSNNParameters
-from norse.torch.module.lif import LIFCell, LIFParameters
+from norse.torch.module.leaky_integrator import LILinearCell
+from norse.torch.module.lsnn import LSNNRecurrentCell, LSNNParameters
+from norse.torch.module.lif import LIFRecurrentCell, LIFParameters
 
 flags.DEFINE_integer("batch_size", 64, "Batch size.")
 flags.DEFINE_enum("device", "cpu", ["cpu", "cuda"], "Device to use by pytorch.")
@@ -84,12 +84,12 @@ class MemoryNet(torch.nn.Module):
         self.is_lsnn = is_lsnn
         if is_lsnn:
             p = LSNNParameters(method=model)
-            self.layer = LSNNCell(input_features, input_features, p, dt=dt)
+            self.layer = LSNNRecurrentCell(input_features, input_features, p, dt=dt)
         else:
             p = LIFParameters(method=model)
-            self.layer = LIFCell(input_features, input_features, dt=dt)
+            self.layer = LIFRecurrentCell(input_features, input_features, dt=dt)
         self.dropout = torch.nn.Dropout(p=0.2)
-        self.readout = LICell(input_features, output_features)
+        self.readout = LILinearCell(input_features, output_features)
 
     def forward(self, x):
         batch_size = x.shape[0]

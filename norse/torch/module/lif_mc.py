@@ -1,14 +1,15 @@
-import torch
+from typing import Optional, Tuple
 
 import numpy as np
-from typing import Optional, Tuple
+import torch
 
 from norse.torch.functional.lif import LIFState, LIFParameters
 from norse.torch.functional.lif_mc import lif_mc_step
-from norse.torch.module.util import remove_autopses
+
+from norse.torch.module.snn import SNNRecurrentCell
 
 
-class LIFMCCell(torch.nn.Module):
+class LIFMCRecurrentCell(SNNRecurrentCell):
     r"""Computes a single euler-integration step of a LIF multi-compartment
     neuron-model.
 
@@ -43,7 +44,7 @@ class LIFMCCell(torch.nn.Module):
         g_coupling (torch.Tensor): conductances between the neuron compartments
         p (LIFParameters): neuron parameters
         dt (float): Integration timestep to use
-        autopses (bool): Allow self-connections in the recurrence? Defaults to False.
+        autapses (bool): Allow self-connections in the recurrence? Defaults to False.
     """
 
     def __init__(
@@ -51,50 +52,55 @@ class LIFMCCell(torch.nn.Module):
         input_size: int,
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
-        dt: float = 0.001,
-        autopses: bool = False,
+        g_coupling: Optional[torch.Tensor] = None,
+        **kwargs
     ):
-        super(LIFMCCell, self).__init__()
+        super().__init__(
+            activation=None,
+            state_fallback=self.initial_state,
+            input_size=input_size,
+            hidden_size=hidden_size,
+            p=p,
+            **kwargs
+        )
+        self.g_coupling = (
+            g_coupling
+            if g_coupling is not None
+            else torch.nn.Parameter(
+                torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
+            )
+        )
 
-        self.input_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, input_size) / np.sqrt(input_size)
+    def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
+        state = LIFState(
+            z=torch.zeros(
+                input_tensor.shape[0],
+                self.hidden_size,
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ),
+            v=self.p.v_leak.detach()
+            * torch.ones(
+                input_tensor.shape[0],
+                self.hidden_size,
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ),
+            i=torch.zeros(
+                input_tensor.shape[0],
+                self.hidden_size,
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ),
         )
-        recurrent_weights = torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
-        self.recurrent_weights = torch.nn.Parameter(
-            recurrent_weights if autopses else remove_autopses(recurrent_weights)
-        )
-        self.g_coupling = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
-        )
-        self.hidden_size = hidden_size
-        self.p = p
-        self.dt = dt
+        state.v.requires_grad = True
+        return state
 
     def forward(
         self, input_tensor: torch.Tensor, state: Optional[LIFState] = None
     ) -> Tuple[torch.Tensor, LIFState]:
         if state is None:
-            state = LIFState(
-                z=torch.zeros(
-                    input_tensor.shape[0],
-                    self.hidden_size,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                ),
-                v=self.p.v_leak.detach()
-                * torch.ones(
-                    input_tensor.shape[0],
-                    self.hidden_size,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                ),
-                i=torch.zeros(
-                    input_tensor.shape[0],
-                    self.hidden_size,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                ),
-            )
+            state = self.initial_state(input_tensor)
         return lif_mc_step(
             input_tensor,
             state,

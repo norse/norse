@@ -2,30 +2,24 @@ import torch
 
 from norse.torch.module.lif_ex import (
     LIFExCell,
-    LIFExLayer,
+    LIFExRecurrentCell,
+    LIFEx,
+    LIFExRecurrent,
     LIFExState,
-    LIFExFeedForwardCell,
     LIFExFeedForwardState,
 )
 
 
 def test_lif_ex_cell():
-    cell = LIFExCell(2, 4)
+    cell = LIFExCell()
     data = torch.randn(5, 2)
     out, _ = cell(data)
 
-    assert out.shape == (5, 4)
+    assert out.shape == (5, 2)
 
 
-def test_lif_ex_cell_backward():
-    cell = LIFExCell(2, 4)
-    data = torch.randn(5, 2)
-    out, _ = cell(data)
-    out.sum().backward()
-
-
-def test_lif_ex_cell_autopses():
-    cell = LIFExCell(2, 2, autopses=True)
+def test_lif_ex_recurrent_cell_autapses():
+    cell = LIFExRecurrentCell(2, 2, autapses=True)
     assert not torch.allclose(
         torch.zeros(2),
         (cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)).sum(0),
@@ -42,8 +36,8 @@ def test_lif_ex_cell_autopses():
     assert not s_full.i[0, 0] == s_part.i[0, 0]
 
 
-def test_lif_ex_cell_no_autopses():
-    cell = LIFExCell(2, 2, autopses=False)
+def test_lif_ex_recurrent_cell_no_autapses():
+    cell = LIFExRecurrentCell(2, 2, autapses=False)
     assert (
         cell.recurrent_weights * torch.eye(*cell.recurrent_weights.shape)
     ).sum() == 0
@@ -60,28 +54,20 @@ def test_lif_ex_cell_no_autopses():
     assert s_full.i[0, 0] == s_part.i[0, 0]
 
 
-def test_lif_ex_layer():
-    layer = LIFExLayer(2, 4)
-    data = torch.randn(10, 5, 2)
-    out, _ = layer(data)
-
-    assert out.shape == (10, 5, 4)
-
-
-def test_lif_ex_layer_state():
-    layer = LIFExLayer(2, 4)
+def test_lif_ex_recurrent_state():
+    layer = LIFExRecurrent(2, 4)
     input_tensor = torch.randn(10, 5, 2)
 
     state = LIFExState(
         z=torch.zeros(
-            (input_tensor.shape[1], layer.cell.hidden_size),
+            (input_tensor.shape[1], layer.hidden_size),
             dtype=input_tensor.dtype,
             device=input_tensor.device,
         ),
-        v=layer.cell.p.v_leak,
+        v=layer.p.v_leak,
         i=torch.zeros(
             input_tensor.shape[1],
-            layer.cell.hidden_size,
+            layer.hidden_size,
             device=input_tensor.device,
             dtype=input_tensor.dtype,
         ),
@@ -91,21 +77,31 @@ def test_lif_ex_layer_state():
     assert out.shape == (10, 5, 4)
 
 
-def test_lif_ex_feedforward_cell():
-    layer = LIFExFeedForwardCell()
-    data = torch.randn(5, 2, 4)
+def test_lif_ex_recurrent():
+    layer = LIFExRecurrent(2, 4)
+    data = torch.randn(5, 2, 2)
     out, _ = layer(data)
 
     assert out.shape == (5, 2, 4)
 
 
-def test_lif_ex_feedforward_cell_state():
-    layer = LIFExFeedForwardCell()
+def test_lif_ex():
+    layer = LIFEx()
+    data = torch.randn(10, 5, 2)
+    out, _ = layer(data)
+
+    assert out.shape == (10, 5, 2)
+
+
+def test_lif_ex_state():
+    layer = LIFEx()
     input_tensor = torch.randn(5, 2, 4)
     state = LIFExFeedForwardState(
         v=layer.p.v_leak,
         i=torch.zeros(
-            *input_tensor.shape, device=input_tensor.device, dtype=input_tensor.dtype
+            *input_tensor.shape[1:],
+            device=input_tensor.device,
+            dtype=input_tensor.dtype
         ),
     )
     out, _ = layer(input_tensor, state)
@@ -113,24 +109,29 @@ def test_lif_ex_feedforward_cell_state():
     assert out.shape == (5, 2, 4)
 
 
-def test_lif_ex_feedforward_cell_backward():
-    layer = LIFExFeedForwardCell()
-    data = torch.randn(5, 2, 4)
+def test_lif_ex_cell_backward():
+    layer = LIFExCell()
+    data = torch.randn(2, 4)
     out, _ = layer(data)
     out.sum().backward()
 
 
-def test_lif_ex_feedforward_cell_repr():
-    model = LIFExFeedForwardCell()
-    assert (
-        str(model)
-        == "LIFExFeedForwardCell(p=LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0), dt=0.001)"
-    )
+def test_lif_ex_recurrent_cell_backward():
+    layer = LIFExRecurrentCell(2, 4)
+    data = torch.randn(2, 2)
+    out, _ = layer(data)
+    out.sum().backward()
 
 
-def test_lif_ex_cell_repr():
-    model = LIFExCell(2, 4)
-    assert (
-        str(model)
-        == "LIFExCell(2, 4, p=LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0), dt=0.001)"
-    )
+def test_lif_ex_backward():
+    layer = LIFEx()
+    data = torch.randn(2, 4)
+    out, _ = layer(data)
+    out.sum().backward()
+
+
+def test_lif_ex_recurrent_backward():
+    layer = LIFExRecurrent(2, 4)
+    data = torch.randn(5, 2, 2)
+    out, _ = layer(data)
+    out.sum().backward()
