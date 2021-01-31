@@ -2,7 +2,6 @@ from typing import NamedTuple, Optional, Tuple
 
 import torch
 import torch.jit
-import norse
 from norse.torch.functional.threshold import threshold
 
 
@@ -167,33 +166,18 @@ def lif_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    if p.method == "super" and getattr(norse, "IS_OPS_LOADED"):
-        # Order: [v_leak, v_th, v_reset, tau_mem_inv, tau_syn_inv, alpha]
-        cpp_params = (
-            p.v_leak,
-            p.v_th,
-            p.v_reset,
-            p.tau_mem_inv,
-            p.tau_syn_inv,
-            torch.as_tensor(p.alpha),
-        )
-        z, v, i = torch.ops.norse_op.lif_super_step(
-            input_tensor, state, input_weights, recurrent_weights, cpp_params, dt
-        )
-        return z, LIFState(z=z, v=v, i=i)
-    else:
-        jit_params = LIFParametersJIT(
-            tau_syn_inv=p.tau_syn_inv,
-            tau_mem_inv=p.tau_mem_inv,
-            v_leak=p.v_leak,
-            v_th=p.v_th,
-            v_reset=p.v_reset,
-            method=p.method,
-            alpha=torch.as_tensor(p.alpha),
-        )
-        return _lif_step_jit(
-            input_tensor, state, input_weights, recurrent_weights, jit_params, dt
-        )
+    jit_params = LIFParametersJIT(
+        tau_syn_inv=p.tau_syn_inv,
+        tau_mem_inv=p.tau_mem_inv,
+        v_leak=p.v_leak,
+        v_th=p.v_th,
+        v_reset=p.v_reset,
+        method=p.method,
+        alpha=torch.as_tensor(p.alpha),
+    )
+    return _lif_step_jit(
+        input_tensor, state, input_weights, recurrent_weights, jit_params, dt
+    )
 
 
 @torch.jit.script
