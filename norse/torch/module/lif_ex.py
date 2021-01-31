@@ -1,6 +1,3 @@
-from typing import Optional, Tuple
-
-import numpy as np
 import torch
 
 from norse.torch.functional.lif_ex import (

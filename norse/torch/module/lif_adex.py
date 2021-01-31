@@ -46,7 +46,6 @@ class LIFAdExCell(SNNCell):
         dt (float): Time step to use.
 
     Examples:
-
         >>> batch_size = 16
         >>> lif_ex = LIFAdExCell()
         >>> data = torch.randn(batch_size, 20, 30)
@@ -109,7 +108,7 @@ class LIFAdExRecurrentCell(SNNRecurrentCell):
     where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the
     recurrent and input spikes respectively.
 
-    Examples:   
+    Examples:
         >>> batch_size = 16
         >>> lif = LIFAdExRecurrentCell(10, 20)
         >>> input = torch.randn(batch_size, 10)

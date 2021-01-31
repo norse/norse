@@ -66,6 +66,25 @@ def test_lif_adex_cell_no_autapses():
     assert s_full.i[0, 0] == s_part.i[0, 0]
 
 
+def test_lif_adex_feedforward_cell_state():
+    cell = LIFAdExCell()
+    input_tensor = torch.randn(5, 2, 4)
+
+    state = LIFAdExFeedForwardState(
+        v=cell.p.v_leak,
+        i=torch.zeros(
+            input_tensor.shape,
+        ),
+        a=torch.zeros(
+            input_tensor.shape,
+        ),
+    )
+
+    out, _ = cell(input_tensor, state)
+
+    assert out.shape == (5, 2, 4)
+
+
 def test_lif_adex_cell_backward():
     cell = LIFAdExCell()
     data = torch.randn(5, 2)
@@ -88,31 +107,12 @@ def test_lif_adex():
     assert out.shape == (10, 5, 4)
 
 
-def test_lif_adex_recurrent_cell():
-    layer = LIFAdExRecurrentCell(2, 4)
+def test_lif_adex_recurrent():
+    layer = LIFAdExRecurrent(2, 4)
     data = torch.randn(2, 2)
     out, _ = layer(data)
 
     assert out.shape == (2, 4)
-
-
-def test_lif_adex_feedforward_cell_state():
-    cell = LIFAdExCell()
-    input_tensor = torch.randn(5, 2, 4)
-
-    state = LIFAdExFeedForwardState(
-        v=cell.p.v_leak,
-        i=torch.zeros(
-            input_tensor.shape,
-        ),
-        a=torch.zeros(
-            input_tensor.shape,
-        ),
-    )
-
-    out, _ = cell(input_tensor, state)
-
-    assert out.shape == (5, 2, 4)
 
 
 def test_lif_adex_backward():
@@ -123,7 +123,7 @@ def test_lif_adex_backward():
 
 
 def test_lif_adex_recurrent_backward():
-    cell = LIFAdExCell()
-    data = torch.randn(5, 2, 4)
+    cell = LIFAdExRecurrentCell(2, 4)
+    data = torch.randn(5, 2, 2)
     out, _ = cell(data)
     out.sum().backward()

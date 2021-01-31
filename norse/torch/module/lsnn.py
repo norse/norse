@@ -1,7 +1,4 @@
-from typing import Optional, Tuple
-
 import torch
-import numpy as np
 
 from norse.torch.functional.lsnn import (
     LSNNParameters,

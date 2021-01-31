@@ -18,13 +18,6 @@ def test_lif_ex_cell():
     assert out.shape == (5, 2)
 
 
-def test_lif_ex_cell_backward():
-    cell = LIFExCell()
-    data = torch.randn(5, 2)
-    out, _ = cell(data)
-    out.sum().backward()
-
-
 def test_lif_ex_recurrent_cell_autapses():
     cell = LIFExRecurrentCell(2, 2, autapses=True)
     assert not torch.allclose(

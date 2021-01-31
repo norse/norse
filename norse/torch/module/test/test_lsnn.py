@@ -1,5 +1,4 @@
 import torch
-from pytest import raises
 
 from norse.torch.module.lsnn import (
     LSNN,
