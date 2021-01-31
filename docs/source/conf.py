@@ -46,7 +46,7 @@ extensions = [
     "sphinxcontrib.bibtex",
 ]
 
-bibtex_bibfiles = ['bibliography.bib']
+bibtex_bibfiles = ["bibliography.bib"]
 
 # sphinx_gallery_conf = {
 #     "examples_dirs": "../../norse/examples",  # path to your example scripts

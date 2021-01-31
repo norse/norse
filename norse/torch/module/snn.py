@@ -104,7 +104,7 @@ class SNNRecurrentCell(torch.nn.Module):
         else:
             self.input_weights = torch.nn.Parameter(
                 torch.randn(self.hidden_size, self.input_size)
-                * torch.sqrt(2 / self.hidden_size)
+                * torch.sqrt(2.0 / self.hidden_size)
             )
 
         if recurrent_weights is not None:
@@ -112,7 +112,7 @@ class SNNRecurrentCell(torch.nn.Module):
         else:
             self.recurrent_weights = torch.nn.Parameter(
                 torch.randn(self.hidden_size, self.hidden_size)
-                * torch.sqrt(2 / self.hidden_size)
+                * torch.sqrt(2.0 / self.hidden_size)
             )
 
         if not autapses:
@@ -234,14 +234,14 @@ class SNNRecurrent(torch.nn.Module):
         else:
             self.input_weights = torch.nn.Parameter(
                 torch.randn(self.hidden_size, self.input_size)
-                * torch.sqrt(2 / self.hidden_size)
+                * torch.sqrt(2.0 / self.hidden_size)
             )
         if recurrent_weights is not None:
             self.recurrent_weights = recurrent_weights
         else:
             self.recurrent_weights = torch.nn.Parameter(
                 torch.randn(self.hidden_size, self.hidden_size)
-                * torch.sqrt(2 / self.hidden_size)
+                * torch.sqrt(2.0 / self.hidden_size)
             )
         if not autapses:
             with torch.no_grad():
