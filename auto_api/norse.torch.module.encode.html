@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -99,7 +95,7 @@ which represent input spikes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
 <li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
 <li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Maximal frequency (in Hertz) which will be emitted.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
@@ -153,12 +149,12 @@ if a number gets close to its “receptive field”.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of output <em>per</em> input value</p></li>
-<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
+<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
 Can also be set for each individual sample.</p></li>
-<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
+<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
 (which changes for each index in the output tensor) and the actual data value to encode respectively.z
 Defaults to gaussian radial basis kernel function.</p></li>
-<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
+<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
 </ul>
 </dd>
 </dl>
@@ -348,6 +344,7 @@ registered hooks while the latter silently ignores them.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -357,11 +354,6 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1"><a class="reference internal" href="../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
@@ -386,7 +378,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.lsnn.html">norse.torch.module.lsnn module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.regularization.html">norse.torch.module.regularization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.sequential.html">norse.torch.module.sequential module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="norse.torch.module.util.html">norse.torch.module.util module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.module.snn.html">norse.torch.module.snn module</a></li>
 </ul>
 </li>
 </ul>

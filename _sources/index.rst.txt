@@ -114,6 +114,7 @@ Table of contents
    ∇ Home <index>
    started
    installing
+   tasks
 
 .. toctree::
    :maxdepth: 2
@@ -126,15 +127,6 @@ Table of contents
    learning
    papers
    working
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Tutorials
-   :glob:
-   :numbered:
-
-   auto_examples/index
-   tasks
 
 .. toctree::
    :caption: API Docs

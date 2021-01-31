@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -42,91 +38,54 @@
   <div class="section" id="module-norse.torch.module.lif_adex">
 <span id="norse-torch-module-lif-adex-module"></span><h1>norse.torch.module.lif_adex module<a class="headerlink" href="#module-norse.torch.module.lif_adex" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="norse.torch.module.lif_adex.LIFAdExCell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_adex.</code><code class="sig-name descname">LIFAdExCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">autopses</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Computes a single euler-integration step of a recurrent adaptive exponential
-LIF neuron-model adapted from
-<a class="reference external" href="http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model">http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model</a>.
-More specifically it implements one integration step of the following ODE</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{align*}
-    \dot{v} &amp;= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right)\right) \\
-    \dot{i} &amp;= -1/\tau_{\text{syn}} i \\
-    \dot{a} &amp;= 1/\tau_{\text{ada}} \left( a_{current} (V - v_{\text{leak}}) - a \right)
-\end{align*}\end{split}\]</div>
-<p>together with the jump condition</p>
-<div class="math notranslate nohighlight">
-\[z = \Theta(v - v_{\text{th}})\]</div>
-<p>and transition equations</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{align*}
-    v &amp;= (1-z) v + z v_{\text{reset}} \\
-    i &amp;= i + w_{\text{input}} z_{\text{in}} \\
-    i &amp;= i + w_{\text{rec}} z_{\text{rec}}
-\end{align*}\end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(z_{\text{rec}}\)</span> and <span class="math notranslate nohighlight">\(z_{\text{in}}\)</span> are the
-recurrent and input spikes respectively.</p>
+<dt id="norse.torch.module.lif_adex.LIFAdEx">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_adex.</code><code class="sig-name descname">LIFAdEx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdEx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdEx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNN" title="norse.torch.module.snn.SNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNN</span></code></a></p>
+<p>A neuron layer that wraps a recurrent LIFAdExCell in time such
+that the layer keeps track of temporal sequences of spikes.
+After application, the layer returns a tuple containing</p>
+<blockquote>
+<div><p>(spikes from all timesteps, state from the last timestep).</p>
+</div></blockquote>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 10 timesteps, 5 batches, 2 neurons</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">LIFAdExLayer</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># Returns tuple of (Tensor(10, 5, 4), LIFExState)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Size of the input.</p></li>
-<li><p><strong>hidden_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Size of the hidden state.</p></li>
-<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFExParameters" title="norse.torch.functional.LIFExParameters"><em>LIFExParameters</em></a>) – Parameters of the LIF neuron model.</p></li>
-<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time step to use.</p></li>
-<li><p><strong>autopses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Allow self-connections in the recurrence? Defaults to False.</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFAdExParameters" title="norse.torch.functional.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – The neuron parameters as a torch Module, which allows the module
+to configure neuron parameters as optimizable.</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time step to use in integration. Defaults to 0.001.</p></li>
 </ul>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lif_ex</span> <span class="o">=</span> <span class="n">LIFAdExCell</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">,</span> <span class="n">s0</span> <span class="o">=</span> <span class="n">lif_ex</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
-</pre></div>
-</div>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
-<dt id="norse.torch.module.lif_adex.LIFAdExCell.extra_repr">
-<code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.extra_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell.extra_repr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should re-implement
-this method in your own modules. Both single-line and multi-line
-strings are acceptable.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="norse.torch.module.lif_adex.LIFAdExCell.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-<dl class="field-list simple">
+<dt id="norse.torch.module.lif_adex.LIFAdEx.initial_state">
+<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdEx.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdEx.initial_state" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="norse.torch.module.lif_adex.LIFAdExCell.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell.training" title="Permalink to this definition">¶</a></dt>
+<dt id="norse.torch.module.lif_adex.LIFAdEx.training">
+<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdEx.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="norse.torch.module.lif_adex.LIFAdExFeedForwardCell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_adex.</code><code class="sig-name descname">LIFAdExFeedForwardCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExFeedForwardCell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dt id="norse.torch.module.lif_adex.LIFAdExCell">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_adex.</code><code class="sig-name descname">LIFAdExCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNCell" title="norse.torch.module.snn.SNNCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNCell</span></code></a></p>
 <p>Computes a single euler-integration step of a feed-forward exponential
-LIF neuron-model adapted from
+LIF neuron-model <em>without</em> recurrence, adapted from
 <a class="reference external" href="http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model">http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model</a>.
 It takes as input the input current as generated by an arbitrary torch
 module or function. More specifically it implements one integration step
@@ -148,93 +107,150 @@ an arbitrary pytorch module (such as a convolution) to input spikes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFExParameters" title="norse.torch.functional.LIFExParameters"><em>LIFExParameters</em></a>) – Parameters of the LIFEx neuron model.</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFAdExParameters" title="norse.torch.functional.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – Parameters of the LIFEx neuron model.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time step to use.</p></li>
 </ul>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lif_ex</span> <span class="o">=</span> <span class="n">LIFExFeedForwardCell</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lif_ex</span> <span class="o">=</span> <span class="n">LIFAdExCell</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">,</span> <span class="n">s0</span> <span class="o">=</span> <span class="n">lif_ex</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
-<dt id="norse.torch.module.lif_adex.LIFAdExFeedForwardCell.extra_repr">
-<code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell.extra_repr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExFeedForwardCell.extra_repr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should re-implement
-this method in your own modules. Both single-line and multi-line
-strings are acceptable.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="norse.torch.module.lif_adex.LIFAdExFeedForwardCell.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExFeedForwardCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExFeedForwardCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-<dl class="field-list simple">
+<dt id="norse.torch.module.lif_adex.LIFAdExCell.initial_state">
+<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExCell.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell.initial_state" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExFeedForwardState</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="norse.torch.module.lif_adex.LIFAdExFeedForwardCell.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExFeedForwardCell.training" title="Permalink to this definition">¶</a></dt>
+<dt id="norse.torch.module.lif_adex.LIFAdExCell.training">
+<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExCell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="norse.torch.module.lif_adex.LIFAdExLayer">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_adex.</code><code class="sig-name descname">LIFAdExLayer</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">cell_args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw_args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>A neuron layer that wraps a recurrent LIFAdExCell in time such
-that the layer keeps track of temporal sequences of spikes.
+<dt id="norse.torch.module.lif_adex.LIFAdExRecurrent">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_adex.</code><code class="sig-name descname">LIFAdExRecurrent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExRecurrent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExRecurrent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrent" title="norse.torch.module.snn.SNNRecurrent"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNRecurrent</span></code></a></p>
+<p>A neuron layer that wraps a recurrent LIFAdExRecurrentCell in time (<em>with</em>
+recurrence) such that the layer keeps track of temporal sequences of spikes.
 After application, the layer returns a tuple containing</p>
 <blockquote>
 <div><p>(spikes from all timesteps, state from the last timestep).</p>
 </div></blockquote>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 10 timesteps, 5 batches, 2 neurons</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">LIFAdExLayer</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># Returns tuple of (Tensor(10, 5, 4), LIFExState)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">LIFAdExRecurrent</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># Returns tuple of (Tensor(10, 5, 4), LIFAdExState)</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of input neurons</p></li>
+<li><p><strong>hidden_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of hidden neurons</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFAdExParameters" title="norse.torch.functional.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – The neuron parameters as a torch Module, which allows the module
+to configure neuron parameters as optimizable.</p></li>
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+matrix normalized to the number of hidden neurons.</p></li>
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+matrix normalized to the number of hidden neurons.</p></li>
+<li><p><strong>autapses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Allow self-connections in the recurrence? Defaults to False. Will also
+remove autapses in custom recurrent weights, if set above.</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time step to use in integration. Defaults to 0.001.</p></li>
+</ul>
+</dd>
+</dl>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
-<dt id="norse.torch.module.lif_adex.LIFAdExLayer.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExLayer.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-<dl class="field-list simple">
+<dt id="norse.torch.module.lif_adex.LIFAdExRecurrent.initial_state">
+<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExRecurrent.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExRecurrent.initial_state" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="norse.torch.module.lif_adex.LIFAdExLayer.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExLayer.training" title="Permalink to this definition">¶</a></dt>
+<dt id="norse.torch.module.lif_adex.LIFAdExRecurrent.training">
+<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExRecurrent.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="norse.torch.module.lif_adex.LIFAdExRecurrentCell">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_adex.</code><code class="sig-name descname">LIFAdExRecurrentCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFAdExParameters(adaptation_current=tensor(4), adaptation_spike=tensor(0.0200), delta_T=tensor(0.5000), tau_ada_inv=tensor(2.), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExRecurrentCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExRecurrentCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell" title="norse.torch.module.snn.SNNRecurrentCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNRecurrentCell</span></code></a></p>
+<p>Computes a single of euler-integration step of a recurrent adaptive exponential
+LIF neuron-model <em>with</em> recurrence, adapted from
+<a class="reference external" href="http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model">http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model</a>.
+More specifically it implements one integration step of the following ODE</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+    \dot{v} &amp;= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right)\right) \\
+    \dot{i} &amp;= -1/\tau_{\text{syn}} i \\
+    \dot{a} &amp;= 1/\tau_{\text{ada}} \left( a_{current} (V - v_{\text{leak}}) - a \right)
+\end{align*}\end{split}\]</div>
+<p>together with the jump condition</p>
+<div class="math notranslate nohighlight">
+\[z = \Theta(v - v_{\text{th}})\]</div>
+<p>and transition equations</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+    v &amp;= (1-z) v + z v_{\text{reset}} \\
+    i &amp;= i + w_{\text{input}} z_{\text{in}} \\
+    i &amp;= i + w_{\text{rec}} z_{\text{rec}}
+\end{align*}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(z_{\text{rec}}\)</span> and <span class="math notranslate nohighlight">\(z_{\text{in}}\)</span> are the
+recurrent and input spikes respectively.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lif</span> <span class="o">=</span> <span class="n">LIFAdExRecurrentCell</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">,</span> <span class="n">s0</span> <span class="o">=</span> <span class="n">lif</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Size of the input. Also known as the number of input features.</p></li>
+<li><p><strong>hidden_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Size of the hidden state. Also known as the number of input features.</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFAdExParameters" title="norse.torch.functional.LIFAdExParameters"><em>LIFAdExParameters</em></a>) – Parameters of the LIF neuron model.</p></li>
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+matrix normalized to the number of hidden neurons.</p></li>
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+matrix normalized to the number of hidden neurons.</p></li>
+<li><p><strong>autapses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Allow self-connections in the recurrence? Defaults to False. Will also
+remove autapses in custom recurrent weights, if set above.</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time step to use.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="py method">
+<dt id="norse.torch.module.lif_adex.LIFAdExRecurrentCell.initial_state">
+<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_adex.html#LIFAdExRecurrentCell.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExRecurrentCell.initial_state" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_adex.html#norse.torch.functional.lif_adex.LIFAdExState" title="norse.torch.functional.lif_adex.LIFAdExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFAdExState</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="norse.torch.module.lif_adex.LIFAdExRecurrentCell.training">
+<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_adex.LIFAdExRecurrentCell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -286,6 +302,7 @@ registered hooks while the latter silently ignores them.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -295,11 +312,6 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1"><a class="reference internal" href="../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
@@ -324,7 +336,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.lsnn.html">norse.torch.module.lsnn module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.regularization.html">norse.torch.module.regularization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.sequential.html">norse.torch.module.sequential module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="norse.torch.module.util.html">norse.torch.module.util module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.module.snn.html">norse.torch.module.snn module</a></li>
 </ul>
 </li>
 </ul>

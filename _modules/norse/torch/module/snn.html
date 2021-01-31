@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>norse.torch.module.snn &#8212; norse 0.0.5 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for norse.torch.module.snn</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Base module for spiking neural network (SNN) modules.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">FeedforwardActivation</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[</span>
+    <span class="c1"># Input        State         Parameters       dt</span>
+    <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="n">RecurrentActivation</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[</span>
+    <span class="c1"># Input        State         Input weights Rec. weights  Parameters       dt</span>
+    <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="SNNCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNCell">[docs]</a><span class="k">class</span> <span class="nc">SNNCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes a feedforward neuron cell *without* time.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        activation (FeedforwardActivation): The activation function accepting an input tensor, state</span>
+<span class="sd">            tensor, and parameters module, and returning a tuple of (output spikes, state).</span>
+<span class="sd">        state_fallback (Callable[[torch.Tensor], Any]): A function that can return a</span>
+<span class="sd">            default state with the correct dimensions, in case no state is provided in the</span>
+<span class="sd">            forward pass.</span>
+<span class="sd">        p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module</span>
+<span class="sd">            to configure neuron parameters as optimizable.</span>
+<span class="sd">        dt (float): Time step to use in integration. Defaults to 0.001.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">activation</span><span class="p">:</span> <span class="n">FeedforwardActivation</span><span class="p">,</span>
+        <span class="n">state_fallback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_fallback</span> <span class="o">=</span> <span class="n">state_fallback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
+<div class="viewcode-block" id="SNNCell.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNCell.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;p=</span><span class="si">{self.p}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span></div>
+
+<div class="viewcode-block" id="SNNCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_fallback</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SNNRecurrentCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell">[docs]</a><span class="k">class</span> <span class="nc">SNNRecurrentCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The base module for recurrent neuron cell *without* time.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        activation (RecurrentActivation): The activation function accepting an input tensor, state</span>
+<span class="sd">            tensor, input weights, recurrent weights, and parameters module, and returning a tuple</span>
+<span class="sd">            of (output spikes (one per timestep), state).</span>
+<span class="sd">        state_fallback (Callable[[torch.Tensor], Any]): A function that can return a</span>
+<span class="sd">            default state with the correct dimensions, in case no state is provided in the</span>
+<span class="sd">            forward pass.</span>
+<span class="sd">        input_size (int): The number of input neurons</span>
+<span class="sd">        hidden_size (int): The number of hidden neurons</span>
+<span class="sd">        p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module</span>
+<span class="sd">            to configure neuron parameters as optimizable.</span>
+<span class="sd">        input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random</span>
+<span class="sd">            matrix normalized to the number of hidden neurons.</span>
+<span class="sd">        recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random</span>
+<span class="sd">            matrix normalized to the number of hidden neurons.</span>
+<span class="sd">        autapses (bool): Allow self-connections in the recurrence? Defaults to False. Will also</span>
+<span class="sd">            remove autapses in custom recurrent weights, if set above.</span>
+<span class="sd">        dt (float): Time step to use in integration. Defaults to 0.001.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">activation</span><span class="p">:</span> <span class="n">RecurrentActivation</span><span class="p">,</span>
+        <span class="n">state_fallback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+        <span class="n">input_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">autapses</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autapses</span> <span class="o">=</span> <span class="n">autapses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_fallback</span> <span class="o">=</span> <span class="n">state_fallback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">input_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">input_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span> <span class="o">=</span> <span class="n">input_weights</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">recurrent_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">recurrent_weights</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">autapses</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">fill_diagonal_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SNNRecurrentCell.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;input_size=</span><span class="si">{self.input_size}</span><span class="s2">, hidden_size=</span><span class="si">{self.hidden_size}</span><span class="s2">, p=</span><span class="si">{self.p}</span><span class="s2">, autapses=</span><span class="si">{self.autapses}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span></div>
+
+<div class="viewcode-block" id="SNNRecurrentCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_fallback</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span>
+            <span class="n">input_tensor</span><span class="p">,</span>
+            <span class="n">state</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SNN"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNN">[docs]</a><span class="k">class</span> <span class="nc">SNN</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The base module for spiking neural networks (RSNN) *with* time (*without* recurrence).</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        activation (RecurrentActivation): The activation function accepting an input tensor, state</span>
+<span class="sd">            tensor, input weights, recurrent weights, and parameters module, and returning a tuple</span>
+<span class="sd">            of (output spikes (one per timestep), state).</span>
+<span class="sd">        state_fallback (Callable[[torch.Tensor], torch.Tensor]): A function that can return a</span>
+<span class="sd">            default state with the correct dimensions, in case no state is provided in the</span>
+<span class="sd">            forward pass.</span>
+<span class="sd">        p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module</span>
+<span class="sd">            to configure neuron parameters as optimizable.</span>
+<span class="sd">        dt (float): Time step to use in integration. Defaults to 0.001.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">activation</span><span class="p">:</span> <span class="n">FeedforwardActivation</span><span class="p">,</span>
+        <span class="n">state_fallback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_fallback</span> <span class="o">=</span> <span class="n">state_fallback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
+<div class="viewcode-block" id="SNN.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNN.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;p=</span><span class="si">{self.p}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span></div>
+
+<div class="viewcode-block" id="SNN.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNN.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_fallback</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
+
+        <span class="n">T</span> <span class="o">=</span> <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span>
+                <span class="n">input_tensor</span><span class="p">[</span><span class="n">ts</span><span class="p">],</span>
+                <span class="n">state</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span> <span class="n">state</span></div></div>
+
+
+<div class="viewcode-block" id="SNNRecurrent"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrent">[docs]</a><span class="k">class</span> <span class="nc">SNNRecurrent</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The base module for recurrent spiking neural networks (RSNN) *with* time.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        activation (RecurrentActivation): The activation function accepting an input tensor, state</span>
+<span class="sd">            tensor, input weights, recurrent weights, and parameters module, and returning a tuple</span>
+<span class="sd">            of (output spikes (one per timestep), state).</span>
+<span class="sd">        state_fallback (Callable[[torch.Tensor], torch.Tensor]): A function that can return a</span>
+<span class="sd">            default state with the correct dimensions, in case no state is provided in the</span>
+<span class="sd">            forward pass.</span>
+<span class="sd">        input_size (int): The number of input neurons</span>
+<span class="sd">        hidden_size (int): The number of hidden neurons</span>
+<span class="sd">        p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module</span>
+<span class="sd">            to configure neuron parameters as optimizable.</span>
+<span class="sd">        input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random</span>
+<span class="sd">            matrix normalized to the number of hidden neurons.</span>
+<span class="sd">        recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random</span>
+<span class="sd">            matrix normalized to the number of hidden neurons.</span>
+<span class="sd">        autapses (bool): Allow self-connections in the recurrence? Defaults to False. Will also</span>
+<span class="sd">            remove autapses in custom recurrent weights, if set above.</span>
+<span class="sd">        dt (float): Time step to use in integration. Defaults to 0.001.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">activation</span><span class="p">:</span> <span class="n">RecurrentActivation</span><span class="p">,</span>
+        <span class="n">state_fallback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
+        <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">input_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">autapses</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autapses</span> <span class="o">=</span> <span class="n">autapses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_fallback</span> <span class="o">=</span> <span class="n">state_fallback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">input_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">input_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span> <span class="o">=</span> <span class="n">input_weights</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">recurrent_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">recurrent_weights</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">autapses</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">fill_diagonal_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SNNRecurrent.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrent.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;input_size=</span><span class="si">{self.input_size}</span><span class="s2">, hidden_size=</span><span class="si">{self.hidden_size}</span><span class="s2">, p=</span><span class="si">{self.p}</span><span class="s2">, autapses=</span><span class="si">{self.autapses}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span></div>
+
+<div class="viewcode-block" id="SNNRecurrent.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrent.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_fallback</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
+
+        <span class="n">T</span> <span class="o">=</span> <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span>
+                <span class="n">input_tensor</span><span class="p">[</span><span class="n">ts</span><span class="p">],</span>
+                <span class="n">state</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span> <span class="n">state</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A library to do deep learning with spiking neural networks.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=norse&repo=norse&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">First steps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">1. Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Usage docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../hardware.html">2. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../spiking.html">3. Introduction to spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../papers.html">5. Papers citing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../working.html">6. Working with Norse</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.task.html">norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.torch.html">norse.torch package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

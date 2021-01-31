@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
@@ -42,11 +38,11 @@
 
 <span class="kn">from</span> <span class="nn">norse.torch.functional.lif</span> <span class="kn">import</span> <span class="n">LIFState</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.lif_refrac</span> <span class="kn">import</span> <span class="n">LIFRefracState</span><span class="p">,</span> <span class="n">LIFRefracFeedForwardState</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.lif_refrac</span> <span class="kn">import</span> <span class="n">LIFRefracCell</span><span class="p">,</span> <span class="n">LIFRefracFeedForwardCell</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.lif_refrac</span> <span class="kn">import</span> <span class="n">LIFRefracCell</span><span class="p">,</span> <span class="n">LIFRefracRecurrentCell</span>
 
 
 <div class="viewcode-block" id="test_lif_refrac_cell"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_cell">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_cell</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracRecurrentCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
@@ -57,7 +53,7 @@
 
 
 <div class="viewcode-block" id="test_lif_refrac_cell_state"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_cell_state">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_cell_state</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracRecurrentCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">input_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracState</span><span class="p">(</span>
@@ -91,7 +87,7 @@
 
 
 <div class="viewcode-block" id="test_lif_refrac_cell_backward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_cell_backward">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_cell_backward</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracRecurrentCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></div>
@@ -99,7 +95,7 @@
 
 <div class="viewcode-block" id="test_lif_refrac_feedforward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_feedforward">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_feedforward</span><span class="p">():</span>
     <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracFeedForwardCell</span><span class="p">()</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracCell</span><span class="p">()</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
@@ -110,7 +106,7 @@
 
 <div class="viewcode-block" id="test_lif_refrac_feedforward_cell"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_feedforward_cell">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_feedforward_cell</span><span class="p">():</span>
     <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracFeedForwardCell</span><span class="p">()</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracCell</span><span class="p">()</span>
     <span class="n">input_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 
     <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracFeedForwardState</span><span class="p">(</span>
@@ -132,8 +128,8 @@
     <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="test_lif_refrac_cell_autopses"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_cell_autopses">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_cell_autopses</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">autopses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_lif_refrac_cell_autapses"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_cell_autapses">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_cell_autapses</span><span class="p">():</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracRecurrentCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">autapses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">assert</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
         <span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="o">*</span><span class="n">cell</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
@@ -156,8 +152,8 @@
     <span class="k">assert</span> <span class="ow">not</span> <span class="n">s_full</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">s_part</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="test_lif_refrac_cell_no_autopses"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_cell_no_autopses">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_cell_no_autopses</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">autopses</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="test_lif_refrac_cell_no_autapses"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_cell_no_autapses">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_cell_no_autapses</span><span class="p">():</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracRecurrentCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">autapses</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">assert</span> <span class="p">(</span>
         <span class="n">cell</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="o">*</span><span class="n">cell</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
@@ -182,7 +178,7 @@
 
 <div class="viewcode-block" id="test_lif_refrac_feedforward_backward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_lif_refrac.html#norse.torch.module.test.test_lif_refrac.test_lif_refrac_feedforward_backward">[docs]</a><span class="k">def</span> <span class="nf">test_lif_refrac_feedforward_backward</span><span class="p">():</span>
     <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracFeedForwardCell</span><span class="p">()</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LIFRefracCell</span><span class="p">()</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></div>
@@ -223,6 +219,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -232,11 +229,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>

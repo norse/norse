@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
@@ -40,11 +36,11 @@
   <h1>Source code for norse.torch.module.test.test_leaky_integrator</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.module.leaky_integrator</span> <span class="kn">import</span> <span class="n">LICell</span><span class="p">,</span> <span class="n">LIFeedForwardCell</span><span class="p">,</span> <span class="n">LIState</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.leaky_integrator</span> <span class="kn">import</span> <span class="n">LICell</span><span class="p">,</span> <span class="n">LILinearCell</span><span class="p">,</span> <span class="n">LIState</span>
 
 
-<div class="viewcode-block" id="test_li_cell"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_li_cell">[docs]</a><span class="k">def</span> <span class="nf">test_li_cell</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LICell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<div class="viewcode-block" id="test_li_linear_cell"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_li_linear_cell">[docs]</a><span class="k">def</span> <span class="nf">test_li_linear_cell</span><span class="p">():</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LILinearCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
@@ -53,8 +49,8 @@
     <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="test_li_cell_state"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_li_cell_state">[docs]</a><span class="k">def</span> <span class="nf">test_li_cell_state</span><span class="p">():</span>
-    <span class="n">cell</span> <span class="o">=</span> <span class="n">LICell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<div class="viewcode-block" id="test_li_linear_cell_state"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_li_linear_cell_state">[docs]</a><span class="k">def</span> <span class="nf">test_li_linear_cell_state</span><span class="p">():</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">LILinearCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">LIState</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
 
@@ -64,23 +60,23 @@
 
 
 <div class="viewcode-block" id="test_cell_backward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_cell_backward">[docs]</a><span class="k">def</span> <span class="nf">test_cell_backward</span><span class="p">():</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">LICell</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LILinearCell</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">loss</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="test_li_feedforward_cell"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_li_feedforward_cell">[docs]</a><span class="k">def</span> <span class="nf">test_li_feedforward_cell</span><span class="p">():</span>
-    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFeedForwardCell</span><span class="p">()</span>
+<div class="viewcode-block" id="test_li_cell"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_li_cell">[docs]</a><span class="k">def</span> <span class="nf">test_li_cell</span><span class="p">():</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">LICell</span><span class="p">()</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="test_li_feedforward_cell_state"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_li_feedforward_cell_state">[docs]</a><span class="k">def</span> <span class="nf">test_li_feedforward_cell_state</span><span class="p">():</span>
-    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFeedForwardCell</span><span class="p">()</span>
+<div class="viewcode-block" id="test_li_cell_state"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_li_cell_state">[docs]</a><span class="k">def</span> <span class="nf">test_li_cell_state</span><span class="p">():</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">LICell</span><span class="p">()</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">LIState</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
 
@@ -89,8 +85,8 @@
     <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="test_ff_backward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_ff_backward">[docs]</a><span class="k">def</span> <span class="nf">test_ff_backward</span><span class="p">():</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">LIFeedForwardCell</span><span class="p">()</span>
+<div class="viewcode-block" id="test_li_backward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_leaky_integrator.html#norse.torch.module.test.test_leaky_integrator.test_li_backward">[docs]</a><span class="k">def</span> <span class="nf">test_li_backward</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LICell</span><span class="p">()</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">loss</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
@@ -132,6 +128,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -141,11 +138,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>

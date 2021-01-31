@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
@@ -38,10 +34,7 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.module.lsnn</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
-
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">norse.torch.functional.lsnn</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">LSNNParameters</span><span class="p">,</span>
@@ -50,13 +43,77 @@
     <span class="n">lsnn_step</span><span class="p">,</span>
     <span class="n">lsnn_feed_forward_step</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.util</span> <span class="kn">import</span> <span class="n">remove_autopses</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span><span class="p">,</span> <span class="n">SNN</span><span class="p">,</span> <span class="n">SNNRecurrent</span>
 
 
-<div class="viewcode-block" id="LSNNCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNCell">[docs]</a><span class="k">class</span> <span class="nc">LSNNCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LSNNCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNCell">[docs]</a><span class="k">class</span> <span class="nc">LSNNCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Euler integration cell for LIF Neuron with threshold adaptation</span>
+<span class="sd">    *without* recurrence.</span>
+<span class="sd">    More specifically it implements one integration step of the following ODE</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \begin{align*}</span>
+<span class="sd">            \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\</span>
+<span class="sd">            \dot{i} &amp;= -1/\tau_{\\text{syn}} i \\</span>
+<span class="sd">            \dot{b} &amp;= -1/\tau_{b} b</span>
+<span class="sd">        \end{align*}</span>
+
+<span class="sd">    together with the jump condition</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        z = \Theta(v - v_{\text{th}} + b)</span>
+
+<span class="sd">    and transition equations</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \begin{align*}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\text{reset}} \\</span>
+<span class="sd">            i &amp;= i + \text{input} \\</span>
+<span class="sd">            b &amp;= b + \beta z</span>
+<span class="sd">        \end{align*}</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        p (LSNNParameters): parameters of the lsnn unit</span>
+<span class="sd">        p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module</span>
+<span class="sd">            to configure neuron parameters as optimizable.</span>
+<span class="sd">        dt (float): Time step to use in integration. Defaults to 0.001.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="n">lsnn_feed_forward_step</span><span class="p">,</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="LSNNCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNFeedForwardState</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">LSNNFeedForwardState</span><span class="p">(</span>
+            <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">b</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">state</span></div></div>
+
+
+<div class="viewcode-block" id="LSNNRecurrentCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNRecurrentCell">[docs]</a><span class="k">class</span> <span class="nc">LSNNRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a LSNN</span>
-<span class="sd">    neuron-model. More specifically it implements one integration step of</span>
-<span class="sd">    the following ODE</span>
+<span class="sd">    neuron-model *with* recurrence. More specifically it implements one</span>
+<span class="sd">    integration step of the following ODE</span>
 
 <span class="sd">    .. math::</span>
 <span class="sd">        \\begin{align*}</span>
@@ -95,160 +152,157 @@
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
-        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-        <span class="n">autopses</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LSNNCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">input_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">input_size</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="n">lsnn_step</span><span class="p">,</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-            <span class="n">recurrent_weights</span> <span class="k">if</span> <span class="n">autopses</span> <span class="k">else</span> <span class="n">remove_autopses</span><span class="p">(</span><span class="n">recurrent_weights</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LSNNRecurrentCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNRecurrentCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNState</span><span class="p">:</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">LSNNState</span><span class="p">(</span>
+            <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                <span class="n">dims</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">b</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
-
-<div class="viewcode-block" id="LSNNCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LSNNState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="n">LSNNState</span><span class="p">(</span>
-                <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                    <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                <span class="p">),</span>
-                <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
-                <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                    <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                <span class="p">),</span>
-                <span class="n">b</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                    <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                <span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="n">lsnn_step</span><span class="p">(</span>
-            <span class="n">input_tensor</span><span class="p">,</span>
-            <span class="n">state</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="p">,</span>
-            <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
-            <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
-        <span class="p">)</span></div></div>
+        <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">state</span></div></div>
 
 
-<div class="viewcode-block" id="LSNNLayer"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNLayer">[docs]</a><span class="k">class</span> <span class="nc">LSNNLayer</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A Long short-term memory neuron module adapted from</span>
-<span class="sd">        https://arxiv.org/abs/1803.09574</span>
+<div class="viewcode-block" id="LSNN"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNN">[docs]</a><span class="k">class</span> <span class="nc">LSNN</span><span class="p">(</span><span class="n">SNN</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A Long short-term memory neuron module *without* recurrence</span>
+<span class="sd">    adapted from https://arxiv.org/abs/1803.09574</span>
 
 <span class="sd">    Usage:</span>
-<span class="sd">      &gt;&gt;&gt; from norse.torch.module import LSNNLayer, LSNNCell</span>
-<span class="sd">      &gt;&gt;&gt; layer = LSNNLayer(LSNNCell, 2, 10)    // LSNNCell of shape 2 -&gt; 10</span>
-<span class="sd">      &gt;&gt;&gt; data  = torch.zeros(2, 5, 2)          // Arbitrary data</span>
+<span class="sd">      &gt;&gt;&gt; from norse.torch import LSNN</span>
+<span class="sd">      &gt;&gt;&gt; layer = LSNN()</span>
+<span class="sd">      &gt;&gt;&gt; data  = torch.zeros(5, 2)</span>
 <span class="sd">      &gt;&gt;&gt; output, state = layer.forward(data)</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">      cell (torch.nn.Module): the underling neuron module, uninitialized</span>
-<span class="sd">      *cell_args: variable length input arguments for the underlying cell</span>
-<span class="sd">                  constructor</span>
-<span class="sd">      **cell_kwargs: variable length key-value arguments for the underlying cell constructor</span>
+<span class="sd">        p (LSNNParameters): The neuron parameters as a torch Module, which allows the module</span>
+<span class="sd">            to configure neuron parameters as optimizable.</span>
+<span class="sd">        dt (float): Time step to use in integration. Defaults to 0.001.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">cell_kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LSNNLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="o">*</span><span class="n">cell_args</span><span class="p">,</span> <span class="o">**</span><span class="n">cell_kwargs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="n">lsnn_feed_forward_step</span><span class="p">,</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
 
-<div class="viewcode-block" id="LSNNLayer.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LSNNState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Takes one step in the LSNN layer by simulating the layer for a number of timesteps.</span>
-<span class="sd">        Since the layer is recurrent, each simulation state (LSNNState) is used as the input for the next step.</span>
-
-<span class="sd">        The function expects inputs in the shape (simulation time steps, batch size, ...).</span>
-
-<span class="sd">        Parameters:</span>
-<span class="sd">            input_tensor (torch.Tensor): Input tensor with timesteps in the first dimension</span>
-<span class="sd">            state (Optional[LSNNState]): The input LSNN state. Defaults to None on the first timestep</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            A tuple of 1) spikes from each timestep and 2) the LSNNState from the last timestep.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="n">input_tensor</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># torch.jit.annotate(List[torch.Tensor], [])</span>
-        <span class="k">for</span> <span class="n">input_step</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
-            <span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">input_step</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-            <span class="n">outputs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">out</span><span class="p">]</span>
-        <span class="c1"># pytype: disable=bad-return-type</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span> <span class="n">state</span></div></div>
-        <span class="c1"># pytype: enable=bad-return-type</span>
+<div class="viewcode-block" id="LSNN.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNN.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNFeedForwardState</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">LSNNFeedForwardState</span><span class="p">(</span>
+            <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">b</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">state</span></div></div>
 
 
-<div class="viewcode-block" id="LSNNFeedForwardCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNFeedForwardCell">[docs]</a><span class="k">class</span> <span class="nc">LSNNFeedForwardCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Euler integration cell for LIF Neuron with threshold adaptation.</span>
-<span class="sd">    More specifically it implements one integration step of the following ODE</span>
+<div class="viewcode-block" id="LSNNRecurrent"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNRecurrent">[docs]</a><span class="k">class</span> <span class="nc">LSNNRecurrent</span><span class="p">(</span><span class="n">SNNRecurrent</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A Long short-term memory neuron module *wit* recurrence</span>
+<span class="sd">    adapted from https://arxiv.org/abs/1803.09574</span>
 
-<span class="sd">    .. math::</span>
-<span class="sd">        \begin{align*}</span>
-<span class="sd">            \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\</span>
-<span class="sd">            \dot{i} &amp;= -1/\tau_{\\text{syn}} i \\</span>
-<span class="sd">            \dot{b} &amp;= -1/\tau_{b} b</span>
-<span class="sd">        \end{align*}</span>
-
-<span class="sd">    together with the jump condition</span>
-
-<span class="sd">    .. math::</span>
-<span class="sd">        z = \Theta(v - v_{\text{th}} + b)</span>
-
-<span class="sd">    and transition equations</span>
-
-<span class="sd">    .. math::</span>
-<span class="sd">        \begin{align*}</span>
-<span class="sd">            v &amp;= (1-z) v + z v_{\text{reset}} \\</span>
-<span class="sd">            i &amp;= i + \text{input} \\</span>
-<span class="sd">            b &amp;= b + \beta z</span>
-<span class="sd">        \end{align*}</span>
+<span class="sd">    Usage:</span>
+<span class="sd">      &gt;&gt;&gt; from norse.torch.module import LSNNRecurrent</span>
+<span class="sd">      &gt;&gt;&gt; layer = LSNNRecurrent(2, 10)          // Shape 2 -&gt; 10</span>
+<span class="sd">      &gt;&gt;&gt; data  = torch.zeros(2, 5, 2)          // Arbitrary data</span>
+<span class="sd">      &gt;&gt;&gt; output, state = layer.forward(data)   // Out: (2, 5, 10)</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        s (LSNNFeedForwardState): current state of the lsnn unit</span>
-<span class="sd">        p (LSNNParameters): parameters of the lsnn unit</span>
-<span class="sd">        dt (float): Integration timestep to use</span>
+<span class="sd">        input_size (int): Size of the input. Also known as the number of input features.</span>
+<span class="sd">        hidden_size (int): Size of the hidden state. Also known as the number of input features.</span>
+<span class="sd">        p (LSNNParameters): The neuron parameters as a torch Module, which allows the module</span>
+<span class="sd">            to configure neuron parameters as optimizable.</span>
+<span class="sd">        dt (float): Time step to use in integration. Defaults to 0.001.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LSNNFeedForwardCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="n">lsnn_step</span><span class="p">,</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
 
-<div class="viewcode-block" id="LSNNFeedForwardCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNFeedForwardCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LSNNFeedForwardState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LSNNFeedForwardState</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="n">LSNNFeedForwardState</span><span class="p">(</span>
-                <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
-                <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                    <span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                <span class="p">),</span>
-                <span class="n">b</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                    <span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                <span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="n">lsnn_feed_forward_step</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="LSNNRecurrent.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lsnn.html#norse.torch.module.LSNNRecurrent.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNState</span><span class="p">:</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">LSNNState</span><span class="p">(</span>
+            <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                <span class="n">dims</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">b</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">state</span></div></div>
 </pre></div>
 
           </div>
@@ -286,6 +340,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -295,11 +350,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>

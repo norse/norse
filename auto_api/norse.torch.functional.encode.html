@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -22,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="norse.torch.functional.heaviside module" href="norse.torch.functional.heaviside.html" />
-    <link rel="prev" title="norse.torch.functional.correlation_sensor module" href="norse.torch.functional.correlation_sensor.html" />
+    <link rel="prev" title="norse.torch.functional.decode module" href="norse.torch.functional.decode.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -64,14 +60,14 @@ occur during a number of timesteps/iterations (seq_length).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – The input tensor, representing LIF current</p></li>
+<li><p><strong>input_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – The input tensor, representing LIF current</p></li>
 <li><p><strong>seq_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of iterations to simulate</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFParameters" title="norse.torch.functional.LIFParameters"><em>LIFParameters</em></a>) – Initial neuron parameters.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time delta between simulation steps</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor with an extra dimension of size <cite>seq_length</cite> containing spikes (1) or no spikes (0).</p>
@@ -96,7 +92,7 @@ value <span class="math notranslate nohighlight">\(x'\)</span>, or <span class="
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – The tensor containing distance values to convert to radial bases</p></li>
+<li><p><strong>tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – The tensor containing distance values to convert to radial bases</p></li>
 <li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The spread of the gaussian distribution. Defaults to 1.</p></li>
 </ul>
 </dd>
@@ -113,14 +109,14 @@ which represent input spikes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
 <li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
 <li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Maximal frequency (in Hertz) which will be emitted.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor with an extra dimension of size <cite>seq_length</cite> containing spikes (1) or no spikes (0).</p>
@@ -152,18 +148,18 @@ if a number gets close to its “receptive field”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – The input data as numerical values to be encoded to population codes</p></li>
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – The input data as numerical values to be encoded to population codes</p></li>
 <li><p><strong>out_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of output <em>per</em> input value</p></li>
-<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
+<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
 Can also be set for each individual sample.</p></li>
-<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
+<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
 (which changes for each index in the output tensor) and the actual data value to encode respectively.z
 Defaults to gaussian radial basis kernel function.</p></li>
-<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
+<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor with an extra dimension of size <cite>seq_length</cite> containing population encoded values of the input stimulus.
@@ -181,14 +177,14 @@ which represent input spikes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [-1,1].</p></li>
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [-1,1].</p></li>
 <li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
 <li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Maximal frequency (in Hertz) which will be emitted.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor with an extra dimension of size <cite>seq_length</cite> containing spikes (1) or no spikes (0).</p>
@@ -213,10 +209,10 @@ fast.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_spikes</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – A tensor of input spikes, assumed to be at least 2D (sequences, …)</p>
+<dd class="field-odd"><p><strong>input_spikes</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – A tensor of input spikes, assumed to be at least 2D (sequences, …)</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor where the first spike (1) is retained in the sequence</p>
@@ -233,14 +229,14 @@ thought to have an infinite refractory period.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><em>torch.Tensor</em></a>) – Input current to encode (needs to be positive).</p></li>
+<li><p><strong>input_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><em>torch.Tensor</em></a>) – Input current to encode (needs to be positive).</p></li>
 <li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFParameters" title="norse.torch.functional.LIFParameters"><em>LIFParameters</em></a>) – Parameters of the LIF neuron model.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -292,6 +288,7 @@ thought to have an infinite refractory period.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -302,11 +299,6 @@ thought to have an infinite refractory period.</p>
 <li class="toctree-l1"><a class="reference internal" href="../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../working.html">6. Working with Norse</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tasks.html">2. Running Tasks</a></li>
-</ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="norse.benchmark.html">norse.benchmark package</a></li>
@@ -316,6 +308,7 @@ thought to have an infinite refractory period.</p>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.test.html">norse.torch.functional.test package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.coba_lif.html">norse.torch.functional.coba_lif module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.correlation_sensor.html">norse.torch.functional.correlation_sensor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.decode.html">norse.torch.functional.decode module</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">norse.torch.functional.encode module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.heaviside.html">norse.torch.functional.heaviside module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.leaky_integrator.html">norse.torch.functional.leaky_integrator module</a></li>
@@ -349,7 +342,7 @@ thought to have an infinite refractory period.</p>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="norse.torch.html">norse.torch package</a><ul>
   <li><a href="norse.torch.functional.html">norse.torch.functional package</a><ul>
-      <li>Previous: <a href="norse.torch.functional.correlation_sensor.html" title="previous chapter">norse.torch.functional.correlation_sensor module</a></li>
+      <li>Previous: <a href="norse.torch.functional.decode.html" title="previous chapter">norse.torch.functional.decode module</a></li>
       <li>Next: <a href="norse.torch.functional.heaviside.html" title="next chapter">norse.torch.functional.heaviside module</a></li>
   </ul></li>
   </ul></li>

@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
@@ -44,7 +40,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">torch.hub</span> <span class="kn">import</span> <span class="n">load_state_dict_from_url</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFFeedForwardLayer</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIF</span>
 <span class="kn">from</span> <span class="nn">norse.torch.module.lift</span> <span class="kn">import</span> <span class="n">Lift</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -79,10 +75,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">avgpool</span> <span class="o">=</span> <span class="n">Lift</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveAvgPool2d</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
             <span class="n">Lift</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4096</span><span class="p">)),</span>
-            <span class="n">LIFFeedForwardLayer</span><span class="p">(),</span>
+            <span class="n">LIF</span><span class="p">(),</span>
             <span class="n">Lift</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">()),</span>
             <span class="n">Lift</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4096</span><span class="p">,</span> <span class="mi">4096</span><span class="p">)),</span>
-            <span class="n">LIFFeedForwardLayer</span><span class="p">(),</span>
+            <span class="n">LIF</span><span class="p">(),</span>
             <span class="n">Lift</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">()),</span>
             <span class="n">Lift</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4096</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)),</span>
         <span class="p">)</span>
@@ -119,9 +115,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">conv2d</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">batch_norm</span><span class="p">:</span>
-                <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Lift</span><span class="p">(</span><span class="n">conv2d</span><span class="p">),</span> <span class="n">Lift</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">v</span><span class="p">)),</span> <span class="n">LIFFeedForwardLayer</span><span class="p">()]</span>
+                <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Lift</span><span class="p">(</span><span class="n">conv2d</span><span class="p">),</span> <span class="n">Lift</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">v</span><span class="p">)),</span> <span class="n">LIF</span><span class="p">()]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Lift</span><span class="p">(</span><span class="n">conv2d</span><span class="p">),</span> <span class="n">LIFFeedForwardLayer</span><span class="p">()]</span>
+                <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Lift</span><span class="p">(</span><span class="n">conv2d</span><span class="p">),</span> <span class="n">LIF</span><span class="p">()]</span>
             <span class="n">in_channels</span> <span class="o">=</span> <span class="n">v</span>
     <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">layers</span><span class="p">)</span>
 
@@ -311,6 +307,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -320,11 +317,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>

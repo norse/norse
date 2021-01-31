@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
@@ -46,15 +42,15 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">norse.torch.module.encode</span> <span class="kn">import</span> <span class="n">PoissonEncoder</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFRecurrentCell</span>
 
 
 <div class="viewcode-block" id="SNNetwork"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_training.html#norse.torch.module.test.test_training.SNNetwork">[docs]</a><span class="k">class</span> <span class="nc">SNNetwork</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SNNetwork</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">PoissonEncoder</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">l0</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">l1</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l0</span> <span class="o">=</span> <span class="n">LIFRecurrentCell</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l1</span> <span class="o">=</span> <span class="n">LIFRecurrentCell</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s1</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="SNNetwork.forward"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.module.test.test_training.html#norse.torch.module.test.test_training.SNNetwork.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">):</span>
@@ -116,6 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -125,11 +122,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>

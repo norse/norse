@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -42,13 +38,13 @@
   <div class="section" id="module-norse.torch.module.lif_mc_refrac">
 <span id="norse-torch-module-lif-mc-refrac-module"></span><h1>norse.torch.module.lif_mc_refrac module<a class="headerlink" href="#module-norse.torch.module.lif_mc_refrac" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="norse.torch.module.lif_mc_refrac.LIFMCRefracCell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_mc_refrac.</code><code class="sig-name descname">LIFMCRefracCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFRefracParameters(lif=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=tensor(100.)), rho_reset=tensor(5.))</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">autopses</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_mc_refrac.html#LIFMCRefracCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_mc_refrac.LIFMCRefracCell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dt id="norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell">
+<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_mc_refrac.</code><code class="sig-name descname">LIFMCRefracRecurrentCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFRefracParameters(lif=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=tensor(100.)), rho_reset=tensor(5.))</span></em>, <em class="sig-param"><span class="n">g_coupling</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_mc_refrac.html#LIFMCRefracRecurrentCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell" title="norse.torch.module.snn.SNNRecurrentCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNRecurrentCell</span></code></a></p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
-<dt id="norse.torch.module.lif_mc_refrac.LIFMCRefracCell.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_mc_refrac.html#LIFMCRefracCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_mc_refrac.LIFMCRefracCell.forward" title="Permalink to this definition">¶</a></dt>
+<dt id="norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_mc_refrac.html#LIFMCRefracRecurrentCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -60,14 +56,24 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+52f6bba ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.8.0a0+f34c791 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell.initial_state">
+<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_mc_refrac.html#LIFMCRefracRecurrentCell.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell.initial_state" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_refrac.html#norse.torch.functional.lif_refrac.LIFRefracState" title="norse.torch.functional.lif_refrac.LIFRefracState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFRefracState</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="norse.torch.module.lif_mc_refrac.LIFMCRefracCell.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_mc_refrac.LIFMCRefracCell.training" title="Permalink to this definition">¶</a></dt>
+<dt id="norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell.training">
+<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -119,6 +125,7 @@ registered hooks while the latter silently ignores them.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -128,11 +135,6 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1"><a class="reference internal" href="../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul class="current">
@@ -157,7 +159,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.lsnn.html">norse.torch.module.lsnn module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.regularization.html">norse.torch.module.regularization module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.sequential.html">norse.torch.module.sequential module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="norse.torch.module.util.html">norse.torch.module.util module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.module.snn.html">norse.torch.module.snn module</a></li>
 </ul>
 </li>
 </ul>

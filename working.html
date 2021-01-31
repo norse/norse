@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -21,7 +17,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. Beginner tutorials" href="auto_examples/index.html" />
+    <link rel="next" title="norse.benchmark package" href="auto_api/norse.benchmark.html" />
     <link rel="prev" title="5. Papers citing Norse" href="papers.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -43,10 +39,10 @@
 <span id="page-working"></span><h1><span class="section-number">6. </span>Working with Norse<a class="headerlink" href="#working-with-norse" title="Permalink to this headline">¶</a></h1>
 <p>For us, Norse is a tool to accelerate our own work within spiking neural networks.
 This page serves to describe the fundamental ideas behind the Python code in Norse and
-provide you with hints as to how you can apply it in your own work
-.
-We will start by explaining some basic terminology, describe a <em>suggestion</em> to how Norse
-can be approach, and finally provide examples on how to work with Norse.</p>
+provide you with specific tools to become productive with SNNs.</p>
+<p>We will start by explaining some basic terminology, describe a <em>suggestion</em> to how Norse
+can be approached, and finally provide examples on how we have solved specific problems
+with Norse.</p>
 <div class="section" id="fundamental-concepts">
 <h2><span class="section-number">6.1. </span>Fundamental concepts<a class="headerlink" href="#fundamental-concepts" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="functional-vs-module-packaging">
@@ -55,7 +51,41 @@ can be approach, and finally provide examples on how to work with Norse.</p>
 The <em>functional</em> package contains functions and classes that are considered atomic.
 If you use this package, you are expected to piece the code together yourself.
 The <em>module</em> package contains PyTorch modules on a slightly higher level.</p>
-<p>This is the abstraction we will work with in this document.</p>
+<p>We will work with the <em>module</em> abstraction in this document.</p>
+</div>
+<div class="section" id="neuron-state">
+<h3><span class="section-number">6.1.2. </span>Neuron state<a class="headerlink" href="#neuron-state" title="Permalink to this headline">¶</a></h3>
+<p>Neurons have parameters that determine their function. For example, they have a
+certain membrane voltage that will lead the neuron to spike <em>if</em> the voltage is
+above a threshold. Someone needs to keep track of that membrane voltage. If we
+wouldn’t, the neuron membrane would never update and we would never get any
+spikes. In Norse, we refer to that as the <strong>neuron state</strong>.</p>
+<p>In code, it looks like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
+
+<span class="n">cell</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">spikes</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>        <span class="c1"># First run is done without any state</span>
+<span class="o">...</span>
+<span class="n">spikes</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="c1"># Now we pass in the previous state</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="neuron-dynamics-and-time">
+<h3><span class="section-number">6.1.3. </span>Neuron dynamics and time<a class="headerlink" href="#neuron-dynamics-and-time" title="Permalink to this headline">¶</a></h3>
+<p>Norse solves two of the hardest parts about running neuron simulations: neural equations and temporal dynamics.
+We have solved that by providing four modules for each neuron type.
+As an example, the <a class="reference external" href="https://arxiv.org/abs/1803.09574">Long short-term memory neuron model</a> the four modules are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LSNNCell</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LSNNRecurrentCell</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LSNN</span></code> and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LSNNRecurrent</span></code></p></li>
+</ul>
+<p>The four modules represent the combinations between simulating over time and having recurrence.
+In other words, the <code class="docutils literal notranslate"><span class="pre">LSNNCell</span></code> is <em>not</em> recurrent, and expects the input data to <em>not</em> have time, while the
+<code class="docutils literal notranslate"><span class="pre">LSNNRecurrent</span></code> <em>is</em> recurrent and expects the input to have time in the <em>first</em> dimension.</p>
 </div>
 </div>
 <div class="section" id="how-to-approach-norse">
@@ -67,10 +97,10 @@ that they become simple to work with.</p>
 <p>The two main differences from artificial neural networks is 1) the state variables containing the neuron parameters
 and 2) the temporal dimension (see <a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spikes</span></a>).
 Apart from that, Norse works like you would expect any PyTorch module to work.</p>
-<p>A specific recommendation to work with Norse is to consider</p>
+<p>When working with Norse we recommend that you consider two things</p>
 <ol class="arabic simple">
-<li><p>What neuron models you need to work with</p></li>
-<li><p>What learning/plasticity models you need</p></li>
+<li><p>Neuron models</p></li>
+<li><p>Learning algorithms and/or plasticity models</p></li>
 </ol>
 <div class="section" id="deciding-on-neuron-models">
 <h3><span class="section-number">6.2.1. </span>Deciding on neuron models<a class="headerlink" href="#deciding-on-neuron-models" title="Permalink to this headline">¶</a></h3>
@@ -81,16 +111,11 @@ In Norse, this is implemented as a recurrent cell in <a class="reference externa
 </div>
 <div class="section" id="deciding-on-learning-plasiticy-models">
 <h3><span class="section-number">6.2.2. </span>Deciding on learning/plasiticy models<a class="headerlink" href="#deciding-on-learning-plasiticy-models" title="Permalink to this headline">¶</a></h3>
-<p>This is an area of active development and will be expanded upon soon.</p>
 <p>Optimisation is mainly done using PyTorch’s optimizers, as seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py#L100">MNIST task</a>.</p>
 </div>
 </div>
 <div class="section" id="examples-on-working-with-norse">
 <h2><span class="section-number">6.3. </span>Examples on working with Norse<a class="headerlink" href="#examples-on-working-with-norse" title="Permalink to this headline">¶</a></h2>
-<p>We have put considerable effort into streamlining it for three scenarios:
-1) porting deep learning models to the spiking/temporal domain,
-2) extending existing models,
-3) exploring novel ideas.</p>
 <div class="section" id="porting-deep-learning-models">
 <h3><span class="section-number">6.3.1. </span>Porting deep learning models<a class="headerlink" href="#porting-deep-learning-models" title="Permalink to this headline">¶</a></h3>
 <p>A classical example of this can be seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py">MNIST</a>
@@ -101,10 +126,6 @@ where convolutions are brought into Norse.</p>
 <p>An example of this can be seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/memory.py">memory task</a>,
 where <a class="reference external" href="https://github.com/IGITUGraz/LSNN-official">adaptive long short-term spiking neural networks</a>
 are added to</p>
-</div>
-<div class="section" id="exploring-novel-ideas">
-<h3><span class="section-number">6.3.3. </span>Exploring novel ideas<a class="headerlink" href="#exploring-novel-ideas" title="Permalink to this headline">¶</a></h3>
-<p>This is an area of active development and will be expanded upon soon.</p>
 </div>
 </div>
 </div>
@@ -154,6 +175,7 @@ are added to</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul class="current">
@@ -169,11 +191,6 @@ are added to</p>
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tasks.html">2. Running Tasks</a></li>
-</ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_api/norse.benchmark.html">norse.benchmark package</a></li>
@@ -186,7 +203,7 @@ are added to</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="papers.html" title="previous chapter"><span class="section-number">5. </span>Papers citing Norse</a></li>
-      <li>Next: <a href="auto_examples/index.html" title="next chapter"><span class="section-number">1. </span>Beginner tutorials</a></li>
+      <li>Next: <a href="auto_api/norse.benchmark.html" title="next chapter">norse.benchmark package</a></li>
   </ul></li>
 </ul>
 </div>

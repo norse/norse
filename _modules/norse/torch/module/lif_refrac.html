@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
@@ -38,9 +34,7 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.module.lif_refrac</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">..functional.lif</span> <span class="kn">import</span> <span class="n">LIFState</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span>
 
@@ -51,10 +45,86 @@
     <span class="n">lif_refrac_step</span><span class="p">,</span>
     <span class="n">lif_refrac_feed_forward_step</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.util</span> <span class="kn">import</span> <span class="n">remove_autopses</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span>
 
 
-<div class="viewcode-block" id="LIFRefracCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracCell">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFRefracCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracCell">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a</span>
+<span class="sd">    LIF neuron-model with absolute refractory period *without* recurrence.</span>
+<span class="sd">    More specifically it implements one integration step of the following ODE.</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{align*}</span>
+<span class="sd">            \\dot{v} &amp;= 1/\\tau_{\\text{mem}} (1-\\Theta(\\rho)) \</span>
+<span class="sd">            (v_{\\text{leak}} - v + i) \\\\</span>
+<span class="sd">            \\dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\</span>
+<span class="sd">            \\dot{\\rho} &amp;= -1/\\tau_{\\text{refrac}} \\Theta(\\rho)</span>
+<span class="sd">        \\end{align*}</span>
+
+<span class="sd">    together with the jump condition</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{align*}</span>
+<span class="sd">            z &amp;= \\Theta(v - v_{\\text{th}}) \\\\</span>
+<span class="sd">            z_r &amp;= \\Theta(-\\rho)</span>
+<span class="sd">        \\end{align*}</span>
+
+<span class="sd">    and transition equations</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{align*}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\\text{reset}} \\\\</span>
+<span class="sd">            \\rho &amp;= \\rho + z_r \\rho_{\\text{reset}}</span>
+<span class="sd">        \\end{align*}</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        p (LIFRefracParameters): parameters of the lif neuron</span>
+<span class="sd">        dt (float): Integration timestep to use</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; batch_size = 16</span>
+<span class="sd">        &gt;&gt;&gt; lif = LIFRefracCell()</span>
+<span class="sd">        &gt;&gt;&gt; input = torch.randn(batch_size, 20, 30)</span>
+<span class="sd">        &gt;&gt;&gt; output, s0 = lif(input)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">lif_refrac_feed_forward_step</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="LIFRefracCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFRefracFeedForwardState</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracFeedForwardState</span><span class="p">(</span>
+            <span class="n">LIFFeedForwardState</span><span class="p">(</span>
+                <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                    <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">),</span>
+            <span class="n">rho</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">state</span></div></div>
+
+
+<div class="viewcode-block" id="LIFRefracRecurrentCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracRecurrentCell">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a LIF</span>
 <span class="sd">    neuron-model with absolute refractory period. More specifically it</span>
 <span class="sd">    implements one integration step of the following ODE.</span>
@@ -93,12 +163,12 @@
 <span class="sd">        hidden_size (int): Size of the hidden state. Also known as the number of input features.</span>
 <span class="sd">        p (LIFRefracParameters): parameters of the lif neuron</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
-<span class="sd">        autopses (bool): Allow self-connections in the recurrence? Defaults to False.</span>
+<span class="sd">        autapses (bool): Allow self-connections in the recurrence? Defaults to False.</span>
 
 <span class="sd">    Examples:</span>
 
 <span class="sd">        &gt;&gt;&gt; batch_size = 16</span>
-<span class="sd">        &gt;&gt;&gt; lif = LIFRefracCell(10, 20)</span>
+<span class="sd">        &gt;&gt;&gt; lif = LIFRefracRecurrentCell(10, 20)</span>
 <span class="sd">        &gt;&gt;&gt; input = torch.randn(batch_size, 10)</span>
 <span class="sd">        &gt;&gt;&gt; output, s0 = lif(input)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -108,131 +178,43 @@
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
-        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-        <span class="n">autopses</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LIFRefracCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">input_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">input_size</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="n">lif_refrac_step</span><span class="p">,</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-            <span class="n">recurrent_weights</span> <span class="k">if</span> <span class="n">autopses</span> <span class="k">else</span> <span class="n">remove_autopses</span><span class="p">(</span><span class="n">recurrent_weights</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
-<div class="viewcode-block" id="LIFRefracCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIFRefracState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracState</span><span class="p">(</span>
-                <span class="n">LIFState</span><span class="p">(</span>
-                    <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                        <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-                        <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                        <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                    <span class="p">),</span>
-                    <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
-                    <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                        <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-                        <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                        <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                    <span class="p">),</span>
-                <span class="p">),</span>
-                <span class="n">rho</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+<div class="viewcode-block" id="LIFRefracRecurrentCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracRecurrentCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFRefracState</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracState</span><span class="p">(</span>
+            <span class="n">LIFState</span><span class="p">(</span>
+                <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                     <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
                     <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                 <span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="n">lif_refrac_step</span><span class="p">(</span>
-            <span class="n">input_tensor</span><span class="p">,</span>
-            <span class="n">state</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="p">,</span>
-            <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
-            <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
-        <span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="LIFRefracFeedForwardCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracFeedForwardCell">[docs]</a><span class="k">class</span> <span class="nc">LIFRefracFeedForwardCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a</span>
-<span class="sd">    LIF neuron-model with absolute refractory period. More specifically</span>
-<span class="sd">    it implements one integration step of the following ODE.</span>
-
-<span class="sd">    .. math::</span>
-<span class="sd">        \\begin{align*}</span>
-<span class="sd">            \\dot{v} &amp;= 1/\\tau_{\\text{mem}} (1-\\Theta(\\rho)) \</span>
-<span class="sd">            (v_{\\text{leak}} - v + i) \\\\</span>
-<span class="sd">            \\dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\</span>
-<span class="sd">            \\dot{\\rho} &amp;= -1/\\tau_{\\text{refrac}} \\Theta(\\rho)</span>
-<span class="sd">        \\end{align*}</span>
-
-<span class="sd">    together with the jump condition</span>
-
-<span class="sd">    .. math::</span>
-<span class="sd">        \\begin{align*}</span>
-<span class="sd">            z &amp;= \\Theta(v - v_{\\text{th}}) \\\\</span>
-<span class="sd">            z_r &amp;= \\Theta(-\\rho)</span>
-<span class="sd">        \\end{align*}</span>
-
-<span class="sd">    and transition equations</span>
-
-<span class="sd">    .. math::</span>
-<span class="sd">        \\begin{align*}</span>
-<span class="sd">            v &amp;= (1-z) v + z v_{\\text{reset}} \\\\</span>
-<span class="sd">            \\rho &amp;= \\rho + z_r \\rho_{\\text{reset}}</span>
-<span class="sd">        \\end{align*}</span>
-
-<span class="sd">    Parameters:</span>
-<span class="sd">        p (LIFRefracParameters): parameters of the lif neuron</span>
-<span class="sd">        dt (float): Integration timestep to use</span>
-
-<span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; batch_size = 16</span>
-<span class="sd">        &gt;&gt;&gt; lif = LIFRefracFeedForwardCell()</span>
-<span class="sd">        &gt;&gt;&gt; input = torch.randn(batch_size, 20, 30)</span>
-<span class="sd">        &gt;&gt;&gt; output, s0 = lif(input)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
-        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LIFRefracFeedForwardCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
-
-<div class="viewcode-block" id="LIFRefracFeedForwardCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_refrac.html#norse.torch.module.LIFRefracFeedForwardCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIFRefracFeedForwardState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFRefracFeedForwardState</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracFeedForwardState</span><span class="p">(</span>
-                <span class="n">LIFFeedForwardState</span><span class="p">(</span>
-                    <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
-                    <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                        <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-                        <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                        <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                    <span class="p">),</span>
-                <span class="p">),</span>
-                <span class="n">rho</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                    <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+                <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
                     <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                 <span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="n">lif_refrac_feed_forward_step</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
+            <span class="p">),</span>
+            <span class="n">rho</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">state</span></div></div>
 </pre></div>
 
           </div>
@@ -270,6 +252,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -279,11 +262,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>

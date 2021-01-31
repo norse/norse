@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
@@ -38,74 +34,82 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.module.lif_mc_refrac</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">..functional.lif_refrac</span> <span class="kn">import</span> <span class="n">LIFRefracParameters</span><span class="p">,</span> <span class="n">LIFRefracState</span>
 <span class="kn">from</span> <span class="nn">..functional.lif</span> <span class="kn">import</span> <span class="n">LIFState</span>
 <span class="kn">from</span> <span class="nn">..functional.lif_mc_refrac</span> <span class="kn">import</span> <span class="n">lif_mc_refrac_step</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.util</span> <span class="kn">import</span> <span class="n">remove_autopses</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNRecurrentCell</span>
 
 
-<div class="viewcode-block" id="LIFMCRefracCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_mc_refrac.html#norse.torch.module.LIFMCRefracCell">[docs]</a><span class="k">class</span> <span class="nc">LIFMCRefracCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LIFMCRefracRecurrentCell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_mc_refrac.html#norse.torch.module.LIFMCRefracRecurrentCell">[docs]</a><span class="k">class</span> <span class="nc">LIFMCRefracRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
-        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
-        <span class="n">autopses</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">g_coupling</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LIFMCRefracCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">input_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">input_size</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
-        <span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-            <span class="n">recurrent_weights</span> <span class="k">if</span> <span class="n">autopses</span> <span class="k">else</span> <span class="n">remove_autopses</span><span class="p">(</span><span class="n">recurrent_weights</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">g_coupling</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
 
-<div class="viewcode-block" id="LIFMCRefracCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_mc_refrac.html#norse.torch.module.LIFMCRefracCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIFRefracState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracState</span><span class="p">(</span>
-                <span class="n">lif</span><span class="o">=</span><span class="n">LIFState</span><span class="p">(</span>
-                    <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                        <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-                        <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                        <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                    <span class="p">),</span>
-                    <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
-                    <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
-                        <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-                        <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                        <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                    <span class="p">),</span>
-                    <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                        <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-                        <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                        <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                    <span class="p">),</span>
-                <span class="p">),</span>
-                <span class="n">rho</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g_coupling</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">g_coupling</span>
+            <span class="k">if</span> <span class="n">g_coupling</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="LIFMCRefracRecurrentCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_mc_refrac.html#norse.torch.module.LIFMCRefracRecurrentCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFRefracState</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracState</span><span class="p">(</span>
+            <span class="n">lif</span><span class="o">=</span><span class="n">LIFState</span><span class="p">(</span>
+                <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                     <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
                     <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
                 <span class="p">),</span>
-            <span class="p">)</span>
+                <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+                <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
+                    <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">),</span>
+            <span class="n">rho</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">state</span></div>
+
+<div class="viewcode-block" id="LIFMCRefracRecurrentCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif_mc_refrac.html#norse.torch.module.LIFMCRefracRecurrentCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIFRefracState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">lif_mc_refrac_step</span><span class="p">(</span>
             <span class="n">input_tensor</span><span class="p">,</span>
             <span class="n">state</span><span class="p">,</span>
@@ -152,6 +156,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -161,11 +166,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>

@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
@@ -41,7 +37,7 @@
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.module.leaky_integrator</span> <span class="kn">import</span> <span class="n">LICell</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.leaky_integrator</span> <span class="kn">import</span> <span class="n">LILinearCell</span>
 <span class="kn">from</span> <span class="nn">norse.torch.module.lif_correlation</span> <span class="kn">import</span> <span class="n">LIFCorrelation</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.correlation_sensor</span> <span class="kn">import</span> <span class="n">correlation_based_update</span>
 
@@ -70,9 +66,9 @@
         <span class="n">y_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span>
 
-    <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">50</span>
     <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">input_features</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">input_features</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">hidden_features</span> <span class="o">=</span> <span class="mi">8</span>
     <span class="n">output_features</span> <span class="o">=</span> <span class="mi">2</span>
 
@@ -94,11 +90,11 @@
     <span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
 
     <span class="n">lif_correlation</span> <span class="o">=</span> <span class="n">LIFCorrelation</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">hidden_features</span><span class="p">)</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">LICell</span><span class="p">(</span><span class="n">hidden_features</span><span class="p">,</span> <span class="n">output_features</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">LILinearCell</span><span class="p">(</span><span class="n">hidden_features</span><span class="p">,</span> <span class="n">output_features</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="n">log_softmax_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">LogSoftmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">NLLLoss</span><span class="p">()</span>
 
-    <span class="n">linear_update</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="n">linear_update</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
     <span class="n">rec_linear_update</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
 
     <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span>
@@ -203,6 +199,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -212,11 +209,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>

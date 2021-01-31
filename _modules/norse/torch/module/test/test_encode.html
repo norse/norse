@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
@@ -44,7 +40,7 @@
 
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">..lif</span> <span class="kn">import</span> <span class="n">LIFLayer</span>
+<span class="kn">from</span> <span class="nn">..lif</span> <span class="kn">import</span> <span class="n">LIFRecurrent</span>
 <span class="kn">from</span> <span class="nn">norse.torch.module.encode</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">PopulationEncoder</span><span class="p">,</span>
     <span class="n">ConstantCurrentLIFEncoder</span><span class="p">,</span>
@@ -115,7 +111,7 @@
     <span class="n">timesteps</span> <span class="o">=</span> <span class="mi">20</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span>
     <span class="n">encoder</span> <span class="o">=</span> <span class="n">SpikeLatencyLIFEncoder</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
-    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFLayer</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFRecurrent</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
     <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></div>
@@ -136,7 +132,7 @@
     <span class="n">encoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
         <span class="n">ConstantCurrentLIFEncoder</span><span class="p">(</span><span class="n">seq_length</span><span class="o">=</span><span class="n">timesteps</span><span class="p">),</span> <span class="n">SpikeLatencyEncoder</span><span class="p">()</span>
     <span class="p">)</span>
-    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFLayer</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">LIFRecurrent</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
@@ -184,6 +180,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
@@ -193,11 +190,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../learning.html">4. Learning with spikes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">2. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
