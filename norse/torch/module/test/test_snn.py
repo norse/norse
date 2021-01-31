@@ -1,3 +1,4 @@
+# pytype: skip-file
 from typing import NamedTuple
 import torch
 from norse.torch.module import lif, snn
