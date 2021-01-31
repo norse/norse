@@ -131,7 +131,7 @@ def test_lif_feedforward_layer():
 
 def test_lif_feedforward_layer_backward():
     model = LIF()
-    data = torch.ones(100, 12)
+    data = torch.ones(10, 12)
     out, _ = model(data)
     loss = out.sum()
     loss.backward()
@@ -140,7 +140,7 @@ def test_lif_feedforward_layer_backward():
 def test_lif_recurrent_layer_backward_iteration():
     # Tests that gradient variables can be used in subsequent applications
     model = LIFRecurrent(6, 6)
-    data = torch.ones(100, 6)
+    data = torch.ones(10, 6)
     out, s = model(data)
     out, _ = model(out, s)
     loss = out.sum()
@@ -149,7 +149,7 @@ def test_lif_recurrent_layer_backward_iteration():
 
 def test_lif_recurrent_layer_backward():
     model = LIFRecurrent(6, 6)
-    data = torch.ones(100, 6)
+    data = torch.ones(10, 6)
     out, _ = model(data)
     loss = out.sum()
     loss.backward()
@@ -158,7 +158,7 @@ def test_lif_recurrent_layer_backward():
 def test_lif_feedforward_layer_backward_iteration():
     # Tests that gradient variables can be used in subsequent applications
     model = LIF()
-    data = torch.ones(100, 6)
+    data = torch.ones(10, 6)
     out, s = model(data)
     out, _ = model(out, s)
     loss = out.sum()
@@ -167,7 +167,7 @@ def test_lif_feedforward_layer_backward_iteration():
 
 def test_backward_model():
     model = SNNetwork()
-    data = torch.ones(100, 12)
+    data = torch.ones(10, 12)
     out = model(data)
     loss = out.sum()
     loss.backward()

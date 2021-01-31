@@ -66,7 +66,12 @@ class LIFRefracCell(SNNCell):
     ) -> LIFRefracFeedForwardState:
         state = LIFRefracFeedForwardState(
             LIFFeedForwardState(
-                v=self.p.lif.v_leak.detach(),
+                v=torch.full(
+                    input_tensor.shape,
+                    self.p.lif.v_leak.detach(),
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
                 i=torch.zeros(
                     input_tensor.shape,
                     device=input_tensor.device,

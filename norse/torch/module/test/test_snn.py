@@ -1,10 +1,30 @@
 from typing import NamedTuple
-
+import torch
 from norse.torch.module import lif, snn
 
 
 class MockParams(NamedTuple):
     my_param: int = -15
+
+
+def test_snn_recurrent_cell_weights():
+    in_w = torch.randn(3, 2)
+    re_w = torch.randn(3, 3)
+    n = snn.SNNRecurrentCell(
+        None, None, 2, 3, p=MockParams(), input_weights=in_w, recurrent_weights=re_w
+    )
+    assert torch.all(torch.eq(n.input_weights, in_w))
+    assert torch.all(torch.eq(n.recurrent_weights, re_w))
+
+
+def test_snn_recurrent_weights():
+    in_w = torch.randn(3, 2)
+    re_w = torch.randn(3, 3)
+    n = snn.SNNRecurrent(
+        None, None, 2, 3, p=MockParams(), input_weights=in_w, recurrent_weights=re_w
+    )
+    assert torch.all(torch.eq(n.input_weights, in_w))
+    assert torch.all(torch.eq(n.recurrent_weights, re_w))
 
 
 def test_snn_cell_repr():
