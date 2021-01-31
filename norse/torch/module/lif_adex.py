@@ -1,5 +1,3 @@
-from typing import Optional, Tuple
-
 import torch
 
 from norse.torch.functional.lif_adex import (
