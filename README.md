@@ -215,7 +215,7 @@ If you use Norse in your work, please cite it as follows:
   year         = 2021,
   note         = {Documentation: https://norse.ai/docs/},
   publisher    = {Zenodo},
-  version      = {0.0.5},
+  version      = {0.0.6},
   doi          = {10.5281/zenodo.4422025},
   url          = {https://doi.org/10.5281/zenodo.4422025}
 }
