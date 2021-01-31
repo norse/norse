@@ -100,11 +100,6 @@ def test_lif_recurrent_sequence():
     assert z.shape == (10, 1, 1)
 
 
-def test_lif_cell_repr():
-    cell = LIF()
-    assert str(cell) == "LIF(\n  (p): LIFParameters()\n)"
-
-
 def test_lif_feedforward_cell_backward():
     # Tests that gradient variables can be used in subsequent applications
     cell = LIFCell()
