@@ -12,7 +12,7 @@ def test_regularization_wrapper():
     assert rs.count == 0
     z, rs = r(z, rs)
     assert rs.count == 10
-    assert hasattr(rs, 'state')
+    assert hasattr(rs, "state")
 
 
 def test_regularization_module():

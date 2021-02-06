@@ -11,66 +11,99 @@ import torch
 import torch.utils.data
 import pytorch_lightning as pl
 
-from norse.torch import LIFParameters, LIFFeedForwardCell, LIFeedForwardCell
-from norse.torch import ConvNet, ConvNet4
+from norse.torch import LIFParameters, LIFCell, LICell, LIParameters
 from norse.torch import (
     ConstantCurrentLIFEncoder,
     PoissonEncoder,
     SignedPoissonEncoder,
     SpikeLatencyLIFEncoder,
 )
-from norse.torch import Lift, SequentialState, RegularizationWrapper
+from norse.torch import SequentialState, RegularizationWrapper
 
 
 class LIFConvNet(pl.LightningModule):
-    def __init__(self, num_channels, lr, optimizer, p):
-        super(LIFConvNet, self).__init__()
+    def __init__(self, seq_length, num_channels, lr, optimizer, p, lr_step=True):
+        super().__init__()
         self.lr = lr
+        self.lr_step = lr_step
         self.optimizer = optimizer
+        self.seq_length = seq_length
+
         self.rsnn = SequentialState(
-            torch.nn.Conv2d(num_channels, 128, 3),  # 0
-            RegularizationWrapper(LIFFeedForwardCell(p)),
-            torch.nn.Conv2d(128, 256, 3),
-            torch.nn.AvgPool2d(2, 2),
+            torch.nn.Conv2d(num_channels, 128, 3),
+            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
+            torch.nn.BatchNorm2d(128),
+            torch.nn.Conv2d(128, 256, 4),
+            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
             torch.nn.BatchNorm2d(256),
-            RegularizationWrapper(LIFFeedForwardCell(p)),  # 5
-            torch.nn.Conv2d(256, 512, 3),
-            torch.nn.AvgPool2d(2, 2),
-            torch.nn.BatchNorm2d(512),
-            torch.nn.Conv2d(512, 1024, 3),
-            torch.nn.Conv2d(1024, 512, 3),  # 10
+            torch.nn.Conv2d(256, 256, 6),
             torch.nn.Flatten(1),
-            torch.nn.Linear(2048, 1024),
-            RegularizationWrapper(LIFFeedForwardCell(p)),
-            torch.nn.Linear(1024, 512),
-            RegularizationWrapper(LIFFeedForwardCell(p)),  # 15
-            torch.nn.Linear(512, 10),
-            LIFeedForwardCell(),
+            torch.nn.Linear(256, 256),
+            RegularizationWrapper(LIFCell(p)),
+            torch.nn.Linear(256, 128),
+            RegularizationWrapper(LIFCell(p)),
+            torch.nn.Linear(128, 10),
+            LICell(),
         )
 
     def forward(self, x):
-        voltages = torch.zeros(*x.shape[:2], 10, device=x.device, dtype=x.dtype)
+        # X was shape (batch, time, ...) and will be (time, batch, ...)
+        x = x.permute(1, 0, 2, 3, 4)
+        voltages = torch.empty(*x.shape[:2], 10, device=x.device, dtype=x.dtype)
         s = None
         for ts in range(x.shape[0]):
-            out, s = self.rsnn(x[ts], s)  # .permute(1, 0, 2)
-            # m, _ = torch.max(voltages, 0)
+            out, s = self.rsnn(x[ts], s)
             voltages[ts, :, :] = out
 
-        m, _ = voltages.max(1)
-        regularization = (s[1].count + s[5].count + s[13].count + s[15].count) * 1e-6
-        return torch.nn.functional.log_softmax(m, dim=1), regularization
+        # Regularize all spiking layers to a number of spikes within 1% - 20%
+        regularization = 0
+        for substate in s:
+            if hasattr(substate, "count") and isinstance(substate.count, torch.Tensor):
+                min_spikes = substate.state.v.shape[-1] * self.seq_length * 0.01  # 1%
+                max_spikes = min_spikes * 20  # 20%
+                regularization = regularization + max(0, min_spikes - substate.count)
+                regularization = regularization + max(0, substate.count - max_spikes)
 
+        return voltages, regularization
+
+    # Forward pass of a single batch
     def training_step(self, batch, batch_idx):
         x, y = batch
-        out, regularization = self(x)
-        loss = torch.nn.functional.nll_loss(out, y) + regularization
+        out, r = self(x)
+        loss = torch.nn.functional.cross_entropy(out.mean(0), y) + r
+
+        self.log("Reg.", r, prog_bar=True)
+        self.log("Loss", loss)
+        self.log("LR", self.scheduler.get_last_lr()[0])
         return loss
+
+    # Same as in training_step, but also reports accuracy
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        out, _ = self(x)
+        loss = torch.nn.functional.cross_entropy(out.mean(0), y)
+        classes = out.mean(0).argmax(1)
+        acc = torch.eq(classes, y).sum().item() / len(y)
+
+        self.log("Loss", loss)
+        self.log("Acc.", acc)
+        self.log("LR", self.scheduler.get_last_lr()[0])
+
+    def training_epoch_end(self, outputs):
+        if self.lr_step:
+            self.scheduler.step()
 
     def configure_optimizers(self):
         if self.optimizer == "adam":
-            return torch.optim.Adam(self.parameters(), lr=self.lr)
+            optimizer = torch.optim.Adam(
+                self.parameters(), lr=self.lr, weight_decay=1e-5
+            )
         else:
-            return torch.optim.SGD(self.parameters(), lr=self.lr)
+            optimizer = torch.optim.SGD(self.parameters(), lr=self.lr, momentum=0.9)
+        self.scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer, step_size=10, gamma=0.1
+        )
+        return optimizer
 
 
 def main(args):
@@ -79,7 +112,7 @@ def main(args):
     torch.manual_seed(args.manual_seed)
 
     # Setup encoding
-    num_channels = 4
+    num_channels = 3
     p = LIFParameters(v_th=torch.as_tensor(args.current_encoder_v_th))
     constant_encoder = ConstantCurrentLIFEncoder(seq_length=args.seq_length, p=p)
     if args.encoding == "poisson":
@@ -108,30 +141,17 @@ def main(args):
         num_channels = 2 * num_channels
 
     # Load datasets
-    def add_luminance(images):
-        return torch.cat(
-            (
-                images,
-                torch.unsqueeze(
-                    0.2126 * images[0, :, :]
-                    + 0.7152 * images[1, :, :]
-                    + 0.0722 * images[2, :, :],
-                    0,
-                ),
-            ),
-            0,
-        )
-
     transform_train = torchvision.transforms.Compose(
         [
             torchvision.transforms.RandomCrop(32, padding=4),
             torchvision.transforms.RandomHorizontalFlip(),
             torchvision.transforms.ToTensor(),
+            torchvision.transforms.Normalize(mean=(0.0, 0.0, 0.0), std=(0.5, 0.5, 0.5)),
+            encoder,
         ]
-        + [add_luminance, encoder]
     )
     transform_test = torchvision.transforms.Compose(
-        [torchvision.transforms.ToTensor()] + [add_luminance, encoder]
+        [torchvision.transforms.ToTensor(), encoder]
     )
     train_loader = torch.utils.data.DataLoader(
         torchvision.datasets.CIFAR10(
@@ -147,11 +167,15 @@ def main(args):
 
     # Define and train the model
     model = LIFConvNet(
-        num_channels=num_channels, lr=args.lr, optimizer=args.optimizer, p=p
+        seq_length=args.seq_length,
+        num_channels=num_channels,
+        lr=args.lr,
+        optimizer=args.optimizer,
+        p=p,
     )
     trainer = pl.Trainer.from_argparse_args(args)
     trainer.fit(model, train_loader)
-    trainer.test(test_dataloader=test_loader)
+    trainer.test(model, test_dataloaders=test_loader)
 
 
 if __name__ == "__main__":
@@ -163,7 +187,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--batch_size", default=32, type=int, help="Number of examples in one minibatch"
     )
-    parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate to use.")
+    parser.add_argument("--lr", type=float, default=2e-3, help="Learning rate to use.")
+    parser.add_argument(
+        "--lr_step",
+        type=bool,
+        default=True,
+        help="Use a stepper to reduce learning weight.",
+    )
     parser.add_argument(
         "--current_encoder_v_th",
         type=float,
@@ -173,7 +203,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--encoding",
         type=str,
-        default="constant",
+        default="constant_polar",
         choices=[
             "poisson",
             "constant",
@@ -192,7 +222,7 @@ if __name__ == "__main__":
         help="Optimizer to use for training.",
     )
     parser.add_argument(
-        "--seq_length", default=100, type=int, help="Number of timesteps to do."
+        "--seq_length", default=40, type=int, help="Number of timesteps to do."
     )
     parser.add_argument(
         "--manual_seed", default=0, type=int, help="Random seed for torch"
