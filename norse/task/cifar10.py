@@ -11,7 +11,7 @@ import torch
 import torch.utils.data
 import pytorch_lightning as pl
 
-from norse.torch import LIFParameters, LIFCell, LICell, LIParameters
+from norse.torch import LIFParameters, LIFCell, LIFRecurrentCell, LICell, LIParameters
 from norse.torch import (
     ConstantCurrentLIFEncoder,
     PoissonEncoder,
@@ -31,18 +31,18 @@ class LIFConvNet(pl.LightningModule):
 
         self.rsnn = SequentialState(
             torch.nn.Conv2d(num_channels, 128, 3),
-            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
+            torch.nn.AvgPool2d(2, 2, ceil_mode=True),
             torch.nn.BatchNorm2d(128),
-            torch.nn.Conv2d(128, 256, 4),
-            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
+            torch.nn.Conv2d(128, 256, 3),
+            torch.nn.AvgPool2d(2, 2, ceil_mode=True),
             torch.nn.BatchNorm2d(256),
-            torch.nn.Conv2d(256, 256, 6),
+            torch.nn.Conv2d(256, 256, 4),
+            torch.nn.AvgPool2d(2, 2, ceil_mode=True),
             torch.nn.Flatten(1),
-            torch.nn.Linear(256, 256),
-            RegularizationWrapper(LIFCell(p)),
-            torch.nn.Linear(256, 128),
-            RegularizationWrapper(LIFCell(p)),
-            torch.nn.Linear(128, 10),
+            RegularizationWrapper(LIFRecurrentCell(1024, 512, p)),
+            # torch.nn.Linear(512, 128),
+            # RegularizationWrapper(LIFCell(p)),
+            torch.nn.Linear(512, 10),
             LICell(),
         )
 
@@ -70,14 +70,17 @@ class LIFConvNet(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch
         out, r = self(x)
-        loss = torch.nn.functional.cross_entropy(out.mean(0), y) + r
+        loss = torch.nn.functional.cross_entropy(out.max(0)[0], y) + r
+        classes = out.mean(0).argmax(1)
+        acc = torch.eq(classes, y).sum().item() / len(y)
 
         self.log("Reg.", r, prog_bar=True)
         self.log("Loss", loss)
         self.log("LR", self.scheduler.get_last_lr()[0])
+        self.log("Acc.", acc, prog_bar=True)
         return loss
 
-    # Same as in training_step, but also reports accuracy
+    # The testing step is the same as the training, but with test data
     def test_step(self, batch, batch_idx):
         x, y = batch
         out, _ = self(x)
@@ -217,12 +220,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--optimizer",
         type=str,
-        default="adam",
+        default="sgd",
         choices=["adam", "sgd"],
         help="Optimizer to use for training.",
     )
     parser.add_argument(
-        "--seq_length", default=40, type=int, help="Number of timesteps to do."
+        "--seq_length", default=64, type=int, help="Number of timesteps to do."
     )
     parser.add_argument(
         "--manual_seed", default=0, type=int, help="Random seed for torch"

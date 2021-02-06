@@ -14,6 +14,7 @@ from .encode import (
 from .leaky_integrator import LICell, LILinearCell, LIParameters, LIState
 from .lif import (
     LIFCell,
+    LIFRecurrentCell,
     LIF,
     LIFFeedForwardState,
     LIFParameters,
@@ -79,9 +80,10 @@ __all__ = [
     "LILinearCell",
     "LIParameters",
     "LIState",
+    "LIF",
     "LIFCell",
     "LIFRecurrent",
-    "LIF",
+    "LIFRecurrentCell",
     "LIFFeedForwardState",
     "LIFParameters",
     "LIFState",
