@@ -63,7 +63,7 @@ from .lsnn import (
     LSNNParameters,
     LSNNState,
 )
-from .regularization import RegularizationCell, RegularizationWrapper
+from .regularization import RegularizationCell
 from .sequential import SequentialState
 
 __all__ = [
