@@ -14,31 +14,6 @@ from norse.torch.functional.regularization import (
 )
 
 
-class RegularizationWrapperState(NamedTuple):
-    state: Any = None
-    count: Any = None
-
-
-class RegularizationWrapper(torch.nn.Module):
-    def __init__(
-        self, module, accumulator: Accumulator = spike_accumulator, state: Any = None
-    ):
-        super().__init__()
-        self.module = module
-        self.accumulator = accumulator
-        self.state = state
-
-    def forward(
-        self,
-        input_tensor: torch.Tensor,
-        state: Optional[RegularizationWrapperState] = None,
-    ):
-        state = state if state is not None else RegularizationWrapperState()
-        z, new_module_state = self.module(input_tensor, state.state)
-        new_regularizer_state = self.accumulator(z, state.count)
-        return z, RegularizationWrapperState(new_module_state, new_regularizer_state)
-
-
 class RegularizationCell(torch.nn.Module):
     """
     A regularisation cell that accumulates some state (for instance number of spikes)

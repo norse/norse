@@ -11,37 +11,38 @@ import torch
 import torch.utils.data
 import pytorch_lightning as pl
 
-from norse.torch import LIFParameters, LIFCell, LIFRecurrentCell, LICell, LIParameters
-from norse.torch import (
-    ConstantCurrentLIFEncoder,
-    PoissonEncoder,
-    SignedPoissonEncoder,
-    SpikeLatencyLIFEncoder,
-)
-from norse.torch import SequentialState, RegularizationWrapper
+import norse
 
 
 class LIFConvNet(pl.LightningModule):
-    def __init__(self, seq_length, num_channels, lr, optimizer, p, lr_step=True):
+    def __init__(
+        self, seq_length, num_channels, lr, optimizer, p, noise_scale=1e-6, lr_step=True
+    ):
         super().__init__()
         self.lr = lr
         self.lr_step = lr_step
         self.optimizer = optimizer
         self.seq_length = seq_length
+        self.noise_distribution = torch.distributions.uniform.Uniform(1e-8, 1e-5)
 
-        self.rsnn = SequentialState(
-            torch.nn.Conv2d(num_channels, 128, 3),
-            torch.nn.AvgPool2d(2, 2, ceil_mode=True),
+        self.rsnn = norse.torch.SequentialState(
+            # Convolutional layers
+            torch.nn.Conv2d(num_channels, 64, 3),  # Block 1
+            norse.torch.LIFCell(p),
+            torch.nn.BatchNorm2d(64),
+            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
+            torch.nn.Conv2d(64, 128, 3),  # Block 2
+            norse.torch.LIFCell(p),
             torch.nn.BatchNorm2d(128),
-            torch.nn.Conv2d(128, 256, 3),
-            torch.nn.AvgPool2d(2, 2, ceil_mode=True),
+            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
+            torch.nn.Conv2d(128, 256, 5),  # Block 3
+            norse.torch.LIFCell(p),
             torch.nn.BatchNorm2d(256),
-            torch.nn.Conv2d(256, 256, 4),
-            torch.nn.AvgPool2d(2, 2, ceil_mode=True),
+            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
             torch.nn.Flatten(1),
-            RegularizationWrapper(LIFRecurrentCell(1024, 512, p)),
-            torch.nn.Linear(512, 10),
-            LICell(),
+            # Classification
+            torch.nn.Linear(1024, 128),
+            torch.nn.Linear(128, 10),
         )
 
     def forward(self, x):
@@ -53,26 +54,20 @@ class LIFConvNet(pl.LightningModule):
             out, s = self.rsnn(x[ts], s)
             voltages[ts, :, :] = out
 
-        # Regularize all spiking layers to a number of spikes within 1% - 20%
-        regularization = 0
-        for substate in s:
-            if hasattr(substate, "count") and isinstance(substate.count, torch.Tensor):
-                min_spikes = substate.state.v.shape[-1] * self.seq_length * 0.01  # 1%
-                max_spikes = min_spikes * 20  # 20%
-                regularization = regularization + max(0, min_spikes - substate.count)
-                regularization = regularization + max(0, substate.count - max_spikes)
-
-        return voltages, regularization
+        return voltages
 
     # Forward pass of a single batch
     def training_step(self, batch, batch_idx):
         x, y = batch
-        out, r = self(x)
-        loss = torch.nn.functional.cross_entropy(out.max(0)[0], y) + r
-        classes = out.mean(0).argmax(1)
+        out = self(x)
+        # Note: The max function is silent for neurons with zero activations, which is
+        #       problematic for backpropagation, so we add a small amount of noise
+        pred = out #+ self.noise_distribution.sample(out.shape).to(self.device)
+        pred = pred.max(dim=0)[0]
+        loss = torch.nn.functional.cross_entropy(pred, y)
+        classes = out.max(0)[0].argmax(1)
         acc = torch.eq(classes, y).sum().item() / len(y)
 
-        self.log("Reg.", r, prog_bar=True)
         self.log("Loss", loss)
         self.log("LR", self.scheduler.get_last_lr()[0])
         self.log("Acc.", acc, prog_bar=True)
@@ -81,9 +76,9 @@ class LIFConvNet(pl.LightningModule):
     # The testing step is the same as the training, but with test data
     def test_step(self, batch, batch_idx):
         x, y = batch
-        out, _ = self(x)
-        loss = torch.nn.functional.cross_entropy(out.mean(0), y)
-        classes = out.mean(0).argmax(1)
+        out = self(x)
+        loss = torch.nn.functional.cross_entropy(out.max(0)[0], y)
+        classes = out.max(dim=0)[0].argmax(1)
         acc = torch.eq(classes, y).sum().item() / len(y)
 
         self.log("Loss", loss)
@@ -102,7 +97,7 @@ class LIFConvNet(pl.LightningModule):
         else:
             optimizer = torch.optim.SGD(self.parameters(), lr=self.lr, momentum=0.9)
         self.scheduler = torch.optim.lr_scheduler.StepLR(
-            optimizer, step_size=10, gamma=0.1
+            optimizer, step_size=5, gamma=0.2
         )
         return optimizer
 
@@ -114,16 +109,20 @@ def main(args):
 
     # Setup encoding
     num_channels = 3
-    p = LIFParameters(v_th=torch.as_tensor(args.current_encoder_v_th))
-    constant_encoder = ConstantCurrentLIFEncoder(seq_length=args.seq_length, p=p)
+    p = norse.torch.LIFParameters(v_th=torch.as_tensor(args.current_encoder_v_th))
+    constant_encoder = norse.torch.ConstantCurrentLIFEncoder(
+        seq_length=args.seq_length, p=p
+    )
     if args.encoding == "poisson":
-        encoder = PoissonEncoder(seq_length=args.seq_length, f_max=200)
+        encoder = norse.torch.PoissonEncoder(seq_length=args.seq_length, f_max=200)
     elif args.encoding == "constant":
         encoder = constant_encoder
     elif args.encoding == "constant_first":
-        encoder = SpikeLatencyLIFEncoder(seq_length=args.seq_length, p=p)
+        encoder = norse.torch.SpikeLatencyLIFEncoder(seq_length=args.seq_length, p=p)
     elif args.encoding == "signed_poisson":
-        encoder = SignedPoissonEncoder(seq_length=args.seq_length, f_max=200)
+        encoder = norse.torch.SignedPoissonEncoder(
+            seq_length=args.seq_length, f_max=200
+        )
     elif args.encoding == "signed_constant":
 
         def signed_current_encoder(x):
@@ -204,7 +203,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--encoding",
         type=str,
-        default="constant_polar",
+        default="constant",
         choices=[
             "poisson",
             "constant",
@@ -223,7 +222,7 @@ if __name__ == "__main__":
         help="Optimizer to use for training.",
     )
     parser.add_argument(
-        "--seq_length", default=64, type=int, help="Number of timesteps to do."
+        "--seq_length", default=100, type=int, help="Number of timesteps to do."
     )
     parser.add_argument(
         "--manual_seed", default=0, type=int, help="Random seed for torch"
