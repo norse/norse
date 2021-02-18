@@ -13,7 +13,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -39,12 +38,12 @@
 <span id="norse-torch-module-lif-correlation-module"></span><h1>norse.torch.module.lif_correlation module<a class="headerlink" href="#module-norse.torch.module.lif_correlation" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="norse.torch.module.lif_correlation.LIFCorrelation">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_correlation.</code><code class="sig-name descname">LIFCorrelation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFCorrelationParameters(lif_parameters=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=tensor(100.)), input_correlation_parameters=CorrelationSensorParameters(eta_p=tensor(1.), eta_m=tensor(1.), tau_ac_inv=tensor(10.), tau_c_inv=tensor(10.)), recurrent_correlation_parameters=CorrelationSensorParameters(eta_p=tensor(1.), eta_m=tensor(1.), tau_ac_inv=tensor(10.), tau_c_inv=tensor(10.)))</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_correlation.html#LIFCorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_correlation.LIFCorrelation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.lif_correlation.</span></code><code class="sig-name descname"><span class="pre">LIFCorrelation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIFCorrelationParameters(lif_parameters=LIFParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=tensor(100.)),</span> <span class="pre">input_correlation_parameters=CorrelationSensorParameters(eta_p=tensor(1.),</span> <span class="pre">eta_m=tensor(1.),</span> <span class="pre">tau_ac_inv=tensor(10.),</span> <span class="pre">tau_c_inv=tensor(10.)),</span> <span class="pre">recurrent_correlation_parameters=CorrelationSensorParameters(eta_p=tensor(1.),</span> <span class="pre">eta_m=tensor(1.),</span> <span class="pre">tau_ac_inv=tensor(10.),</span> <span class="pre">tau_c_inv=tensor(10.)))</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_correlation.html#LIFCorrelation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_correlation.LIFCorrelation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt id="norse.torch.module.lif_correlation.LIFCorrelation.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em>, <em class="sig-param"><span class="n">input_weights</span></em>, <em class="sig-param"><span class="n">recurrent_weights</span></em>, <em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_correlation.html#LIFCorrelation.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_correlation.LIFCorrelation.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurrent_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_correlation.html#LIFCorrelation.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_correlation.LIFCorrelation.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -56,14 +55,14 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_correlation.html#norse.torch.functional.lif_correlation.LIFCorrelationState" title="norse.torch.functional.lif_correlation.LIFCorrelationState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFCorrelationState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.lif_correlation.html#norse.torch.functional.lif_correlation.LIFCorrelationState" title="norse.torch.functional.lif_correlation.LIFCorrelationState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFCorrelationState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="norse.torch.module.lif_correlation.LIFCorrelation.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_correlation.LIFCorrelation.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lif_correlation.LIFCorrelation.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -195,7 +194,7 @@ registered hooks while the latter silently ignores them.</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

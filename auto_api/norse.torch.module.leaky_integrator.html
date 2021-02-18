@@ -39,7 +39,7 @@
 <span id="norse-torch-module-leaky-integrator-module"></span><h1>norse.torch.module.leaky_integrator module<a class="headerlink" href="#module-norse.torch.module.leaky_integrator" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="norse.torch.module.leaky_integrator.LICell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.leaky_integrator.</code><code class="sig-name descname">LICell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.))</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LICell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.leaky_integrator.LICell" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.leaky_integrator.</span></code><code class="sig-name descname"><span class="pre">LICell</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.))</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LICell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.leaky_integrator.LICell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNCell" title="norse.torch.module.snn.SNNCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNCell</span></code></a></p>
 <p>Cell for a leaky-integrator <em>without</em> recurrence.
 More specifically it implements a discretized version of the ODE</p>
@@ -62,7 +62,7 @@ More specifically it implements a discretized version of the ODE</p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt id="norse.torch.module.leaky_integrator.LICell.initial_state">
-<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LICell.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.leaky_integrator.LICell.initial_state" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">initial_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LICell.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.leaky_integrator.LICell.initial_state" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.leaky_integrator.html#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a></p>
@@ -72,14 +72,14 @@ More specifically it implements a discretized version of the ODE</p>
 
 <dl class="py attribute">
 <dt id="norse.torch.module.leaky_integrator.LICell.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.leaky_integrator.LICell.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.leaky_integrator.LICell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="norse.torch.module.leaky_integrator.LILinearCell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.leaky_integrator.</code><code class="sig-name descname">LILinearCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.))</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LILinearCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.leaky_integrator.LILinearCell" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.leaky_integrator.</span></code><code class="sig-name descname"><span class="pre">LILinearCell</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.))</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LILinearCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.leaky_integrator.LILinearCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Cell for a leaky-integrator with an additional linear weighting.
 More specifically it implements a discretized version of the ODE</p>
@@ -104,7 +104,7 @@ More specifically it implements a discretized version of the ODE</p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt id="norse.torch.module.leaky_integrator.LILinearCell.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LILinearCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.leaky_integrator.LILinearCell.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LILinearCell.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.leaky_integrator.LILinearCell.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -116,14 +116,14 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.leaky_integrator.html#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.leaky_integrator.html#norse.torch.functional.leaky_integrator.LIState" title="norse.torch.functional.leaky_integrator.LIState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="norse.torch.module.leaky_integrator.LILinearCell.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.leaky_integrator.LILinearCell.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.leaky_integrator.LILinearCell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -255,7 +255,7 @@ registered hooks while the latter silently ignores them.</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

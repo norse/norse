@@ -39,11 +39,11 @@
 <span id="norse-torch-functional-threshold-module"></span><h1>norse.torch.functional.threshold module<a class="headerlink" href="#module-norse.torch.functional.threshold" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="norse.torch.functional.threshold.CircDist">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">CircDist</code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#CircDist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.CircDist" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">CircDist</span></code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#CircDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.CircDist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.CircDist.backward">
-<em class="property">static </em><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#CircDist.backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.CircDist.backward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">backward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#CircDist.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.CircDist.backward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines a formula for differentiating the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
@@ -61,7 +61,7 @@ output.</p>
 
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.CircDist.forward">
-<em class="property">static </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#CircDist.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.CircDist.forward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#CircDist.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.CircDist.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context ctx as the first argument, followed by any
@@ -74,7 +74,7 @@ during the backward pass.</p>
 
 <dl class="py class">
 <dt id="norse.torch.functional.threshold.HeaviCirc">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">HeaviCirc</code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviCirc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviCirc" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">HeaviCirc</span></code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviCirc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviCirc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
 <p>Approximation of the heaviside step function as</p>
 <div class="math notranslate nohighlight">
@@ -82,7 +82,7 @@ during the backward pass.</p>
 \frac{x}{(x^2 + \alpha^2)^{1/2}}\]</div>
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.HeaviCirc.backward">
-<em class="property">static </em><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviCirc.backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviCirc.backward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">backward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviCirc.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviCirc.backward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines a formula for differentiating the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
@@ -100,7 +100,7 @@ output.</p>
 
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.HeaviCirc.forward">
-<em class="property">static </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviCirc.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviCirc.forward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviCirc.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviCirc.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context ctx as the first argument, followed by any
@@ -113,7 +113,7 @@ during the backward pass.</p>
 
 <dl class="py class">
 <dt id="norse.torch.functional.threshold.HeaviErfc">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">HeaviErfc</code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviErfc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviErfc" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">HeaviErfc</span></code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviErfc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviErfc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
 <p>Approximation of the heaviside step function as</p>
 <div class="math notranslate nohighlight">
@@ -121,7 +121,7 @@ during the backward pass.</p>
 <p>where erfc is the error function.</p>
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.HeaviErfc.backward">
-<em class="property">static </em><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviErfc.backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviErfc.backward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">backward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviErfc.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviErfc.backward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines a formula for differentiating the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
@@ -139,7 +139,7 @@ output.</p>
 
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.HeaviErfc.forward">
-<em class="property">static </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviErfc.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviErfc.forward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviErfc.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviErfc.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context ctx as the first argument, followed by any
@@ -152,14 +152,14 @@ during the backward pass.</p>
 
 <dl class="py class">
 <dt id="norse.torch.functional.threshold.HeaviTanh">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">HeaviTanh</code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTanh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTanh" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">HeaviTanh</span></code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTanh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTanh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
 <p>Approximation of the heaviside step function as</p>
 <div class="math notranslate nohighlight">
 \[h(x,k) = \frac{1}{2} + \frac{1}{2} \text{tanh}(k x)\]</div>
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.HeaviTanh.backward">
-<em class="property">static </em><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTanh.backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTanh.backward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">backward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTanh.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTanh.backward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines a formula for differentiating the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
@@ -177,7 +177,7 @@ output.</p>
 
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.HeaviTanh.forward">
-<em class="property">static </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTanh.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTanh.forward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTanh.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTanh.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context ctx as the first argument, followed by any
@@ -190,11 +190,11 @@ during the backward pass.</p>
 
 <dl class="py class">
 <dt id="norse.torch.functional.threshold.HeaviTent">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">HeaviTent</code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTent" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">HeaviTent</span></code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.HeaviTent.backward">
-<em class="property">static </em><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTent.backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTent.backward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">backward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTent.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTent.backward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines a formula for differentiating the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
@@ -212,7 +212,7 @@ output.</p>
 
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.HeaviTent.forward">
-<em class="property">static </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTent.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTent.forward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#HeaviTent.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.HeaviTent.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context ctx as the first argument, followed by any
@@ -225,14 +225,14 @@ during the backward pass.</p>
 
 <dl class="py class">
 <dt id="norse.torch.functional.threshold.Logistic">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">Logistic</code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#Logistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.Logistic" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">Logistic</span></code><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#Logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.Logistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
 <p>Probalistic approximation of the heaviside step function as</p>
 <div class="math notranslate nohighlight">
 \[z \sim p(\frac{1}{2} + \frac{1}{2} \text{tanh}(k x))\]</div>
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.Logistic.backward">
-<em class="property">static </em><code class="sig-name descname">backward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#Logistic.backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.Logistic.backward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">backward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#Logistic.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.Logistic.backward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines a formula for differentiating the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
@@ -250,7 +250,7 @@ output.</p>
 
 <dl class="py method">
 <dt id="norse.torch.functional.threshold.Logistic.forward">
-<em class="property">static </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#Logistic.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.Logistic.forward" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#Logistic.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.Logistic.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the operation.</p>
 <p>This function is to be overridden by all subclasses.</p>
 <p>It must accept a context ctx as the first argument, followed by any
@@ -263,50 +263,50 @@ during the backward pass.</p>
 
 <dl class="py function">
 <dt id="norse.torch.functional.threshold.circ_dist_fn">
-<code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">circ_dist_fn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#circ_dist_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.circ_dist_fn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">circ_dist_fn</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#circ_dist_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.circ_dist_fn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="norse.torch.functional.threshold.heavi_circ_fn">
-<code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">heavi_circ_fn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#heavi_circ_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.heavi_circ_fn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">heavi_circ_fn</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#heavi_circ_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.heavi_circ_fn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="norse.torch.functional.threshold.heavi_erfc_fn">
-<code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">heavi_erfc_fn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#heavi_erfc_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.heavi_erfc_fn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">heavi_erfc_fn</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#heavi_erfc_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.heavi_erfc_fn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="norse.torch.functional.threshold.heavi_tanh_fn">
-<code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">heavi_tanh_fn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#heavi_tanh_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.heavi_tanh_fn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">heavi_tanh_fn</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#heavi_tanh_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.heavi_tanh_fn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="norse.torch.functional.threshold.heavi_tent_fn">
-<code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">heavi_tent_fn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#heavi_tent_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.heavi_tent_fn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">heavi_tent_fn</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#heavi_tent_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.heavi_tent_fn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="norse.torch.functional.threshold.logistic_fn">
-<code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">logistic_fn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">k</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#logistic_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.logistic_fn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">logistic_fn</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#logistic_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.logistic_fn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="norse.torch.functional.threshold.sign">
-<code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">sign</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">method</span></em>, <em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#sign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.sign" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">sign</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#sign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.sign" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="norse.torch.functional.threshold.threshold">
-<code class="sig-prename descclassname">norse.torch.functional.threshold.</code><code class="sig-name descname">threshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">method</span></em>, <em class="sig-param"><span class="n">alpha</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.threshold.threshold" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.threshold.</span></code><code class="sig-name descname"><span class="pre">threshold</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/threshold.html#threshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.threshold.threshold" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -445,7 +445,7 @@ during the backward pass.</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

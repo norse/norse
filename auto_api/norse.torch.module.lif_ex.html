@@ -39,7 +39,7 @@
 <span id="norse-torch-module-lif-ex-module"></span><h1>norse.torch.module.lif_ex module<a class="headerlink" href="#module-norse.torch.module.lif_ex" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="norse.torch.module.lif_ex.LIFEx">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_ex.</code><code class="sig-name descname">LIFEx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFEx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFEx" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.lif_ex.</span></code><code class="sig-name descname"><span class="pre">LIFEx</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIFExParameters(delta_T=tensor(0.5000),</span> <span class="pre">tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFEx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFEx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNN" title="norse.torch.module.snn.SNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNN</span></code></a></p>
 <p>A neuron layer that wraps a <a class="reference internal" href="#norse.torch.module.lif_ex.LIFExCell" title="norse.torch.module.lif_ex.LIFExCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExCell</span></code></a> in time such
 that the layer keeps track of temporal sequences of spikes.
@@ -65,7 +65,7 @@ to configure neuron parameters as optimizable. Defaults to None.</p></li>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt id="norse.torch.module.lif_ex.LIFEx.initial_state">
-<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFEx.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFEx.initial_state" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">initial_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFEx.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFEx.initial_state" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExFeedForwardState" title="norse.torch.functional.lif_ex.LIFExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExFeedForwardState</span></code></a></p>
@@ -75,14 +75,14 @@ to configure neuron parameters as optimizable. Defaults to None.</p></li>
 
 <dl class="py attribute">
 <dt id="norse.torch.module.lif_ex.LIFEx.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_ex.LIFEx.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lif_ex.LIFEx.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="norse.torch.module.lif_ex.LIFExCell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_ex.</code><code class="sig-name descname">LIFExCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExCell" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.lif_ex.</span></code><code class="sig-name descname"><span class="pre">LIFExCell</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIFExParameters(delta_T=tensor(0.5000),</span> <span class="pre">tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNCell" title="norse.torch.module.snn.SNNCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNCell</span></code></a></p>
 <p>Computes a single euler-integration step of a recurrent
 exponential LIF neuron-model (<em>without</em> recurrence) adapted from
@@ -124,7 +124,7 @@ recurrent and input spikes respectively.</p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt id="norse.torch.module.lif_ex.LIFExCell.initial_state">
-<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExCell.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExCell.initial_state" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">initial_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExCell.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExCell.initial_state" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExFeedForwardState" title="norse.torch.functional.lif_ex.LIFExFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExFeedForwardState</span></code></a></p>
@@ -134,14 +134,14 @@ recurrent and input spikes respectively.</p>
 
 <dl class="py attribute">
 <dt id="norse.torch.module.lif_ex.LIFExCell.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExCell.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExCell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="norse.torch.module.lif_ex.LIFExRecurrent">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_ex.</code><code class="sig-name descname">LIFExRecurrent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExRecurrent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrent" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.lif_ex.</span></code><code class="sig-name descname"><span class="pre">LIFExRecurrent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIFExParameters(delta_T=tensor(0.5000),</span> <span class="pre">tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExRecurrent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrent" title="norse.torch.module.snn.SNNRecurrent"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNRecurrent</span></code></a></p>
 <p>A neuron layer that wraps a <a class="reference internal" href="#norse.torch.module.lif_ex.LIFExRecurrentCell" title="norse.torch.module.lif_ex.LIFExRecurrentCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExRecurrentCell</span></code></a> in time such
 that the layer keeps track of temporal sequences of spikes.
@@ -162,9 +162,9 @@ After application, the module returns a tuple containing</p>
 <li><p><strong>hidden_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of hidden neurons</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFExParameters" title="norse.torch.functional.LIFExParameters"><em>LIFExParameters</em></a>) – The neuron parameters as a torch Module, which allows the module
 to configure neuron parameters as optimizable. Defaults to None.</p></li>
-<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
 matrix normalized to the number of hidden neurons.</p></li>
-<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
 matrix normalized to the number of hidden neurons.</p></li>
 <li><p><strong>autapses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Allow self-connections in the recurrence? Defaults to False. Will also
 remove autapses in custom recurrent weights, if set above.</p></li>
@@ -175,7 +175,7 @@ remove autapses in custom recurrent weights, if set above.</p></li>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt id="norse.torch.module.lif_ex.LIFExRecurrent.initial_state">
-<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExRecurrent.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrent.initial_state" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">initial_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExRecurrent.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrent.initial_state" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExState" title="norse.torch.functional.lif_ex.LIFExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExState</span></code></a></p>
@@ -185,14 +185,14 @@ remove autapses in custom recurrent weights, if set above.</p></li>
 
 <dl class="py attribute">
 <dt id="norse.torch.module.lif_ex.LIFExRecurrent.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrent.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrent.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="norse.torch.module.lif_ex.LIFExRecurrentCell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.lif_ex.</code><code class="sig-name descname">LIFExRecurrentCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFExParameters(delta_T=tensor(0.5000), tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExRecurrentCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrentCell" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.lif_ex.</span></code><code class="sig-name descname"><span class="pre">LIFExRecurrentCell</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIFExParameters(delta_T=tensor(0.5000),</span> <span class="pre">tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExRecurrentCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrentCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell" title="norse.torch.module.snn.SNNRecurrentCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNRecurrentCell</span></code></a></p>
 <p>Computes a single euler-integration step of a recurrent
 exponential LIFEx neuron-model (<em>with</em> recurrence) adapted from
@@ -236,7 +236,7 @@ recurrent and input spikes respectively.</p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt id="norse.torch.module.lif_ex.LIFExRecurrentCell.initial_state">
-<code class="sig-name descname">initial_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExRecurrentCell.initial_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrentCell.initial_state" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">initial_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_ex.html#LIFExRecurrentCell.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrentCell.initial_state" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lif_ex.html#norse.torch.functional.lif_ex.LIFExState" title="norse.torch.functional.lif_ex.LIFExState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LIFExState</span></code></a></p>
@@ -246,7 +246,7 @@ recurrent and input spikes respectively.</p>
 
 <dl class="py attribute">
 <dt id="norse.torch.module.lif_ex.LIFExRecurrentCell.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrentCell.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lif_ex.LIFExRecurrentCell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -378,7 +378,7 @@ recurrent and input spikes respectively.</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

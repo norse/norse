@@ -42,7 +42,7 @@ inputs to the spiking domain. Note that some functions, like <cite>population_en
 but rather numerical values that will have to be converted into spikes via, for instance, the poisson encoder.</p>
 <dl class="py function">
 <dt id="norse.torch.functional.encode.constant_current_lif_encode">
-<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">constant_current_lif_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_current</span></em>, <em class="sig-param"><span class="n">seq_length</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=tensor(100.))</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#constant_current_lif_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.constant_current_lif_encode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.encode.</span></code><code class="sig-name descname"><span class="pre">constant_current_lif_encode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_current</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIFParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=tensor(100.))</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#constant_current_lif_encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.encode.constant_current_lif_encode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that
 occur during a number of timesteps/iterations (seq_length).</p>
 <p class="rubric">Example</p>
@@ -60,14 +60,14 @@ occur during a number of timesteps/iterations (seq_length).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – The input tensor, representing LIF current</p></li>
+<li><p><strong>input_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – The input tensor, representing LIF current</p></li>
 <li><p><strong>seq_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of iterations to simulate</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFParameters" title="norse.torch.functional.LIFParameters"><em>LIFParameters</em></a>) – Initial neuron parameters.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time delta between simulation steps</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor with an extra dimension of size <cite>seq_length</cite> containing spikes (1) or no spikes (0).</p>
@@ -77,13 +77,13 @@ occur during a number of timesteps/iterations (seq_length).</p>
 
 <dl class="py function">
 <dt id="norse.torch.functional.encode.euclidean_distance">
-<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">euclidean_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#euclidean_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.euclidean_distance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.encode.</span></code><code class="sig-name descname"><span class="pre">euclidean_distance</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#euclidean_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.encode.euclidean_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple euclidean distance metric.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="norse.torch.functional.encode.gaussian_rbf">
-<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">gaussian_rbf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">sigma</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#gaussian_rbf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.gaussian_rbf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.encode.</span></code><code class="sig-name descname"><span class="pre">gaussian_rbf</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#gaussian_rbf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.encode.gaussian_rbf" title="Permalink to this definition">¶</a></dt>
 <dd><p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Radial_basis_function_kernel">gaussian radial basis kernel</a>
 that calculates the radial basis given a distance value (distance between <span class="math notranslate nohighlight">\(x\)</span> and a data
 value <span class="math notranslate nohighlight">\(x'\)</span>, or <span class="math notranslate nohighlight">\(\|\mathbf{x} - \mathbf{x'}\|^2\)</span> below).</p>
@@ -92,7 +92,7 @@ value <span class="math notranslate nohighlight">\(x'\)</span>, or <span class="
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – The tensor containing distance values to convert to radial bases</p></li>
+<li><p><strong>tensor</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – The tensor containing distance values to convert to radial bases</p></li>
 <li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The spread of the gaussian distribution. Defaults to 1.</p></li>
 </ul>
 </dd>
@@ -101,7 +101,7 @@ value <span class="math notranslate nohighlight">\(x'\)</span>, or <span class="
 
 <dl class="py function">
 <dt id="norse.torch.functional.encode.poisson_encode">
-<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">poisson_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_values</span></em>, <em class="sig-param"><span class="n">seq_length</span></em>, <em class="sig-param"><span class="n">f_max</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#poisson_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.poisson_encode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.encode.</span></code><code class="sig-name descname"><span class="pre">poisson_encode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#poisson_encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.encode.poisson_encode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encodes a tensor of input values, which are assumed to be in the
 range [0,1] into a tensor of one dimension higher of binary values,
 which represent input spikes.</p>
@@ -109,14 +109,14 @@ which represent input spikes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [0,1].</p></li>
 <li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
 <li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Maximal frequency (in Hertz) which will be emitted.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor with an extra dimension of size <cite>seq_length</cite> containing spikes (1) or no spikes (0).</p>
@@ -126,7 +126,7 @@ which represent input spikes.</p>
 
 <dl class="py function">
 <dt id="norse.torch.functional.encode.population_encode">
-<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">population_encode</code><span class="sig-paren">(</span><em class="sig-param">input_values</em>, <em class="sig-param">out_features</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">kernel=&lt;function gaussian_rbf&gt;</em>, <em class="sig-param">distance_function=&lt;function euclidean_distance&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#population_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.population_encode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.encode.</span></code><code class="sig-name descname"><span class="pre">population_encode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">input_values</span></em>, <em class="sig-param"><span class="pre">out_features</span></em>, <em class="sig-param"><span class="pre">scale=None</span></em>, <em class="sig-param"><span class="pre">kernel=&lt;function</span> <span class="pre">gaussian_rbf&gt;</span></em>, <em class="sig-param"><span class="pre">distance_function=&lt;function</span> <span class="pre">euclidean_distance&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#population_encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.encode.population_encode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encodes a set of input values into population codes, such that each singular input value is represented by
 a list of numbers (typically calculated by a radial basis kernel), whose length is equal to the out_features.</p>
 <p>Population encoding can be visualised by imagining a number of neurons in a list, whose activity increases
@@ -148,18 +148,18 @@ if a number gets close to its “receptive field”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – The input data as numerical values to be encoded to population codes</p></li>
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – The input data as numerical values to be encoded to population codes</p></li>
 <li><p><strong>out_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of output <em>per</em> input value</p></li>
-<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
+<li><p><strong>scale</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – The scaling factor for the kernels. Defaults to the maximum value of the input.
 Can also be set for each individual sample.</p></li>
-<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
+<li><p><strong>kernel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that takes two inputs and returns a tensor. The two inputs represent the center value
 (which changes for each index in the output tensor) and the actual data value to encode respectively.z
 Defaults to gaussian radial basis kernel function.</p></li>
-<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
+<li><p><strong>distance_function</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>], <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]) – A function that calculates the distance between two numbers. Defaults to euclidean.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor with an extra dimension of size <cite>seq_length</cite> containing population encoded values of the input stimulus.
@@ -170,21 +170,21 @@ Note: An extra step is required to convert the values to spikes, see above.</p>
 
 <dl class="py function">
 <dt id="norse.torch.functional.encode.signed_poisson_encode">
-<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">signed_poisson_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_values</span></em>, <em class="sig-param"><span class="n">seq_length</span></em>, <em class="sig-param"><span class="n">f_max</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#signed_poisson_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.signed_poisson_encode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.encode.</span></code><code class="sig-name descname"><span class="pre">signed_poisson_encode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#signed_poisson_encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.encode.signed_poisson_encode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encodes a tensor of input values, which are assumed to be in the
 range [-1,1] into a tensor of one dimension higher of binary values,
 which represent input spikes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [-1,1].</p></li>
+<li><p><strong>input_values</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – Input data tensor with values assumed to be in the interval [-1,1].</p></li>
 <li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
 <li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Maximal frequency (in Hertz) which will be emitted.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor with an extra dimension of size <cite>seq_length</cite> containing spikes (1) or no spikes (0).</p>
@@ -194,7 +194,7 @@ which represent input spikes.</p>
 
 <dl class="py function">
 <dt id="norse.torch.functional.encode.spike_latency_encode">
-<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">spike_latency_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_spikes</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#spike_latency_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.spike_latency_encode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.encode.</span></code><code class="sig-name descname"><span class="pre">spike_latency_encode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_spikes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#spike_latency_encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.encode.spike_latency_encode" title="Permalink to this definition">¶</a></dt>
 <dd><p>For all neurons, remove all but the first spike. This encoding basically measures the time it takes for a
 neuron to spike <em>first</em>. Assuming that the inputs are constant, this makes sense in that strong inputs spikes
 fast.</p>
@@ -209,10 +209,10 @@ fast.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_spikes</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – A tensor of input spikes, assumed to be at least 2D (sequences, …)</p>
+<dd class="field-odd"><p><strong>input_spikes</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – A tensor of input spikes, assumed to be at least 2D (sequences, …)</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A tensor where the first spike (1) is retained in the sequence</p>
@@ -222,21 +222,21 @@ fast.</p>
 
 <dl class="py function">
 <dt id="norse.torch.functional.encode.spike_latency_lif_encode">
-<code class="sig-prename descclassname">norse.torch.functional.encode.</code><code class="sig-name descname">spike_latency_lif_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_current</span></em>, <em class="sig-param"><span class="n">seq_length</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=tensor(100.), v_leak=tensor(0.), v_th=tensor(1.), v_reset=tensor(0.), method='super', alpha=tensor(100.))</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#spike_latency_lif_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.functional.encode.spike_latency_lif_encode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">norse.torch.functional.encode.</span></code><code class="sig-name descname"><span class="pre">spike_latency_lif_encode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_current</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIFParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=tensor(100.))</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/encode.html#spike_latency_lif_encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.encode.spike_latency_lif_encode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encodes an input value by the time the first spike occurs.
 Similar to the ConstantCurrentLIFEncoder, but the LIF can be
 thought to have an infinite refractory period.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><em>torch.Tensor</em></a>) – Input current to encode (needs to be positive).</p></li>
+<li><p><strong>input_current</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><em>torch.Tensor</em></a>) – Input current to encode (needs to be positive).</p></li>
 <li><p><strong>sequence_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of time steps in the resulting spike train.</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LIFParameters" title="norse.torch.functional.LIFParameters"><em>LIFParameters</em></a>) – Parameters of the LIF neuron model.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Integration time step (should coincide with the integration time step used in the model)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -375,7 +375,7 @@ thought to have an infinite refractory period.</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

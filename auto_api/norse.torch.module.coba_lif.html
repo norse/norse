@@ -39,7 +39,7 @@
 <span id="norse-torch-module-coba-lif-module"></span><h1>norse.torch.module.coba_lif module<a class="headerlink" href="#module-norse.torch.module.coba_lif" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="norse.torch.module.coba_lif.CobaLIFCell">
-<em class="property">class </em><code class="sig-prename descclassname">norse.torch.module.coba_lif.</code><code class="sig-name descname">CobaLIFCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">hidden_size</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">CobaLIFParameters(tau_syn_exc_inv=tensor(0.2000), tau_syn_inh_inv=tensor(0.2000), c_m_inv=tensor(5.), g_l=tensor(0.2500), e_rev_I=tensor(- 100), e_rev_E=tensor(60), v_rest=tensor(- 20), v_reset=tensor(- 70), v_thresh=tensor(- 10), method='super', alpha=100.0)</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/coba_lif.html#CobaLIFCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.coba_lif.CobaLIFCell" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.coba_lif.</span></code><code class="sig-name descname"><span class="pre">CobaLIFCell</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">CobaLIFParameters(tau_syn_exc_inv=tensor(0.2000),</span> <span class="pre">tau_syn_inh_inv=tensor(0.2000),</span> <span class="pre">c_m_inv=tensor(5.),</span> <span class="pre">g_l=tensor(0.2500),</span> <span class="pre">e_rev_I=tensor(-</span> <span class="pre">100),</span> <span class="pre">e_rev_E=tensor(60),</span> <span class="pre">v_rest=tensor(-</span> <span class="pre">20),</span> <span class="pre">v_reset=tensor(-</span> <span class="pre">70),</span> <span class="pre">v_thresh=tensor(-</span> <span class="pre">10),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/coba_lif.html#CobaLIFCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.coba_lif.CobaLIFCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Module that computes a single euler-integration step of a conductance based
 LIF neuron-model. More specifically it implements one integration step of
@@ -84,7 +84,7 @@ and input spikes respectively.</p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt id="norse.torch.module.coba_lif.CobaLIFCell.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_tensor</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/coba_lif.html#CobaLIFCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#norse.torch.module.coba_lif.CobaLIFCell.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/coba_lif.html#CobaLIFCell.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.coba_lif.CobaLIFCell.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -96,14 +96,14 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+acd0a1d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.CobaLIFState" title="norse.torch.functional.coba_lif.CobaLIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFState</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+02ae276 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference internal" href="norse.torch.functional.coba_lif.html#norse.torch.functional.coba_lif.CobaLIFState" title="norse.torch.functional.coba_lif.CobaLIFState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CobaLIFState</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="norse.torch.module.coba_lif.CobaLIFCell.training">
-<code class="sig-name descname">training</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></em><a class="headerlink" href="#norse.torch.module.coba_lif.CobaLIFCell.training" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.coba_lif.CobaLIFCell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -235,7 +235,7 @@ registered hooks while the latter silently ignores them.</p>
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
