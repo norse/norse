@@ -4,9 +4,6 @@ spike thresholds to produce events (spikes).
 
 See :mod:`norse.torch.functional.lif` for more information.
 """
-from typing import Any, Optional, Tuple
-
-import numpy as np
 import torch
 
 from norse.torch.functional.lif import (
