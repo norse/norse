@@ -43,12 +43,18 @@ This requires command-line access to
     cd norse
     python setup.py install
 
+* Installing with docker
+
+.. code:: bash
+    
+    docker pull quay.io/norse/norse
 
 
 Optional dependencies
 =====================
 
 Some of the tasks require additional dependencies like 
+`Pytorch Lightning <https://pytorchlightning.ai/>`_,
 `Torchtext <https://pytorch.org/text/stable/index.html>`_ and 
 `Torchvision <https://pytorch.org/docs/stable/torchvision/index.html>`_.
 We also offer support for `Tensorboard <https://pytorch.org/docs/stable/tensorboard.html>`_ 

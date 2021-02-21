@@ -112,8 +112,8 @@ Table of contents
    :numbered:
 
    ∇ Home <index>
-   started
    installing
+   started
    tasks
 
 .. toctree::

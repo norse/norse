@@ -1,7 +1,7 @@
 .. _page-started:
 
-Getting started
----------------
+Quickstart
+----------
 
 This page walks you through the initial steps to becoming productive with Norse.
 We will cover how to 
@@ -45,10 +45,10 @@ forever dead!
 .. code:: python
 
     import torch
-    import norse.torch as norse
+    import norse
 
-    cell = norse.LIFCell()
-    data = norse.ones(1)
+    cell = norse.torch.LIFCell()
+    data = torch.ones(1)
     spikes, state = cell(data)
 
 The *next* time you call the cell, you need to pass in that state. 
@@ -73,17 +73,44 @@ module that ties stateful modules together:
 .. code:: python
 
     import torch
-    import norse.torch as norse
+    import norse
 
     model = SequentialState(
         torch.nn.Linear(10, 5),
-        norse.LIFCell(),
+        norse.torch.LIFCell(),
         torch.nn.Linear(5, 1)
     )
 
     data = torch.ones(8, 10) # (batch, input)
+    out, state = model(data) # (8, 1) output shape
 
-    out, state = model(data)
+Using recurrence in Norse
+=========================
+
+All neuron modules have :code:`Cell` and :code:`RecurrentCell` classes. 
+The :code:`Cell` class applied above simply works as a feed-forward activation
+of the neuron, while the :code:`RecurrentCell` also contains linear and 
+recurrent weights (we are weighing both the input *and* the recurrent spikes).
+For that reason, we need to inform the module what **shape** it needs to take,
+since we have to initialize weights to match the desired input/output shape.
+
+The :code:`RecurrentCell` classes work out of the box and can be plugged
+directly into the above code. Note that we have the same input/output shape,
+but that it could easily be different:
+
+.. code:: python
+
+    import torch
+    import norse
+
+    model = SequentialState(
+        torch.nn.Linear(10, 5),
+        norse.torch.LIFRecurrentCell(5, 5),
+        torch.nn.Linear(5, 1)
+    )
+
+    data = torch.ones(8, 10) # (batch, input)
+    out, state = model(data) # (8, 1) output shape
 
 You can do the same for other neuron types like the 
 `LSNN <https://norse.github.io/norse/auto_api/norse.torch.module.lsnn.html>`_, 
@@ -101,16 +128,20 @@ The network above (the one without time) works perfectly well with time, and you
 easily wrap it with a for loop. However, it's also possible to run each module
 individually in time.
 
-For LSNNs, the simplest way to go about this is to use the 
-`LSNN module <https://norse.github.io/norse/auto_api/norse.torch.module.lsnn.html>`_.
-You can then **lift** the regular
-PyTorch modules into the time domain (that is, simply run them once for every
-timestep):
+In Norse, we model this time aspect by removing the :code:`Cell` suffix from
+the model. So the a :code:`LIFCell` in time will simply be called :code:`LIF`.
+Similarly, a :code:`LIFRecurrentCell` in time will simply be called :code:`LIFRecurrent`.
+
+The regular Torch modules also need to run in time. For that, we
+added a module to **lift** PyTorch modules into the time domain (that is,
+simply run them once for every timestep).
+
+Taken together, we get the following:
 
 .. code:: python
 
     import torch
-    import norse.torch as norse
+    import norse
 
     model = SequentialState(
         norse.Lift(torch.nn.Linear(10, 5)),
@@ -121,41 +152,9 @@ timestep):
     out, state = model(data)
 
 Using Norse neurons with recurrence
-===================================
-
-Finally, neurons are known to be recurrent. Meaning, one population *can* connect
-to themselves. In the ``Cell`` example (without time) we simply suffix the neuron
-with the word ``Recurrent``:
-
-.. code:: python
-
-    import torch
-    import norse.torch as norse
-
-    model = SequentialState(
-        torch.nn.Linear(10, 5),
-        norse.LIFRecurrentCell(),
-        torch.nn.Linear(5, 1)
-    )
-
-    data = torch.ones(8, 10) # (batch, input)
-
-    out, state = model(data)
-
-In the example with time, the same logic applies:
-
-.. code:: python
-
-    import torch
-    import norse.torch as norse
-
-    model = SequentialState(
-        norse.Lift(torch.nn.Linear(10, 5)),
-        norse.LSNNRecurrent(5, 5),
-        norse.Lift(torch.nn.Linear(5, 1))
     )
     data = torch.ones(100, 8, 10) # (time, batch, input)
-    out, state = model(data)
+    out, state = model(data)      # (100, 8, 1) output shape
 
 This covers the most basic way to apply Norse. More information can be found
-in :ref:`page-spiking`, :ref:`page-working` and :ref:`page-spike-learning`.
+:ref:`page-spiking`, :ref:`page-working` and :ref:`page-spike-learning`.
