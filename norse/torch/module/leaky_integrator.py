@@ -22,7 +22,6 @@ from ..functional.leaky_integrator import (
 )
 
 
-
 class LICell(SNNCell):
     r"""Cell for a leaky-integrator *without* recurrence.
     More specifically it implements a discretized version of the ODE
