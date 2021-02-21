@@ -6,12 +6,13 @@ in every timestep.
 
 See :mod:`norse.torch.functional.leaky_integrator` for more information.
 """
+from typing import Optional, Tuple
+
 import torch
 import torch.jit
 import numpy as np
-from typing import Optional, Tuple
 
-import torch, numpy as np
+from norse.torch.module.snn import SNNCell
 
 from ..functional.leaky_integrator import (
     li_step,
@@ -20,7 +21,6 @@ from ..functional.leaky_integrator import (
     LIParameters,
 )
 
-from norse.torch.module.snn import SNNCell
 
 
 class LICell(SNNCell):
