@@ -1,4 +1,3 @@
-
 r"""
 A `heaviside step function <https://en.wikipedia.org/wiki/Heaviside_step_function>`_
 that truncates numbers <= 0 to 0 and everything else to 1.
