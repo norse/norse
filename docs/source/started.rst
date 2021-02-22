@@ -8,8 +8,8 @@ We will cover how to
 
 * Work with neuron state
 * Work with Norse without time
-* Work with Norse with time
 * Work with Norse with recurrence
+* Work with Norse with time
 
 If you are entirely unfamiliar with `spiking neural networks (SNNs) <https://en.wikipedia.org/wiki/Spiking_neural_network>`_
 we recommend you skim our page that introduces the topic: :ref:`page-spiking`.
@@ -150,11 +150,6 @@ Taken together, we get the following:
     )
     data = torch.ones(100, 8, 10) # (time, batch, input)
     out, state = model(data)
-
-Using Norse neurons with recurrence
-    )
-    data = torch.ones(100, 8, 10) # (time, batch, input)
-    out, state = model(data)      # (100, 8, 1) output shape
 
 This covers the most basic way to apply Norse. More information can be found
 :ref:`page-spiking`, :ref:`page-working` and :ref:`page-spike-learning`.
