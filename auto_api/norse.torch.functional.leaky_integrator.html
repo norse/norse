@@ -37,6 +37,36 @@
             
   <div class="section" id="module-norse.torch.functional.leaky_integrator">
 <span id="norse-torch-functional-leaky-integrator-module"></span><h1>norse.torch.functional.leaky_integrator module<a class="headerlink" href="#module-norse.torch.functional.leaky_integrator" title="Permalink to this headline">¶</a></h1>
+<p>Leaky integrators describe a <em>leaky</em> neuron membrane that integrates
+incoming currents over time, but never spikes. In other words, the
+neuron adds up incoming input current, while leaking out some of it
+in every timestep.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+    \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+    \dot{i} &amp;= 1/\tau_{\text{syn}} i
+\end{align*}\end{split}\]</div>
+<p>The first equation describes how the membrane voltage (<span class="math notranslate nohighlight">\(v\)</span>, across
+the membrane) changes over time. A constant amount of current is <em>leaked</em>
+out every timestep (<span class="math notranslate nohighlight">\(v_{\text{leak}}\)</span>), while the current
+(<span class="math notranslate nohighlight">\(i\)</span>) is added.</p>
+<p>The second equation describes how the current flowing into the neuron
+changes in every timestep.</p>
+<p>Notice that both equations are parameterized by the <em>time constant</em>
+<span class="math notranslate nohighlight">\(\tau\)</span>. This constant controls how <em>fast</em> the changes in voltage
+and current occurs. A large time constant means a small change.
+In Norse, we call this parameter the <em>inverse</em> to avoid having to
+recalculate the inverse (<span class="math notranslate nohighlight">\(\tau_{\text{mem_inv}}\)</span> and
+<span class="math notranslate nohighlight">\(\tau_{\text{syn_inv}}\)</span> respectively).
+So, for Norse a large inverse time constant means <em>rapid</em> changes while
+a small inverse time constant means <em>slow</em> changes.</p>
+<p>Recall that <em>voltage</em> is the difference in charge between two points (in
+this case the neuron membrane) and <em>current</em> is the rate of change or the
+amount of current being added/subtracted at each timestep.</p>
+<p>More information can be found on
+<a class="reference external" href="https://en.wikipedia.org/wiki/Biological_neuron_model#Leaky_integrate-and-fire">Wikipedia</a>
+or in the book <a class="reference external" href="https://neuronaldynamics.epfl.ch/online/Ch5.html">*Neuron Dynamics* by W. Gerstner et al.,
+freely available online</a>.</p>
 <dl class="py class">
 <dt id="norse.torch.functional.leaky_integrator.LIParameters">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.functional.leaky_integrator.</span></code><code class="sig-name descname"><span class="pre">LIParameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tau_syn_inv</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+c89db19 ))"><span class="pre">torch.Tensor</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">tensor(200.)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_mem_inv</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+c89db19 ))"><span class="pre">torch.Tensor</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">tensor(100.)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_leak</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+c89db19 ))"><span class="pre">torch.Tensor</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">tensor(0.)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/leaky_integrator.html#LIParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.leaky_integrator.LIParameters" title="Permalink to this definition">¶</a></dt>
@@ -184,8 +214,8 @@ More specifically it implements a discretized version of the ODE</p>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../started.html">1. Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../started.html">2. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>

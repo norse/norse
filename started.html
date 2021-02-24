@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>1. Getting started &#8212; norse 0.0.6 documentation</title>
+    <title>2. Quickstart &#8212; norse 0.0.6 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css" />
@@ -16,8 +16,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="2. Installing Norse" href="installing.html" />
-    <link rel="prev" title="Norse" href="index.html" />
+    <link rel="next" title="3. Running Tasks" href="tasks.html" />
+    <link rel="prev" title="1. Installing Norse" href="installing.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -34,20 +34,20 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="getting-started">
-<span id="page-started"></span><h1><span class="section-number">1. </span>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="quickstart">
+<span id="page-started"></span><h1><span class="section-number">2. </span>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
 <p>This page walks you through the initial steps to becoming productive with Norse.
 We will cover how to</p>
 <ul class="simple">
 <li><p>Work with neuron state</p></li>
 <li><p>Work with Norse without time</p></li>
-<li><p>Work with Norse with time</p></li>
 <li><p>Work with Norse with recurrence</p></li>
+<li><p>Work with Norse with time</p></li>
 </ul>
 <p>If you are entirely unfamiliar with <a class="reference external" href="https://en.wikipedia.org/wiki/Spiking_neural_network">spiking neural networks (SNNs)</a>
 we recommend you skim our page that introduces the topic: <a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spikes</span></a>.</p>
 <div class="section" id="running-off-the-shelf-code">
-<h2><span class="section-number">1.1. </span>Running off-the-shelf code<a class="headerlink" href="#running-off-the-shelf-code" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.1. </span>Running off-the-shelf code<a class="headerlink" href="#running-off-the-shelf-code" title="Permalink to this headline">¶</a></h2>
 <p>If you just want to get started we recommend our <a class="reference external" href="https://github.com/norse/notebooks/">collection of Jupyter Notebook Tutorials</a>.
 They can be run online on Google Colab.</p>
 <p>Additionally, we provide a set of tasks that you can run right after installing Norse.
@@ -61,7 +61,7 @@ Norse achieve on-par performance with modern non-spiking networks:</p>
 run them.</p>
 </div>
 <div class="section" id="building-neural-networks-with-state">
-<h2><span class="section-number">1.2. </span>Building neural networks with state<a class="headerlink" href="#building-neural-networks-with-state" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.2. </span>Building neural networks with state<a class="headerlink" href="#building-neural-networks-with-state" title="Permalink to this headline">¶</a></h2>
 <p>If you would like to build your own models with Norse you need to know that <strong>neurons contain state</strong>.
 In practice, that meant that <strong>neurons in Norse outputs two things</strong>: a spike tensor and the neuron state.
 Norse initialises all the necessary state for you <em>in the beginning</em>, but you need
@@ -69,10 +69,10 @@ to carry the state onwards.
 If you do not, the state will always be zero, the neuron will never spike and your neurons will be
 forever dead!</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
+<span class="kn">import</span> <span class="nn">norse</span>
 
-<span class="n">cell</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">()</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">cell</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">torch</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">spikes</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -85,7 +85,7 @@ Otherwise you will get the exact same output</p>
 if you are looking for inspiration.</p>
 </div>
 <div class="section" id="using-norse-neurons-with-time">
-<h2><span class="section-number">1.3. </span>Using Norse neurons with time<a class="headerlink" href="#using-norse-neurons-with-time" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.3. </span>Using Norse neurons with time<a class="headerlink" href="#using-norse-neurons-with-time" title="Permalink to this headline">¶</a></h2>
 <p>Similar to PyTorch’s <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html">Sequential</a>,
 Norse’s neuron models can be chained in a network.
 Unfortunately, this does not work with neurons for the same reason that it does
@@ -93,17 +93,41 @@ not work with PyTorch’s own RNNs: state.
 Instead, Norse offers a <a class="reference external" href="https://norse.github.io/norse/auto_api/norse.torch.module.sequential.html">SequentialState</a>
 module that ties stateful modules together:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
+<span class="kn">import</span> <span class="nn">norse</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
-    <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">torch</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(),</span>
     <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># (batch, input)</span>
+<span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># (8, 1) output shape</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-recurrence-in-norse">
+<h2><span class="section-number">2.4. </span>Using recurrence in Norse<a class="headerlink" href="#using-recurrence-in-norse" title="Permalink to this headline">¶</a></h2>
+<p>All neuron modules have <code class="code docutils literal notranslate"><span class="pre">Cell</span></code> and <code class="code docutils literal notranslate"><span class="pre">RecurrentCell</span></code> classes.
+The <code class="code docutils literal notranslate"><span class="pre">Cell</span></code> class applied above simply works as a feed-forward activation
+of the neuron, while the <code class="code docutils literal notranslate"><span class="pre">RecurrentCell</span></code> also contains linear and
+recurrent weights (we are weighing both the input <em>and</em> the recurrent spikes).
+For that reason, we need to inform the module what <strong>shape</strong> it needs to take,
+since we have to initialize weights to match the desired input/output shape.</p>
+<p>The <code class="code docutils literal notranslate"><span class="pre">RecurrentCell</span></code> classes work out of the box and can be plugged
+directly into the above code. Note that we have the same input/output shape,
+but that it could easily be different:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">norse</span>
 
-<span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">SequentialState</span><span class="p">(</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">torch</span><span class="o">.</span><span class="n">LIFRecurrentCell</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># (batch, input)</span>
+<span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># (8, 1) output shape</span>
 </pre></div>
 </div>
 <p>You can do the same for other neuron types like the
@@ -111,7 +135,7 @@ module that ties stateful modules together:</p>
 <a class="reference external" href="https://norse.github.io/norse/auto_api/norse.torch.module.lif_adex.html">LIFAdEx</a>, etc.</p>
 </div>
 <div class="section" id="using-norse-in-time">
-<h2><span class="section-number">1.4. </span>Using Norse in time<a class="headerlink" href="#using-norse-in-time" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">2.5. </span>Using Norse in time<a class="headerlink" href="#using-norse-in-time" title="Permalink to this headline">¶</a></h2>
 <p>The above <a href="#id1"><span class="problematic" id="id2">``</span></a>XCell``s follow the abstraction from PyTorch where the cells are “simple”
 activation functions that is applied once.
 However, neurons exist in time and will need to be given at least a few timesteps of
@@ -119,46 +143,15 @@ input before something interesting happens (like a spike).</p>
 <p>The network above (the one without time) works perfectly well with time, and you can
 easily wrap it with a for loop. However, it’s also possible to run each module
 individually in time.</p>
-<p>For LSNNs, the simplest way to go about this is to use the
-<a class="reference external" href="https://norse.github.io/norse/auto_api/norse.torch.module.lsnn.html">LSNN module</a>.
-You can then <strong>lift</strong> the regular
-PyTorch modules into the time domain (that is, simply run them once for every
-timestep):</p>
+<p>In Norse, we model this time aspect by removing the <code class="code docutils literal notranslate"><span class="pre">Cell</span></code> suffix from
+the model. So the a <code class="code docutils literal notranslate"><span class="pre">LIFCell</span></code> in time will simply be called <code class="code docutils literal notranslate"><span class="pre">LIF</span></code>.
+Similarly, a <code class="code docutils literal notranslate"><span class="pre">LIFRecurrentCell</span></code> in time will simply be called <code class="code docutils literal notranslate"><span class="pre">LIFRecurrent</span></code>.</p>
+<p>The regular Torch modules also need to run in time. For that, we
+added a module to <strong>lift</strong> PyTorch modules into the time domain (that is,
+simply run them once for every timestep).</p>
+<p>Taken together, we get the following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">SequentialState</span><span class="p">(</span>
-    <span class="n">norse</span><span class="o">.</span><span class="n">Lift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
-    <span class="n">norse</span><span class="o">.</span><span class="n">LSNNRecurrent</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
-    <span class="n">norse</span><span class="o">.</span><span class="n">Lift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># (time, batch, input)</span>
-<span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="using-norse-neurons-with-recurrence">
-<h2><span class="section-number">1.5. </span>Using Norse neurons with recurrence<a class="headerlink" href="#using-norse-neurons-with-recurrence" title="Permalink to this headline">¶</a></h2>
-<p>Finally, neurons are known to be recurrent. Meaning, one population <em>can</em> connect
-to themselves. In the <code class="docutils literal notranslate"><span class="pre">Cell</span></code> example (without time) we simply suffix the neuron
-with the word <code class="docutils literal notranslate"><span class="pre">Recurrent</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">SequentialState</span><span class="p">(</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
-    <span class="n">norse</span><span class="o">.</span><span class="n">LIFRecurrentCell</span><span class="p">(),</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">)</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># (batch, input)</span>
-
-<span class="n">out</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>In the example with time, the same logic applies:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
+<span class="kn">import</span> <span class="nn">norse</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">norse</span><span class="o">.</span><span class="n">Lift</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
@@ -170,7 +163,7 @@ with the word <code class="docutils literal notranslate"><span class="pre">Recur
 </pre></div>
 </div>
 <p>This covers the most basic way to apply Norse. More information can be found
-in <a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spikes</span></a>, <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a> and <a class="reference internal" href="learning.html#page-spike-learning"><span class="std std-ref">Learning with spikes</span></a>.</p>
+<a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spikes</span></a>, <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a> and <a class="reference internal" href="learning.html#page-spike-learning"><span class="std std-ref">Learning with spikes</span></a>.</p>
 </div>
 </div>
 
@@ -217,15 +210,15 @@ in <a class="reference internal" href="spiking.html#page-spiking"><span class="s
 <li class="toctree-l2"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#running-off-the-shelf-code">1.1. Running off-the-shelf code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-neural-networks-with-state">1.2. Building neural networks with state</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-norse-neurons-with-time">1.3. Using Norse neurons with time</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-norse-in-time">1.4. Using Norse in time</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-norse-neurons-with-recurrence">1.5. Using Norse neurons with recurrence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-off-the-shelf-code">2.1. Running off-the-shelf code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-neural-networks-with-state">2.2. Building neural networks with state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-norse-neurons-with-time">2.3. Using Norse neurons with time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-recurrence-in-norse">2.4. Using recurrence in Norse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-norse-in-time">2.5. Using Norse in time</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">2. Installing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
@@ -248,8 +241,8 @@ in <a class="reference internal" href="spiking.html#page-spiking"><span class="s
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Norse</a></li>
-      <li>Next: <a href="installing.html" title="next chapter"><span class="section-number">2. </span>Installing Norse</a></li>
+      <li>Previous: <a href="installing.html" title="previous chapter"><span class="section-number">1. </span>Installing Norse</a></li>
+      <li>Next: <a href="tasks.html" title="next chapter"><span class="section-number">3. </span>Running Tasks</a></li>
   </ul></li>
 </ul>
 </div>

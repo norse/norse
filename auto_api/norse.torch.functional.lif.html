@@ -37,6 +37,26 @@
             
   <div class="section" id="module-norse.torch.functional.lif">
 <span id="norse-torch-functional-lif-module"></span><h1>norse.torch.functional.lif module<a class="headerlink" href="#module-norse.torch.functional.lif" title="Permalink to this headline">¶</a></h1>
+<p>A very popular neuron model that combines a <a class="reference internal" href="norse.torch.functional.leaky_integrator.html#module-norse.torch.functional.leaky_integrator" title="norse.torch.functional.leaky_integrator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">norse.torch.functional.leaky_integrator</span></code></a> with
+spike thresholds to produce events (spikes).</p>
+<p>The model describes the change in a neuron membrane voltage (<span class="math notranslate nohighlight">\(v\)</span>)
+and inflow current (<span class="math notranslate nohighlight">\(i\)</span>).
+See the <a class="reference internal" href="norse.torch.functional.leaky_integrator.html#module-norse.torch.functional.leaky_integrator" title="norse.torch.functional.leaky_integrator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">leaky_integrator</span></code></a> module for more information.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+    \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+    \dot{i} &amp;= 1/\tau_{\text{syn}} i
+\end{align*}\end{split}\]</div>
+<p>The F in LIF stands for the thresholded “firing” events that occur if the
+neuron voltage increases over a certain point or <em>threshold</em> (<span class="math notranslate nohighlight">\(v_{\text{th}}\)</span>).</p>
+<div class="math notranslate nohighlight">
+\[z = \Theta(v - v_{\text{th}})\]</div>
+<p>In regular artificial neural networks, this is referred to as the <em>activation
+function</em>. The behaviour can be controlled by setting the <code class="code docutils literal notranslate"><span class="pre">method</span></code> field in
+the neuron parameters, but will default to the <a class="reference internal" href="norse.torch.functional.superspike.html#module-norse.torch.functional.superspike" title="norse.torch.functional.superspike"><code class="xref py py-mod docutils literal notranslate"><span class="pre">superspike</span></code></a> synthetic
+gradient approach that uses the <a class="reference internal" href="norse.torch.functional.heaviside.html#module-norse.torch.functional.heaviside" title="norse.torch.functional.heaviside"><code class="xref py py-mod docutils literal notranslate"><span class="pre">heaviside</span></code></a> step function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}H[n]=\begin{cases} 0, &amp; n &lt;= 0 \\ 1, &amp; n \gt 0 \end{cases}\end{split}\]</div>
 <dl class="py class">
 <dt id="norse.torch.functional.lif.LIFFeedForwardState">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.functional.lif.</span></code><code class="sig-name descname"><span class="pre">LIFFeedForwardState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+c89db19 ))"><span class="pre">torch.Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+c89db19 ))"><span class="pre">torch.Tensor</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/lif.html#LIFFeedForwardState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.lif.LIFFeedForwardState" title="Permalink to this definition">¶</a></dt>
@@ -379,8 +399,8 @@ and input spikes respectively.</p>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../started.html">1. Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../started.html">2. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>

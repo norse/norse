@@ -33,9 +33,21 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.module.leaky_integrator</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Leaky integrators describe a *leaky* neuron membrane that integrates</span>
+<span class="sd">incoming currents over time, but never spikes. In other words, the</span>
+<span class="sd">neuron adds up incoming input current, while leaking out some of it</span>
+<span class="sd">in every timestep.</span>
 
-<span class="kn">import</span> <span class="nn">torch</span><span class="o">,</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="sd">See :mod:`norse.torch.functional.leaky_integrator` for more information.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.jit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNCell</span>
 
 <span class="kn">from</span> <span class="nn">..functional.leaky_integrator</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">li_step</span><span class="p">,</span>
@@ -43,8 +55,6 @@
     <span class="n">LIState</span><span class="p">,</span>
     <span class="n">LIParameters</span><span class="p">,</span>
 <span class="p">)</span>
-
-<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNCell</span>
 
 
 <div class="viewcode-block" id="LICell"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.leaky_integrator.html#norse.torch.module.LICell">[docs]</a><span class="k">class</span> <span class="nc">LICell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
@@ -185,8 +195,8 @@
 <p class="caption"><span class="caption-text">First steps</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">1. Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">2. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>

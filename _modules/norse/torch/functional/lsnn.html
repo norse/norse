@@ -33,7 +33,35 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.functional.lsnn</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Long-short term memory module, building on the work by</span>
+<span class="sd">[G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass](https://github.com/IGITUGraz/LSNN-official).</span>
+
+<span class="sd">The LSNN dynamics is similar to the :mod:`.lif` equations, but it</span>
+<span class="sd">adds an adaptive term :math:`b`:</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    \begin{align*}</span>
+<span class="sd">        \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\</span>
+<span class="sd">        \dot{i} &amp;= -1/\tau_{\text{syn}}\; i \\</span>
+<span class="sd">        \dot{b} &amp;= -1/\tau_{b}\; b</span>
+<span class="sd">    \end{align*}</span>
+
+<span class="sd">This adaptation is applied in the jump condition when the neuron spikes:</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    z = \Theta(v - v_{\text{th}} + b)</span>
+
+<span class="sd">Contrast this with the regular LIF jump condition:</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    z = \Theta(v - v_{\text{th}})</span>
+
+<span class="sd">In practice, this means that the LSNN neurons *adapt* to fire more or less</span>
+<span class="sd">given the same input. The adaptation is determined by the :math:`\tau_b`</span>
+<span class="sd">time constant.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 
@@ -327,8 +355,8 @@
 <p class="caption"><span class="caption-text">First steps</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">1. Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">2. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>

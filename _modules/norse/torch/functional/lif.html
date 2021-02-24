@@ -33,7 +33,36 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.functional.lif</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A very popular neuron model that combines a :mod:`norse.torch.functional.leaky_integrator` with</span>
+<span class="sd">spike thresholds to produce events (spikes).</span>
+
+<span class="sd">The model describes the change in a neuron membrane voltage (:math:`v`)</span>
+<span class="sd">and inflow current (:math:`i`).</span>
+<span class="sd">See the :mod:`.leaky_integrator` module for more information.</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    \begin{align*}</span>
+<span class="sd">        \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\</span>
+<span class="sd">        \dot{i} &amp;= 1/\tau_{\text{syn}} i</span>
+<span class="sd">    \end{align*}</span>
+
+<span class="sd">The F in LIF stands for the thresholded &quot;firing&quot; events that occur if the</span>
+<span class="sd">neuron voltage increases over a certain point or *threshold* (:math:`v_{\text{th}}`).</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    z = \Theta(v - v_{\text{th}})</span>
+
+<span class="sd">In regular artificial neural networks, this is referred to as the *activation</span>
+<span class="sd">function*. The behaviour can be controlled by setting the :code:`method` field in</span>
+<span class="sd">the neuron parameters, but will default to the :mod:`.superspike` synthetic</span>
+<span class="sd">gradient approach that uses the :mod:`.heaviside` step function:</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    H[n]=\begin{cases} 0, &amp; n &lt;= 0 \\ 1, &amp; n \gt 0 \end{cases}</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.jit</span>
@@ -361,8 +390,8 @@
 <p class="caption"><span class="caption-text">First steps</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">1. Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">2. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>

@@ -33,7 +33,46 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.functional.leaky_integrator</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Leaky integrators describe a *leaky* neuron membrane that integrates</span>
+<span class="sd">incoming currents over time, but never spikes. In other words, the</span>
+<span class="sd">neuron adds up incoming input current, while leaking out some of it</span>
+<span class="sd">in every timestep.</span>
+
+<span class="sd">.. math::</span>
+<span class="sd">    \begin{align*}</span>
+<span class="sd">        \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\</span>
+<span class="sd">        \dot{i} &amp;= 1/\tau_{\text{syn}} i</span>
+<span class="sd">    \end{align*}</span>
+
+<span class="sd">The first equation describes how the membrane voltage (:math:`v`, across</span>
+<span class="sd">the membrane) changes over time. A constant amount of current is *leaked*</span>
+<span class="sd">out every timestep (:math:`v_{\text{leak}}`), while the current</span>
+<span class="sd">(:math:`i`) is added.</span>
+
+<span class="sd">The second equation describes how the current flowing into the neuron</span>
+<span class="sd">changes in every timestep.</span>
+
+<span class="sd">Notice that both equations are parameterized by the *time constant*</span>
+<span class="sd">:math:`\tau`. This constant controls how *fast* the changes in voltage</span>
+<span class="sd">and current occurs. A large time constant means a small change.</span>
+<span class="sd">In Norse, we call this parameter the *inverse* to avoid having to</span>
+<span class="sd">recalculate the inverse (:math:`\tau_{\text{mem_inv}}` and</span>
+<span class="sd">:math:`\tau_{\text{syn_inv}}` respectively).</span>
+<span class="sd">So, for Norse a large inverse time constant means *rapid* changes while</span>
+<span class="sd">a small inverse time constant means *slow* changes.</span>
+
+<span class="sd">Recall that *voltage* is the difference in charge between two points (in</span>
+<span class="sd">this case the neuron membrane) and *current* is the rate of change or the</span>
+<span class="sd">amount of current being added/subtracted at each timestep.</span>
+
+<span class="sd">More information can be found on</span>
+<span class="sd">`Wikipedia &lt;https://en.wikipedia.org/wiki/Biological_neuron_model#Leaky_integrate-and-fire&gt;`_</span>
+<span class="sd">or in the book `*Neuron Dynamics* by W. Gerstner et al.,</span>
+<span class="sd">freely available online &lt;https://neuronaldynamics.epfl.ch/online/Ch5.html&gt;`_.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.jit</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
@@ -162,8 +201,8 @@
 <p class="caption"><span class="caption-text">First steps</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">1. Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">2. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">2. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Usage docs</span></p>
