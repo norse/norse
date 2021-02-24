@@ -18,7 +18,7 @@ neuron voltage increases over a certain point or *threshold* (:math:`v_{\text{th
 .. math::
     z = \Theta(v - v_{\text{th}})
 
-In regular artificial neural networks, this is referred to as the *activation 
+In regular artificial neural networks, this is referred to as the *activation
 function*. The behaviour can be controlled by setting the :code:`method` field in
 the neuron parameters, but will default to the :mod:`.superspike` synthetic
 gradient approach that uses the :mod:`.heaviside` step function:

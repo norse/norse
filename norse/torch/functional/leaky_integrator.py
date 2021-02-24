@@ -1,6 +1,6 @@
 r"""
 Leaky integrators describe a *leaky* neuron membrane that integrates
-incoming currents over time, but never spikes. In other words, the 
+incoming currents over time, but never spikes. In other words, the
 neuron adds up incoming input current, while leaking out some of it
 in every timestep.
 
@@ -33,7 +33,7 @@ amount of current being added/subtracted at each timestep.
 
 More information can be found on
 `Wikipedia <https://en.wikipedia.org/wiki/Biological_neuron_model#Leaky_integrate-and-fire>`_
-or in the book `*Neuron Dynamics* by W. Gerstner et al., 
+or in the book `*Neuron Dynamics* by W. Gerstner et al.,
 freely available online <https://neuronaldynamics.epfl.ch/online/Ch5.html>`_.
 """
 

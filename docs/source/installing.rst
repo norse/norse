@@ -21,7 +21,7 @@ to download and install  `CMake <https://cmake.org/>`_ and `PyTorch <https://pyt
 For that reason, we recommend `following the PyTorch "Get Started" guide <https://pytorch.org/get-started/locally/>`_ as the first step.
 
 You might also have to install Python headers if you have not already done that. In Debian-based distros (like Ubuntu),
-this can be done by running `apt install python3-dev`.
+this can be done by running ``apt install python3-dev``.
 
 Installation steps
 ==================
