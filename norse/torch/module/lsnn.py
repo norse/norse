@@ -1,3 +1,9 @@
+"""
+Long-short term memory module, building on the work by
+[G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass](https://github.com/IGITUGraz/LSNN-official).
+
+See :mod:`norse.torch.functional.lsnn` for more information.
+"""
 import torch
 
 from norse.torch.functional.lsnn import (

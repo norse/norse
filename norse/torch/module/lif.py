@@ -1,7 +1,8 @@
 """
-Leaky integrate-and-fire neurons is a popular neuron model
-for spiking neural networks because they are simple and
-fast while still being biologically interesting.
+A very popular neuron model that combines a :mod:`norse.torch.module.leaky_integrator` with
+spike thresholds to produce events (spikes).
+
+See :mod:`norse.torch.functional.lif` for more information.
 """
 import torch
 

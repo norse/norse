@@ -1,6 +1,18 @@
+r"""
+Leaky integrators describe a *leaky* neuron membrane that integrates
+incoming currents over time, but never spikes. In other words, the
+neuron adds up incoming input current, while leaking out some of it
+in every timestep.
+
+See :mod:`norse.torch.functional.leaky_integrator` for more information.
+"""
 from typing import Optional, Tuple
 
-import torch, numpy as np
+import torch
+import torch.jit
+import numpy as np
+
+from norse.torch.module.snn import SNNCell
 
 from ..functional.leaky_integrator import (
     li_step,
@@ -8,8 +20,6 @@ from ..functional.leaky_integrator import (
     LIState,
     LIParameters,
 )
-
-from norse.torch.module.snn import SNNCell
 
 
 class LICell(SNNCell):
