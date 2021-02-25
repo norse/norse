@@ -65,6 +65,7 @@ from .lif_refrac import (
     lif_refrac_feed_forward_step,
     lif_refrac_step,
 )
+from .lift import lift
 from .logical import logical_and, logical_or, logical_xor
 from .lsnn import (
     LSNNFeedForwardState,
@@ -132,6 +133,7 @@ __all__ = [
     "lif_mc_step",
     "lif_mc_refrac_feed_forward_step",
     "lif_mc_refrac_step",
+    "lift",
     "LIFRefracFeedForwardState",
     "LIFRefracParameters",
     "LIFRefracState",
