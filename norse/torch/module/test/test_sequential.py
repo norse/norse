@@ -99,6 +99,7 @@ def test_sequential_debug_hook():
     model.remove_debug_hooks()
     assert not hasattr(model, "spike_history")
 
+
 def test_sequential_debug_hook_twice():
     model = norse.SequentialState(
         torch.nn.Linear(1, 10, bias=False),
