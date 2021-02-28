@@ -78,3 +78,18 @@ def test_backprop_works():
         loss.backward()  # backpropagation, compute gradients
         optimizer.step()
         state = [s.detach() if s is not None else None for s in state]
+
+def test_sequential_debug_hook():
+    data = torch.ones(10, 2, 8, 1)
+    model = norse.SequentialState(
+    torch.nn.Linear(1, 10, bias=False),
+        norse.LIFRecurrent(10, 10),
+        norse.LIF(),
+        norse.LIF(),
+        norse.LIF()
+    )
+    model.register_debug_hooks()
+    model(data)
+    spikes = torch.stack(model.spike_history)
+    assert spikes.shape == (4, 10, 2, 8, 10)
+    assert spikes.max() > 0

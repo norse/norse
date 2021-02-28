@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath("../../"))
 # -- Project information -----------------------------------------------------
 
 project = "norse"
-copyright = "2020, Norse.ai"
+copyright = "2019 - 2021, Norse.ai"
 author = "Norse.ai"
 
 # The full version, including alpha/beta/rc tags
