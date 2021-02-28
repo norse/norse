@@ -93,7 +93,7 @@ def test_sequential_debug_hook():
     )
     model.register_debug_hooks()
     model(data)
-    spikes = torch.stack(model.spike_history)
+    spikes = torch.stack(model.spike_history).detach().cpu()
     assert spikes.shape == (4, 10, 2, 8, 10)
     assert spikes.max() > 0
     model.remove_debug_hooks()
