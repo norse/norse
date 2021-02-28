@@ -1,3 +1,5 @@
+import pytest
+
 import torch
 from torch import nn
 import norse.torch as norse
@@ -96,3 +98,12 @@ def test_sequential_debug_hook():
     assert spikes.max() > 0
     model.remove_debug_hooks()
     assert not hasattr(model, "spike_history")
+
+def test_sequential_debug_hook_twice():
+    model = norse.SequentialState(
+        torch.nn.Linear(1, 10, bias=False),
+        norse.LIFRecurrent(10, 10),
+    )
+    model.register_debug_hooks()
+    with pytest.raises(ValueError):
+        model.register_debug_hooks()
