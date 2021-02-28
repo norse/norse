@@ -7,4 +7,4 @@ network functionality.
 from .functional import *
 from .models import *
 from .module import *
-from .utils import *
+from .util.plot import *

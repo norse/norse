@@ -2,6 +2,6 @@
 """
 
 from . import benchmark, dataset, task
-from .torch import functional, models, module, utils
+from .torch import functional, models, module, util
 
-__all__ = ["task", "benchmark", "dataset", "functional", "models", "module", "utils"]
+__all__ = ["task", "benchmark", "dataset", "functional", "models", "module", "util"]

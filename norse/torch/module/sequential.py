@@ -1,4 +1,4 @@
-from typing import Callable, Union
+from typing import Union
 
 import inspect
 import torch
@@ -42,7 +42,9 @@ class SequentialState(torch.nn.Sequential):
     def __init__(self, *args: torch.nn.Module):
         super(SequentialState, self).__init__()
         self.stateful_layers = []
-        self.forward_state_hooks = []
+        self.output_handles = []
+        self.spike_history = []
+        self.state_history = []
         for idx, module in enumerate(args):
             self.add_module(str(idx), module)
             # Identify all the stateful layers
@@ -51,42 +53,47 @@ class SequentialState(torch.nn.Sequential):
                 "state" in signature.parameters or isinstance(module, torch.nn.RNNBase)
             )
 
-    def register_forward_state_hooks(
-        self,
-        forward_hook: Callable[[torch.nn.Module, torch.Tensor, torch.Tensor], None],
-    ):
+    def register_debug_hooks(self):
         """
-        Registers hooks for all state*ful* layers.
+        Registers debug hooks that captures spikes (:attr:`output_spikes`) and states
+        (:attr:`output_states`) for every stateful layer.
 
-        Hooks can be removed by calling :meth:`remove_state_hooks`_.
-
-        Arguments:
-          child_hook (Callable): The hook applied to all children everytime they produce an output
-          pre_hook (Optional[Callable]): An optional hook for the SequentialState module,
-                                         executed *before* the input is propagated to the children.
+        Hooks can be removed by calling :meth:`remove_debug_hook`_.
 
         Example:
             >>> import norse.torch as snn
-            >>> def my_hook(module, input, output):
-            >>>     ...
             >>> module = snn.SequentialState(...)
-            >>> module.register_forward_state_hook(my_hook)
+            >>> module.register_debug_hook()
             >>> module(...)
+            >>> module.output_spikes # Layer spikes from last application
+            >>> module.output_states # Layer states from last application
         """
-        if len(self.forward_state_hooks) > 0:
-            raise ValueError("Forward state hooks already in place")
+        if len(self.output_handles) > 0:
+            raise ValueError("Debug hooks already in place")
+
+        def output_handle(mod, inp, out):
+            self.spike_history.append(out[0])
+            self.state_history.append(out[1])
+
+        def clear_output(mod, inp):
+            self.spike_history = []
+            self.state_history = []
 
         for name, module in self.named_children():
             if self.stateful_layers[int(name)]:
-                handle = module.register_forward_hook(forward_hook)
-                self.forward_state_hooks.append(handle)
+                handle = module.register_forward_hook(output_handle)
+                self.output_handles.append(handle)
+        self.output_handles.append(self.register_forward_pre_hook(clear_output))
 
-    def remove_forward_state_hooks(self):
+    def remove_debug_hooks(self):
         """
-        Disables the forward state hooks, registered in :meth:`register_forward_state_hooks`_.
+        Disables the debug hooks, registered in :meth:`register_debug_hook`_.
         """
-        for handle in self.forward_state_hooks:
+        for handle in self.output_handles:
             handle.remove()
+        del self.output_spikes
+        del self.output_states
+        del self.output_handles
 
     def forward(self, input_tensor: torch.Tensor, state: Union[list, None] = None):
         """
