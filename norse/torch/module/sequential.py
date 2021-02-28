@@ -91,8 +91,8 @@ class SequentialState(torch.nn.Sequential):
         """
         for handle in self.output_handles:
             handle.remove()
-        del self.output_spikes
-        del self.output_states
+        del self.spike_history
+        del self.state_history
         del self.output_handles
 
     def forward(self, input_tensor: torch.Tensor, state: Union[list, None] = None):
