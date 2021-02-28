@@ -7,6 +7,7 @@ from norse.torch.module.lif import LIFCell
 
 class ConvNet(torch.nn.Module):
     """
+<<<<<<< HEAD
     A convolutional network with LIF dynamics
 
     Arguments:
@@ -15,6 +16,10 @@ class ConvNet(torch.nn.Module):
         method (str): Threshold method
     """
 
+=======
+    A convolutional network with 
+    """
+>>>>>>> 97edc4c... Added features to diagnose and plot
     def __init__(
         self, num_channels=1, feature_size=28, method="super", dtype=torch.float
     ):
