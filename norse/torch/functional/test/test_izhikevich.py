@@ -448,7 +448,7 @@ def plot_test():
     plt.plot(vs_phasic_bursting)
     plt.plot(cs_phasic_bursting)
 
-    vs_mixed_mode cs_mixed_mode = test_mixed_mode()
+    vs_mixed_mode, cs_mixed_mode = test_mixed_mode()
 
     plt.subplot(5, 4, 5)
     plt.plot(vs_mixed_mode)
