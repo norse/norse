@@ -42,6 +42,7 @@ def test_tonic_spiking():
         cs.append(input_current)
     return vs, cs
 
+
 def test_phasic_spiking():
     s, p = izk.phasic_spiking((1))
     T1 = 20
@@ -60,6 +61,7 @@ def test_phasic_spiking():
         _, s = izhikevich_step(input_current, s, p)
         cs.append(input_current)
     return vs, cs
+
 
 def test_tonic_bursting():
     s, p = izk.tonic_bursting((1))
@@ -81,6 +83,7 @@ def test_tonic_bursting():
         cs.append(input_current)
     return vs, cs
 
+
 def test_phasic_bursting():
     s, p = izk.phasic_bursting((1))
     T1 = 20
@@ -98,6 +101,7 @@ def test_phasic_bursting():
         _, s = izhikevich_step(input_current, s, p)
         cs.append(input_current)
     return vs, cs
+
 
 def test_mixed_mode():
     s, p = izk.mixed_mode((1))
@@ -117,6 +121,7 @@ def test_mixed_mode():
         _, s = izhikevich_step(input_current, s, p)
         cs.append(input_current)
     return vs, cs
+
 
 def test_spike_frequency_adaptation():
     s, p = izk.spike_frequency_adaptation((1))
@@ -138,6 +143,7 @@ def test_spike_frequency_adaptation():
         cs.append(input_current)
     return vs, cs
 
+
 def test_class_1_exc():
     s, p = izk.class_1_exc((1))
     ts = np.arange(0, 300, 0.25)
@@ -157,6 +163,7 @@ def test_class_1_exc():
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
     return vs
+
 
 def test_class_2_exc():
     s, p = izk.class_2_exc((1))
@@ -178,6 +185,7 @@ def test_class_2_exc():
         _, s = izhikevich_step(input_current, s, p)
     return vs
 
+
 def test_spike_latency():
     s, p = izk.spike_latency((1))
     ts = np.arange(0, 100, 0.2)
@@ -198,6 +206,7 @@ def test_spike_latency():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_subthreshold_oscillation():
     s, p = izk.subthreshold_oscillation((1))
     ts = np.arange(0, 200, 0.25)
@@ -217,6 +226,7 @@ def test_subthreshold_oscillation():
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
+
 
 def test_resonator():
     s, p = izk.resonator((1))
@@ -247,6 +257,7 @@ def test_resonator():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_integrator():
     s, p = izk.integrator((1))
     ts = np.arange(0, 100, 0.25)
@@ -276,6 +287,7 @@ def test_integrator():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_rebound_spike():
     s, p = izk.rebound_spike((1))
     ts = np.arange(0, 200, 0.2)
@@ -297,6 +309,7 @@ def test_rebound_spike():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_rebound_burst():
     s, p = izk.rebound_burst((1))
     ts = np.arange(0, 200, 0.2)
@@ -317,6 +330,7 @@ def test_rebound_burst():
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
+
 
 def test_threshhold_variability():
     s, p = izk.threshhold_variability((1))
@@ -342,6 +356,7 @@ def test_threshhold_variability():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_bistability():
     s, p = izk.bistability((1))
     ts = np.arange(0, 300, 0.25)
@@ -364,6 +379,7 @@ def test_bistability():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_dap():
     s, p = izk.dap((1))
     ts = np.arange(0, 50, 0.1)
@@ -385,6 +401,7 @@ def test_dap():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_inhibition_induced_spiking():
     s, p = izk.inhibition_induced_spiking((1))
     ts = np.arange(0, 350, 0.5)
@@ -402,6 +419,7 @@ def test_inhibition_induced_spiking():
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
+
 
 def test_inhibition_induced_bursting():
     s, p = izk.inhibition_induced_bursting((1))
@@ -421,6 +439,7 @@ def test_inhibition_induced_bursting():
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
+
 
 def plot_test():
     vs_tonic, cs_tonic = test_tonic_spiking()
