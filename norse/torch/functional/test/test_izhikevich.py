@@ -156,7 +156,7 @@ def test_class_1_exc():
 
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
-    return vs, cs
+    return vs
 
 def test_class_2_exc():
     s, p = izk.class_2_exc((1))
@@ -176,7 +176,7 @@ def test_class_2_exc():
 
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
-    return vs, cs
+    return vs
 
 def test_spike_latency():
     s, p = izk.spike_latency((1))
@@ -388,7 +388,6 @@ def test_dap():
 def test_inhibition_induced_spiking():
     s, p = izk.inhibition_induced_spiking((1))
     ts = np.arange(0, 350, 0.5)
-    
     vs = []
     us = []
     cs = []
@@ -460,12 +459,12 @@ def plot_test():
     plt.plot(vs_sfa)
     plt.plot(cs_sfa)
 
-    vs_class_1_exc, cs_class_1_exc = test_class_1_exc()
+    vs_class_1_exc = test_class_1_exc()
 
     plt.subplot(5, 4, 7)
     plt.plot(vs_class_1_exc)
 
-    vs_class_2_exc, cs_class_2_exc = test_class_2_exc()
+    vs_class_2_exc = test_class_2_exc()
 
     plt.subplot(5, 4, 8)
     plt.plot(vs_class_2_exc)
