@@ -116,7 +116,7 @@ def test_mixed_mode():
             input_current = 0 * torch.ones(1)
         _, s = izhikevich_step(input_current, s, p)
         cs.append(input_current)
-    return vs, us, cs
+    return vs, cs
 
 def test_spike_frequency_adaptation():
     s, p = izk.spike_frequency_adaptation((1))
