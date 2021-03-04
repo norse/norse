@@ -42,6 +42,7 @@ def test_tonic_spiking():
         cs.append(input_current)
     return vs, cs
 
+
 def test_phasic_spiking():
     p, s = izk.phasic_spiking
     T1 = 20
@@ -60,6 +61,7 @@ def test_phasic_spiking():
         _, s = izhikevich_step(input_current, s, p)
         cs.append(input_current)
     return vs, cs
+
 
 def test_tonic_bursting():
     p, s = izk.tonic_bursting
@@ -81,6 +83,7 @@ def test_tonic_bursting():
         cs.append(input_current)
     return vs, cs
 
+
 def test_phasic_bursting():
     p, s = izk.phasic_bursting
     T1 = 20
@@ -98,6 +101,7 @@ def test_phasic_bursting():
         _, s = izhikevich_step(input_current, s, p)
         cs.append(input_current)
     return vs, cs
+
 
 def test_mixed_mode():
     p, s = izk.mixed_mode
@@ -138,6 +142,7 @@ def test_spike_frequency_adaptation():
 
         cs.append(input_current)
     return vs, cs
+
 
 def test_class_1_exc():
     p, s = izk.class_1_exc
@@ -201,6 +206,7 @@ def test_spike_latency():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_subthreshold_oscillation():
     p, s = izk.subthreshold_oscillation
     ts = np.arange(0, 200, 0.25)
@@ -220,6 +226,7 @@ def test_subthreshold_oscillation():
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
+
 
 def test_resonator():
     p, s = izk.resonator
@@ -250,6 +257,7 @@ def test_resonator():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_integrator():
     p, s = izk.integrator
     ts = np.arange(0, 100, 0.25)
@@ -279,6 +287,7 @@ def test_integrator():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_rebound_spike():
     p, s = izk.rebound_spike
     ts = np.arange(0, 200, 0.2)
@@ -300,6 +309,7 @@ def test_rebound_spike():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_rebound_burst():
     p, s = izk.rebound_burst
     ts = np.arange(0, 200, 0.2)
@@ -320,6 +330,7 @@ def test_rebound_burst():
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
+
 
 def test_threshhold_variability():
     p, s = izk.threshhold_variability
@@ -345,6 +356,7 @@ def test_threshhold_variability():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_bistability():
     p, s = izk.bistability
     ts = np.arange(0, 300, 0.25)
@@ -367,6 +379,7 @@ def test_bistability():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_dap():
     p, s = izk.dap
     ts = np.arange(0, 50, 0.1)
@@ -388,6 +401,7 @@ def test_dap():
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
 
+
 def test_inhibition_induced_spiking():
     p, s = izk.inhibition_induced_spiking
     ts = np.arange(0, 350, 0.5)
@@ -405,6 +419,7 @@ def test_inhibition_induced_spiking():
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
+
 
 def test_inhibition_induced_bursting():
     p, s = izk.inhibition_induced_bursting
@@ -424,6 +439,7 @@ def test_inhibition_induced_bursting():
         cs.append(input_current)
         _, s = izhikevich_step(input_current, s, p)
     return vs, cs
+
 
 def plot_test():
     vs_tonic, cs_tonic = test_tonic_spiking()
