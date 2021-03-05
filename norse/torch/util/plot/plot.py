@@ -187,9 +187,9 @@ def plot_scatter_3d(
         pos = ax.scatter(
             s.indices()[0], s.indices()[2], s.indices()[1], c=s.values(), **kwargs
         )
-    if p.show_colorbar:
-        fig.colorbar(pos, ax=axes, fraction=0.06 / len(axes))
-    return fig
+    if show_colorbar:
+        plt.gcf().colorbar(pos, ax=axes, fraction=0.06 / len(axes))
+    return axes
 
 
 def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs):
