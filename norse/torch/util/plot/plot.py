@@ -131,7 +131,7 @@ def plot_scatter_3d(
             s.indices()[0], s.indices()[2], s.indices()[1], c=s.values(), **kwargs
         )
     if p.show_colorbar:
-        fig.colorbar(pos, ax=axes, label=p.c_label, fraction=0.06 / len(axes))
+        fig.colorbar(pos, ax=axes, fraction=0.06 / len(axes))
     return fig
 
 
