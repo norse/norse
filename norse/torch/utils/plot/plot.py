@@ -11,9 +11,9 @@ import torch
 
 def _detach_tensor(tensor: torch.Tensor):
     if tensor.requires_grad:
-        return tensor.detach()
+        return tensor.detach().cpu()
     else:
-        return tensor
+        return tensor.cpu()
 
 
 def plot_heatmap_2d(

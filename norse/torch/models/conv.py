@@ -6,6 +6,10 @@ from norse.torch.module.lif import LIFCell
 
 
 class ConvNet(torch.nn.Module):
+    """
+    A convolutional network with
+    """
+
     def __init__(
         self, num_channels=1, feature_size=28, method="super", dtype=torch.float
     ):

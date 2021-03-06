@@ -110,11 +110,10 @@ def main(args):
     # Finally, we define the trainer and fit the model
     trainer = pl.Trainer.from_argparse_args(args)
     trainer.fit(model, train_loader)
-    trainer.test(test_dataloader=test_loader)
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
+    parser = ArgumentParser("MNIST digit classification with spiking neural networks")
     parser = pl.Trainer.add_argparse_args(parser)
     parser.set_defaults(
         max_epochs=1000, auto_select_gpus=True, progress_bar_refresh_rate=1
