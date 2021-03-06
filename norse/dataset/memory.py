@@ -78,9 +78,14 @@ class MemoryStoreRecallDataset(torch.utils.data.Dataset):
                 f_max=hz,
                 dt=self.dt,
             )
+
         encoded_data_pattern = encode_pattern(data_pattern, self.poisson_rate)
-        encoded_command_pattern = encode_pattern(torch.cat((store_pattern, recall_pattern), dim=1), self.poisson_rate // 2)
-        encoded_pattern = torch.cat((encoded_data_pattern, encoded_command_pattern), dim=2)
+        encoded_command_pattern = encode_pattern(
+            torch.cat((store_pattern, recall_pattern), dim=1), self.poisson_rate // 2
+        )
+        encoded_pattern = torch.cat(
+            (encoded_data_pattern, encoded_command_pattern), dim=2
+        )
         encoded = torch.cat(encoded_pattern.chunk(self.seq_periods, dim=1)).squeeze()
         return encoded, label_pattern
 
