@@ -8,10 +8,15 @@ import torchvision
 import matplotlib.pyplot as plt
 
 import torch
+import torch.nn.functional as F
 import torch.utils.data
 import pytorch_lightning as pl
+from pytorch_lightning.metrics import functional as FM
 
 import norse
+
+
+
 
 
 class LIFConvNet(pl.LightningModule):
@@ -23,67 +28,70 @@ class LIFConvNet(pl.LightningModule):
         self.lr_step = lr_step
         self.optimizer = optimizer
         self.seq_length = seq_length
-        self.noise_distribution = torch.distributions.uniform.Uniform(1e-8, 1e-5)
-
-        self.rsnn = norse.torch.SequentialState(
+        self.p = p
+        
+        self.features = norse.torch.SequentialState(
             # Convolutional layers
             torch.nn.Conv2d(num_channels, 64, 3),  # Block 1
             norse.torch.LIFCell(p),
-            torch.nn.BatchNorm2d(64),
-            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
+            torch.nn.MaxPool2d(2, 2),
             torch.nn.Conv2d(64, 128, 3),  # Block 2
             norse.torch.LIFCell(p),
-            torch.nn.BatchNorm2d(128),
-            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
-            torch.nn.Conv2d(128, 256, 5),  # Block 3
-            norse.torch.LIFCell(p),
-            torch.nn.BatchNorm2d(256),
-            torch.nn.MaxPool2d(2, 2, ceil_mode=True),
-            torch.nn.Flatten(1),
+            torch.nn.MaxPool2d(2, 2),
+            torch.nn.Conv2d(128, 256, 3),  # Block 3
+            norse.torch.LIFCell(p),            
+            torch.nn.MaxPool2d(2, 2),
+            torch.nn.Flatten(),
+        )
+        self.classification = norse.torch.SequentialState(
             # Classification
-            torch.nn.Linear(1024, 128),
-            torch.nn.Linear(128, 10),
+            torch.nn.Linear(1024, 10),
+            norse.torch.LICell()
         )
 
     def forward(self, x):
-        # X was shape (batch, time, ...) and will be (time, batch, ...)
-        x = x.permute(1, 0, 2, 3, 4)
-        voltages = torch.empty(*x.shape[:2], 10, device=x.device, dtype=x.dtype)
-        s = None
-        for ts in range(x.shape[0]):
-            out, s = self.rsnn(x[ts], s)
-            voltages[ts, :, :] = out
+        voltages = torch.empty(self.seq_length, x.shape[0], 10, device=x.device, dtype=x.dtype)
+        sf = None
+        sc = None
+        tau_syn = 1/self.p.tau_syn_inv        
+        for ts in range(self.seq_length):
+            out_f, sf = self.features(x, sf)
+            out_c, sc = self.classification(out_f, sc)
+            voltages[ts, :, :] = out_c + 0.01 * torch.randn(x.shape[0], 10, device=x.device)
 
-        return voltages
+        y_hat, _ = torch.max(voltages, 0)
+        return y_hat
+    
 
     # Forward pass of a single batch
     def training_step(self, batch, batch_idx):
         x, y = batch
-        out = self(x)
-        # Note: The max function is silent for neurons with zero activations, which is
-        #       problematic for backpropagation, so we add a small amount of noise
-        pred = out #+ self.noise_distribution.sample(out.shape).to(self.device)
-        pred = pred.max(dim=0)[0]
-        loss = torch.nn.functional.cross_entropy(pred, y)
-        classes = out.max(0)[0].argmax(1)
-        acc = torch.eq(classes, y).sum().item() / len(y)
-
-        self.log("Loss", loss)
-        self.log("LR", self.scheduler.get_last_lr()[0])
-        self.log("Acc.", acc, prog_bar=True)
+        y_hat = self(x)
+        loss = F.cross_entropy(y_hat, y)
+        acc1, acc5 = self.__accuracy(y_hat, y, topk=(1, 5))
+        self.log('train_loss', loss, on_step=True, on_epoch=True, logger=True)
+        self.log('train_acc1', acc1, on_step=True, prog_bar=True, on_epoch=True, logger=True)
+        self.log('train_acc5', acc5, on_step=True, on_epoch=True, logger=True)
         return loss
 
-    # The testing step is the same as the training, but with test data
+    def validation_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self(x)
+        loss = F.cross_entropy(y_hat, y)
+        acc1, acc5 = self.__accuracy(y_hat, y, topk=(1, 5))
+        self.log('val_loss', loss, on_step=True, on_epoch=True)
+        self.log('val_acc1', acc1, on_step=True, prog_bar=True, on_epoch=True)
+        self.log('val_acc5', acc5, on_step=True, on_epoch=True)
+        
+    # The testing step is the same as the training, but with test data    
     def test_step(self, batch, batch_idx):
         x, y = batch
-        out = self(x)
-        loss = torch.nn.functional.cross_entropy(out.max(0)[0], y)
-        classes = out.max(dim=0)[0].argmax(1)
-        acc = torch.eq(classes, y).sum().item() / len(y)
-
-        self.log("Loss", loss)
-        self.log("Acc.", acc)
-        self.log("LR", self.scheduler.get_last_lr()[0])
+        y_hat = self(x)
+        loss = F.cross_entropy(y_hat, y)
+        acc1, acc5 = self.__accuracy(y_hat, y, topk=(1, 5))
+        self.log('test_loss', loss, on_step=True, on_epoch=True)
+        self.log('test_acc1', acc1, on_step=True, prog_bar=True, on_epoch=True)
+        self.log('test_acc5', acc5, on_step=True, on_epoch=True)
 
     def training_epoch_end(self, outputs):
         if self.lr_step:
@@ -101,7 +109,25 @@ class LIFConvNet(pl.LightningModule):
         )
         return optimizer
 
+    @staticmethod
+    def __accuracy(output, target, topk=(1, )):
+        """Computes the accuracy over the k top predictions for the specified values of k"""
+        with torch.no_grad():
+            maxk = max(topk)
+            batch_size = target.size(0)
 
+            _, pred = output.topk(maxk, 1, True, True)
+            pred = pred.t()
+            correct = pred.eq(target.view(1, -1).expand_as(pred))
+
+            res = []
+            for k in topk:
+                correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
+                res.append(correct_k.mul_(100.0 / batch_size))
+            return res
+
+
+    
 def main(args):
 
     # Set seeds
@@ -146,23 +172,23 @@ def main(args):
             torchvision.transforms.RandomCrop(32, padding=4),
             torchvision.transforms.RandomHorizontalFlip(),
             torchvision.transforms.ToTensor(),
-            torchvision.transforms.Normalize(mean=(0.0, 0.0, 0.0), std=(0.5, 0.5, 0.5)),
-            encoder,
         ]
     )
     transform_test = torchvision.transforms.Compose(
-        [torchvision.transforms.ToTensor(), encoder]
+        [torchvision.transforms.ToTensor()]
     )
     train_loader = torch.utils.data.DataLoader(
         torchvision.datasets.CIFAR10(
             root=".", train=True, download=True, transform=transform_train
         ),
         batch_size=args.batch_size,
+        num_workers=32,
         shuffle=True,
     )
-    test_loader = torch.utils.data.DataLoader(
+    val_loader = torch.utils.data.DataLoader(
         torchvision.datasets.CIFAR10(root=".", train=False, transform=transform_test),
         batch_size=args.batch_size,
+        num_workers=32,        
     )
 
     # Define and train the model
@@ -171,11 +197,11 @@ def main(args):
         num_channels=num_channels,
         lr=args.lr,
         optimizer=args.optimizer,
-        p=p,
+        p=norse.torch.LIFParameters(v_th=torch.as_tensor(0.4)),
     )
     trainer = pl.Trainer.from_argparse_args(args)
-    trainer.fit(model, train_loader)
-    trainer.test(model, test_dataloaders=test_loader)
+    trainer.fit(model, train_loader, val_loader)
+    # trainer.test(model, test_dataloaders=test_loader)
 
 
 if __name__ == "__main__":
@@ -197,7 +223,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--current_encoder_v_th",
         type=float,
-        default=0.8,
+        default=0.2,
         help="Voltage threshold for the LIF dynamics",
     )
     parser.add_argument(
@@ -217,12 +243,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--optimizer",
         type=str,
-        default="sgd",
+        default="adam",
         choices=["adam", "sgd"],
         help="Optimizer to use for training.",
     )
     parser.add_argument(
-        "--seq_length", default=100, type=int, help="Number of timesteps to do."
+        "--seq_length", default=128, type=int, help="Number of timesteps to do."
     )
     parser.add_argument(
         "--manual_seed", default=0, type=int, help="Random seed for torch"
