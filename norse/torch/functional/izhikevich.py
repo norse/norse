@@ -5,6 +5,22 @@ from norse.torch.functional.threshold import threshold
 
 
 class IzhikevichParameters(NamedTuple):
+    """Parametrization of av Izhikevich neuron
+    Parameters:
+        a (float): time scale of the recovery variable u. Smaller values result in slower recovery in 1/ms
+        b (float): sensitivity of the recovery variable u to the subthreshold fluctuations of the membrane potential v. Greater values couple v and u more strongly resulting in possible subthreshold oscillations and low-threshold spiking dynamics
+        c (float): after-spike reset value of the membrane potential in mV
+        d (float): after-spike reset of the recovery variable u caused by slow high-threshold Na+ and K+ conductances in mV
+        sq (float): constant of the v squared variable in mV/ms
+        mn (float): constant of the v variable in 1/ms
+        bias (float): bias constant in mV/ms
+        v_th (torch.Tensor): threshold potential in mV
+        tau_inv (float) : inverse time constant in 1/ms
+        method (str): method to determine the spike threshold
+                      (relevant for surrogate gradients)
+        alpha (float): hyper parameter to use in surrogate gradient computation
+    """
+    
     a: float
     b: float
     c: float
@@ -19,11 +35,18 @@ class IzhikevichParameters(NamedTuple):
 
 
 class IzhikevichState(NamedTuple):
+    """State of a Izhikevich neuron
+    Parameters:
+        v (torch.Tensor): membrane potential
+        u (torch.Tensor): membrane recovery variable
+    """
+    
     v: torch.Tensor
     u: torch.Tensor
 
 
 def tonic_spiking(shape) -> Tuple[IzhikevichState, IzhikevichParameters]:
+    
     p = IzhikevichParameters(a=0.02, b=0.2, c=-65, d=6)
     s = IzhikevichState(v=-70 * torch.ones(shape), u=-70 * p.b * torch.ones(shape))
     return s, p
