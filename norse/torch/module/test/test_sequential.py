@@ -83,7 +83,6 @@ def test_backprop_works():
 
 
 def test_sequential_forward_state_hook():
-    global count
     data = torch.ones(10, 2, 8, 1)
     model = norse.SequentialState(
         torch.nn.Linear(1, 10, bias=False),
@@ -104,7 +103,7 @@ def test_sequential_forward_state_hook():
     spikes = torch.stack(spikes).detach().cpu()
     assert spikes.shape == (4, 10, 2, 8, 10)
     assert spikes.max() > 0
-    print(states)
+
     assert len(states) == 4
     assert states[0] is None
     spikes = []
