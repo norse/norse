@@ -1,7 +1,5 @@
 from typing import Callable, Union
 
-from functools import partial
-
 import inspect
 import torch
 
