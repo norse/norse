@@ -29,7 +29,7 @@ def plot_heatmap_2d(
     .. plot::
 
         import torch
-        from norse.torch import plot_heatmap_2d
+        from norse.torch.utils.plot import plot_heatmap_2d
         data = torch.randn(28, 28)
         plot_heatmap_2d(data)
         plt.show()
@@ -68,7 +68,7 @@ def plot_histogram_2d(data: torch.Tensor, axes: plt.Axes = None, **kwargs):
     .. plot::
 
         import torch
-        from norse.torch import LIF, plot_histogram_2d
+        from norse.torch.utils.plot import LIF, plot_histogram_2d
         spikes, state = LIF()(torch.ones(100, 1))
         plot_histogram_2d(spikes)
         plt.show()
@@ -103,7 +103,7 @@ def plot_spikes_2d(spikes: torch.Tensor, axes: plt.Axes = None, **kwargs):
 
     Example:
         >>> import torch
-        >>> from norse.torch import LIF, plot_spikes_2d
+        >>> from norse.torch.utils.plot import LIF, plot_spikes_2d
         >>> spikes, _ = LIF()(torch.randn(200, 10))
         >>> plot_spikes_2d(spikes)
         >>> plt.show()
@@ -111,7 +111,7 @@ def plot_spikes_2d(spikes: torch.Tensor, axes: plt.Axes = None, **kwargs):
     .. plot::
 
         import torch
-        from norse.torch import LIF, plot_spikes_2d
+        from norse.torch.utils.plot import LIF, plot_spikes_2d
         spikes, _ = LIF()(torch.randn(200, 10))
         plot_spikes_2d(spikes)
         plt.show()
@@ -143,7 +143,7 @@ def plot_scatter_3d(
     .. plot::
 
         import torch
-        from norse.torch import LIF, plot_scatter_3d
+        from norse.torch.utils.plot import LIF, plot_scatter_3d
         distribution = torch.distributions.bernoulli.Bernoulli(torch.tensor([0.02]))
         data = distribution.sample(sample_shape=(3, 100, 10, 10)).squeeze()
         data.names=('L', 'T', 'X', 'Y')
@@ -201,7 +201,7 @@ def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs)
 
     Example:
         >>> import torch
-        >>> from norse.torch import plot_heatmap_3d
+        >>> from norse.torch.utils.plot import plot_heatmap_3d
         >>> data = torch.randn(4, 28, 28, names=('L', 'X', 'Y'))
         >>> plot_heatmap_3d(data)
         >>> plt.show()
@@ -209,7 +209,7 @@ def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs)
     .. plot::
 
         import torch
-        from norse.torch import plot_heatmap_3d
+        from norse.torch.utils.plot import plot_heatmap_3d
         data = torch.randn(4, 28, 28, names=('L', 'X', 'Y'))
         plot_heatmap_3d(data)
         plt.show()
@@ -243,5 +243,5 @@ def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs)
     plt.xticks(range(0, L), range(1, L + 1))
     pos = ax.scatter(s.indices()[0], s.indices()[2], s.indices()[1], **kwargs)
     if show_colorbar:
-        plt.gcf().colorbar(pos, ax=ax, label=p.c_label)
+        plt.gcf().colorbar(pos, ax=ax)
     return ax

@@ -43,6 +43,7 @@ valid_transform = torch.nn.Sequential(
 train_speech_commands = SpeechCommands(dataset=train_sc, transform=train_transform)
 valid_speech_commands = SpeechCommands(dataset=valid_sc, transform=valid_transform)
 
+# pytype: disable=module-attr
 train_loader = torch.utils.data.DataLoader(
     train_speech_commands, batch_size=BATCH_SIZE, shuffle=True
 )
@@ -50,6 +51,7 @@ train_loader = torch.utils.data.DataLoader(
 valid_loader = torch.utils.data.DataLoader(
     valid_speech_commands, batch_size=BATCH_SIZE, shuffle=True
 )
+# pytype: enable=module-attr
 
 if MODEL == "lif":
     model = lif_model(n_output=13).to(DEVICE)

@@ -111,7 +111,7 @@ Table of contents
    :caption: First steps
    :numbered:
 
-   ∇ Home <index>
+   ∇ Home <self>
    installing
    started
    tasks
