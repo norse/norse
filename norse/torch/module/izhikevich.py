@@ -17,6 +17,7 @@ from ..functional import izhikevich
 
 from norse.torch.module.snn import SNN, SNNCell, SNNRecurrent, SNNRecurrentCell
 
+
 class IzhikevichCell(SNNCell):
     """Documentation WIP
     Module that computes a single Izhikevich neuron-model *without* recurrence and *without* time.
@@ -32,15 +33,12 @@ class IzhikevichCell(SNNCell):
 
     def __init__(
         self,
-        spiking_method : IzhikevichSpikingBehaviour,
-        #spiking method : str,
+        spiking_method: IzhikevichSpikingBehaviour,
+        # spiking method : str,
         **kwargs
     ):
         super().__init__(
-            izhikevich_step,
-            spiking_method.p,
-            pass_state(spiking_method.s),
-            **kwargs
+            izhikevich_step, spiking_method.p, pass_state(spiking_method.s), **kwargs
         )
 
 
