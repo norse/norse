@@ -8,7 +8,9 @@ from norse.torch.functional.threshold import threshold
 from ..functional.izhikevich import (
     IzhikevichState,
     IzhikevichParameters,
+    IzhikevichSpikingBehaviour,
     izhikevich_step,
+    pass_state,
 )
 
 from ..functional import izhikevich
@@ -20,8 +22,7 @@ class IzhikevichCell(SNNCell):
     Module that computes a single Izhikevich neuron-model *without* recurrence and *without* time.
 
     Parameters:
-        p (IzhikevichParameters): Parameters of the Izhikevich neuron model.
-        dt (float): Time step to use. Defaults to 0.001.
+        spiking_method (IzhikevichSpikingBehaviour) : parameters and initial state of the neuron
     Examples:
         >>> batch_size = 16
         >>> izhikevich = IzhikevichCell(10, 20)
@@ -31,21 +32,16 @@ class IzhikevichCell(SNNCell):
 
     def __init__(
         self,
-        spiking_method : Callable[[torch.Size], Tuple[IzhikevichState, IzhikevichParameters]],
+        spiking_method : IzhikevichSpikingBehaviour,
         #spiking method : str,
         **kwargs
     ):
         super().__init__(
             izhikevich_step,
-            self.cell_initialization,
-            spiking_method = spiking_method,
+            spiking_method.p,
+            pass_state(spiking_method.s),
             **kwargs
         )
-        
-    def cell_initialization(self, input_tensor: torch.Tensor, spiking_method):
-        spiking_method = self.spiking_method
-        #state, self.p = getattr(izhikevich, spiking_method)(input_tensor.shape)
-        state, p = self.spiking_method(input_tensor.shape)
 
 
 class Izhikevich(SNN):

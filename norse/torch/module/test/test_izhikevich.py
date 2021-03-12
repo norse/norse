@@ -6,7 +6,7 @@ from norse.torch.functional import izhikevich
 def test_izhikevich_cell():
     shape = (5,2)
     data = torch.randn(shape)
-    cell = IzhikevichCell(izhikevich.tonic_spiking(shape))
+    cell = IzhikevichCell(izhikevich.tonic_spiking)
     out, s = cell(data)
     
     for x in s:
