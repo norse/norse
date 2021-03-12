@@ -31,15 +31,15 @@ class IzhikevichCell(SNNCell):
         >>> output, s0 = izhikevich(input)
     """
 
-    def __init__(
-        self,
-        spiking_method: IzhikevichSpikingBehaviour,
-        # spiking method : str,
-        **kwargs
-    ):
+    def __init__(self, spiking_method: IzhikevichSpikingBehaviour, **kwargs):
         super().__init__(
-            izhikevich_step, pass_state, spiking_method.p, **kwargs
+            izhikevich_step, self.initial_state, spiking_method.p, **kwargs
         )
+        self.spiking_method = spiking_method
+
+    def initial_state(self, input_tensor: torch.Tensor) -> IzhikevichState:
+        state = self.spiking_method.s
+        return state
 
 
 class Izhikevich(SNN):
