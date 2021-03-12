@@ -38,7 +38,7 @@ class IzhikevichCell(SNNCell):
         **kwargs
     ):
         super().__init__(
-            izhikevich_step, spiking_method.p, pass_state(spiking_method.s), **kwargs
+            izhikevich_step, pass_state, spiking_method.p, **kwargs
         )
 
 
