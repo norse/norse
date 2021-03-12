@@ -10,7 +10,6 @@ from ..functional.izhikevich import (
     IzhikevichParameters,
     IzhikevichSpikingBehaviour,
     izhikevich_step,
-    pass_state,
 )
 
 from ..functional import izhikevich
