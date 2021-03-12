@@ -157,11 +157,6 @@ inhibition_induced_bursting = IzhikevichSpikingBehaviour(
 )
 
 
-def pass_state(state: IzhikevichState):
-    """Simple function to pass the state, needed for the Izhikevich module to work with SNNCell"""
-    return state
-
-
 def izhikevich_step(
     input_current: torch.Tensor,
     s: IzhikevichState,
