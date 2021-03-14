@@ -123,6 +123,5 @@ __all__ = [
     "LSNNParameters",
     "LSNNState",
     "RegularizationCell",
-    "RegularizationWrapper",
     "SequentialState",
 ]

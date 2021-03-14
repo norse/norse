@@ -1,7 +1,7 @@
 import torch
 
 from norse.torch.module.lif import LIFCell
-from norse.torch.module.regularization import RegularizationCell, RegularizationWrapper
+from norse.torch.module.regularization import RegularizationCell
 
 
 def test_regularization_module():

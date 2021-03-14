@@ -5,7 +5,7 @@ membrane parameters, or other properties over time.
 """
 import torch
 
-from typing import Any, NamedTuple, Optional
+from typing import Any
 
 from norse.torch.functional.regularization import (
     regularize_step,
