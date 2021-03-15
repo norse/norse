@@ -1,5 +1,5 @@
 import torch
-from typing import NamedTuple, Tuple
+from typing import NamedTuple
 
 from norse.torch.functional.threshold import threshold
 
