@@ -18,7 +18,7 @@ class IzhikevichCell(SNNCell):
     Parameters:
         spiking_method (IzhikevichSpikingBehaviour) : parameters and initial state of the neuron
     Example with tonic spiking:
-        >>> from torch.norse import tonic_spiking
+        >>> from norse.torch import IzhikevichCell, tonic_spiking
         >>> batch_size = 16
         >>> cell = IzhikevichCell(tonic_spiking)
         >>> input = torch.randn(batch_size, 10)
