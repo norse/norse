@@ -24,7 +24,7 @@ mpl.rcParams["ytick.labelright"] = False
 
 
 def test_tonic_spiking():
-    s, p = izk.tonic_spiking((1))
+    p, s = izk.tonic_spiking
     ts = np.arange(0, 100, 0.25)
     T1 = ts[-1] / 10
     vs = []
@@ -44,7 +44,7 @@ def test_tonic_spiking():
 
 
 def test_phasic_spiking():
-    s, p = izk.phasic_spiking((1))
+    p, s = izk.phasic_spiking
     T1 = 20
     vs = []
     us = []
@@ -64,7 +64,7 @@ def test_phasic_spiking():
 
 
 def test_tonic_bursting():
-    s, p = izk.tonic_bursting((1))
+    p, s = izk.tonic_bursting
     T1 = 25
     vs = []
     us = []
@@ -85,7 +85,7 @@ def test_tonic_bursting():
 
 
 def test_phasic_bursting():
-    s, p = izk.phasic_bursting((1))
+    p, s = izk.phasic_bursting
     T1 = 20
     vs = []
     us = []
@@ -104,7 +104,7 @@ def test_phasic_bursting():
 
 
 def test_mixed_mode():
-    s, p = izk.mixed_mode((1))
+    p, s = izk.mixed_mode
     ts = np.arange(0, 160, 0.25)
     T1 = ts[-1] / 10
     vs = []
@@ -124,7 +124,7 @@ def test_mixed_mode():
 
 
 def test_spike_frequency_adaptation():
-    s, p = izk.spike_frequency_adaptation((1))
+    p, s = izk.spike_frequency_adaptation
     ts = np.arange(0, 85, 0.25)
     T1 = ts[-1] / 10
     vs = []
@@ -145,7 +145,7 @@ def test_spike_frequency_adaptation():
 
 
 def test_class_1_exc():
-    s, p = izk.class_1_exc((1))
+    p, s = izk.class_1_exc
     ts = np.arange(0, 300, 0.25)
     T1 = 30
     vs = []
@@ -166,7 +166,7 @@ def test_class_1_exc():
 
 
 def test_class_2_exc():
-    s, p = izk.class_2_exc((1))
+    p, s = izk.class_2_exc
     ts = np.arange(0, 300, 0.25)
     T1 = 30
     vs = []
@@ -187,7 +187,7 @@ def test_class_2_exc():
 
 
 def test_spike_latency():
-    s, p = izk.spike_latency((1))
+    p, s = izk.spike_latency
     ts = np.arange(0, 100, 0.2)
     T1 = ts[-1] / 10
     vs = []
@@ -208,7 +208,7 @@ def test_spike_latency():
 
 
 def test_subthreshold_oscillation():
-    s, p = izk.subthreshold_oscillation((1))
+    p, s = izk.subthreshold_oscillation
     ts = np.arange(0, 200, 0.25)
     T1 = ts[-1] / 10
     vs = []
@@ -229,7 +229,7 @@ def test_subthreshold_oscillation():
 
 
 def test_resonator():
-    s, p = izk.resonator((1))
+    p, s = izk.resonator
     ts = np.arange(0, 400, 0.25)
     T1 = ts[-1] / 10
     T2 = T1 + 20
@@ -259,7 +259,7 @@ def test_resonator():
 
 
 def test_integrator():
-    s, p = izk.integrator((1))
+    p, s = izk.integrator
     ts = np.arange(0, 100, 0.25)
     T1 = ts[-1] / 11
     T2 = T1 + 5
@@ -289,7 +289,7 @@ def test_integrator():
 
 
 def test_rebound_spike():
-    s, p = izk.rebound_spike((1))
+    p, s = izk.rebound_spike
     ts = np.arange(0, 200, 0.2)
     T1 = 20
 
@@ -311,7 +311,7 @@ def test_rebound_spike():
 
 
 def test_rebound_burst():
-    s, p = izk.rebound_burst((1))
+    p, s = izk.rebound_burst
     ts = np.arange(0, 200, 0.2)
     T1 = 20
 
@@ -333,7 +333,7 @@ def test_rebound_burst():
 
 
 def test_threshhold_variability():
-    s, p = izk.threshhold_variability((1))
+    p, s = izk.threshhold_variability
     ts = np.arange(0, 100, 0.25)
     T1 = 10
     T2 = 80
@@ -358,7 +358,7 @@ def test_threshhold_variability():
 
 
 def test_bistability():
-    s, p = izk.bistability((1))
+    p, s = izk.bistability
     ts = np.arange(0, 300, 0.25)
     T1 = ts[-1] / 8
     T2 = 216
@@ -381,7 +381,7 @@ def test_bistability():
 
 
 def test_dap():
-    s, p = izk.dap((1))
+    p, s = izk.dap
     ts = np.arange(0, 50, 0.1)
     T1 = 10
 
@@ -403,7 +403,7 @@ def test_dap():
 
 
 def test_inhibition_induced_spiking():
-    s, p = izk.inhibition_induced_spiking((1))
+    p, s = izk.inhibition_induced_spiking
     ts = np.arange(0, 350, 0.5)
     vs = []
     us = []
@@ -422,7 +422,7 @@ def test_inhibition_induced_spiking():
 
 
 def test_inhibition_induced_bursting():
-    s, p = izk.inhibition_induced_bursting((1))
+    p, s = izk.inhibition_induced_bursting
     ts = np.arange(0, 350, 0.5)
 
     vs = []
