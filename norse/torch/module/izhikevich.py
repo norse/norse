@@ -1,20 +1,14 @@
-from typing import Any, Callable, Optional, Tuple
+from typing import Callable, Optional, Tuple
 
-import numpy as np
 import torch
-
-from norse.torch.functional.threshold import threshold
 
 from ..functional.izhikevich import (
     IzhikevichState,
-    IzhikevichParameters,
     IzhikevichSpikingBehaviour,
     izhikevich_step,
 )
 
-from ..functional import izhikevich
-
-from norse.torch.module.snn import SNN, SNNCell, SNNRecurrent, SNNRecurrentCell
+from norse.torch.module.snn import SNN, SNNCell  # , SNNRecurrent, SNNRecurrentCell
 
 
 class IzhikevichCell(SNNCell):
@@ -41,7 +35,7 @@ class IzhikevichCell(SNNCell):
         return state
 
 
-class Izhikevich(SNN):
+class IzhikevichLayer(SNN):
     """
     A neuron layer that wraps a recurrent IzhikevichCell in time such
     that the layer keeps track of temporal sequences of spikes.
