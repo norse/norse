@@ -35,8 +35,7 @@ class IzhikevichCell(SNNCell):
         return state
 
 
-"""
-class IzhikevichLayer(SNN):
+"""class IzhikevichLayer(SNN):
     
     A neuron layer that wraps a recurrent IzhikevichCell in time such
     that the layer keeps track of temporal sequences of spikes.
