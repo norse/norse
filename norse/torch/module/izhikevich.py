@@ -1,4 +1,4 @@
-from typing import Callable, Optional, Tuple
+# from typing import Optional, Tuple
 
 import torch
 
@@ -35,8 +35,9 @@ class IzhikevichCell(SNNCell):
         return state
 
 
+"""
 class IzhikevichLayer(SNN):
-    """
+    
     A neuron layer that wraps a recurrent IzhikevichCell in time such
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
@@ -45,7 +46,7 @@ class IzhikevichLayer(SNN):
         >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
         >>> l = IzhikevichLayer(2, 4)
         >>> l(data) # Returns tuple of (Tensor(10, 5, 4), IzhikevichState)
-    """
+    
 
     def __init__(self, *cell_args, **kw_args):
         super(IzhikevichLayer, self).__init__()
@@ -62,3 +63,4 @@ class IzhikevichLayer(SNN):
         # pytype: disable=bad-return-type
         return torch.stack(outputs), state
         # pytype: enable=bad-return-type
+"""
