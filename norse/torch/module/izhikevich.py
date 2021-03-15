@@ -110,21 +110,14 @@ class IzhikevichRecurrentCell(SNNRecurrentCell):
         return state
 
 
-"""
-class IzhikevichLayer(SNN):
-<<<<<<< HEAD
+class Izhikevich(SNN):
     """
-    A neuron layer that wraps a :class:`IzhikevichCell` in time such
-=======
-    
     A neuron layer that wraps a recurrent IzhikevichCell in time such
->>>>>>> bd69b28... Misc changes
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
     Example:
         >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-<<<<<<< HEAD
         >>> l = Izhikevich()
         >>> l(data) # Returns tuple of (Tensor(10, 5, 2), IzhikevichState)
     Parameters:
@@ -206,25 +199,3 @@ class IzhikevichRecurrent(SNNRecurrent):
             ),
         )
         return state
-=======
-        >>> l = IzhikevichLayer(2, 4)
-        >>> l(data) # Returns tuple of (Tensor(10, 5, 4), IzhikevichState)
-    
-
-    def __init__(self, *cell_args, **kw_args):
-        super(IzhikevichLayer, self).__init__()
-        self.cell = IzhikevichCell(*cell_args, **kw_args)
-
-    def forward(
-        self, input_tensor: torch.Tensor, state: Optional[IzhikevichState] = None
-    ) -> Tuple[torch.Tensor, IzhikevichState]:
-        inputs = input_tensor.unbind(0)
-        outputs = []  # torch.jit.annotate(List[torch.Tensor], [])
-        for _, input_step in enumerate(inputs):
-            out, state = self.cell(input_step, state)
-            outputs += [out]
-        # pytype: disable=bad-return-type
-        return torch.stack(outputs), state
-        # pytype: enable=bad-return-type
-"""
->>>>>>> bd69b28... Misc changes
