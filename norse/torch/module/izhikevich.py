@@ -25,9 +25,9 @@ class IzhikevichCell(SNNCell):
         spiking_method (IzhikevichSpikingBehaviour) : parameters and initial state of the neuron
     Examples:
         >>> batch_size = 16
-        >>> izhikevich = IzhikevichCell(10, 20)
+        >>> cell = IzhikevichCell(spiking_method)
         >>> input = torch.randn(batch_size, 10)
-        >>> output, s0 = izhikevich(input)
+        >>> output, s0 = cell(input)
     """
 
     def __init__(self, spiking_method: IzhikevichSpikingBehaviour, **kwargs):

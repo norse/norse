@@ -56,104 +56,144 @@ class IzhikevichSpikingBehaviour(NamedTuple):
     s: IzhikevichState
 
 
-p_ts = IzhikevichParameters(a=0.02, b=0.2, c=-65, d=6)
+tonic_spiking_p = IzhikevichParameters(a=0.02, b=0.2, c=-65, d=6)
 tonic_spiking = IzhikevichSpikingBehaviour(
-    p=p_ts, s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * p_ts.b)
+    p=tonic_spiking_p,
+    s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * tonic_spiking_p.b),
 )
 
-p_ps = IzhikevichParameters(a=0.02, b=0.25, c=-65, d=6)
+phasic_spiking_p = IzhikevichParameters(a=0.02, b=0.25, c=-65, d=6)
 phasic_spiking = IzhikevichSpikingBehaviour(
-    p=p_ps, s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * p_ps.b)
+    p=phasic_spiking_p,
+    s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * phasic_spiking_p.b),
 )
 
-p_tb = IzhikevichParameters(a=0.02, b=0.2, c=-50, d=2)
+tonic_bursting_p = IzhikevichParameters(a=0.02, b=0.2, c=-50, d=2)
 tonic_bursting = IzhikevichSpikingBehaviour(
-    p=p_tb, s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * p_tb.b)
+    p=tonic_bursting_p,
+    s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * tonic_bursting_p.b),
 )
 
-p_pb = IzhikevichParameters(a=0.02, b=0.25, c=-55, d=0.05, tau_inv=200)
+phasic_bursting_p = IzhikevichParameters(a=0.02, b=0.25, c=-55, d=0.05, tau_inv=200)
 phasic_bursting = IzhikevichSpikingBehaviour(
-    p=p_pb, s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * p_pb.b)
+    p=phasic_bursting_p,
+    s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * phasic_bursting_p.b),
 )
 
-p_mm = IzhikevichParameters(a=0.02, b=0.2, c=-55, d=4, tau_inv=250)
+mixed_mode_p = IzhikevichParameters(a=0.02, b=0.2, c=-55, d=4, tau_inv=250)
 mixed_mode = IzhikevichSpikingBehaviour(
-    p=p_mm, s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * p_mm.b)
+    p=mixed_mode_p,
+    s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * mixed_mode_p.b),
 )
 
-p_sfa = IzhikevichParameters(a=0.01, b=0.2, c=-65, d=8, tau_inv=250)
+spike_frequency_adaptation_p = IzhikevichParameters(
+    a=0.01, b=0.2, c=-65, d=8, tau_inv=250
+)
 spike_frequency_adaptation = IzhikevichSpikingBehaviour(
-    p=p_sfa, s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * p_sfa.b)
+    p=spike_frequency_adaptation_p,
+    s=IzhikevichState(
+        v=torch.tensor(-70), u=torch.tensor(-70) * spike_frequency_adaptation_p.b
+    ),
 )
 
-p_c1e = IzhikevichParameters(a=0.02, b=-0.1, c=-55, d=6, mn=4.1, bias=108, tau_inv=250)
+class_1_exc_p = IzhikevichParameters(
+    a=0.02, b=-0.1, c=-55, d=6, mn=4.1, bias=108, tau_inv=250
+)
 class_1_exc = IzhikevichSpikingBehaviour(
-    p=p_c1e, s=IzhikevichState(v=torch.tensor(-60), u=torch.tensor(-60) * p_c1e.b)
+    p=class_1_exc_p,
+    s=IzhikevichState(v=torch.tensor(-60), u=torch.tensor(-60) * class_1_exc_p.b),
 )
 
-p_c2e = IzhikevichParameters(a=0.2, b=0.26, c=-65, d=0, tau_inv=250)
+class_2_exc_p = IzhikevichParameters(a=0.2, b=0.26, c=-65, d=0, tau_inv=250)
 class_2_exc = IzhikevichSpikingBehaviour(
-    p=p_c2e, s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * p_c2e.b)
+    p=class_2_exc_p,
+    s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * class_2_exc_p.b),
 )
 
-p_sl = IzhikevichParameters(a=0.02, b=0.2, c=-65, d=6, tau_inv=250)
+spike_latency_p = IzhikevichParameters(a=0.02, b=0.2, c=-65, d=6, tau_inv=250)
 spike_latency = IzhikevichSpikingBehaviour(
-    p=p_sl, s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * p_sl.b)
+    p=spike_latency_p,
+    s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * spike_latency_p.b),
 )
 
-p_so = IzhikevichParameters(a=0.05, b=0.26, c=-60, d=0, tau_inv=250)
+subthreshold_oscillation_p = IzhikevichParameters(
+    a=0.05, b=0.26, c=-60, d=0, tau_inv=250
+)
 subthreshold_oscillation = IzhikevichSpikingBehaviour(
-    p=p_so, s=IzhikevichState(v=torch.tensor(-62), u=torch.tensor(-62) * p_so.b)
+    p=subthreshold_oscillation_p,
+    s=IzhikevichState(
+        v=torch.tensor(-62), u=torch.tensor(-62) * subthreshold_oscillation_p.b
+    ),
 )
 
-p_r = IzhikevichParameters(a=0.1, b=0.26, c=-60, d=-1, tau_inv=250)
+resonator_p = IzhikevichParameters(a=0.1, b=0.26, c=-60, d=-1, tau_inv=250)
 resonator = IzhikevichSpikingBehaviour(
-    p=p_r, s=IzhikevichState(v=torch.tensor(-62), u=torch.tensor(-62) * p_r.b)
+    p=resonator_p,
+    s=IzhikevichState(v=torch.tensor(-62), u=torch.tensor(-62) * resonator_p.b),
 )
 
-p_i = IzhikevichParameters(a=0.02, b=-0.1, c=-55, d=6, mn=4.1, bias=108, tau_inv=250)
+integrator_p = IzhikevichParameters(
+    a=0.02, b=-0.1, c=-55, d=6, mn=4.1, bias=108, tau_inv=250
+)
 integrator = IzhikevichSpikingBehaviour(
-    p=p_i, s=IzhikevichState(v=torch.tensor(-60), u=torch.tensor(-60) * p_i.b)
+    p=integrator_p,
+    s=IzhikevichState(v=torch.tensor(-60), u=torch.tensor(-60) * integrator_p.b),
 )
 
-p_rs = IzhikevichParameters(a=0.03, b=0.25, c=-60, d=4, tau_inv=200)
+rebound_spike_p = IzhikevichParameters(a=0.03, b=0.25, c=-60, d=4, tau_inv=200)
 rebound_spike = IzhikevichSpikingBehaviour(
-    p=p_rs, s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * p_rs.b)
+    p=rebound_spike_p,
+    s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * rebound_spike_p.b),
 )
 
-p_rb = IzhikevichParameters(a=0.03, b=0.25, c=-52, d=0, tau_inv=200)
+rebound_burst_p = IzhikevichParameters(a=0.03, b=0.25, c=-52, d=0, tau_inv=200)
 rebound_burst = IzhikevichSpikingBehaviour(
-    p=p_rb, s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * p_rb.b)
+    p=rebound_burst_p,
+    s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * rebound_burst_p.b),
 )
 
-p_tv = IzhikevichParameters(a=0.03, b=0.25, c=-60, d=4, tau_inv=250)
+threshhold_variability_p = IzhikevichParameters(a=0.03, b=0.25, c=-60, d=4, tau_inv=250)
 threshhold_variability = IzhikevichSpikingBehaviour(
-    p=p_tv, s=IzhikevichState(v=torch.tensor(-64), u=torch.tensor(-64) * p_tv.b)
+    p=threshhold_variability_p,
+    s=IzhikevichState(
+        v=torch.tensor(-64), u=torch.tensor(-64) * threshhold_variability_p.b
+    ),
 )
 
-p_b = IzhikevichParameters(a=0.1, b=0.26, c=-60, d=0, tau_inv=250)
+bistability_p = IzhikevichParameters(a=0.1, b=0.26, c=-60, d=0, tau_inv=250)
 bistability = IzhikevichSpikingBehaviour(
-    p=p_b, s=IzhikevichState(v=torch.tensor(-61), u=torch.tensor(-61) * p_b.b)
+    p=bistability_p,
+    s=IzhikevichState(v=torch.tensor(-61), u=torch.tensor(-61) * bistability_p.b),
 )
 
-p_dap = IzhikevichParameters(a=1.0, b=0.2, c=-60, d=-21, tau_inv=100)
+dap_p = IzhikevichParameters(a=1.0, b=0.2, c=-60, d=-21, tau_inv=100)
 dap = IzhikevichSpikingBehaviour(
-    p=p_dap, s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * p_dap.b)
+    p=dap_p, s=IzhikevichState(v=torch.tensor(-70), u=torch.tensor(-70) * dap_p.b)
 )
 
-p_a = IzhikevichParameters(a=0.02, b=1.0, c=-55, d=4, tau_inv=500)
+accomodation_p = IzhikevichParameters(a=0.02, b=1.0, c=-55, d=4, tau_inv=500)
 accomodation = IzhikevichSpikingBehaviour(
-    p=p_a, s=IzhikevichState(v=torch.tensor(-65), u=torch.tensor(-16))
+    p=accomodation_p, s=IzhikevichState(v=torch.tensor(-65), u=torch.tensor(-16))
 )
 
-p_iis = IzhikevichParameters(a=-0.02, b=-1.0, c=-60, d=8, tau_inv=250)
+inhibition_induced_spiking_p = IzhikevichParameters(
+    a=-0.02, b=-1.0, c=-60, d=8, tau_inv=250
+)
 inhibition_induced_spiking = IzhikevichSpikingBehaviour(
-    p=p_iis, s=IzhikevichState(v=torch.tensor(-63.8), u=torch.tensor(-63.8) * p_iis.b)
+    p=inhibition_induced_spiking_p,
+    s=IzhikevichState(
+        v=torch.tensor(-63.8), u=torch.tensor(-63.8) * inhibition_induced_spiking_p.b
+    ),
 )
 
-p_iib = IzhikevichParameters(a=-0.026, b=-1.0, c=-45, d=-2, tau_inv=250)
+inhibition_induced_bursting_p = IzhikevichParameters(
+    a=-0.026, b=-1.0, c=-45, d=-2, tau_inv=250
+)
 inhibition_induced_bursting = IzhikevichSpikingBehaviour(
-    p=p_iib, s=IzhikevichState(v=torch.tensor(-63.8), u=torch.tensor(-63.8) * p_iib.b)
+    p=inhibition_induced_bursting_p,
+    s=IzhikevichState(
+        v=torch.tensor(-63.8), u=torch.tensor(-63.8) * inhibition_induced_bursting_p.b
+    ),
 )
 
 
