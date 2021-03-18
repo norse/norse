@@ -215,7 +215,11 @@ def ada_lif_step(
     # compute resets
     v_new = v_decayed - z_new * (p.v_th - p.v_reset)
     # compute b update
+<<<<<<< HEAD
     b_new = b_decayed + z_new * p.beta
+=======
+    b_new = b_decayed + z_new * p.tau_adapt_inv * p.beta
+>>>>>>> 4697ac2... Corrected memory task
     # compute current jumps
     i_new = (
         i_decayed
