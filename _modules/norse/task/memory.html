@@ -1,22 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>norse.task.memory &#8212; norse 0.0.4 documentation</title>
-    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>norse.task.memory &#8212; norse 0.0.6 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/gallery-dataframe.css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -42,11 +38,12 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.utils.data</span>
 
 <span class="kn">from</span> <span class="nn">norse.torch.functional.encode</span> <span class="kn">import</span> <span class="n">poisson_encode</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.leaky_integrator</span> <span class="kn">import</span> <span class="n">LICell</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.lsnn</span> <span class="kn">import</span> <span class="n">LSNNCell</span><span class="p">,</span> <span class="n">LSNNParameters</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span><span class="p">,</span> <span class="n">LIFParameters</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.leaky_integrator</span> <span class="kn">import</span> <span class="n">LILinearCell</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.lsnn</span> <span class="kn">import</span> <span class="n">LSNNRecurrentCell</span><span class="p">,</span> <span class="n">LSNNParameters</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFRecurrentCell</span><span class="p">,</span> <span class="n">LIFParameters</span>
 
 <span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_integer</span><span class="p">(</span><span class="s2">&quot;batch_size&quot;</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="s2">&quot;Batch size.&quot;</span><span class="p">)</span>
 <span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_enum</span><span class="p">(</span><span class="s2">&quot;device&quot;</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="s2">&quot;cuda&quot;</span><span class="p">],</span> <span class="s2">&quot;Device to use by pytorch.&quot;</span><span class="p">)</span>
@@ -122,12 +119,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">is_lsnn</span> <span class="o">=</span> <span class="n">is_lsnn</span>
         <span class="k">if</span> <span class="n">is_lsnn</span><span class="p">:</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">LSNNCell</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">input_features</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">LSNNRecurrentCell</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">input_features</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">LIFCell</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">input_features</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">LIFRecurrentCell</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">input_features</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">readout</span> <span class="o">=</span> <span class="n">LICell</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">output_features</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readout</span> <span class="o">=</span> <span class="n">LILinearCell</span><span class="p">(</span><span class="n">input_features</span><span class="p">,</span> <span class="n">output_features</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MemoryNet.forward"><a class="viewcode-back" href="../../../auto_api/norse.task.memory.html#norse.task.memory.MemoryNet.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -580,19 +577,21 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<p class="caption"><span class="caption-text">First steps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">∇ Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../started.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tasks.html">3. Running Tasks</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../about.html">1. About Norse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">2. Installing Norse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../hardware.html">3. Hardware acceleration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../spiking.html">4. Introduction to spiking neural networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../learning.html">5. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hardware.html">2. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../spiking.html">3. Introduction to spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../experiments.html">2. Running Experiments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
@@ -636,7 +635,7 @@
       &copy;2020, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
