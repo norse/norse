@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath("../../"))
 # -- Project information -----------------------------------------------------
 
 project = "norse"
-copyright = "2020, Norse.ai"
+copyright = "2019 - 2021, Norse.ai"
 author = "Norse.ai"
 
 # The full version, including alpha/beta/rc tags
@@ -90,6 +90,7 @@ html_css_files = ["custom.css"]
 intersphinx_mapping = {
     "python": ("https://docs.python.org/", None),
     "numpy": ("http://docs.scipy.org/doc/numpy/", None),
+    "matplotlib": ('https://matplotlib.org/stable/', None),
     "PyTorch": ("http://pytorch.org/docs/master/", None),
 }
 

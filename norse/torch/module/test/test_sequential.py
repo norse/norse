@@ -1,3 +1,5 @@
+import pytest
+
 import torch
 from torch import nn
 import norse.torch as norse
@@ -78,3 +80,49 @@ def test_backprop_works():
         loss.backward()  # backpropagation, compute gradients
         optimizer.step()
         state = [s.detach() if s is not None else None for s in state]
+
+
+def test_sequential_forward_state_hook():
+    data = torch.ones(10, 2, 8, 1)
+    model = norse.SequentialState(
+        torch.nn.Linear(1, 10, bias=False),
+        norse.LIFRecurrent(10, 10),
+        norse.LIF(),
+        norse.LIF(),
+        norse.LIF(),
+    )
+    spikes = []
+    states = []
+
+    def forward_state_hook(mod, inp, output):
+        spikes.append(inp[0])
+        states.append(inp[1])
+
+    model.register_forward_state_hooks(forward_state_hook)
+    _, s = model(data)
+    spikes = torch.stack(spikes).detach().cpu()
+    assert spikes.shape == (4, 10, 2, 8, 10)
+    assert spikes.max() > 0
+
+    assert len(states) == 4
+    assert states[0] is None
+    spikes = []
+    states = []
+    model(data, s)
+    assert hasattr(states[0], "v")  # isinstance is broken for namedtuple
+    model.remove_forward_state_hooks()
+    model(data, s)
+    assert len(spikes) == 4
+
+
+def test_sequential_debug_hook_twice():
+    def dub(mod, inp, output):
+        pass
+
+    model = norse.SequentialState(
+        torch.nn.Linear(1, 10, bias=False),
+        norse.LIFRecurrent(10, 10),
+    )
+    model.register_forward_state_hooks(dub)
+    with pytest.raises(ValueError):
+        model.register_forward_state_hooks(dub)
