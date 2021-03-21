@@ -39,7 +39,7 @@ If the incoming currents exceed a threshold, the post-synaptic
 neuron releases a spike.
 Hhis can easily be expressed in code:
 
-.. code:: python
+.. code::
 
     if membrane > threshold: spike!
 

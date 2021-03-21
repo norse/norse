@@ -33,51 +33,51 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.module.sequential</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 
 <div class="viewcode-block" id="SequentialState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.sequential.html#norse.torch.module.SequentialState">[docs]</a><span class="k">class</span> <span class="nc">SequentialState</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A sequential model that works exactly like PyTorch&#39;s ``Sequential`` with the</span>
+<span class="sd">    A sequential model that works like PyTorch&#39;s ``Sequential`` with the</span>
 <span class="sd">    addition that it handles neuron states.</span>
+
+
+<span class="sd">    Arguments:</span>
+<span class="sd">      args (*torch.nn.Module): A list of modules to sequentially apply in the forward pass</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.module.lift import LIFT</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.module.sequential import SequentialState</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.module.lif import LIFRecurrent</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.ones(1, 16, 8, 4)     # Single timestep</span>
-<span class="sd">        &gt;&gt;&gt; model = SequentialState(</span>
-<span class="sd">        &gt;&gt;&gt;   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)</span>
-<span class="sd">        &gt;&gt;&gt;   torch.nn.Flatten(2),             # (1, 8, 12)</span>
-<span class="sd">        &gt;&gt;&gt;   LIFRecurrent(12, 6),                 # (1, 8, 6)</span>
-<span class="sd">        &gt;&gt;&gt;   LIFRecurrent(6, 1)                   # (1, 8, 1)</span>
+<span class="sd">        &gt;&gt;&gt; import norse.torch as snn</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.ones(1, 16, 8, 4)         # Single timestep</span>
+<span class="sd">        &gt;&gt;&gt; model = snn.SequentialState(</span>
+<span class="sd">        &gt;&gt;&gt;   snn.Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)</span>
+<span class="sd">        &gt;&gt;&gt;   torch.nn.Flatten(2),                 # (1, 8, 12)</span>
+<span class="sd">        &gt;&gt;&gt;   snn.LIFRecurrent(12, 6),             # (1, 8, 6)</span>
+<span class="sd">        &gt;&gt;&gt;   snn.LIFRecurrent(6, 1)               # (1, 8, 1)</span>
 <span class="sd">        &gt;&gt;&gt; )</span>
 <span class="sd">        &gt;&gt;&gt; model(data)</span>
 
 <span class="sd">    Example with recurrent layers:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.module.lift import Lift</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.module.sequential import SequentialState</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.module.lif import LIFCell, LIFRecurrent</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.module.lsnn import LSNNCell, LSNNLayer</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.ones(1, 16, 8, 4)     # Single timestep</span>
-<span class="sd">        &gt;&gt;&gt; model = SequentialState(</span>
-<span class="sd">        &gt;&gt;&gt;   Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)</span>
-<span class="sd">        &gt;&gt;&gt;   torch.nn.Flatten(2),             # (1, 8, 12)</span>
-<span class="sd">        &gt;&gt;&gt;   LSNNLayer(LSNNCell, 12, 6),      # (1, 8, 6)</span>
-<span class="sd">        &gt;&gt;&gt;   torch.nn.RNN(6, 4, 2),           # (1, 6, 4) with 2 recurrent layers</span>
-<span class="sd">        &gt;&gt;&gt;   LIFRecurrent(LIFCell,4, 1)           # (1, 4, 1)</span>
+<span class="sd">        &gt;&gt;&gt; import norse.torch as snn</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.ones(1, 16, 8, 4)         # Single timestep</span>
+<span class="sd">        &gt;&gt;&gt; model = snn.SequentialState(</span>
+<span class="sd">        &gt;&gt;&gt;   snn.Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)</span>
+<span class="sd">        &gt;&gt;&gt;   torch.nn.Flatten(2),                 # (1, 8, 12)</span>
+<span class="sd">        &gt;&gt;&gt;   snn.LSNNRecurrent(12, 6),            # (1, 8, 6)</span>
+<span class="sd">        &gt;&gt;&gt;   torch.nn.RNN(6, 4, 2),               # (1, 6, 4) with 2 recurrent layers</span>
+<span class="sd">        &gt;&gt;&gt;   snn.LIFRecurrent(4, 1)               # (1, 4, 1)</span>
 <span class="sd">        &gt;&gt;&gt; )</span>
 <span class="sd">        &gt;&gt;&gt; model(data)</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SequentialState</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stateful_layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forward_state_hooks</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_module</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="n">module</span><span class="p">)</span>
             <span class="c1"># Identify all the stateful layers</span>
@@ -85,6 +85,43 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">stateful_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="s2">&quot;state&quot;</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">RNNBase</span><span class="p">)</span>
             <span class="p">)</span>
+
+<div class="viewcode-block" id="SequentialState.register_forward_state_hooks"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.sequential.html#norse.torch.module.SequentialState.register_forward_state_hooks">[docs]</a>    <span class="k">def</span> <span class="nf">register_forward_state_hooks</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">forward_hook</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Registers hooks for all state*ful* layers.</span>
+
+<span class="sd">        Hooks can be removed by calling :meth:`remove_state_hooks`_.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">          child_hook (Callable): The hook applied to all children everytime they produce an output</span>
+<span class="sd">          pre_hook (Optional[Callable]): An optional hook for the SequentialState module,</span>
+<span class="sd">                                         executed *before* the input is propagated to the children.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; import norse.torch as snn</span>
+<span class="sd">            &gt;&gt;&gt; def my_hook(module, input, output):</span>
+<span class="sd">            &gt;&gt;&gt;     ...</span>
+<span class="sd">            &gt;&gt;&gt; module = snn.SequentialState(...)</span>
+<span class="sd">            &gt;&gt;&gt; module.register_forward_state_hook(my_hook)</span>
+<span class="sd">            &gt;&gt;&gt; module(...)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forward_state_hooks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Forward state hooks already in place&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_children</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateful_layers</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">name</span><span class="p">)]:</span>
+                <span class="n">handle</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">forward_hook</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">forward_state_hooks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SequentialState.remove_forward_state_hooks"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.sequential.html#norse.torch.module.SequentialState.remove_forward_state_hooks">[docs]</a>    <span class="k">def</span> <span class="nf">remove_forward_state_hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Disables the forward state hooks, registered in :meth:`register_forward_state_hooks`_.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">handle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_state_hooks</span><span class="p">:</span>
+            <span class="n">handle</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SequentialState.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.sequential.html#norse.torch.module.SequentialState.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -194,10 +231,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Norse.ai.
+      &copy;2019 - 2021, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
