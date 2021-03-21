@@ -30,11 +30,6 @@ from norse.torch.module.lif import LIFCell, LIFRecurrentCell, LIFParameters
 from norse.torch.utils.plot import plot_spikes_2d
 
 
-def zero_diagonal_(tensor):
-    with torch.no_grad():
-        return tensor.fill_diagonal_(0.0)
-
-
 def sparsify_(tensor, sparsity):
     if tensor.ndimension() != 2:
         raise ValueError("Only tensors with 2 dimensions are supported")
@@ -56,6 +51,7 @@ class LSNNLIFNet(torch.nn.Module):
         assert input_features % 2 == 0, "Input features must be a whole number"
         self.neurons_per_layer = input_features // 2
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         self.lsnn_cell = LSNNRecurrentCell(
@@ -94,8 +90,26 @@ from norse.torch.util.plot import plot_spikes_2d
         )
         zero_diagonal_(self.linear_recurrent.weight)
         # sparsify_(self.linear_recurrent.weight, 0.8)
+=======
+        self.linear_input = torch.nn.Linear(input_features, input_features)
+        self.linear_recurrent = torch.nn.Linear(input_features, input_features)
+>>>>>>> a883fb0... Fixed regularization
         self.lsnn_cell = LSNNCell(p_lsnn, dt=dt)
         self.lif_cell = LIFCell(p_lif, dt=dt)
+
+        # Initialize weights
+        with torch.no_grad():
+            torch.nn.init.normal_(
+                self.linear_input.weight, mean=0, std=1 / input_features
+            ).fill_diagonal_(0.0)
+            torch.nn.init.normal_(
+                self.linear_recurrent.weight, mean=0, std=1 / input_features
+            ).fill_diagonal_(0.0)
+        # Remove autapses
+        def autapse_hook(gradient):
+            return gradient.clone().fill_diagonal_(0.0)
+
+        self.linear_recurrent.weight.register_hook(autapse_hook)
 
     def forward(
         self, input_spikes: torch.Tensor, state: Optional[Tuple[Any, Any, torch.Tensor]]
@@ -173,16 +187,19 @@ class MemoryNet(pl.LightningModule):
         self.optimizer = args.optimizer
         self.learning_rate = args.learning_rate
         self.weight_decay = args.weight_decay
+        self.regularization_factor = args.regularization_factor
+        self.regularization_target = args.regularization_target * args.dt
+        self.log("Neuron model", args.neuron_model)
         p_lsnn = LSNNParameters(
             method=args.model,
-            v_th=torch.as_tensor(0.3),
-            tau_syn_inv=torch.as_tensor(1 / 7e-3),
-            tau_mem_inv=torch.as_tensor(1 / 4e-2),
+            v_th=torch.as_tensor(0.5),
+            tau_syn_inv=torch.as_tensor(1 / 5e-3),
+            tau_mem_inv=torch.as_tensor(1 / 2e-2),
             tau_adapt_inv=torch.as_tensor(1 / 1.2),
         )
         p_lif = LIFParameters(
             method=args.model,
-            v_th=torch.as_tensor(1.0),
+            v_th=torch.as_tensor(0.5),
             tau_syn_inv=torch.as_tensor(1 / 5e-3),
             tau_mem_inv=torch.as_tensor(1 / 2e-2),
         )
@@ -240,7 +257,7 @@ class MemoryNet(pl.LightningModule):
             )
 
         self.scheduler = torch.optim.lr_scheduler.StepLR(
-            optimizer, step_size=1, gamma=0.99
+            optimizer, step_size=100, gamma=0.7
         )
         return [optimizer], [self.scheduler]
 
@@ -443,10 +460,11 @@ def _plot_run(xs, readouts, spikes, betas=None):
         labels = ys[mask].float()
         predictions = softmax[mask]
         loss = torch.nn.functional.binary_cross_entropy(predictions, labels)
-        # Regularization: Punish 0.05 < activity > 30%
-        # pos_reg_loss = torch.nn.functional.relu(spikes.mean(0) - 0.3).sum() * 1e-4
-        # neg_reg_loss = torch.nn.functional.relu(0.005 - spikes.mean(0)).sum() * 1e-2
-        return loss  # + pos_reg_loss + neg_reg_loss
+        # Regularization
+        loss_reg = (
+            (self.regularization_target - spikes.mean(0).mean(0)) ** 2
+        ).sum() * self.regularization_factor
+        return loss + loss_reg
 
     def validation_step(self, batch, batch_idx):
         xs, ys = batch
@@ -776,6 +794,18 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--random_seed", type=int, default=0, help="Random seed for PyTorch"
+    )
+    parser.add_argument(
+        "--regularization_factor",
+        type=int,
+        default=1e-2,
+        help="Scale for regularization loss.",
+    )
+    parser.add_argument(
+        "--regularization_target",
+        type=int,
+        default=10,
+        help="Target measure for regularization",
     )
 
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
