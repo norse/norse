@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from typing import Any, Optional, Tuple
+import math
 
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
@@ -15,18 +16,43 @@ from norse.torch.module.lif import LIFCell, LIFRecurrentCell, LIFParameters
 from norse.torch.utils.plot import plot_spikes_2d
 
 
+def zero_diagonal_(tensor):
+    with torch.no_grad():
+        return tensor.fill_diagonal_(0.0)
+
+
+def sparsify_(tensor, sparsity):
+    if tensor.ndimension() != 2:
+        raise ValueError("Only tensors with 2 dimensions are supported")
+
+    rows, cols = tensor.shape
+    num_zeros = int(math.ceil(sparsity * rows))
+
+    with torch.no_grad():
+        for col_idx in range(cols):
+            row_indices = torch.randperm(rows)
+            zero_indices = row_indices[:num_zeros]
+            tensor[zero_indices, col_idx] = 0
+    return tensor
+
+
 class LSNNLIFNet(torch.nn.Module):
     def __init__(self, input_features, p_lsnn, p_lif, dt):
         super().__init__()
         assert input_features % 2 == 0, "Input features must be a whole number"
         self.neurons_per_layer = input_features // 2
 
-        self.linear_input = torch.nn.Linear(input_features, input_features)
+        self.linear_input = torch.nn.Linear(input_features, input_features, bias=False)
         torch.nn.init.normal_(self.linear_input.weight, mean=0, std=1 / input_features)
-        self.linear_recurrent = torch.nn.Linear(input_features, input_features)
+        self.recurrent_weights = torch.nn.Parameter()
+        self.linear_recurrent = torch.nn.Linear(
+            input_features, input_features, bias=False
+        )
         torch.nn.init.normal_(
             self.linear_recurrent.weight, mean=0, std=1 / input_features
         )
+        zero_diagonal_(self.linear_recurrent.weight)
+        # sparsify_(self.linear_recurrent.weight, 0.8)
         self.lsnn_cell = LSNNCell(p_lsnn, dt=dt)
         self.lif_cell = LIFCell(p_lif, dt=dt)
 
@@ -61,20 +87,20 @@ class MemoryNet(pl.LightningModule):
         self.weight_decay = args.weight_decay
         p_lsnn = LSNNParameters(
             method=args.model,
-            v_th=torch.as_tensor(0.5),
-            tau_syn_inv=torch.nn.Parameter(torch.as_tensor(1 / 7e-3)),
-            tau_mem_inv=torch.nn.Parameter(torch.as_tensor(1 / 4e-2)),
+            v_th=torch.as_tensor(0.3),
+            tau_syn_inv=torch.as_tensor(1 / 7e-3),
+            tau_mem_inv=torch.as_tensor(1 / 4e-2),
             tau_adapt_inv=torch.as_tensor(1 / 1.2),
         )
         p_lif = LIFParameters(
             method=args.model,
             v_th=torch.as_tensor(1.0),
-            tau_syn_inv=torch.nn.Parameter(torch.as_tensor(1 / 5e-3)),
-            tau_mem_inv=torch.nn.Parameter(torch.as_tensor(1 / 2e-2)),
+            tau_syn_inv=torch.as_tensor(1 / 5e-3),
+            tau_mem_inv=torch.as_tensor(1 / 2e-2),
         )
         p_li = LIParameters(
-            tau_syn_inv=torch.nn.Parameter(torch.as_tensor(1 / 5e-3)),
-            tau_mem_inv=torch.nn.Parameter(torch.as_tensor(1 / 2e-2)),
+            tau_syn_inv=torch.as_tensor(1 / 5e-3),
+            tau_mem_inv=torch.as_tensor(1 / 2e-2),
         )
         if args.neuron_model == "lsnn":
             self.layer = LSNNRecurrentCell(input_features, input_features, p=p_lsnn)
@@ -139,9 +165,9 @@ class MemoryNet(pl.LightningModule):
         predictions = softmax[mask]
         loss = torch.nn.functional.binary_cross_entropy(predictions, labels)
         # Regularization: Punish 0.05 < activity > 30%
-        pos_reg_loss = torch.nn.functional.relu(spikes.mean(0) - 0.3).sum() * 1e-4
-        neg_reg_loss = torch.nn.functional.relu(0.005 - spikes.mean(0)).sum() * 1e-2
-        return loss + pos_reg_loss + neg_reg_loss
+        # pos_reg_loss = torch.nn.functional.relu(spikes.mean(0) - 0.3).sum() * 1e-4
+        # neg_reg_loss = torch.nn.functional.relu(0.005 - spikes.mean(0)).sum() * 1e-2
+        return loss  # + pos_reg_loss + neg_reg_loss
 
     def validation_step(self, batch, batch_idx):
         xs, ys = batch
