@@ -93,7 +93,7 @@ def test_izhikevich_recurrent_cell_autapses(spiking_method):
         v=torch.zeros(1, 2),
         u=torch.zeros(1, 2),
     )
-    z, s_part = cell(torch.zeros(1, 2), s2)
+    _, s_part = cell(torch.zeros(1, 2), s2)
     assert not s_full.v[0, 0] == s_part.v[0, 0]
 
 
