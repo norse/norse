@@ -89,6 +89,7 @@ from .izhikevich import (
     IzhikevichParameters,
     IzhikevichSpikingBehaviour,
     IzhikevichState,
+    IzhikevichRecurrentState,
     tonic_spiking,
     tonic_bursting,
     phasic_spiking,
@@ -109,6 +110,8 @@ from .izhikevich import (
     accomodation,
     inhibition_induced_spiking,
     inhibition_induced_bursting,
+    izhikevich_step,
+    izhikevich_recurrent_step,
 )
 
 __all__ = [
@@ -188,6 +191,7 @@ __all__ = [
     "IzhikevichParameters",
     "IzhikevichSpikingBehaviour",
     "IzhikevichState",
+    "IzhikevichRecurrentState",
     "tonic_spiking",
     "tonic_bursting",
     "phasic_spiking",
@@ -208,4 +212,6 @@ __all__ = [
     "accomodation",
     "inhibition_induced_spiking",
     "inhibition_induced_bursting",
+    "izhikevich_step",
+    "izhikevich_recurrent_step",
 ]
