@@ -9,6 +9,29 @@ from norse.torch.module.izhikevich import (
 )
 from norse.torch.functional import izhikevich, IzhikevichSpikingBehaviour
 
+list_method = [
+    izhikevich.tonic_spiking,
+    izhikevich.phasic_spiking,
+    izhikevich.tonic_bursting,
+    izhikevich.phasic_bursting,
+    izhikevich.mixed_mode,
+    izhikevich.spike_frequency_adaptation,
+    izhikevich.class_1_exc,
+    izhikevich.class_2_exc,
+    izhikevich.spike_latency,
+    izhikevich.subthreshold_oscillation,
+    izhikevich.resonator,
+    izhikevich.integrator,
+    izhikevich.rebound_spike,
+    izhikevich.rebound_burst,
+    izhikevich.threshhold_variability,
+    izhikevich.bistability,
+    izhikevich.dap,
+    izhikevich.accomodation,
+    izhikevich.inhibition_induced_spiking,
+    izhikevich.inhibition_induced_bursting,
+]
+
 
 class SNNetwork(torch.nn.Module):
     def __init__(self, spiking_method: IzhikevichSpikingBehaviour):
@@ -24,31 +47,7 @@ class SNNetwork(torch.nn.Module):
         return self.s1.v.squeeze()
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_cell(spiking_method):
     shape = (5, 2)
     data = torch.randn(shape)
@@ -60,31 +59,7 @@ def test_izhikevich_cell(spiking_method):
     assert out.shape == (5, 2)
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_recurrent_cell(spiking_method):
     cell = IzhikevichRecurrentCell(2, 4, spiking_method)
     data = torch.randn(5, 2)
@@ -95,31 +70,7 @@ def test_izhikevich_recurrent_cell(spiking_method):
     assert out.shape == (5, 4)
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_recurrent_cell_autapses(spiking_method):
     cell = IzhikevichRecurrentCell(
         2,
@@ -146,31 +97,7 @@ def test_izhikevich_recurrent_cell_autapses(spiking_method):
     assert not s_full.v[0, 0] == s_part.v[0, 0]
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_recurrent_cell_no_autapses(spiking_method):
     cell = IzhikevichRecurrentCell(2, 2, spiking_method, autapses=False)
     assert (
@@ -191,31 +118,7 @@ def test_izhikevich_recurrent_cell_no_autapses(spiking_method):
     assert s_full.v[0, 0] == s_part.v[0, 0]
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_in_time(spiking_method):
     layer = Izhikevich(spiking_method)
     data = torch.randn(10, 5, 2)
@@ -224,31 +127,7 @@ def test_izhikevich_in_time(spiking_method):
     assert out.shape == (10, 5, 2)
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_recurrent_sequence(spiking_method):
     l1 = IzhikevichRecurrent(8, 6, spiking_method)
     l2 = IzhikevichRecurrent(6, 4, spiking_method)
@@ -263,31 +142,7 @@ def test_izhikevich_recurrent_sequence(spiking_method):
     assert z.shape == (10, 1, 1)
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_feedforward_cell_backward(spiking_method):
     # Tests that gradient variables can be used in subsequent applications
     cell = IzhikevichCell(spiking_method)
@@ -298,31 +153,7 @@ def test_izhikevich_feedforward_cell_backward(spiking_method):
     loss.backward()
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_recurrent_cell_backward(spiking_method):
     # Tests that gradient variables can be used in subsequent applications
     cell = IzhikevichRecurrentCell(4, 4, spiking_method)
@@ -333,31 +164,7 @@ def test_izhikevich_recurrent_cell_backward(spiking_method):
     loss.backward()
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_feedforward_layer(spiking_method):
     layer = Izhikevich(spiking_method)
     data = torch.randn(10, 5, 4)
@@ -367,31 +174,7 @@ def test_izhikevich_feedforward_layer(spiking_method):
         assert x.shape == (5, 4)
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_feedforward_layer_backward(spiking_method):
     model = Izhikevich(spiking_method)
     data = torch.ones(10, 12)
@@ -400,31 +183,7 @@ def test_izhikevich_feedforward_layer_backward(spiking_method):
     loss.backward()
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_recurrent_layer_backward_iteration(spiking_method):
     # Tests that gradient variables can be used in subsequent applications
     model = IzhikevichRecurrent(6, 6, spiking_method)
@@ -435,31 +194,7 @@ def test_izhikevich_recurrent_layer_backward_iteration(spiking_method):
     loss.backward()
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_recurrent_layer_backward(spiking_method):
     model = IzhikevichRecurrent(6, 6, spiking_method)
     data = torch.ones(10, 6)
@@ -468,31 +203,7 @@ def test_izhikevich_recurrent_layer_backward(spiking_method):
     loss.backward()
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_izhikevich_feedforward_layer_backward_iteration(spiking_method):
     # Tests that gradient variables can be used in subsequent applications
     model = Izhikevich(spiking_method)
@@ -503,31 +214,7 @@ def test_izhikevich_feedforward_layer_backward_iteration(spiking_method):
     loss.backward()
 
 
-@pytest.mark.parametrize(
-    "spiking_method",
-    [
-        (izhikevich.tonic_spiking),
-        (izhikevich.phasic_spiking),
-        (izhikevich.tonic_bursting),
-        (izhikevich.phasic_bursting),
-        (izhikevich.mixed_mode),
-        (izhikevich.spike_frequency_adaptation),
-        (izhikevich.class_1_exc),
-        (izhikevich.class_2_exc),
-        (izhikevich.spike_latency),
-        (izhikevich.subthreshold_oscillation),
-        (izhikevich.resonator),
-        (izhikevich.integrator),
-        (izhikevich.rebound_spike),
-        (izhikevich.rebound_burst),
-        (izhikevich.threshhold_variability),
-        (izhikevich.bistability),
-        (izhikevich.dap),
-        (izhikevich.accomodation),
-        (izhikevich.inhibition_induced_spiking),
-        (izhikevich.inhibition_induced_bursting),
-    ],
-)
+@pytest.mark.parametrize("spiking_method", list_method)
 def test_backward_model(spiking_method):
     model = SNNetwork(spiking_method)
     data = torch.ones(10, 12)
