@@ -87,7 +87,7 @@ def test_izhikevich_recurrent_cell_autapses(spiking_method):
     s1 = izhikevich.IzhikevichRecurrentState(
         z=torch.ones(1, 2), v=torch.zeros(1, 2), u=torch.zeros(1, 2)
     )
-    z, s_full = cell(torch.zeros(1, 2), s1)
+    _, s_full = cell(torch.zeros(1, 2), s1)
     s2 = izhikevich.IzhikevichRecurrentState(
         z=torch.tensor([[0, 1]], dtype=torch.float32),
         v=torch.zeros(1, 2),
