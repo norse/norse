@@ -112,7 +112,7 @@ class IzhikevichRecurrentCell(SNNRecurrentCell):
 
 class Izhikevich(SNN):
     """
-    A neuron layer that wraps a recurrent IzhikevichCell in time such
+    A neuron layer that wraps a :class:`IzhikevichCell` in time such
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
