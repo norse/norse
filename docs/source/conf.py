@@ -24,8 +24,7 @@ copyright = "2020, Norse.ai"
 author = "Norse.ai"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.5"
-
+release = "0.0.6"
 
 # -- General configuration ---------------------------------------------------
 
@@ -43,16 +42,16 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.githubpages",
     "sphinx_autodoc_typehints",
-    "sphinx_gallery.gen_gallery",
+    # "sphinx_gallery.gen_gallery",
     "sphinxcontrib.bibtex",
 ]
 
-bibtex_bibfiles = ['bibliography.bib']
+bibtex_bibfiles = ["bibliography.bib"]
 
-sphinx_gallery_conf = {
-    "examples_dirs": "../../norse/examples",  # path to your example scripts
-    "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
-}
+# sphinx_gallery_conf = {
+#     "examples_dirs": "../../norse/examples",  # path to your example scripts
+#     "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
+# }
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

@@ -11,22 +11,23 @@ from .encode import (
     SpikeLatencyEncoder,
     SpikeLatencyLIFEncoder,
 )
-from .leaky_integrator import LICell, LIFeedForwardCell, LIParameters, LIState
+from .leaky_integrator import LICell, LILinearCell, LIParameters, LIState
 from .lif import (
     LIFCell,
-    LIFFeedForwardCell,
+    LIF,
     LIFFeedForwardState,
     LIFParameters,
     LIFState,
-    LIFLayer,
+    LIFRecurrent,
 )
 from .lif_adex import (
     LIFAdExCell,
-    LIFAdExFeedForwardCell,
+    LIFAdExRecurrentCell,
+    LIFAdEx,
+    LIFAdExRecurrent,
     LIFAdExFeedForwardState,
     LIFAdExParameters,
     LIFAdExState,
-    LIFAdExLayer,
 )
 from .lif_correlation import (
     LIFCorrelation,
@@ -35,17 +36,18 @@ from .lif_correlation import (
 )
 from .lif_ex import (
     LIFExCell,
-    LIFExFeedForwardCell,
+    LIFExRecurrentCell,
+    LIFEx,
+    LIFExRecurrent,
     LIFExFeedForwardState,
-    LIFExLayer,
     LIFExParameters,
     LIFExState,
 )
-from .lif_mc import LIFMCCell
-from .lif_mc_refrac import LIFMCRefracCell
+from .lif_mc import LIFMCRecurrentCell
+from .lif_mc_refrac import LIFMCRefracRecurrentCell
 from .lif_refrac import (
     LIFRefracCell,
-    LIFRefracFeedForwardCell,
+    LIFRefracRecurrentCell,
     LIFRefracFeedForwardState,
     LIFRefracParameters,
     LIFRefracState,
@@ -53,14 +55,22 @@ from .lif_refrac import (
 from .lift import Lift
 from .lsnn import (
     LSNNCell,
-    LSNNFeedForwardCell,
+    LSNNRecurrentCell,
+    LSNN,
+    LSNNRecurrent,
     LSNNFeedForwardState,
     LSNNParameters,
     LSNNState,
-    LSNNLayer,
 )
 from .regularization import RegularizationCell
 from .sequential import SequentialState
+
+from .izhikevich import (
+    IzhikevichCell,
+    IzhikevichRecurrentCell,
+    Izhikevich,
+    IzhikevichRecurrent,
+)
 
 __all__ = [
     "CobaLIFCell",
@@ -73,54 +83,54 @@ __all__ = [
     "SpikeLatencyEncoder",
     "SpikeLatencyLIFEncoder",
     "LICell",
-    "LIFeedForwardCell",
+    "LILinearCell",
     "LIParameters",
     "LIState",
     "LIFCell",
-    "LIFLayer",
-    "LIFFeedForwardCell",
+    "LIFRecurrent",
+    "LIF",
     "LIFFeedForwardState",
     "LIFParameters",
     "LIFState",
+    "LIFAdEx",
     "LIFAdExCell",
-    "LIFAdExFeedForwardCell",
     "LIFAdExFeedForwardState",
     "LIFAdExParameters",
     "LIFAdExState",
-    "LIFAdExLayer",
     "LIFAdExCell",
-    "LIFAdExFeedForwardCell",
-    "LIFAdExFeedForwardState",
+    "LIFAdExRecurrentCell",
+    "LIFAdExRecurrent",
     "LIFAdExParameters",
     "LIFAdExState",
     "LIFCorrelation",
     "LIFCorrelationParameters",
     "LIFCorrelationState",
     "LIFExCell",
-    "LIFExFeedForwardCell",
+    "LIFExRecurrentCell",
+    "LIFEx",
+    "LIFExRecurrent",
     "LIFExFeedForwardState",
-    "LIFExLayer",
     "LIFExParameters",
     "LIFExState",
-    "LIFMCCell",
-    "LIFMCRefracCell",
-    "LIFRefracParameters",
-    "LIFRefracState",
-    "LIFMCRefracCell",
-    "LIFRefracParameters",
-    "LIFRefracState",
+    "LIFMCRecurrentCell",
+    "LIFMCRefracRecurrentCell",
     "LIFRefracCell",
-    "LIFRefracFeedForwardCell",
+    "LIFRefracRecurrentCell",
     "LIFRefracFeedForwardState",
     "LIFRefracParameters",
     "LIFRefracState",
     "Lift",
     "LSNNCell",
-    "LSNNFeedForwardCell",
+    "LSNNRecurrentCell",
+    "LSNN",
+    "LSNNRecurrent",
     "LSNNFeedForwardState",
     "LSNNParameters",
-    "LSNNLayer",
     "LSNNState",
     "RegularizationCell",
     "SequentialState",
+    "IzhikevichCell",
+    "IzhikevichRecurrentCell",
+    "Izhikevich",
+    "IzhikevichRecurrent",
 ]

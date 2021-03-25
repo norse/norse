@@ -2,7 +2,7 @@
 # licensed under BSD 3-Clause License, see LICENSE.torchvision for license details
 from torch import nn
 from torch.hub import load_state_dict_from_url
-from norse.torch.module.lif import LIFFeedForwardLayer
+from norse.torch.module.lif import LIF
 from norse.torch.module.lift import Lift
 
 __all__ = ["MobileNetV2", "mobilenet_v2"]
@@ -52,7 +52,7 @@ class ConvBNReLU(nn.Sequential):
                 )
             ),
             Lift(norm_layer(out_planes)),
-            LIFFeedForwardLayer(),
+            LIF(),
         )
 
 
