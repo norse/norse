@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>norse.torch.functional.izhikevich &#8212; norse 0.0.6 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for norse.torch.functional.izhikevich</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
+
+
+<div class="viewcode-block" id="IzhikevichParameters"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.izhikevich.html#norse.torch.functional.IzhikevichParameters">[docs]</a><span class="k">class</span> <span class="nc">IzhikevichParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parametrization of av Izhikevich neuron</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        a (float): time scale of the recovery variable u. Smaller values result in slower recovery in 1/ms</span>
+<span class="sd">        b (float): sensitivity of the recovery variable u to the subthreshold fluctuations of the membrane potential v. Greater values couple v and u more strongly resulting in possible subthreshold oscillations and low-threshold spiking dynamics</span>
+<span class="sd">        c (float): after-spike reset value of the membrane potential in mV</span>
+<span class="sd">        d (float): after-spike reset of the recovery variable u caused by slow high-threshold Na+ and K+ conductances in mV</span>
+<span class="sd">        sq (float): constant of the v squared variable in mV/ms</span>
+<span class="sd">        mn (float): constant of the v variable in 1/ms</span>
+<span class="sd">        bias (float): bias constant in mV/ms</span>
+<span class="sd">        v_th (torch.Tensor): threshold potential in mV</span>
+<span class="sd">        tau_inv (float) : inverse time constant in 1/ms</span>
+<span class="sd">        method (str): method to determine the spike threshold</span>
+<span class="sd">                      (relevant for surrogate gradients)</span>
+<span class="sd">        alpha (float): hyper parameter to use in surrogate gradient computation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">b</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">c</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">d</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">sq</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.04</span>
+    <span class="n">mn</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">bias</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">140</span>
+    <span class="n">v_th</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">tau_inv</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">250</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;super&quot;</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.0</span></div>
+
+
+<div class="viewcode-block" id="IzhikevichState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.izhikevich.html#norse.torch.functional.IzhikevichState">[docs]</a><span class="k">class</span> <span class="nc">IzhikevichState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;State of a Izhikevich neuron</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        v (torch.Tensor): membrane potential</span>
+<span class="sd">        u (torch.Tensor): membrane recovery variable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="n">u</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
+
+
+<div class="viewcode-block" id="IzhikevichRecurrentState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.izhikevich.html#norse.torch.functional.IzhikevichRecurrentState">[docs]</a><span class="k">class</span> <span class="nc">IzhikevichRecurrentState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;State of a Izhikevich neuron</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        v (torch.Tensor): membrane potential</span>
+<span class="sd">        u (torch.Tensor): membrane recovery variable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="n">v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+    <span class="n">u</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
+
+
+<div class="viewcode-block" id="IzhikevichSpikingBehaviour"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.izhikevich.html#norse.torch.functional.IzhikevichSpikingBehaviour">[docs]</a><span class="k">class</span> <span class="nc">IzhikevichSpikingBehaviour</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Spiking behaviour of a Izhikevich neuron</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        p (IzhikevichParameters) : parameters of the Izhikevich neuron model</span>
+<span class="sd">        s (IzhikevichState) : state of the Izhikevich neuron model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">p</span><span class="p">:</span> <span class="n">IzhikevichParameters</span>
+    <span class="n">s</span><span class="p">:</span> <span class="n">IzhikevichState</span></div>
+
+
+<span class="n">tonic_spiking_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">65</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">tonic_spiking</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">tonic_spiking_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">70.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">)</span> <span class="o">*</span> <span class="n">tonic_spiking_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">phasic_spiking_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">65</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">phasic_spiking</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">phasic_spiking_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">64</span><span class="p">)</span> <span class="o">*</span> <span class="n">phasic_spiking_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">tonic_bursting_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">50</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">tonic_bursting</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">tonic_bursting_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">70.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">)</span> <span class="o">*</span> <span class="n">tonic_bursting_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">phasic_bursting_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">55</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">phasic_bursting</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">phasic_bursting_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">64</span><span class="p">)</span> <span class="o">*</span> <span class="n">phasic_bursting_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">mixed_mode_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">55</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">mixed_mode</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">mixed_mode_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">70.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">)</span> <span class="o">*</span> <span class="n">mixed_mode_p</span><span class="o">.</span><span class="n">b</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">spike_frequency_adaptation_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span>
+    <span class="n">a</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">65</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span>
+<span class="p">)</span>
+<span class="n">spike_frequency_adaptation</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">spike_frequency_adaptation_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">70.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">)</span> <span class="o">*</span> <span class="n">spike_frequency_adaptation_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">class_1_exc_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span>
+    <span class="n">a</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">55</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">mn</span><span class="o">=</span><span class="mf">4.1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mi">108</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span>
+<span class="p">)</span>
+<span class="n">class_1_exc</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">class_1_exc_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">60.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="n">class_1_exc_p</span><span class="o">.</span><span class="n">b</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">class_2_exc_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.26</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">65</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">class_2_exc</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">class_2_exc_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">64</span><span class="p">)</span> <span class="o">*</span> <span class="n">class_2_exc_p</span><span class="o">.</span><span class="n">b</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">spike_latency_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">65</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">spike_latency</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">spike_latency_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">70.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">)</span> <span class="o">*</span> <span class="n">spike_latency_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">subthreshold_oscillation_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span>
+    <span class="n">a</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.26</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">60</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span>
+<span class="p">)</span>
+<span class="n">subthreshold_oscillation</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">subthreshold_oscillation_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">62.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">62</span><span class="p">)</span> <span class="o">*</span> <span class="n">subthreshold_oscillation_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">resonator_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.26</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">60</span><span class="p">,</span> <span class="n">d</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">resonator</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">resonator_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">62.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">62</span><span class="p">)</span> <span class="o">*</span> <span class="n">resonator_p</span><span class="o">.</span><span class="n">b</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">integrator_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span>
+    <span class="n">a</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">55</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">mn</span><span class="o">=</span><span class="mf">4.1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mi">108</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span>
+<span class="p">)</span>
+<span class="n">integrator</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">integrator_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">60.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="n">integrator_p</span><span class="o">.</span><span class="n">b</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">rebound_spike_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">60</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">rebound_spike</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">rebound_spike_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">64</span><span class="p">)</span> <span class="o">*</span> <span class="n">rebound_spike_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">rebound_burst_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">52</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">rebound_burst</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">rebound_burst_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">64</span><span class="p">)</span> <span class="o">*</span> <span class="n">rebound_burst_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">threshhold_variability_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">60</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">threshhold_variability</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">threshhold_variability_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">64</span><span class="p">)</span> <span class="o">*</span> <span class="n">threshhold_variability_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">bistability_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.26</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">60</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">bistability</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">bistability_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">61.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">61</span><span class="p">)</span> <span class="o">*</span> <span class="n">bistability_p</span><span class="o">.</span><span class="n">b</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">dap_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">60</span><span class="p">,</span> <span class="n">d</span><span class="o">=-</span><span class="mi">21</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">dap</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">dap_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">70.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">)</span> <span class="o">*</span> <span class="n">dap_p</span><span class="o">.</span><span class="n">b</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">accomodation_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">55</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">accomodation</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">accomodation_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">65.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mi">16</span><span class="p">)),</span>
+<span class="p">)</span>
+
+<span class="n">inhibition_induced_spiking_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span>
+    <span class="n">a</span><span class="o">=-</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">60</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span>
+<span class="p">)</span>
+<span class="n">inhibition_induced_spiking</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">inhibition_induced_spiking_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">63.8</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">63.8</span><span class="p">)</span> <span class="o">*</span> <span class="n">inhibition_induced_spiking_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">inhibition_induced_bursting_p</span> <span class="o">=</span> <span class="n">IzhikevichParameters</span><span class="p">(</span>
+    <span class="n">a</span><span class="o">=-</span><span class="mf">0.026</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">c</span><span class="o">=-</span><span class="mi">45</span><span class="p">,</span> <span class="n">d</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">tau_inv</span><span class="o">=</span><span class="mi">250</span>
+<span class="p">)</span>
+<span class="n">inhibition_induced_bursting</span> <span class="o">=</span> <span class="n">IzhikevichSpikingBehaviour</span><span class="p">(</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">inhibition_induced_bursting_p</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">IzhikevichState</span><span class="p">(</span>
+        <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">63.8</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">63.8</span><span class="p">)</span> <span class="o">*</span> <span class="n">inhibition_induced_bursting_p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="izhikevich_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.izhikevich.html#norse.torch.functional.izhikevich_step">[docs]</a><span class="k">def</span> <span class="nf">izhikevich_step</span><span class="p">(</span>
+    <span class="n">input_current</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">s</span><span class="p">:</span> <span class="n">IzhikevichState</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">IzhikevichParameters</span><span class="p">,</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">IzhikevichState</span><span class="p">]:</span>
+    <span class="n">v_</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_inv</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">sq</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">mn</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">bias</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">input_current</span>
+    <span class="p">)</span>
+    <span class="n">u_</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_inv</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">z_</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">v_</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_</span> <span class="o">+</span> <span class="n">z_</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">c</span>
+    <span class="n">u_</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_</span><span class="p">)</span> <span class="o">*</span> <span class="n">u_</span> <span class="o">+</span> <span class="n">z_</span> <span class="o">*</span> <span class="p">(</span><span class="n">u_</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">z_</span><span class="p">,</span> <span class="n">IzhikevichState</span><span class="p">(</span><span class="n">v_</span><span class="p">,</span> <span class="n">u_</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="izhikevich_recurrent_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.izhikevich.html#norse.torch.functional.izhikevich_recurrent_step">[docs]</a><span class="k">def</span> <span class="nf">izhikevich_recurrent_step</span><span class="p">(</span>
+    <span class="n">input_current</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">s</span><span class="p">:</span> <span class="n">IzhikevichRecurrentState</span><span class="p">,</span>
+    <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">IzhikevichParameters</span><span class="p">,</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">IzhikevichRecurrentState</span><span class="p">]:</span>
+    <span class="n">input_current</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">input_current</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">)</span>
+    <span class="n">recurrent_current</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">)</span>
+    <span class="n">v_</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_inv</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">sq</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">mn</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">bias</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">input_current</span> <span class="o">+</span> <span class="n">recurrent_current</span>
+    <span class="p">)</span>
+    <span class="n">u_</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_inv</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">z_</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">v_</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_</span> <span class="o">+</span> <span class="n">z_</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">c</span>
+    <span class="n">u_</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_</span><span class="p">)</span> <span class="o">*</span> <span class="n">u_</span> <span class="o">+</span> <span class="n">z_</span> <span class="o">*</span> <span class="p">(</span><span class="n">u_</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">z_</span><span class="p">,</span> <span class="n">IzhikevichRecurrentState</span><span class="p">(</span><span class="n">z_</span><span class="p">,</span> <span class="n">v_</span><span class="p">,</span> <span class="n">u_</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A library to do deep learning with spiking neural networks.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=norse&repo=norse&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">First steps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../started.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Usage docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../hardware.html">2. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../spiking.html">3. Introduction to spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../papers.html">5. Papers citing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../working.html">6. Working with Norse</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.task.html">norse.task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.torch.html">norse.torch package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019 - 2021, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
