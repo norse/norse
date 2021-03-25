@@ -1,68 +1,79 @@
+from typing import Optional, Tuple
+
+import numpy as np
 import torch
 
 from ..functional.lif_refrac import LIFRefracParameters, LIFRefracState
 from ..functional.lif import LIFState
 from ..functional.lif_mc_refrac import lif_mc_refrac_step
 
-import numpy as np
-from typing import Optional, Tuple
+from norse.torch.module.snn import SNNRecurrentCell
 
 
-class LIFMCRefracCell(torch.nn.Module):
+class LIFMCRefracRecurrentCell(SNNRecurrentCell):
     def __init__(
         self,
         input_size: int,
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
-        dt: float = 0.001,
+        g_coupling: Optional[torch.Tensor] = None,
+        **kwargs
     ):
-        super(LIFMCRefracCell, self).__init__()
-        self.input_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, input_size) / np.sqrt(input_size)
+        super().__init__(
+            activation=None,
+            state_fallback=self.initial_state,
+            input_size=input_size,
+            hidden_size=hidden_size,
+            p=p,
+            **kwargs
         )
-        self.recurrent_weights = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
-        )
-        self.g_coupling = torch.nn.Parameter(
-            torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
-        )
-        self.p = p
-        self.dt = dt
-        self.hidden_size = hidden_size
 
-    def forward(
-        self, input_tensor: torch.Tensor, state: Optional[LIFRefracState] = None
-    ) -> Tuple[torch.Tensor, LIFRefracState]:
-        if state is None:
-            state = LIFRefracState(
-                lif=LIFState(
-                    z=torch.zeros(
-                        input_tensor.shape[0],
-                        self.hidden_size,
-                        device=input_tensor.device,
-                        dtype=input_tensor.dtype,
-                    ),
-                    v=self.p.lif.v_leak.detach()
-                    * torch.ones(
-                        input_tensor.shape[0],
-                        self.hidden_size,
-                        device=input_tensor.device,
-                        dtype=input_tensor.dtype,
-                    ),
-                    i=torch.zeros(
-                        input_tensor.shape[0],
-                        self.hidden_size,
-                        device=input_tensor.device,
-                        dtype=input_tensor.dtype,
-                    ),
-                ),
-                rho=torch.zeros(
+        self.g_coupling = (
+            g_coupling
+            if g_coupling is not None
+            else torch.nn.Parameter(
+                torch.randn(hidden_size, hidden_size) / np.sqrt(hidden_size)
+            )
+        )
+
+    def initial_state(self, input_tensor: torch.Tensor) -> LIFRefracState:
+        state = LIFRefracState(
+            lif=LIFState(
+                z=torch.zeros(
                     input_tensor.shape[0],
                     self.hidden_size,
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
-            )
+                v=self.p.lif.v_leak.detach()
+                * torch.ones(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+                i=torch.zeros(
+                    input_tensor.shape[0],
+                    self.hidden_size,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ),
+            ),
+            rho=torch.zeros(
+                input_tensor.shape[0],
+                self.hidden_size,
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ),
+        )
+        state.lif.v.requires_grad = True
+        return state
+
+    def forward(
+        self, input_tensor: torch.Tensor, state: Optional[LIFRefracState] = None
+    ) -> Tuple[torch.Tensor, LIFRefracState]:
+        if state is None:
+            state = self.initial_state(input_tensor)
         return lif_mc_refrac_step(
             input_tensor,
             state,

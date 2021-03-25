@@ -5,12 +5,10 @@ import numpy as np
 import norse
 from norse.torch.functional.heaviside import heaviside
 
-if getattr(norse, "IS_OPS_LOADED"):
-    superspike_fn = torch.ops.norse_op.superfun
-else:  #  pragma: no cover
-    from .superspike import super_fn
 
-    superspike_fn = super_fn
+from .superspike import super_fn
+
+superspike_fn = super_fn
 
 
 class HeaviErfc(torch.autograd.Function):

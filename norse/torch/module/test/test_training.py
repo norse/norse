@@ -6,15 +6,15 @@ that gradients are properly propagated
 import torch
 
 from norse.torch.module.encode import PoissonEncoder
-from norse.torch.module.lif import LIFCell
+from norse.torch.module.lif import LIFRecurrentCell
 
 
 class SNNetwork(torch.nn.Module):
     def __init__(self):
         super(SNNetwork, self).__init__()
         self.encoder = PoissonEncoder(10, f_max=1000)
-        self.l0 = LIFCell(12, 6)
-        self.l1 = LIFCell(6, 1)
+        self.l0 = LIFRecurrentCell(12, 6)
+        self.l1 = LIFRecurrentCell(6, 1)
         self.s0 = self.s1 = None
 
     def forward(self, input_tensor):

@@ -1,7 +1,18 @@
+r"""
+Leaky integrators describe a *leaky* neuron membrane that integrates
+incoming currents over time, but never spikes. In other words, the
+neuron adds up incoming input current, while leaking out some of it
+in every timestep.
+
+See :mod:`norse.torch.functional.leaky_integrator` for more information.
+"""
+from typing import Optional, Tuple
+
 import torch
 import torch.jit
 import numpy as np
-from typing import Optional, Tuple
+
+from norse.torch.module.snn import SNNCell
 
 from ..functional.leaky_integrator import (
     li_step,
@@ -11,8 +22,51 @@ from ..functional.leaky_integrator import (
 )
 
 
-class LICell(torch.nn.Module):
-    r"""Cell for a leaky-integrator.
+class LICell(SNNCell):
+    r"""Cell for a leaky-integrator *without* recurrence.
+    More specifically it implements a discretized version of the ODE
+
+    .. math::
+
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
+        \end{align*}
+
+
+    and transition equations
+
+    .. math::
+        i = i + w i_{\text{in}}
+
+    Parameters:
+        p (LIParameters): parameters of the leaky integrator
+        dt (float): integration timestep to use
+    """
+
+    def __init__(self, p: LIParameters = LIParameters(), **kwargs):
+        super().__init__(
+            activation=li_feed_forward_step,
+            state_fallback=self.initial_state,
+            p=p,
+            **kwargs,
+        )
+
+    def initial_state(self, input_tensor: torch.Tensor) -> LIState:
+        state = LIState(
+            v=self.p.v_leak.detach(),
+            i=torch.zeros(
+                *input_tensor.shape,
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ),
+        )
+        state.v.requires_grad = True
+        return state
+
+
+class LILinearCell(torch.nn.Module):
+    r"""Cell for a leaky-integrator with an additional linear weighting.
     More specifically it implements a discretized version of the ODE
 
     .. math::
@@ -38,17 +92,18 @@ class LICell(torch.nn.Module):
     def __init__(
         self,
         input_size: int,
-        output_size: int,
+        hidden_size: int,
         p: LIParameters = LIParameters(),
         dt: float = 0.001,
     ):
-        super(LICell, self).__init__()
-        self.input_weights = torch.nn.Parameter(
-            torch.randn(output_size, input_size) / np.sqrt(input_size)
-        )
+        super().__init__()
+        self.input_size = input_size
+        self.hidden_size = hidden_size
         self.p = p
         self.dt = dt
-        self.output_size = output_size
+        self.input_weights = torch.nn.Parameter(
+            torch.randn(hidden_size, input_size) / np.sqrt(input_size)
+        )
 
     def forward(
         self, input_tensor: torch.Tensor, state: Optional[LIState] = None
@@ -57,7 +112,7 @@ class LICell(torch.nn.Module):
             state = LIState(
                 v=self.p.v_leak.detach(),
                 i=torch.zeros(
-                    (input_tensor.shape[0], self.output_size),
+                    (input_tensor.shape[0], self.hidden_size),
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
@@ -70,46 +125,3 @@ class LICell(torch.nn.Module):
             p=self.p,
             dt=self.dt,
         )
-
-
-class LIFeedForwardCell(torch.nn.Module):
-    r"""Cell for a leaky-integrator.
-    More specifically it implements a discretized version of the ODE
-
-    .. math::
-
-        \begin{align*}
-            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
-            \dot{i} &= -1/\tau_{\text{syn}} i
-        \end{align*}
-
-
-    and transition equations
-
-    .. math::
-        i = i + w i_{\text{in}}
-
-    Parameters:
-        p (LIParameters): parameters of the leaky integrator
-        dt (float): integration timestep to use
-    """
-
-    def __init__(self, p: LIParameters = LIParameters(), dt: float = 0.001):
-        super(LIFeedForwardCell, self).__init__()
-        self.p = p
-        self.dt = dt
-
-    def forward(
-        self, input_tensor: torch.Tensor, state: Optional[LIState] = None
-    ) -> Tuple[torch.Tensor, LIState]:
-        if state is None:
-            state = LIState(
-                v=self.p.v_leak.detach(),
-                i=torch.zeros(
-                    *input_tensor.shape,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                ),
-            )
-            state.v.requires_grad = True
-        return li_feed_forward_step(input_tensor, state, p=self.p, dt=self.dt)

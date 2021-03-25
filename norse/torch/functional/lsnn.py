@@ -1,3 +1,31 @@
+r"""
+Long-short term memory module, building on the work by
+[G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass](https://github.com/IGITUGraz/LSNN-official).
+
+The LSNN dynamics is similar to the :mod:`.lif` equations, but it
+adds an adaptive term :math:`b`:
+
+.. math::
+    \begin{align*}
+        \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+        \dot{i} &= -1/\tau_{\text{syn}}\; i \\
+        \dot{b} &= -1/\tau_{b}\; b
+    \end{align*}
+
+This adaptation is applied in the jump condition when the neuron spikes:
+
+.. math::
+    z = \Theta(v - v_{\text{th}} + b)
+
+Contrast this with the regular LIF jump condition:
+
+.. math::
+    z = \Theta(v - v_{\text{th}})
+
+In practice, this means that the LSNN neurons *adapt* to fire more or less
+given the same input. The adaptation is determined by the :math:`\tau_b`
+time constant.
+"""
 from typing import NamedTuple, Tuple
 
 import torch

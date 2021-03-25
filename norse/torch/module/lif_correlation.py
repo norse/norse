@@ -2,13 +2,13 @@ import torch
 
 from typing import Optional, Tuple
 
-from ..functional.lif_correlation import (
+from norse.torch.functional.lif_correlation import (
     LIFCorrelationState,
     LIFCorrelationParameters,
     lif_correlation_step,
 )
-from ..functional.lif import LIFState
-from ..functional.correlation_sensor import CorrelationSensorState
+from norse.torch.functional.lif import LIFState
+from norse.torch.functional.correlation_sensor import CorrelationSensorState
 
 
 class LIFCorrelation(torch.nn.Module):
