@@ -66,6 +66,13 @@ from .lsnn import (
 from .regularization import RegularizationCell
 from .sequential import SequentialState
 
+from .izhikevich import (
+    IzhikevichCell,
+    IzhikevichRecurrentCell,
+    Izhikevich,
+    IzhikevichRecurrent,
+)
+
 __all__ = [
     "CobaLIFCell",
     "CobaLIFState",
@@ -124,4 +131,8 @@ __all__ = [
     "LSNNState",
     "RegularizationCell",
     "SequentialState",
+    "IzhikevichCell",
+    "IzhikevichRecurrentCell",
+    "Izhikevich",
+    "IzhikevichRecurrent",
 ]
