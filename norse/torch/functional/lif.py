@@ -60,11 +60,11 @@ class LIFParameters(NamedTuple):
 
 
 default_bio_parameters = LIFParameters(
-    tau_syn_inv=1 / 0.5,
-    tau_mem_inv=1 / 20.0,
-    v_leak=-65.0,
-    v_th=-50.0,
-    v_reset=-65.0,
+    tau_syn_inv=torch.as_tensor(1 / 0.5),
+    tau_mem_inv=torch.as_tensor(1 / 20.0),
+    v_leak=torch.as_tensor(-65.0),
+    v_th=torch.as_tensor(-50.0),
+    v_reset=torch.as_tensor(-65.0),
 )
 
 
@@ -82,7 +82,9 @@ class LIFState(NamedTuple):
     i: torch.Tensor
 
 
-default_bio_initial_state = LIFState(z=0.0, v=-65.0, i=0.0)
+default_bio_initial_state = LIFState(
+    z=torch.as_tensor(0.0), v=torch.as_tensor(-65.0), i=torch.as_tensor(0.0)
+)
 
 
 class LIFFeedForwardState(NamedTuple):

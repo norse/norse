@@ -1,6 +1,7 @@
 # pytype: skip-file
 from typing import NamedTuple
 import torch
+from norse.torch.functional.lif import lif_step, LIFState, LIFParameters
 from norse.torch.module import lif, snn
 
 
@@ -18,6 +19,32 @@ def test_snn_recurrent_cell_weights():
     assert torch.all(torch.eq(n.recurrent_weights, re_w))
 
 
+def test_snn_recurrent_cell_weights_autapse_update():
+    in_w = torch.ones(3, 2)
+    re_w = torch.nn.Parameter(torch.ones(3, 3))
+    n = snn.SNNRecurrentCell(
+        lif_step,
+        lambda x: LIFState(v=torch.zeros(3), i=torch.zeros(3), z=torch.ones(3)),
+        2,
+        3,
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        input_weights=in_w,
+        recurrent_weights=re_w,
+    )
+    assert torch.all(torch.eq(n.recurrent_weights.diag(), torch.zeros(3)))
+    optim = torch.optim.Adam(n.parameters())
+    optim.zero_grad()
+    z, s = n(torch.ones(2))
+    z, _ = n(torch.ones(2), s)
+    loss = z.sum()
+    loss.backward()
+    optim.step()
+    w = n.recurrent_weights.clone().detach()
+    assert torch.all(torch.eq(w.diag(), torch.zeros(3)))
+    w.fill_diagonal_(1.0)
+    assert not torch.all(torch.eq(w, torch.ones(3, 3)))
+
+
 def test_snn_recurrent_weights():
     in_w = torch.randn(3, 2)
     re_w = torch.randn(3, 3)
@@ -26,6 +53,32 @@ def test_snn_recurrent_weights():
     )
     assert torch.all(torch.eq(n.input_weights, in_w))
     assert torch.all(torch.eq(n.recurrent_weights, re_w))
+
+
+def test_snn_recurrent_weights_autapse_update():
+    in_w = torch.ones(3, 2)
+    re_w = torch.nn.Parameter(torch.ones(3, 3))
+    n = snn.SNNRecurrent(
+        lif_step,
+        lambda x: LIFState(v=torch.zeros(3), i=torch.zeros(3), z=torch.ones(3)),
+        2,
+        3,
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        input_weights=in_w,
+        recurrent_weights=re_w,
+    )
+    assert torch.all(torch.eq(n.recurrent_weights.diag(), torch.zeros(3)))
+    optim = torch.optim.Adam(n.parameters())
+    optim.zero_grad()
+    z, s = n(torch.ones(1, 2))
+    z, _ = n(torch.ones(1, 2), s)
+    loss = z.sum()
+    loss.backward()
+    optim.step()
+    w = n.recurrent_weights.clone().detach()
+    assert torch.all(torch.eq(w.diag(), torch.zeros(3)))
+    w.fill_diagonal_(1.0)
+    assert not torch.all(torch.eq(w, torch.ones(3, 3)))
 
 
 def test_snn_cell_repr():
