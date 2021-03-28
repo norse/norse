@@ -122,7 +122,10 @@ class SNNRecurrentCell(torch.nn.Module):
             # Eradicate gradient updates from autapses
             def autapse_hook(gradient):
                 return gradient.clone().fill_diagonal_(0.0)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4e283ef... Fixed diagonal weights in recurrent models
             self.recurrent_weights.requires_grad = True
             self.recurrent_weights.register_hook(autapse_hook)
 
@@ -259,7 +262,10 @@ class SNNRecurrent(torch.nn.Module):
             # Eradicate gradient updates from autapses
             def autapse_hook(gradient):
                 return gradient.clone().fill_diagonal_(0.0)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4e283ef... Fixed diagonal weights in recurrent models
             self.recurrent_weights.requires_grad = True
             self.recurrent_weights.register_hook(autapse_hook)
 
