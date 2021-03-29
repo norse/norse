@@ -109,9 +109,9 @@ python -m norse.task.mnist_pl --gpus=4
 
 ### 2.3. Example: Spiking convolutional classifier 
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/norse/notebooks/blob/master/norse_tutorial.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/norse/notebooks/blob/master/mnist_classifiers.ipynb)
 
-This classifier is a taken from our [tutorial on training a spiking MNIST classifier](https://colab.research.google.com/github/norse/notebooks/blob/master/norse_tutorial.ipynb) and achieves >99% accuracy.
+This classifier is a taken from our [tutorial on training a spiking MNIST classifier](https://github.com/norse/notebooks#level-intermediate) and achieves >99% accuracy.
 
 ```python
 import torch, torch.nn as nn
@@ -127,8 +127,7 @@ model = SequentialState(
     LIFCell(),
     nn.MaxPool2d(2, 2),
     nn.Flatten(),                # Flatten to 800 units
-    nn.Linear(800, 500),
-    nn.Linear(500, 10),
+    nn.Linear(800, 10),
     LICell(),                    # Non-spiking integrator layer
 )
 
@@ -141,12 +140,12 @@ The long short-term spiking neural networks from the paper by [G. Bellec, D. Sal
 ```python
 import torch
 from norse.torch import LSNNRecurrent
-# recurrent LSNN network with 2 input neurons and 10 output neurons
+# Recurrent LSNN network with 2 input neurons and 10 output neurons
 layer = LSNNRecurrent(2, 10)
 # Generate data: 20 timesteps with 8 datapoints per batch for 2 neurons
 data  = torch.zeros(20, 8, 2)
 # Tuple of (output spikes of shape (20, 8, 2), layer state)
-output, new_state = layer.forward(data)
+output, new_state = layer(data)
 ```
 
 ## 3. Why Norse?
