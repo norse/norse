@@ -95,11 +95,12 @@
     <span class="k">return</span> <span class="n">state</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span></div>
 
 
+<span class="c1"># pytype: disable=annotation-type-mismatch</span>
 <div class="viewcode-block" id="regularize_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.regularization.html#norse.torch.functional.regularize_step">[docs]</a><span class="k">def</span> <span class="nf">regularize_step</span><span class="p">(</span>
     <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">s</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">accumulator</span><span class="p">:</span> <span class="n">Accumulator</span> <span class="o">=</span> <span class="n">spike_accumulator</span><span class="p">,</span>
-    <span class="n">state</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes one step for a regularizer that aggregates some information (based on the</span>
@@ -109,14 +110,16 @@
 <span class="sd">    Parameters:</span>
 <span class="sd">        z (torch.Tensor): Spikes from a cell</span>
 <span class="sd">        s (Any): Neuron state</span>
+<span class="sd">        accumulator (Accumulator): Accumulator that decides what should be accumulated</span>
 <span class="sd">        state (Optional[Any]): The regularization state to be aggregated. Typically some numerical value like a count. Defaults to None</span>
 
 <span class="sd">    Return:</span>
 <span class="sd">        A tuple of (spikes, regularizer state)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">accumulator</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">accumulator</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span></div>
+
+
+<span class="c1"># pytype: enable=annotation-type-mismatch</span>
 </pre></div>
 
           </div>
@@ -207,7 +210,7 @@
       &copy;2019 - 2021, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
