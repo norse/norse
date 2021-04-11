@@ -137,7 +137,7 @@ def stdp_step_linear(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,
     w: torch.Tensor,
-    state_stdp: STDPState = STDPState,
+    state_stdp: STDPState,
     p_stdp: STDPParameters = STDPParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, STDPState]:
@@ -181,7 +181,7 @@ def stdp_step_conv2d(
     z_pre: torch.Tensor,
     z_post: torch.Tensor,
     w: torch.Tensor,
-    state_stdp: STDPState = STDPState,
+    state_stdp: STDPState,
     p_stdp: STDPParameters = STDPParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, STDPState]:
