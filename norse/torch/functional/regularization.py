@@ -59,11 +59,12 @@ def voltage_accumulator(
     return state + s.v
 
 
+# pytype: disable=annotation-type-mismatch
 def regularize_step(
     z: torch.Tensor,
     s: Any,
     accumulator: Accumulator = spike_accumulator,
-    state: Any = None,
+    state: Optional[Any] = None,
 ) -> Tuple[torch.Tensor, Any]:
     """
     Takes one step for a regularizer that aggregates some information (based on the
@@ -73,11 +74,13 @@ def regularize_step(
     Parameters:
         z (torch.Tensor): Spikes from a cell
         s (Any): Neuron state
+        accumulator (Accumulator): Accumulator that decides what should be accumulated
         state (Optional[Any]): The regularization state to be aggregated. Typically some numerical value like a count. Defaults to None
 
     Return:
         A tuple of (spikes, regularizer state)
     """
-    if state is None:
-        return z, accumulator(z, s, None)
     return z, accumulator(z, s, state)
+
+
+# pytype: enable=annotation-type-mismatch

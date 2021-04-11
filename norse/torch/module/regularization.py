@@ -37,10 +37,13 @@ class RegularizationCell(torch.nn.Module):
         state (Optional[T]): The regularization state to be aggregated to of any type T. Defaults to None.
     """
 
+    # pytype: disable=annotation-type-mismatch
     def __init__(self, accumulator: Accumulator = spike_accumulator, state: Any = None):
         super(RegularizationCell, self).__init__()
         self.accumulator = accumulator
         self.state = state
+
+    # pytype: enable=annotation-type-mismatch
 
     def forward(self, z, s):
         _, state = regularize_step(z, s, self.accumulator, self.state)
