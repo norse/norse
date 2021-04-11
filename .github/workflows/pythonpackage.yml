@@ -4,42 +4,41 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.7, 3.8, 3.9]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytorch-lightning
-        pip install -e .
-    - name: Test with pytest
-      run: |
-        pip install pytest pytest-cov
-        pytest norse --cov=norse/torch --cov-config=.coveragerc --cov-report=xml
-    - name: Test with PyType
-      run: |
-        pip install pytype
-        pytype norse
-    - name: Upload coverage
-      uses: codecov/codecov-action@v1
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        env_vars: OS,PYTHON
-        name: codecov-umbrella
-        fail_ci_if_error: true
-    - name: Lint with black
-      run: |
-        pip install black
-        black --check norse
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytorch-lightning
+          pip install -e .
+      - name: Test with pytest
+        run: |
+          pip install pytest pytest-cov
+          pytest norse --cov=norse/torch --cov-config=.coveragerc --cov-report=xml
+      - name: Test with PyType
+        run: |
+          pip install pytype
+          pytype norse
+      - name: Upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          env_vars: OS,PYTHON
+          name: codecov-umbrella
+          fail_ci_if_error: true
+      - name: Lint with black
+        run: |
+          pip install black
+          black --check norse

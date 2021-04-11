@@ -64,11 +64,6 @@ pip install norse
 </pre></div></td><td><a href="https://pypi.org/" title="PyPi">Pip</a></td>
 </tr>
 <tr>
-<td>From Conda</td><td> <div class="highlight highlight-source-shell"><pre>
-conda install -c norse norse
-</pre></div></td><td><a href="https://docs.anaconda.com/anaconda/install/" title="Anaconda">Anaconda</a> or <a href="https://docs.conda.io/en/latest/miniconda.html" title="Miniconda">Miniconda</a></td>
-</tr>
-<tr>
 <td>From source</td><td><div class="highlight highlight-source-shell"><pre>
 pip install -qU git+https://github.com/norse/norse
 </pre></div></td><td><a href="https://pypi.org/" title="PyPi">Pip</a>, <a href="https://pytorch.org/get-started/locally/" title="PyTorch">PyTorch</a></td>
@@ -77,6 +72,11 @@ pip install -qU git+https://github.com/norse/norse
 <td>With Docker</td><td><div class="highlight highlight-source-shell"><pre>
 docker pull quay.io/norse/norse
 </pre></div></td><td><a href="https://www.docker.com/get-started" title="Docker">Docker</a></td>
+</tr>
+<tr>
+<td>From Conda</td><td> <div class="highlight highlight-source-shell"><pre>
+conda install -c norse norse
+</pre></div></td><td><a href="https://docs.anaconda.com/anaconda/install/" title="Anaconda">Anaconda</a> or <a href="https://docs.conda.io/en/latest/miniconda.html" title="Miniconda">Miniconda</a></td>
 </tr>
 </table>
 
