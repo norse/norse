@@ -5,7 +5,11 @@ import torch
 import torch.utils.data
 =======
 import torch
+<<<<<<< HEAD
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
+=======
+import torch.utils.data
+>>>>>>> 4f2e8da... Fixed pytype errors
 
 from norse.torch.functional.encode import poisson_encode
 
