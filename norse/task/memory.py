@@ -133,6 +133,40 @@ class MemoryNet(pl.LightningModule):
         betas = torch.stack(seq_betas) if len(seq_betas) > 0 else None
         return spikes, readouts, betas
 
+    def testing_step(self, batch, batch_idx):
+        xs, ys = batch
+        spikes, readouts, betas = self(xs)
+        # Loss: Difference between recall activity and recall pattern
+        seq_readouts = readouts.mean(1).softmax(2).permute(1, 0, 2)
+        mask = ys.sum(2).gt(0)
+        labels = ys[mask].float()
+        predictions = seq_readouts[mask]
+        loss = torch.nn.functional.binary_cross_entropy_with_logits(predictions, labels)
+        # Accuracy: Sum of correct patterns out of total
+        accuracy = (ys[mask].argmax(1) == seq_readouts[mask].argmax(1)).float().mean()
+        values = {
+            "test_loss": loss,
+            "test_accuracy": accuracy,
+            "LR": self.scheduler.get_last_lr()[0],
+        }
+
+        # Plot random batch
+        random_index = torch.randint(0, len(xs), (1,)).item()
+        figure = _plot_run(
+            xs[random_index],
+            readouts[:, :, random_index],
+            spikes[:, random_index],
+            betas[:, random_index] if betas is not None else None,
+        )
+        self.logger.experiment.add_figure("Test readout", figure, self.current_epoch)
+        self.log_dict(values, self.current_epoch)
+
+        # Early stopping when loss <= 0.05
+        if loss <= 0.05:
+            self.trainer.should_stop = True
+
+        return loss
+
     def training_step(self, batch, batch_idx):
         xs, ys = batch
         spikes, readouts, _ = self(xs)
@@ -169,7 +203,6 @@ class MemoryNet(pl.LightningModule):
 
         # Plot random batch
         random_index = torch.randint(0, len(xs), (1,)).item()
-        torch.save((xs, betas, readouts, spikes), "dat.pt")
         figure = _plot_run(
             xs[random_index],
             readouts[:, :, random_index],
