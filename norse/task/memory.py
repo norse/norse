@@ -341,6 +341,7 @@ class MemoryNet(pl.LightningModule):
 
         return loss
 
+<<<<<<< HEAD
     def training_step(self, batch, batch_idx):
         xs, ys = batch
         spikes, readouts, _ = self(xs)
@@ -466,6 +467,8 @@ def _plot_run(xs, readouts, spikes, betas=None):
         return spikes, readouts, betas
 >>>>>>> 33bb6df... Updated memory task
 
+=======
+>>>>>>> 741c77e... Added test step for memory task
     def training_step(self, batch, batch_idx):
         xs, ys = batch
         spikes, readouts, _ = self(xs)
@@ -502,7 +505,6 @@ def _plot_run(xs, readouts, spikes, betas=None):
 
         # Plot random batch
         random_index = torch.randint(0, len(xs), (1,)).item()
-        torch.save((xs, betas, readouts, spikes), "dat.pt")
         figure = _plot_run(
             xs[random_index],
             readouts[:, :, random_index],
