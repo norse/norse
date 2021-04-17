@@ -4,13 +4,15 @@ from argparse import ArgumentParser
 =======
 >>>>>>> 4697ac2... Corrected memory task
 from typing import Any, Optional, Tuple
-import math
 
 import matplotlib
 import matplotlib.colors as colors
+<<<<<<< HEAD
 =======
 
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
+=======
+>>>>>>> 33bb6df... Updated memory task
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import pytorch_lightning as pl
@@ -19,30 +21,19 @@ import torch.utils.data
 
 from norse.dataset.memory import MemoryStoreRecallDataset
 from norse.torch.module.leaky_integrator import LILinearCell
-from norse.torch.module.lsnn import LSNNRecurrentCell, LSNNCell, LSNNParameters
+from norse.torch.module.lsnn import LSNNRecurrentCell, LSNNParameters
 from norse.torch.functional.leaky_integrator import LIParameters
+<<<<<<< HEAD
 <<<<<<< HEAD
 from norse.torch.module.lif import LIFRecurrentCell, LIFParameters
 <<<<<<< HEAD
 =======
 from norse.torch.module.lif import LIFCell, LIFRecurrentCell, LIFParameters
 >>>>>>> 4697ac2... Corrected memory task
+=======
+from norse.torch.module.lif import LIFRecurrentCell, LIFParameters
+>>>>>>> 33bb6df... Updated memory task
 from norse.torch.utils.plot import plot_spikes_2d
-
-
-def sparsify_(tensor, sparsity):
-    if tensor.ndimension() != 2:
-        raise ValueError("Only tensors with 2 dimensions are supported")
-
-    rows, cols = tensor.shape
-    num_zeros = int(math.ceil(sparsity * rows))
-
-    with torch.no_grad():
-        for col_idx in range(cols):
-            row_indices = torch.randperm(rows)
-            zero_indices = row_indices[:num_zeros]
-            tensor[zero_indices, col_idx] = 0
-    return tensor
 
 
 class LSNNLIFNet(torch.nn.Module):
@@ -54,12 +45,16 @@ class LSNNLIFNet(torch.nn.Module):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 33bb6df... Updated memory task
         self.lsnn_cell = LSNNRecurrentCell(
             input_features, self.neurons_per_layer, p_lsnn, dt=dt
         )
         self.lif_cell = LIFRecurrentCell(
             input_features, self.neurons_per_layer, p_lif, dt=dt
         )
+<<<<<<< HEAD
 
     def forward(self, input_spikes: torch.Tensor, state: Optional[Tuple[Any, Any]]):
         if state is None:
@@ -110,26 +105,25 @@ from norse.torch.util.plot import plot_spikes_2d
             return gradient.clone().fill_diagonal_(0.0)
 
         self.linear_recurrent.weight.register_hook(autapse_hook)
+=======
+>>>>>>> 33bb6df... Updated memory task
 
-    def forward(
-        self, input_spikes: torch.Tensor, state: Optional[Tuple[Any, Any, torch.Tensor]]
-    ):
+    def forward(self, input_spikes: torch.Tensor, state: Optional[Tuple[Any, Any]]):
         if state is None:
             lif_state = None
             lsnn_state = None
-            previous_spikes = torch.zeros_like(input_spikes)
         else:
-            lif_state, lsnn_state, previous_spikes = state
+            lif_state, lsnn_state = state
 
-        weighted_input = self.linear_input(input_spikes) + self.linear_recurrent(
-            previous_spikes
-        )
-        lif_input, lsnn_input = weighted_input.split(self.neurons_per_layer, -1)
-        lif_out, lif_state = self.lif_cell(lif_input, lif_state)
-        lsnn_out, lsnn_state = self.lsnn_cell(lsnn_input, lsnn_state)
+        lif_out, lif_state = self.lif_cell(input_spikes, lif_state)
+        lsnn_out, lsnn_state = self.lsnn_cell(input_spikes, lsnn_state)
         out_spikes = torch.cat((lif_out, lsnn_out), -1)
+<<<<<<< HEAD
         return out_spikes, (lif_state, lsnn_state, out_spikes)
 >>>>>>> 4697ac2... Corrected memory task
+=======
+        return out_spikes, (lif_state, lsnn_state)
+>>>>>>> 33bb6df... Updated memory task
 
 
 class MemoryNet(pl.LightningModule):
@@ -186,37 +180,42 @@ class MemoryNet(pl.LightningModule):
 >>>>>>> 4697ac2... Corrected memory task
         self.optimizer = args.optimizer
         self.learning_rate = args.learning_rate
-        self.weight_decay = args.weight_decay
         self.regularization_factor = args.regularization_factor
-        self.regularization_target = args.regularization_target * args.dt
+        self.regularization_target = args.regularization_target / (
+            self.seq_length * args.seq_repetitions
+        )
         self.log("Neuron model", args.neuron_model)
         p_lsnn = LSNNParameters(
             method=args.model,
             v_th=torch.as_tensor(0.5),
-            tau_syn_inv=torch.as_tensor(1 / 5e-3),
+            tau_syn_inv=torch.as_tensor(1 / 6e-3),
             tau_mem_inv=torch.as_tensor(1 / 2e-2),
-            tau_adapt_inv=torch.as_tensor(1 / 1.2),
+            tau_adapt_inv=torch.exp(torch.as_tensor(-1 / 1200)),
+            beta=torch.as_tensor(1.8),
         )
         p_lif = LIFParameters(
             method=args.model,
             v_th=torch.as_tensor(0.5),
-            tau_syn_inv=torch.as_tensor(1 / 5e-3),
+            tau_syn_inv=torch.as_tensor(1 / 6e-3),
             tau_mem_inv=torch.as_tensor(1 / 2e-2),
         )
         p_li = LIParameters(
-            tau_syn_inv=torch.as_tensor(1 / 5e-3),
+            tau_syn_inv=torch.as_tensor(1 / 6e-3),
             tau_mem_inv=torch.as_tensor(1 / 2e-2),
         )
         if args.neuron_model == "lsnn":
+            self.capture_b = False
             self.layer = LSNNRecurrentCell(input_features, input_features, p=p_lsnn)
         elif args.neuron_model == "lsnnlif":
             self.layer = LSNNLIFNet(
                 input_features, p_lsnn=p_lsnn, p_lif=p_lif, dt=args.dt
             )
+            self.capture_b = True
         else:
             self.layer = LIFRecurrentCell(
                 input_features, input_features, p=p_lif, dt=args.dt
             )
+<<<<<<< HEAD
 <<<<<<< HEAD
         self.dropout = torch.nn.Dropout(p=0.1)
         li_p = LIParameters(
@@ -228,6 +227,11 @@ class MemoryNet(pl.LightningModule):
 =======
         self.readout = LILinearCell(input_features, output_features, p=p_li)
 >>>>>>> 4697ac2... Corrected memory task
+=======
+            self.capture_b = False
+        self.readout = LILinearCell(input_features, output_features, p=p_li)
+        self.scheduler = None
+>>>>>>> 33bb6df... Updated memory task
 
     def configure_optimizers(self):
         if self.optimizer == "sgd":
@@ -236,14 +240,18 @@ class MemoryNet(pl.LightningModule):
                 lr=self.learning_rate,
                 momentum=0.9,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 weight_decay=self.weight_decay,
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
+=======
+>>>>>>> 33bb6df... Updated memory task
             )
         elif self.optimizer == "adam":
             optimizer = torch.optim.Adam(
                 self.parameters(),
                 lr=self.learning_rate,
+<<<<<<< HEAD
 <<<<<<< HEAD
             )
 
@@ -254,10 +262,12 @@ class MemoryNet(pl.LightningModule):
 
 =======
                 weight_decay=self.weight_decay,
+=======
+>>>>>>> 33bb6df... Updated memory task
             )
 
         self.scheduler = torch.optim.lr_scheduler.StepLR(
-            optimizer, step_size=100, gamma=0.7
+            optimizer, step_size=100, gamma=0.3
         )
         return [optimizer], [self.scheduler]
 
@@ -291,6 +301,7 @@ class MemoryNet(pl.LightningModule):
                 seq_betas.append(sl[1].b.clone().detach().cpu())
         spikes = torch.cat(step_spikes)
         readouts = torch.stack(step_readouts)
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         betas = torch.stack(seq_betas) if len(seq_betas) > 0 else None
@@ -450,33 +461,39 @@ def _plot_run(xs, readouts, spikes, betas=None):
 =======
         return spikes, readouts
 >>>>>>> 4697ac2... Corrected memory task
+=======
+        betas = torch.stack(seq_betas) if len(seq_betas) > 0 else None
+        return spikes, readouts, betas
+>>>>>>> 33bb6df... Updated memory task
 
     def training_step(self, batch, batch_idx):
         xs, ys = batch
-        spikes, readouts = self(xs)
+        spikes, readouts, _ = self(xs)
         # Loss: Difference between recall activity and recall pattern
-        softmax = readouts.softmax(3).mean(1).permute(1, 0, 2)
+        seq_readouts = readouts.mean(1).softmax(2).permute(1, 0, 2)
         mask = ys.sum(2).gt(0)
         labels = ys[mask].float()
-        predictions = softmax[mask]
-        loss = torch.nn.functional.binary_cross_entropy(predictions, labels)
+        predictions = seq_readouts[mask]
+        loss = torch.nn.functional.binary_cross_entropy_with_logits(predictions, labels)
         # Regularization
         loss_reg = (
-            (self.regularization_target - spikes.mean(0).mean(0)) ** 2
-        ).sum() * self.regularization_factor
+            (spikes.mean(0).mean(0) - self.regularization_target) ** 2
+            * self.regularization_factor
+        ).sum()
+        self.log("loss_reg", loss_reg, self.current_epoch)
         return loss + loss_reg
 
     def validation_step(self, batch, batch_idx):
         xs, ys = batch
-        spikes, readouts = self(xs)
+        spikes, readouts, betas = self(xs)
         # Loss: Difference between recall activity and recall pattern
-        softmax = readouts.softmax(3).mean(1).permute(1, 0, 2)
+        seq_readouts = readouts.mean(1).softmax(2).permute(1, 0, 2)
         mask = ys.sum(2).gt(0)
         labels = ys[mask].float()
-        predictions = softmax[mask]
-        loss = torch.nn.functional.binary_cross_entropy(predictions, labels)
+        predictions = seq_readouts[mask]
+        loss = torch.nn.functional.binary_cross_entropy_with_logits(predictions, labels)
         # Accuracy: Sum of correct patterns out of total
-        accuracy = (ys[mask].argmax(1) == softmax[mask].argmax(1)).float().mean()
+        accuracy = (ys[mask].argmax(1) == seq_readouts[mask].argmax(1)).float().mean()
         values = {
             "val_loss": loss,
             "val_accuracy": accuracy,
@@ -485,29 +502,31 @@ def _plot_run(xs, readouts, spikes, betas=None):
 
         # Plot random batch
         random_index = torch.randint(0, len(xs), (1,)).item()
+        torch.save((xs, betas, readouts, spikes), "dat.pt")
         figure = _plot_run(
             xs[random_index],
-            ys[random_index],
             readouts[:, :, random_index],
             spikes[:, random_index],
+            betas[:, random_index] if betas is not None else None,
         )
         self.logger.experiment.add_figure("Readout", figure, self.current_epoch)
         self.log_dict(values, self.current_epoch)
 
-        # Early stopping when accuracy >= 95%
-        if accuracy >= 0.95:
+        # Early stopping when loss <= 0.05
+        if loss <= 0.05:
             self.trainer.should_stop = True
 
         return loss
 
 
-def _plot_run(xs, ys, readouts, spikes):
+def _plot_run(xs, readouts, spikes, betas=None):
     """
     Only plots the first batch event
     """
-    figure = plt.figure(figsize=(16, 10))
-    gridspec.GridSpec(5, 1)
-    ax = plt.subplot2grid((5, 1), (0, 0), rowspan=2)
+    figure = plt.figure(figsize=(20, 16))
+    gs = gridspec.GridSpec(5, 2, width_ratios=[100, 1])
+    plt.subplots_adjust(wspace=0.03)
+    ax = figure.add_subplot(gs[:2, :1])
     plot_spikes_2d(xs.flip(1))  # Flip order so commands are shown on top
     yticks = torch.tensor([2, 7, 12, 17])
     y_labels = []
@@ -515,17 +534,37 @@ def _plot_run(xs, ys, readouts, spikes):
     y_labels.append("Store")
     y_labels.append("1")
     y_labels.append("0")
+    ax.set_xlim(0, len(xs))
     ax.set_ylabel("Command")
     ax.set_yticks(yticks)
     ax.set_yticklabels(y_labels)
 
-    ax = plt.subplot2grid((5, 1), (2, 0), rowspan=2)
-    plot_spikes_2d(spikes)
+    if betas is not None:
+        ax = figure.add_subplot(gs[2:4, :1])
+        blues_map = matplotlib.cm.get_cmap("Blues")
+        beta_cmap = colors.ListedColormap(blues_map(torch.linspace(0.0, 0.75, 256)))
+        bhm = plt.imshow(
+            betas.T,
+            cmap=beta_cmap,
+            aspect="auto",
+            interpolation="none",
+            vmin=0,
+            vmax=10,
+        )
+        alphas = spikes.clone().cpu().detach()
+        alphas[spikes < 1] = 0
+        plot_spikes_2d(spikes, alpha=alphas.T, cmap="gray_r")
+        hax = figure.add_subplot(gs[2:4, 1:2])
+        plt.colorbar(bhm, cax=hax, pad=0.05, aspect=20, label=r"$\beta$ value")
+    else:
+        ax = figure.add_subplot(gs[2:4, :1])
+        plot_spikes_2d(spikes)
     ax.set_ylabel("Activity")
     ax.set_yticks([0, 19])
     ax.set_yticklabels([1, 20])
+    ax.set_xlim(0, len(xs))
 
-    ax = plt.subplot2grid((5, 1), (4, 0), rowspan=1)
+    ax = figure.add_subplot(gs[4, :1])
     ax.set_ylim(-1.1, 1.1)
 <<<<<<< HEAD
     ax.set_yticks([-1, 0, 1])
@@ -540,7 +579,7 @@ def _plot_run(xs, ys, readouts, spikes):
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
 =======
     ax.set_yticks([-1, 1])
-    ax.set_yticklabels([0, 1])
+    ax.set_yticklabels([1, 0])
     v1, v2 = readouts.detach().cpu().view(-1, 2).softmax(1).chunk(2, 1)
     ax.set_ylabel("Readout")
     ax.set_xlim(0, len(v1))
@@ -551,8 +590,9 @@ def _plot_run(xs, ys, readouts, spikes):
         linestyle="dashed",
         label="Decision boundary",
     )
-    plt.plot(v1 - v2, color="black", label="Softmax readout")
+    plt.plot(v1 - v2, color="black", label="Readout")
     plt.legend(loc="upper right")
+    plt.tight_layout()
     return figure
 >>>>>>> 4697ac2... Corrected memory task
 
@@ -580,6 +620,7 @@ def main(args):
 <<<<<<< HEAD
     dataset_val = MemoryStoreRecallDataset(
         args.samples // 2,
+<<<<<<< HEAD
 =======
     dataset_test = MemoryStoreRecallDataset(
 =======
@@ -587,6 +628,8 @@ def main(args):
 >>>>>>> 4697ac2... Corrected memory task
         args.samples // 5,
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
+=======
+>>>>>>> 33bb6df... Updated memory task
         args.seq_length,
         args.seq_periods,
         args.seq_repetitions,
@@ -595,6 +638,9 @@ def main(args):
         dt=args.dt,
     )
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 33bb6df... Updated memory task
     dataset_test = MemoryStoreRecallDataset(
         args.samples // 2,
         args.seq_length,
@@ -607,6 +653,7 @@ def main(args):
     checkpoint = pl.callbacks.ModelCheckpoint(
         save_top_k=args.save_top_k, monitor="val_loss"
     )
+<<<<<<< HEAD
     train_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size)
     val_loader = torch.utils.data.DataLoader(dataset_val, batch_size=batch_size)
     test_loader = torch.utils.data.DataLoader(dataset_test, batch_size=batch_size)
@@ -709,10 +756,14 @@ if __name__ == "__main__":
     )
 
 =======
+=======
+>>>>>>> 33bb6df... Updated memory task
     train_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size)
     val_loader = torch.utils.data.DataLoader(dataset_val, batch_size=batch_size)
-    trainer = pl.Trainer.from_argparse_args(args)
+    test_loader = torch.utils.data.DataLoader(dataset_test, batch_size=batch_size)
+    trainer = pl.Trainer.from_argparse_args(args, callbacks=[checkpoint])
     trainer.fit(model, train_dataloader=train_loader, val_dataloaders=val_loader)
+    trainer.test(model=model, test_dataloaders=test_loader)
 
 
 if __name__ == "__main__":
@@ -760,7 +811,13 @@ if __name__ == "__main__":
         help="Number of neurons per input bit (population encoded).",
     )
     parser.add_argument(
-        "--samples", type=int, default=250, help="Number of data points to train on."
+        "--samples", type=int, default=512, help="Number of data points to train on."
+    )
+    parser.add_argument(
+        "--save_top_k",
+        type=int,
+        default=1,
+        help="Number of top models to checkpoint. -1 for all.",
     )
     parser.add_argument(
         "--seq_length",
@@ -783,14 +840,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--poisson_rate",
         type=float,
-        default=100,
+        default=200,
         help="Poisson rate encoding for the data generation in Hz.",
-    )
-    parser.add_argument(
-        "--weight_decay",
-        type=float,
-        default=1e-8,
-        help="Weight decay (L2 regularisation penalty).",
     )
     parser.add_argument(
         "--random_seed", type=int, default=0, help="Random seed for PyTorch"

@@ -94,8 +94,8 @@ class SpikingHeidelberg(torch.utils.data.IterableDataset):
     def _data_iterator(self, fp):
         return zip(fp["spikes"]["times"], fp["spikes"]["units"], fp["labels"])
 
-    def _bin_spikes(self, tuple):
-        times, units, label = tuple
+    def _bin_spikes(self, tup):
+        times, units, label = tup
         assert len(times) == len(units), "Spikes and units must have same length"
         length = int(self.max_length // self.dt + 1)
         data = torch.zeros((length, self.n_units), dtype=torch.uint8)
