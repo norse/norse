@@ -1,4 +1,5 @@
 import torch
+import torch.utils.data
 
 from norse.torch.functional.encode import poisson_encode
 

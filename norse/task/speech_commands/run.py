@@ -6,7 +6,7 @@ import torchaudio
 # pytype: enable=import-error
 import argparse
 
-from norse.dataset.speech_commands import SpeechCommands, prepare_dataset
+from norse.dataset.speech_commands import SpeechCommandsDataset, prepare_dataset
 
 # pytype: disable=import-error
 from norse.task.speech_commands.model import LSTMModel, lsnn_model, lif_model
@@ -40,8 +40,12 @@ valid_transform = torch.nn.Sequential(
     torchaudio.transforms.MelSpectrogram(sample_rate=16000, n_mels=80),
 )
 
-train_speech_commands = SpeechCommands(dataset=train_sc, transform=train_transform)
-valid_speech_commands = SpeechCommands(dataset=valid_sc, transform=valid_transform)
+train_speech_commands = SpeechCommandsDataset(
+    dataset=train_sc, transform=train_transform
+)
+valid_speech_commands = SpeechCommandsDataset(
+    dataset=valid_sc, transform=valid_transform
+)
 
 # pytype: disable=module-attr
 train_loader = torch.utils.data.DataLoader(
