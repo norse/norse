@@ -182,7 +182,7 @@ class DVSGestureDataset(torch.utils.data.Dataset):
     ]
 
     def __init__(self, root, train=True, download=False):
-        super(DVSGesture).__init__()
+        super().__init__()
 
         self.root = root
         self.train = train
