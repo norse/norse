@@ -2,7 +2,7 @@
 Utilities for plotting spikes in layers over time in 2D and 3D.
 """
 
-from typing import List
+from typing import List, Optional
 
 import matplotlib.pyplot as plt
 
@@ -17,7 +17,10 @@ def _detach_tensor(tensor: torch.Tensor):
 
 
 def plot_heatmap_2d(
-    data: torch.Tensor, axes: plt.Axes = None, show_colorbar: bool = False, **kwargs
+    data: torch.Tensor,
+    axes: Optional[plt.Axes] = None,
+    show_colorbar: bool = False,
+    **kwargs
 ):
     """
     Plots a heatmat of two-dimensional data
@@ -57,7 +60,7 @@ def plot_heatmap_2d(
     return ax
 
 
-def plot_histogram_2d(data: torch.Tensor, axes: plt.Axes = None, **kwargs):
+def plot_histogram_2d(data: torch.Tensor, axes: Optional[plt.Axes] = None, **kwargs):
     """
     Plots a histogram of 1-dimensional data.
 
@@ -89,7 +92,7 @@ def plot_histogram_2d(data: torch.Tensor, axes: plt.Axes = None, **kwargs):
     return ax
 
 
-def plot_spikes_2d(spikes: torch.Tensor, axes: plt.Axes = None, **kwargs):
+def plot_spikes_2d(spikes: torch.Tensor, axes: Optional[plt.Axes] = None, **kwargs):
     """
     Plots a 2D diagram of spikes. Works similar to the :meth:`plot_heatmap_2d` but
     in black and white.
@@ -192,7 +195,12 @@ def plot_scatter_3d(
     return axes
 
 
-def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs):
+def plot_heatmap_3d(
+    spikes: torch.Tensor,
+    axes: Optional[plt.Axes] = None,
+    show_colorbar: bool = False,
+    **kwargs
+):
     """
     Plots heatmaps for some activity in several layers.
     Expects a named tensor with names=('L', 'X', 'Y').
@@ -227,7 +235,10 @@ def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs)
     spikes = _detach_tensor(spikes).align_to(*"LXY")
     L = spikes.shape[0]
 
-    ax = plt.gcf().add_subplot(1, 1, 1, projection="3d")
+    if axes is not None:
+        ax = axes
+    else:
+        ax = plt.gcf().add_subplot(1, 1, 1, projection="3d")
     unnamed = spikes + 1e-10  # Add infinitely small amount to "trigger" all pixels
     unnamed.names = None  # Unnamed tensor required for to_sparse
     s = unnamed.to_sparse().coalesce()
