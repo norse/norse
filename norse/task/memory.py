@@ -190,7 +190,7 @@ class MemoryNet(pl.LightningModule):
             v_th=torch.as_tensor(0.5),
             tau_syn_inv=torch.as_tensor(1 / 6e-3),
             tau_mem_inv=torch.as_tensor(1 / 2e-2),
-            tau_adapt_inv=torch.exp(torch.as_tensor(-1 / 1200)),
+            tau_adapt_inv=torch.exp(torch.as_tensor(-1 / 1200.0)),
             beta=torch.as_tensor(1.8),
         )
         p_lif = LIFParameters(
@@ -581,7 +581,7 @@ def _plot_run(xs, readouts, spikes, betas=None):
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
 =======
     ax.set_yticks([-1, 1])
-    ax.set_yticklabels([1, 0])
+    ax.set_yticklabels([0, 1])
     v1, v2 = readouts.detach().cpu().view(-1, 2).softmax(1).chunk(2, 1)
     ax.set_ylabel("Readout")
     ax.set_xlim(0, len(v1))

@@ -50,7 +50,11 @@ class LSNNParameters(NamedTuple):
 
     tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
     tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
+<<<<<<< HEAD
     tau_adapt_inv: torch.Tensor = torch.as_tensor(1.0 / 800)
+=======
+    tau_adapt_inv: torch.Tensor = torch.exp(torch.as_tensor(-1.0 / 800))
+>>>>>>> 177f198... Fixed LSNN LIF beta update
     v_leak: torch.Tensor = torch.as_tensor(0.0)
     v_th: torch.Tensor = torch.as_tensor(1.0)
     v_reset: torch.Tensor = torch.as_tensor(0.0)
@@ -216,10 +220,14 @@ def ada_lif_step(
     v_new = v_decayed - z_new * (p.v_th - p.v_reset)
     # compute b update
 <<<<<<< HEAD
+<<<<<<< HEAD
     b_new = b_decayed + z_new * p.beta
 =======
     b_new = b_decayed + z_new * p.tau_adapt_inv * p.beta
 >>>>>>> 4697ac2... Corrected memory task
+=======
+    b_new = b_decayed + z_new * p.beta
+>>>>>>> 177f198... Fixed LSNN LIF beta update
     # compute current jumps
     i_new = (
         i_decayed

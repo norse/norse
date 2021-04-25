@@ -26,7 +26,12 @@ class ConvNet(torch.nn.Module):
 >>>>>>> 074b2d7... Fixed linting
 =======
     """
-    A convolutional network with
+    A convolutional network with LIF dynamics
+
+    Arguments:
+        num_channels (int): Number of input channels
+        feature_size (int): Number of input features
+        method (str): Threshold method
     """
 
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
