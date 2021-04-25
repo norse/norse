@@ -7,7 +7,12 @@ from norse.torch.module.lif import LIFCell
 
 class ConvNet(torch.nn.Module):
     """
-    A convolutional network with
+    A convolutional network with LIF dynamics
+
+    Arguments:
+        num_channels (int): Number of input channels
+        feature_size (int): Number of input features
+        method (str): Threshold method
     """
 
     def __init__(
@@ -55,6 +60,15 @@ class ConvNet(torch.nn.Module):
 
 
 class ConvNet4(torch.nn.Module):
+    """
+    A convolutional network with LIF dynamics
+
+    Arguments:
+        num_channels (int): Number of input channels
+        feature_size (int): Number of input features
+        method (str): Threshold method
+    """
+
     def __init__(
         self, num_channels=1, feature_size=28, method="super", dtype=torch.float
     ):

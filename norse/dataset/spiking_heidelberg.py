@@ -3,8 +3,8 @@ The Spiking Heidelberg Digits (SHD) audio dataset
 https://compneuro.net/posts/2019-spiking-heidelberg-digits/
 Licensed under CC A 4.0
 
-Cramer, B., Stradmann, Y., Schemmel, J., and Zenke, F. (2019). 
-The Heidelberg spiking datasets for the systematic evaluation of spiking neural networks. 
+Cramer, B., Stradmann, Y., Schemmel, J., and Zenke, F. (2019).
+The Heidelberg spiking datasets for the systematic evaluation of spiking neural networks.
 ArXiv:1910.07407 [Cs, q-Bio]. https://arxiv.org/abs/1910.07407
 """
 
@@ -19,7 +19,7 @@ from torchvision.datasets.utils import check_integrity, download_and_extract_arc
 import torch
 
 
-class SpikingHeidelberg(torch.utils.data.IterableDataset):
+class SpikingHeidelbergDigitsDataset(torch.utils.data.IterableDataset):
     """
     Initialises, but does not download by default, the
     `Spiking Heidelberg audio dataset <https://compneuro.net/posts/2019-spiking-heidelberg-digits/>`_.
@@ -44,7 +44,7 @@ class SpikingHeidelberg(torch.utils.data.IterableDataset):
     n_units = 700  # 700 channels
 
     def __init__(self, root, dt=0.001, sparse=True, train=True, download=False):
-        super(SpikingHeidelberg).__init__()
+        super().__init__()
         self.root = root
         self.train = train
         self.dt = dt
@@ -69,16 +69,13 @@ class SpikingHeidelberg(torch.utils.data.IterableDataset):
             )
         )
 
-    def _data_iterator(self, fp):
-        return zip(fp["spikes"]["times"], fp["spikes"]["units"], fp["labels"])
-
     def _bin_spikes(self, tup):
         times, units, label = tup
         assert len(times) == len(units), "Spikes and units must have same length"
         length = int(self.max_length // self.dt + 1)
         data = torch.zeros((length, self.n_units), dtype=torch.uint8)
-        for index in range(len(times)):
-            time_index = int(times[index] // self.dt)
+        for index, time_value in enumerate(times):
+            time_index = int(time_value // self.dt)
             unit_index = units[index]
             data[time_index][unit_index] = 1
         return data.to_sparse(), torch.as_tensor(int(label), dtype=torch.uint8)
@@ -94,6 +91,9 @@ class SpikingHeidelberg(torch.utils.data.IterableDataset):
             )
 
     def __iter__(self):
+        def _data_iterator(self, fp):
+            return zip(fp["spikes"]["times"], fp["spikes"]["units"], fp["labels"])
+
         iterator = map(self._bin_spikes, self._data_iterator(self.test_fp))
         if self.train:
             iterator = chain(
