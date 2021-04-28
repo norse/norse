@@ -190,7 +190,7 @@ class MemoryNet(pl.LightningModule):
             v_th=torch.as_tensor(0.5),
             tau_syn_inv=torch.as_tensor(1 / 6e-3),
             tau_mem_inv=torch.as_tensor(1 / 2e-2),
-            tau_adapt_inv=torch.exp(torch.as_tensor(-1 / 1200.0)),
+            tau_adapt_inv=torch.as_tensor(1 / 1200.0),
             beta=torch.as_tensor(1.8),
         )
         p_lif = LIFParameters(
