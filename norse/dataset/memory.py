@@ -1,3 +1,5 @@
+from typing import Optional
+
 import torch
 import torch.utils.data
 
@@ -22,17 +24,19 @@ class MemoryStoreRecallDataset(torch.utils.data.Dataset):
         population_size (int): Number of neurons encoding each command. Defaults to 5.
         poisson_rate (int): Poisson rate for each command in Hz. Defaults to 250.
         dt (float): Timestep for the dataset. Defaults to 0.001 (1000Hz).
+        seed (Optional[int]): Optional seed for the random generator
     """
 
     def __init__(
         self,
-        samples,
-        seq_length=100,
-        seq_periods=12,
-        seq_repetitions=4,
-        population_size=5,
-        poisson_rate=100,
-        dt=0.001,
+        samples: int,
+        seq_length: int = 100,
+        seq_periods: int = 12,
+        seq_repetitions: int = 4,
+        population_size: int = 5,
+        poisson_rate: int = 100,
+        dt: float = 0.001,
+        seed: Optional[int] = None,
     ):
         self.samples = samples
         self.seq_length = seq_length
@@ -52,13 +56,17 @@ class MemoryStoreRecallDataset(torch.utils.data.Dataset):
             high=seq_periods,
             size=(samples, seq_repetitions),
         )
+        self.generator = None if seed is None else torch.manual_seed(seed)
 
     def __len__(self):
         return self.samples
 
     def _generate_sequence(self, idx, rep_idx):
         data_pattern = torch.stack(
-            [torch.randperm(2) for _ in range(self.seq_periods)]
+            [
+                torch.randperm(2, generator=self.generator)
+                for _ in range(self.seq_periods)
+            ]
         ).byte()
         store_index = self.store_indices[idx][rep_idx]
         recall_index = self.recall_indices[idx][rep_idx]
