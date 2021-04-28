@@ -1,9 +1,14 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Optional
 
 import torch
 import torch.utils.data
 =======
+=======
+from typing import Optional
+
+>>>>>>> 3a3ea38... Added seed parameter for the memory dataset
 import torch
 <<<<<<< HEAD
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
@@ -33,14 +38,21 @@ class MemoryStoreRecallDataset(torch.utils.data.Dataset):
         poisson_rate (int): Poisson rate for each command in Hz. Defaults to 250.
         dt (float): Timestep for the dataset. Defaults to 0.001 (1000Hz).
 <<<<<<< HEAD
+<<<<<<< HEAD
         seed (Optional[int]): Optional seed for the random generator
 =======
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
+=======
+        seed (Optional[int]): Optional seed for the random generator
+>>>>>>> 3a3ea38... Added seed parameter for the memory dataset
     """
 
     def __init__(
         self,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3a3ea38... Added seed parameter for the memory dataset
         samples: int,
         seq_length: int = 100,
         seq_periods: int = 12,
@@ -49,6 +61,7 @@ class MemoryStoreRecallDataset(torch.utils.data.Dataset):
         poisson_rate: int = 100,
         dt: float = 0.001,
         seed: Optional[int] = None,
+<<<<<<< HEAD
 =======
         samples,
         seq_length=100,
@@ -58,6 +71,8 @@ class MemoryStoreRecallDataset(torch.utils.data.Dataset):
         poisson_rate=100,
         dt=0.001,
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
+=======
+>>>>>>> 3a3ea38... Added seed parameter for the memory dataset
     ):
         self.samples = samples
         self.seq_length = seq_length
@@ -78,9 +93,13 @@ class MemoryStoreRecallDataset(torch.utils.data.Dataset):
             size=(samples, seq_repetitions),
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.generator = None if seed is None else torch.manual_seed(seed)
 =======
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
+=======
+        self.generator = None if seed is None else torch.manual_seed(seed)
+>>>>>>> 3a3ea38... Added seed parameter for the memory dataset
 
     def __len__(self):
         return self.samples
@@ -88,13 +107,19 @@ class MemoryStoreRecallDataset(torch.utils.data.Dataset):
     def _generate_sequence(self, idx, rep_idx):
         data_pattern = torch.stack(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3a3ea38... Added seed parameter for the memory dataset
             [
                 torch.randperm(2, generator=self.generator)
                 for _ in range(self.seq_periods)
             ]
+<<<<<<< HEAD
 =======
             [torch.randperm(2) for _ in range(self.seq_periods)]
 >>>>>>> 267ca63... Added memory dataset and reworked memory task
+=======
+>>>>>>> 3a3ea38... Added seed parameter for the memory dataset
         ).byte()
         store_index = self.store_indices[idx][rep_idx]
         recall_index = self.recall_indices[idx][rep_idx]
