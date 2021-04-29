@@ -2,13 +2,12 @@
 # https://github.com/pytorch/examples/blob/master/reinforcement_learning/reinforce.py
 # which is licensed under the license found in LICENSE.cartpole
 
-import torch
+from argparse import ArgumentParser
 import numpy as np
-from absl import app
-from absl import flags
-from absl import logging
 import random
 import os
+
+import torch
 
 # pytype: disable=import-error
 import gym
@@ -20,21 +19,6 @@ from norse.torch.module.encode import ConstantCurrentLIFEncoder
 from norse.torch.module.lif import LIFRecurrentCell
 from norse.torch.module.lsnn import LSNNRecurrentCell, LSNNParameters
 from norse.torch.module.leaky_integrator import LILinearCell
-
-FLAGS = flags.FLAGS
-flags.DEFINE_enum("device", "cpu", ["cpu", "cuda"], "Device to use by pytorch.")
-flags.DEFINE_integer("episodes", 100, "Number of training trials.")
-flags.DEFINE_float("learning_rate", 1e-3, "Learning rate to use.")
-flags.DEFINE_float("gamma", 0.99, "discount factor to use")
-flags.DEFINE_integer(
-    "log_interval", 10, "In which intervals to display learning progress."
-)
-flags.DEFINE_enum("model", "super", ["super"], "Model to use for training.")
-flags.DEFINE_enum("policy", "snn", ["snn", "lsnn", "ann"], "Select policy to use.")
-flags.DEFINE_boolean("render", False, "Render the environment")
-flags.DEFINE_string("environment", "CartPole-v1", "Gym environment to use.")
-flags.DEFINE_integer("random_seed", 1234, "Random seed to use")
-
 
 class ANNPolicy(torch.nn.Module):
     def __init__(self):
@@ -159,13 +143,13 @@ def select_action(state, policy, device):
     return action.item()
 
 
-def finish_episode(policy, optimizer):
+def finish_episode(policy, optimizer, gamma):
     eps = np.finfo(np.float32).eps.item()
     R = 0
     policy_loss = []
     returns = []
     for r in policy.rewards[::-1]:
-        R = r + FLAGS.gamma * R
+        R = r + gamma * R
         returns.insert(0, R)
     returns = torch.as_tensor(returns)
     returns = (returns - returns.mean()) / (returns.std() + eps)
@@ -181,42 +165,43 @@ def finish_episode(policy, optimizer):
 
 def main(args):
     running_reward = 10
-    torch.manual_seed(FLAGS.random_seed)
-    random.seed(FLAGS.random_seed)
+    torch.manual_seed(args.random_seed)
+    random.seed(args.random_seed)
 
-    label = f"{FLAGS.policy}-{FLAGS.model}-{FLAGS.random_seed}"
+    label = f"{args.policy}-{args.model}-{args.random_seed}"
     os.makedirs(f"runs/cartpole/{label}", exist_ok=True)
     os.chdir(f"runs/cartpole/{label}")
-    FLAGS.append_flags_into_file("flags.txt")
+    with open("flags.txt", "w") as fp:
+        fp.write(str(args))
 
-    np.random.seed(FLAGS.random_seed)
+    np.random.seed(args.random_seed)
     if torch.cuda.is_available():
-        torch.cuda.manual_seed(FLAGS.random_seed)
+        torch.cuda.manual_seed(args.random_seed)
 
-    device = torch.device(FLAGS.device)
+    device = torch.device(args.device)
 
-    env = gym.make(FLAGS.environment)
+    env = gym.make(args.environment)
     env.reset()
-    env.seed(FLAGS.random_seed)
+    env.seed(args.random_seed)
 
-    if FLAGS.policy == "ann":
+    if args.policy == "ann":
         policy = ANNPolicy().to(device)
-    elif FLAGS.policy == "snn":
+    elif args.policy == "snn":
         policy = Policy().to(device)
-    elif FLAGS.policy == "lsnn":
-        policy = LSNNPolicy(model=FLAGS.model).to(device)
-    optimizer = torch.optim.Adam(policy.parameters(), lr=FLAGS.learning_rate)
+    elif args.policy == "lsnn":
+        policy = LSNNPolicy(model=args.model).to(device)
+    optimizer = torch.optim.Adam(policy.parameters(), lr=args.learning_rate)
 
     running_rewards = []
     episode_rewards = []
 
-    for e in range(FLAGS.episodes):
+    for e in range(args.episodes):
         state, ep_reward = env.reset(), 0
 
         for t in range(1, 10000):  # Don't infinite loop while learning
             action = select_action(state, policy, device=device)
             state, reward, done, _ = env.step(action)
-            if FLAGS.render:
+            if args.render:
                 env.render()
             policy.rewards.append(reward)
             ep_reward += reward
@@ -224,18 +209,18 @@ def main(args):
                 break
 
         running_reward = 0.05 * ep_reward + (1 - 0.05) * running_reward
-        finish_episode(policy, optimizer)
+        finish_episode(policy, optimizer, args.gamma)
 
-        if e % FLAGS.log_interval == 0:
-            logging.info(
+        if e % args.log_interval == 0:
+            print(
                 "Episode {}/{} \tLast reward: {:.2f}\tAverage reward: {:.2f}".format(
-                    e, FLAGS.episodes, ep_reward, running_reward
+                    e, args.episodes, ep_reward, running_reward
                 )
             )
         episode_rewards.append(ep_reward)
         running_rewards.append(running_reward)
         if running_reward > env.spec.reward_threshold:
-            logging.info(
+            print(
                 "Solved! Running reward is now {} and "
                 "the last episode runs to {} time steps!".format(running_reward, t)
             )
@@ -248,4 +233,15 @@ def main(args):
 
 
 if __name__ == "__main__":
-    app.run(main)
+    parser = ArgumentParser("Cartpole reinforcement learning task. Requires OpenAI gym")
+    parser.add_argument("--device", type=str, default="cpu", choices=["cpu", "cuda"], help="Device to use by pytorch.")
+    parser.add_argument("--episodes", type=int, default=100, help="Number of training trials.")
+    parser.add_argument("--learning-rate", type=float, default=1e-3, help="Learning rate to use.")
+    parser.add_argument("--gamma", type=float, default=0.99, help="discount factor to use")
+    parser.add_argument("--log-interval", type=int, default=10, help="In which intervals to display learning progress.")
+    parser.add_argument("--model", type=str, default="super", choices=["super"], help="Model to use for training.")
+    parser.add_argument("--policy", type=str, default="snn", choices=["snn", "lsnn", "ann"], help="Select policy to use.")
+    parser.add_argument("--render", type=bool, default=False, help="Render the environment")
+    parser.add_argument("--environment", type=str, default="CartPole-v1", help="Gym environment to use.")
+    parser.add_argument("--random-seed", type=int, default=1234, help="Random seed to use")
+    main(parser.parse_args())
