@@ -20,7 +20,10 @@ from norse.torch.module.lif import LIFRecurrentCell
 from norse.torch.module.lsnn import LSNNRecurrentCell, LSNNParameters
 from norse.torch.module.leaky_integrator import LILinearCell
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b1890ea... Removed absail dependency from cartpole
 class ANNPolicy(torch.nn.Module):
     def __init__(self):
         super(ANNPolicy, self).__init__()
@@ -235,6 +238,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = ArgumentParser("Cartpole reinforcement learning task. Requires OpenAI gym")
+<<<<<<< HEAD
     parser.add_argument(
         "--device",
         type=str,
@@ -280,4 +284,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "--random-seed", type=int, default=1234, help="Random seed to use"
     )
+=======
+    parser.add_argument("--device", type=str, default="cpu", choices=["cpu", "cuda"], help="Device to use by pytorch.")
+    parser.add_argument("--episodes", type=int, default=100, help="Number of training trials.")
+    parser.add_argument("--learning-rate", type=float, default=1e-3, help="Learning rate to use.")
+    parser.add_argument("--gamma", type=float, default=0.99, help="discount factor to use")
+    parser.add_argument("--log-interval", type=int, default=10, help="In which intervals to display learning progress.")
+    parser.add_argument("--model", type=str, default="super", choices=["super"], help="Model to use for training.")
+    parser.add_argument("--policy", type=str, default="snn", choices=["snn", "lsnn", "ann"], help="Select policy to use.")
+    parser.add_argument("--render", type=bool, default=False, help="Render the environment")
+    parser.add_argument("--environment", type=str, default="CartPole-v1", help="Gym environment to use.")
+    parser.add_argument("--random-seed", type=int, default=1234, help="Random seed to use")
+>>>>>>> b1890ea... Removed absail dependency from cartpole
     main(parser.parse_args())
