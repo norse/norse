@@ -191,15 +191,6 @@ def main(args):
 
     torch.manual_seed(args.random_seed)
     np.random.seed(args.random_seed)
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 3206196... Removed absail from MNIST and cleaned code
-=======
-
->>>>>>> e5b78c0... Removed absail dependency
     if torch.cuda.is_available():
         torch.cuda.manual_seed(args.random_seed)
         torch.backends.cudnn.enabled = True

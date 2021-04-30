@@ -11,15 +11,8 @@ jobs:
 
     steps: 
       - uses: actions/checkout@v1
-<<<<<<< HEAD
-      - name: Setup C++
-        run: sudo apt update && sudo apt install gcc-10 g++-10
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-=======
       - name: Set up Python
         uses: actions/setup-python@v2
->>>>>>> c914eda... Improved doc building
         with:
           python-version: '3.x'
       - name: Compile docs
@@ -27,6 +20,7 @@ jobs:
         with:
           docs-folder: "docs/"
           pre-build-command: |
+            apt update && apt install g++ -y
             python -m pip install --upgrade pip
             pip install -r requirements-dev.txt
             pip install -e .

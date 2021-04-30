@@ -6,25 +6,6 @@ from norse.torch.module.lif import LIFCell
 
 
 class ConvNet(torch.nn.Module):
-<<<<<<< HEAD
-<<<<<<< HEAD
-    """
-<<<<<<< HEAD
-    A convolutional network with LIF dynamics
-
-    Arguments:
-        num_channels (int): Number of input channels
-        feature_size (int): Number of input features
-        method (str): Threshold method
-    """
-
-=======
-    A convolutional network with 
-    """
->>>>>>> 97edc4c... Added features to diagnose and plot
-=======
->>>>>>> 074b2d7... Fixed linting
-=======
     """
     A convolutional network with LIF dynamics
 
@@ -34,7 +15,6 @@ class ConvNet(torch.nn.Module):
         method (str): Threshold method
     """
 
->>>>>>> 267ca63... Added memory dataset and reworked memory task
     def __init__(
         self, num_channels=1, feature_size=28, method="super", dtype=torch.float
     ):

@@ -55,7 +55,6 @@ def plot_heatmap_2d(
     kwargs["interpolation"] = kwargs.get("interpolation", "none")
 
     pos = plt.imshow(_detach_tensor(data).T, **kwargs)
-    ax.invert_yaxis()
     if show_colorbar:
         ax.colorbar(pos, ax=ax)
     return ax
@@ -116,11 +115,7 @@ def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs)
     return ax
 
 
-<<<<<<< HEAD
 def plot_histogram_2d(spikes: torch.Tensor, axes: Optional[plt.Axes] = None, **kwargs):
-=======
-def plot_histogram_2d(data: torch.Tensor, axes: plt.Axes = None, **kwargs):
->>>>>>> ff7f351... Fixed plot examples
     """
     Plots a histogram of 1-dimensional data.
 
@@ -152,11 +147,7 @@ def plot_histogram_2d(data: torch.Tensor, axes: plt.Axes = None, **kwargs):
     """
     ax = axes if axes is not None else plt.gca()
     kwargs["density"] = kwargs.get("density", True)
-<<<<<<< HEAD
     plt.hist(_detach_tensor(spikes).numpy(), **kwargs)
-=======
-    plt.hist(_detach_tensor(data).numpy(), **kwargs)
->>>>>>> ff7f351... Fixed plot examples
     return ax
 
 

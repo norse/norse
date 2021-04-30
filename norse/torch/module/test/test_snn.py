@@ -34,10 +34,6 @@ def test_snn_recurrent_cell_weights_autapse_update():
     assert torch.all(torch.eq(n.recurrent_weights.diag(), torch.zeros(3)))
     optim = torch.optim.Adam(n.parameters())
     optim.zero_grad()
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 33bb6df... Updated memory task
     spikes = []
     s = None
     for _ in range(10):
@@ -45,29 +41,13 @@ def test_snn_recurrent_cell_weights_autapse_update():
         spikes.append(z)
     spikes = torch.stack(spikes)
     loss = spikes.sum()
-<<<<<<< HEAD
     loss.backward()
     optim.step()
     w = n.recurrent_weights.clone().detach()
     assert not z.sum() == 0.0
     assert torch.all(torch.eq(w.diag(), torch.zeros(3)))
-=======
-    z, s = n(torch.ones(2))
-    z, _ = n(torch.ones(2), s)
-    loss = z.sum()
-=======
->>>>>>> 33bb6df... Updated memory task
-    loss.backward()
-    optim.step()
-    w = n.recurrent_weights.clone().detach()
-    assert not z.sum() == 0.0
-    assert torch.all(torch.eq(w.diag(), torch.zeros(3)))
-<<<<<<< HEAD
     w.fill_diagonal_(1.0)
     assert not torch.all(torch.eq(w, torch.ones(3, 3)))
->>>>>>> 4e283ef... Fixed diagonal weights in recurrent models
-=======
->>>>>>> 33bb6df... Updated memory task
 
 
 def test_snn_recurrent_weights():
@@ -102,14 +82,6 @@ def test_snn_recurrent_weights_autapse_update():
     optim.step()
     w = n.recurrent_weights.clone().detach()
     assert torch.all(torch.eq(w.diag(), torch.zeros(3)))
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    w.fill_diagonal_(1.0)
-    assert not torch.all(torch.eq(w, torch.ones(3, 3)))
->>>>>>> 4e283ef... Fixed diagonal weights in recurrent models
-=======
->>>>>>> 33bb6df... Updated memory task
 
 
 def test_snn_cell_repr():

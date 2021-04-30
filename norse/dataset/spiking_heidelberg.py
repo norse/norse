@@ -3,18 +3,8 @@ The Spiking Heidelberg Digits (SHD) audio dataset
 https://compneuro.net/posts/2019-spiking-heidelberg-digits/
 Licensed under CC A 4.0
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 Cramer, B., Stradmann, Y., Schemmel, J., and Zenke, F. (2019).
 The Heidelberg spiking datasets for the systematic evaluation of spiking neural networks.
-=======
-Cramer, B., Stradmann, Y., Schemmel, J., and Zenke, F. (2019). 
-The Heidelberg spiking datasets for the systematic evaluation of spiking neural networks. 
->>>>>>> fa2a42b... Added spiking heidelberg dataset
-=======
-Cramer, B., Stradmann, Y., Schemmel, J., and Zenke, F. (2019).
-The Heidelberg spiking datasets for the systematic evaluation of spiking neural networks.
->>>>>>> 177f198... Fixed LSNN LIF beta update
 ArXiv:1910.07407 [Cs, q-Bio]. https://arxiv.org/abs/1910.07407
 """
 
@@ -29,15 +19,7 @@ from torchvision.datasets.utils import check_integrity, download_and_extract_arc
 import torch
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 class SpikingHeidelbergDigitsDataset(torch.utils.data.IterableDataset):
-=======
-class SpikingHeidelberg(torch.utils.data.IterableDataset):
->>>>>>> fa2a42b... Added spiking heidelberg dataset
-=======
-class SpikingHeidelbergDigitsDataset(torch.utils.data.IterableDataset):
->>>>>>> 177f198... Fixed LSNN LIF beta update
     """
     Initialises, but does not download by default, the
     `Spiking Heidelberg audio dataset <https://compneuro.net/posts/2019-spiking-heidelberg-digits/>`_.
@@ -62,15 +44,7 @@ class SpikingHeidelbergDigitsDataset(torch.utils.data.IterableDataset):
     n_units = 700  # 700 channels
 
     def __init__(self, root, dt=0.001, sparse=True, train=True, download=False):
-<<<<<<< HEAD
-<<<<<<< HEAD
         super().__init__()
-=======
-        super(SpikingHeidelberg).__init__()
->>>>>>> fa2a42b... Added spiking heidelberg dataset
-=======
-        super().__init__()
->>>>>>> 177f198... Fixed LSNN LIF beta update
         self.root = root
         self.train = train
         self.dt = dt
@@ -95,8 +69,6 @@ class SpikingHeidelbergDigitsDataset(torch.utils.data.IterableDataset):
             )
         )
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     def _bin_spikes(self, tup):
         times, units, label = tup
         assert len(times) == len(units), "Spikes and units must have same length"
@@ -104,25 +76,6 @@ class SpikingHeidelbergDigitsDataset(torch.utils.data.IterableDataset):
         data = torch.zeros((length, self.n_units), dtype=torch.uint8)
         for index, time_value in enumerate(times):
             time_index = int(time_value // self.dt)
-=======
-    def _data_iterator(self, fp):
-        return zip(fp["spikes"]["times"], fp["spikes"]["units"], fp["labels"])
-
-=======
->>>>>>> 177f198... Fixed LSNN LIF beta update
-    def _bin_spikes(self, tup):
-        times, units, label = tup
-        assert len(times) == len(units), "Spikes and units must have same length"
-        length = int(self.max_length // self.dt + 1)
-        data = torch.zeros((length, self.n_units), dtype=torch.uint8)
-<<<<<<< HEAD
-        for index in range(len(times)):
-            time_index = int(times[index] // self.dt)
->>>>>>> fa2a42b... Added spiking heidelberg dataset
-=======
-        for index, time_value in enumerate(times):
-            time_index = int(time_value // self.dt)
->>>>>>> 177f198... Fixed LSNN LIF beta update
             unit_index = units[index]
             data[time_index][unit_index] = 1
         return data.to_sparse(), torch.as_tensor(int(label), dtype=torch.uint8)
@@ -138,18 +91,9 @@ class SpikingHeidelbergDigitsDataset(torch.utils.data.IterableDataset):
             )
 
     def __iter__(self):
-<<<<<<< HEAD
-<<<<<<< HEAD
         def _data_iterator(self, fp):
             return zip(fp["spikes"]["times"], fp["spikes"]["units"], fp["labels"])
 
-=======
->>>>>>> fa2a42b... Added spiking heidelberg dataset
-=======
-        def _data_iterator(self, fp):
-            return zip(fp["spikes"]["times"], fp["spikes"]["units"], fp["labels"])
-
->>>>>>> 177f198... Fixed LSNN LIF beta update
         iterator = map(self._bin_spikes, self._data_iterator(self.test_fp))
         if self.train:
             iterator = chain(
