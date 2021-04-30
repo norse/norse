@@ -132,7 +132,7 @@ def label_to_index(dataset):
     return label_to_index
 
 
-class SpeechCommands(torch.utils.data.Dataset):
+class SpeechCommandsDataset(torch.utils.data.Dataset):
     """Speech Commands dataset as described in "Speech Commands: A Dataset for Limited-Vocabulary Speech Recognition"
     (https://arxiv.org/abs/1804.03209). This is meant as a wrapper around the corresponding
     SPEECHCOMMANDS dataset defined in torchaudio.

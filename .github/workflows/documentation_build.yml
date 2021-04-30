@@ -6,18 +6,13 @@ on:
 jobs:
   build-docs:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.8]
 
     steps:
       - uses: actions/checkout@v1
-      - name: Setup C++
-        run: sudo apt update && sudo apt install gcc-10 g++-10
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.x'
       - name: Compile docs
         uses: ammaraskar/sphinx-action@master
         with:

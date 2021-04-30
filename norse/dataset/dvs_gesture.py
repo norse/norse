@@ -11,7 +11,7 @@ import logging
 from torchvision.datasets.utils import check_integrity, download_and_extract_archive
 
 
-class DVSGesture(torch.utils.data.Dataset):
+class DVSGestureDataset(torch.utils.data.Dataset):
     """
     The IBM gesture dataset containing 11 hand gestures from 29 subjects under
     3 illumination conditions recorded from a DVS128 camera
@@ -182,7 +182,7 @@ class DVSGesture(torch.utils.data.Dataset):
     ]
 
     def __init__(self, root, train=True, download=False):
-        super(DVSGesture).__init__()
+        super().__init__()
 
         self.root = root
         self.train = train

@@ -90,7 +90,7 @@ html_css_files = ["custom.css"]
 intersphinx_mapping = {
     "python": ("https://docs.python.org/", None),
     "numpy": ("http://docs.scipy.org/doc/numpy/", None),
-    "matplotlib": ('https://matplotlib.org/stable/', None),
+    "matplotlib": ("https://matplotlib.org/stable/", None),
     "PyTorch": ("http://pytorch.org/docs/master/", None),
 }
 

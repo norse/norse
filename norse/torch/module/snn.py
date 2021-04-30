@@ -119,8 +119,18 @@ class SNNRecurrentCell(torch.nn.Module):
             with torch.no_grad():
                 self.recurrent_weights.fill_diagonal_(0.0)
 
+            # Eradicate gradient updates from autapses
+            def autapse_hook(gradient):
+                return gradient.clone().fill_diagonal_(0.0)
+
+            self.recurrent_weights.requires_grad = True
+            self.recurrent_weights.register_hook(autapse_hook)
+
     def extra_repr(self) -> str:
-        return f"input_size={self.input_size}, hidden_size={self.hidden_size}, p={self.p}, autapses={self.autapses}, dt={self.dt}"
+        return (
+            f"input_size={self.input_size}, hidden_size={self.hidden_size}, "
+            + f"p={self.p}, autapses={self.autapses}, dt={self.dt}"
+        )
 
     def forward(self, input_tensor: torch.Tensor, state: Optional[Any] = None):
         state = state if state is not None else self.state_fallback(input_tensor)
@@ -246,6 +256,12 @@ class SNNRecurrent(torch.nn.Module):
         if not autapses:
             with torch.no_grad():
                 self.recurrent_weights.fill_diagonal_(0.0)
+            # Eradicate gradient updates from autapses
+            def autapse_hook(gradient):
+                return gradient.clone().fill_diagonal_(0.0)
+
+            self.recurrent_weights.requires_grad = True
+            self.recurrent_weights.register_hook(autapse_hook)
 
     def extra_repr(self) -> str:
         return f"input_size={self.input_size}, hidden_size={self.hidden_size}, p={self.p}, autapses={self.autapses}, dt={self.dt}"

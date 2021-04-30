@@ -162,7 +162,6 @@ def main(args):
         [
             torchvision.transforms.RandomCrop(32, padding=4),
             torchvision.transforms.RandomHorizontalFlip(),
-            torchvision.transforms.ToTensor(),
         ]
     )
     transform_test = torchvision.transforms.Compose([torchvision.transforms.ToTensor()])

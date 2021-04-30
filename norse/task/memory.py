@@ -1,512 +1,427 @@
-from absl import app, flags
-import datetime
-import logging
-import numpy as np
+from argparse import ArgumentParser
+from typing import Any, Optional, Tuple
+
+import matplotlib
+import matplotlib.colors as colors
+import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
+import pytorch_lightning as pl
 import torch
 import torch.utils.data
 
-from norse.torch.functional.encode import poisson_encode
+from norse.dataset.memory import MemoryStoreRecallDataset
 from norse.torch.module.leaky_integrator import LILinearCell
 from norse.torch.module.lsnn import LSNNRecurrentCell, LSNNParameters
+from norse.torch.functional.leaky_integrator import LIParameters
 from norse.torch.module.lif import LIFRecurrentCell, LIFParameters
-
-flags.DEFINE_integer("batch_size", 64, "Batch size.")
-flags.DEFINE_enum("device", "cpu", ["cpu", "cuda"], "Device to use by pytorch.")
-flags.DEFINE_integer("device_number", 0, "Index of the CUDA device to use, if at all.")
-flags.DEFINE_float("dt", 0.001, "Time change per simulation step.")
-flags.DEFINE_integer("epochs", 20, "Number of epochs.")
-flags.DEFINE_float("learning_rate", 2e-3, "Learning rate to use.")
-flags.DEFINE_integer(
-    "log_interval", 10, "In which intervals to display learning progress."
-)
-flags.DEFINE_enum(
-    "model",
-    "super",
-    ["super", "tanh", "circ", "logistic", "circ_dist"],
-    "Model to use for training.",
-)
-flags.DEFINE_enum(
-    "neuron_model",
-    "lsnn",
-    ["lsnn", "lif"],
-    "Neuron model to use in network.",
-)
-flags.DEFINE_enum(
-    "optimizer", "adam", ["adam", "sgd"], "Optimizer to use for training."
-)
-flags.DEFINE_boolean("plot", False, "Do intermediate plots during test sets.")
-flags.DEFINE_enum(
-    "plot_output",
-    "show",
-    ["show", "file"],
-    "How to output plots: display on screen (show) or save to file (file).",
-)
-
-flags.DEFINE_integer(
-    "poisson_rate",
-    50,
-    "Number of spikes per second, drawn from a poisson distribution.",
-)
-flags.DEFINE_integer(
-    "population_size", 5, "Number of neurons per input bit (population encoded)."
-)
-flags.DEFINE_integer(
-    "random_seed", int(torch.randint(high=100000, size=(1,))[0]), "Random seed."
-)
-flags.DEFINE_integer("samples", 1000, "Number of samples to use.")
-flags.DEFINE_boolean("save_model", True, "Save the model after training every epoch.")
-flags.DEFINE_integer("seq_length", 200, "Number of time steps per experiment step.")
-flags.DEFINE_integer(
-    "seq_steps", 24, "Number of steps in each experiment (should be at least 8)."
-)
-flags.DEFINE_integer(
-    "seq_repetitions",
-    24,
-    "Number of times a sequence is repeated.",
-)
-flags.DEFINE_float("weight_decay", 1e-5, "Weight decay (L2 regularisation penalty).")
+from norse.torch.utils.plot import plot_spikes_2d
 
 
-class MemoryNet(torch.nn.Module):
-    def __init__(
-        self,
-        input_features,
-        output_features,
-        seq_length,
-        is_lsnn,
-        dt=0.01,
-        model="super",
-    ):
+class LSNNLIFNet(torch.nn.Module):
+    def __init__(self, input_features, p_lsnn, p_lif, dt):
+        super().__init__()
+        assert input_features % 2 == 0, "Input features must be a whole number"
+        self.neurons_per_layer = input_features // 2
+
+        self.lsnn_cell = LSNNRecurrentCell(
+            input_features, self.neurons_per_layer, p_lsnn, dt=dt
+        )
+        self.lif_cell = LIFRecurrentCell(
+            input_features, self.neurons_per_layer, p_lif, dt=dt
+        )
+
+    def forward(self, input_spikes: torch.Tensor, state: Optional[Tuple[Any, Any]]):
+        if state is None:
+            lif_state = None
+            lsnn_state = None
+        else:
+            lif_state, lsnn_state = state
+
+        lif_out, lif_state = self.lif_cell(input_spikes, lif_state)
+        lsnn_out, lsnn_state = self.lsnn_cell(input_spikes, lsnn_state)
+        out_spikes = torch.cat((lif_out, lsnn_out), -1)
+        return out_spikes, (lif_state, lsnn_state)
+
+
+class MemoryNet(pl.LightningModule):
+    def __init__(self, input_features, output_features, args):
         super(MemoryNet, self).__init__()
         self.input_features = input_features
         self.output_features = output_features
-        self.seq_length = seq_length
-        self.is_lsnn = is_lsnn
-        if is_lsnn:
-            p = LSNNParameters(method=model)
-            self.layer = LSNNRecurrentCell(input_features, input_features, p, dt=dt)
+        self.seq_length = args.seq_length
+        self.optimizer = args.optimizer
+        self.learning_rate = args.learning_rate
+        self.regularization_factor = args.regularization_factor
+        self.regularization_target = args.regularization_target / (
+            self.seq_length * args.seq_repetitions
+        )
+        self.log("Neuron model", args.neuron_model)
+        p_lsnn = LSNNParameters(
+            method=args.model,
+            v_th=torch.as_tensor(0.5),
+            tau_adapt_inv=torch.as_tensor(1 / 1200.0),
+            beta=torch.as_tensor(1.8),
+        )
+        p_lif = LIFParameters(
+            method=args.model,
+            v_th=torch.as_tensor(0.5),
+        )
+        p_li = LIParameters()
+        if args.neuron_model == "lsnn":
+            self.capture_b = False
+            self.layer = LSNNRecurrentCell(input_features, input_features, p=p_lsnn)
+        elif args.neuron_model == "lsnnlif":
+            self.layer = LSNNLIFNet(
+                input_features, p_lsnn=p_lsnn, p_lif=p_lif, dt=args.dt
+            )
+            self.capture_b = True
         else:
-            p = LIFParameters(method=model)
-            self.layer = LIFRecurrentCell(input_features, input_features, dt=dt)
-        self.dropout = torch.nn.Dropout(p=0.2)
-        self.readout = LILinearCell(input_features, output_features)
+            self.layer = LIFRecurrentCell(
+                input_features, input_features, p=p_lif, dt=args.dt
+            )
+            self.capture_b = False
+        self.readout = LILinearCell(input_features, output_features, p=p_li)
+        self.scheduler = None
+
+    def configure_optimizers(self):
+        if self.optimizer == "sgd":
+            optimizer = torch.optim.SGD(
+                self.parameters(),
+                lr=self.learning_rate,
+                momentum=0.9,
+                weight_decay=self.weight_decay,
+            )
+        elif self.optimizer == "adam":
+            optimizer = torch.optim.Adam(
+                self.parameters(),
+                lr=self.learning_rate,
+            )
+
+        self.scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer, step_size=100, gamma=0.3
+        )
+        return [optimizer], [self.scheduler]
 
     def forward(self, x):
-        batch_size = x.shape[0]
-
         sl = None
         sr = None
         seq_spikes = []
         step_spikes = []
         seq_readouts = []
         step_readouts = []
+        seq_betas = []
         for index, x_step in enumerate(x.unbind(1)):
             spikes, sl = self.layer(x_step, sl)
             seq_spikes.append(spikes)
-            spikes = self.dropout(spikes)
-            _, sr = self.readout(spikes, sr)
-            seq_readouts.append(sr.v)
+            v, sr = self.readout(spikes, sr)
+            seq_readouts.append(v)
             if (index + 1) % self.seq_length == 0:
                 step_spikes.append(torch.stack(seq_spikes))
                 seq_spikes = []
                 step_readouts.append(torch.stack(seq_readouts))
                 seq_readouts = []
+            if self.capture_b:
+                seq_betas.append(sl[1].b.clone().detach().cpu())
         spikes = torch.cat(step_spikes)
         readouts = torch.stack(step_readouts)
-        return readouts, spikes
+        betas = torch.stack(seq_betas) if len(seq_betas) > 0 else None
+        return spikes, readouts, betas
 
+    def testing_step(self, batch, batch_idx):
+        xs, ys = batch
+        spikes, readouts, betas = self(xs)
+        # Loss: Difference between recall activity and recall pattern
+        seq_readouts = readouts.mean(1).softmax(2).permute(1, 0, 2)
+        mask = ys.sum(2).gt(0)
+        labels = ys[mask].float()
+        predictions = seq_readouts[mask]
+        loss = torch.nn.functional.binary_cross_entropy_with_logits(predictions, labels)
+        # Accuracy: Sum of correct patterns out of total
+        accuracy = (ys[mask].argmax(1) == seq_readouts[mask].argmax(1)).float().mean()
+        values = {
+            "test_loss": loss,
+            "test_accuracy": accuracy,
+            "LR": self.scheduler.get_last_lr()[0],
+        }
 
-class MemoryDataset(torch.utils.data.Dataset):
-    def __init__(
-        self,
-        samples,
-        steps,
-        seq_length,
-        seq_repetitions,
-        population_size,
-        device,
-        poisson_rate=1,
-        dt=0.001,
-        generator=torch.default_generator,
-    ):
-        self.samples = samples
-        self.steps = steps
-        self.seq_length = seq_length
-        self.seq_repetitions = seq_repetitions
-        self.population_size = population_size
-        self.poisson_rate = poisson_rate
-        self.device = device
-        self.dt = dt
-        self.generator = generator
-
-        self.store_indices = torch.randint(
-            low=0,
-            high=steps // 2,
-            size=(samples, seq_repetitions),
-            generator=generator,
+        # Plot random batch
+        random_index = torch.randint(0, len(xs), (1,)).item()
+        figure = _plot_run(
+            xs[random_index],
+            readouts[:, :, random_index],
+            spikes[:, random_index],
+            betas[:, random_index] if betas is not None else None,
         )
-        self.recall_indices = torch.randint(
-            low=steps // 2,
-            high=steps,
-            size=(samples, seq_repetitions),
-            generator=generator,
+        self.logger.experiment.add_figure("Test readout", figure, self.current_epoch)
+        self.log_dict(values, self.current_epoch)
+
+        # Early stopping when loss <= 0.05
+        if loss <= 0.05:
+            self.trainer.should_stop = True
+
+        return loss
+
+    def training_step(self, batch, batch_idx):
+        xs, ys = batch
+        spikes, readouts, _ = self(xs)
+        # Loss: Difference between recall activity and recall pattern
+        seq_readouts = readouts.mean(1).softmax(2).permute(1, 0, 2)
+        mask = ys.sum(2).gt(0)
+        labels = ys[mask].float()
+        predictions = seq_readouts[mask]
+        loss = torch.nn.functional.binary_cross_entropy_with_logits(predictions, labels)
+        # Regularization
+        loss_reg = (
+            (spikes.mean(0).mean(0) - self.regularization_target) ** 2
+            * self.regularization_factor
+        ).sum()
+        self.log("loss_reg", loss_reg, self.current_epoch)
+        return loss + loss_reg
+
+    def validation_step(self, batch, batch_idx):
+        xs, ys = batch
+        spikes, readouts, betas = self(xs)
+        # Loss: Difference between recall activity and recall pattern
+        seq_readouts = readouts.mean(1).softmax(2).permute(1, 0, 2)
+        mask = ys.sum(2).gt(0)
+        labels = ys[mask].float()
+        predictions = seq_readouts[mask]
+        loss = torch.nn.functional.binary_cross_entropy_with_logits(predictions, labels)
+        # Accuracy: Sum of correct patterns out of total
+        accuracy = (ys[mask].argmax(1) == seq_readouts[mask].argmax(1)).float().mean()
+        values = {
+            "val_loss": loss,
+            "val_accuracy": accuracy,
+            "LR": self.scheduler.get_last_lr()[0],
+        }
+
+        # Plot random batch
+        random_index = torch.randint(0, len(xs), (1,)).item()
+        figure = _plot_run(
+            xs[random_index],
+            readouts[:, :, random_index],
+            spikes[:, random_index],
+            betas[:, random_index] if betas is not None else None,
         )
+        self.logger.experiment.add_figure("Readout", figure, self.current_epoch)
+        self.log_dict(values, self.current_epoch)
 
-    def __len__(self):
-        return self.samples
+        # Early stopping when loss <= 0.05
+        if loss <= 0.05:
+            self.trainer.should_stop = True
 
-    def _generate_sequence(self, idx, rep_idx):
-        data_pattern = torch.stack(
-            [torch.randperm(2, generator=self.generator) for _ in range(self.steps)]
-        ).byte()
-        store_index = self.store_indices[idx][rep_idx]
-        recall_index = self.recall_indices[idx][rep_idx]
-        store_pattern = torch.zeros((self.steps, 1)).byte()
-        recall_pattern = store_pattern.clone()
-        label_pattern = torch.zeros((self.steps, 2)).byte()
-
-        store_pattern[store_index] = 1
-        recall_pattern[recall_index] = 1
-        label_class = data_pattern[store_index].byte()
-        label_pattern[store_index] = label_class
-        label_pattern[recall_index] = label_class
-        data_pattern[recall_index] = torch.zeros(2)
-
-        input_pattern = torch.cat((data_pattern, store_pattern, recall_pattern), dim=1)
-        input_pattern = input_pattern.repeat_interleave(self.population_size, dim=1)
-        encoded = poisson_encode(
-            input_pattern,
-            seq_length=self.seq_length,
-            f_max=self.poisson_rate,
-            dt=self.dt,
-        )
-        encoded = torch.cat(encoded.chunk(self.steps, dim=1)).squeeze()
-        return encoded.to(self.device), label_pattern.to(self.device)
-
-    def __getitem__(self, idx):
-        repetitions = [
-            self._generate_sequence(idx, i) for i in range(self.seq_repetitions)
-        ]
-        return (
-            torch.cat([rep[0] for rep in repetitions]),
-            torch.cat([rep[1] for rep in repetitions]),
-        )
+        return loss
 
 
-def _memory_accuracy_loss(xs, ys):
-    xs = torch.stack(xs.mean(1).softmax(2).unbind(dim=1), dim=0)
-
-    loss = torch.nn.functional.binary_cross_entropy(xs, ys.float())
-
-    target = ys.argmax(1).min(1).indices
-    batch_indices = ys.argmax(1).min(1).values
-    recall_values = torch.stack(
-        [xs[idx][batch_index] for idx, batch_index in enumerate(batch_indices)]
-    ).argmax(1)
-    return (target == recall_values).float().sum(), loss
-
-
-def _plot_run(
-    xs, ys, readouts, spikes, epoch, total_epochs, accuracy, file_prefix=None
-):
+def _plot_run(xs, readouts, spikes, betas=None):
     """
     Only plots the first batch event
     """
+    figure = plt.figure(figsize=(20, 16))
+    gs = gridspec.GridSpec(5, 2, width_ratios=[100, 1])
+    plt.subplots_adjust(wspace=0.03)
+    ax = figure.add_subplot(gs[:2, :1])
+    plot_spikes_2d(xs.flip(1))  # Flip order so commands are shown on top
+    yticks = torch.tensor([2, 7, 12, 17])
+    y_labels = []
+    y_labels.append("Recall")
+    y_labels.append("Store")
+    y_labels.append("1")
+    y_labels.append("0")
+    ax.set_xlim(0, len(xs))
+    ax.set_ylabel("Command")
+    ax.set_yticks(yticks)
+    ax.set_yticklabels(y_labels)
 
-    def spikes_to_events(spike_list):
-        return [[x for x, spike in enumerate(ts) if spike > 0] for ts in spike_list.T]
-
-    try:
-        import matplotlib.pyplot as plt
-        import matplotlib.gridspec as gridspec
-
-        # Setup grid
-        plt.title(f"Accuracy: {accuracy} (epoch {epoch}/{total_epochs}")
-        gridspec.GridSpec(4, 1)
-        plt.subplot2grid((4, 1), (0, 0), rowspan=3)
-        input_events = spikes_to_events(xs[0])
-        network_events = spikes_to_events(spikes[:, 0])
-        plt.eventplot(
-            network_events + input_events[::-1],
-            linewidth=1,
-            linelengths=0.8,
-            color="black",
+    if betas is not None:
+        ax = figure.add_subplot(gs[2:4, :1])
+        blues_map = matplotlib.cm.get_cmap("Blues")
+        beta_cmap = colors.ListedColormap(blues_map(torch.linspace(0.0, 0.75, 256)))
+        betas_full = torch.cat(
+            [torch.zeros_like(betas.squeeze().detach()), betas.squeeze().detach()],
+            dim=1,
         )
-        yticks = [x for x in range(len(network_events))] + [22.5, 27.5, 32.5, 37.5]
-        y_labels = [""] * len(network_events)
-        y_labels.append("Recall")
-        y_labels.append("Store")
-        y_labels.append("1")
-        y_labels.append("0")
-        plt.gca().set_yticks(yticks)
-        plt.gca().set_yticklabels(y_labels)
-
-        readout_events = readouts[:, :, 0].detach().reshape(-1, 2).softmax(1)
-        readout_sum = (readout_events[:, 0] - readout_events[:, 1]).cpu().numpy()
-
-        plt.subplot2grid((4, 1), (3, 0), rowspan=1)
-        plt.gca().set_ylim(-1.1, 1.1)
-        plt.gca().set_yticks([-1, 0, 1])
-        plt.plot(readout_sum, color="black")
-
-        plt.tight_layout()
-        if file_prefix:
-            plt.savefig(f"{file_prefix}_{epoch}.png")
-        else:
-            plt.show()
-        plt.close()
-    except ImportError as e:
-        logging.warning("Plotting failed: Cannot import matplotlib: " + str(e))
-
-
-def train(
-    model,
-    data_loader,
-    optimizer,
-    epoch,
-    total_epochs,
-    log_interval=1e10,
-    writer=None,
-):
-    model.train()
-    losses = []
-    optimizer.zero_grad()
-    step = 0
-
-    for batch_idx, (xs, ys) in enumerate(data_loader):
-        optimizer.zero_grad()
-        readouts, _ = model(xs)
-        accuracy, loss = _memory_accuracy_loss(readouts, ys)
-        loss.backward()
-
-        optimizer.step()
-        step += 1
-
-        logging.info(
-            "Train Epoch: {}/{} [{}/{} ({:.0f}%)]\tLoss: {:.6f}".format(
-                epoch,
-                total_epochs,
-                batch_idx * len(xs),
-                len(data_loader.dataset),
-                100.0 * batch_idx / len(data_loader),
-                loss.item(),
-            )
+        bhm = plt.imshow(
+            betas_full.T,
+            cmap=beta_cmap,
+            aspect="auto",
+            interpolation="none",
+            vmin=0,
+            vmax=10,
         )
+        alphas = spikes.clone().cpu().detach()
+        alphas[spikes < 1] = 0
+        plot_spikes_2d(spikes, alpha=alphas.T, cmap="gray_r")
+        hax = figure.add_subplot(gs[2:4, 1:2])
+        plt.colorbar(bhm, cax=hax, pad=0.05, aspect=20, label=r"$\beta$ value")
+    else:
+        ax = figure.add_subplot(gs[4, :1])
+        plot_spikes_2d(spikes)
+    ax.set_ylabel("Activity")
+    ax.set_yticks([0, 19])
+    ax.set_yticklabels([1, 20])
+    ax.set_xlim(0, len(xs))
 
-        if step % log_interval == 0 and writer:
-            try:
-                writer.add_scalar("Loss/train", loss.item(), step)
-                writer.add_scalar("Accuracy/train", accuracy.item(), step)
-
-                for tag, value in model.named_parameters():
-                    tag = tag.replace(".", "/")
-                    writer.add_histogram(tag, value.data.cpu().numpy(), step)
-                    writer.add_histogram(
-                        tag + "/grad", value.grad.data.cpu().numpy(), step
-                    )
-            except ValueError as e:
-                logging.warning("Error when writing to tensorboard: " + str(e))
-
-        losses.append(loss.item())
-
-    mean_loss = torch.mean(torch.tensor(losses).float())
-    return losses, mean_loss
-
-
-def test(
-    model,
-    method,
-    test_loader,
-    epoch,
-    total_epochs,
-    plot=False,
-    plot_file_prefix=None,
-    writer=None,
-):
-    model.eval()
-    test_loss = 0
-    correct = 0
-    did_plot = False
-    runs = []
-
-    with torch.no_grad():
-        for xs, ys in test_loader:
-            readouts, spikes = model(xs)
-            if plot:
-                runs.append((xs, ys, readouts, spikes))
-            accuracy, loss = _memory_accuracy_loss(readouts, ys)
-            test_loss += loss.item()
-            correct += accuracy
-
-            if plot and not did_plot:
-                _plot_run(
-                    xs,
-                    ys,
-                    readouts,
-                    spikes,
-                    epoch,
-                    total_epochs,
-                    accuracy,
-                    plot_file_prefix,
-                )
-                did_plot = True
-
-    test_loss /= len(test_loader.dataset)
-
-    accuracy = 100.0 * correct / len(test_loader.dataset)
-    logging.info(
-        f"\nTest set {method}: Average loss: {test_loss:.4f}, \
-            Accuracy: {correct}/{len(test_loader.dataset)} ({accuracy:.0f}%)\n"
+    ax = figure.add_subplot(gs[4, :1])
+    ax.set_ylim(-1.1, 1.1)
+    ax.set_yticks([-1, 1])
+    ax.set_yticklabels([0, 1])
+    v1, v2 = readouts.detach().cpu().view(-1, 2).softmax(1).chunk(2, 1)
+    ax.set_ylabel("Readout")
+    ax.set_xlim(0, len(v1))
+    plt.plot(
+        [0, len(xs)],
+        [0, 0],
+        color="black",
+        linestyle="dashed",
+        label="Decision boundary",
     )
-    if writer:
-        writer.add_scalar("Loss/test", test_loss, epoch)
-        writer.add_scalar("Accuracy/test", accuracy, epoch)
-
-    return test_loss, accuracy
-
-
-def save(path, epoch, model, optimizer, is_best=False):
-    torch.save(
-        {
-            "epoch": epoch + 1,
-            "model_state_dict": model.state_dict(),
-            "optimizer_state_dict": optimizer.state_dict(),
-            "is_best": is_best,
-        },
-        path,
-    )
+    plt.plot(v1 - v2, color="black", label="Readout")
+    plt.legend(loc="upper right")
+    plt.tight_layout()
+    return figure
 
 
 def main(args):
-    try:
-        from torch.utils.tensorboard import SummaryWriter
-
-        writer = SummaryWriter()
-    except ImportError:
-        logging.info(
-            "Disabling logging due to missing tensorboard dependency. Install tensorboard to enable logging."
-        )
-        writer = None
-
-    FLAGS = flags.FLAGS
-
     input_features = (
-        4 * FLAGS.population_size
+        4 * args.population_size
     )  # (two bits + store + recall) * population size
     output_features = 2
-    batch_size = FLAGS.batch_size
-    epochs = FLAGS.epochs
+    batch_size = args.batch_size
+    torch.random.manual_seed(args.random_seed)
 
-    generator = torch.random.manual_seed(FLAGS.random_seed)
+    model = MemoryNet(input_features, output_features, args)
 
-    if FLAGS.device == "cuda":
-        # Workaround for https://github.com/pytorch/pytorch/issues/21819
-        torch.cuda.set_device(FLAGS.device_number)
-
-    model = MemoryNet(
-        input_features,
-        output_features,
-        seq_length=FLAGS.seq_length,
-        is_lsnn=FLAGS.neuron_model == "lsnn",
-        dt=FLAGS.dt,
-    ).to(FLAGS.device)
-
-    if FLAGS.optimizer == "sgd":
-        optimizer = torch.optim.SGD(
-            model.parameters(),
-            lr=FLAGS.learning_rate,
-            momentum=0.9,
-            weight_decay=FLAGS.weight_decay,
-        )
-    elif FLAGS.optimizer == "adam":
-        optimizer = torch.optim.Adam(
-            model.parameters(), lr=FLAGS.learning_rate, weight_decay=FLAGS.weight_decay
-        )
-
-    file_prefix = f"memory_{datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d_%Hh%M')}_{FLAGS.neuron_model}"
-
-    dataset = MemoryDataset(
-        FLAGS.samples,
-        FLAGS.seq_steps,
-        FLAGS.seq_length,
-        FLAGS.seq_repetitions,
-        FLAGS.population_size,
-        device=FLAGS.device,
-        poisson_rate=FLAGS.poisson_rate,
-        dt=FLAGS.dt,
-        generator=generator,
+    dataset = MemoryStoreRecallDataset(
+        args.samples,
+        args.seq_length,
+        args.seq_periods,
+        args.seq_repetitions,
+        args.population_size,
+        poisson_rate=args.poisson_rate,
+        dt=args.dt,
     )
-    dataset_test = MemoryDataset(
-        FLAGS.samples // 5,
-        FLAGS.seq_steps,
-        FLAGS.seq_length,
-        FLAGS.seq_repetitions,
-        FLAGS.population_size,
-        device=FLAGS.device,
-        poisson_rate=FLAGS.poisson_rate,
-        dt=FLAGS.dt,
-        generator=generator,
+    dataset_val = MemoryStoreRecallDataset(
+        args.samples // 2,
+        args.seq_length,
+        args.seq_periods,
+        args.seq_repetitions,
+        args.population_size,
+        poisson_rate=args.poisson_rate,
+        dt=args.dt,
     )
-    loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size)
-    loader_test = torch.utils.data.DataLoader(dataset_test, batch_size=batch_size)
-
-    training_losses = []
-    mean_losses = []
-    test_losses = []
-    accuracies = []
-    for epoch_index in range(epochs):
-        training_loss, mean_loss = train(
-            model,
-            loader,
-            optimizer,
-            epoch_index,
-            epochs,
-            log_interval=FLAGS.log_interval,
-            writer=writer,
-        )
-        test_loss, accuracy = test(
-            model,
-            FLAGS.model,
-            loader_test,
-            epoch_index,
-            epochs,
-            plot=FLAGS.plot,
-            plot_file_prefix=(file_prefix if FLAGS.plot_output == "file" else None),
-            writer=writer,
-        )
-
-        training_losses += training_loss
-        mean_losses.append(mean_loss)
-        test_losses.append(test_loss)
-        accuracies.append(accuracy)
-
-        max_accuracy = np.max(np.array(accuracies))
-
-        if FLAGS.save_model:
-            model_path = f"{file_prefix}_epoch_{epoch_index}.pt"
-            save(
-                model_path,
-                model=model,
-                optimizer=optimizer,
-                epoch=epoch_index,
-                is_best=accuracy > max_accuracy,
-            )
-
-    np.save("training_losses.npy", np.array(training_losses))
-    np.save("mean_losses.npy", np.array(mean_losses))
-    np.save("test_losses.npy", np.array(test_losses))
-    np.save("accuracies.npy", np.array(accuracies))
-    model_path = f"{file_prefix}_final.pt"
-    save(
-        model_path,
-        epoch=epoch_index,
-        model=model,
-        optimizer=optimizer,
-        is_best=accuracy > max_accuracy,
+    dataset_test = MemoryStoreRecallDataset(
+        args.samples // 2,
+        args.seq_length,
+        args.seq_periods,
+        args.seq_repetitions * 2,  # Double repetitions
+        args.population_size,
+        poisson_rate=args.poisson_rate,
+        dt=args.dt,
     )
-    if writer:
-        writer.close()
+    checkpoint = pl.callbacks.ModelCheckpoint(
+        save_top_k=args.save_top_k, monitor="val_loss"
+    )
+    train_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size)
+    val_loader = torch.utils.data.DataLoader(dataset_val, batch_size=batch_size)
+    test_loader = torch.utils.data.DataLoader(dataset_test, batch_size=batch_size)
+    trainer = pl.Trainer.from_argparse_args(args, callbacks=[checkpoint])
+    trainer.fit(model, train_dataloader=train_loader, val_dataloaders=val_loader)
+    trainer.test(model=model, test_dataloaders=test_loader)
 
 
 if __name__ == "__main__":
-    app.run(main)
+    parser = ArgumentParser("Memory task with spiking neural networks")
+    parser = pl.Trainer.add_argparse_args(parser)
+    parser.set_defaults(
+        max_epochs=1000, auto_select_gpus=True, progress_bar_refresh_rate=1
+    )
+    parser.add_argument(
+        "--batch_size",
+        default=128,
+        type=int,
+        help="Number of examples in one minibatch",
+    )
+    parser.add_argument(
+        "--learning_rate", type=float, default=0.01, help="Learning rate to use."
+    )
+    parser.add_argument(
+        "--model",
+        default="super",
+        choices=["super", "tanh", "circ", "logistic", "circ_dist"],
+        help="Model to use for training.",
+    )
+    parser.add_argument(
+        "--neuron_model",
+        type=str,
+        default="lsnnlif",
+        choices=["lsnn", "lif", "lsnnlif"],
+        help="Neuron model to use in network. 100%% LSNN, 100%% LIF and 50/50.",
+    )
+    parser.add_argument(
+        "--dt", default=0.001, type=str, help="Time change per simulation step."
+    )
+    parser.add_argument(
+        "--optimizer",
+        type=str,
+        default="adam",
+        choices=["adam", "sgd"],
+        help="Optimizer to use for training.",
+    )
+    parser.add_argument(
+        "--population_size",
+        type=int,
+        default=5,
+        help="Number of neurons per input bit (population encoded).",
+    )
+    parser.add_argument(
+        "--samples", type=int, default=512, help="Number of data points to train on."
+    )
+    parser.add_argument(
+        "--save_top_k",
+        type=int,
+        default=1,
+        help="Number of top models to checkpoint. -1 for all.",
+    )
+    parser.add_argument(
+        "--seq_length",
+        type=int,
+        default=200,
+        help="Number of time steps in one command/value.",
+    )
+    parser.add_argument(
+        "--seq_periods",
+        type=int,
+        default=12,
+        help="Number of commands in one data point/iteration.",
+    )
+    parser.add_argument(
+        "--seq_repetitions",
+        type=int,
+        default=1,
+        help="Number of times one store/retrieve command is repeated in a single data point.",
+    )
+    parser.add_argument(
+        "--poisson_rate",
+        type=float,
+        default=100,
+        help="Poisson rate encoding for the data generation in Hz.",
+    )
+    parser.add_argument(
+        "--random_seed", type=int, default=0, help="Random seed for PyTorch"
+    )
+    parser.add_argument(
+        "--regularization_factor",
+        type=int,
+        default=1e-2,
+        help="Scale for regularization loss.",
+    )
+    parser.add_argument(
+        "--regularization_target",
+        type=int,
+        default=10,
+        help="Target measure for regularization",
+    )
+
+    args = parser.parse_args()
+    main(args)

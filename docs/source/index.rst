@@ -134,6 +134,7 @@ Table of contents
    :titlesonly:
 
    auto_api/norse.benchmark
+   auto_api/norse.dataset
    auto_api/norse.task
    auto_api/norse.torch
 

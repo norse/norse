@@ -41,8 +41,7 @@ class LSNNParameters(NamedTuple):
                                     constant (:math:`1/\tau_\text{syn}`)
         tau_mem_inv (torch.Tensor): inverse membrane time
                                     constant (:math:`1/\tau_\text{mem}`)
-        tau_adapt_inv (torch.Tensor): inverse adaptation time
-                                      constant (:math:`1/\tau_b`)
+        tau_adapt_inv (torch.Tensor): adaptation time constant (:math:`\tau_b`)
         v_leak (torch.Tensor): leak potential
         v_th (torch.Tensor): threshold potential
         v_reset (torch.Tensor): reset potential
@@ -51,7 +50,7 @@ class LSNNParameters(NamedTuple):
 
     tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
     tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
-    tau_adapt_inv: torch.Tensor = torch.as_tensor(1.0 / 700)
+    tau_adapt_inv: torch.Tensor = torch.as_tensor(1.0 / 800)
     v_leak: torch.Tensor = torch.as_tensor(0.0)
     v_th: torch.Tensor = torch.as_tensor(1.0)
     v_reset: torch.Tensor = torch.as_tensor(0.0)
@@ -151,7 +150,7 @@ def lsnn_step(
         + torch.nn.functional.linear(state.z, recurrent_weights)
     )
 
-    b_new = b_decayed + z_new * p.tau_adapt_inv * p.beta
+    b_new = b_decayed + z_new * p.beta
     return z_new, LSNNState(z_new, v_new, i_new, b_new)
 
 
@@ -199,18 +198,31 @@ def ada_lif_step(
         p (LSNNParameters): parameters of the lsnn unit
         dt (float): Integration timestep to use
     """
-    di = -dt * p.tau_syn_inv * state.i
-    i = state.i + di
-    i = i + torch.nn.functional.linear(input_tensor, input_weights)
-    i = i + torch.nn.functional.linear(state.z, recurrent_weights)
+    # compute voltage updates
     dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i - state.b)
-    v = state.v + dv
+    v_decayed = state.v + dv
+
+    # compute current updates
+    di = -dt * p.tau_syn_inv * state.i
+    i_decayed = state.i + di
+
+    # compute threshold updates
     db = -dt * p.tau_adapt_inv * state.b
-    b = state.b + db
-    z_new = threshold(v - p.v_th, p.method, p.alpha)
-    v = v - z_new * (p.v_th - p.v_reset)
-    b = b + z_new * p.tau_adapt_inv * p.beta
-    return z_new, LSNNState(z_new, v, i, b)
+    b_decayed = state.b + db
+
+    # compute new spikes
+    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+    # compute resets
+    v_new = v_decayed - z_new * (p.v_th - p.v_reset)
+    # compute b update
+    b_new = b_decayed + z_new * p.beta
+    # compute current jumps
+    i_new = (
+        i_decayed
+        + torch.nn.functional.linear(input_tensor, input_weights)
+        + torch.nn.functional.linear(state.z, recurrent_weights)
+    )
+    return z_new, LSNNState(z_new, v_new, i_new, b_new)
 
 
 class LSNNFeedForwardState(NamedTuple):
@@ -280,7 +292,7 @@ def lsnn_feed_forward_step(
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
     # compute b update
-    b_new = (1 - z_new) * b_decayed + z_new * state.b
+    b_new = b_decayed + z_new * p.beta
     # compute current jumps
     i_new = i_decayed + input_tensor
 
