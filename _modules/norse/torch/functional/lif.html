@@ -96,11 +96,11 @@
 
 
 <span class="n">default_bio_parameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(</span>
-    <span class="n">tau_syn_inv</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">tau_mem_inv</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">20.0</span><span class="p">,</span>
-    <span class="n">v_leak</span><span class="o">=-</span><span class="mf">65.0</span><span class="p">,</span>
-    <span class="n">v_th</span><span class="o">=-</span><span class="mf">50.0</span><span class="p">,</span>
-    <span class="n">v_reset</span><span class="o">=-</span><span class="mf">65.0</span><span class="p">,</span>
+    <span class="n">tau_syn_inv</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">0.5</span><span class="p">),</span>
+    <span class="n">tau_mem_inv</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">20.0</span><span class="p">),</span>
+    <span class="n">v_leak</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">65.0</span><span class="p">),</span>
+    <span class="n">v_th</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">50.0</span><span class="p">),</span>
+    <span class="n">v_reset</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">65.0</span><span class="p">),</span>
 <span class="p">)</span>
 
 
@@ -118,7 +118,9 @@
     <span class="n">i</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
 
 
-<span class="n">default_bio_initial_state</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">v</span><span class="o">=-</span><span class="mf">65.0</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">default_bio_initial_state</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">65.0</span><span class="p">),</span> <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="LIFFeedForwardState"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.html#norse.torch.functional.LIFFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">LIFFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -407,6 +409,7 @@
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.dataset.html">norse.dataset package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.task.html">norse.task package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.torch.html">norse.torch package</a></li>
 </ul>

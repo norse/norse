@@ -155,8 +155,18 @@
             <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">fill_diagonal_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
 
+            <span class="c1"># Eradicate gradient updates from autapses</span>
+            <span class="k">def</span> <span class="nf">autapse_hook</span><span class="p">(</span><span class="n">gradient</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">gradient</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">fill_diagonal_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">register_hook</span><span class="p">(</span><span class="n">autapse_hook</span><span class="p">)</span>
+
 <div class="viewcode-block" id="SNNRecurrentCell.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;input_size=</span><span class="si">{self.input_size}</span><span class="s2">, hidden_size=</span><span class="si">{self.hidden_size}</span><span class="s2">, p=</span><span class="si">{self.p}</span><span class="s2">, autapses=</span><span class="si">{self.autapses}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;input_size=</span><span class="si">{self.input_size}</span><span class="s2">, hidden_size=</span><span class="si">{self.hidden_size}</span><span class="s2">, &quot;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;p=</span><span class="si">{self.p}</span><span class="s2">, autapses=</span><span class="si">{self.autapses}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="SNNRecurrentCell.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_fallback</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
@@ -282,6 +292,12 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">autapses</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">fill_diagonal_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="c1"># Eradicate gradient updates from autapses</span>
+            <span class="k">def</span> <span class="nf">autapse_hook</span><span class="p">(</span><span class="n">gradient</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">gradient</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">fill_diagonal_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recurrent_weights</span><span class="o">.</span><span class="n">register_hook</span><span class="p">(</span><span class="n">autapse_hook</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SNNRecurrent.extra_repr"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrent.extra_repr">[docs]</a>    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;input_size=</span><span class="si">{self.input_size}</span><span class="s2">, hidden_size=</span><span class="si">{self.hidden_size}</span><span class="s2">, p=</span><span class="si">{self.p}</span><span class="s2">, autapses=</span><span class="si">{self.autapses}</span><span class="s2">, dt=</span><span class="si">{self.dt}</span><span class="s2">&quot;</span></div>
@@ -355,6 +371,7 @@
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.dataset.html">norse.dataset package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.task.html">norse.task package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.torch.html">norse.torch package</a></li>
 </ul>
