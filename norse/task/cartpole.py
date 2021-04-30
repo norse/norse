@@ -21,9 +21,13 @@ from norse.torch.module.lsnn import LSNNRecurrentCell, LSNNParameters
 from norse.torch.module.leaky_integrator import LILinearCell
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> b1890ea... Removed absail dependency from cartpole
+=======
+
+>>>>>>> ff7f351... Fixed plot examples
 class ANNPolicy(torch.nn.Module):
     def __init__(self):
         super(ANNPolicy, self).__init__()
@@ -239,6 +243,9 @@ def main(args):
 if __name__ == "__main__":
     parser = ArgumentParser("Cartpole reinforcement learning task. Requires OpenAI gym")
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ff7f351... Fixed plot examples
     parser.add_argument(
         "--device",
         type=str,
@@ -284,6 +291,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--random-seed", type=int, default=1234, help="Random seed to use"
     )
+<<<<<<< HEAD
 =======
     parser.add_argument("--device", type=str, default="cpu", choices=["cpu", "cuda"], help="Device to use by pytorch.")
     parser.add_argument("--episodes", type=int, default=100, help="Number of training trials.")
@@ -296,4 +304,6 @@ if __name__ == "__main__":
     parser.add_argument("--environment", type=str, default="CartPole-v1", help="Gym environment to use.")
     parser.add_argument("--random-seed", type=int, default=1234, help="Random seed to use")
 >>>>>>> b1890ea... Removed absail dependency from cartpole
+=======
+>>>>>>> ff7f351... Fixed plot examples
     main(parser.parse_args())
