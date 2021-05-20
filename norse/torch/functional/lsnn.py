@@ -142,7 +142,7 @@ def lsnn_step(
     # compute new spikes
     z_new = threshold(v_decayed - b_decayed, p.method, p.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    v_new = (1 - z_new.detach()) * v_decayed + z_new.detach() * p.v_reset
     # compute current jumps
     i_new = (
         i_decayed
@@ -150,7 +150,7 @@ def lsnn_step(
         + torch.nn.functional.linear(state.z, recurrent_weights)
     )
 
-    b_new = b_decayed + z_new * p.beta
+    b_new = b_decayed + z_new.detach() * p.beta
     return z_new, LSNNState(z_new, v_new, i_new, b_new)
 
 
