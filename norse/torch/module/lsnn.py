@@ -70,11 +70,7 @@ class LSNNCell(SNNCell):
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
-            b=torch.zeros(
-                *input_tensor.shape,
-                device=input_tensor.device,
-                dtype=input_tensor.dtype,
-            ),
+            b=self.p.v_th.detach()
         )
         state.v.requires_grad = True
         return state
@@ -155,11 +151,7 @@ class LSNNRecurrentCell(SNNRecurrentCell):
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
-            b=torch.zeros(
-                *dims,
-                device=input_tensor.device,
-                dtype=input_tensor.dtype,
-            ),
+            b=self.p.v_th.detach(),
         )
         state.v.requires_grad = True
         return state
@@ -202,8 +194,9 @@ class LSNN(SNN):
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
-            b=torch.zeros(
-                *input_tensor.shape[1:],
+            b=torch.full(
+                input_tensor.shape[1:],
+                self.p.v_th.detach(),
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
@@ -266,7 +259,8 @@ class LSNNRecurrent(SNNRecurrent):
                 dtype=input_tensor.dtype,
             ),
             b=torch.zeros(
-                *dims,
+                dims,
+                self.p.v_th.detach(),
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
