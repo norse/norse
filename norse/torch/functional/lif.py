@@ -178,8 +178,8 @@ def lif_step_sparse(
     # compute current jumps
     i_new = (
         i_decayed
-        + torch.sparse.mm(input_tensor, input_weights)
-        + torch.sparse.mm(state.z, recurrent_weights)
+        + torch.sparse.mm(input_tensor, input_weights.t())
+        + torch.sparse.mm(state.z, recurrent_weights.t())
     )
 
     z_sparse = z_new.to_sparse()
