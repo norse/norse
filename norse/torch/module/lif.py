@@ -279,6 +279,7 @@ class LIFRecurrent(SNNRecurrent):
         *args,
         **kwargs
     ):
+        self.sparse = sparse
         if sparse:
             super().__init__(
                 activation=lif_step_sparse,
