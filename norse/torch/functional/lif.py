@@ -155,6 +155,37 @@ def _lif_step_jit(
     return z_new, LIFState(z_new, v_new, i_new)
 
 
+def lif_step_sparse(
+    input_tensor: torch.Tensor,
+    state: LIFState,
+    input_weights: torch.Tensor,
+    recurrent_weights: torch.Tensor,
+    p: LIFParameters = LIFParameters(),
+    dt: float = 0.001,
+) -> Tuple[torch.Tensor, LIFState]:  # pragma: no cover
+    # compute voltage updates
+    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
+    v_decayed = state.v + dv
+
+    # compute current updates
+    di = -dt * p.tau_syn_inv * state.i
+    i_decayed = state.i + di
+
+    # compute new spikes
+    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+    # compute reset
+    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    # compute current jumps
+    i_new = (
+        i_decayed
+        + torch.sparse.mm(input_tensor, input_weights)
+        + torch.sparse.mm(state.z, recurrent_weights)
+    )
+
+    z_sparse = z_new.to_sparse()
+    return z_sparse, LIFState(z_sparse, v_new, i_new)
+
+
 def lif_step(
     input_tensor: torch.Tensor,
     state: LIFState,
@@ -293,6 +324,30 @@ def lif_feed_forward_step(
             i=torch.zeros_like(input_tensor),
         )
     return _lif_feed_forward_step_jit(input_tensor, state=state, p=jit_params, dt=dt)
+
+
+def lif_feed_forward_step_sparse(
+    input_tensor: torch.Tensor,
+    state: LIFFeedForwardState,
+    p: LIFParameters = LIFParameters(),
+    dt: float = 0.001,
+) -> Tuple[torch.Tensor, LIFFeedForwardState]:  # pragma: no cover
+    # compute voltage updates
+    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
+    v_decayed = state.v + dv
+
+    # compute current updates
+    di = -dt * p.tau_syn_inv * state.i
+    i_decayed = state.i + di
+
+    # compute new spikes
+    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+    # compute reset
+    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    # compute current jumps
+    i_new = i_decayed + input_tensor
+
+    return z_new.to_sparse(), LIFFeedForwardState(v=v_new, i=i_new)
 
 
 def lif_current_encoder(
