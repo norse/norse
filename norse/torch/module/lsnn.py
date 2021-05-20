@@ -304,11 +304,7 @@ class LSNNRecurrent(SNNRecurrent):
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
-<<<<<<< HEAD
             b=torch.full(
-=======
-            b=torch.zeros(
->>>>>>> 1515eb0... Merge commit
                 dims,
                 self.p.v_th.detach(),
                 device=input_tensor.device,
