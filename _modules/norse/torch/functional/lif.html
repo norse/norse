@@ -6,11 +6,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>norse.torch.functional.lif &#8212; norse 0.0.6 documentation</title>
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
-    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
@@ -191,6 +191,37 @@
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="lif_step_sparse"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif_step_sparse">[docs]</a><span class="k">def</span> <span class="nf">lif_step_sparse</span><span class="p">(</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LIFState</span><span class="p">,</span>
+    <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">]:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="c1"># compute voltage updates</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">v_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+
+    <span class="c1"># compute current updates</span>
+    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span>
+    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
+
+    <span class="c1"># compute new spikes</span>
+    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_decayed</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="c1"># compute reset</span>
+    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="c1"># compute current jumps</span>
+    <span class="n">i_new</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">i_decayed</span>
+        <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">input_weights</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
+        <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
+    <span class="p">)</span>
+
+    <span class="n">z_sparse</span> <span class="o">=</span> <span class="n">z_new</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">z_sparse</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z_sparse</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="lif_step"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif_step">[docs]</a><span class="k">def</span> <span class="nf">lif_step</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LIFState</span><span class="p">,</span>
@@ -331,6 +362,30 @@
     <span class="k">return</span> <span class="n">_lif_feed_forward_step_jit</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">jit_params</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="lif_feed_forward_step_sparse"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif_feed_forward_step_sparse">[docs]</a><span class="k">def</span> <span class="nf">lif_feed_forward_step_sparse</span><span class="p">(</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">]:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="c1"># compute voltage updates</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">v_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+
+    <span class="c1"># compute current updates</span>
+    <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span>
+    <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
+
+    <span class="c1"># compute new spikes</span>
+    <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_decayed</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="c1"># compute reset</span>
+    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="c1"># compute current jumps</span>
+    <span class="n">i_new</span> <span class="o">=</span> <span class="n">i_decayed</span> <span class="o">+</span> <span class="n">input_tensor</span>
+
+    <span class="k">return</span> <span class="n">z_new</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">(),</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">v_new</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i_new</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="lif_current_encoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif_current_encoder">[docs]</a><span class="k">def</span> <span class="nf">lif_current_encoder</span><span class="p">(</span>
     <span class="n">input_current</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">voltage</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -449,7 +504,7 @@
       &copy;2019 - 2021, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

@@ -6,15 +6,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>norse.torch.module.lsnn module &#8212; norse 0.0.6 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -42,8 +42,8 @@
 [G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass](<a class="reference external" href="https://github.com/IGITUGraz/LSNN-official">https://github.com/IGITUGraz/LSNN-official</a>).</p>
 <p>See <a class="reference internal" href="norse.torch.functional.lsnn.html#module-norse.torch.functional.lsnn" title="norse.torch.functional.lsnn"><code class="xref py py-mod docutils literal notranslate"><span class="pre">norse.torch.functional.lsnn</span></code></a> for more information.</p>
 <dl class="py class">
-<dt id="norse.torch.module.lsnn.LSNN">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.lsnn.</span></code><code class="sig-name descname"><span class="pre">LSNN</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNN" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNN">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.lsnn.</span></span><span class="sig-name descname"><span class="pre">LSNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNN" title="norse.torch.module.snn.SNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNN</span></code></a></p>
 <p>A Long short-term memory neuron module <em>without</em> recurrence
 adapted from <a class="reference external" href="https://arxiv.org/abs/1803.09574">https://arxiv.org/abs/1803.09574</a></p>
@@ -67,8 +67,8 @@ to configure neuron parameters as optimizable.</p></li>
 </dl>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
-<dt id="norse.torch.module.lsnn.LSNN.initial_state">
-<code class="sig-name descname"><span class="pre">initial_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNN.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNN.initial_state" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNN.initial_state">
+<span class="sig-name descname"><span class="pre">initial_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNN.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNN.initial_state" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNFeedForwardState" title="norse.torch.functional.lsnn.LSNNFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNFeedForwardState</span></code></a></p>
@@ -77,15 +77,15 @@ to configure neuron parameters as optimizable.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="norse.torch.module.lsnn.LSNN.training">
-<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lsnn.LSNN.training" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNN.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lsnn.LSNN.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="norse.torch.module.lsnn.LSNNCell">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.lsnn.</span></code><code class="sig-name descname"><span class="pre">LSNNCell</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNCell" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNNCell">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.lsnn.</span></span><span class="sig-name descname"><span class="pre">LSNNCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNCell" title="norse.torch.module.snn.SNNCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNCell</span></code></a></p>
 <p>Euler integration cell for LIF Neuron with threshold adaptation
 <em>without</em> recurrence.
@@ -109,7 +109,7 @@ More specifically it implements one integration step of the following ODE</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.9.0a0+git1bb0a27 ))"><em>torch.nn.Module</em></a>) – parameters of the lsnn unit</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.9.0a0+gitf8f3346 ))"><em>torch.nn.Module</em></a>) – parameters of the lsnn unit</p></li>
 <li><p><strong>p</strong> – The neuron parameters as a torch Module, which allows the module
 to configure neuron parameters as optimizable.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time step to use in integration. Defaults to 0.001.</p></li>
@@ -118,8 +118,8 @@ to configure neuron parameters as optimizable.</p></li>
 </dl>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
-<dt id="norse.torch.module.lsnn.LSNNCell.initial_state">
-<code class="sig-name descname"><span class="pre">initial_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNCell.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNCell.initial_state" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNNCell.initial_state">
+<span class="sig-name descname"><span class="pre">initial_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNCell.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNCell.initial_state" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNFeedForwardState" title="norse.torch.functional.lsnn.LSNNFeedForwardState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNFeedForwardState</span></code></a></p>
@@ -128,15 +128,15 @@ to configure neuron parameters as optimizable.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="norse.torch.module.lsnn.LSNNCell.training">
-<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lsnn.LSNNCell.training" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNNCell.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lsnn.LSNNCell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="norse.torch.module.lsnn.LSNNRecurrent">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.lsnn.</span></code><code class="sig-name descname"><span class="pre">LSNNRecurrent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNRecurrent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrent" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNNRecurrent">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.lsnn.</span></span><span class="sig-name descname"><span class="pre">LSNNRecurrent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNRecurrent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrent" title="norse.torch.module.snn.SNNRecurrent"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNRecurrent</span></code></a></p>
 <p>A Long short-term memory neuron module <em>wit</em> recurrence
 adapted from <a class="reference external" href="https://arxiv.org/abs/1803.09574">https://arxiv.org/abs/1803.09574</a></p>
@@ -162,8 +162,8 @@ to configure neuron parameters as optimizable.</p></li>
 </dl>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
-<dt id="norse.torch.module.lsnn.LSNNRecurrent.initial_state">
-<code class="sig-name descname"><span class="pre">initial_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNRecurrent.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrent.initial_state" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNNRecurrent.initial_state">
+<span class="sig-name descname"><span class="pre">initial_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNRecurrent.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrent.initial_state" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a></p>
@@ -172,15 +172,15 @@ to configure neuron parameters as optimizable.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="norse.torch.module.lsnn.LSNNRecurrent.training">
-<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrent.training" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNNRecurrent.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrent.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="norse.torch.module.lsnn.LSNNRecurrentCell">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">norse.torch.module.lsnn.</span></code><code class="sig-name descname"><span class="pre">LSNNRecurrentCell</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNRecurrentCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrentCell" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNNRecurrentCell">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.lsnn.</span></span><span class="sig-name descname"><span class="pre">LSNNRecurrentCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNRecurrentCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrentCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell" title="norse.torch.module.snn.SNNRecurrentCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNRecurrentCell</span></code></a></p>
 <p>Module that computes a single euler-integration step of a LSNN
 neuron-model <em>with</em> recurrence. More specifically it implements one
@@ -216,8 +216,8 @@ recurrent and input spikes respectively.</p>
 </dl>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
-<dt id="norse.torch.module.lsnn.LSNNRecurrentCell.initial_state">
-<code class="sig-name descname"><span class="pre">initial_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNRecurrentCell.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrentCell.initial_state" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNNRecurrentCell.initial_state">
+<span class="sig-name descname"><span class="pre">initial_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lsnn.html#LSNNRecurrentCell.initial_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrentCell.initial_state" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="norse.torch.functional.lsnn.html#norse.torch.functional.lsnn.LSNNState" title="norse.torch.functional.lsnn.LSNNState"><code class="xref py py-class docutils literal notranslate"><span class="pre">LSNNState</span></code></a></p>
@@ -226,8 +226,8 @@ recurrent and input spikes respectively.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="norse.torch.module.lsnn.LSNNRecurrentCell.training">
-<code class="sig-name descname"><span class="pre">training</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrentCell.training" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="norse.torch.module.lsnn.LSNNRecurrentCell.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.lsnn.LSNNRecurrentCell.training" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -353,7 +353,7 @@ recurrent and input spikes respectively.</p>
       &copy;2019 - 2021, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
