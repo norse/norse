@@ -24,10 +24,10 @@ class LSNNLIFNet(torch.nn.Module):
         self.neurons_per_layer = input_features // 2
 
         self.lsnn_cell = LSNNRecurrentCell(
-            input_features, self.neurons_per_layer, p_lsnn, dt=dt
+            input_features, self.neurons_per_layer, p=p_lsnn, dt=dt
         )
         self.lif_cell = LIFRecurrentCell(
-            input_features, self.neurons_per_layer, p_lif, dt=dt
+            input_features, self.neurons_per_layer, p=p_lif, dt=dt
         )
 
     def forward(self, input_spikes: torch.Tensor, state: Optional[Tuple[Any, Any]]):
