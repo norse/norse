@@ -315,7 +315,7 @@ class LIFRecurrent(SNNRecurrent):
                 *dims,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
-            ).to_sparse(),
+            ),
             v=torch.full(
                 dims,
                 self.p.v_leak.detach(),
