@@ -9,6 +9,10 @@ from norse.torch.functional.lif_refrac import (
     lif_refrac_step,
     lif_refrac_feed_forward_step,
 )
+from norse.torch.functional.adjoint.lif_refrac_adjoint import (
+    lif_refrac_adjoint_step,
+    lif_refrac_feed_forward_adjoint_step
+)
 from norse.torch.module.snn import SNNCell, SNNRecurrentCell
 
 
@@ -52,13 +56,21 @@ class LIFRefracCell(SNNCell):
         >>> output, s0 = lif(input)
     """
 
-    def __init__(self, p: LIFRefracParameters = LIFRefracParameters(), **kwargs):
-        super().__init__(
-            lif_refrac_feed_forward_step,
-            self.initial_state,
-            p=p,
-            **kwargs,
-        )
+    def __init__(self, p: LIFRefracParameters = LIFRefracParameters(), adjoint: bool = False, **kwargs):
+        if adjoint:
+            super().__init__(
+                lif_refrac_feed_forward_adjoint_step,
+                self.initial_state,
+                p=p,
+                **kwargs,
+            )
+        else:
+            super().__init__(
+                lif_refrac_feed_forward_step,
+                self.initial_state,
+                p=p,
+                **kwargs,
+            )
 
     def initial_state(
         self,
@@ -142,16 +154,27 @@ class LIFRefracRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
+        adjoint: bool = False,
         **kwargs
     ):
-        super().__init__(
-            activation=lif_refrac_step,
-            state_fallback=self.initial_state,
-            input_size=input_size,
-            hidden_size=hidden_size,
-            p=p,
-            **kwargs,
-        )
+        if adjoint:
+            super().__init__(
+                activation=lif_refrac_adjoint_step,
+                state_fallback=self.initial_state,
+                input_size=input_size,
+                hidden_size=hidden_size,
+                p=p,
+                **kwargs,
+            )
+        else:
+            super().__init__(
+                activation=lif_refrac_step,
+                state_fallback=self.initial_state,
+                input_size=input_size,
+                hidden_size=hidden_size,
+                p=p,
+                **kwargs,
+            )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFRefracState:
         state = LIFRefracState(
