@@ -22,7 +22,7 @@ class LIFMCRefracAdjointFunction(torch.autograd.Function):
         g_coupling: torch.Tensor,
         p: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
-    ) -> Tuple[torch.Tensor, LIFRefracState]:
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         ctx.p = p
         ctx.dt = dt
 
