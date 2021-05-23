@@ -11,7 +11,7 @@ from norse.torch.functional.lif_refrac import (
 )
 from norse.torch.functional.adjoint.lif_refrac_adjoint import (
     lif_refrac_adjoint_step,
-    lif_refrac_feed_forward_adjoint_step
+    lif_refrac_feed_forward_adjoint_step,
 )
 from norse.torch.module.snn import SNNCell, SNNRecurrentCell
 
@@ -56,7 +56,12 @@ class LIFRefracCell(SNNCell):
         >>> output, s0 = lif(input)
     """
 
-    def __init__(self, p: LIFRefracParameters = LIFRefracParameters(), adjoint: bool = False, **kwargs):
+    def __init__(
+        self,
+        p: LIFRefracParameters = LIFRefracParameters(),
+        adjoint: bool = False,
+        **kwargs
+    ):
         if adjoint:
             super().__init__(
                 lif_refrac_feed_forward_adjoint_step,
