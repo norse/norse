@@ -258,7 +258,7 @@ class LSNNRecurrent(SNNRecurrent):
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
-            b=torch.zeros(
+            b=torch.full(
                 dims,
                 self.p.v_th.detach(),
                 device=input_tensor.device,
