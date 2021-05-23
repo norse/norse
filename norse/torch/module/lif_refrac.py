@@ -56,26 +56,15 @@ class LIFRefracCell(SNNCell):
         >>> output, s0 = lif(input)
     """
 
-    def __init__(
-        self,
-        p: LIFRefracParameters = LIFRefracParameters(),
-        adjoint: bool = False,
-        **kwargs
-    ):
-        if adjoint:
-            super().__init__(
-                lif_refrac_feed_forward_adjoint_step,
-                self.initial_state,
-                p=p,
-                **kwargs,
-            )
-        else:
-            super().__init__(
-                lif_refrac_feed_forward_step,
-                self.initial_state,
-                p=p,
-                **kwargs,
-            )
+    def __init__(self, p: LIFRefracParameters = LIFRefracParameters(), **kwargs):
+        super().__init__(
+            lif_refrac_feed_forward_adjoint_step
+            if p.method == "adjoint"
+            else lif_refrac_feed_forward_step,
+            self.initial_state,
+            p=p,
+            **kwargs,
+        )
 
     def initial_state(
         self,
