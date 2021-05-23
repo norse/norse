@@ -114,7 +114,7 @@ class LIFAdjointRefracFeedForwardFunction(torch.autograd.Function):
         rho: torch.Tensor,
         p: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
-    ) -> Tuple[LIFRefracFeedForwardState, torch.Tensor]:
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         ctx.tau_syn_inv = p.lif.tau_syn_inv
         ctx.tau_mem_inv = p.lif.tau_mem_inv
         ctx.dt = dt
@@ -166,7 +166,7 @@ def lif_refrac_feed_forward_adjoint_step(
     s: LIFRefracFeedForwardState,
     p: LIFRefracParameters = LIFRefracParameters(),
     dt: float = 0.001,
-):
+) -> Tuple[torch.Tensor, LIFRefracFeedForwardState]:
     """Implementes a single euler forward and adjoint backward
     step of a leaky integrate and fire neuron with current based
     exponential synapses and a refractory period.
