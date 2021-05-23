@@ -21,10 +21,11 @@ def test_lif_adjoint_step():
 
     assert True
 
+
 def test_lif_feed_forward_adjoint_step():
     input = torch.ones(1, 10)
     s = LIFFeedForwardState(v=torch.zeros(10), i=torch.zeros(10))
-    tgt = 8    
+    tgt = 8
 
     for i in range(100):
         z, s = lif_feed_forward_adjoint_step(input, s)

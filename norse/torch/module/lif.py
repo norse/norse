@@ -15,6 +15,10 @@ from norse.torch.functional.lif import (
     lif_feed_forward_step,
     lif_feed_forward_step_sparse,
 )
+from norse.torch.functional.adjoint.lif_adjoint import (
+    lif_adjoint_step,
+    lif_feed_forward_adjoint_step,
+)
 from norse.torch.module.snn import SNN, SNNCell, SNNRecurrent, SNNRecurrentCell
 
 
@@ -53,10 +57,19 @@ class LIFCell(SNNCell):
         dt (float): Time step to use. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFParameters = LIFParameters(), sparse=False, **kwargs):
+    def __init__(
+        self, p: LIFParameters = LIFParameters(), sparse=False, adjoint=False, **kwargs
+    ):
         if sparse:
             super().__init__(
                 activation=lif_feed_forward_step_sparse,
+                state_fallback=self.initial_state,
+                p=p,
+                **kwargs,
+            )
+        elif adjoint:
+            super().__init__(
+                activation=lif_feed_forward_adjoint_step,
                 state_fallback=self.initial_state,
                 p=p,
                 **kwargs,
@@ -139,12 +152,22 @@ class LIFRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         sparse: bool = False,
+        adjoint: bool = False,
         p: LIFParameters = LIFParameters(),
         **kwargs
     ):
         if sparse:
             super().__init__(
                 activation=lif_step_sparse,
+                state_fallback=self.initial_state,
+                p=p,
+                input_size=input_size,
+                hidden_size=hidden_size,
+                **kwargs,
+            )
+        elif adjoint:
+            super().__init__(
+                activation=lif_adjoint_step,
                 state_fallback=self.initial_state,
                 p=p,
                 input_size=input_size,
@@ -210,10 +233,19 @@ class LIF(SNN):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFParameters = LIFParameters(), sparse=False, **kwargs):
+    def __init__(
+        self, p: LIFParameters = LIFParameters(), sparse=False, adjoint=False, **kwargs
+    ):
         if sparse:
             super().__init__(
                 activation=lif_feed_forward_step_sparse,
+                state_fallback=self.initial_state,
+                p=p,
+                **kwargs,
+            )
+        elif adjoint:
+            super().__init__(
+                activation=lif_feed_forward_adjoint_step,
                 state_fallback=self.initial_state,
                 p=p,
                 **kwargs,
@@ -275,6 +307,7 @@ class LIFRecurrent(SNNRecurrent):
         input_size: int,
         hidden_size: int,
         sparse: bool = False,
+        adjoint: bool = False,
         p: LIFParameters = LIFParameters(),
         *args,
         **kwargs
@@ -283,6 +316,15 @@ class LIFRecurrent(SNNRecurrent):
         if sparse:
             super().__init__(
                 activation=lif_step_sparse,
+                state_fallback=self.initial_state,
+                input_size=input_size,
+                hidden_size=hidden_size,
+                p=p,
+                **kwargs,
+            )
+        elif adjoint:
+            super().__init__(
+                activation=lif_adjoint_step,
                 state_fallback=self.initial_state,
                 input_size=input_size,
                 hidden_size=hidden_size,

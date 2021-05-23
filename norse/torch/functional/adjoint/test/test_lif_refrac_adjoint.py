@@ -9,7 +9,10 @@ from norse.torch.functional.adjoint.lif_refrac_adjoint import (
     lif_refrac_adjoint_step,
     lif_refrac_feed_forward_adjoint_step,
 )
-from norse.torch.functional.adjoint.lif_refrac_adjoint import lif_refrac_step, lif_refrac_feed_forward_step
+from norse.torch.functional.adjoint.lif_refrac_adjoint import (
+    lif_refrac_step,
+    lif_refrac_feed_forward_step,
+)
 
 
 def test_lif_refrac_adjoint_step():

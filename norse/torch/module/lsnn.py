@@ -13,6 +13,10 @@ from norse.torch.functional.lsnn import (
     lsnn_step,
     lsnn_feed_forward_step,
 )
+from norse.torch.functional.adjoint.lsnn_adjoint import (
+    lsnn_adjoint_step,
+    lsnn_feed_forward_adjoint_step,
+)
 from norse.torch.module.snn import SNNCell, SNNRecurrentCell, SNN, SNNRecurrent
 
 
@@ -49,13 +53,23 @@ class LSNNCell(SNNCell):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, p: LSNNParameters = LSNNParameters(), **kwargs):
-        super().__init__(
-            activation=lsnn_feed_forward_step,
-            state_fallback=self.initial_state,
-            p=p,
-            **kwargs,
-        )
+    def __init__(
+        self, p: LSNNParameters = LSNNParameters(), adjoint: bool = False, **kwargs
+    ):
+        if adjoint:
+            super().__init__(
+                activation=lsnn_feed_forward_adjoint_step,
+                state_fallback=self.initial_state,
+                p=p,
+                **kwargs,
+            )
+        else:
+            super().__init__(
+                activation=lsnn_feed_forward_step,
+                state_fallback=self.initial_state,
+                p=p,
+                **kwargs,
+            )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LSNNFeedForwardState:
         state = LSNNFeedForwardState(
@@ -70,7 +84,7 @@ class LSNNCell(SNNCell):
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
-            b=self.p.v_th.detach()
+            b=self.p.v_th.detach(),
         )
         state.v.requires_grad = True
         return state
@@ -118,16 +132,27 @@ class LSNNRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LSNNParameters = LSNNParameters(),
+        adjoint: bool = False,
         **kwargs
     ):
-        super().__init__(
-            activation=lsnn_step,
-            state_fallback=self.initial_state,
-            input_size=input_size,
-            hidden_size=hidden_size,
-            p=p,
-            **kwargs,
-        )
+        if adjoint:
+            super().__init__(
+                activation=lsnn_adjoint_step,
+                state_fallback=self.initial_state,
+                input_size=input_size,
+                hidden_size=hidden_size,
+                p=p,
+                **kwargs,
+            )
+        else:
+            super().__init__(
+                activation=lsnn_step,
+                state_fallback=self.initial_state,
+                input_size=input_size,
+                hidden_size=hidden_size,
+                p=p,
+                **kwargs,
+            )
 
     def initial_state(
         self,
@@ -173,13 +198,23 @@ class LSNN(SNN):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, p: LSNNParameters = LSNNParameters(), **kwargs):
-        super().__init__(
-            activation=lsnn_feed_forward_step,
-            state_fallback=self.initial_state,
-            p=p,
-            **kwargs,
-        )
+    def __init__(
+        self, p: LSNNParameters = LSNNParameters(), adjoint: bool = False, **kwargs
+    ):
+        if adjoint:
+            super().__init__(
+                activation=lsnn_feed_forward_adjoint_step,
+                state_fallback=self.initial_state,
+                p=p,
+                **kwargs,
+            )
+        else:
+            super().__init__(
+                activation=lsnn_feed_forward_step,
+                state_fallback=self.initial_state,
+                p=p,
+                **kwargs,
+            )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LSNNFeedForwardState:
         state = LSNNFeedForwardState(
@@ -228,16 +263,27 @@ class LSNNRecurrent(SNNRecurrent):
         input_size: int,
         hidden_size: int,
         p: LSNNParameters = LSNNParameters(),
+        adjoint: bool = False,
         **kwargs
     ):
-        super().__init__(
-            activation=lsnn_step,
-            state_fallback=self.initial_state,
-            input_size=input_size,
-            hidden_size=hidden_size,
-            p=p,
-            **kwargs,
-        )
+        if adjoint:
+            super().__init__(
+                activation=lsnn_adjoint_step,
+                state_fallback=self.initial_state,
+                input_size=input_size,
+                hidden_size=hidden_size,
+                p=p,
+                **kwargs,
+            )
+        else:
+            super().__init__(
+                activation=lsnn_step,
+                state_fallback=self.initial_state,
+                input_size=input_size,
+                hidden_size=hidden_size,
+                p=p,
+                **kwargs,
+            )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LSNNState:
         dims = (*input_tensor.shape[1:-1], self.hidden_size)
