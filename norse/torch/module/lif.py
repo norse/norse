@@ -58,6 +58,7 @@ class LIFCell(SNNCell):
         dt (float): Time step to use. Defaults to 0.001.
     """
 
+<<<<<<< HEAD
     def __init__(self, p: LIFParameters = LIFParameters(), sparse=False, **kwargs):
         super().__init__(
             activation=(
@@ -67,6 +68,32 @@ class LIFCell(SNNCell):
             p=p,
             **kwargs,
         )
+=======
+    def __init__(
+        self, p: LIFParameters = LIFParameters(), sparse=False, adjoint=False, **kwargs
+    ):
+        if sparse:
+            super().__init__(
+                activation=lif_feed_forward_step_sparse,
+                state_fallback=self.initial_state,
+                p=p,
+                **kwargs,
+            )
+        elif adjoint:
+            super().__init__(
+                activation=lif_feed_forward_adjoint_step,
+                state_fallback=self.initial_state,
+                p=p,
+                **kwargs,
+            )
+        else:
+            super().__init__(
+                activation=lif_feed_forward_step,
+                state_fallback=self.initial_state,
+                p=p,
+                **kwargs,
+            )
+>>>>>>> 0865402... Add adjoint support to LIF / LSNN modules
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
         state = LIFFeedForwardState(
