@@ -15,6 +15,10 @@ from norse.torch.functional.lif import (
     lif_feed_forward_step,
     lif_feed_forward_step_sparse,
 )
+from norse.torch.functional.adjoint.lif_adjoint import (
+    lif_adjoint_step,
+    lif_feed_forward_adjoint_step,
+)
 from norse.torch.module.snn import SNN, SNNCell, SNNRecurrent, SNNRecurrentCell
 
 
