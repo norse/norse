@@ -136,7 +136,7 @@ class LSNNFeedForwardAdjointFunction(torch.autograd.Function):
         b: torch.Tensor,
         p: LSNNParameters = LSNNParameters(),
         dt: float = 0.001,
-    ) -> Tuple[torch.Tensor, LSNNFeedForwardState]:
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         ctx.p = p
         ctx.dt = dt
 

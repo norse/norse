@@ -23,7 +23,7 @@ class LIFAdjointFunction(torch.autograd.Function):
         recurrent_weights: torch.Tensor,
         p: LIFParameters = LIFParameters(),
         dt: float = 0.001,
-    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         ctx.tau_syn_inv = p.tau_syn_inv
         ctx.tau_mem_inv = p.tau_mem_inv
         ctx.v_th = p.v_th
