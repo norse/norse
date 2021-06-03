@@ -90,6 +90,7 @@ from .izhikevich import (
     IzhikevichSpikingBehaviour,
     IzhikevichState,
     IzhikevichRecurrentState,
+    createIzhikevichSpikingBehaviour,
     tonic_spiking,
     tonic_bursting,
     phasic_spiking,

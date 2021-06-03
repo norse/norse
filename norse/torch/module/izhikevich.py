@@ -18,9 +18,20 @@ def _convert_to_recurrent_state(state: IzhikevichState) -> IzhikevichRecurrentSt
 
 
 class IzhikevichCell(SNNCell):
-    """Documentation WIP
+    """
     Module that computes a single Izhikevich neuron-model *without* recurrence and *without* time.
     More specifically it implements one integration step of the following ODE:
+
+    .. math::
+        \\begin{align*}
+            \\dot{v} &= 0.04v² + 5v + 140 - u + I
+            \\dot{u} &= a(bv - u)
+        \\end{align*}
+
+    and
+
+    .. math::
+        \\text{if} v = 30 \\text{mV, then} v = c \\text{and} u = u + d
 
     Parameters:
         spiking_method (IzhikevichSpikingBehaviour) : parameters and initial state of the neuron
@@ -46,7 +57,19 @@ class IzhikevichCell(SNNCell):
 
 class IzhikevichRecurrentCell(SNNRecurrentCell):
     """Module that computes a single euler-integration step of an Izhikevich neuron-model *with* recurrence but *without* time.
-    More specifically it implements one integration step of the following ODE
+    More specifically it implements one integration step of the following ODE :
+
+    .. math::
+        \\begin{align*}
+            \\dot{v} &= 0.04v² + 5v + 140 - u + I
+            \\dot{u} &= a(bv - u)
+        \\end{align*}
+
+    and
+
+    .. math::
+        \\text{if} v = 30 \\text{mV, then} v = c \\text{and} u = u + d
+
     Example with tonic spiking:
         >>> from norse.torch import IzhikevichRecurrentCell, tonic_spiking
         >>> batch_size = 16
@@ -142,7 +165,7 @@ class Izhikevich(SNN):
 
 class IzhikevichRecurrent(SNNRecurrent):
     """
-    A neuron layer that wraps a :class:`IzhikevichCell` in time such
+    A neuron layer that wraps a :class:`IzhikevichRecurrentCell` in time such
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).

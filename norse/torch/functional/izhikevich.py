@@ -1,4 +1,6 @@
 import torch
+import matplotlib.pyplot as plt
+import numpy as np
 from typing import NamedTuple, Tuple
 
 from norse.torch.functional.threshold import threshold
@@ -66,6 +68,69 @@ class IzhikevichSpikingBehaviour(NamedTuple):
 
     p: IzhikevichParameters
     s: IzhikevichState
+
+
+def createIzhikevichSpikingBehaviour(
+    a: float,
+    b: float,
+    c: float,
+    d: float,
+    v_rest: float,
+    u_rest: float,
+    tau_inv: float = 250,
+    current: float = 1,
+    print: bool = False,
+    time_print: int = 250,
+    timestep_print: float = 0.1,
+) -> IzhikevichSpikingBehaviour:
+    """
+    A function that allows for the creation of custom Izhikevich neurons models, as well as a visualization of their behaviour on a 250 ms time window
+    Parameters:
+        a (float): time scale of the recovery variable u. Smaller values result in slower recovery in 1/ms
+        b (float): sensitivity of the recovery variable u to the subthreshold fluctuations of the membrane potential v. Greater values couple v and u more strongly resulting in possible subthreshold oscillations and low-threshold spiking dynamics
+        c (float): after-spike reset value of the membrane potential in mV
+        d (float): after-spike reset of the recovery variable u caused by slow high-threshold Na+ and K+ conductances in mV
+        v_rest (float): resting value of the v variable in mV
+        u_rest (float): resting value of the u variable
+        tau_inv (float) : inverse time constant in 1/ms
+        current (float) : input current
+        time_print (float) : size of the time window in ms
+        timestep_print (float) : timestep of the simulation in ms
+    """
+    params = IzhikevichParameters(a=a, b=b, c=c, d=d, tau_inv=tau_inv)
+    behaviour = IzhikevichSpikingBehaviour(
+        p=params,
+        s=IzhikevichState(
+            v=torch.tensor(float(v_rest), requires_grad=True),
+            u=torch.tensor(u_rest) * params.b,
+        ),
+    )
+    if print:
+        p, s = behaviour
+        T1 = 20
+        vs = []
+        us = []
+        cs = []
+        time = []
+
+        for t in np.arange(0, time_print, timestep_print):
+            vs.append(s.v.item())
+            us.append(s.u.item())
+            time.append(t * timestep_print)
+
+            if t > T1:
+                input_current = current * torch.ones(1)
+            else:
+                input_current = 0 * torch.ones(1)
+            _, s = izhikevich_step(input_current, s, p)
+            cs.append(input_current)
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111)
+        ax1.set_ylabel("Membrane potential (mV)")
+        ax1.set_xlabel("Time (ms)")
+        ax1.plot(time, vs)
+        ax1.plot(time, cs)
+    return behaviour
 
 
 tonic_spiking_p = IzhikevichParameters(a=0.02, b=0.2, c=-65, d=6)

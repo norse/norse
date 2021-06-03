@@ -441,6 +441,15 @@ def test_inhibition_induced_bursting():
     return vs, cs
 
 
+def test_creation():
+    p, s = izk.tonic_spiking
+    created = izk.createIzhikevichSpikingBehaviour(
+        a=p.a, b=p.b, c=p.c, d=p.d, v_rest=float(s.v), u_rest=float(s.u) / p.b
+    )
+    assert created.p == p
+    assert created.s == s
+
+
 def plot_test():
     vs_tonic, cs_tonic = test_tonic_spiking()
 
