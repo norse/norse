@@ -28,7 +28,7 @@ Norse aims to exploit the advantages of bio-inspired neural components, which ar
 Norse expands [PyTorch](https://pytorch.org/) with primitives for bio-inspired neural components, 
 bringing you two advantages: a modern and proven infrastructure based on PyTorch and deep learning-compatible spiking neural network components.
 
-**Documentation**: https://norse.ai/docs/
+**Documentation**: norse.github.io/norse/
 
 ## 1. Getting started
 
