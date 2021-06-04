@@ -60,7 +60,7 @@ def plot_heatmap_2d(
     return ax
 
 
-def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs):
+def plot_heatmap_3d(spikes: torch.Tensor, ax=None, show_colorbar: bool = False, **kwargs):
     """
     Plots heatmaps for some activity in several layers.
     Expects a named tensor with names=('L', 'X', 'Y').
@@ -94,8 +94,9 @@ def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs)
     """
     spikes = _detach_tensor(spikes).align_to(*"LXY")
     L = spikes.shape[0]
-
-    ax = plt.gcf().add_subplot(1, 1, 1, projection="3d")
+    
+    if ax is None:
+        ax = plt.gcf().add_subplot(1, 1, 1, projection="3d")
     unnamed = spikes + 1e-10  # Add infinitely small amount to "trigger" all pixels
     unnamed.names = None  # Unnamed tensor required for to_sparse
     s = unnamed.to_sparse().coalesce()
