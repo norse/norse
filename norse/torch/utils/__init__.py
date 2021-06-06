@@ -1,7 +1,7 @@
 """
 Utilities for Norse networks in Torch.
 
-The package, and all its subpackages, depends on Matplotlib.
+Packages and subpackages may depend on Matplotlib and Tensorboard.
 """
 
 from .tensorboard import (
