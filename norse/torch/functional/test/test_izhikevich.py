@@ -456,7 +456,7 @@ def test_creation_print():
     )
     assert created.p == p
     assert created.s == s
-    plt.close
+    plt.close()
 
 
 def plot_test():
