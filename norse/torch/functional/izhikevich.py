@@ -79,7 +79,7 @@ def createIzhikevichSpikingBehaviour(
     u_rest: float,
     tau_inv: float = 250,
     current: float = 1,
-    print: bool = False,
+    print_neuron: bool = False,
     time_print: int = 250,
     timestep_print: float = 0.1,
 ) -> IzhikevichSpikingBehaviour:
@@ -105,7 +105,7 @@ def createIzhikevichSpikingBehaviour(
             u=torch.tensor(u_rest) * params.b,
         ),
     )
-    if print:
+    if print_neuron:
         p, s = behaviour
         T1 = 20
         vs = []

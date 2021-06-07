@@ -449,6 +449,15 @@ def test_creation():
     assert created.p == p
     assert created.s == s
 
+def test_creation_print():
+    p, s = izk.tonic_spiking
+    created = izk.createIzhikevichSpikingBehaviour(
+        a=p.a, b=p.b, c=p.c, d=p.d, v_rest=float(s.v), u_rest=float(s.u) / p.b, print_neuron = True
+    )
+    assert created.p == p
+    assert created.s == s
+    plt.close
+
 
 def plot_test():
     vs_tonic, cs_tonic = test_tonic_spiking()
