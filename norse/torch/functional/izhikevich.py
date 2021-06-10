@@ -1,6 +1,4 @@
 import torch
-import matplotlib.pyplot as plt
-import numpy as np
 from typing import NamedTuple, Tuple
 
 from norse.torch.functional.threshold import threshold
