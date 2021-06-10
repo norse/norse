@@ -7,7 +7,7 @@ from norse.torch.module.izhikevich import (
     Izhikevich,
     IzhikevichRecurrent,
 )
-from norse.torch.functional import izhikevich, IzhikevichSpikingBehaviour
+from norse.torch.functional import izhikevich, IzhikevichSpikingBehavior
 
 list_method = [
     izhikevich.tonic_spiking,
