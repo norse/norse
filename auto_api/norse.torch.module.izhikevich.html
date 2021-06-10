@@ -14,6 +14,7 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -84,12 +85,19 @@ to configure neuron parameters as optimizable.</p></li>
 <dt class="sig sig-object py" id="norse.torch.module.izhikevich.IzhikevichCell">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.izhikevich.</span></span><span class="sig-name descname"><span class="pre">IzhikevichCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spiking_method</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/izhikevich.html#IzhikevichCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.izhikevich.IzhikevichCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNCell" title="norse.torch.module.snn.SNNCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNCell</span></code></a></p>
-<p>Documentation WIP
-Module that computes a single Izhikevich neuron-model <em>without</em> recurrence and <em>without</em> time.
+<p>Module that computes a single Izhikevich neuron-model <em>without</em> recurrence and <em>without</em> time.
 More specifically it implements one integration step of the following ODE:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align*}
+    \dot{v} &amp;= 0.04v² + 5v + 140 - u + I
+    \dot{u} &amp;= a(bv - u)
+\end{align*}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\text{if} v = 30 \text{mV, then} v = c \text{and} u = u + d\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>spiking_method</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.IzhikevichSpikingBehaviour" title="norse.torch.functional.IzhikevichSpikingBehaviour"><em>IzhikevichSpikingBehaviour</em></a>) – parameters and initial state of the neuron</p>
+<dd class="field-odd"><p><strong>spiking_method</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.IzhikevichSpikingBehavior" title="norse.torch.functional.IzhikevichSpikingBehavior"><em>IzhikevichSpikingBehavior</em></a>) – parameters and initial state of the neuron</p>
 </dd>
 </dl>
 <dl>
@@ -124,7 +132,7 @@ More specifically it implements one integration step of the following ODE:</p>
 <dt class="sig sig-object py" id="norse.torch.module.izhikevich.IzhikevichRecurrent">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.izhikevich.</span></span><span class="sig-name descname"><span class="pre">IzhikevichRecurrent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spiking_method</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/izhikevich.html#IzhikevichRecurrent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.izhikevich.IzhikevichRecurrent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrent" title="norse.torch.module.snn.SNNRecurrent"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNRecurrent</span></code></a></p>
-<p>A neuron layer that wraps a <a class="reference internal" href="#norse.torch.module.izhikevich.IzhikevichCell" title="norse.torch.module.izhikevich.IzhikevichCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">IzhikevichCell</span></code></a> in time such
+<p>A neuron layer that wraps a <a class="reference internal" href="#norse.torch.module.izhikevich.IzhikevichRecurrentCell" title="norse.torch.module.izhikevich.IzhikevichRecurrentCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">IzhikevichRecurrentCell</span></code></a> in time such
 that the layer keeps track of temporal sequences of spikes.
 After application, the layer returns a tuple containing</p>
 <blockquote>
@@ -168,24 +176,34 @@ to configure neuron parameters as optimizable.</p></li>
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.izhikevich.</span></span><span class="sig-name descname"><span class="pre">IzhikevichRecurrentCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spiking_method</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/izhikevich.html#IzhikevichRecurrentCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.izhikevich.IzhikevichRecurrentCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNRecurrentCell" title="norse.torch.module.snn.SNNRecurrentCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNRecurrentCell</span></code></a></p>
 <p>Module that computes a single euler-integration step of an Izhikevich neuron-model <em>with</em> recurrence but <em>without</em> time.
-More specifically it implements one integration step of the following ODE
-Example with tonic spiking:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">IzhikevichRecurrentCell</span><span class="p">,</span> <span class="n">tonic_spiking</span>
+More specifically it implements one integration step of the following ODE :</p>
+<div class="math notranslate nohighlight">
+\[\begin{align*}
+    \dot{v} &amp;= 0.04v² + 5v + 140 - u + I
+    \dot{u} &amp;= a(bv - u)
+\end{align*}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\text{if} v = 30 \text{mV, then} v = c \text{and} u = u + d\]</div>
+<dl>
+<dt>Example with tonic spiking:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">IzhikevichRecurrentCell</span><span class="p">,</span> <span class="n">tonic_spiking</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 5 batches, 2 neurons</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">IzhikevichRecurrentCell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># Returns tuple of (Tensor(5, 4), IzhikevichState)</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Size of the input. Also known as the number of input features. Defaults to None</p></li>
 <li><p><strong>hidden_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Size of the hidden state. Also known as the number of input features. Defaults to None</p></li>
 <li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.IzhikevichParameters" title="norse.torch.functional.IzhikevichParameters"><em>IzhikevichParameters</em></a>) – Parameters of the Izhikevich neuron model.</p></li>
-<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+git89e6f30 ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+git210259b ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
 matrix normalized to the number of hidden neurons.</p></li>
-<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+git89e6f30 ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+git210259b ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
 matrix normalized to the number of hidden neurons.</p></li>
 <li><p><strong>autapses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Allow self-connections in the recurrence? Defaults to False. Will also
 remove autapses in custom recurrent weights, if set above.</p></li>
