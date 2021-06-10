@@ -3,7 +3,7 @@ import torch
 from ..functional.izhikevich import (
     IzhikevichState,
     IzhikevichRecurrentState,
-    IzhikevichSpikingBehaviour,
+    IzhikevichSpikingBehavior,
     izhikevich_step,
     izhikevich_recurrent_step,
 )
@@ -18,12 +18,23 @@ def _convert_to_recurrent_state(state: IzhikevichState) -> IzhikevichRecurrentSt
 
 
 class IzhikevichCell(SNNCell):
-    """Documentation WIP
+    """
     Module that computes a single Izhikevich neuron-model *without* recurrence and *without* time.
     More specifically it implements one integration step of the following ODE:
 
+    .. math::
+        \\begin{align*}
+            \\dot{v} &= 0.04v² + 5v + 140 - u + I
+            \\dot{u} &= a(bv - u)
+        \\end{align*}
+
+    and
+
+    .. math::
+        \\text{if} v = 30 \\text{mV, then} v = c \\text{and} u = u + d
+
     Parameters:
-        spiking_method (IzhikevichSpikingBehaviour) : parameters and initial state of the neuron
+        spiking_method (IzhikevichSpikingBehavior) : parameters and initial state of the neuron
     Example with tonic spiking:
         >>> from norse.torch import IzhikevichCell, tonic_spiking
         >>> batch_size = 16
@@ -32,7 +43,7 @@ class IzhikevichCell(SNNCell):
         >>> output, s0 = cell(input)
     """
 
-    def __init__(self, spiking_method: IzhikevichSpikingBehaviour, **kwargs):
+    def __init__(self, spiking_method: IzhikevichSpikingBehavior, **kwargs):
         super().__init__(
             izhikevich_step, self.initial_state, spiking_method.p, **kwargs
         )
@@ -46,7 +57,19 @@ class IzhikevichCell(SNNCell):
 
 class IzhikevichRecurrentCell(SNNRecurrentCell):
     """Module that computes a single euler-integration step of an Izhikevich neuron-model *with* recurrence but *without* time.
-    More specifically it implements one integration step of the following ODE
+    More specifically it implements one integration step of the following ODE :
+
+    .. math::
+        \\begin{align*}
+            \\dot{v} &= 0.04v² + 5v + 140 - u + I
+            \\dot{u} &= a(bv - u)
+        \\end{align*}
+
+    and
+
+    .. math::
+        \\text{if} v = 30 \\text{mV, then} v = c \\text{and} u = u + d
+
     Example with tonic spiking:
         >>> from norse.torch import IzhikevichRecurrentCell, tonic_spiking
         >>> batch_size = 16
@@ -70,7 +93,7 @@ class IzhikevichRecurrentCell(SNNRecurrentCell):
         self,
         input_size: int,
         hidden_size: int,
-        spiking_method: IzhikevichSpikingBehaviour,
+        spiking_method: IzhikevichSpikingBehavior,
         **kwargs
     ):
         super().__init__(
@@ -126,7 +149,7 @@ class Izhikevich(SNN):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, spiking_method: IzhikevichSpikingBehaviour, **kwargs):
+    def __init__(self, spiking_method: IzhikevichSpikingBehavior, **kwargs):
         super().__init__(
             activation=izhikevich_step,
             state_fallback=self.initial_state,
@@ -142,7 +165,7 @@ class Izhikevich(SNN):
 
 class IzhikevichRecurrent(SNNRecurrent):
     """
-    A neuron layer that wraps a :class:`IzhikevichCell` in time such
+    A neuron layer that wraps a :class:`IzhikevichRecurrentCell` in time such
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
@@ -160,7 +183,7 @@ class IzhikevichRecurrent(SNNRecurrent):
         self,
         input_size: int,
         hidden_size: int,
-        spiking_method: IzhikevichSpikingBehaviour,
+        spiking_method: IzhikevichSpikingBehavior,
         *args,
         **kwargs
     ):

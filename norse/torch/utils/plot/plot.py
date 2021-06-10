@@ -5,8 +5,10 @@ Utilities for plotting spikes in layers over time in 2D and 3D.
 from typing import List, Optional
 
 import matplotlib.pyplot as plt
-
+import numpy as np
 import torch
+
+from norse.torch.functional.izhikevich import IzhikevichSpikingBehavior, izhikevich_step
 
 
 def _detach_tensor(tensor: torch.Tensor):
@@ -257,3 +259,60 @@ def plot_spikes_2d(spikes: torch.Tensor, axes: plt.Axes = None, **kwargs):
     """
     kwargs["cmap"] = kwargs.get("cmap", "binary")
     return plot_heatmap_2d(spikes, axes=axes, **kwargs)
+
+
+def plot_izhikevich(
+    behavior: IzhikevichSpikingBehavior,
+    current: float = 1,
+    time_print: int = 250,
+    time_current: int = 20,
+    timestep_print: float = 0.1,
+):
+    """
+    Computes and plots a 2D visualisation of the behavior of an Izhikevich neuron model.
+    By default, the time window is 250ms with a time step of 0.1ms
+
+    Example :
+        >>> import torch
+        >>> from norse.torch import tonic_spiking
+        >>> from norse.torch.utils.plot import plot_izhikevich
+        >>> plot_izhikevich(tonic_spiking)
+
+    .. plot::
+
+        import torch
+        from norse.torch import tonic_spiking
+        from norse.torch.utils.plot import plot_izhikevich
+        plot_izhikevich(tonic_spiking)
+
+    Arguments :
+        behavior (IzhikevichSpikingBehavior) : behavior of an Izhikevich neuron
+        current (float) : strengh of the input current, defaults to 1
+        time_print (float) : size of the time window for simulation (in ms)
+        time_current (float) : time at which the input current goes from 0 to current (in ms)
+        timestep_print (float) : timestep of the simulation (in ms)
+    """
+    p, s = behavior
+    T1 = time_current
+    vs = []
+    us = []
+    cs = []
+    time = []
+
+    for t in np.arange(0, time_print, timestep_print):
+        vs.append(s.v.item())
+        us.append(s.u.item())
+        time.append(t * timestep_print)
+
+        if t > T1:
+            input_current = current * torch.ones(1)
+        else:
+            input_current = 0 * torch.ones(1)
+        _, s = izhikevich_step(input_current, s, p)
+        cs.append(input_current)
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+    ax1.set_ylabel("Membrane potential (mV)")
+    ax1.set_xlabel("Time (ms)")
+    ax1.plot(time, vs)
+    ax1.plot(time, cs)

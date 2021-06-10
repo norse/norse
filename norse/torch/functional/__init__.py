@@ -87,9 +87,10 @@ from .threshold import (
 
 from .izhikevich import (
     IzhikevichParameters,
-    IzhikevichSpikingBehaviour,
+    IzhikevichSpikingBehavior,
     IzhikevichState,
     IzhikevichRecurrentState,
+    create_izhikevich_spiking_behavior,
     tonic_spiking,
     tonic_bursting,
     phasic_spiking,
@@ -189,9 +190,10 @@ __all__ = [
     "heavi_tent_fn",
     "logistic_fn",
     "IzhikevichParameters",
-    "IzhikevichSpikingBehaviour",
+    "IzhikevichSpikingBehavior",
     "IzhikevichState",
     "IzhikevichRecurrentState",
+    "create_izhikevich_spiking_behavior",
     "tonic_spiking",
     "tonic_bursting",
     "phasic_spiking",
