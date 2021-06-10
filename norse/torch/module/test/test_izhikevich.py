@@ -34,7 +34,7 @@ list_method = [
 
 
 class SNNetwork(torch.nn.Module):
-    def __init__(self, spiking_method: IzhikevichSpikingBehaviour):
+    def __init__(self, spiking_method: IzhikevichSpikingBehavior):
         super(SNNetwork, self).__init__()
         self.spiking_method = spiking_method
         self.l0 = Izhikevich(spiking_method)
