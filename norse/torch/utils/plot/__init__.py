@@ -8,6 +8,7 @@ from .plot import (
     plot_histogram_2d,
     plot_scatter_3d,
     plot_spikes_2d,
+    plot_izhikevich,
 )
 
 __all__ = [
@@ -16,4 +17,5 @@ __all__ = [
     "plot_histogram_2d",
     "plot_scatter_3d",
     "plot_spikes_2d",
+    "plot_izhikevich",
 ]

@@ -59,8 +59,8 @@ class IzhikevichRecurrentState(NamedTuple):
     u: torch.Tensor
 
 
-class IzhikevichSpikingBehaviour(NamedTuple):
-    """Spiking behaviour of a Izhikevich neuron
+class IzhikevichSpikingBehavior(NamedTuple):
+    """Spiking behavior of a Izhikevich neuron
     Parameters:
         p (IzhikevichParameters) : parameters of the Izhikevich neuron model
         s (IzhikevichState) : state of the Izhikevich neuron model
@@ -70,7 +70,7 @@ class IzhikevichSpikingBehaviour(NamedTuple):
     s: IzhikevichState
 
 
-def createIzhikevichSpikingBehaviour(
+def create_izhikevich_spiking_behavior(
     a: float,
     b: float,
     c: float,
@@ -78,13 +78,9 @@ def createIzhikevichSpikingBehaviour(
     v_rest: float,
     u_rest: float,
     tau_inv: float = 250,
-    current: float = 1,
-    print_neuron: bool = False,
-    time_print: int = 250,
-    timestep_print: float = 0.1,
-) -> IzhikevichSpikingBehaviour:
+) -> IzhikevichSpikingBehavior:
     """
-    A function that allows for the creation of custom Izhikevich neurons models, as well as a visualization of their behaviour on a 250 ms time window
+    A function that allows for the creation of custom Izhikevich neurons models, as well as a visualization of their behavior on a 250 ms time window
     Parameters:
         a (float): time scale of the recovery variable u. Smaller values result in slower recovery in 1/ms
         b (float): sensitivity of the recovery variable u to the subthreshold fluctuations of the membrane potential v. Greater values couple v and u more strongly resulting in possible subthreshold oscillations and low-threshold spiking dynamics
@@ -98,43 +94,18 @@ def createIzhikevichSpikingBehaviour(
         timestep_print (float) : timestep of the simulation in ms
     """
     params = IzhikevichParameters(a=a, b=b, c=c, d=d, tau_inv=tau_inv)
-    behaviour = IzhikevichSpikingBehaviour(
+    behavior = IzhikevichSpikingBehavior(
         p=params,
         s=IzhikevichState(
             v=torch.tensor(float(v_rest), requires_grad=True),
             u=torch.tensor(u_rest) * params.b,
         ),
     )
-    if print_neuron:
-        p, s = behaviour
-        T1 = 20
-        vs = []
-        us = []
-        cs = []
-        time = []
-
-        for t in np.arange(0, time_print, timestep_print):
-            vs.append(s.v.item())
-            us.append(s.u.item())
-            time.append(t * timestep_print)
-
-            if t > T1:
-                input_current = current * torch.ones(1)
-            else:
-                input_current = 0 * torch.ones(1)
-            _, s = izhikevich_step(input_current, s, p)
-            cs.append(input_current)
-        fig = plt.figure()
-        ax1 = fig.add_subplot(111)
-        ax1.set_ylabel("Membrane potential (mV)")
-        ax1.set_xlabel("Time (ms)")
-        ax1.plot(time, vs)
-        ax1.plot(time, cs)
-    return behaviour
+    return behavior
 
 
 tonic_spiking_p = IzhikevichParameters(a=0.02, b=0.2, c=-65, d=6)
-tonic_spiking = IzhikevichSpikingBehaviour(
+tonic_spiking = IzhikevichSpikingBehavior(
     p=tonic_spiking_p,
     s=IzhikevichState(
         v=torch.tensor(-70.0, requires_grad=True),
@@ -143,7 +114,7 @@ tonic_spiking = IzhikevichSpikingBehaviour(
 )
 
 phasic_spiking_p = IzhikevichParameters(a=0.02, b=0.25, c=-65, d=6)
-phasic_spiking = IzhikevichSpikingBehaviour(
+phasic_spiking = IzhikevichSpikingBehavior(
     p=phasic_spiking_p,
     s=IzhikevichState(
         v=torch.tensor(-64.0, requires_grad=True),
@@ -152,7 +123,7 @@ phasic_spiking = IzhikevichSpikingBehaviour(
 )
 
 tonic_bursting_p = IzhikevichParameters(a=0.02, b=0.2, c=-50, d=2)
-tonic_bursting = IzhikevichSpikingBehaviour(
+tonic_bursting = IzhikevichSpikingBehavior(
     p=tonic_bursting_p,
     s=IzhikevichState(
         v=torch.tensor(-70.0, requires_grad=True),
@@ -161,7 +132,7 @@ tonic_bursting = IzhikevichSpikingBehaviour(
 )
 
 phasic_bursting_p = IzhikevichParameters(a=0.02, b=0.25, c=-55, d=0.05, tau_inv=200)
-phasic_bursting = IzhikevichSpikingBehaviour(
+phasic_bursting = IzhikevichSpikingBehavior(
     p=phasic_bursting_p,
     s=IzhikevichState(
         v=torch.tensor(-64.0, requires_grad=True),
@@ -170,7 +141,7 @@ phasic_bursting = IzhikevichSpikingBehaviour(
 )
 
 mixed_mode_p = IzhikevichParameters(a=0.02, b=0.2, c=-55, d=4, tau_inv=250)
-mixed_mode = IzhikevichSpikingBehaviour(
+mixed_mode = IzhikevichSpikingBehavior(
     p=mixed_mode_p,
     s=IzhikevichState(
         v=torch.tensor(-70.0, requires_grad=True), u=torch.tensor(-70) * mixed_mode_p.b
@@ -180,7 +151,7 @@ mixed_mode = IzhikevichSpikingBehaviour(
 spike_frequency_adaptation_p = IzhikevichParameters(
     a=0.01, b=0.2, c=-65, d=8, tau_inv=250
 )
-spike_frequency_adaptation = IzhikevichSpikingBehaviour(
+spike_frequency_adaptation = IzhikevichSpikingBehavior(
     p=spike_frequency_adaptation_p,
     s=IzhikevichState(
         v=torch.tensor(-70.0, requires_grad=True),
@@ -191,7 +162,7 @@ spike_frequency_adaptation = IzhikevichSpikingBehaviour(
 class_1_exc_p = IzhikevichParameters(
     a=0.02, b=-0.1, c=-55, d=6, mn=4.1, bias=108, tau_inv=250
 )
-class_1_exc = IzhikevichSpikingBehaviour(
+class_1_exc = IzhikevichSpikingBehavior(
     p=class_1_exc_p,
     s=IzhikevichState(
         v=torch.tensor(-60.0, requires_grad=True), u=torch.tensor(-60) * class_1_exc_p.b
@@ -199,7 +170,7 @@ class_1_exc = IzhikevichSpikingBehaviour(
 )
 
 class_2_exc_p = IzhikevichParameters(a=0.2, b=0.26, c=-65, d=0, tau_inv=250)
-class_2_exc = IzhikevichSpikingBehaviour(
+class_2_exc = IzhikevichSpikingBehavior(
     p=class_2_exc_p,
     s=IzhikevichState(
         v=torch.tensor(-64.0, requires_grad=True), u=torch.tensor(-64) * class_2_exc_p.b
@@ -207,7 +178,7 @@ class_2_exc = IzhikevichSpikingBehaviour(
 )
 
 spike_latency_p = IzhikevichParameters(a=0.02, b=0.2, c=-65, d=6, tau_inv=250)
-spike_latency = IzhikevichSpikingBehaviour(
+spike_latency = IzhikevichSpikingBehavior(
     p=spike_latency_p,
     s=IzhikevichState(
         v=torch.tensor(-70.0, requires_grad=True),
@@ -218,7 +189,7 @@ spike_latency = IzhikevichSpikingBehaviour(
 subthreshold_oscillation_p = IzhikevichParameters(
     a=0.05, b=0.26, c=-60, d=0, tau_inv=250
 )
-subthreshold_oscillation = IzhikevichSpikingBehaviour(
+subthreshold_oscillation = IzhikevichSpikingBehavior(
     p=subthreshold_oscillation_p,
     s=IzhikevichState(
         v=torch.tensor(-62.0, requires_grad=True),
@@ -227,7 +198,7 @@ subthreshold_oscillation = IzhikevichSpikingBehaviour(
 )
 
 resonator_p = IzhikevichParameters(a=0.1, b=0.26, c=-60, d=-1, tau_inv=250)
-resonator = IzhikevichSpikingBehaviour(
+resonator = IzhikevichSpikingBehavior(
     p=resonator_p,
     s=IzhikevichState(
         v=torch.tensor(-62.0, requires_grad=True), u=torch.tensor(-62) * resonator_p.b
@@ -237,7 +208,7 @@ resonator = IzhikevichSpikingBehaviour(
 integrator_p = IzhikevichParameters(
     a=0.02, b=-0.1, c=-55, d=6, mn=4.1, bias=108, tau_inv=250
 )
-integrator = IzhikevichSpikingBehaviour(
+integrator = IzhikevichSpikingBehavior(
     p=integrator_p,
     s=IzhikevichState(
         v=torch.tensor(-60.0, requires_grad=True), u=torch.tensor(-60) * integrator_p.b
@@ -245,7 +216,7 @@ integrator = IzhikevichSpikingBehaviour(
 )
 
 rebound_spike_p = IzhikevichParameters(a=0.03, b=0.25, c=-60, d=4, tau_inv=200)
-rebound_spike = IzhikevichSpikingBehaviour(
+rebound_spike = IzhikevichSpikingBehavior(
     p=rebound_spike_p,
     s=IzhikevichState(
         v=torch.tensor(-64.0, requires_grad=True),
@@ -254,7 +225,7 @@ rebound_spike = IzhikevichSpikingBehaviour(
 )
 
 rebound_burst_p = IzhikevichParameters(a=0.03, b=0.25, c=-52, d=0, tau_inv=200)
-rebound_burst = IzhikevichSpikingBehaviour(
+rebound_burst = IzhikevichSpikingBehavior(
     p=rebound_burst_p,
     s=IzhikevichState(
         v=torch.tensor(-64.0, requires_grad=True),
@@ -263,7 +234,7 @@ rebound_burst = IzhikevichSpikingBehaviour(
 )
 
 threshhold_variability_p = IzhikevichParameters(a=0.03, b=0.25, c=-60, d=4, tau_inv=250)
-threshhold_variability = IzhikevichSpikingBehaviour(
+threshhold_variability = IzhikevichSpikingBehavior(
     p=threshhold_variability_p,
     s=IzhikevichState(
         v=torch.tensor(-64.0, requires_grad=True),
@@ -272,7 +243,7 @@ threshhold_variability = IzhikevichSpikingBehaviour(
 )
 
 bistability_p = IzhikevichParameters(a=0.1, b=0.26, c=-60, d=0, tau_inv=250)
-bistability = IzhikevichSpikingBehaviour(
+bistability = IzhikevichSpikingBehavior(
     p=bistability_p,
     s=IzhikevichState(
         v=torch.tensor(-61.0, requires_grad=True), u=torch.tensor(-61) * bistability_p.b
@@ -280,7 +251,7 @@ bistability = IzhikevichSpikingBehaviour(
 )
 
 dap_p = IzhikevichParameters(a=1.0, b=0.2, c=-60, d=-21, tau_inv=100)
-dap = IzhikevichSpikingBehaviour(
+dap = IzhikevichSpikingBehavior(
     p=dap_p,
     s=IzhikevichState(
         v=torch.tensor(-70.0, requires_grad=True), u=torch.tensor(-70) * dap_p.b
@@ -288,7 +259,7 @@ dap = IzhikevichSpikingBehaviour(
 )
 
 accomodation_p = IzhikevichParameters(a=0.02, b=1.0, c=-55, d=4, tau_inv=500)
-accomodation = IzhikevichSpikingBehaviour(
+accomodation = IzhikevichSpikingBehavior(
     p=accomodation_p,
     s=IzhikevichState(v=torch.tensor(-65.0, requires_grad=True), u=torch.tensor(-16)),
 )
@@ -296,7 +267,7 @@ accomodation = IzhikevichSpikingBehaviour(
 inhibition_induced_spiking_p = IzhikevichParameters(
     a=-0.02, b=-1.0, c=-60, d=8, tau_inv=250
 )
-inhibition_induced_spiking = IzhikevichSpikingBehaviour(
+inhibition_induced_spiking = IzhikevichSpikingBehavior(
     p=inhibition_induced_spiking_p,
     s=IzhikevichState(
         v=torch.tensor(-63.8, requires_grad=True),
@@ -307,7 +278,7 @@ inhibition_induced_spiking = IzhikevichSpikingBehaviour(
 inhibition_induced_bursting_p = IzhikevichParameters(
     a=-0.026, b=-1.0, c=-45, d=-2, tau_inv=250
 )
-inhibition_induced_bursting = IzhikevichSpikingBehaviour(
+inhibition_induced_bursting = IzhikevichSpikingBehavior(
     p=inhibition_induced_bursting_p,
     s=IzhikevichState(
         v=torch.tensor(-63.8, requires_grad=True),

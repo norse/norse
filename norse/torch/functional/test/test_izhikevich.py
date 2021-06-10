@@ -1,12 +1,12 @@
 import torch
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib as mpl
 import norse.torch.functional.izhikevich as izk
 from norse.torch.functional.izhikevich import (
     izhikevich_step,
 )
-
-import matplotlib.pyplot as plt
-import matplotlib as mpl
+from norse.torch.utils.plot import plot_izhikevich
 
 
 mpl.rcParams["axes.spines.left"] = False
@@ -443,7 +443,7 @@ def test_inhibition_induced_bursting():
 
 def test_creation():
     p, s = izk.tonic_spiking
-    created = izk.createIzhikevichSpikingBehaviour(
+    created = izk.create_izhikevich_spiking_behavior(
         a=p.a, b=p.b, c=p.c, d=p.d, v_rest=float(s.v), u_rest=float(s.u) / p.b
     )
     assert created.p == p
@@ -452,15 +452,10 @@ def test_creation():
 
 def test_creation_print():
     p, s = izk.tonic_spiking
-    created = izk.createIzhikevichSpikingBehaviour(
-        a=p.a,
-        b=p.b,
-        c=p.c,
-        d=p.d,
-        v_rest=float(s.v),
-        u_rest=float(s.u) / p.b,
-        print_neuron=True,
+    created = izk.create_izhikevich_spiking_behavior(
+        a=p.a, b=p.b, c=p.c, d=p.d, v_rest=float(s.v), u_rest=float(s.u) / p.b
     )
+    plot_izhikevich(created)
     assert created.p == p
     assert created.s == s
     plt.close()

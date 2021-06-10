@@ -3,7 +3,7 @@ import torch
 from ..functional.izhikevich import (
     IzhikevichState,
     IzhikevichRecurrentState,
-    IzhikevichSpikingBehaviour,
+    IzhikevichSpikingBehavior,
     izhikevich_step,
     izhikevich_recurrent_step,
 )
@@ -34,7 +34,7 @@ class IzhikevichCell(SNNCell):
         \\text{if} v = 30 \\text{mV, then} v = c \\text{and} u = u + d
 
     Parameters:
-        spiking_method (IzhikevichSpikingBehaviour) : parameters and initial state of the neuron
+        spiking_method (IzhikevichSpikingBehavior) : parameters and initial state of the neuron
     Example with tonic spiking:
         >>> from norse.torch import IzhikevichCell, tonic_spiking
         >>> batch_size = 16
@@ -43,7 +43,7 @@ class IzhikevichCell(SNNCell):
         >>> output, s0 = cell(input)
     """
 
-    def __init__(self, spiking_method: IzhikevichSpikingBehaviour, **kwargs):
+    def __init__(self, spiking_method: IzhikevichSpikingBehavior, **kwargs):
         super().__init__(
             izhikevich_step, self.initial_state, spiking_method.p, **kwargs
         )
@@ -93,7 +93,7 @@ class IzhikevichRecurrentCell(SNNRecurrentCell):
         self,
         input_size: int,
         hidden_size: int,
-        spiking_method: IzhikevichSpikingBehaviour,
+        spiking_method: IzhikevichSpikingBehavior,
         **kwargs
     ):
         super().__init__(
@@ -149,7 +149,7 @@ class Izhikevich(SNN):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, spiking_method: IzhikevichSpikingBehaviour, **kwargs):
+    def __init__(self, spiking_method: IzhikevichSpikingBehavior, **kwargs):
         super().__init__(
             activation=izhikevich_step,
             state_fallback=self.initial_state,
@@ -183,7 +183,7 @@ class IzhikevichRecurrent(SNNRecurrent):
         self,
         input_size: int,
         hidden_size: int,
-        spiking_method: IzhikevichSpikingBehaviour,
+        spiking_method: IzhikevichSpikingBehavior,
         *args,
         **kwargs
     ):
