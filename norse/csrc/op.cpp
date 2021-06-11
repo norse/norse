@@ -1,21 +1,26 @@
 #include <torch/custom_class.h>
 #include <torch/library.h>
 #include <torch/torch.h>
+#include <torch/extension.h>
 
-torch::Tensor heaviside(torch::Tensor input) {
+torch::Tensor heaviside(torch::Tensor input)
+{
   return (input > 0).type_as(input);
 }
 
-class SuperFunction : public torch::autograd::Function<SuperFunction> {
+class SuperFunction : public torch::autograd::Function<SuperFunction>
+{
 public:
   static torch::Tensor forward(torch::autograd::AutogradContext *ctx,
-                               torch::Tensor input, torch::Tensor alpha) {
+                               torch::Tensor input, torch::Tensor alpha)
+  {
     ctx->save_for_backward({input, alpha});
     return heaviside(input);
   }
   static torch::autograd::tensor_list
   backward(torch::autograd::AutogradContext *ctx,
-           torch::autograd::tensor_list grad_outputs) {
+           torch::autograd::tensor_list grad_outputs)
+  {
     auto saved = ctx->get_saved_variables();
     auto input = saved[0];
     auto alpha = saved[1];
@@ -25,7 +30,8 @@ public:
   }
 };
 
-torch::Tensor superfun(torch::Tensor input, torch::Tensor alpha) {
+torch::Tensor superfun(torch::Tensor input, torch::Tensor alpha)
+{
   return SuperFunction::apply(input, alpha);
 }
 
@@ -37,7 +43,8 @@ auto lif_step(torch::Tensor input_tensor,
                          torch::Tensor, torch::Tensor, torch::Tensor>
                   p,
               double dt)
-    -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor> {
+    -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor>
+{
   auto [z, v, i] = s;
   auto [v_leak, v_th, v_reset, tau_mem_inv, tau_syn_inv, alpha] = p;
   auto dv = dt * tau_mem_inv * ((v_leak - v) + i);
@@ -69,12 +76,14 @@ auto lif_integral(torch::Tensor input_tensor,
                              torch::Tensor, torch::Tensor, torch::Tensor>
                       p,
                   double dt)
-    -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor> {
+    -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor>
+{
   auto time_steps = input_tensor.size(0);
 
   std::vector<torch::Tensor> spikes;
 
-  for (int64_t ts = 0; ts < time_steps; ts++) {
+  for (int64_t ts = 0; ts < time_steps; ts++)
+  {
     auto input = input_tensor.index({ts});
     s = lif_step<f>(input, s, input_weights, recurrent_weights, p, dt);
     spikes.push_back(std::get<0>(s));
@@ -85,7 +94,8 @@ auto lif_integral(torch::Tensor input_tensor,
 
 auto lif_super_integral = lif_integral<superfun>;
 
-TORCH_LIBRARY(norse_op, m) {
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m)
+{
   m.def("superfun", superfun);
   m.def("lif_super_step", lif_super_step);
   m.def("lif_super_integral", lif_super_integral);

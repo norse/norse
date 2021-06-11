@@ -21,8 +21,8 @@ setup(
     long_description=readme_text,
     long_description_content_type="text/markdown",
     url="http://github.com/norse/norse",
-    author="Christian Pehle",
-    author_email="christian.pehle@gmail.com",
+    author="Christian Pehle, Jens E. Pedersen",
+    author_email="christian.pehle@gmail.com, jens@jepedersen.dk",
     packages=setuptools.find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -40,7 +40,7 @@ setup(
     ],
     keywords="machine learning spiking neural networks",
     ext_modules=[
-        CppExtension("norse_op", ["norse/csrc/op.cpp"], extra_compile_args=["-O3"])
+        CppExtension(name="norse_op", sources=["norse/csrc/op.cpp"], extra_compile_args=["-O3"])
     ],
     cmdclass={"build_ext": BuildExtension.with_options(no_python_abi_suffix=True)},
 )

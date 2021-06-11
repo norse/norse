@@ -2,7 +2,6 @@ import torch
 import pytest
 
 import norse
-import norse.torch.functional.lif as lif_module
 from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,

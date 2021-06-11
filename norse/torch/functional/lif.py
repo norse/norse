@@ -28,9 +28,11 @@ gradient approach that uses the :mod:`.heaviside` step function:
 
 """
 from typing import NamedTuple, Optional, Tuple
+import sys
 
 import torch
 import torch.jit
+
 from norse.torch.functional.threshold import threshold
 
 
@@ -228,18 +230,25 @@ def lif_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    jit_params = LIFParametersJIT(
-        tau_syn_inv=p.tau_syn_inv,
-        tau_mem_inv=p.tau_mem_inv,
-        v_leak=p.v_leak,
-        v_th=p.v_th,
-        v_reset=p.v_reset,
-        method=p.method,
-        alpha=torch.as_tensor(p.alpha),
-    )
-    return _lif_step_jit(
-        input_tensor, state, input_weights, recurrent_weights, jit_params, dt
-    )
+    if getattr(sys.modules["norse"], "IS_OPS_LOADED"):
+        import norse_op
+
+        return norse_op.lif_step(
+            input_tensor, state, input_weights, recurrent_weights, p, dt
+        )
+    else:
+        jit_params = LIFParametersJIT(
+            tau_syn_inv=p.tau_syn_inv,
+            tau_mem_inv=p.tau_mem_inv,
+            v_leak=p.v_leak,
+            v_th=p.v_th,
+            v_reset=p.v_reset,
+            method=p.method,
+            alpha=torch.as_tensor(p.alpha),
+        )
+        return _lif_step_jit(
+            input_tensor, state, input_weights, recurrent_weights, jit_params, dt
+        )
 
 
 @torch.jit.script
