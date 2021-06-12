@@ -21,7 +21,7 @@ in pkgs.mkShell rec {
     pythonPackages.pybind11
     pythonPackages.pytest
 
-    cmake
+    cmake ninja
   ];
 
   # Run this command, only after creating the virtual environment

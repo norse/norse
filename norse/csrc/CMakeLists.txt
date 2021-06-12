@@ -1,4 +1,5 @@
 add_library(norse SHARED op.cpp)
+
 target_compile_features(norse PRIVATE cxx_std_17)
 target_include_directories(norse PRIVATE ${Python3_INCLUDE_DIRS})
 target_include_directories(norse PRIVATE include)
