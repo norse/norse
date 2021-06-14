@@ -1,18 +1,26 @@
-#include <torch/torch.h>
 #include <gtest/gtest.h>
+#include <torch/torch.h>
 #include "super.h"
-#include "lif.h"
+#include "lif.cpp"
+#include <iostream>
 
 auto p = std::make_tuple(torch::full({1}, 1.0 / 5e-3), torch::full({1}, 1.0 / 1e-2),
-                         torch::ones({1}), torch::ones({1}),
+                         torch::zeros({1}), torch::ones({1}),
                          torch::zeros({1}), torch::full({1}, 100.0));
 double dt = 0.001;
 
 // LIF FF
-TEST(LIF_FF_TEST, BasicAssertions)
+TEST(LIF_TEST, LIF_FF)
 {
   auto t = torch::ones({4, 1});
   auto s = std::make_tuple(torch::ones({1}), torch::ones({1}));
-  auto out = norse::lif_feedforward_step<norse::superfun>(t, s, p, dt);
-  auto [z, v, i] = out;
+  auto [z, v, i] = lif_feedforward_step<superfun>(t, s, p, dt);
+  EXPECT_TRUE(torch::allclose(torch::zeros({4, 1}), z));
+  std::cout << v << i;
+
+  s = std::make_tuple(v, i);
+  auto [z1, v1, i1] = lif_feedforward_step<superfun>(t, s, p, dt);
+
+  std::cout << z1 << v1 << i1;
+  EXPECT_TRUE(torch::allclose(torch::ones({4, 1}), z1));
 }

@@ -8,7 +8,7 @@
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m)
 {
-  m.def("superfun", norse::superfun);
+  m.def("superfun", superfun);
   m.def("lif_super_step", lif_super_step);
   m.def("lif_super_integral", lif_super_integral);
 }

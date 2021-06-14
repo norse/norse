@@ -1,6 +1,7 @@
 #include <torch/custom_class.h>
 #include <torch/torch.h>
 
+#include "super.h"
 
 torch::Tensor heaviside(torch::Tensor input)
 {

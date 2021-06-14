@@ -11,7 +11,7 @@ auto lif_feedforward_step(torch::Tensor input_tensor,
     -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor>
 {
   auto [v, i] = s;
-  auto [v_leak, v_th, v_reset, tau_mem_inv, tau_syn_inv, alpha] = p;
+  auto [tau_syn_inv, tau_mem_inv, v_leak, v_th, v_reset, alpha] = p;
   auto dv = dt * tau_mem_inv * ((v_leak - v) + i);
   auto v_decayed = v + dv;
 
@@ -29,7 +29,16 @@ auto lif_feedforward_step(torch::Tensor input_tensor,
   return {z_new, v_new, i_new};
 }
 
-auto lif_super_feedforward_step = lif_feedforward_step<norse::superfun>;
+template <torch::Tensor f(torch::Tensor, torch::Tensor)>
+auto lif_feedforward_step(torch::Tensor input_tensor,
+                          std::tuple<torch::Tensor, torch::Tensor> s,
+                          std::tuple<torch::Tensor, torch::Tensor, torch::Tensor,
+                                     torch::Tensor, torch::Tensor, torch::Tensor>
+                              p,
+                          double dt)
+    -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor>;
+
+auto lif_super_feedforward_step = lif_feedforward_step<superfun>;
 
 template <torch::Tensor f(torch::Tensor, torch::Tensor)>
 auto lif_feedforward_integral(torch::Tensor input_tensor,
@@ -55,7 +64,7 @@ auto lif_feedforward_integral(torch::Tensor input_tensor,
   return {torch::stack(spikes), std::get<1>(new_s), std::get<2>(new_s)};
 }
 
-auto lif_super_feedforward_integral = lif_feedforward_integral<norse::superfun>;
+auto lif_super_feedforward_integral = lif_feedforward_integral<superfun>;
 
 template <torch::Tensor f(torch::Tensor, torch::Tensor)>
 auto lif_step(torch::Tensor input_tensor,
@@ -68,7 +77,7 @@ auto lif_step(torch::Tensor input_tensor,
     -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor>
 {
   auto [z, v, i] = s;
-  auto [v_leak, v_th, v_reset, tau_mem_inv, tau_syn_inv, alpha] = p;
+  auto [tau_syn_inv, tau_mem_inv, v_leak, v_th, v_reset, alpha] = p;
   auto dv = dt * tau_mem_inv * ((v_leak - v) + i);
   auto v_decayed = v + dv;
 
@@ -88,7 +97,7 @@ auto lif_step(torch::Tensor input_tensor,
   return {z_new, v_new, i_new};
 }
 
-auto lif_super_step = lif_step<norse::superfun>;
+auto lif_super_step = lif_step<superfun>;
 
 template <torch::Tensor f(torch::Tensor, torch::Tensor)>
 auto lif_integral(torch::Tensor input_tensor,
@@ -114,4 +123,4 @@ auto lif_integral(torch::Tensor input_tensor,
   return {torch::stack(spikes), std::get<1>(s), std::get<2>(s)};
 }
 
-auto lif_super_integral = lif_integral<norse::superfun>;
+auto lif_super_integral = lif_integral<superfun>;
