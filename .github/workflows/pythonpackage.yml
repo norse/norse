@@ -16,6 +16,8 @@ jobs:
     name: "Build: ${{ matrix.config.os}} Python v${{ matrix.python-version }}"
     steps:
       - uses: actions/checkout@v2
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.9
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@master
       - name: Build with CMake
