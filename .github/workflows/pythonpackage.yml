@@ -11,7 +11,12 @@ jobs:
         config:
           - { name: "Windows MSVC", os: windows-latest, cc: "cl", cxx: "cl" }
           - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
-          - { name: "MacOS clang", os: macos-latest, cc: "clang", cxx: "clang++" }
+          - {
+              name: "MacOS clang",
+              os: macos-latest,
+              cc: "clang",
+              cxx: "clang++",
+            }
         python-version: [3.7, 3.8, 3.9]
     name: "Build: ${{ matrix.config.os}} Python v${{ matrix.python-version }}"
     steps:
@@ -20,20 +25,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Setup Ninja
-        uses: ashutoshvarma/setup-ninja@master
-      - name: Build with CMake
-        uses: ashutoshvarma/action-cmake-build@master
-        with:
-          build-dir: ${{ runner.workspace }}/build
-          cc: ${{ matrix.config.cc }}
-          cxx: ${{ matrix.config.cxx }}
-          configure-options: -G Ninja
-          build-type: Debug
-      - name: Test with Ctest
-        run: |
-          cd build/norse/csrc
-          ctest
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

@@ -1,0 +1,86 @@
+name: C++ package
+
+on: [push, pull_request]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Debug
+
+jobs:
+  build-cpp-local:
+    if: ${{ env.ACT }}
+
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
+        python-version: [3.9]
+    name: "OS ${{ matrix.os}} Python v${{ matrix.python-version }}"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.9
+        with:
+          cmake-version: "3.20.x"
+      - name: Install G++ and libtorch
+        run: |
+          apt update
+          apt install g++ libgtest-dev ninja-build python3-dev -y
+          wget https://download.pytorch.org/libtorch/nightly/cpu/libtorch-shared-with-deps-latest.zip -O ${{ runner.workspace }}/libtorch.zip
+          unzip -q ${{ runner.workspace }}/libtorch.zip -d ${{ runner.workspace }}/
+      - name: Build with CMake
+        uses: ashutoshvarma/action-cmake-build@master
+        env:
+          CMAKE_PREFIX_PATH: ${{ runner.workspace }}/libtorch/
+        with:
+          build-dir: ${{ runner.workspace }}/build
+          cc: ${{ matrix.config.cc }}
+          cxx: ${{ matrix.config.cxx }}
+          configure-options: -G Ninja
+          build-type: ${{ env.BUILD_TYPE }}
+          run-test: true
+          ctest-options: --test-dir ${{ runner.workspace }}/build/norse/csrc/
+
+  build-cpp-github:
+    if: ${{ !env.ACT }}
+
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      max-parallel: 4
+      matrix:
+        config:
+          - { name: "Windows MSVC", os: windows-latest, cc: "cl", cxx: "cl" }
+          - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
+          - {
+              name: "MacOS clang",
+              os: macos-latest,
+              cc: "clang",
+              cxx: "clang++",
+            }
+        python-version: [3.7, 3.8, 3.9]
+    name: "OS ${{ matrix.os}} Python v${{ matrix.python-version }}"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.9
+        with:
+          cmake-version: "3.20.x"
+      - name: Install G++ and libtorch
+        run: |
+          apt update
+          apt install g++ libgtest-dev ninja-build python3-dev -y
+          wget https://download.pytorch.org/libtorch/nightly/cpu/libtorch-shared-with-deps-latest.zip -O ${{ runner.workspace }}/libtorch.zip
+          unzip -q ${{ runner.workspace }}/libtorch.zip -d ${{ runner.workspace }}/
+      - name: Build with CMake
+        uses: ashutoshvarma/action-cmake-build@master
+        env:
+          CMAKE_PREFIX_PATH: ${{ runner.workspace }}/libtorch/
+        with:
+          build-dir: ${{ runner.workspace }}/build
+          cc: ${{ matrix.config.cc }}
+          cxx: ${{ matrix.config.cxx }}
+          configure-options: -G Ninja
+          build-type: ${{ env.BUILD_TYPE }}
+          run-test: true
+          ctest-options: --test-dir ${{ runner.workspace }}/build/norse/csrc/
