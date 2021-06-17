@@ -33,7 +33,13 @@ import sys
 import torch
 import torch.jit
 
+import norse.utils
+
+if norse.utils.IS_OPS_LOADED:
+    import norse_op
+
 from norse.torch.functional.threshold import threshold
+from norse.torch.functional.lift import lift
 
 
 class LIFParameters(NamedTuple):
@@ -230,12 +236,11 @@ def lif_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    if getattr(sys.modules["norse"], "IS_OPS_LOADED"):
-        import norse_op
-
-        return norse_op.lif_step(
+    if norse.utils.IS_OPS_LOADED:
+        z, v, i = norse_op.lif_super_step(
             input_tensor, state, input_weights, recurrent_weights, p, dt
         )
+        return z, LIFState(z=z, v=v, i=i)
     else:
         jit_params = LIFParametersJIT(
             tau_syn_inv=p.tau_syn_inv,
@@ -315,24 +320,73 @@ def lif_feed_forward_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    jit_params = LIFParametersJIT(
-        tau_syn_inv=p.tau_syn_inv,
-        tau_mem_inv=p.tau_mem_inv,
-        v_leak=p.v_leak,
-        v_th=p.v_th,
-        v_reset=p.v_reset,
-        method=p.method,
-        alpha=torch.as_tensor(p.alpha),
-    )
-    # Because input tensors are not directly used in the first pass (no
-    # broadcasting takes place) we need to set the state values to the
-    # same shape as the input.
-    if state is None:
-        state = LIFFeedForwardState(
-            v=torch.full_like(input_tensor, jit_params.v_reset),
-            i=torch.zeros_like(input_tensor),
+    if norse.utils.IS_OPS_LOADED:
+        z, v, i = norse_op.lif_super_feed_forward_step(input_tensor, state, p, dt)
+        return z, LIFFeedForwardState(v=v, i=i)
+    else:
+        jit_params = LIFParametersJIT(
+            tau_syn_inv=p.tau_syn_inv,
+            tau_mem_inv=p.tau_mem_inv,
+            v_leak=p.v_leak,
+            v_th=p.v_th,
+            v_reset=p.v_reset,
+            method=p.method,
+            alpha=torch.as_tensor(p.alpha),
         )
-    return _lif_feed_forward_step_jit(input_tensor, state=state, p=jit_params, dt=dt)
+        # Because input tensors are not directly used in the first pass (no
+        # broadcasting takes place) we need to set the state values to the
+        # same shape as the input.
+        if state is None:
+            state = LIFFeedForwardState(
+                v=torch.full_like(input_tensor, jit_params.v_reset),
+                i=torch.zeros_like(input_tensor),
+            )
+        return _lif_feed_forward_step_jit(
+            input_tensor, state=state, p=jit_params, dt=dt
+        )
+
+
+def lif_feed_forward_integral(
+    input_tensor: torch.Tensor,
+    state: LIFFeedForwardState,
+    p: LIFParameters = LIFParameters(),
+    dt: float = 0.001,
+) -> Tuple[torch.Tensor, LIFState]:
+    r"""Computes multiple euler-integration steps of a LIF neuron-model. More
+    specifically it integrates the following ODE
+
+    .. math::
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
+        \end{align*}
+
+    together with the jump condition
+
+    .. math::
+        z = \Theta(v - v_{\text{th}})
+
+    and transition equations
+
+    .. math::
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            i &= i + i_{\text{in}}
+        \end{align*}
+
+    Parameters:
+        input_tensor (torch.Tensor): the input spikes with the outer dimension assumed to be timesteps
+        s (LIFState): current state of the LIF neuron
+        p (LIFParameters): parameters of a leaky integrate and fire neuron
+        dt (float): Integration timestep to use
+    """
+    if norse.utils.IS_OPS_LOADED:
+        z, v, i = norse_op.lif_super_feed_forward_integral(input_tensor, state, p, dt)
+        return z, LIFFeedForwardState(v=v, i=i)
+    else:
+        return lift(lif_feed_forward_step)(
+            input_tensor=input_tensor, state=state, p=p, dt=dt
+        )
 
 
 def lif_feed_forward_step_sparse(

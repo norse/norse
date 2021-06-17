@@ -1,5 +1,5 @@
 import torch
-import norse.torch.models.conv as conv
+from norse.torch.models import conv
 
 
 def test_convnet4():

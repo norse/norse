@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
-project(norse)
+project(norse VERSION 0.0.6)
 
 # PyTorch requires C++14
 set(CMAKE_CXX_STANDARD 17)
