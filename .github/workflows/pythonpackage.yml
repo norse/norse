@@ -3,42 +3,53 @@ name: Python package
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-python:
     runs-on: ${{ matrix.config.os }}
     strategy:
       max-parallel: 4
       matrix:
         config:
-          - { name: "Windows MSVC", os: windows-latest, cc: "cl", cxx: "cl" }
-          - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
+          # - { name: "Windows MSVC", os: windows-latest }
+          - {
+              name: "Ubuntu gcc",
+              os: ubuntu-latest,
+              conda: publish/conda/environment.yaml,
+            }
           - {
               name: "MacOS clang",
               os: macos-latest,
-              cc: "clang",
-              cxx: "clang++",
+              conda: publish/conda/environment.yaml,
             }
         python-version: [3.7, 3.8, 3.9]
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
     name: "Build: ${{ matrix.config.os}} Python v${{ matrix.python-version }}"
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - name: Cache conda
+        uses: actions/cache@v2
+        env:
+          # Increase this value to reset cache if environment.yaml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('${{ matrix.config.conda }}') }}
+      - uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytorch-lightning
-          pip install -e .
+          use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
+          mamba-version: "*"
+          auto-update-conda: true
+          environment-file: ${{ matrix.config.conda }}
       - name: Test with pytest
-        run: |
-          pip install pytest pytest-cov
-          pytest norse --cov=norse/torch --cov-config=.coveragerc --cov-report=xml
+        run: pytest norse --cov=norse/torch --cov-config=.coveragerc --cov-report=xml
       - name: Test with PyType
-        run: |
-          pip install pytype
-          pytype norse
+        run: pytype norse
+      - name: Lint with black
+        run: black --check norse
       - name: Upload coverage
         uses: codecov/codecov-action@v1
         with:
@@ -48,7 +59,3 @@ jobs:
           env_vars: OS,PYTHON
           name: codecov-umbrella
           fail_ci_if_error: true
-      - name: Lint with black
-        run: |
-          pip install black
-          black --check norse
