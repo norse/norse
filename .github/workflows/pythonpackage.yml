@@ -25,13 +25,13 @@ jobs:
           CACHE_NUMBER: 0
         with:
           path: ~/python_pkgs_dir
-          key: ${{ runner.os }}-python-${{ env.CACHE_NUMBER }}-${{hashFiles('${{ matrix.config.conda }}') }}
+          key: ${{ runner.os }}-python${{ matrix.python-version }}-${{ env.CACHE_NUMBER }} }}
       - name: Install Python
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements-dev.txt
       - name: Run unit tests
         run: pytest norse --cov=norse/torch --cov-config=.coveragerc --cov-report=xml
       - name: Type check

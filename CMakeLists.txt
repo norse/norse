@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(norse VERSION 0.0.6)
 
-# PyTorch requires C++14
+# PyTorch requires C++14 and Norse requires C++17
 set(CMAKE_CXX_STANDARD 17)
 add_compile_definitions(_GLIBCXX_USE_CXX11_ABI=0)
 
