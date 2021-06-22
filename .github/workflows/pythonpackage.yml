@@ -4,51 +4,39 @@ on: [push, pull_request]
 
 jobs:
   build-python:
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest #${{ matrix.config.os }}
     strategy:
       max-parallel: 4
       matrix:
         config:
-          # - { name: "Windows MSVC", os: windows-latest }
-          - {
-              name: "Ubuntu gcc",
-              os: ubuntu-latest,
-              conda: publish/conda/environment.yaml,
-            }
-          - {
-              name: "MacOS clang",
-              os: macos-latest,
-              conda: publish/conda/environment.yaml,
-            }
+          - { name: "Windows MSVC", os: windows-latest }
+          - { name: "Ubuntu gcc", os: ubuntu-latest }
+          - { name: "MacOS clang", os: macos-latest }
         python-version: [3.7, 3.8, 3.9]
-
-    defaults:
-      run:
-        shell: bash -l {0}
 
     name: "Build: ${{ matrix.config.os}} Python v${{ matrix.python-version }}"
     steps:
       - uses: actions/checkout@v2
-      - name: Cache conda
+      - name: Cache
+        if: ${{ !env.ACT }}
         uses: actions/cache@v2
         env:
           # Increase this value to reset cache if environment.yaml has not changed
           CACHE_NUMBER: 0
         with:
-          path: ~/conda_pkgs_dir
-          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('${{ matrix.config.conda }}') }}
-      - uses: conda-incubator/setup-miniconda@v2
+          path: ~/python_pkgs_dir
+          key: ${{ runner.os }}-python-${{ env.CACHE_NUMBER }}-${{hashFiles('${{ matrix.config.conda }}') }}
+      - name: Install Python
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-          use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
-          mamba-version: "*"
-          auto-update-conda: true
-          environment-file: ${{ matrix.config.conda }}
-      - name: Test with pytest
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run unit tests
         run: pytest norse --cov=norse/torch --cov-config=.coveragerc --cov-report=xml
-      - name: Test with PyType
+      - name: Type check
         run: pytype norse
-      - name: Lint with black
+      - name: Lint
         run: black --check norse
       - name: Upload coverage
         uses: codecov/codecov-action@v1
