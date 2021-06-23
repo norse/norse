@@ -383,7 +383,7 @@ def lif_feed_forward_integral(
     """
     if norse.utils.IS_OPS_LOADED:
         z, v, i = norse_op.lif_super_feed_forward_integral(input_tensor, state, p, dt)
-        return z, LIFFeedForwardState(v=v, i=i)
+        return z, LIFState(z=z, v=v, i=i)
     else:
         return lift(lif_feed_forward_step)(
             input_tensor=input_tensor, state=state, p=p, dt=dt

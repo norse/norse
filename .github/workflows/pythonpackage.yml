@@ -42,7 +42,7 @@ jobs:
       - name: Run unit tests
         run: pytest norse
       - name: Type check
-        run: pytype norse
+        run: pytype norse -j 4
       - name: Lint
         run: black --check norse
       - name: Upload coverage
