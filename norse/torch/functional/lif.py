@@ -320,6 +320,15 @@ def lif_feed_forward_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
+    # Because input tensors are not directly used in the first pass (no
+    # broadcasting takes place) we need to set the state values to the
+    # same shape as the input.
+    if state is None:
+        state = LIFFeedForwardState(
+            v=torch.full_like(input_tensor, p.v_reset),
+            i=torch.zeros_like(input_tensor),
+        )
+
     if norse.utils.IS_OPS_LOADED:
         z, v, i = norse_op.lif_super_feed_forward_step(input_tensor, state, p, dt)
         return z, LIFFeedForwardState(v=v, i=i)
@@ -333,14 +342,6 @@ def lif_feed_forward_step(
             method=p.method,
             alpha=torch.as_tensor(p.alpha),
         )
-        # Because input tensors are not directly used in the first pass (no
-        # broadcasting takes place) we need to set the state values to the
-        # same shape as the input.
-        if state is None:
-            state = LIFFeedForwardState(
-                v=torch.full_like(input_tensor, jit_params.v_reset),
-                i=torch.zeros_like(input_tensor),
-            )
         return _lif_feed_forward_step_jit(
             input_tensor, state=state, p=jit_params, dt=dt
         )

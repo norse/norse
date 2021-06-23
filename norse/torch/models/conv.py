@@ -25,12 +25,12 @@ class ConvNet(torch.nn.Module):
         self.fc1 = torch.nn.Linear(self.features * self.features * 50, 500)
         self.out = LILinearCell(500, 10)
         self.lif0 = LIFCell(
-            p=LIFParameters(method=method, alpha=100.0),
+            p=LIFParameters(method=method, alpha=torch.tensor(100.0)),
         )
         self.lif1 = LIFCell(
-            p=LIFParameters(method=method, alpha=100.0),
+            p=LIFParameters(method=method, alpha=torch.tensor(100.0)),
         )
-        self.lif2 = LIFCell(p=LIFParameters(method=method, alpha=100.0))
+        self.lif2 = LIFCell(p=LIFParameters(method=method, alpha=torch.tensor(100.0)))
         self.dtype = dtype
 
     def forward(self, x):
@@ -79,12 +79,12 @@ class ConvNet4(torch.nn.Module):
         self.conv2 = torch.nn.Conv2d(32, 64, 5, 1)
         self.fc1 = torch.nn.Linear(self.features * self.features * 64, 1024)
         self.lif0 = LIFCell(
-            p=LIFParameters(method=method, alpha=100.0, v_th=torch.as_tensor(0.7)),
+            p=LIFParameters(method=method, alpha=torch.tensor(100.0), v_th=torch.as_tensor(0.7)),
         )
         self.lif1 = LIFCell(
-            p=LIFParameters(method=method, alpha=100.0, v_th=torch.as_tensor(0.7)),
+            p=LIFParameters(method=method, alpha=torch.tensor(100.0), v_th=torch.as_tensor(0.7)),
         )
-        self.lif2 = LIFCell(p=LIFParameters(method=method, alpha=100.0))
+        self.lif2 = LIFCell(p=LIFParameters(method=method, alpha=torch.tensor(100.0)))
         self.out = LILinearCell(1024, 10)
         self.dtype = dtype
 
