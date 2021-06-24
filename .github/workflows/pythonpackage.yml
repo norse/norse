@@ -4,14 +4,14 @@ on: [push, pull_request]
 
 jobs:
   build-python:
-    runs-on: ubuntu-latest #${{ matrix.config.os }}
+    runs-on: ${{ matrix.config.os }}
     strategy:
       max-parallel: 4
       matrix:
         config:
-          #- { name: "Windows MSVC", os: windows-latest }
+          - { name: "Windows MSVC", os: windows-latest }
           - { name: "Ubuntu gcc", os: ubuntu-latest }
-          #- { name: "MacOS clang", os: macos-latest }
+          - { name: "MacOS clang", os: macos-latest }
         python-version: [3.7, 3.8, 3.9]
 
     name: "Build: ${{ matrix.config.os}} Python v${{ matrix.python-version }}"

@@ -13,14 +13,14 @@ jobs:
       max-parallel: 4
       matrix:
         config:
-          # - { name: "Windows cl", os: windows-latest, cc: "cl", cxx: "cl" }
+          - { name: "Windows cl", os: windows-latest, cc: "cl", cxx: "cl" }
           - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
-          # - {
-          #     name: "MacOS clang",
-          #     os: macos-latest,
-          #     cc: "clang",
-          #     cxx: "clang++",
-          #   }
+          - {
+              name: "MacOS clang",
+              os: macos-latest,
+              cc: "clang",
+              cxx: "clang++",
+            }
         python-version: [3.7, 3.8, 3.9]
     name: "Build C++ - ${{ matrix.config.name}} Python v${{ matrix.python-version }}"
     steps:
