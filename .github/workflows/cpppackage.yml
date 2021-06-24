@@ -47,8 +47,8 @@ jobs:
       - name: (Ubuntu) Install G++ and libtorch
         if: ${{ matrix.config.os == 'ubuntu-latest' }}
         run: |
-          apt update
-          apt install g++ libgtest-dev ninja-build -y
+          sudo apt update
+          sudo apt install g++ libgtest-dev ninja-build -y
           wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.9.0%2Bcpu.zip -O ${{ github.workspace }}/libtorch.zip
           unzip -q ${{ github.workspace }}/libtorch.zip -d ${{ github.workspace }}/
       - name: (MacOS) Install clang and libtorch
