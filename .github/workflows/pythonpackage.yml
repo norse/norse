@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -e .
-          pip install pytest pytype black tensorboard
+          pip install -r requirements-dev.txt
       - name: Run unit tests
         run: pytest norse
       - name: Type check
