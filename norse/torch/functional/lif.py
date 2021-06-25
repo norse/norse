@@ -35,8 +35,10 @@ import torch.jit
 
 import norse.utils
 
-if norse.utils.IS_OPS_LOADED:
+try:
     import norse_op
+except ModuleNotFoundError:
+    pass
 
 from norse.torch.functional.threshold import threshold
 from norse.torch.functional.lift import lift
