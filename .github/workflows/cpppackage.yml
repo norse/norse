@@ -59,7 +59,7 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest' }}
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: install cmake mingw ninja wget unzip
+          args: install mingw ninja wget unzip
       - name: (Windows) Install libtorch
         if: ${{ matrix.config.os == 'windows-latest'}}
         run: |
