@@ -14,7 +14,7 @@ jobs:
           - { name: "MacOS clang", os: macos-latest }
         python-version: [3.7, 3.8, 3.9]
 
-    name: "Build: ${{ matrix.config.os}} Python v${{ matrix.python-version }}"
+    name: "Build Python: ${{ matrix.config.os}} Python v${{ matrix.python-version }}"
     steps:
       - uses: actions/checkout@master
       - name: Cache
@@ -44,7 +44,7 @@ jobs:
 
   build-python-checks:
     runs-on: ubuntu-latest
-    name: "Build: Python type checking, linting, and coverage"
+    name: "Build Python: type checking, linting, and coverage"
     steps:
       - uses: actions/checkout@master
       - name: Cache
@@ -68,7 +68,7 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
       - name: Run unit tests
-        run: pytest norse
+        run: pytest norse --cov=./ --cov-report=xml
       - name: Type check
         run: pytype norse -j 4
       - name: Lint
@@ -77,7 +77,6 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
           flags: unittests
           env_vars: OS,PYTHON
           name: codecov-umbrella
