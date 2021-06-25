@@ -59,13 +59,12 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest' }}
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: install python cmake ninja wget unzip
+          args: install python cmake ninja wget unzip microsoft-build-tools
       - name: (Windows) Install libtorch
         if: ${{ matrix.config.os == 'windows-latest'}}
         run: |
           wget https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-1.9.0%2Bcpu.zip -O ${{ github.workspace }}/libtorch.zip
           unzip -q ${{ github.workspace }}/libtorch.zip -d ${{ github.workspace }}/
-      - run: cd ${{ github.workspace }} && pwd && ls
       - run: env
       - name: Build
         run: |
