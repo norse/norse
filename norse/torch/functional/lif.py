@@ -238,12 +238,12 @@ def lif_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    if norse.utils.IS_OPS_LOADED:
+    try:
         z, v, i = norse_op.lif_super_step(
             input_tensor, state, input_weights, recurrent_weights, p, dt
         )
         return z, LIFState(z=z, v=v, i=i)
-    else:
+    except NameError:
         jit_params = LIFParametersJIT(
             tau_syn_inv=p.tau_syn_inv,
             tau_mem_inv=p.tau_mem_inv,
@@ -331,10 +331,10 @@ def lif_feed_forward_step(
             i=torch.zeros_like(input_tensor),
         )
 
-    if norse.utils.IS_OPS_LOADED:
+    try:
         z, v, i = norse_op.lif_super_feed_forward_step(input_tensor, state, p, dt)
         return z, LIFFeedForwardState(v=v, i=i)
-    else:
+    except NameError:
         jit_params = LIFParametersJIT(
             tau_syn_inv=p.tau_syn_inv,
             tau_mem_inv=p.tau_mem_inv,
@@ -383,10 +383,10 @@ def lif_feed_forward_integral(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    if norse.utils.IS_OPS_LOADED:
+    try:
         z, v, i = norse_op.lif_super_feed_forward_integral(input_tensor, state, p, dt)
         return z, LIFState(z=z, v=v, i=i)
-    else:
+    except NameError:
         return lift(lif_feed_forward_step)(
             input_tensor=input_tensor, state=state, p=p, dt=dt
         )
