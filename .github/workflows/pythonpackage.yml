@@ -25,13 +25,40 @@ jobs:
           CACHE_NUMBER: 0
         with:
           path: ~/python_pkgs_dir
-          key: ${{ runner.os }}-python${{ matrix.python-version }}-${{ env.CACHE_NUMBER }} }}
+          key: ${{ runner.os }}-python${{ matrix.python-version }}-${{ env.CACHE_NUMBER }}
       - name: Install Python
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
       - name: (Ubuntu) Install GCC
         if: ${{ matrix.config.os == 'ubuntu-latest' }}
+        run: |
+          sudo apt update
+          sudo apt install g++ -y
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install pytest
+      - name: Run unit tests
+        run: pytest norse
+
+  build-python-checks:
+    runs-on: ubuntu-latest
+    name: "Build: Python type checking, linting, and coverage"
+    steps:
+      - uses: actions/checkout@master
+      - name: Cache
+        if: ${{ !env.ACT }} # Cache not working due to https://github.com/nektos/act/issues/329
+        uses: actions/cache@v2
+        env:
+          # Increase this value to reset cache if environment.yaml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: ~/cpp_pkgs_dir
+          key: ubuntu-python-latest-${{ env.CACHE_NUMBER }}
+      - name: Install Python
+        uses: actions/setup-python@v2
+      - name: Install GCC
         run: |
           sudo apt update
           sudo apt install g++ -y
