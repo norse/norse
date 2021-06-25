@@ -42,8 +42,6 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.9
         with:
           cmake-version: "3.20.x"
-      - name: Setup Ninja
-        uses: ashutoshvarma/setup-ninja@master
       - name: (Ubuntu) Install G++ and libtorch
         if: ${{ matrix.config.os == 'ubuntu-latest' }}
         run: |
@@ -54,7 +52,7 @@ jobs:
       - name: (MacOS) Install clang and libtorch
         if: ${{ matrix.config.os == 'macos-latest' }}
         run: |
-          brew install llvm
+          brew install llvm ninja
           wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-1.9.0%2Bcpu.zip -O ${{ github.workspace }}/libtorch.zip
           unzip -q ${{ github.workspace }}/libtorch.zip -d ${{ github.workspace }}/
       - name: (Windows) Install MinGW
@@ -65,11 +63,8 @@ jobs:
       - name: (Windows) Install libtorch
         if: ${{ matrix.config.os == 'windows-latest'}}
         run: |
-          git clone -b master --recurse-submodule https://github.com/pytorch/pytorch.git
-          mkdir pytorch-build
-          cd pytorch-build
-          cmake -DBUILD_SHARED_LIBS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release -DPYTHON_EXECUTABLE:PATH=`which python3` -DCMAKE_INSTALL_PREFIX:PATH=../pytorch-install ../pytorch
-          cmake --build . --target install
+          wget https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-1.9.0%2Bcpu.zip -O ${{ github.workspace }}/libtorch.zip
+          unzip -q ${{ github.workspace }}/libtorch.zip -d ${{ github.workspace }}/
       - run: cd ${{ github.workspace }} && pwd && ls
       - run: env
       - name: Build
