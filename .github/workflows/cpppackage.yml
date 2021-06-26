@@ -13,7 +13,7 @@ jobs:
       max-parallel: 4
       matrix:
         config:
-          - { name: "Windows cl", os: windows-latest, cc: "gcc", cxx: "g++" }
+          - { name: "Windows cl", os: windows-latest, cc: "cl", cxx: "cl" }
           - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
           - {
               name: "MacOS clang",
@@ -67,6 +67,9 @@ jobs:
           unzip -q ${{ github.workspace }}/libtorch.zip -d ${{ github.workspace }}/
       - run: env
       - name: Build
+        env:
+          CC: ${{ matrix.config.cc }}
+          CXX: ${{ matrix.config.cxx }}
         run: |
           cmake -GNinja -B build -S . -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_PREFIX_PATH=${{ github.workspace }}/libtorch
           cmake --build build
