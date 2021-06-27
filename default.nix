@@ -18,6 +18,10 @@ in pkgs.mkShell rec {
     pythonPackages.matplotlib
     pythonPackages.jupyter
     pythonPackages.pytorch
+    pythonPackages.pybind11
+    pythonPackages.pytest
+
+    cmake ninja
   ];
 
   # Run this command, only after creating the virtual environment
@@ -30,6 +34,7 @@ in pkgs.mkShell rec {
   # Now we can execute any commands within the virtual environment.
   # This is optional and can be left out to run pip manually.
   postShellHook = ''
+    export LD_LIBRARY_PATH=${stdenv.cc.cc.lib}/lib/:/run/opengl-driver/lib/
     # allow pip to install wheels
     unset SOURCE_DATE_EPOCH
   '';

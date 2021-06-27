@@ -1,5 +1,5 @@
 import torch
-import norse.torch.models.vgg as vgg
+from norse.torch.models import vgg
 
 
 def test_vgg11_forward():

@@ -117,7 +117,7 @@ def test_lif_correlation_training():
         m, _ = torch.max(voltages, dim=0)
 
         log_p_y = log_softmax_fn(m)
-        loss_val = loss_fn(log_p_y, y_data)
+        loss_val = loss_fn(log_p_y, y_data.long())
 
         loss_val.backward()
         optimizer.step()

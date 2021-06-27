@@ -2,7 +2,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-import norse.torch.functional.izhikevich as izk
+from norse.torch.functional import izhikevich as izk
 from norse.torch.functional.izhikevich import (
     izhikevich_step,
 )

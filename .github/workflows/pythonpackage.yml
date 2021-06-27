@@ -3,43 +3,82 @@ name: Python package
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-python:
+    runs-on: ${{ matrix.config.os }}
     strategy:
       max-parallel: 4
       matrix:
+        config:
+          - { name: "Windows MSVC", os: windows-latest }
+          - { name: "Ubuntu gcc", os: ubuntu-latest }
+          - { name: "MacOS clang", os: macos-latest }
         python-version: [3.7, 3.8, 3.9]
 
+    name: "Build Python: ${{ matrix.config.os}} Python v${{ matrix.python-version }}"
     steps:
-      - uses: actions/checkout@v1
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+      - uses: actions/checkout@master
+      - name: Cache
+        if: ${{ !env.ACT }} # Cache not working due to https://github.com/nektos/act/issues/329
+        uses: actions/cache@v2
+        env:
+          # Increase this value to reset cache if environment.yaml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: ~/python_pkgs_dir
+          key: ${{ runner.os }}-python${{ matrix.python-version }}-${{ env.CACHE_NUMBER }}
+      - name: Install Python
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - name: (Ubuntu) Install GCC
+        if: ${{ matrix.config.os == 'ubuntu-latest' }}
+        run: |
+          sudo apt update
+          sudo apt install g++ -y
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytorch-lightning
+          pip install --upgrade pip
           pip install -e .
-      - name: Test with pytest
+          pip install pytest tensorboard
+      - name: Run unit tests
+        run: pytest norse
+
+  build-python-checks:
+    runs-on: ubuntu-latest
+    name: "Build Python: type checking, linting, and coverage"
+    steps:
+      - uses: actions/checkout@master
+      - name: Cache
+        if: ${{ !env.ACT }} # Cache not working due to https://github.com/nektos/act/issues/329
+        uses: actions/cache@v2
+        env:
+          # Increase this value to reset cache if environment.yaml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: ~/cpp_pkgs_dir
+          key: ubuntu-python-latest-${{ env.CACHE_NUMBER }}
+      - name: Install Python
+        uses: actions/setup-python@v2
+      - name: Install GCC
         run: |
-          pip install pytest pytest-cov
-          pytest norse --cov=norse/torch --cov-config=.coveragerc --cov-report=xml
-      - name: Test with PyType
+          sudo apt update
+          sudo apt install g++ -y
+      - name: Install dependencies
         run: |
-          pip install pytype
-          pytype norse
+          pip install -e .
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+      - name: Run unit tests
+        run: pytest norse --cov=./ --cov-report=xml
+      - name: Type check
+        run: pytype norse -j 4
+      - name: Lint
+        run: black --check norse
       - name: Upload coverage
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
           flags: unittests
           env_vars: OS,PYTHON
           name: codecov-umbrella
           fail_ci_if_error: true
-      - name: Lint with black
-        run: |
-          pip install black
-          black --check norse

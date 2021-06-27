@@ -1,7 +1,7 @@
+from os import path
+
 import setuptools
 from setuptools import setup
-
-from os import path
 
 from torch.utils.cpp_extension import BuildExtension, CppExtension
 
@@ -13,6 +13,12 @@ with open(path.join(pwd, "requirements.txt")) as fp:
 with open(path.join(pwd, "README.md"), encoding="utf-8") as fp:
     readme_text = fp.read()
 
+cpp_extension = CppExtension(
+    name="norse_op",
+    sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
+    extra_compile_args=["-O3"],
+)
+
 setup(
     install_requires=install_requires,
     name="norse",
@@ -21,8 +27,8 @@ setup(
     long_description=readme_text,
     long_description_content_type="text/markdown",
     url="http://github.com/norse/norse",
-    author="Christian Pehle",
-    author_email="christian.pehle@gmail.com",
+    author="Christian Pehle, Jens E. Pedersen",
+    author_email="christian.pehle@gmail.com, jens@jepedersen.dk",
     packages=setuptools.find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -39,8 +45,6 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     keywords="machine learning spiking neural networks",
-    ext_modules=[
-        CppExtension("norse_op", ["norse/csrc/op.cpp"], extra_compile_args=["-O3"])
-    ],
+    ext_modules=[cpp_extension],
     cmdclass={"build_ext": BuildExtension.with_options(no_python_abi_suffix=True)},
 )
