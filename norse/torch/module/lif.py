@@ -287,6 +287,7 @@ class LIFRecurrent(SNNRecurrent):
                 input_size=input_size,
                 hidden_size=hidden_size,
                 p=p,
+                *args,
                 **kwargs,
             )
         else:

@@ -1,3 +1,5 @@
+import sys
+
 import torch
 import pytest
 
@@ -8,7 +10,7 @@ from norse.torch.functional.lif import (
     LIFParameters,
     LIFParametersJIT,
     lif_step,
-    # lif_step_integral,
+    lif_step_integral,
     lif_feed_forward_step,
     lif_feed_forward_integral,
     _lif_feed_forward_step_jit,
@@ -27,6 +29,7 @@ def jit_fixture():
 
 
 def test_lif_cpp_and_jit_step():
+    assert norse.utils.IS_OPS_LOADED
     x = torch.ones(20)
     s = LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10))
     input_weights = torch.linspace(0, 0.5, 200).view(10, 20)
@@ -96,6 +99,59 @@ def test_lif_heavi():
     z, s = lif_step(x, s, input_weights, recurrent_weights, p)
     assert z.max() > 0
     assert z.shape == (2, 1)
+
+
+def test_lif_integral_jit(jit_fixture):
+    x = torch.ones(10, 20)
+    s = LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10))
+    input_weights = torch.linspace(0, 0.5, 200).view(10, 20)
+    recurrent_weights = torch.linspace(0, -2, 100).view(10, 10)
+
+    results = [
+        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        torch.as_tensor([0, 0, 0, 0, 1, 1, 1, 1, 1, 1]),
+        torch.as_tensor([0, 0, 1, 1, 1, 1, 1, 1, 1, 1]),
+        torch.as_tensor([0, 0, 0, 0, 0, 0, 1, 1, 1, 1]),
+        torch.as_tensor([0, 0, 0, 0, 1, 1, 0, 0, 0, 0]),
+        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 1, 1, 1]),
+        torch.as_tensor([0, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
+        torch.as_tensor([0, 1, 1, 0, 1, 0, 0, 1, 1, 1]),
+        torch.as_tensor([0, 0, 0, 0, 0, 1, 1, 0, 0, 1]),
+    ]
+
+    s = LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10))
+    norse.utils.IS_OPS_LOADED = False  # Disable cpp
+
+    z, s = lif_step_integral(x, s, input_weights, recurrent_weights)
+    assert torch.all(torch.equal(z, results))
+
+
+def test_lif_integral_cpp(cpp_fixture):
+    x = torch.ones(10, 20)
+    s = LIFState(z=torch.zeros(20), v=torch.zeros(20), i=torch.zeros(20))
+    input_weights = torch.linspace(0, 0.5, 200).view(10, 20)
+    recurrent_weights = torch.linspace(0, -2, 100).view(10, 10)
+
+    results = [
+        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+        torch.as_tensor([0, 0, 0, 0, 1, 1, 1, 1, 1, 1]),
+        torch.as_tensor([0, 0, 1, 1, 1, 1, 1, 1, 1, 1]),
+        torch.as_tensor([0, 0, 0, 0, 0, 0, 1, 1, 1, 1]),
+        torch.as_tensor([0, 0, 0, 0, 1, 1, 0, 0, 0, 0]),
+        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 1, 1, 1]),
+        torch.as_tensor([0, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
+        torch.as_tensor([0, 1, 1, 0, 1, 0, 0, 1, 1, 1]),
+        torch.as_tensor([0, 0, 0, 0, 0, 1, 1, 0, 0, 1]),
+    ]
+
+    z, s = lif_step_integral(x, s, input_weights, recurrent_weights)
+    assert torch.all(torch.equal(z.size(), torch.tensor([10, 20])))
+    assert torch.all(torch.equal(s.z.size(), torch.tensor([20])))
+    assert torch.all(torch.equal(s.v.size(), torch.tensor([20])))
+    assert torch.all(torch.equal(s.i.size(), torch.tensor([20])))
+    assert torch.all(torch.equal(z, results))
 
 
 def test_lif_feed_forward_step():
@@ -172,7 +228,7 @@ def test_lif_feed_forward_integrate_cpp(cpp_fixture):
     assert torch.allclose(expected_v, s.v[0], atol=1e-4)
 
 
-def test_lif_feed_forward_integrate_jif(jit_fixture):
+def test_lif_feed_forward_integrate_jit(jit_fixture):
     x = torch.ones(9, 2)
     s = LIFFeedForwardState(v=torch.zeros(2), i=torch.zeros(2))
 
