@@ -28,12 +28,8 @@ gradient approach that uses the :mod:`.heaviside` step function:
 
 """
 from typing import NamedTuple, Optional, Tuple
-import sys
-
 import torch
 import torch.jit
-
-import norse.utils
 
 try:
     import norse_op
