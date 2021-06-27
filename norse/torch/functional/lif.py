@@ -244,19 +244,18 @@ def lif_step(
             return z, LIFState(z=z, v=v, i=i)
         except NameError:
             pass
-    else:
-        jit_params = LIFParametersJIT(
-            tau_syn_inv=p.tau_syn_inv,
-            tau_mem_inv=p.tau_mem_inv,
-            v_leak=p.v_leak,
-            v_th=p.v_th,
-            v_reset=p.v_reset,
-            method=p.method,
-            alpha=torch.as_tensor(p.alpha),
-        )
-        return _lif_step_jit(
-            input_tensor, state, input_weights, recurrent_weights, jit_params, dt
-        )
+    jit_params = LIFParametersJIT(
+        tau_syn_inv=p.tau_syn_inv,
+        tau_mem_inv=p.tau_mem_inv,
+        v_leak=p.v_leak,
+        v_th=p.v_th,
+        v_reset=p.v_reset,
+        method=p.method,
+        alpha=torch.as_tensor(p.alpha),
+    )
+    return _lif_step_jit(
+        input_tensor, state, input_weights, recurrent_weights, jit_params, dt
+    )
 
 
 def lif_step_integral(
@@ -319,15 +318,14 @@ def lif_step_integral(
             return z, LIFState(z=z, v=v, i=i)
         except NameError:
             pass
-    else:
-        return lift(_lif_step_jit)(
-            input_tensor=input_tensor,
-            state=state,
-            input_weights=input_weights,
-            recurrent_weights=recurrent_weights,
-            p=p,
-            dt=dt,
-        )
+    return lift(_lif_step_jit)(
+        input_tensor=input_tensor,
+        state=state,
+        input_weights=input_weights,
+        recurrent_weights=recurrent_weights,
+        p=p,
+        dt=dt,
+    )
 
 
 @torch.jit.script
@@ -409,19 +407,16 @@ def lif_feed_forward_step(
             return z, LIFFeedForwardState(v=v, i=i)
         except NameError:
             pass
-    else:
-        jit_params = LIFParametersJIT(
-            tau_syn_inv=p.tau_syn_inv,
-            tau_mem_inv=p.tau_mem_inv,
-            v_leak=p.v_leak,
-            v_th=p.v_th,
-            v_reset=p.v_reset,
-            method=p.method,
-            alpha=torch.as_tensor(p.alpha),
-        )
-        return _lif_feed_forward_step_jit(
-            input_tensor, state=state, p=jit_params, dt=dt
-        )
+    jit_params = LIFParametersJIT(
+        tau_syn_inv=p.tau_syn_inv,
+        tau_mem_inv=p.tau_mem_inv,
+        v_leak=p.v_leak,
+        v_th=p.v_th,
+        v_reset=p.v_reset,
+        method=p.method,
+        alpha=torch.as_tensor(p.alpha),
+    )
+    return _lif_feed_forward_step_jit(input_tensor, state=state, p=jit_params, dt=dt)
 
 
 def lif_feed_forward_integral(
@@ -466,10 +461,9 @@ def lif_feed_forward_integral(
             return z, LIFState(z=z, v=v, i=i)
         except NameError:
             pass
-    else:
-        return lift(lif_feed_forward_step)(
-            input_tensor=input_tensor, state=state, p=p, dt=dt
-        )
+    return lift(lif_feed_forward_step)(
+        input_tensor=input_tensor, state=state, p=p, dt=dt
+    )
 
 
 def lif_feed_forward_step_sparse(
