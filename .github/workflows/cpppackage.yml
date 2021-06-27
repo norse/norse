@@ -13,16 +13,8 @@ jobs:
       max-parallel: 4
       matrix:
         config:
-          - { name: "Windows cl", os: windows-latest, cc: "cl", cxx: "cl" }
           - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
-          - {
-              name: "MacOS clang",
-              os: macos-latest,
-              cc: "clang",
-              cxx: "clang++",
-            }
-        python-version: [3.7, 3.8, 3.9]
-    name: "Build C++ - ${{ matrix.config.name}} Python v${{ matrix.python-version }}"
+    name: "Build C++ - ${{ matrix.config.name}}"
     steps:
       - uses: actions/checkout@v2
       - name: Cache
@@ -36,8 +28,6 @@ jobs:
           key: ${{ runner.os }}-python${{ matrix.python-version }}-${{ env.CACHE_NUMBER }} }}
       - name: Install Python
         uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1.9
         with:
@@ -49,23 +39,6 @@ jobs:
           sudo apt install g++ libgtest-dev ninja-build -y
           wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.9.0%2Bcpu.zip -O ${{ github.workspace }}/libtorch.zip
           unzip -q ${{ github.workspace }}/libtorch.zip -d ${{ github.workspace }}/
-      - name: (MacOS) Install clang and libtorch
-        if: ${{ matrix.config.os == 'macos-latest' }}
-        run: |
-          brew install llvm ninja
-          wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-1.9.0%2Bcpu.zip -O ${{ github.workspace }}/libtorch.zip
-          unzip -q ${{ github.workspace }}/libtorch.zip -d ${{ github.workspace }}/
-      - name: (Windows) Install Chocolatey
-        if: ${{ matrix.config.os == 'windows-latest' }}
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: install ninja wget unzip microsoft-build-tools vcredist-all
-      - name: (Windows) Install libtorch
-        if: ${{ matrix.config.os == 'windows-latest'}}
-        run: |
-          wget https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-1.9.0%2Bcpu.zip -O ${{ github.workspace }}/libtorch.zip
-          unzip -q ${{ github.workspace }}/libtorch.zip -d ${{ github.workspace }}/
-      - run: env
       - name: Build
         env:
           CC: ${{ matrix.config.cc }}
