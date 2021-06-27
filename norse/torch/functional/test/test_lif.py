@@ -101,57 +101,58 @@ def test_lif_heavi():
     assert z.shape == (2, 1)
 
 
-def test_lif_integral_jit(jit_fixture):
+def test_lif_integral(jit_fixture):
     x = torch.ones(10, 20)
     s = LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10))
     input_weights = torch.linspace(0, 0.5, 200).view(10, 20)
     recurrent_weights = torch.linspace(0, -2, 100).view(10, 10)
 
-    results = [
-        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-        torch.as_tensor([0, 0, 0, 0, 1, 1, 1, 1, 1, 1]),
-        torch.as_tensor([0, 0, 1, 1, 1, 1, 1, 1, 1, 1]),
-        torch.as_tensor([0, 0, 0, 0, 0, 0, 1, 1, 1, 1]),
-        torch.as_tensor([0, 0, 0, 0, 1, 1, 0, 0, 0, 0]),
-        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 1, 1, 1]),
-        torch.as_tensor([0, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
-        torch.as_tensor([0, 1, 1, 0, 1, 0, 0, 1, 1, 1]),
-        torch.as_tensor([0, 0, 0, 0, 0, 1, 1, 0, 0, 1]),
-    ]
-
-    s = LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10))
-    norse.utils.IS_OPS_LOADED = False  # Disable cpp
+    results = torch.stack(
+        [
+            torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+            torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+            torch.as_tensor([0, 0, 0, 0, 1, 1, 1, 1, 1, 1]),
+            torch.as_tensor([0, 0, 1, 1, 1, 1, 1, 1, 1, 1]),
+            torch.as_tensor([0, 0, 0, 0, 0, 0, 1, 1, 1, 1]),
+            torch.as_tensor([0, 0, 0, 0, 1, 1, 0, 0, 0, 0]),
+            torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 1, 1, 1]),
+            torch.as_tensor([0, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
+            torch.as_tensor([0, 1, 1, 0, 1, 0, 0, 1, 1, 1]),
+            torch.as_tensor([0, 0, 0, 0, 0, 1, 1, 0, 0, 1]),
+        ]
+    )
 
     z, s = lif_step_integral(x, s, input_weights, recurrent_weights)
-    assert torch.all(torch.equal(z, results))
+    assert torch.equal(torch.tensor(s.v.size()), torch.tensor([10]))
+    assert torch.equal(torch.tensor(s.i.size()), torch.tensor([10]))
+    assert torch.equal(z, results.float())
 
 
 def test_lif_integral_cpp(cpp_fixture):
     x = torch.ones(10, 20)
-    s = LIFState(z=torch.zeros(20), v=torch.zeros(20), i=torch.zeros(20))
+    s = LIFState(z=torch.zeros(10), v=torch.zeros(10), i=torch.zeros(10))
     input_weights = torch.linspace(0, 0.5, 200).view(10, 20)
     recurrent_weights = torch.linspace(0, -2, 100).view(10, 10)
 
-    results = [
-        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-        torch.as_tensor([0, 0, 0, 0, 1, 1, 1, 1, 1, 1]),
-        torch.as_tensor([0, 0, 1, 1, 1, 1, 1, 1, 1, 1]),
-        torch.as_tensor([0, 0, 0, 0, 0, 0, 1, 1, 1, 1]),
-        torch.as_tensor([0, 0, 0, 0, 1, 1, 0, 0, 0, 0]),
-        torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 1, 1, 1]),
-        torch.as_tensor([0, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
-        torch.as_tensor([0, 1, 1, 0, 1, 0, 0, 1, 1, 1]),
-        torch.as_tensor([0, 0, 0, 0, 0, 1, 1, 0, 0, 1]),
-    ]
+    results = torch.stack(
+        [
+            torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+            torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+            torch.as_tensor([0, 0, 0, 0, 1, 1, 1, 1, 1, 1]),
+            torch.as_tensor([0, 0, 1, 1, 1, 1, 1, 1, 1, 1]),
+            torch.as_tensor([0, 0, 0, 0, 0, 0, 1, 1, 1, 1]),
+            torch.as_tensor([0, 0, 0, 0, 1, 1, 0, 0, 0, 0]),
+            torch.as_tensor([0, 0, 0, 0, 0, 0, 0, 1, 1, 1]),
+            torch.as_tensor([0, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
+            torch.as_tensor([0, 1, 1, 0, 1, 0, 0, 1, 1, 1]),
+            torch.as_tensor([0, 0, 0, 0, 0, 1, 1, 0, 0, 1]),
+        ]
+    )
 
     z, s = lif_step_integral(x, s, input_weights, recurrent_weights)
-    assert torch.all(torch.equal(z.size(), torch.tensor([10, 20])))
-    assert torch.all(torch.equal(s.z.size(), torch.tensor([20])))
-    assert torch.all(torch.equal(s.v.size(), torch.tensor([20])))
-    assert torch.all(torch.equal(s.i.size(), torch.tensor([20])))
-    assert torch.all(torch.equal(z, results))
+    assert torch.equal(torch.tensor(s.v.size()), torch.tensor([10]))
+    assert torch.equal(torch.tensor(s.i.size()), torch.tensor([10]))
+    assert torch.equal(z, results.float())
 
 
 def test_lif_feed_forward_step():

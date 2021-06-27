@@ -320,17 +320,13 @@ def lif_step_integral(
         except NameError:
             pass
     else:
-        jit_params = LIFParametersJIT(
-            tau_syn_inv=p.tau_syn_inv,
-            tau_mem_inv=p.tau_mem_inv,
-            v_leak=p.v_leak,
-            v_th=p.v_th,
-            v_reset=p.v_reset,
-            method=p.method,
-            alpha=torch.as_tensor(p.alpha),
-        )
-        return _lif_step_jit(
-            input_tensor, state, input_weights, recurrent_weights, jit_params, dt
+        return lift(_lif_step_jit)(
+            input_tensor=input_tensor,
+            state=state,
+            input_weights=input_weights,
+            recurrent_weights=recurrent_weights,
+            p=p,
+            dt=dt,
         )
 
 
@@ -464,7 +460,9 @@ def lif_feed_forward_integral(
     """
     if norse.utils.IS_OPS_LOADED:
         try:
-            z, v, i = norse_op.lif_super_feed_forward_integral(input_tensor, state, p, dt)
+            z, v, i = norse_op.lif_super_feed_forward_integral(
+                input_tensor, state, p, dt
+            )
             return z, LIFState(z=z, v=v, i=i)
         except NameError:
             pass
