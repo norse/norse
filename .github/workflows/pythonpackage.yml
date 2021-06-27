@@ -37,6 +37,7 @@ jobs:
           sudo apt install g++ -y
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install -e .
           pip install pytest tensorboard
       - name: Run unit tests
