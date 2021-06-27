@@ -1,22 +1,19 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>norse.torch.functional.test.test_stdp &#8212; norse 0.0.4 documentation</title>
-    <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>norse.torch.functional.test.test_stdp &#8212; norse 0.0.6 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/gallery-dataframe.css" />
-    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
-    <script src="../../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="../../../../../about.html" />
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -37,119 +34,267 @@
           <div class="body" role="main">
             
   <h1>Source code for norse.torch.functional.test.test_stdp</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.functional.stdp</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">...functional.stdp</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">STDPParameters</span><span class="p">,</span>
     <span class="n">STDPState</span><span class="p">,</span>
-    <span class="n">linear_soft_multiplicative_stdp_step</span><span class="p">,</span>
-    <span class="n">linear_hard_multiplicative_stdp_step</span><span class="p">,</span>
-    <span class="n">linear_additive_stdp_step</span><span class="p">,</span>
-    <span class="n">conv2d_soft_multiplicative_stdp_step</span><span class="p">,</span>
-    <span class="n">conv2d_hard_multiplicative_stdp_step</span><span class="p">,</span>
-    <span class="n">conv2d_additive_stdp_step</span><span class="p">,</span>
+    <span class="n">stdp_step_linear</span><span class="p">,</span>
+    <span class="n">stdp_step_conv2d</span><span class="p">,</span>
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="test_linear_soft_multiplicative_stdp_step"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.test_linear_soft_multiplicative_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">test_linear_soft_multiplicative_stdp_step</span><span class="p">():</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="mi">100</span>
-    <span class="n">pre</span><span class="p">,</span> <span class="n">post</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="n">pre</span><span class="p">)</span>  <span class="c1"># weights between 0 and 1 as default</span>
-    <span class="n">z_pre</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">time</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pre</span><span class="p">))</span>
-    <span class="n">z_post</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">post</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pre</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">post</span><span class="p">))</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
-        <span class="n">dw</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">linear_soft_multiplicative_stdp_step</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">z_pre</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z_post</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s</span><span class="p">)</span>
-        <span class="n">w</span> <span class="o">+=</span> <span class="n">dw</span></div>
+<div class="viewcode-block" id="create_id"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.create_id">[docs]</a><span class="k">def</span> <span class="nf">create_id</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="test_linear_hard_multiplicative_stdp_step"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.test_linear_hard_multiplicative_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">test_linear_hard_multiplicative_stdp_step</span><span class="p">():</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="mi">100</span>
-    <span class="n">pre</span><span class="p">,</span> <span class="n">post</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="n">pre</span><span class="p">)</span>  <span class="c1"># weights between 0 and 1 as default</span>
-    <span class="n">z_pre</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">time</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pre</span><span class="p">))</span>
-    <span class="n">z_post</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">post</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pre</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">post</span><span class="p">))</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
-        <span class="n">dw</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">linear_hard_multiplicative_stdp_step</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">z_pre</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z_post</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s</span><span class="p">)</span>
-        <span class="n">w</span> <span class="o">+=</span> <span class="n">dw</span></div>
-
-
-<div class="viewcode-block" id="test_linear_additive_stdp_step"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.test_linear_additive_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">test_linear_additive_stdp_step</span><span class="p">():</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="mi">100</span>
-    <span class="n">pre</span><span class="p">,</span> <span class="n">post</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="n">pre</span><span class="p">)</span>  <span class="c1"># weights between 0 and 1 as default</span>
-    <span class="n">z_pre</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">time</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pre</span><span class="p">))</span>
-    <span class="n">z_post</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">post</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pre</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">post</span><span class="p">))</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
-        <span class="n">dw</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">linear_additive_stdp_step</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">z_pre</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z_post</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s</span><span class="p">)</span>
-        <span class="n">w</span> <span class="o">+=</span> <span class="n">dw</span></div>
-
-
-<div class="viewcode-block" id="test_conv2d_soft_multiplicative_stdp_step"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.test_conv2d_soft_multiplicative_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">test_conv2d_soft_multiplicative_stdp_step</span><span class="p">():</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="mi">100</span>
-    <span class="n">batch</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span>
-    <span class="n">in_hw</span><span class="p">,</span> <span class="n">out_hw</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
-    <span class="n">kernel</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="c1"># stride, padding, dilation = (1, 0, 1) as default</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>  <span class="c1"># weights between 0 and 1 as default</span>
-    <span class="n">z_pre</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">time</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">in_hw</span><span class="p">))</span>
-    <span class="n">z_post</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">out_hw</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">(</span>
-        <span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">in_hw</span><span class="p">),</span>
-        <span class="n">y</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">out_hw</span><span class="p">),</span>
+<span class="c1"># Linear STDP</span>
+<div class="viewcode-block" id="initialise_for_linear_stdp"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.initialise_for_linear_stdp">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span>
+    <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;function&quot;</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;additive&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;additive_step&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;multiplicative_pow&quot;</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;multiplicative_relu&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+    <span class="p">],</span>
+    <span class="n">ids</span><span class="o">=</span><span class="n">create_id</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">initialise_for_linear_stdp</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">stdp_algorithm</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_batches</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">n_pre</span><span class="p">,</span> <span class="n">n_post</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+    <span class="n">w0</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_post</span><span class="p">,</span> <span class="n">n_pre</span><span class="p">)</span>
+    <span class="n">z_pre</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]],</span>
+            <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span>
+            <span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]],</span>
+        <span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="n">z_post</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span>
+            <span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]],</span>
+            <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span>
+        <span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="n">state_stdp</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">(</span>
+        <span class="n">t_pre</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">n_pre</span><span class="p">),</span>
+        <span class="n">t_post</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">n_post</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">p_stdp</span> <span class="o">=</span> <span class="n">STDPParameters</span><span class="p">(</span>
+        <span class="n">eta_minus</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">,</span>
+        <span class="n">eta_plus</span><span class="o">=</span><span class="mf">3e-1</span><span class="p">,</span>  <span class="c1"># Best to check with large, asymmetric learning-rates</span>
+        <span class="n">stdp_algorithm</span><span class="o">=</span><span class="n">stdp_algorithm</span><span class="p">,</span>
+        <span class="n">mu</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">hardbound</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">convolutional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
-        <span class="n">dw</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">conv2d_soft_multiplicative_stdp_step</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">z_pre</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z_post</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s</span><span class="p">)</span>
-        <span class="n">w</span> <span class="o">+=</span> <span class="n">dw</span></div>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">stdp_algorithm</span><span class="p">,</span>
+        <span class="n">n_batches</span><span class="p">,</span>
+        <span class="n">n_pre</span><span class="p">,</span>
+        <span class="n">n_post</span><span class="p">,</span>
+        <span class="n">w0</span><span class="p">,</span>
+        <span class="n">z_pre</span><span class="p">,</span>
+        <span class="n">z_post</span><span class="p">,</span>
+        <span class="n">state_stdp</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="test_conv2d_hard_multiplicative_stdp_step"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.test_conv2d_hard_multiplicative_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">test_conv2d_hard_multiplicative_stdp_step</span><span class="p">():</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="mi">1000</span>
-    <span class="n">batch</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span>
-    <span class="n">in_hw</span><span class="p">,</span> <span class="n">out_hw</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
-    <span class="n">kernel</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="c1"># stride, padding, dilation = (1, 0, 1) as default</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>  <span class="c1"># weights between 0 and 1 as default</span>
-    <span class="n">z_pre</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">time</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">in_hw</span><span class="p">))</span>
-    <span class="n">z_post</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">out_hw</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">(</span>
-        <span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">in_hw</span><span class="p">),</span>
-        <span class="n">y</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">out_hw</span><span class="p">),</span>
+<div class="viewcode-block" id="test_linear_stdp_stepper"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.test_linear_stdp_stepper">[docs]</a><span class="k">def</span> <span class="nf">test_linear_stdp_stepper</span><span class="p">(</span><span class="n">initialise_for_linear_stdp</span><span class="p">):</span>
+    <span class="p">(</span>
+        <span class="n">_</span><span class="p">,</span>
+        <span class="n">n_batches</span><span class="p">,</span>
+        <span class="n">n_pre</span><span class="p">,</span>
+        <span class="n">n_post</span><span class="p">,</span>
+        <span class="n">w</span><span class="p">,</span>
+        <span class="n">z_pre</span><span class="p">,</span>
+        <span class="n">z_post</span><span class="p">,</span>
+        <span class="n">state_stdp</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">initialise_for_linear_stdp</span>
+
+    <span class="n">n_time</span> <span class="o">=</span> <span class="n">z_pre</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">t_pre</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">t_post</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">n_t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_time</span><span class="p">):</span>
+        <span class="n">w0</span> <span class="o">=</span> <span class="n">w</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">state_stdp</span> <span class="o">=</span> <span class="n">stdp_step_linear</span><span class="p">(</span>
+            <span class="n">z_pre</span><span class="p">[</span><span class="n">n_t</span><span class="p">],</span>
+            <span class="n">z_post</span><span class="p">[</span><span class="n">n_t</span><span class="p">],</span>
+            <span class="n">w</span><span class="p">,</span>
+            <span class="n">state_stdp</span><span class="p">,</span>
+            <span class="n">p_stdp</span><span class="p">,</span>
+            <span class="n">dt</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Calculating the gradient for one synapse</span>
+        <span class="n">t_pre</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="mf">0.001</span> <span class="o">*</span> <span class="p">(</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">tau_pre_inv</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">t_pre</span> <span class="o">+</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">*</span> <span class="n">z_pre</span><span class="p">[</span><span class="n">n_t</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">t_post</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="mf">0.001</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">tau_post_inv</span><span class="p">)</span>
+            <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">t_post</span> <span class="o">+</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">a_post</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">[</span><span class="n">n_t</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Check potentiation</span>
+        <span class="k">if</span> <span class="n">n_t</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">w0</span><span class="p">)</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">w_max</span> <span class="o">-</span> <span class="n">w0</span><span class="p">,</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">mu</span><span class="p">),</span>
+                <span class="n">p_stdp</span><span class="o">.</span><span class="n">eta_plus</span> <span class="o">*</span> <span class="n">t_pre</span><span class="p">,</span>
+                <span class="n">atol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                <span class="n">rtol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="c1"># Check depression</span>
+        <span class="k">if</span> <span class="n">n_t</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">w0</span><span class="p">)</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">w0</span><span class="p">,</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">mu</span><span class="p">),</span>
+                <span class="n">p_stdp</span><span class="o">.</span><span class="n">eta_minus</span> <span class="o">*</span> <span class="n">t_post</span><span class="p">,</span>
+                <span class="n">atol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                <span class="n">rtol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Shape checks</span>
+    <span class="k">assert</span> <span class="n">state_stdp</span><span class="o">.</span><span class="n">t_pre</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">n_pre</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">state_stdp</span><span class="o">.</span><span class="n">t_post</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">n_post</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">n_post</span><span class="p">,</span> <span class="n">n_pre</span><span class="p">)</span></div>
+
+
+<span class="c1"># Conv2D STDP</span>
+<div class="viewcode-block" id="initialise_for_conv2d_stdp"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.initialise_for_conv2d_stdp">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span>
+    <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;function&quot;</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;additive&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;additive_step&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;multiplicative_pow&quot;</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;multiplicative_relu&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+    <span class="p">],</span>
+    <span class="n">ids</span><span class="o">=</span><span class="n">create_id</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">initialise_for_conv2d_stdp</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">stdp_algorithm</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_batches</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">c_pre</span><span class="p">,</span> <span class="n">c_post</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span>
+    <span class="n">hw_pre</span><span class="p">,</span> <span class="n">hw_post</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="n">hw_kern</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">w0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">c_pre</span><span class="p">,</span> <span class="n">c_post</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_kern</span><span class="p">)</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">w0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">z_pre</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_pre</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_pre</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_pre</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_pre</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_pre</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_pre</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">z_post</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_post</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_post</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_post</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_post</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_post</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_post</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">state_stdp</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">(</span>
+        <span class="n">t_pre</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_pre</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_pre</span><span class="p">),</span>
+        <span class="n">t_post</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_post</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_post</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">p_stdp</span> <span class="o">=</span> <span class="n">STDPParameters</span><span class="p">(</span>
+        <span class="n">eta_minus</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
+        <span class="n">eta_plus</span><span class="o">=</span><span class="mf">3e-2</span><span class="p">,</span>  <span class="c1"># Best to check with large, asymmetric learning-rates</span>
+        <span class="n">stdp_algorithm</span><span class="o">=</span><span class="n">stdp_algorithm</span><span class="p">,</span>
+        <span class="n">mu</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">hardbound</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">convolutional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
-        <span class="n">dw</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">conv2d_hard_multiplicative_stdp_step</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">z_pre</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z_post</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s</span><span class="p">)</span>
-        <span class="n">w</span> <span class="o">+=</span> <span class="n">dw</span></div>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">stdp_algorithm</span><span class="p">,</span>
+        <span class="n">n_batches</span><span class="p">,</span>
+        <span class="n">c_pre</span><span class="p">,</span>
+        <span class="n">c_post</span><span class="p">,</span>
+        <span class="n">hw_pre</span><span class="p">,</span>
+        <span class="n">hw_post</span><span class="p">,</span>
+        <span class="n">hw_kern</span><span class="p">,</span>
+        <span class="n">w0</span><span class="p">,</span>
+        <span class="n">z_pre</span><span class="p">,</span>
+        <span class="n">z_post</span><span class="p">,</span>
+        <span class="n">state_stdp</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="test_conv2d_additive_stdp_step"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.test_conv2d_additive_stdp_step">[docs]</a><span class="k">def</span> <span class="nf">test_conv2d_additive_stdp_step</span><span class="p">():</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="mi">100</span>
-    <span class="n">batch</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span>
-    <span class="n">in_hw</span><span class="p">,</span> <span class="n">out_hw</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
-    <span class="n">kernel</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="c1"># stride, padding, dilation = (1, 0, 1) as default</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>  <span class="c1"># weights between 0 and 1 as default</span>
-    <span class="n">z_pre</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">time</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">in_hw</span><span class="p">))</span>
-    <span class="n">z_post</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">out_hw</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">STDPState</span><span class="p">(</span>
-        <span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">in_hw</span><span class="p">),</span>
-        <span class="n">y</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="o">*</span><span class="n">out_hw</span><span class="p">),</span>
-    <span class="p">)</span>
+<div class="viewcode-block" id="test_conv2d_stdp_stepper"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_stdp.html#norse.torch.functional.test.test_stdp.test_conv2d_stdp_stepper">[docs]</a><span class="k">def</span> <span class="nf">test_conv2d_stdp_stepper</span><span class="p">(</span><span class="n">initialise_for_conv2d_stdp</span><span class="p">):</span>
+    <span class="p">(</span>
+        <span class="n">_</span><span class="p">,</span>
+        <span class="n">n_batches</span><span class="p">,</span>
+        <span class="n">c_pre</span><span class="p">,</span>
+        <span class="n">c_post</span><span class="p">,</span>
+        <span class="n">hw_pre</span><span class="p">,</span>
+        <span class="n">hw_post</span><span class="p">,</span>
+        <span class="n">hw_kern</span><span class="p">,</span>
+        <span class="n">w</span><span class="p">,</span>
+        <span class="n">z_pre</span><span class="p">,</span>
+        <span class="n">z_post</span><span class="p">,</span>
+        <span class="n">state_stdp</span><span class="p">,</span>
+        <span class="n">p_stdp</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">initialise_for_conv2d_stdp</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
-        <span class="n">dw</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">conv2d_additive_stdp_step</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">z_pre</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">z_post</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s</span><span class="p">)</span>
-        <span class="n">w</span> <span class="o">+=</span> <span class="n">dw</span></div>
+    <span class="n">n_time</span> <span class="o">=</span> <span class="n">z_pre</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">t_pre</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">t_post</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">n_t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_time</span><span class="p">):</span>
+        <span class="n">w0</span> <span class="o">=</span> <span class="n">w</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">state_stdp</span> <span class="o">=</span> <span class="n">stdp_step_conv2d</span><span class="p">(</span>
+            <span class="n">z_pre</span><span class="p">[</span><span class="n">n_t</span><span class="p">],</span>
+            <span class="n">z_post</span><span class="p">[</span><span class="n">n_t</span><span class="p">],</span>
+            <span class="n">w</span><span class="p">,</span>
+            <span class="n">state_stdp</span><span class="p">,</span>
+            <span class="n">p_stdp</span><span class="p">,</span>
+            <span class="n">dt</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Calculating the gradient for one synapse</span>
+        <span class="n">t_pre</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="mf">0.001</span>
+            <span class="o">*</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">tau_pre_inv</span>
+            <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">t_pre</span> <span class="o">+</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">a_pre</span> <span class="o">*</span> <span class="n">z_pre</span><span class="p">[</span><span class="n">n_t</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">t_post</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="mf">0.001</span>
+            <span class="o">*</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">tau_post_inv</span>
+            <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">t_post</span> <span class="o">+</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">a_post</span> <span class="o">*</span> <span class="n">z_post</span><span class="p">[</span><span class="n">n_t</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Check potentiation</span>
+        <span class="k">if</span> <span class="n">n_t</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">w0</span><span class="p">)</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">p_stdp</span><span class="o">.</span><span class="n">w_max</span> <span class="o">-</span> <span class="n">w0</span><span class="p">,</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">mu</span><span class="p">),</span>
+                <span class="n">hw_post</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">hw_post</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">eta_plus</span> <span class="o">*</span> <span class="n">t_pre</span><span class="p">,</span>
+                <span class="n">atol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                <span class="n">rtol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Check depression</span>
+        <span class="k">if</span> <span class="n">n_t</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">w0</span><span class="p">)</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">w0</span> <span class="o">-</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">w_min</span><span class="p">,</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">mu</span><span class="p">),</span>
+                <span class="n">hw_post</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">hw_post</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p_stdp</span><span class="o">.</span><span class="n">eta_minus</span> <span class="o">*</span> <span class="n">t_post</span><span class="p">,</span>
+                <span class="n">atol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                <span class="n">rtol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Shape checks</span>
+    <span class="k">assert</span> <span class="n">state_stdp</span><span class="o">.</span><span class="n">t_pre</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_pre</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_pre</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">state_stdp</span><span class="o">.</span><span class="n">t_post</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">c_post</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_post</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">c_post</span><span class="p">,</span> <span class="n">c_pre</span><span class="p">,</span> <span class="o">*</span><span class="n">hw_kern</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -182,23 +327,26 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Usage Docs</span></p>
+<p class="caption"><span class="caption-text">First steps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">∇ Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../started.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">3. Running Tasks</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Usage docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../about.html">1. About Norse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../installing.html">2. Installing Norse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../hardware.html">3. Hardware acceleration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../spiking.html">4. Introduction to spiking neural networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../learning.html">5. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../hardware.html">2. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../spiking.html">3. Introduction to spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../working.html">6. Working with Norse</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/index.html">1. Beginner tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../experiments.html">2. Running Experiments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../auto_api/norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_api/norse.dataset.html">norse.dataset package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../auto_api/norse.task.html">norse.task package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../auto_api/norse.torch.html">norse.torch package</a></li>
 </ul>
@@ -235,10 +383,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Norse.ai.
+      &copy;2019 - 2021, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

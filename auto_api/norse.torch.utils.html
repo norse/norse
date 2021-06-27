@@ -35,8 +35,180 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="norse-torch-utils-package">
-<h1>norse.torch.utils package<a class="headerlink" href="#norse-torch-utils-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-norse.torch.utils">
+<span id="norse-torch-utils-package"></span><h1>norse.torch.utils package<a class="headerlink" href="#module-norse.torch.utils" title="Permalink to this headline">¶</a></h1>
+<p>Utilities for Norse networks in Torch.</p>
+<p>Packages and subpackages may depend on Matplotlib and Tensorboard.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.torch.utils.hook_spike_activity_mean">
+<span class="sig-prename descclassname"><span class="pre">norse.torch.utils.</span></span><span class="sig-name descname"><span class="pre">hook_spike_activity_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/utils/tensorboard.html#hook_spike_activity_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.utils.hook_spike_activity_mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a hook that can be applied to stateful torch Modules.
+The hook plots the <em>mean neuron activity</em> as a line, assuming that the module output is a
+tuple of (spikes, state). That is, this will not work on modules that only
+returns a single tensor as output (i. e. have no state).</p>
+<p>Read more about hooks in PyTorch Modules in the
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">Module documentation</a>.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">snn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">snn.util</span> <span class="kn">import</span> <span class="n">tensorboard</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hook</span> <span class="o">=</span> <span class="n">tensorboard</span><span class="o">.</span><span class="n">hook_spike_activity_mean</span><span class="p">(</span><span class="s2">&quot;lif&quot;</span><span class="p">,</span> <span class="n">SummaryWriter</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">snn</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">()</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">hook</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the module as referred to in Tensorboard</p></li>
+<li><p><strong>writer</strong> (<em>SummaryWriter</em>) – The Tensorboard Writer to log to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A hook that will plot the mean neuron spike activity when registered
+to a Torch module.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.torch.utils.hook_spike_activity_sum">
+<span class="sig-prename descclassname"><span class="pre">norse.torch.utils.</span></span><span class="sig-name descname"><span class="pre">hook_spike_activity_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/utils/tensorboard.html#hook_spike_activity_sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.utils.hook_spike_activity_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a hook that can be applied to stateful torch Modules.
+The hook plots the <em>summed neuron activity</em> as a line, assuming that the module output is a
+tuple of (spikes, state). That is, this will not work on modules that only
+returns a single tensor as output (i. e. have no state).</p>
+<p>Read more about hooks in PyTorch Modules in the
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">Module documentation</a>.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">snn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">snn.util</span> <span class="kn">import</span> <span class="n">tensorboard</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hook</span> <span class="o">=</span> <span class="n">tensorboard</span><span class="o">.</span><span class="n">hook_spike_activity_sum</span><span class="p">(</span><span class="s2">&quot;lif&quot;</span><span class="p">,</span> <span class="n">SummaryWriter</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">snn</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">()</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">hook</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the module as referred to in Tensorboard</p></li>
+<li><p><strong>writer</strong> (<em>SummaryWriter</em>) – The Tensorboard Writer to log to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A hook that will plot the mean neuron spike activity when registered
+to a Torch module.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.torch.utils.hook_spike_histogram_mean">
+<span class="sig-prename descclassname"><span class="pre">norse.torch.utils.</span></span><span class="sig-name descname"><span class="pre">hook_spike_histogram_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/utils/tensorboard.html#hook_spike_histogram_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.utils.hook_spike_histogram_mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a hook that can be applied to stateful torch Modules.
+The hook shows a histogram of <em>mean neuron activity</em>, assuming that the module output is a
+tuple of (spikes, state). That is, this will not work on modules that only
+returns a single tensor as output (i. e. have no state).</p>
+<p>Read more about hooks in PyTorch Modules in the
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">Module documentation</a>.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">snn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">snn.util</span> <span class="kn">import</span> <span class="n">tensorboard</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hook</span> <span class="o">=</span> <span class="n">tensorboard</span><span class="o">.</span><span class="n">hook_spike_histogram_mean</span><span class="p">(</span><span class="s2">&quot;lif&quot;</span><span class="p">,</span> <span class="n">SummaryWriter</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">snn</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">()</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">hook</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the module as referred to in Tensorboard</p></li>
+<li><p><strong>writer</strong> (<em>SummaryWriter</em>) – The Tensorboard Writer to log to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A hook that will plot the mean neuron spike activity when registered
+to a Torch module.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.torch.utils.hook_spike_histogram_sum">
+<span class="sig-prename descclassname"><span class="pre">norse.torch.utils.</span></span><span class="sig-name descname"><span class="pre">hook_spike_histogram_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/utils/tensorboard.html#hook_spike_histogram_sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.utils.hook_spike_histogram_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a hook that can be applied to stateful torch Modules.
+The hook shows a histogram of the <em>summed neuron activity</em>, assuming that the module
+output is a tuple of (spikes, state). That is, this will not work on modules that only
+returns a single tensor as output (i. e. have no state).</p>
+<p>Read more about hooks in PyTorch Modules in the
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">Module documentation</a>.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">snn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">snn.util</span> <span class="kn">import</span> <span class="n">tensorboard</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hook</span> <span class="o">=</span> <span class="n">tensorboard</span><span class="o">.</span><span class="n">hook_spike_histogram_sum</span><span class="p">(</span><span class="s2">&quot;lif&quot;</span><span class="p">,</span> <span class="n">SummaryWriter</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">snn</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">()</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">hook</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the module as referred to in Tensorboard</p></li>
+<li><p><strong>writer</strong> (<em>SummaryWriter</em>) – The Tensorboard Writer to log to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A hook that will plot the mean neuron spike activity when registered
+to a Torch module.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.torch.utils.hook_spike_image">
+<span class="sig-prename descclassname"><span class="pre">norse.torch.utils.</span></span><span class="sig-name descname"><span class="pre">hook_spike_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/utils/tensorboard.html#hook_spike_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.utils.hook_spike_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a hook that can be applied to stateful torch Modules.
+The hook plots the <em>spiked</em> output, assuming that the module output is a
+tuple of (spikes, state). That is, this will not work on modules that only
+returns a single tensor as output (i. e. have no state).</p>
+<p>Read more about hooks in PyTorch Modules in the
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">Module documentation</a>.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">snn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">snn.util</span> <span class="kn">import</span> <span class="n">tensorboard</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hook</span> <span class="o">=</span> <span class="n">tensorboard</span><span class="o">.</span><span class="n">hook_spike_image</span><span class="p">(</span><span class="s2">&quot;lif&quot;</span><span class="p">,</span> <span class="n">SummaryWriter</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">snn</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">()</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">hook</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the module as referred to in Tensorboard</p></li>
+<li><p><strong>writer</strong> (<em>SummaryWriter</em>) – The Tensorboard Writer to log to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A hook that will plot the spike activity as an image when registered
+to a Torch module.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">

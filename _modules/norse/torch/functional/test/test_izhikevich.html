@@ -36,13 +36,13 @@
   <h1>Source code for norse.torch.functional.test.test_izhikevich</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">norse.torch.functional.izhikevich</span> <span class="k">as</span> <span class="nn">izk</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">from</span> <span class="nn">norse.torch.functional</span> <span class="kn">import</span> <span class="n">izhikevich</span> <span class="k">as</span> <span class="n">izk</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.izhikevich</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">izhikevich_step</span><span class="p">,</span>
 <span class="p">)</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">from</span> <span class="nn">norse.torch.utils.plot</span> <span class="kn">import</span> <span class="n">plot_izhikevich</span>
 
 
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;axes.spines.left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
@@ -475,6 +475,26 @@
         <span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_current</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">izhikevich_step</span><span class="p">(</span><span class="n">input_current</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vs</span><span class="p">,</span> <span class="n">cs</span></div>
+
+
+<div class="viewcode-block" id="test_creation"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_izhikevich.html#norse.torch.functional.test.test_izhikevich.test_creation">[docs]</a><span class="k">def</span> <span class="nf">test_creation</span><span class="p">():</span>
+    <span class="n">p</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">izk</span><span class="o">.</span><span class="n">tonic_spiking</span>
+    <span class="n">created</span> <span class="o">=</span> <span class="n">izk</span><span class="o">.</span><span class="n">create_izhikevich_spiking_behavior</span><span class="p">(</span>
+        <span class="n">a</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> <span class="n">v_rest</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">),</span> <span class="n">u_rest</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">p</span><span class="o">.</span><span class="n">b</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">created</span><span class="o">.</span><span class="n">p</span> <span class="o">==</span> <span class="n">p</span>
+    <span class="k">assert</span> <span class="n">created</span><span class="o">.</span><span class="n">s</span> <span class="o">==</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="test_creation_print"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_izhikevich.html#norse.torch.functional.test.test_izhikevich.test_creation_print">[docs]</a><span class="k">def</span> <span class="nf">test_creation_print</span><span class="p">():</span>
+    <span class="n">p</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">izk</span><span class="o">.</span><span class="n">tonic_spiking</span>
+    <span class="n">created</span> <span class="o">=</span> <span class="n">izk</span><span class="o">.</span><span class="n">create_izhikevich_spiking_behavior</span><span class="p">(</span>
+        <span class="n">a</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> <span class="n">v_rest</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">),</span> <span class="n">u_rest</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">p</span><span class="o">.</span><span class="n">b</span>
+    <span class="p">)</span>
+    <span class="n">plot_izhikevich</span><span class="p">(</span><span class="n">created</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">created</span><span class="o">.</span><span class="n">p</span> <span class="o">==</span> <span class="n">p</span>
+    <span class="k">assert</span> <span class="n">created</span><span class="o">.</span><span class="n">s</span> <span class="o">==</span> <span class="n">s</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="plot_test"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_izhikevich.html#norse.torch.functional.test.test_izhikevich.plot_test">[docs]</a><span class="k">def</span> <span class="nf">plot_test</span><span class="p">():</span>

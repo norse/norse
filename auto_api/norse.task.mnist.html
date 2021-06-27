@@ -35,8 +35,61 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="norse-task-mnist-module">
-<h1>norse.task.mnist module<a class="headerlink" href="#norse-task-mnist-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-norse.task.mnist">
+<span id="norse-task-mnist-module"></span><h1>norse.task.mnist module<a class="headerlink" href="#module-norse.task.mnist" title="Permalink to this headline">¶</a></h1>
+<p>In this task, we train a spiking convolutional network to learn the
+MNIST digit recognition task.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="norse.task.mnist.LIFConvNet">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.task.mnist.</span></span><span class="sig-name descname"><span class="pre">LIFConvNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'super'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_first_spike</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/task/mnist.html#LIFConvNet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.task.mnist.LIFConvNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="norse.task.mnist.LIFConvNet.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/task/mnist.html#LIFConvNet.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.task.mnist.LIFConvNet.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.task.mnist.LIFConvNet.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.task.mnist.LIFConvNet.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.task.mnist.load">
+<span class="sig-prename descclassname"><span class="pre">norse.task.mnist.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/task/mnist.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.task.mnist.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.task.mnist.main">
+<span class="sig-prename descclassname"><span class="pre">norse.task.mnist.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/task/mnist.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.task.mnist.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.task.mnist.save">
+<span class="sig-prename descclassname"><span class="pre">norse.task.mnist.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_best</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/task/mnist.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.task.mnist.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.task.mnist.test">
+<span class="sig-prename descclassname"><span class="pre">norse.task.mnist.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/task/mnist.html#test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.task.mnist.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.task.mnist.train">
+<span class="sig-prename descclassname"><span class="pre">norse.task.mnist.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_grad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_clip_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_plot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/task/mnist.html#train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.task.mnist.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 
