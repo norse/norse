@@ -41,7 +41,7 @@ from norse.torch.functional.lift import lift
 import norse.utils
 
 
-class LIFParameters(NamedTuple):
+class LIFParameters(torch.nn.Module):
     """Parametrization of a LIF neuron
 
     Parameters:
@@ -54,16 +54,26 @@ class LIFParameters(NamedTuple):
         v_reset (torch.Tensor): reset potential in mV
         method (str): method to determine the spike threshold
                       (relevant for surrogate gradients)
-        alpha (float): hyper parameter to use in surrogate gradient computation
+        alpha (torch.Tensor): hyper parameter to use in surrogate gradient computation
     """
 
-    tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
-    tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
-    v_leak: torch.Tensor = torch.as_tensor(0.0)
-    v_th: torch.Tensor = torch.as_tensor(1.0)
-    v_reset: torch.Tensor = torch.as_tensor(0.0)
-    method: str = "super"
-    alpha: float = torch.as_tensor(100.0)
+    def __init__(
+        self,
+        tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3),
+        tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2),
+        v_leak: torch.Tensor = torch.as_tensor(0.0),
+        v_th: torch.Tensor = torch.as_tensor(1.0),
+        v_reset: torch.Tensor = torch.as_tensor(0.0),
+        method: str = "super",
+        alpha: float = torch.as_tensor(100.0),
+    ) -> None:
+        self.tau_syn_inv = tau_syn_inv
+        self.tau_mem_inv = tau_mem_inv
+        self.v_leak = v_leak
+        self.v_th = v_th
+        self.v_reset = v_reset
+        self.method = method
+        self.alpha = alpha
 
 
 default_bio_parameters = LIFParameters(
