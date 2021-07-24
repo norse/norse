@@ -33,7 +33,7 @@ import torch.jit
 
 try:
     import norse_op
-except ModuleNotFoundError: # pragma: no cover
+except ModuleNotFoundError:  # pragma: no cover
     pass
 
 from norse.torch.functional.threshold import threshold
@@ -242,7 +242,7 @@ def lif_step(
                 input_tensor, state, input_weights, recurrent_weights, p, dt
             )
             return z, LIFState(z=z, v=v, i=i)
-        except NameError: # pragma: no cover
+        except NameError:  # pragma: no cover
             pass
     jit_params = LIFParametersJIT(
         tau_syn_inv=p.tau_syn_inv,
@@ -309,7 +309,7 @@ def lif_step_integral(
                 input_tensor, state, input_weights, recurrent_weights, p, dt
             )
             return z, LIFState(z=z, v=v, i=i)
-        except NameError: # pragma: no cover
+        except NameError:  # pragma: no cover
             pass
     return lift(_lif_step_jit)(
         input_tensor=input_tensor,
@@ -389,7 +389,7 @@ def lif_feed_forward_step(
         try:
             z, v, i = norse_op.lif_super_feed_forward_step(input_tensor, state, p, dt)
             return z, LIFFeedForwardState(v=v, i=i)
-        except NameError: # pragma: no cover
+        except NameError:  # pragma: no cover
             pass
     jit_params = LIFParametersJIT(
         tau_syn_inv=p.tau_syn_inv,
@@ -443,7 +443,7 @@ def lif_feed_forward_integral(
                 input_tensor, state, p, dt
             )
             return z, LIFState(z=z, v=v, i=i)
-        except NameError: # pragma: no cover
+        except NameError:  # pragma: no cover
             pass
     return lift(lif_feed_forward_step)(
         input_tensor=input_tensor, state=state, p=p, dt=dt

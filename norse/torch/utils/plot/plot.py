@@ -155,7 +155,7 @@ def plot_histogram_2d(spikes: torch.Tensor, axes: Optional[plt.Axes] = None, **k
 
 def plot_scatter_3d(
     spikes: torch.Tensor,
-    axes: List[plt.Axes] = None,
+    axes: Optional[List[plt.Axes]] = None,
     show_colorbar: bool = True,
     **kwargs
 ):

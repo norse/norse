@@ -1,4 +1,3 @@
-from typing import Type
 import torch
 import pytest
 
@@ -16,8 +15,9 @@ from norse.torch.functional.lift import lift
 def test_lift_without_state_or_parameters():
     data = torch.ones(3, 2, 1)
     lifted = lift(lif_feed_forward_step)
-    with pytest.raises(TypeError): # No state given
+    with pytest.raises(TypeError):  # No state given
         lifted(data)
+
 
 def test_lift_with_state_without_parameters():
     data = torch.ones(3, 2, 1)

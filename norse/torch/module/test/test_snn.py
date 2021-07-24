@@ -18,15 +18,24 @@ def test_snn_recurrent_cell_weights():
     assert torch.all(torch.eq(n.input_weights, in_w))
     assert torch.all(torch.eq(n.recurrent_weights, re_w))
 
+
 def test_snn_recurrent_cell_weights_no_autapses():
     in_w = torch.randn(3, 2)
     re_w = torch.randn(3, 3) * (torch.eye(3) - 1) * -1
 
     n = snn.SNNRecurrentCell(
-        None, None, 2, 3, p=MockParams(), input_weights=in_w, recurrent_weights=re_w, autapses=False
+        None,
+        None,
+        2,
+        3,
+        p=MockParams(),
+        input_weights=in_w,
+        recurrent_weights=re_w,
+        autapses=False,
     )
     assert torch.all(torch.eq(n.input_weights, in_w))
     assert torch.all(torch.eq(n.recurrent_weights, re_w))
+
 
 def test_snn_recurrent_cell_weights_autapse_update():
     in_w = torch.ones(3, 2)
@@ -68,14 +77,23 @@ def test_snn_recurrent_weights():
     assert torch.all(torch.eq(n.input_weights, in_w))
     assert torch.all(torch.eq(n.recurrent_weights, re_w))
 
+
 def test_snn_recurrent_weights_no_autapses():
     in_w = torch.randn(3, 2)
     re_w = torch.randn(3, 3) * (torch.eye(3) - 1) * -1
     n = snn.SNNRecurrent(
-        None, None, 2, 3, p=MockParams(), input_weights=in_w, recurrent_weights=re_w, autapses=False
+        None,
+        None,
+        2,
+        3,
+        p=MockParams(),
+        input_weights=in_w,
+        recurrent_weights=re_w,
+        autapses=False,
     )
     assert torch.all(torch.eq(n.input_weights, in_w))
     assert torch.all(torch.eq(n.recurrent_weights, re_w))
+
 
 def test_snn_recurrent_weights_autapse_update():
     in_w = torch.ones(3, 2)
