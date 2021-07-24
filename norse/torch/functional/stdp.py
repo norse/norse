@@ -62,13 +62,6 @@ class STDPParameters:
         dilation (int): Dilation for convolution
     """
 
-    def Additive(self):
-        return (
-            torch.tensor(0.0),
-            lambda w: self.eta_plus,
-            lambda w: self.eta_minus,
-        )
-
     def __init__(
         self,
         a_pre: torch.Tensor = torch.as_tensor(1.0),

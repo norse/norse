@@ -1,4 +1,6 @@
+from typing import Type
 import torch
+import pytest
 
 from norse.torch.functional.leaky_integrator import li_step, LIState
 from norse.torch.functional.lif import (
@@ -14,11 +16,8 @@ from norse.torch.functional.lift import lift
 def test_lift_without_state_or_parameters():
     data = torch.ones(3, 2, 1)
     lifted = lift(lif_feed_forward_step)
-    z, s = lifted(data)
-    assert z.shape == (3, 2, 1)
-    assert s.v.shape == (2, 1)
-    assert s.i.shape == (2, 1)
-
+    with pytest.raises(TypeError): # No state given
+        lifted(data)
 
 def test_lift_with_state_without_parameters():
     data = torch.ones(3, 2, 1)
@@ -27,17 +26,6 @@ def test_lift_with_state_without_parameters():
         data,
         state=LIFFeedForwardState(torch.zeros_like(data[0]), torch.zeros_like(data[0])),
     )
-    assert z.shape == (3, 2, 1)
-    assert s.v.shape == (2, 1)
-    assert s.i.shape == (2, 1)
-
-
-def test_lift_without_state_with_parameters():
-    data = torch.ones(3, 2, 1)
-    lifted = lift(
-        lif_feed_forward_step, p=LIFParameters(v_th=torch.as_tensor(0.3), method="tanh")
-    )
-    z, s = lifted(data)
     assert z.shape == (3, 2, 1)
     assert s.v.shape == (2, 1)
     assert s.i.shape == (2, 1)

@@ -20,7 +20,7 @@ class _Lifted:
         if self.p is not None and "p" not in kwargs:
             kwargs["p"] = self.p
 
-        state = kwargs.get("state", None)
+        state = kwargs.get("state")
         kwargs.pop("state", None)
         outputs = []
         for i in input_tensor:

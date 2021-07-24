@@ -33,7 +33,7 @@ import torch.jit
 
 try:
     import norse_op
-except ModuleNotFoundError:
+except ModuleNotFoundError: # pragma: no cover
     pass
 
 from norse.torch.functional.threshold import threshold
@@ -242,7 +242,7 @@ def lif_step(
                 input_tensor, state, input_weights, recurrent_weights, p, dt
             )
             return z, LIFState(z=z, v=v, i=i)
-        except NameError:
+        except NameError: # pragma: no cover
             pass
     jit_params = LIFParametersJIT(
         tau_syn_inv=p.tau_syn_inv,
@@ -303,20 +303,13 @@ def lif_step_integral(
     Returns:
         A tuple of (spike output from all timesteps, neuron state from the final timestep)
     """
-    if state is None:
-        size = input_tensor.size()[1:]
-        state = LIFState(
-            z=torch.zeros(size),
-            v=torch.full(size, p.v_reset),
-            i=torch.zeros(size),
-        )
     if norse.utils.IS_OPS_LOADED:
         try:
             z, v, i = norse_op.lif_super_integral(
                 input_tensor, state, input_weights, recurrent_weights, p, dt
             )
             return z, LIFState(z=z, v=v, i=i)
-        except NameError:
+        except NameError: # pragma: no cover
             pass
     return lift(_lif_step_jit)(
         input_tensor=input_tensor,
@@ -355,7 +348,7 @@ def _lif_feed_forward_step_jit(
 
 def lif_feed_forward_step(
     input_tensor: torch.Tensor,
-    state: Optional[LIFFeedForwardState] = None,
+    state: Optional[LIFFeedForwardState],
     p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
@@ -392,20 +385,11 @@ def lif_feed_forward_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    # Because input tensors are not directly used in the first pass (no
-    # broadcasting takes place) we need to set the state values to the
-    # same shape as the input.
-    if state is None:
-        state = LIFFeedForwardState(
-            v=torch.full_like(input_tensor, p.v_reset),
-            i=torch.zeros_like(input_tensor),
-        )
-
     if norse.utils.IS_OPS_LOADED:
         try:
             z, v, i = norse_op.lif_super_feed_forward_step(input_tensor, state, p, dt)
             return z, LIFFeedForwardState(v=v, i=i)
-        except NameError:
+        except NameError: # pragma: no cover
             pass
     jit_params = LIFParametersJIT(
         tau_syn_inv=p.tau_syn_inv,
@@ -459,7 +443,7 @@ def lif_feed_forward_integral(
                 input_tensor, state, p, dt
             )
             return z, LIFState(z=z, v=v, i=i)
-        except NameError:
+        except NameError: # pragma: no cover
             pass
     return lift(lif_feed_forward_step)(
         input_tensor=input_tensor, state=state, p=p, dt=dt

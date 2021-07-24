@@ -52,7 +52,7 @@ def initialise_for_linear_stdp(request):
         eta_plus=3e-1,  # Best to check with large, asymmetric learning-rates
         stdp_algorithm=stdp_algorithm,
         mu=request.param[1],
-        hardbound=False,
+        hardbound=True,
         convolutional=False,
     )
 

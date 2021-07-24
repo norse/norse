@@ -1,6 +1,6 @@
 import torch
 
-from norse.torch.functional.lif import LIFState
+from norse.torch.functional.lif import LIFState, LIFParameters
 from norse.torch.module.lif import (
     LIFCell,
     LIFRecurrent,
@@ -171,3 +171,30 @@ def test_backward_model():
     out = model(data)
     loss = out.sum()
     loss.backward()
+
+
+def test_lif_datatype():
+    for sparse in [True, False]:
+        input_tensor = torch.zeros(1, 2, dtype=torch.bool)
+        if sparse:
+            input_tensor = input_tensor.to_sparse()
+
+        p = LIFParameters()
+        for t in [LIFCell, LIF]:
+            z, s = t(p, sparse=sparse)(input_tensor)
+            assert s.v.dtype == torch.float32
+            assert s.i.dtype == torch.float32
+            assert z.is_sparse is sparse
+
+        # Recurrent layers only supports floats due to the linear layer
+        input_tensor = torch.zeros(1, 2, dtype=torch.float32)
+        z, s = LIFRecurrentCell(2, 1, p, sparse=sparse)(input_tensor)
+        assert s.v.dtype == torch.float32
+        assert s.i.dtype == torch.float32
+        assert z.is_sparse is sparse
+
+        input_tensor = input_tensor.unsqueeze(1)
+        z, s = LIFRecurrent(2, 1, p, sparse=sparse)(input_tensor)
+        assert s.v.dtype == torch.float32
+        assert s.i.dtype == torch.float32
+        assert z.is_sparse is sparse
