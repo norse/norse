@@ -1,3 +1,7 @@
+# XXX: temporary for visualization
+import sys
+sys.path.append("norse/torch/functional")
+
 import torch
 import torch.jit
 import numpy as np
@@ -6,7 +10,8 @@ import norse
 from norse.torch.functional.heaviside import heaviside
 
 
-from .superspike import super_fn
+# XXX: temporary for visualization
+from superspike import super_fn
 
 superspike_fn = super_fn
 
@@ -156,23 +161,37 @@ def circ_dist_fn(x: torch.Tensor, k: float):
     return CircDist.apply(x, k)
 
 
-class HeaviTent(torch.autograd.Function):
+class Triangle(torch.autograd.Function):
+    r"""Triangular/piecewise linear surrogate gradient as in
+
+    S.K. Esser et al., **"Convolutional networks for fast, energy-efficient neuromorphic computing"**,
+    Proceedings of the National Academy of Sciences 113(41), 11441-11446, (2016),
+    `doi:10.1073/pnas.1604850113 <https://www.pnas.org/content/113/41/11441.short>`_
+    G. Bellec et al., **"A solution to the learning dilemma for recurrent networks of spiking neurons"**,
+    Nature Communications 11(1), 3625, (2020),
+    `doi:10.1038/s41467-020-17236-y <https://www.nature.com/articles/s41467-020-17236-y>`_
+    """
+
     @staticmethod
-    def forward(ctx, x, alpha):
-        ctx.alpha = alpha
+    @torch.jit.ignore
+    def forward(ctx, x: torch.Tensor, alpha: float) -> torch.Tensor:
         ctx.save_for_backward(x)
+        ctx.alpha = alpha
         return heaviside(x)
 
     @staticmethod
-    def backward(ctx, dy):
+    @torch.jit.ignore
+    def backward(ctx, grad_output):
         (x,) = ctx.saved_tensors
         alpha = ctx.alpha
-        return torch.relu(1 - torch.abs(x)) * alpha * dy, None
+        grad_input = grad_output.clone()
+        grad = grad_input * alpha * torch.relu(1 - x.abs())
+        return grad, None
 
 
 @torch.jit.ignore
-def heavi_tent_fn(x: torch.Tensor, k: float):
-    return HeaviTent.apply(x, k)
+def triangle_fn(x: torch.Tensor, alpha: float = 0.3) -> torch.Tensor:
+    return Triangle.apply(x, alpha)
 
 
 def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
@@ -180,10 +199,10 @@ def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
         return heaviside(x)
     elif method == "super":
         return superspike_fn(x, torch.as_tensor(alpha))
+    elif method == "triangle":
+        return triangle_fn(x, alpha)
     elif method == "tanh":
         return heavi_tanh_fn(x, alpha)
-    elif method == "tent":
-        return heavi_tent_fn(x, alpha)
     elif method == "circ":
         return heavi_circ_fn(x, alpha)
     elif method == "heavi_erfc":
@@ -198,3 +217,27 @@ def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
 
 def sign(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
     return 2 * threshold(x, method, alpha) - 1
+
+
+# XXX: temporary for visualization
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
+    x = torch.linspace(-5, 5, 1001)
+
+    superspike = 1 / (1 + 100 * x.abs()) ** 2
+    triangle = 0.3 * torch.relu(1 - x.abs())  # same as tent
+    tanh = 1 - (x * 1).tanh().pow(2)
+    circ = -(x.pow(2) / (2 * (1 ** 2 + x.pow(2)).pow(1.5))) + 1 / (2 * (1 ** 2 + x.pow(2)).sqrt()) * 2 * 1
+    erfc = (2 * torch.exp(-(1 * x).pow(2))) / (torch.as_tensor(np.pi).sqrt())
+
+    plt.plot(x.numpy(), superspike.numpy(), label="superspike")
+    plt.plot(x.numpy(), triangle.numpy(), label="triangle")
+    plt.plot(x.numpy(), tanh.numpy(), label="tanh")
+    plt.plot(x.numpy(), circ.numpy(), label="circ")
+    plt.plot(x.numpy(), erfc.numpy(), label="erfc")
+    plt.xlabel("v - thresh")
+    plt.ylabel("grad")
+    plt.grid()
+    plt.legend()
+    plt.show()
