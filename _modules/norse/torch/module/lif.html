@@ -86,24 +86,19 @@
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        p (LIFParameters): Parameters of the LIF neuron model.</span>
+<span class="sd">        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.</span>
 <span class="sd">        dt (float): Time step to use. Defaults to 0.001.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-                <span class="n">activation</span><span class="o">=</span><span class="n">lif_feed_forward_step_sparse</span><span class="p">,</span>
-                <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-                <span class="n">activation</span><span class="o">=</span><span class="n">lif_feed_forward_step</span><span class="p">,</span>
-                <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">lif_feed_forward_step_sparse</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">lif_feed_forward_step</span>
+            <span class="p">),</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="LIFCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.LIFCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFFeedForwardState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span>
@@ -111,12 +106,12 @@
                 <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                 <span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
@@ -161,6 +156,7 @@
 <span class="sd">        input_size (int): Size of the input. Also known as the number of input features.</span>
 <span class="sd">        hidden_size (int): Size of the hidden state. Also known as the number of input features.</span>
 <span class="sd">        p (LIFParameters): Parameters of the LIF neuron model.</span>
+<span class="sd">        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.</span>
 <span class="sd">        input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random</span>
 <span class="sd">            matrix normalized to the number of hidden neurons.</span>
 <span class="sd">        recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random</span>
@@ -174,54 +170,46 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+        <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-        <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-                <span class="n">activation</span><span class="o">=</span><span class="n">lif_step_sparse</span><span class="p">,</span>
-                <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
-                <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
-                <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-                <span class="n">activation</span><span class="o">=</span><span class="n">lif_step</span><span class="p">,</span>
-                <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
-                <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
-                <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="p">(</span><span class="n">lif_step_sparse</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">lif_step</span><span class="p">),</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sparse</span> <span class="o">=</span> <span class="n">sparse</span>
 
 <div class="viewcode-block" id="LIFRecurrentCell.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.LIFRecurrentCell.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFState</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span>
-            <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
-                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sparse</span>
-            <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
-                <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">(),</span>
+            <span class="n">z</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sparse</span>
+                <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
             <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
                 <span class="n">dims</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                 <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
@@ -243,24 +231,19 @@
 <span class="sd">    Parameters:</span>
 <span class="sd">        p (LIFParameters): The neuron parameters as a torch Module, which allows the module</span>
 <span class="sd">            to configure neuron parameters as optimizable.</span>
+<span class="sd">        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.</span>
 <span class="sd">        dt (float): Time step to use in integration. Defaults to 0.001.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-                <span class="n">activation</span><span class="o">=</span><span class="n">lif_feed_forward_step_sparse</span><span class="p">,</span>
-                <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-                <span class="n">activation</span><span class="o">=</span><span class="n">lif_feed_forward_step</span><span class="p">,</span>
-                <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">lif_feed_forward_step_sparse</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">lif_feed_forward_step</span>
+            <span class="p">),</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="LIF.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.LIF.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFFeedForwardState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span>
@@ -268,12 +251,12 @@
                 <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>  <span class="c1"># Assume first dimension is time</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                 <span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
@@ -297,6 +280,7 @@
 <span class="sd">        hidden_size (int): The number of hidden neurons</span>
 <span class="sd">        p (LIFParameters): The neuron parameters as a torch Module, which allows the module</span>
 <span class="sd">            to configure neuron parameters as optimizable.</span>
+<span class="sd">        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.</span>
 <span class="sd">        input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random</span>
 <span class="sd">            matrix normalized to the number of hidden neurons.</span>
 <span class="sd">        recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random</span>
@@ -310,30 +294,21 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+        <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">*</span><span class="n">args</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sparse</span> <span class="o">=</span> <span class="n">sparse</span>
-        <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-                <span class="n">activation</span><span class="o">=</span><span class="n">lif_step_sparse</span><span class="p">,</span>
-                <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
-                <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
-                <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-                <span class="n">activation</span><span class="o">=</span><span class="n">lif_step</span><span class="p">,</span>
-                <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
-                <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
-                <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">activation</span><span class="o">=</span><span class="p">(</span><span class="n">lif_step_sparse</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">lif_step</span><span class="p">),</span>
+            <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="LIFRecurrent.initial_state"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.lif.html#norse.torch.module.LIFRecurrent.initial_state">[docs]</a>    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFState</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span>  <span class="c1"># Remove first dimension (time)</span>
@@ -356,12 +331,12 @@
                 <span class="n">dims</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                 <span class="o">*</span><span class="n">dims</span><span class="p">,</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
@@ -398,14 +373,14 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">First steps</span></p>
+<p class="caption" role="heading"><span class="caption-text">First steps</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installing.html">1. Installing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../started.html">2. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Usage docs</span></p>
+<p class="caption" role="heading"><span class="caption-text">Usage docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../about.html">1. About Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../hardware.html">2. Hardware acceleration</a></li>
@@ -414,7 +389,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../working.html">6. Working with Norse</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.benchmark.html">norse.benchmark package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../auto_api/norse.dataset.html">norse.dataset package</a></li>
@@ -435,7 +410,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -457,7 +432,7 @@
       &copy;2019 - 2021, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

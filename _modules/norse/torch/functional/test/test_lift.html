@@ -35,6 +35,7 @@
             
   <h1>Source code for norse.torch.functional.test.test_lift</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
 
 <span class="kn">from</span> <span class="nn">norse.torch.functional.leaky_integrator</span> <span class="kn">import</span> <span class="n">li_step</span><span class="p">,</span> <span class="n">LIState</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.lif</span> <span class="kn">import</span> <span class="p">(</span>
@@ -50,10 +51,8 @@
 <div class="viewcode-block" id="test_lift_without_state_or_parameters"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_lift.html#norse.torch.functional.test.test_lift.test_lift_without_state_or_parameters">[docs]</a><span class="k">def</span> <span class="nf">test_lift_without_state_or_parameters</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">lifted</span> <span class="o">=</span> <span class="n">lift</span><span class="p">(</span><span class="n">lif_feed_forward_step</span><span class="p">)</span>
-    <span class="n">z</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lifted</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>  <span class="c1"># No state given</span>
+        <span class="n">lifted</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="test_lift_with_state_without_parameters"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_lift.html#norse.torch.functional.test.test_lift.test_lift_with_state_without_parameters">[docs]</a><span class="k">def</span> <span class="nf">test_lift_with_state_without_parameters</span><span class="p">():</span>
@@ -63,17 +62,6 @@
         <span class="n">data</span><span class="p">,</span>
         <span class="n">state</span><span class="o">=</span><span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>
     <span class="p">)</span>
-    <span class="k">assert</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="test_lift_without_state_with_parameters"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_lift.html#norse.torch.functional.test.test_lift.test_lift_without_state_with_parameters">[docs]</a><span class="k">def</span> <span class="nf">test_lift_without_state_with_parameters</span><span class="p">():</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">lifted</span> <span class="o">=</span> <span class="n">lift</span><span class="p">(</span>
-        <span class="n">lif_feed_forward_step</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">LIFParameters</span><span class="p">(</span><span class="n">v_th</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">0.3</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;tanh&quot;</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">z</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lifted</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
@@ -155,14 +143,14 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">First steps</span></p>
+<p class="caption" role="heading"><span class="caption-text">First steps</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../installing.html">1. Installing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../started.html">2. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tasks.html">3. Running Tasks</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Usage docs</span></p>
+<p class="caption" role="heading"><span class="caption-text">Usage docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../about.html">1. About Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../hardware.html">2. Hardware acceleration</a></li>
@@ -171,7 +159,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../working.html">6. Working with Norse</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../auto_api/norse.benchmark.html">norse.benchmark package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../auto_api/norse.dataset.html">norse.dataset package</a></li>
@@ -192,7 +180,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -214,7 +202,7 @@
       &copy;2019 - 2021, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

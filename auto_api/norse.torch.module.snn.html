@@ -49,10 +49,10 @@
 <li><p><strong>activation</strong> (<em>RecurrentActivation</em>) – The activation function accepting an input tensor, state
 tensor, input weights, recurrent weights, and parameters module, and returning a tuple
 of (output spikes (one per timestep), state).</p></li>
-<li><p><strong>state_fallback</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a><em>]</em><em>, </em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a><em>]</em>) – A function that can return a
+<li><p><strong>state_fallback</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a><em>]</em><em>, </em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a><em>]</em>) – A function that can return a
 default state with the correct dimensions, in case no state is provided in the
 forward pass.</p></li>
-<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.nn.Module</em></a>) – The neuron parameters as a torch Module, which allows the module
+<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.nn.Module</em></a>) – The neuron parameters as a torch Module, which allows the module
 to configure neuron parameters as optimizable.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time step to use in integration. Defaults to 0.001.</p></li>
 </ul>
@@ -104,10 +104,10 @@ registered hooks while the latter silently ignores them.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>activation</strong> (<em>FeedforwardActivation</em>) – The activation function accepting an input tensor, state
 tensor, and parameters module, and returning a tuple of (output spikes, state).</p></li>
-<li><p><strong>state_fallback</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a><em>]</em><em>, </em><em>Any</em><em>]</em>) – A function that can return a
+<li><p><strong>state_fallback</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a><em>]</em><em>, </em><em>Any</em><em>]</em>) – A function that can return a
 default state with the correct dimensions, in case no state is provided in the
 forward pass.</p></li>
-<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.nn.Module</em></a>) – The neuron parameters as a torch Module, which allows the module
+<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.nn.Module</em></a>) – The neuron parameters as a torch Module, which allows the module
 to configure neuron parameters as optimizable.</p></li>
 <li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time step to use in integration. Defaults to 0.001.</p></li>
 </ul>
@@ -160,16 +160,16 @@ registered hooks while the latter silently ignores them.</p>
 <li><p><strong>activation</strong> (<em>RecurrentActivation</em>) – The activation function accepting an input tensor, state
 tensor, input weights, recurrent weights, and parameters module, and returning a tuple
 of (output spikes (one per timestep), state).</p></li>
-<li><p><strong>state_fallback</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a><em>]</em><em>, </em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a><em>]</em>) – A function that can return a
+<li><p><strong>state_fallback</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a><em>]</em><em>, </em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a><em>]</em>) – A function that can return a
 default state with the correct dimensions, in case no state is provided in the
 forward pass.</p></li>
 <li><p><strong>input_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of input neurons</p></li>
 <li><p><strong>hidden_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of hidden neurons</p></li>
-<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.nn.Module</em></a>) – The neuron parameters as a torch Module, which allows the module
+<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.nn.Module</em></a>) – The neuron parameters as a torch Module, which allows the module
 to configure neuron parameters as optimizable.</p></li>
-<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
 matrix normalized to the number of hidden neurons.</p></li>
-<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
 matrix normalized to the number of hidden neurons.</p></li>
 <li><p><strong>autapses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Allow self-connections in the recurrence? Defaults to False. Will also
 remove autapses in custom recurrent weights, if set above.</p></li>
@@ -224,16 +224,16 @@ registered hooks while the latter silently ignores them.</p>
 <li><p><strong>activation</strong> (<em>RecurrentActivation</em>) – The activation function accepting an input tensor, state
 tensor, input weights, recurrent weights, and parameters module, and returning a tuple
 of (output spikes (one per timestep), state).</p></li>
-<li><p><strong>state_fallback</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a><em>]</em><em>, </em><em>Any</em><em>]</em>) – A function that can return a
+<li><p><strong>state_fallback</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a><em>]</em><em>, </em><em>Any</em><em>]</em>) – A function that can return a
 default state with the correct dimensions, in case no state is provided in the
 forward pass.</p></li>
 <li><p><strong>input_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of input neurons</p></li>
 <li><p><strong>hidden_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of hidden neurons</p></li>
-<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.nn.Module</em></a>) – The neuron parameters as a torch Module, which allows the module
+<li><p><strong>p</strong> (<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.nn.Module</em></a>) – The neuron parameters as a torch Module, which allows the module
 to configure neuron parameters as optimizable.</p></li>
-<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
 matrix normalized to the number of hidden neurons.</p></li>
-<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitbe1a85d ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb9e662f ))"><em>torch.Tensor</em></a>) – Weights used for input tensors. Defaults to a random
 matrix normalized to the number of hidden neurons.</p></li>
 <li><p><strong>autapses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Allow self-connections in the recurrence? Defaults to False. Will also
 remove autapses in custom recurrent weights, if set above.</p></li>
@@ -310,14 +310,14 @@ registered hooks while the latter silently ignores them.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">First steps</span></p>
+<p class="caption" role="heading"><span class="caption-text">First steps</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">∇ Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installing.html">1. Installing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../started.html">2. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tasks.html">3. Running Tasks</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Usage docs</span></p>
+<p class="caption" role="heading"><span class="caption-text">Usage docs</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../about.html">1. About Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../hardware.html">2. Hardware acceleration</a></li>
@@ -326,7 +326,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1"><a class="reference internal" href="../papers.html">5. Papers citing Norse</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../working.html">6. Working with Norse</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Docs</span></p>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="norse.benchmark.html">norse.benchmark package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="norse.dataset.html">norse.dataset package</a></li>
@@ -376,7 +376,7 @@ registered hooks while the latter silently ignores them.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -398,7 +398,7 @@ registered hooks while the latter silently ignores them.</p>
       &copy;2019 - 2021, Norse.ai.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
