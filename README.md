@@ -14,7 +14,7 @@ A [deep learning](https://en.wikipedia.org/wiki/Deep_learning) library for [spik
         <img src="https://img.shields.io/conda/v/norse/norse" />
     </a>
     <a href="https://github.com/norse/norse/pulse" alt="Activity">
-        <img src="https://img.shields.io/github/commit-activity/m/norse/norse" />
+        <img src="https://img.shields.io/github/last-commit/norse/norse" />
     </a>
     <a href="https://discord.gg/7fGN359">
         <img src="https://img.shields.io/discord/723215296399147089"
