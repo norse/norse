@@ -85,7 +85,6 @@ auto lif_step(torch::Tensor input_tensor,
   auto i_new =
       (i_decayed + torch::nn::functional::linear(input_tensor, input_weights) +
        torch::nn::functional::linear(z, recurrent_weights));
-
   return {z_new, v_new, i_new};
 }
 

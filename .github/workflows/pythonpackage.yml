@@ -39,9 +39,9 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -e .
-          pip install pytest tensorboard
+          pip install pytest-xdist tensorboard
       - name: Run unit tests
-        run: pytest norse
+        run: pytest -n auto norse
 
   build-python-checks:
     runs-on: ubuntu-latest

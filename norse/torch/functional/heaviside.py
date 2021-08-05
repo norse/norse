@@ -18,4 +18,4 @@ def heaviside(data):
     .. math::
         H[n]=\begin{cases} 0, & n <= 0 \\ 1, & n \gt 0 \end{cases}
     """
-    return torch.gt(data, torch.as_tensor(0.0)).to(data.dtype)
+    return torch.gt(data, torch.as_tensor(0.0)).to(data.dtype)  # pragma: no cover

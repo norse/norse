@@ -76,7 +76,7 @@ def test_state_sequence_conv():
     model(data)
 
 
-def test_backprop_works():
+def test_backprop_through_time_works():
     model = norse.SequentialState(
         norse.LSNNRecurrent(1, 2),
         norse.LSNNRecurrent(2, 3),
@@ -91,13 +91,12 @@ def test_backprop_works():
     data = torch.ones(3, 1, 2, 1)
     target = torch.ones(1, 1)
     state = None
+    optimizer.zero_grad()  # clear gradients for this training step
     for x in data:
         out, state = model(x, state)
-        loss = loss_func(out, target)
-        optimizer.zero_grad()  # clear gradients for this training step
-        loss.backward()  # backpropagation, compute gradients
-        optimizer.step()
-        state = [s.detach() if s is not None else None for s in state]
+    loss = loss_func(out, target)
+    loss.backward()  # backpropagation, compute gradients
+    optimizer.step()
 
 
 def test_sequential_forward_state_hook():

@@ -50,24 +50,19 @@ class LIFCell(SNNCell):
 
     Arguments:
         p (LIFParameters): Parameters of the LIF neuron model.
+        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.
         dt (float): Time step to use. Defaults to 0.001.
     """
 
     def __init__(self, p: LIFParameters = LIFParameters(), sparse=False, **kwargs):
-        if sparse:
-            super().__init__(
-                activation=lif_feed_forward_step_sparse,
-                state_fallback=self.initial_state,
-                p=p,
-                **kwargs,
-            )
-        else:
-            super().__init__(
-                activation=lif_feed_forward_step,
-                state_fallback=self.initial_state,
-                p=p,
-                **kwargs,
-            )
+        super().__init__(
+            activation=(
+                lif_feed_forward_step_sparse if sparse else lif_feed_forward_step
+            ),
+            state_fallback=self.initial_state,
+            p=p,
+            **kwargs,
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
         state = LIFFeedForwardState(
@@ -75,12 +70,12 @@ class LIFCell(SNNCell):
                 input_tensor.shape,
                 self.p.v_leak.detach(),
                 device=input_tensor.device,
-                dtype=input_tensor.dtype,
+                dtype=torch.float32,
             ),
             i=torch.zeros(
                 *input_tensor.shape,
                 device=input_tensor.device,
-                dtype=input_tensor.dtype,
+                dtype=torch.float32,
             ),
         )
         state.v.requires_grad = True
@@ -125,6 +120,7 @@ class LIFRecurrentCell(SNNRecurrentCell):
         input_size (int): Size of the input. Also known as the number of input features.
         hidden_size (int): Size of the hidden state. Also known as the number of input features.
         p (LIFParameters): Parameters of the LIF neuron model.
+        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.
         input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
             matrix normalized to the number of hidden neurons.
         recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
@@ -138,54 +134,46 @@ class LIFRecurrentCell(SNNRecurrentCell):
         self,
         input_size: int,
         hidden_size: int,
-        sparse: bool = False,
         p: LIFParameters = LIFParameters(),
+        sparse: bool = False,
         **kwargs
     ):
-        if sparse:
-            super().__init__(
-                activation=lif_step_sparse,
-                state_fallback=self.initial_state,
-                p=p,
-                input_size=input_size,
-                hidden_size=hidden_size,
-                **kwargs,
-            )
-        else:
-            super().__init__(
-                activation=lif_step,
-                state_fallback=self.initial_state,
-                p=p,
-                input_size=input_size,
-                hidden_size=hidden_size,
-                **kwargs,
-            )
+        super().__init__(
+            activation=(lif_step_sparse if sparse else lif_step),
+            state_fallback=self.initial_state,
+            p=p,
+            input_size=input_size,
+            hidden_size=hidden_size,
+            **kwargs,
+        )
         self.sparse = sparse
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
         dims = (*input_tensor.shape[:-1], self.hidden_size)
         state = LIFState(
-            z=torch.zeros(
-                *dims,
-                device=input_tensor.device,
-                dtype=input_tensor.dtype,
-            ).to_sparse()
-            if self.sparse
-            else torch.zeros(
-                *dims,
-                device=input_tensor.device,
-                dtype=input_tensor.dtype,
-            ).to_sparse(),
+            z=(
+                torch.zeros(
+                    *dims,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ).to_sparse()
+                if self.sparse
+                else torch.zeros(
+                    *dims,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                )
+            ),
             v=torch.full(
                 dims,
                 self.p.v_leak.detach(),
                 device=input_tensor.device,
-                dtype=input_tensor.dtype,
+                dtype=torch.float32,
             ),
             i=torch.zeros(
                 *dims,
                 device=input_tensor.device,
-                dtype=input_tensor.dtype,
+                dtype=torch.float32,
             ),
         )
         state.v.requires_grad = True
@@ -207,24 +195,19 @@ class LIF(SNN):
     Parameters:
         p (LIFParameters): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
+        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
     def __init__(self, p: LIFParameters = LIFParameters(), sparse=False, **kwargs):
-        if sparse:
-            super().__init__(
-                activation=lif_feed_forward_step_sparse,
-                state_fallback=self.initial_state,
-                p=p,
-                **kwargs,
-            )
-        else:
-            super().__init__(
-                activation=lif_feed_forward_step,
-                state_fallback=self.initial_state,
-                p=p,
-                **kwargs,
-            )
+        super().__init__(
+            activation=(
+                lif_feed_forward_step_sparse if sparse else lif_feed_forward_step
+            ),
+            state_fallback=self.initial_state,
+            p=p,
+            **kwargs,
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
         state = LIFFeedForwardState(
@@ -232,12 +215,12 @@ class LIF(SNN):
                 input_tensor.shape[1:],  # Assume first dimension is time
                 self.p.v_leak.detach(),
                 device=input_tensor.device,
-                dtype=input_tensor.dtype,
+                dtype=torch.float32,
             ),
             i=torch.zeros(
                 *input_tensor.shape[1:],
                 device=input_tensor.device,
-                dtype=input_tensor.dtype,
+                dtype=torch.float32,
             ),
         )
         state.v.requires_grad = True
@@ -261,6 +244,7 @@ class LIFRecurrent(SNNRecurrent):
         hidden_size (int): The number of hidden neurons
         p (LIFParameters): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
+        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.
         input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
             matrix normalized to the number of hidden neurons.
         recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
@@ -274,30 +258,21 @@ class LIFRecurrent(SNNRecurrent):
         self,
         input_size: int,
         hidden_size: int,
-        sparse: bool = False,
         p: LIFParameters = LIFParameters(),
+        sparse: bool = False,
         *args,
         **kwargs
     ):
         self.sparse = sparse
-        if sparse:
-            super().__init__(
-                activation=lif_step_sparse,
-                state_fallback=self.initial_state,
-                input_size=input_size,
-                hidden_size=hidden_size,
-                p=p,
-                **kwargs,
-            )
-        else:
-            super().__init__(
-                activation=lif_step,
-                state_fallback=self.initial_state,
-                input_size=input_size,
-                hidden_size=hidden_size,
-                p=p,
-                **kwargs,
-            )
+        super().__init__(
+            activation=(lif_step_sparse if sparse else lif_step),
+            state_fallback=self.initial_state,
+            input_size=input_size,
+            hidden_size=hidden_size,
+            p=p,
+            *args,
+            **kwargs,
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
         dims = (  # Remove first dimension (time)
@@ -320,12 +295,12 @@ class LIFRecurrent(SNNRecurrent):
                 dims,
                 self.p.v_leak.detach(),
                 device=input_tensor.device,
-                dtype=input_tensor.dtype,
+                dtype=torch.float32,
             ),
             i=torch.zeros(
                 *dims,
                 device=input_tensor.device,
-                dtype=input_tensor.dtype,
+                dtype=torch.float32,
             ),
         )
         state.v.requires_grad = True
