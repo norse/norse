@@ -17,7 +17,9 @@ from norse.torch.functional.lif import (
 )
 from norse.torch.functional.adjoint.lif_adjoint import (
     lif_adjoint_step,
+    lif_adjoint_step_sparse,
     lif_feed_forward_adjoint_step,
+    lif_feed_forward_adjoint_step_sparse,
 )
 from norse.torch.module.snn import SNN, SNNCell, SNNRecurrent, SNNRecurrentCell
 
@@ -58,7 +60,6 @@ class LIFCell(SNNCell):
         dt (float): Time step to use. Defaults to 0.001.
     """
 
-<<<<<<< HEAD
     def __init__(self, p: LIFParameters = LIFParameters(), sparse=False, **kwargs):
         super().__init__(
             activation=(
@@ -68,32 +69,6 @@ class LIFCell(SNNCell):
             p=p,
             **kwargs,
         )
-=======
-    def __init__(
-        self, p: LIFParameters = LIFParameters(), sparse=False, adjoint=False, **kwargs
-    ):
-        if sparse:
-            super().__init__(
-                activation=lif_feed_forward_step_sparse,
-                state_fallback=self.initial_state,
-                p=p,
-                **kwargs,
-            )
-        elif adjoint:
-            super().__init__(
-                activation=lif_feed_forward_adjoint_step,
-                state_fallback=self.initial_state,
-                p=p,
-                **kwargs,
-            )
-        else:
-            super().__init__(
-                activation=lif_feed_forward_step,
-                state_fallback=self.initial_state,
-                p=p,
-                **kwargs,
-            )
->>>>>>> 0865402... Add adjoint support to LIF / LSNN modules
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
         state = LIFFeedForwardState(
@@ -166,35 +141,34 @@ class LIFRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
-        sparse: bool = False,
         **kwargs
     ):
         super().__init__(
-            activation=(lif_step_sparse if sparse else lif_step),
+            activation=lif_adjoint_step if p.method == "adjoint" else lif_step,
+            activation_sparse=lif_adjoint_step_sparse
+            if p.method == "adjoint"
+            else lif_step_sparse,
             state_fallback=self.initial_state,
             p=p,
             input_size=input_size,
             hidden_size=hidden_size,
             **kwargs,
         )
-        self.sparse = sparse
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
         dims = (*input_tensor.shape[:-1], self.hidden_size)
         state = LIFState(
-            z=(
-                torch.zeros(
-                    *dims,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                ).to_sparse()
-                if self.sparse
-                else torch.zeros(
-                    *dims,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                )
-            ),
+            z=torch.zeros(
+                *dims,
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ).to_sparse()
+            if input_tensor.is_sparse
+            else torch.zeros(
+                *dims,
+                device=input_tensor.device,
+                dtype=input_tensor.dtype,
+            ).to_sparse(),
             v=torch.full(
                 dims,
                 self.p.v_leak.detach(),
@@ -230,11 +204,14 @@ class LIF(SNN):
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFParameters = LIFParameters(), sparse=False, **kwargs):
+    def __init__(self, p: LIFParameters = LIFParameters(), **kwargs):
         super().__init__(
-            activation=(
-                lif_feed_forward_step_sparse if sparse else lif_feed_forward_step
-            ),
+            activation=lif_feed_forward_adjoint_step
+            if p.method == "adjoint"
+            else lif_feed_forward_step,
+            activation_sparse=lif_feed_forward_adjoint_step_sparse
+            if p.method == "adjoint"
+            else lif_feed_forward_step_sparse,
             state_fallback=self.initial_state,
             p=p,
             **kwargs,
@@ -290,18 +267,17 @@ class LIFRecurrent(SNNRecurrent):
         input_size: int,
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
-        sparse: bool = False,
-        *args,
         **kwargs
     ):
-        self.sparse = sparse
         super().__init__(
-            activation=(lif_step_sparse if sparse else lif_step),
+            activation=lif_adjoint_step if p.method == "adjoint" else lif_step,
+            activation_sparse=lif_adjoint_step_sparse
+            if p.method == "adjoint"
+            else lif_step_sparse,
             state_fallback=self.initial_state,
             input_size=input_size,
             hidden_size=hidden_size,
             p=p,
-            *args,
             **kwargs,
         )
 
@@ -316,7 +292,7 @@ class LIFRecurrent(SNNRecurrent):
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ).to_sparse()
-            if self.sparse
+            if input_tensor.is_sparse
             else torch.zeros(
                 *dims,
                 device=input_tensor.device,
