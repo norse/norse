@@ -453,7 +453,7 @@ def lif_feed_forward_integral(
 def lif_feed_forward_step_sparse(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState,
-    p: LIFParametersJIT,
+    p: LIFParameters,
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:  # pragma: no cover
     # compute voltage updates
