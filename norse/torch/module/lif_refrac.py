@@ -59,7 +59,7 @@ class LIFRefracCell(SNNCell):
     def __init__(self, p: LIFRefracParameters = LIFRefracParameters(), **kwargs):
         super().__init__(
             lif_refrac_feed_forward_adjoint_step
-            if p.method == "adjoint"
+            if p.lif.method == "adjoint"
             else lif_refrac_feed_forward_step,
             self.initial_state,
             p=p,
@@ -148,27 +148,18 @@ class LIFRefracRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
-        adjoint: bool = False,
         **kwargs
     ):
-        if adjoint:
-            super().__init__(
-                activation=lif_refrac_adjoint_step,
-                state_fallback=self.initial_state,
-                input_size=input_size,
-                hidden_size=hidden_size,
-                p=p,
-                **kwargs,
-            )
-        else:
-            super().__init__(
-                activation=lif_refrac_step,
-                state_fallback=self.initial_state,
-                input_size=input_size,
-                hidden_size=hidden_size,
-                p=p,
-                **kwargs,
-            )
+        super().__init__(
+            activation=lif_refrac_adjoint_step
+            if p.lif.method == "adjoint"
+            else lif_refrac_step,
+            state_fallback=self.initial_state,
+            input_size=input_size,
+            hidden_size=hidden_size,
+            p=p,
+            **kwargs,
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFRefracState:
         state = LIFRefracState(

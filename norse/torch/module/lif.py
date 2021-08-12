@@ -60,11 +60,16 @@ class LIFCell(SNNCell):
         dt (float): Time step to use. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFParameters = LIFParameters(), sparse=False, **kwargs):
+    def __init__(self, p: LIFParameters = LIFParameters(), **kwargs):
         super().__init__(
             activation=(
-                lif_feed_forward_step_sparse if sparse else lif_feed_forward_step
+                lif_feed_forward_adjoint_step
+                if p.method == "adjoint"
+                else lif_feed_forward_step
             ),
+            activation_sparse=lif_feed_forward_adjoint_step_sparse
+            if p.method == "adjoint"
+            else lif_feed_forward_step_sparse,
             state_fallback=self.initial_state,
             p=p,
             **kwargs,
