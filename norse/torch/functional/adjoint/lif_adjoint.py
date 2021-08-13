@@ -8,7 +8,7 @@ from ..lif import (
     lif_step,
     lif_feed_forward_step,
     lif_feed_forward_step_sparse,
-    lif_step_sparse
+    lif_step_sparse,
 )
 from typing import NamedTuple, Tuple
 
@@ -120,7 +120,9 @@ class LIFSparseAdjointFunction(torch.autograd.Function):
         ctx.v_reset = p.v_reset
         ctx.dt = dt
         s = LIFState(z, v, i)
-        z_new, s_new = lif_step_sparse(input, s, input_weights, recurrent_weights, p, dt)
+        z_new, s_new = lif_step_sparse(
+            input, s, input_weights, recurrent_weights, p, dt
+        )
 
         # dv before spiking
         dv_m = p.tau_mem_inv * ((p.v_leak - s_new.v) + s.i)
@@ -128,7 +130,12 @@ class LIFSparseAdjointFunction(torch.autograd.Function):
         dv_p = p.tau_mem_inv * ((p.v_leak - s_new.v) + s.i)
 
         ctx.save_for_backward(
-            input, z_new, dv_m.sparse_mask(z_new), dv_p.sparse_mask(z_new), input_weights, recurrent_weights
+            input,
+            z_new,
+            dv_m.sparse_mask(z_new),
+            dv_p.sparse_mask(z_new),
+            input_weights,
+            recurrent_weights,
         )
         return z_new, s_new.v, s_new.i
 
@@ -190,7 +197,6 @@ def lif_adjoint_step_sparse(
         input, s.z, s.v, s.i, input_weights, recurrent_weights, p, dt
     )
     return z, LIFState(z, v, i)
-
 
 
 class LIFFeedForwardAdjointFunction(torch.autograd.Function):
@@ -264,7 +270,6 @@ def lif_feed_forward_adjoint_step(
     return z_new, LIFFeedForwardState(v_new, i_new)
 
 
-
 class LIFFeedForwardSparseAdjointFunction(torch.autograd.Function):
     @staticmethod
     def forward(
@@ -335,5 +340,7 @@ def lif_feed_forward_adjoint_step_sparse(
         p (LIFParameters): leaky integrate and fire parameters
         dt (float): time step of integration
     """
-    z_new, v_new, i_new = LIFFeedForwardSparseAdjointFunction.apply(input, s.v, s.i, p, dt)
+    z_new, v_new, i_new = LIFFeedForwardSparseAdjointFunction.apply(
+        input, s.v, s.i, p, dt
+    )
     return z_new, LIFFeedForwardState(v_new, i_new)
