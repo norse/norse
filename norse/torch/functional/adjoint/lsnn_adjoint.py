@@ -16,7 +16,7 @@ class LSNNAdjointFunction(torch.autograd.Function):
     @staticmethod
     def forward(
         ctx,
-        input: torch.Tensor,
+        input_tensor: torch.Tensor,
         z: torch.Tensor,
         v: torch.Tensor,
         i: torch.Tensor,
@@ -30,7 +30,9 @@ class LSNNAdjointFunction(torch.autograd.Function):
         ctx.dt = dt
 
         s = LSNNState(z, v, i, b)
-        z_new, s_new = lsnn_step(input, s, input_weights, recurrent_weights, p, dt)
+        z_new, s_new = lsnn_step(
+            input_tensor, s, input_weights, recurrent_weights, p, dt
+        )
 
         dv_m = p.tau_mem_inv * ((p.v_leak - s.v) + s.i)  # dv before spiking
         dv_p = p.tau_mem_inv * ((p.v_leak - s_new.v) + s.i)  # dv after spiking
@@ -38,14 +40,21 @@ class LSNNAdjointFunction(torch.autograd.Function):
         db_p = p.tau_adapt_inv * (p.v_th - s_new.b)  # db after spiking
 
         ctx.save_for_backward(
-            input, z_new, dv_m, dv_p, db_m, db_p, input_weights, recurrent_weights
+            input_tensor,
+            z_new,
+            dv_m,
+            dv_p,
+            db_m,
+            db_p,
+            input_weights,
+            recurrent_weights,
         )
         return z_new, s_new.v, s_new.i, s_new.b
 
     @staticmethod
     def backward(ctx, doutput, lambda_v, lambda_i, lambda_b):
         (
-            input,
+            input_tensor,
             z,
             dv_m,
             dv_p,
@@ -60,7 +69,7 @@ class LSNNAdjointFunction(torch.autograd.Function):
         tau_mem_inv = p.tau_mem_inv
         tau_adapt_inv = p.tau_adapt_inv
 
-        dw_input = lambda_i.t().mm(input)
+        dw_input = lambda_i.t().mm(input_tensor)
         dw_rec = lambda_i.t().mm(z)
 
         # lambda_i decay

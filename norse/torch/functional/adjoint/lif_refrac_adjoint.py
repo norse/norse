@@ -17,7 +17,7 @@ class LIFAdjointRefracFunction(torch.autograd.Function):
     @staticmethod
     def forward(
         ctx,
-        input: torch.Tensor,
+        input_tensor: torch.Tensor,
         z: torch.Tensor,
         v: torch.Tensor,
         i: torch.Tensor,
@@ -32,7 +32,7 @@ class LIFAdjointRefracFunction(torch.autograd.Function):
 
         s = LIFRefracState(LIFState(z, v, i), rho)
         z_new, s_new = lif_refrac_step(
-            input, s, input_weights, recurrent_weights, p, dt
+            input_tensor, s, input_weights, recurrent_weights, p, dt
         )
 
         # dv before spiking
@@ -41,17 +41,25 @@ class LIFAdjointRefracFunction(torch.autograd.Function):
         dv_p = p.lif.tau_mem_inv * ((p.lif.v_leak - s_new.lif.v) + s.lif.i)
 
         ctx.save_for_backward(
-            input, z_new, s_new.rho, dv_m, dv_p, input_weights, recurrent_weights
+            input_tensor, z_new, s_new.rho, dv_m, dv_p, input_weights, recurrent_weights
         )
         return z_new, s_new.lif.v, s_new.lif.i, s_new.rho
 
     @staticmethod
     def backward(ctx, doutput, lambda_v, lambda_i, lambda_rho):
-        input, z, rho, dv_m, dv_p, input_weights, recurrent_weights = ctx.saved_tensors
+        (
+            input_tensor,
+            z,
+            rho,
+            dv_m,
+            dv_p,
+            input_weights,
+            recurrent_weights,
+        ) = ctx.saved_tensors
         p = ctx.p
         dt = ctx.dt
 
-        dw_input = lambda_i.t().mm(input)
+        dw_input = lambda_i.t().mm(input_tensor)
         dw_rec = lambda_i.t().mm(z)
 
         refrac_mask = heaviside(rho)

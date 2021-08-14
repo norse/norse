@@ -10,14 +10,14 @@ from ..lif import (
     lif_feed_forward_step_sparse,
     lif_step_sparse,
 )
-from typing import NamedTuple, Tuple
+from typing import Tuple
 
 
 class LIFAdjointFunction(torch.autograd.Function):
     @staticmethod
     def forward(
         ctx,
-        input: torch.Tensor,
+        input_tensor: torch.Tensor,
         z: torch.Tensor,
         v: torch.Tensor,
         i: torch.Tensor,
@@ -32,7 +32,9 @@ class LIFAdjointFunction(torch.autograd.Function):
         ctx.v_reset = p.v_reset
         ctx.dt = dt
         s = LIFState(z, v, i)
-        z_new, s_new = lif_step(input, s, input_weights, recurrent_weights, p, dt)
+        z_new, s_new = lif_step(
+            input_tensor, s, input_weights, recurrent_weights, p, dt
+        )
 
         # dv before spiking
         dv_m = p.tau_mem_inv * ((p.v_leak - s_new.v) + s.i)
@@ -40,18 +42,25 @@ class LIFAdjointFunction(torch.autograd.Function):
         dv_p = p.tau_mem_inv * ((p.v_leak - s_new.v) + s.i)
 
         ctx.save_for_backward(
-            input, z_new, dv_m, dv_p, input_weights, recurrent_weights
+            input_tensor, z_new, dv_m, dv_p, input_weights, recurrent_weights
         )
         return z_new, s_new.v, s_new.i
 
     @staticmethod
     def backward(ctx, doutput, lambda_v, lambda_i):
-        input, z, dv_m, dv_p, input_weights, recurrent_weights = ctx.saved_tensors
+        (
+            input_tensor,
+            z,
+            dv_m,
+            dv_p,
+            input_weights,
+            recurrent_weights,
+        ) = ctx.saved_tensors
         tau_syn_inv = ctx.tau_syn_inv
         tau_mem_inv = ctx.tau_mem_inv
         dt = ctx.dt
 
-        dw_input = lambda_i.t().mm(input)
+        dw_input = lambda_i.t().mm(input_tensor)
         dw_rec = lambda_i.t().mm(z)
 
         # lambda_i decay

@@ -9,7 +9,7 @@ class CobaLIFAdjointFunction(torch.nn.Function):
     @staticmethod
     def forward(
         ctx,
-        input: torch.Tensor,
+        input_tensor: torch.Tensor,
         z: torch.Tensor,
         v: torch.Tensor,
         g_e: torch.Tensor,
@@ -23,7 +23,9 @@ class CobaLIFAdjointFunction(torch.nn.Function):
         ctx.p = p
 
         s = CobaLIFState(z, v, g_e, g_i)
-        z_new, s_new = coba_lif_step(input, s, input_weights, recurrent_weights, p, dt)
+        z_new, s_new = coba_lif_step(
+            input_tensor, s, input_weights, recurrent_weights, p, dt
+        )
 
         # dv before spiking
         dv_m = p.c_m_inv * (
@@ -39,7 +41,7 @@ class CobaLIFAdjointFunction(torch.nn.Function):
         )
 
         ctx.save_for_backward(
-            input,
+            input_tensor,
             s_new.z,
             s_new.v,
             s_new.g_e,

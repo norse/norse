@@ -10,7 +10,7 @@ class LIFMCAdjointFunction(torch.autograd.Function):
     @staticmethod
     def forward(
         ctx,
-        input: torch.Tensor,
+        input_tensor: torch.Tensor,
         z: torch.Tensor,
         v: torch.Tensor,
         i: torch.Tensor,
@@ -25,7 +25,7 @@ class LIFMCAdjointFunction(torch.autograd.Function):
 
         s = LIFState(z, v, i)
         z_new, s_new = lif_mc_step(
-            input, s, input_weights, recurrent_weights, g_coupling, p, dt
+            input_tensor, s, input_weights, recurrent_weights, g_coupling, p, dt
         )
 
         # dv before spiking
@@ -33,7 +33,7 @@ class LIFMCAdjointFunction(torch.autograd.Function):
         # dv after spiking
         dv_p = p.tau_mem_inv * ((p.v_leak - s_new.v) + s.i)
         ctx.save_for_backward(
-            input,
+            input_tensor,
             s_new.v,
             z_new,
             dv_m,
@@ -48,7 +48,7 @@ class LIFMCAdjointFunction(torch.autograd.Function):
     @staticmethod
     def backward(ctx, doutput, lambda_v, lambda_i):
         (
-            input,
+            input_tensor,
             v,
             z,
             dv_m,
@@ -60,7 +60,7 @@ class LIFMCAdjointFunction(torch.autograd.Function):
         p = ctx.p
         dt = ctx.dt
 
-        dw_input = lambda_i.t().mm(input)
+        dw_input = lambda_i.t().mm(input_tensor)
         dw_rec = lambda_i.t().mm(z)
 
         # update for coupling
