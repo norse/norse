@@ -151,7 +151,7 @@ def _lif_step_jit(
     # compute new spikes
     z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    v_new = (1 - z_new.detach()) * v_decayed + z_new.detach() * p.v_reset
     # compute current jumps
     i_new = (
         i_decayed
@@ -453,7 +453,7 @@ def lif_feed_forward_integral(
 def lif_feed_forward_step_sparse(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState,
-    p: LIFParameters = LIFParameters(),
+    p: LIFParameters,
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:  # pragma: no cover
     # compute voltage updates

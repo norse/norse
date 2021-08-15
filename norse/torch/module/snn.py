@@ -31,6 +31,8 @@ class SNNCell(torch.nn.Module):
         p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
         dt (float): Time step to use in integration. Defaults to 0.001.
+        activation_sparse (Optional[FeedforwardActivation]): A Sparse activation function - if it exists
+            for the neuron model
     """
 
     def __init__(
@@ -39,9 +41,11 @@ class SNNCell(torch.nn.Module):
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
         p: Any,
         dt: float = 0.001,
+        activation_sparse: Optional[FeedforwardActivation] = None,
     ):
         super().__init__()
         self.activation = activation
+        self.activation_sparse = activation_sparse
         self.state_fallback = state_fallback
         self.p = p
         self.dt = dt
@@ -51,7 +55,10 @@ class SNNCell(torch.nn.Module):
 
     def forward(self, input_tensor: torch.Tensor, state: Optional[Any] = None):
         state = state if state is not None else self.state_fallback(input_tensor)
-        return self.activation(input_tensor, state, self.p, self.dt)
+        if self.activation_sparse is not None and input_tensor.is_sparse:
+            return self.activation_sparse(input_tensor, state, self.p, self.dt)
+        else:
+            return self.activation(input_tensor, state, self.p, self.dt)
 
 
 class SNNRecurrentCell(torch.nn.Module):
@@ -76,6 +83,8 @@ class SNNRecurrentCell(torch.nn.Module):
         autapses (bool): Allow self-connections in the recurrence? Defaults to False. Will also
             remove autapses in custom recurrent weights, if set above.
         dt (float): Time step to use in integration. Defaults to 0.001.
+        activation_sparse (Optional[RecurrentActivation]): A Sparse activation function - if it exists
+            for the neuron model
     """
 
     def __init__(
@@ -89,9 +98,11 @@ class SNNRecurrentCell(torch.nn.Module):
         recurrent_weights: Optional[torch.Tensor] = None,
         autapses: bool = False,
         dt: float = 0.001,
+        activation_sparse: Optional[RecurrentActivation] = None,
     ):
         super().__init__()
         self.activation = activation
+        self.activation_sparse = activation_sparse
         self.autapses = autapses
         self.state_fallback = state_fallback
         self.p = p
@@ -134,14 +145,24 @@ class SNNRecurrentCell(torch.nn.Module):
 
     def forward(self, input_tensor: torch.Tensor, state: Optional[Any] = None):
         state = state if state is not None else self.state_fallback(input_tensor)
-        return self.activation(
-            input_tensor,
-            state,
-            self.input_weights,
-            self.recurrent_weights,
-            self.p,
-            self.dt,
-        )
+        if self.activation_sparse is not None and input_tensor.is_sparse:
+            return self.activation_sparse(
+                input_tensor,
+                state,
+                self.input_weights,
+                self.recurrent_weights,
+                self.p,
+                self.dt,
+            )
+        else:
+            return self.activation(
+                input_tensor,
+                state,
+                self.input_weights,
+                self.recurrent_weights,
+                self.p,
+                self.dt,
+            )
 
 
 class SNN(torch.nn.Module):
@@ -158,6 +179,8 @@ class SNN(torch.nn.Module):
         p (torch.nn.Module): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
         dt (float): Time step to use in integration. Defaults to 0.001.
+        activation_sparse (Optional[FeedforwardActivation]): A Sparse activation function - if it exists
+            for the neuron model
     """
 
     def __init__(
@@ -166,9 +189,11 @@ class SNN(torch.nn.Module):
         state_fallback: Callable[[torch.Tensor], torch.Tensor],
         p: Any,
         dt: float = 0.001,
+        activation_sparse: Optional[FeedforwardActivation] = None,
     ):
         super().__init__()
         self.activation = activation
+        self.activation_sparse = activation_sparse
         self.state_fallback = state_fallback
         self.p = p
         self.dt = dt
@@ -182,8 +207,14 @@ class SNN(torch.nn.Module):
         T = input_tensor.shape[0]
         outputs = []
 
+        activation = (
+            self.activation_sparse
+            if self.activation_sparse is not None and input_tensor.is_sparse
+            else self.activation
+        )
+
         for ts in range(T):
-            out, state = self.activation(
+            out, state = activation(
                 input_tensor[ts],
                 state,
                 self.p,
@@ -216,6 +247,8 @@ class SNNRecurrent(torch.nn.Module):
         autapses (bool): Allow self-connections in the recurrence? Defaults to False. Will also
             remove autapses in custom recurrent weights, if set above.
         dt (float): Time step to use in integration. Defaults to 0.001.
+        activation_sparse (Optional[RecurrentActivation]): A Sparse activation function - if it exists
+            for the neuron model
     """
 
     def __init__(
@@ -229,9 +262,11 @@ class SNNRecurrent(torch.nn.Module):
         recurrent_weights: Optional[torch.Tensor] = None,
         autapses: bool = False,
         dt: float = 0.001,
+        activation_sparse: Optional[RecurrentActivation] = None,
     ):
         super().__init__()
         self.activation = activation
+        self.activation_sparse = activation_sparse
         self.autapses = autapses
         self.state_fallback = state_fallback
         self.p = p
@@ -272,8 +307,14 @@ class SNNRecurrent(torch.nn.Module):
         T = input_tensor.shape[0]
         outputs = []
 
+        activation = (
+            self.activation_sparse
+            if self.activation_sparse is not None and input_tensor.is_sparse
+            else self.activation
+        )
+
         for ts in range(T):
-            out, state = self.activation(
+            out, state = activation(
                 input_tensor[ts],
                 state,
                 self.input_weights,

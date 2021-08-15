@@ -7,6 +7,7 @@ from norse.torch.module import lif, snn
 
 class MockParams(NamedTuple):
     my_param: int = -15
+    method: str = "bob"
 
 
 def test_snn_recurrent_cell_weights():

@@ -181,20 +181,20 @@ def test_lif_datatype():
 
         p = LIFParameters()
         for t in [LIFCell, LIF]:
-            z, s = t(p, sparse=sparse)(input_tensor)
+            z, s = t(p)(input_tensor)
             assert s.v.dtype == torch.float32
             assert s.i.dtype == torch.float32
             assert z.is_sparse is sparse
 
         # Recurrent layers only supports floats due to the linear layer
-        input_tensor = torch.zeros(1, 2, dtype=torch.float32)
-        z, s = LIFRecurrentCell(2, 1, p, sparse=sparse)(input_tensor)
+        input_tensor = input_tensor.float()
+        z, s = LIFRecurrentCell(2, 1, p)(input_tensor)
         assert s.v.dtype == torch.float32
         assert s.i.dtype == torch.float32
         assert z.is_sparse is sparse
 
         input_tensor = input_tensor.unsqueeze(1)
-        z, s = LIFRecurrent(2, 1, p, sparse=sparse)(input_tensor)
+        z, s = LIFRecurrent(2, 1, p)(input_tensor)
         assert s.v.dtype == torch.float32
         assert s.i.dtype == torch.float32
         assert z.is_sparse is sparse
