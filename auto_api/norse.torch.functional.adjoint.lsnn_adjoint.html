@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>norse.torch.functional.adjoint.lsnn_adjoint module &#8212; norse 0.0.6 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="norse.torch.functional.test package" href="norse.torch.functional.test.html" />
+    <link rel="prev" title="norse.torch.functional.adjoint.lif_refrac_adjoint module" href="norse.torch.functional.adjoint.lif_refrac_adjoint.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-norse.torch.functional.adjoint.lsnn_adjoint">
+<span id="norse-torch-functional-adjoint-lsnn-adjoint-module"></span><h1>norse.torch.functional.adjoint.lsnn_adjoint module<a class="headerlink" href="#module-norse.torch.functional.adjoint.lsnn_adjoint" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.functional.adjoint.lsnn_adjoint.</span></span><span class="sig-name descname"><span class="pre">LSNNAdjointFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/adjoint/lsnn_adjoint.html#LSNNAdjointFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.backward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doutput</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/adjoint/lsnn_adjoint.html#LSNNAdjointFunction.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a formula for differentiating the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
+as many outputs as the <a class="reference internal" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.forward" title="norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> returned (None will be passed in
+for non tensor outputs of the forward function),
+and it should return as many tensors, as there were inputs to
+<a class="reference internal" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.forward" title="norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>. Each argument is the gradient w.r.t the given output,
+and each returned value should be the gradient w.r.t. the
+corresponding input. If an input is not a Tensor or is a Tensor not
+requiring grads, you can just pass None as a gradient for that input.</p>
+<p>The context can be used to retrieve tensors saved during the forward
+pass. It also has an attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx.needs_input_grad</span></code> as a tuple
+of booleans representing whether each input needs gradient. E.g.,
+<a class="reference internal" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.backward" title="norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> will have <code class="docutils literal notranslate"><span class="pre">ctx.needs_input_grad[0]</span> <span class="pre">=</span> <span class="pre">True</span></code> if the
+first input to <a class="reference internal" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.forward" title="norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> needs gradient computated w.r.t. the
+output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.forward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurrent_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/adjoint/lsnn_adjoint.html#LSNNAdjointFunction.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNAdjointFunction.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context ctx as the first argument, followed by any
+number of arguments (tensors or other types).</p>
+<p>The context can be used to store arbitrary data that can be then
+retrieved during the backward pass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.functional.adjoint.lsnn_adjoint.</span></span><span class="sig-name descname"><span class="pre">LSNNFeedForwardAdjointFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/adjoint/lsnn_adjoint.html#LSNNFeedForwardAdjointFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.backward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doutput</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/adjoint/lsnn_adjoint.html#LSNNFeedForwardAdjointFunction.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a formula for differentiating the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
+as many outputs as the <a class="reference internal" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.forward" title="norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> returned (None will be passed in
+for non tensor outputs of the forward function),
+and it should return as many tensors, as there were inputs to
+<a class="reference internal" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.forward" title="norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>. Each argument is the gradient w.r.t the given output,
+and each returned value should be the gradient w.r.t. the
+corresponding input. If an input is not a Tensor or is a Tensor not
+requiring grads, you can just pass None as a gradient for that input.</p>
+<p>The context can be used to retrieve tensors saved during the forward
+pass. It also has an attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx.needs_input_grad</span></code> as a tuple
+of booleans representing whether each input needs gradient. E.g.,
+<a class="reference internal" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.backward" title="norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> will have <code class="docutils literal notranslate"><span class="pre">ctx.needs_input_grad[0]</span> <span class="pre">=</span> <span class="pre">True</span></code> if the
+first input to <a class="reference internal" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.forward" title="norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> needs gradient computated w.r.t. the
+output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.forward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/adjoint/lsnn_adjoint.html#LSNNFeedForwardAdjointFunction.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.adjoint.lsnn_adjoint.LSNNFeedForwardAdjointFunction.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context ctx as the first argument, followed by any
+number of arguments (tensors or other types).</p>
+<p>The context can be used to store arbitrary data that can be then
+retrieved during the backward pass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.torch.functional.adjoint.lsnn_adjoint.lsnn_adjoint_step">
+<span class="sig-prename descclassname"><span class="pre">norse.torch.functional.adjoint.lsnn_adjoint.</span></span><span class="sig-name descname"><span class="pre">lsnn_adjoint_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurrent_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/adjoint/lsnn_adjoint.html#lsnn_adjoint_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.adjoint.lsnn_adjoint.lsnn_adjoint_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementes a single euler forward and adjoint backward
+step of a lif neuron with adaptive threshhold and current based
+exponential synapses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – input spikes from other cells</p></li>
+<li><p><strong>s</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LSNNState" title="norse.torch.functional.LSNNState"><em>LSNNState</em></a>) – current state of the LSNN unit</p></li>
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – synaptic weights for input spikes</p></li>
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – recurrent weights for recurrent spikes</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LSNNParameters" title="norse.torch.functional.LSNNParameters"><em>LSNNParameters</em></a>) – parameters of the LSNN unit</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – integration timestep</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="norse.torch.functional.adjoint.lsnn_adjoint.lsnn_feed_forward_adjoint_step">
+<span class="sig-prename descclassname"><span class="pre">norse.torch.functional.adjoint.lsnn_adjoint.</span></span><span class="sig-name descname"><span class="pre">lsnn_feed_forward_adjoint_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LSNNParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">tau_adapt_inv=tensor(0.0012),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">beta=tensor(1.8000),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/functional/adjoint/lsnn_adjoint.html#lsnn_feed_forward_adjoint_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.adjoint.lsnn_adjoint.lsnn_feed_forward_adjoint_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementes a single euler forward and adjoint backward
+step of a lif neuron with adaptive threshhold and current based
+exponential synapses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – input spikes from other cells</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – membrane voltage state of this cell</p></li>
+<li><p><strong>i</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – synaptic input current state of this cell</p></li>
+<li><p><strong>b</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – state of the adaptation variable</p></li>
+<li><p><strong>input_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – synaptic weights for input spikes</p></li>
+<li><p><strong>recurrent_weights</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – recurrent weights for recurrent spikes</p></li>
+<li><p><strong>p</strong> (<a class="reference internal" href="norse.torch.functional.html#norse.torch.functional.LSNNParameters" title="norse.torch.functional.LSNNParameters"><em>LSNNParameters</em></a>) – parameters to use for the lsnn unit</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><em>torch.Tensor</em></a>) – integration timestep</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A library to do deep learning with spiking neural networks.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=norse&repo=norse&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">First steps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">∇ Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../started.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tasks.html">3. Running Tasks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Usage docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">1. About Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">2. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spiking.html">3. Introduction to spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../learning.html">4. Learning with spikes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../papers.html">5. Papers citing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../working.html">6. Working with Norse</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="norse.benchmark.html">norse.benchmark package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="norse.dataset.html">norse.dataset package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="norse.task.html">norse.task package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="norse.torch.html">norse.torch package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="norse.torch.functional.html">norse.torch.functional package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="norse.torch.functional.adjoint.html">norse.torch.functional.adjoint package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="norse.torch.functional.adjoint.test.html">norse.torch.functional.adjoint.test package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="norse.torch.functional.adjoint.coba_lif_adjoint.html">norse.torch.functional.adjoint.coba_lif_adjoint module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="norse.torch.functional.adjoint.lif_adjoint.html">norse.torch.functional.adjoint.lif_adjoint module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="norse.torch.functional.adjoint.lif_mc_adjoint.html">norse.torch.functional.adjoint.lif_mc_adjoint module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="norse.torch.functional.adjoint.lif_mc_refrac_adjoint.html">norse.torch.functional.adjoint.lif_mc_refrac_adjoint module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="norse.torch.functional.adjoint.lif_refrac_adjoint.html">norse.torch.functional.adjoint.lif_refrac_adjoint module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">norse.torch.functional.adjoint.lsnn_adjoint module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.test.html">norse.torch.functional.test package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.coba_lif.html">norse.torch.functional.coba_lif module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.correlation_sensor.html">norse.torch.functional.correlation_sensor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.decode.html">norse.torch.functional.decode module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.encode.html">norse.torch.functional.encode module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.heaviside.html">norse.torch.functional.heaviside module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.iaf.html">norse.torch.functional.iaf module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.izhikevich.html">norse.torch.functional.izhikevich module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.leaky_integrator.html">norse.torch.functional.leaky_integrator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.lif.html">norse.torch.functional.lif module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.lif_adex.html">norse.torch.functional.lif_adex module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.lif_correlation.html">norse.torch.functional.lif_correlation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.lif_ex.html">norse.torch.functional.lif_ex module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.lif_mc.html">norse.torch.functional.lif_mc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.lif_mc_refrac.html">norse.torch.functional.lif_mc_refrac module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.lif_refrac.html">norse.torch.functional.lif_refrac module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.lift.html">norse.torch.functional.lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.logical.html">norse.torch.functional.logical module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.lsnn.html">norse.torch.functional.lsnn module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.regularization.html">norse.torch.functional.regularization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.stdp.html">norse.torch.functional.stdp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.stdp_sensor.html">norse.torch.functional.stdp_sensor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.superspike.html">norse.torch.functional.superspike module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.threshold.html">norse.torch.functional.threshold module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.functional.tsodyks_makram.html">norse.torch.functional.tsodyks_makram module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.models.html">norse.torch.models package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.module.html">norse.torch.module package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="norse.torch.utils.html">norse.torch.utils package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="norse.torch.html">norse.torch package</a><ul>
+  <li><a href="norse.torch.functional.html">norse.torch.functional package</a><ul>
+  <li><a href="norse.torch.functional.adjoint.html">norse.torch.functional.adjoint package</a><ul>
+      <li>Previous: <a href="norse.torch.functional.adjoint.lif_refrac_adjoint.html" title="previous chapter">norse.torch.functional.adjoint.lif_refrac_adjoint module</a></li>
+      <li>Next: <a href="norse.torch.functional.test.html" title="next chapter">norse.torch.functional.test package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019 - 2021, Norse.ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/auto_api/norse.torch.functional.adjoint.lsnn_adjoint.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -170,7 +170,7 @@
     <span class="c1"># compute new spikes</span>
     <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_decayed</span> <span class="o">-</span> <span class="n">b_decayed</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
     <span class="c1"># compute reset</span>
-    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
     <span class="c1"># compute current jumps</span>
     <span class="n">i_new</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">i_decayed</span>
@@ -178,7 +178,7 @@
         <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="n">b_new</span> <span class="o">=</span> <span class="n">b_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">beta</span>
+    <span class="n">b_new</span> <span class="o">=</span> <span class="n">b_decayed</span> <span class="o">+</span> <span class="n">z_new</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">beta</span>
     <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">LSNNState</span><span class="p">(</span><span class="n">z_new</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">i_new</span><span class="p">,</span> <span class="n">b_new</span><span class="p">)</span></div>
 
 

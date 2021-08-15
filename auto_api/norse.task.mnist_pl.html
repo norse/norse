@@ -70,41 +70,42 @@ key whose value is a single LR scheduler or <code class="docutils literal notran
 The default configuration is shown below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lr_dict</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1"># REQUIRED: The scheduler instance</span>
-    <span class="s1">&#39;scheduler&#39;</span><span class="p">:</span> <span class="n">lr_scheduler</span><span class="p">,</span>
+    <span class="s2">&quot;scheduler&quot;</span><span class="p">:</span> <span class="n">lr_scheduler</span><span class="p">,</span>
     <span class="c1"># The unit of the scheduler&#39;s step size, could also be &#39;step&#39;.</span>
     <span class="c1"># &#39;epoch&#39; updates the scheduler on epoch end whereas &#39;step&#39;</span>
     <span class="c1"># updates it after a optimizer update.</span>
-    <span class="s1">&#39;interval&#39;</span><span class="p">:</span> <span class="s1">&#39;epoch&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="s2">&quot;epoch&quot;</span><span class="p">,</span>
     <span class="c1"># How many epochs/steps should pass between calls to</span>
     <span class="c1"># `scheduler.step()`. 1 corresponds to updating the learning</span>
     <span class="c1"># rate after every epoch/step.</span>
-    <span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="c1"># Metric to to monitor for schedulers like `ReduceLROnPlateau`</span>
-    <span class="s1">&#39;monitor&#39;</span><span class="p">:</span> <span class="s1">&#39;val_loss&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;monitor&quot;</span><span class="p">:</span> <span class="s2">&quot;val_loss&quot;</span><span class="p">,</span>
     <span class="c1"># If set to `True`, will enforce that the value specified &#39;monitor&#39;</span>
     <span class="c1"># is available when the scheduler is updated, thus stopping</span>
     <span class="c1"># training if not found. If set to `False`, it will only produce a warning</span>
-    <span class="s1">&#39;strict&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;strict&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="c1"># If using the `LearningRateMonitor` callback to monitor the</span>
     <span class="c1"># learning rate progress, this keyword can be used to specify</span>
     <span class="c1"># a custom logged name</span>
-    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>When there are schedulers in which the <code class="docutils literal notranslate"><span class="pre">.step()</span></code> method is conditioned on a value, such as the
-<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html#torch.optim.lr_scheduler.ReduceLROnPlateau" title="(in PyTorch vmaster (1.10.0a0+gitfd62ee1 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.lr_scheduler.ReduceLROnPlateau</span></code></a> scheduler, Lightning requires that the <code class="docutils literal notranslate"><span class="pre">lr_dict</span></code>
+<a class="reference external" href="https://pytorch.org/docs/master/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html#torch.optim.lr_scheduler.ReduceLROnPlateau" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.lr_scheduler.ReduceLROnPlateau</span></code></a> scheduler, Lightning requires that the <code class="docutils literal notranslate"><span class="pre">lr_dict</span></code>
 contains the keyword <code class="docutils literal notranslate"><span class="pre">&quot;monitor&quot;</span></code> set to the metric name that the scheduler should be conditioned on.</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The ReduceLROnPlateau scheduler requires a monitor</span>
 <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="n">optimizer</span><span class="p">,</span>
-        <span class="s1">&#39;lr_scheduler&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">&#39;scheduler&#39;</span><span class="p">:</span> <span class="n">ReduceLROnPlateau</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="o">...</span><span class="p">),</span>
-            <span class="s1">&#39;monitor&#39;</span><span class="p">:</span> <span class="s1">&#39;metric_to_track&#39;</span><span class="p">,</span>
-        <span class="p">}</span>
+        <span class="s2">&quot;optimizer&quot;</span><span class="p">:</span> <span class="n">optimizer</span><span class="p">,</span>
+        <span class="s2">&quot;lr_scheduler&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;scheduler&quot;</span><span class="p">:</span> <span class="n">ReduceLROnPlateau</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="o">...</span><span class="p">),</span>
+            <span class="s2">&quot;monitor&quot;</span><span class="p">:</span> <span class="s2">&quot;metric_to_track&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
     <span class="p">}</span>
+
 
 <span class="c1"># In the case of two optimizers, only one using the ReduceLROnPlateau scheduler</span>
 <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -114,13 +115,13 @@ contains the keyword <code class="docutils literal notranslate"><span class="pre
     <span class="n">scheduler2</span> <span class="o">=</span> <span class="n">LambdaLR</span><span class="p">(</span><span class="n">optimizer2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="p">{</span>
-            <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="n">optimizer1</span><span class="p">,</span>
-            <span class="s1">&#39;lr_scheduler&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;scheduler&#39;</span><span class="p">:</span> <span class="n">scheduler1</span><span class="p">,</span>
-                <span class="s1">&#39;monitor&#39;</span><span class="p">:</span> <span class="s1">&#39;metric_to_track&#39;</span><span class="p">,</span>
-            <span class="p">}</span>
+            <span class="s2">&quot;optimizer&quot;</span><span class="p">:</span> <span class="n">optimizer1</span><span class="p">,</span>
+            <span class="s2">&quot;lr_scheduler&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;scheduler&quot;</span><span class="p">:</span> <span class="n">scheduler1</span><span class="p">,</span>
+                <span class="s2">&quot;monitor&quot;</span><span class="p">:</span> <span class="s2">&quot;metric_to_track&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
         <span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="n">optimizer2</span><span class="p">,</span> <span class="s1">&#39;lr_scheduler&#39;</span><span class="p">:</span> <span class="n">scheduler2</span><span class="p">}</span>
+        <span class="p">{</span><span class="s2">&quot;optimizer&quot;</span><span class="p">:</span> <span class="n">optimizer2</span><span class="p">,</span> <span class="s2">&quot;lr_scheduler&quot;</span><span class="p">:</span> <span class="n">scheduler2</span><span class="p">},</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -144,8 +145,8 @@ and passing multiple optimizers in dictionaries with a frequency of 1:</p>
     <span class="n">optimizer_one</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
     <span class="n">optimizer_two</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="n">optimizer_one</span><span class="p">,</span> <span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="n">optimizer_two</span><span class="p">,</span> <span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;optimizer&quot;</span><span class="p">:</span> <span class="n">optimizer_one</span><span class="p">,</span> <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;optimizer&quot;</span><span class="p">:</span> <span class="n">optimizer_two</span><span class="p">,</span> <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
     <span class="p">]</span>
 </pre></div>
 </div>
@@ -204,7 +205,7 @@ the scheduler will only be updated when its optimizer is being used.</p>
 <li><p>Lightning calls <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> and <code class="docutils literal notranslate"><span class="pre">.step()</span></code> on each optimizer and learning rate scheduler as needed.</p></li>
 <li><p>If you use 16-bit precision (<code class="docutils literal notranslate"><span class="pre">precision=16</span></code>), Lightning will automatically handle the optimizers.</p></li>
 <li><p>If you use multiple optimizers, <a class="reference internal" href="#norse.task.mnist_pl.LIFConvNet.training_step" title="norse.task.mnist_pl.LIFConvNet.training_step"><code class="xref py py-meth docutils literal notranslate"><span class="pre">training_step()</span></code></a> will have an additional <code class="docutils literal notranslate"><span class="pre">optimizer_idx</span></code> parameter.</p></li>
-<li><p>If you use <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.optim.LBFGS.html#torch.optim.LBFGS" title="(in PyTorch vmaster (1.10.0a0+gitfd62ee1 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.LBFGS</span></code></a>, Lightning handles the closure function automatically for you.</p></li>
+<li><p>If you use <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.optim.LBFGS.html#torch.optim.LBFGS" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.LBFGS</span></code></a>, Lightning handles the closure function automatically for you.</p></li>
 <li><p>If you use multiple optimizers, gradients will be calculated only for the parameters of current optimizer
 at each training step.</p></li>
 <li><p>If you need to control how often those optimizers step or override the default <code class="docutils literal notranslate"><span class="pre">.step()</span></code> schedule,
@@ -216,7 +217,7 @@ override the <code class="xref py py-meth docutils literal notranslate"><span cl
 <dl class="py method">
 <dt class="sig sig-object py" id="norse.task.mnist_pl.LIFConvNet.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/task/mnist_pl.html#LIFConvNet.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.task.mnist_pl.LIFConvNet.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Same as <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module.forward" title="(in PyTorch vmaster (1.10.0a0+gitfd62ee1 ))"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.nn.Module.forward()</span></code></a>.</p>
+<dd><p>Same as <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module.forward" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.nn.Module.forward()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -243,17 +244,17 @@ the progress bar or logger.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>batch</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitfd62ee1 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a> | (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitfd62ee1 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, …) | [<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitfd62ee1 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, …]) – The output of your <a class="reference external" href="https://pytorch.org/docs/master/data.html#torch.utils.data.DataLoader" title="(in PyTorch vmaster (1.10.0a0+gitfd62ee1 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code></a>. A tensor, tuple or list.</p></li>
+<li><p><strong>batch</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a> | (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, …) | [<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>, …]) – The output of your <a class="reference external" href="https://pytorch.org/docs/master/data.html#torch.utils.data.DataLoader" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code></a>. A tensor, tuple or list.</p></li>
 <li><p><strong>batch_idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Integer displaying index of this batch</p></li>
 <li><p><strong>optimizer_idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – When using multiple optimizers, this argument will also be present.</p></li>
-<li><p><strong>hiddens</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitfd62ee1 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>) – Passed in if
+<li><p><strong>hiddens</strong> (<a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a>) – Passed in if
 <a href="#id1"><span class="problematic" id="id2">:paramref:`~pytorch_lightning.core.lightning.LightningModule.truncated_bptt_steps`</span></a> &gt; 0.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Any of.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitfd62ee1 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a> - The loss tensor</p></li>
+<li><p><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+gitb27b86a ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a> - The loss tensor</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> - A dictionary. Can include any keys, but must include the key <code class="docutils literal notranslate"><span class="pre">'loss'</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> - Training will skip to the next batch</p></li>
 </ul>
@@ -280,8 +281,10 @@ You can also do fancier things like multiple forward passes or something model s
 <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">optimizer_idx</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">optimizer_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># do training_step with encoder</span>
+        <span class="o">...</span>
     <span class="k">if</span> <span class="n">optimizer_idx</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="c1"># do training_step with decoder</span>
+        <span class="o">...</span>
 </pre></div>
 </div>
 <p>If you add truncated back propagation through time you will also get an additional
@@ -292,7 +295,7 @@ argument with the hidden states of the previous step.</p>
     <span class="o">...</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">hiddens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lstm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">hiddens</span><span class="p">)</span>
     <span class="o">...</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;loss&#39;</span><span class="p">:</span> <span class="n">loss</span><span class="p">,</span> <span class="s1">&#39;hiddens&#39;</span><span class="p">:</span> <span class="n">hiddens</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="p">,</span> <span class="s2">&quot;hiddens&quot;</span><span class="p">:</span> <span class="n">hiddens</span><span class="p">}</span>
 </pre></div>
 </div>
 <div class="admonition note">

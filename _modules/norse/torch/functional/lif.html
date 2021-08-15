@@ -187,7 +187,7 @@
     <span class="c1"># compute new spikes</span>
     <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_decayed</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
     <span class="c1"># compute reset</span>
-    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+    <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
     <span class="c1"># compute current jumps</span>
     <span class="n">i_new</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">i_decayed</span>
@@ -489,7 +489,7 @@
 <div class="viewcode-block" id="lif_feed_forward_step_sparse"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.lif.html#norse.torch.functional.lif_feed_forward_step_sparse">[docs]</a><span class="k">def</span> <span class="nf">lif_feed_forward_step_sparse</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span><span class="p">,</span>
-    <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span><span class="p">,</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">]:</span>  <span class="c1"># pragma: no cover</span>
     <span class="c1"># compute voltage updates</span>

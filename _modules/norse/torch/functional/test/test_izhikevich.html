@@ -36,27 +36,10 @@
   <h1>Source code for norse.torch.functional.test.test_izhikevich</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional</span> <span class="kn">import</span> <span class="n">izhikevich</span> <span class="k">as</span> <span class="n">izk</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.izhikevich</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">izhikevich_step</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">norse.torch.utils.plot</span> <span class="kn">import</span> <span class="n">plot_izhikevich</span>
-
-
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;axes.spines.left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;axes.spines.right&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;axes.spines.top&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;axes.spines.bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;xtick.top&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;xtick.bottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;xtick.labeltop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;xtick.labelbottom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;ytick.left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;ytick.right&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;ytick.labelleft&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;ytick.labelright&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
 
 <div class="viewcode-block" id="test_tonic_spiking"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_izhikevich.html#norse.torch.functional.test.test_izhikevich.test_tonic_spiking">[docs]</a><span class="k">def</span> <span class="nf">test_tonic_spiking</span><span class="p">():</span>
@@ -491,126 +474,8 @@
     <span class="n">created</span> <span class="o">=</span> <span class="n">izk</span><span class="o">.</span><span class="n">create_izhikevich_spiking_behavior</span><span class="p">(</span>
         <span class="n">a</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> <span class="n">v_rest</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">),</span> <span class="n">u_rest</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="n">p</span><span class="o">.</span><span class="n">b</span>
     <span class="p">)</span>
-    <span class="n">plot_izhikevich</span><span class="p">(</span><span class="n">created</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">created</span><span class="o">.</span><span class="n">p</span> <span class="o">==</span> <span class="n">p</span>
-    <span class="k">assert</span> <span class="n">created</span><span class="o">.</span><span class="n">s</span> <span class="o">==</span> <span class="n">s</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="plot_test"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_izhikevich.html#norse.torch.functional.test.test_izhikevich.plot_test">[docs]</a><span class="k">def</span> <span class="nf">plot_test</span><span class="p">():</span>
-    <span class="n">vs_tonic</span><span class="p">,</span> <span class="n">cs_tonic</span> <span class="o">=</span> <span class="n">test_tonic_spiking</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_tonic</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_tonic</span><span class="p">)</span>
-
-    <span class="n">vs_phasic_spiking</span><span class="p">,</span> <span class="n">cs_phasic_spiking</span> <span class="o">=</span> <span class="n">test_phasic_spiking</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_phasic_spiking</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_phasic_spiking</span><span class="p">)</span>
-
-    <span class="n">vs_tonic_bursting</span><span class="p">,</span> <span class="n">cs_tonic_bursting</span> <span class="o">=</span> <span class="n">test_tonic_bursting</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_tonic_bursting</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_tonic_bursting</span><span class="p">)</span>
-
-    <span class="n">vs_phasic_bursting</span><span class="p">,</span> <span class="n">cs_phasic_bursting</span> <span class="o">=</span> <span class="n">test_phasic_bursting</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_phasic_bursting</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_phasic_bursting</span><span class="p">)</span>
-
-    <span class="n">vs_mixed_mode</span><span class="p">,</span> <span class="n">cs_mixed_mode</span> <span class="o">=</span> <span class="n">test_mixed_mode</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_mixed_mode</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_mixed_mode</span><span class="p">)</span>
-
-    <span class="n">vs_sfa</span><span class="p">,</span> <span class="n">cs_sfa</span> <span class="o">=</span> <span class="n">test_spike_frequency_adaptation</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_sfa</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_sfa</span><span class="p">)</span>
-
-    <span class="n">vs_class_1_exc</span> <span class="o">=</span> <span class="n">test_class_1_exc</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_class_1_exc</span><span class="p">)</span>
-
-    <span class="n">vs_class_2_exc</span> <span class="o">=</span> <span class="n">test_class_2_exc</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_class_2_exc</span><span class="p">)</span>
-
-    <span class="n">vs_spike_latency</span><span class="p">,</span> <span class="n">cs_spike_latency</span> <span class="o">=</span> <span class="n">test_spike_latency</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_spike_latency</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_spike_latency</span><span class="p">)</span>
-
-    <span class="n">vs_so</span><span class="p">,</span> <span class="n">cs_so</span> <span class="o">=</span> <span class="n">test_subthreshold_oscillation</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_so</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_so</span><span class="p">)</span>
-
-    <span class="n">vs_resonator</span><span class="p">,</span> <span class="n">cs_resonator</span> <span class="o">=</span> <span class="n">test_resonator</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_resonator</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_resonator</span><span class="p">)</span>
-
-    <span class="n">vs_integrator</span><span class="p">,</span> <span class="n">cs_integrator</span> <span class="o">=</span> <span class="n">test_integrator</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_integrator</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_integrator</span><span class="p">)</span>
-
-    <span class="n">vs_rebound_spike</span><span class="p">,</span> <span class="n">cs_rebound_spike</span> <span class="o">=</span> <span class="n">test_rebound_spike</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_rebound_spike</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_rebound_spike</span><span class="p">)</span>
-
-    <span class="n">vs_rebound_burst</span><span class="p">,</span> <span class="n">cs_rebound_burst</span> <span class="o">=</span> <span class="n">test_rebound_burst</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_rebound_burst</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_rebound_burst</span><span class="p">)</span>
-
-    <span class="n">vs_tv</span><span class="p">,</span> <span class="n">cs_tv</span> <span class="o">=</span> <span class="n">test_threshhold_variability</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_tv</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_tv</span><span class="p">)</span>
-
-    <span class="n">vs_bistability</span><span class="p">,</span> <span class="n">cs_bistability</span> <span class="o">=</span> <span class="n">test_bistability</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_bistability</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_bistability</span><span class="p">)</span>
-
-    <span class="n">vs_dap</span><span class="p">,</span> <span class="n">cs_dap</span> <span class="o">=</span> <span class="n">test_dap</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_dap</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_dap</span><span class="p">)</span>
-
-    <span class="n">vs_iis</span><span class="p">,</span> <span class="n">cs_iis</span> <span class="o">=</span> <span class="n">test_inhibition_induced_spiking</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_iis</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_iis</span><span class="p">)</span>
-
-    <span class="n">vs_iib</span><span class="p">,</span> <span class="n">cs_iib</span> <span class="o">=</span> <span class="n">test_inhibition_induced_bursting</span><span class="p">()</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vs_iib</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cs_iib</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;izhikevich_test.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span></div>
+    <span class="k">assert</span> <span class="n">created</span><span class="o">.</span><span class="n">s</span> <span class="o">==</span> <span class="n">s</span></div>
 </pre></div>
 
           </div>

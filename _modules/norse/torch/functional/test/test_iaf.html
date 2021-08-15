@@ -53,14 +53,15 @@
 
 
 <div class="viewcode-block" id="test_iaf_step_batch"><a class="viewcode-back" href="../../../../../auto_api/norse.torch.functional.test.test_iaf.html#norse.torch.functional.test.test_iaf.test_iaf_step_batch">[docs]</a><span class="k">def</span> <span class="nf">test_iaf_step_batch</span><span class="p">():</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">IAFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">IAFParameters</span><span class="p">(</span><span class="n">v_reset</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-    <span class="n">w_in</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">w_rec</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">pass</span></div>
+    <span class="c1"># x = torch.ones(2, 10)</span>
+    <span class="c1"># s = IAFState(z=torch.zeros(2, 5), v=torch.zeros(2, 5))</span>
+    <span class="c1"># p = IAFParameters(v_reset=torch.zeros(2, 5))</span>
+    <span class="c1"># w_in = torch.randn(5, 10)</span>
+    <span class="c1"># w_rec = torch.randn(5, 5)</span>
 
-    <span class="n">z</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">iaf_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">w_in</span><span class="p">,</span> <span class="n">w_rec</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span></div>
+    <span class="c1"># z, s = iaf_step(x, s, w_in, w_rec, p)</span>
+    <span class="c1"># assert z.shape == (2, 5)</span>
 </pre></div>
 
           </div>
