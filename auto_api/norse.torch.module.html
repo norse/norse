@@ -484,6 +484,112 @@ remove autapses in custom recurrent weights, if set above.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.</span></span><span class="sig-name descname"><span class="pre">LConv2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/conv.html#LConv2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.LConv2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.conv.Conv3d</span></code></p>
+<p>Implements a 2d-convolution applied pointwise in time. See <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html?highlight=conv2d#torch.nn.Conv2d">https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html?highlight=conv2d#torch.nn.Conv2d</a>,
+for documentation of the arguments, which we will reproduce in part here.</p>
+<p>This module expects an additional temporal dimension in the tensor it is passed, that is
+in the notation in the documentation referenced above, it turns in the simplest case a tensor
+with input shape <span class="math notranslate nohighlight">\((T, N, C_{      ext{in}}, H, W)\)</span> and output tensor of shape
+<span class="math notranslate nohighlight">\((T, N, C_{       ext{out}}, H_{  ext{out}}, W_{  ext{out}})\)</span>, by applying a 2d convolution
+operation pointwise along the time-direction, with T denoting the number of time steps.</p>
+<p>{groups_note}</p>
+<dl class="simple">
+<dt>The parameters <a class="reference internal" href="#norse.torch.module.LConv2d.kernel_size" title="norse.torch.module.LConv2d.kernel_size"><code class="xref py py-attr docutils literal notranslate"><span class="pre">kernel_size</span></code></a>, <a class="reference internal" href="#norse.torch.module.LConv2d.stride" title="norse.torch.module.LConv2d.stride"><code class="xref py py-attr docutils literal notranslate"><span class="pre">stride</span></code></a>, <a class="reference internal" href="#norse.torch.module.LConv2d.padding" title="norse.torch.module.LConv2d.padding"><code class="xref py py-attr docutils literal notranslate"><span class="pre">padding</span></code></a>, <a class="reference internal" href="#norse.torch.module.LConv2d.dilation" title="norse.torch.module.LConv2d.dilation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dilation</span></code></a> can either be:</dt><dd><ul class="simple">
+<li><p>a single <code class="docutils literal notranslate"><span class="pre">int</span></code> – in which case the same value is used for the height and width dimension</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">tuple</span></code> of two ints – in which case, the first <cite>int</cite> is used for the height dimension,
+and the second <cite>int</cite> for the width dimension</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of channels in the input image</p></li>
+<li><p><strong>out_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of channels produced by the convolution</p></li>
+<li><p><strong>kernel_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – Size of the convolving kernel</p></li>
+<li><p><strong>stride</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>, </em><em>optional</em>) – Stride of the convolution. Default: 1</p></li>
+<li><p><strong>padding</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Padding added to all four sides of
+the input. Default: 0</p></li>
+<li><p><strong>dilation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>, </em><em>optional</em>) – Spacing between kernel elements. Default: 1</p></li>
+<li><p><strong>groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Number of blocked connections from input
+channels to output channels. Default: 1</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.bias">
+<span class="sig-name descname"><span class="pre">bias</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+git67788ee ))"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#norse.torch.module.LConv2d.bias" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.dilation">
+<span class="sig-name descname"><span class="pre">dilation</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#norse.torch.module.LConv2d.dilation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/conv.html#LConv2d.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.LConv2d.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.groups">
+<span class="sig-name descname"><span class="pre">groups</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></em><a class="headerlink" href="#norse.torch.module.LConv2d.groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.kernel_size">
+<span class="sig-name descname"><span class="pre">kernel_size</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#norse.torch.module.LConv2d.kernel_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.out_channels">
+<span class="sig-name descname"><span class="pre">out_channels</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></em><a class="headerlink" href="#norse.torch.module.LConv2d.out_channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.output_padding">
+<span class="sig-name descname"><span class="pre">output_padding</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#norse.torch.module.LConv2d.output_padding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.padding">
+<span class="sig-name descname"><span class="pre">padding</span></span><em class="property"><span class="pre">:</span> <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#norse.torch.module.LConv2d.padding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.padding_mode">
+<span class="sig-name descname"><span class="pre">padding_mode</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></em><a class="headerlink" href="#norse.torch.module.LConv2d.padding_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.stride">
+<span class="sig-name descname"><span class="pre">stride</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#norse.torch.module.LConv2d.stride" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.transposed">
+<span class="sig-name descname"><span class="pre">transposed</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></em><a class="headerlink" href="#norse.torch.module.LConv2d.transposed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="norse.torch.module.LConv2d.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.10.0a0+git67788ee ))"><span class="pre">torch.Tensor</span></a></em><a class="headerlink" href="#norse.torch.module.LConv2d.weight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="norse.torch.module.LICell">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.</span></span><span class="sig-name descname"><span class="pre">LICell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LIParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.))</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/leaky_integrator.html#LICell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.LICell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="norse.torch.module.snn.html#norse.torch.module.snn.SNNCell" title="norse.torch.module.snn.SNNCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">norse.torch.module.snn.SNNCell</span></code></a></p>
@@ -2897,6 +3003,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1"><a class="reference internal" href="norse.torch.module.test.html">norse.torch.module.test package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="norse.torch.module.test.html#submodules">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.test.test_coba.html">norse.torch.module.test.test_coba module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.module.test.test_conv.html">norse.torch.module.test.test_conv module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.test.test_encode.html">norse.torch.module.test.test_encode module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.test.test_izhikevich.html">norse.torch.module.test.test_izhikevich module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.test.test_leaky_integrator.html">norse.torch.module.test.test_leaky_integrator module</a></li>
@@ -2925,6 +3032,7 @@ registered hooks while the latter silently ignores them.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="norse.torch.module.coba_lif.html">norse.torch.module.coba_lif module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="norse.torch.module.conv.html">norse.torch.module.conv module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="norse.torch.module.encode.html">norse.torch.module.encode module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="norse.torch.module.izhikevich.html">norse.torch.module.izhikevich module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="norse.torch.module.leaky_integrator.html">norse.torch.module.leaky_integrator module</a></li>
@@ -3003,6 +3111,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">norse.torch.module package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.test.html">norse.torch.module.test package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.coba_lif.html">norse.torch.module.coba_lif module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="norse.torch.module.conv.html">norse.torch.module.conv module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.encode.html">norse.torch.module.encode module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.izhikevich.html">norse.torch.module.izhikevich module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="norse.torch.module.leaky_integrator.html">norse.torch.module.leaky_integrator module</a></li>
