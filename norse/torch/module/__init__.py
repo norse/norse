@@ -3,6 +3,7 @@ Modules for spiking neural network, adhering to the ``torch.nn.Module`` interfac
 """
 
 from .coba_lif import CobaLIFCell, CobaLIFParameters, CobaLIFState
+from .conv import LConv2d
 from .encode import (
     ConstantCurrentLIFEncoder,
     PoissonEncoder,
@@ -78,6 +79,7 @@ __all__ = [
     "CobaLIFState",
     "CobaLIFParameters",
     "ConstantCurrentLIFEncoder",
+    "LConv2d",
     "PoissonEncoder",
     "PopulationEncoder",
     "SignedPoissonEncoder",
