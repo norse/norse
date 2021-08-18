@@ -88,12 +88,10 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Encodes a tensor of input values, which are assumed to be in the</span>
-<span class="sd">        range [0,1] (if not signed, [-1,1] if signed)</span>
-<span class="sd">        into a tensor of one dimension higher of binary values,</span>
+<span class="sd">        range [0,1] into a tensor of one dimension higher of binary values,</span>
 <span class="sd">        which represent input spikes.</span>
 
 <span class="sd">        Parameters:</span>
-<span class="sd">            input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [0,1].</span>
 <span class="sd">            sequence_length (int): Number of time steps in the resulting spike train.</span>
 <span class="sd">            f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
 <span class="sd">            dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
@@ -105,6 +103,24 @@
 
 <div class="viewcode-block" id="PoissonEncoder.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.PoissonEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">poisson_encode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f_max</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="PoissonEncoderStep"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.PoissonEncoderStep">[docs]</a><span class="k">class</span> <span class="nc">PoissonEncoderStep</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encodes a tensor of input values, which are assumed to be in the</span>
+<span class="sd">        range [0,1] into a tensor of binary values, which represent input spikes.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
+<span class="sd">            dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PoissonEncoderStep</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span> <span class="o">=</span> <span class="n">f_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
+<div class="viewcode-block" id="PoissonEncoderStep.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.PoissonEncoderStep.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">poisson_encode_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f_max</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="PopulationEncoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.PopulationEncoder">[docs]</a><span class="k">class</span> <span class="nc">PopulationEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -168,9 +184,8 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Encodes a tensor of input values, which are assumed to be in the</span>
-<span class="sd">        range [-1,1] (if not signed, [-1,1] if signed)</span>
-<span class="sd">        into a tensor of one dimension higher of binary values,</span>
-<span class="sd">        which represent input spikes.</span>
+<span class="sd">        range [-1,1] into a tensor of one dimension higher of values in {-1,0,1},</span>
+<span class="sd">        which represent signed input spikes.</span>
 
 <span class="sd">        Parameters:</span>
 <span class="sd">            sequence_length (int): Number of time steps in the resulting spike train.</span>
@@ -186,6 +201,25 @@
         <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">signed_poisson_encode</span><span class="p">(</span>
             <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f_max</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
         <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SignedPoissonEncoderStep"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.SignedPoissonEncoderStep">[docs]</a><span class="k">class</span> <span class="nc">SignedPoissonEncoderStep</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encodes a tensor of input values, which are assumed to be in the</span>
+<span class="sd">        range [-1,1] into a tensor of values in {-1,0,1},</span>
+<span class="sd">        which represent signed input spikes.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            f_max (float): Maximal frequency (in Hertz) which will be emitted.</span>
+<span class="sd">            dt (float): Integration time step (should coincide with the integration time step used in the model)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SignedPoissonEncoderStep</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span> <span class="o">=</span> <span class="n">f_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+
+<div class="viewcode-block" id="SignedPoissonEncoderStep.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.SignedPoissonEncoderStep.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">encode</span><span class="o">.</span><span class="n">signed_poisson_encode_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f_max</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="SpikeLatencyLIFEncoder"><a class="viewcode-back" href="../../../../auto_api/norse.torch.module.encode.html#norse.torch.module.SpikeLatencyLIFEncoder">[docs]</a><span class="k">class</span> <span class="nc">SpikeLatencyLIFEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
