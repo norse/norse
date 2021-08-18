@@ -10,7 +10,9 @@ from norse.torch.module.encode import (
     ConstantCurrentLIFEncoder,
     SpikeLatencyEncoder,
     PoissonEncoder,
+    PoissonEncoderStep,
     SignedPoissonEncoder,
+    SignedPoissonEncoderStep,
     SpikeLatencyLIFEncoder,
 )
 
@@ -55,12 +57,26 @@ def test_signed_poisson_encoder():
     assert out.shape == torch.Size([seq_length, 10, 10])
 
 
+def test_signed_poisson_encoder_step():
+    encoder = SignedPoissonEncoderStep()
+    x = torch.randn(10, 10)
+    out = encoder(x)
+    assert out.shape == torch.Size([10, 10])
+
+
 def test_poisson_encoder():
     seq_length = 100
     encoder = PoissonEncoder(seq_length=seq_length)
     x = torch.randn(10, 10)
     out = encoder(x)
     assert out.shape == torch.Size([seq_length, 10, 10])
+
+
+def test_poisson_encoder_step():
+    encoder = PoissonEncoderStep()
+    x = torch.randn(10, 10)
+    out = encoder(x)
+    assert out.shape == torch.Size([10, 10])
 
 
 def test_spike_latency_lif_encoder():

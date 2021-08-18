@@ -52,12 +52,10 @@ class PoissonEncoder(torch.nn.Module):
     def __init__(self, seq_length: int, f_max: float = 100, dt: float = 0.001):
         """
         Encodes a tensor of input values, which are assumed to be in the
-        range [0,1] (if not signed, [-1,1] if signed)
-        into a tensor of one dimension higher of binary values,
+        range [0,1] into a tensor of one dimension higher of binary values,
         which represent input spikes.
 
         Parameters:
-            input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [0,1].
             sequence_length (int): Number of time steps in the resulting spike train.
             f_max (float): Maximal frequency (in Hertz) which will be emitted.
             dt (float): Integration time step (should coincide with the integration time step used in the model)
@@ -69,6 +67,24 @@ class PoissonEncoder(torch.nn.Module):
 
     def forward(self, x):
         return encode.poisson_encode(x, self.seq_length, f_max=self.f_max, dt=self.dt)
+
+
+class PoissonEncoderStep(torch.nn.Module):
+    def __init__(self, f_max: float = 1000, dt: float = 0.001):
+        """
+        Encodes a tensor of input values, which are assumed to be in the
+        range [0,1] into a tensor of binary values, which represent input spikes.
+
+        Parameters:
+            f_max (float): Maximal frequency (in Hertz) which will be emitted.
+            dt (float): Integration time step (should coincide with the integration time step used in the model)
+        """
+        super(PoissonEncoderStep, self).__init__()
+        self.f_max = f_max
+        self.dt = dt
+
+    def forward(self, x):
+        return encode.poisson_encode_step(x, f_max=self.f_max, dt=self.dt)
 
 
 class PopulationEncoder(torch.nn.Module):
@@ -132,9 +148,8 @@ class SignedPoissonEncoder(torch.nn.Module):
     def __init__(self, seq_length: int, f_max: float = 100, dt: float = 0.001):
         """
         Encodes a tensor of input values, which are assumed to be in the
-        range [-1,1] (if not signed, [-1,1] if signed)
-        into a tensor of one dimension higher of binary values,
-        which represent input spikes.
+        range [-1,1] into a tensor of one dimension higher of values in {-1,0,1},
+        which represent signed input spikes.
 
         Parameters:
             sequence_length (int): Number of time steps in the resulting spike train.
@@ -150,6 +165,25 @@ class SignedPoissonEncoder(torch.nn.Module):
         return encode.signed_poisson_encode(
             x, self.seq_length, f_max=self.f_max, dt=self.dt
         )
+
+
+class SignedPoissonEncoderStep(torch.nn.Module):
+    def __init__(self, f_max: float = 1000, dt: float = 0.001):
+        """
+        Encodes a tensor of input values, which are assumed to be in the
+        range [-1,1] into a tensor of values in {-1,0,1},
+        which represent signed input spikes.
+
+        Parameters:
+            f_max (float): Maximal frequency (in Hertz) which will be emitted.
+            dt (float): Integration time step (should coincide with the integration time step used in the model)
+        """
+        super(SignedPoissonEncoderStep, self).__init__()
+        self.f_max = f_max
+        self.dt = dt
+
+    def forward(self, x):
+        return encode.signed_poisson_encode_step(x, f_max=self.f_max, dt=self.dt)
 
 
 class SpikeLatencyLIFEncoder(torch.nn.Module):
