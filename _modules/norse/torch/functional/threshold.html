@@ -38,11 +38,8 @@
 <span class="kn">import</span> <span class="nn">torch.jit</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">norse</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.heaviside</span> <span class="kn">import</span> <span class="n">heaviside</span>
-
-
-<span class="kn">from</span> <span class="nn">.superspike</span> <span class="kn">import</span> <span class="n">super_fn</span>
+<span class="kn">from</span> <span class="nn">norse.torch.functional.superspike</span> <span class="kn">import</span> <span class="n">super_fn</span>
 
 <span class="n">superspike_fn</span> <span class="o">=</span> <span class="n">super_fn</span>
 
@@ -192,23 +189,37 @@
     <span class="k">return</span> <span class="n">CircDist</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="HeaviTent"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.HeaviTent">[docs]</a><span class="k">class</span> <span class="nc">HeaviTent</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
-<div class="viewcode-block" id="HeaviTent.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.HeaviTent.forward">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
-        <span class="n">ctx</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+<div class="viewcode-block" id="Triangle"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.Triangle">[docs]</a><span class="k">class</span> <span class="nc">Triangle</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Triangular/piecewise linear surrogate gradient as in</span>
+
+<span class="sd">    S.K. Esser et al., **&quot;Convolutional networks for fast, energy-efficient neuromorphic computing&quot;**,</span>
+<span class="sd">    Proceedings of the National Academy of Sciences 113(41), 11441-11446, (2016),</span>
+<span class="sd">    `doi:10.1073/pnas.1604850113 &lt;https://www.pnas.org/content/113/41/11441.short&gt;`_</span>
+<span class="sd">    G. Bellec et al., **&quot;A solution to the learning dilemma for recurrent networks of spiking neurons&quot;**,</span>
+<span class="sd">    Nature Communications 11(1), 3625, (2020),</span>
+<span class="sd">    `doi:10.1038/s41467-020-17236-y &lt;https://www.nature.com/articles/s41467-020-17236-y&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Triangle.forward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.Triangle.forward">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">ignore</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">ctx</span><span class="o">.</span><span class="n">save_for_backward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HeaviTent.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.HeaviTent.backward">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+<div class="viewcode-block" id="Triangle.backward"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.Triangle.backward">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">ignore</span>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">):</span>
         <span class="p">(</span><span class="n">x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">alpha</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">dy</span><span class="p">,</span> <span class="kc">None</span></div></div>
+        <span class="n">grad_input</span> <span class="o">=</span> <span class="n">grad_output</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">grad_input</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">abs</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">grad</span><span class="p">,</span> <span class="kc">None</span></div></div>
 
 
-<div class="viewcode-block" id="heavi_tent_fn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.heavi_tent_fn">[docs]</a><span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">ignore</span>
-<span class="k">def</span> <span class="nf">heavi_tent_fn</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">HeaviTent</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span></div>
+<div class="viewcode-block" id="triangle_fn"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.triangle_fn">[docs]</a><span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">ignore</span>
+<span class="k">def</span> <span class="nf">triangle_fn</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">Triangle</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="threshold"><a class="viewcode-back" href="../../../../auto_api/norse.torch.functional.threshold.html#norse.torch.functional.threshold">[docs]</a><span class="k">def</span> <span class="nf">threshold</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
@@ -216,10 +227,10 @@
         <span class="k">return</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;super&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">superspike_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;triangle&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">triangle_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;tanh&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">heavi_tanh_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;tent&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">heavi_tent_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;circ&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">heavi_circ_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;heavi_erfc&quot;</span><span class="p">:</span>
@@ -228,7 +239,7 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Attempted to apply threshold function </span><span class="si">{method}</span><span class="s2">, but no such &quot;</span>
             <span class="o">+</span> <span class="s2">&quot;function exist. We currently support heaviside, super, &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;tanh, tent, circ, and heavi_erfc.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;tanh, triangle, circ, and heavi_erfc.&quot;</span>
         <span class="p">)</span></div>
 
 
