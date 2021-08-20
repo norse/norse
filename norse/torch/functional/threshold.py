@@ -1,19 +1,13 @@
-# XXX: temporary for visualization
-import sys
-sys.path.append("norse/torch/functional")
+from typing import Callable, Optional
 
 import torch
-import torch.jit
 import numpy as np
 
-import norse
+
+from norse.torch.functional.surrogates import *
 from norse.torch.functional.heaviside import heaviside
 
 
-# XXX: temporary for visualization
-from superspike import super_fn
-
-superspike_fn = super_fn
 
 
 class HeaviErfc(torch.autograd.Function):
@@ -219,25 +213,43 @@ def sign(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
     return 2 * threshold(x, method, alpha) - 1
 
 
-# XXX: temporary for visualization
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
+class ThresholdFunction(torch.autograd.Function):
+    """
+    Threshold function that allows a custom threshold implementation and surrogate gradient.
+    """
 
-    x = torch.linspace(-5, 5, 1001)
+    @staticmethod
+    @torch.jit.ignore
+    def forward(ctx, x: torch.Tensor, fw: Callable, surrogate: Callable, alpha: float, beta: Optional[float]) -> torch.Tensor:
+        ctx.save_for_backward(x)
+        ctx.surrogate = surrogate
+        ctx.alpha = alpha
+        ctx.beta = beta
+        return fw(x)
 
-    superspike = 1 / (1 + 100 * x.abs()) ** 2
-    triangle = 0.3 * torch.relu(1 - x.abs())  # same as tent
-    tanh = 1 - (x * 1).tanh().pow(2)
-    circ = -(x.pow(2) / (2 * (1 ** 2 + x.pow(2)).pow(1.5))) + 1 / (2 * (1 ** 2 + x.pow(2)).sqrt()) * 2 * 1
-    erfc = (2 * torch.exp(-(1 * x).pow(2))) / (torch.as_tensor(np.pi).sqrt())
+    @staticmethod
+    @torch.jit.ignore
+    def backward(ctx, grad_output):
+        (x,) = ctx.saved_tensors
+        surrogate = ctx.surrogate
+        alpha = ctx.alpha
+        beta = ctx.beta
+        grad_input = grad_output.clone()
+        grad = surrogate(x, alpha, beta) * grad_input
+        return grad, None, None, None, None
 
-    plt.plot(x.numpy(), superspike.numpy(), label="superspike")
-    plt.plot(x.numpy(), triangle.numpy(), label="triangle")
-    plt.plot(x.numpy(), tanh.numpy(), label="tanh")
-    plt.plot(x.numpy(), circ.numpy(), label="circ")
-    plt.plot(x.numpy(), erfc.numpy(), label="erfc")
-    plt.xlabel("v - thresh")
-    plt.ylabel("grad")
-    plt.grid()
-    plt.legend()
-    plt.show()
+
+class Threshold(torch.nn.Module):
+    """
+    Threshold module. Defaults to deterministic threshold with SuperSpike surrogate (scale 100).
+    """
+
+    def __init__(self, fw: Callable = heaviside, surrogate: Callable = superspike, alpha: float = 100.0, beta: Optional[float] = None):
+        super().__init__()
+        self.fw = fw
+        self.surrogate = surrogate
+        self.alpha = alpha
+        self.beta = beta
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return ThresholdFunction.apply(x, self.fw, self.surrogate, self.alpha, self.beta)
