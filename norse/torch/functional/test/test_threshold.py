@@ -82,7 +82,7 @@ def test_threshold_backward():
     alpha = 10.0
     x = torch.ones(10)
 
-    methods = ["super", "tanh", "tent", "circ", "heavi_erfc"]
+    methods = ["super", "tanh", "triangle", "circ", "heavi_erfc"]
 
     for method in methods:
         x = torch.ones(10, requires_grad=True)
@@ -101,7 +101,7 @@ def test_threshold_backward():
 def test_threshold():
     alpha = 10.0
 
-    methods = ["super", "heaviside", "tanh", "tent", "circ", "heavi_erfc"]
+    methods = ["super", "heaviside", "tanh", "triangle", "circ", "heavi_erfc"]
 
     for method in methods:
         x = torch.ones(10)
@@ -124,7 +124,7 @@ def test_sign():
         "super",
         "heaviside",
         "tanh",
-        "tent",
+        "triangle",
         "circ",
     ]
 

@@ -83,7 +83,7 @@ from .threshold import (
     heavi_circ_fn,
     heavi_erfc_fn,
     heavi_tanh_fn,
-    heavi_tent_fn,
+    triangle_fn,
     logistic_fn,
 )
 
@@ -189,7 +189,7 @@ __all__ = [
     "heavi_circ_fn",
     "heavi_erfc_fn",
     "heavi_tanh_fn",
-    "heavi_tent_fn",
+    "triangle_fn",
     "logistic_fn",
     "IzhikevichParameters",
     "IzhikevichSpikingBehavior",
