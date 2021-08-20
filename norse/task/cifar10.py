@@ -1,13 +1,8 @@
-import os
-import datetime
-import uuid
-
 from argparse import ArgumentParser
-from collections import namedtuple
 import torchvision
-import matplotlib.pyplot as plt
 
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.data
 import pytorch_lightning as pl
@@ -17,8 +12,8 @@ from norse.torch.functional.lif import LIFParameters
 
 
 def label_smoothing_loss(y_hat, y, alpha=0.2):
-    log_probs = torch.nn.functional.log_softmax(y_hat, dim=1, _stacklevel=5)
-    xent = torch.nn.functional.nll_loss(log_probs, y, reduction="none")
+    log_probs = F.log_softmax(y_hat, dim=1, _stacklevel=5)
+    xent = F.nll_loss(log_probs, y, reduction="none")
     KL = -log_probs.mean(dim=1)
     loss = (1 - alpha) * xent + alpha * KL
     return loss.sum()
@@ -40,28 +35,28 @@ class LIFConvNet(pl.LightningModule):
 
         self.features = SequentialState(
             # preparation
-            torch.nn.Conv2d(
+            nn.Conv2d(
                 num_channels, c[0], kernel_size=3, stride=1, padding=1, bias=False
             ),
             LIFCell(p),
             # block 1
-            torch.nn.Conv2d(c[0], c[1], kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(c[0], c[1], kernel_size=3, stride=1, padding=1, bias=False),
             LIFCell(p),
-            torch.nn.MaxPool2d(2),
+            nn.MaxPool2d(2),
             # block 2
-            torch.nn.Conv2d(c[1], c[2], kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(c[1], c[2], kernel_size=3, stride=1, padding=1, bias=False),
             LIFCell(p),
-            torch.nn.MaxPool2d(2),
+            nn.MaxPool2d(2),
             # block 3
-            torch.nn.Conv2d(c[2], c[3], kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(c[2], c[3], kernel_size=3, stride=1, padding=1, bias=False),
             LIFCell(p),
-            torch.nn.MaxPool2d(2),
-            torch.nn.Flatten(),
+            nn.MaxPool2d(2),
+            nn.Flatten(),
         )
 
         self.classification = SequentialState(
             # Classification
-            torch.nn.Linear(4096, 10, bias=False),
+            nn.Linear(4096, 10, bias=False),
             LICell(),
         )
 
