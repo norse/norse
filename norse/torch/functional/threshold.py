@@ -3,9 +3,7 @@ import torch.jit
 import numpy as np
 
 from norse.torch.functional.heaviside import heaviside
-
-
-from superspike import super_fn
+from norse.torch.functional.superspike import super_fn
 
 superspike_fn = super_fn
 
@@ -205,7 +203,7 @@ def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
         raise ValueError(
             f"Attempted to apply threshold function {method}, but no such "
             + "function exist. We currently support heaviside, super, "
-            + "tanh, tent, circ, and heavi_erfc."
+            + "tanh, triangle, circ, and heavi_erfc."
         )
 
 
