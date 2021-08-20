@@ -1,16 +1,10 @@
-# XXX: temporary for visualization
-import sys
-sys.path.append("norse/torch/functional")
-
 import torch
 import torch.jit
 import numpy as np
 
-import norse
 from norse.torch.functional.heaviside import heaviside
 
 
-# XXX: temporary for visualization
 from superspike import super_fn
 
 superspike_fn = super_fn
@@ -217,27 +211,3 @@ def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
 
 def sign(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
     return 2 * threshold(x, method, alpha) - 1
-
-
-# XXX: temporary for visualization
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-
-    x = torch.linspace(-5, 5, 1001)
-
-    superspike = 1 / (1 + 100 * x.abs()) ** 2
-    triangle = 0.3 * torch.relu(1 - x.abs())  # same as tent
-    tanh = 1 - (x * 1).tanh().pow(2)
-    circ = -(x.pow(2) / (2 * (1 ** 2 + x.pow(2)).pow(1.5))) + 1 / (2 * (1 ** 2 + x.pow(2)).sqrt()) * 2 * 1
-    erfc = (2 * torch.exp(-(1 * x).pow(2))) / (torch.as_tensor(np.pi).sqrt())
-
-    plt.plot(x.numpy(), superspike.numpy(), label="superspike")
-    plt.plot(x.numpy(), triangle.numpy(), label="triangle")
-    plt.plot(x.numpy(), tanh.numpy(), label="tanh")
-    plt.plot(x.numpy(), circ.numpy(), label="circ")
-    plt.plot(x.numpy(), erfc.numpy(), label="erfc")
-    plt.xlabel("v - thresh")
-    plt.ylabel("grad")
-    plt.grid()
-    plt.legend()
-    plt.show()
