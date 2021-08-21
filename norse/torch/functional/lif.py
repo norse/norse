@@ -386,11 +386,8 @@ def lif_feed_forward_step(
         dt (float): Integration timestep to use
     """
     if norse.utils.IS_OPS_LOADED:
-        try:
-            z, v, i = norse_op.lif_super_feed_forward_step(input_tensor, state, p, dt)
-            return z, LIFFeedForwardState(v=v, i=i)
-        except NameError:  # pragma: no cover
-            pass
+        z, v, i = norse_op.lif_super_feed_forward_step(input_tensor, state, p, dt)
+        return z, LIFFeedForwardState(v=v, i=i)
     jit_params = LIFParametersJIT(
         tau_syn_inv=p.tau_syn_inv,
         tau_mem_inv=p.tau_mem_inv,
@@ -453,7 +450,7 @@ def lif_feed_forward_integral(
 def lif_feed_forward_step_sparse(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState,
-    p: LIFParameters,
+    p: LIFParametersJIT,
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:  # pragma: no cover
     # compute voltage updates
@@ -465,13 +462,54 @@ def lif_feed_forward_step_sparse(
     i_decayed = state.i + di
 
     # compute new spikes
-    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+    thresholds = (v_decayed - p.v_th).coalesce()
+    jumps = threshold(thresholds.values(), p.method, p.alpha)
+    z_new = torch.sparse_coo_tensor(
+        indices=thresholds.indices(),
+        values=jumps,
+        size=v_decayed.size(),
+        device=thresholds.device,
+    ).coalesce()
+    # z_new = threshold((v_decayed - p.v_th).to_dense(), p.method, p.alpha)
+    # z_new = z_new.to_sparse().coalesce()
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    ones = torch.sparse_coo_tensor(
+        indices=z_new.indices(),
+        values=torch.full_like(z_new.values(), 1),
+        size=z_new.size(),
+        device=z_new.device,
+    )
+    v_new = (ones - z_new) * v_decayed + z_new * p.v_reset
     # compute current jumps
-    i_new = i_decayed + input_tensor
+    i_new = (
+        i_decayed + input_tensor
+    )  # Must cast to dense to make gradients flow correctly
 
-    return z_new.to_sparse(), LIFFeedForwardState(v=v_new, i=i_new)
+    return z_new, LIFFeedForwardState(v=v_new, i=i_new)
+
+
+# # compute new spikes
+#     thresholds = (v_decayed - p.v_th).coalesce()
+#     jumps = threshold(thresholds.values(), p.method, p.alpha)
+#     z_new = torch.sparse_coo_tensor(
+#         indices=thresholds.indices(),
+#         values=jumps,
+#         size=v_decayed.size(),
+#         device=thresholds.device,
+#     ).coalesce()
+
+#     # compute reset
+#     ones = torch.sparse_coo_tensor(
+#             indices=z_new.indices(),
+#             values=torch.full_like(z_new.values(), 1),
+#             size=z_new.size(),
+#             device=z_new.device,
+#         )
+#     v_new = (ones - z_new) * v_decayed + z_new * p.v_reset
+#     # compute current jumps
+#     i_new = i_decayed + input_tensor
+
+#     return z_new.to_sparse().coalesce(), LIFFeedForwardState(v=v_new, i=i_new)
 
 
 def lif_current_encoder(
