@@ -16,7 +16,7 @@ with open(path.join(pwd, "README.md"), encoding="utf-8") as fp:
 cpp_extension = CppExtension(
     name="norse_op",
     sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
-    extra_compile_args=["-O3"],
+    extra_compile_args=["-O3", "/std:c++17"],
 )
 
 setup(
