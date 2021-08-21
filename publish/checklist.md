@@ -3,6 +3,7 @@
 This checklist exists to ensure releases are correctly packaged and published.
 
 * Bump the version number
+  * in `setup.py` and `meta.yaml`
 * Deploy to PyPi
   * Ensure the action is properly deployed
   * If it fails, reproduce manually with `manylinux` (`quay.io/pypa/manylinux2014_x86_64`)

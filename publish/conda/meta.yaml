@@ -1,5 +1,5 @@
 {% set name = "norse" %}
-{% set version = "0.0.6" %}
+{% set version = "0.0.7RC1" %}
 
 package:
   name: "{{ name|lower }}"
@@ -8,11 +8,6 @@ package:
 source:
   path: ../../
 
-build:
-  number: 0
-  script: 
-    - python -m pip install --no-deps --ignore-installed -e .
-    
 outputs:
   - name: norse
     files:
@@ -25,53 +20,55 @@ outputs:
       - README.md
       - requirements.txt
       - setup.py
-
-requirements:
-  build:
-    - cmake
-    - gxx_linux-64
-    - {{ compiler('cxx') }} # [win]
-  host:
-    - python
-    - numpy>=1.12
-    - setuptools
-    - pytorch>=1.6.0
-    - typing_extensions
-    - dataclasses
-    - ninja
-    - libuv
-    - pkg-config
-    - pip
-  run:
-    - python
-    - pip
-    - pytorch>=1.5.0
-    - torchvision
-    - dataclasses
-    - ninja
-    - typing_extensions
-
-      #test:
-      #  requires:
-      #    - pytest
-      #    - pytest-xdist
-      #  imports:
-      #    - norse
-      #    - torch
-      #  source_files:
-      #    - "**/*.py"
-      #    - "*.so"
-      #  commands:
-      #    - pytest -n 4 -vv
+    test:
+      requires:
+        - pytest
+        - pytest-xdist
+      imports:
+        - norse
+        - torch
+      source_files:
+        - "**/*.py"
+        - "*.so"
+      commands:
+        - pytest -n 4 -vv
+    requirements:
+      script:
+        - python -m pip install --no-deps --ignore-installed -e .
+    
+      build:
+        - cmake
+        - gxx_linux-64
+        - {{ compiler('cxx') }} # [win]
+        - pytorch>=1.9.0
+      host:
+        - numpy {{ numpy }}
+        - setuptools
+        - typing_extensions
+        - dataclasses
+        - ninja
+        - libuv
+        - pkg-config
+        - pip
+      run:
+        - python
+        - pip
+        - pytorch>=1.9.0
+        - torchvision
+        - dataclasses
+        - ninja
+        - typing_extensions
 
 about:
-  home: https://norse.ai/docs
+  home: https://github.com/norse/norse
   license: LGPLv3
   license_file: LICENSE
   summary: A library to do deep learning with spiking neural networks.
-  description: 
+  description: |
+    Norse expands PyTorch with primitives for bio-inspired neural components, bringing you two advantages: 
+    a modern and proven infrastructure based on PyTorch and deep learning-compatible spiking neural network components.
   dev_url: https://github.com/norse/norse
-  doc_url: https://norse.ai/docs
+  doc_url: https://norse.github.io/norse/
   doc_source_url: https://github.com/norse/norse/blob/master/README.md
 
 
