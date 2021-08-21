@@ -481,9 +481,7 @@ def lif_feed_forward_step_sparse(
     )
     v_new = (ones - z_new) * v_decayed + z_new * p.v_reset
     # compute current jumps
-    i_new = (
-        i_decayed + input_tensor
-    )  # Must cast to dense to make gradients flow correctly
+    i_new = i_decayed + input_tensor
 
     return z_new, LIFFeedForwardState(v=v_new, i=i_new)
 
