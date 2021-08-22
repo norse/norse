@@ -12,8 +12,8 @@ IF EXIST "%env_path_root%\BuildTools\%env_path_head%" (
         IF EXIST "%build_root_path%\Professional\%env_path_head%" (
             "%build_root_path%\Professional\%env_path_head%"
         ) ELSE (
-            IF EXIST "%build_root_path%\Entreprise\%env_path_head%" (
-                "%build_root_path%\Entreprise\%env_path_head%"
+            IF EXIST "%build_root_path%\Enterprise\%env_path_head%" (
+                "%build_root_path%\Enterprise\%env_path_head%"
             ) ELSE (
                 echo Visual Studio 2019 required.
             )
