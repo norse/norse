@@ -1,3 +1,4 @@
+import os
 from os import path
 
 import setuptools
@@ -13,17 +14,24 @@ with open(path.join(pwd, "requirements.txt")) as fp:
 with open(path.join(pwd, "README.md"), encoding="utf-8") as fp:
     readme_text = fp.read()
 
-cpp_extension = CppExtension(
-    name="norse_op",
-    sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
-    extra_compile_args=["-O3"],
-)
+if os.name == 'nt':
+    cpp_extension = CppExtension(
+        name="norse_op",
+        sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
+        extra_compile_args=["-O3", "/std:c++17"],
+    )
+else:
+    cpp_extension = CppExtension(
+        name="norse_op",
+        sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
+        extra_compile_args=["-O3"],
+    )
 
 setup(
     install_requires=install_requires,
     setup_requires=["setuptools", "wheel", "torch"],
     name="norse",
-    version="0.0.7RC1",
+    version="0.0.7RC2",
     description="A library for deep learning with spiking neural networks",
     long_description=readme_text,
     long_description_content_type="text/markdown",
