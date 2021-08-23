@@ -1,3 +1,4 @@
+import os
 from os import path
 
 import setuptools
@@ -13,11 +14,18 @@ with open(path.join(pwd, "requirements.txt")) as fp:
 with open(path.join(pwd, "README.md"), encoding="utf-8") as fp:
     readme_text = fp.read()
 
-cpp_extension = CppExtension(
-    name="norse_op",
-    sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
-    extra_compile_args=["-O3"],
-)
+if os.name == 'nt':
+    cpp_extension = CppExtension(
+        name="norse_op",
+        sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
+        extra_compile_args=["-O3", "/std:c++17"],
+    )
+else:
+    cpp_extension = CppExtension(
+        name="norse_op",
+        sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
+        extra_compile_args=["-O3"],
+    )
 
 setup(
     install_requires=install_requires,
