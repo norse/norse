@@ -38,7 +38,7 @@ jobs:
       - name: (Windows) Set build environment
         if: ${{ matrix.config.os == 'windows-latest' }}
         run: |
-          set_win_env.bat
+          publish/set_win_env.bat
       - name: Install dependencies
         run: |
           pip install --upgrade pip
