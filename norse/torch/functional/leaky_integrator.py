@@ -7,7 +7,7 @@ in every timestep.
 .. math::
     \begin{align*}
         \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
-        \dot{i} &= 1/\tau_{\text{syn}} i
+        \dot{i} &= -1/\tau_{\text{syn}} i
     \end{align*}
 
 The first equation describes how the membrane voltage (:math:`v`, across
