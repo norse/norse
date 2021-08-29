@@ -8,7 +8,7 @@ logo: logo.png
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: cache
+  execute_notebooks: auto
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -37,7 +37,21 @@ html:
   use_edit_page_button: true
   use_issues_button: true
   use_repository_button: true
-  path_to_docs: "docs/"  
+  path_to_docs: "docs/"
+
+# MyST extensions
+myst_enable_extensions:
+- "amsmath"
+- "colon_fence"
+- "deflist"
+- "dollarmath"
+- "html_admonition"
+- "html_image"
+- "linkify"
+- "replacements"
+- "smartquotes"
+- "substitution"
+- "tasklist"
 
 # Sphinx config
 sphinx:
@@ -47,8 +61,6 @@ sphinx:
   - 'sphinx.ext.autosummary'
   - 'sphinx.ext.intersphinx'
   - 'sphinx.ext.viewcode'
-  # local_extension:
-    # norse: "../"
   config:
     autosummary_generate: true
     templates_path:

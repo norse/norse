@@ -12,7 +12,7 @@ import torch
 import torch.jit
 import numpy as np
 
-from norse.torch.module.snn import SNNCell
+from norse.torch.module.snn import SNN, SNNCell
 
 from ..functional.leaky_integrator import (
     li_step,
@@ -59,6 +59,63 @@ class LICell(SNNCell):
                 *input_tensor.shape,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
+            ),
+        )
+        state.v.requires_grad = True
+        return state
+
+
+class LI(SNN):
+    r"""A neuron layer that wraps a leaky-integrator :class:`LICell` in time, but 
+    *without* recurrence. The layer iterates over the  _outer_ dimension of the input.
+    More specifically it implements a discretized version of the ODE
+
+    .. math::
+
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
+        \end{align*}
+
+
+    and transition equations
+
+    .. math::
+        i = i + w i_{\text{in}}
+    
+    After application, the layer returns a tuple containing
+      (voltages from all timesteps, state from the last timestep).
+
+    Example:
+    >>> data = torch.zeros(10, 2) # 10 timesteps, 2 neurons
+    >>> l = LI()
+    >>> l(data) # Returns tuple of (Tensor(10, 2), LIState)
+
+    Parameters:
+        p (LIParameters): parameters of the leaky integrator
+        dt (float): integration timestep to use
+    """
+
+    def __init__(self, p: LIParameters = LIParameters(), **kwargs):
+        super().__init__(
+            activation=li_feed_forward_step,
+            state_fallback=self.initial_state,
+            p=p,
+            **kwargs,
+        )
+
+    def initial_state(self, input_tensor: torch.Tensor) -> LIState:
+        state = LIState(
+            v=torch.full(
+                input_tensor.shape[1:],  # Assume first dimension is time
+                self.p.v_leak.detach(),
+                device=input_tensor.device,
+                dtype=torch.float32,
+            ),
+            i=torch.zeros(
+                *input_tensor.shape[1:],
+                device=input_tensor.device,
+                dtype=torch.float32,
             ),
         )
         state.v.requires_grad = True

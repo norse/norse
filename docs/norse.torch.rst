@@ -100,6 +100,7 @@ Leaky integrator
     LIState
     LIParameters
 
+    LI
     LICell
     LILinearCell
 

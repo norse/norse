@@ -99,3 +99,5 @@ GPU acceleration
 
 If you would like to have GPU hardware acceleration, you will have to enable the
 NVIDIA runtime, as described here: https://developer.nvidia.com/nvidia-container-runtime.
+
+For more information, please refer to our page on :ref:`page-hardware`.

@@ -64,14 +64,14 @@ Threshold functions
     :toctree: generated
     :nosignatures:
 
-    heaviside <heaviside.heaviside>
-    heavi_erfc_fn <threshold.heavi_erfc_fn>
-    heavi_tanh_fn <threshold.heavi_tanh_fn>
-    logistic_fn <threshold.logistic_fn>
-    heavi_circ_fn <threshold.heavi_circ_fn>
-    circ_dist_fn <threshold.circ_dist_fn>
-    triangle_fn <threshold.triangle_fn>
-    super_fn <superspike.super_fn>
+    heaviside
+    heavi_erfc_fn
+    heavi_tanh_fn
+    logistic_fn
+    heavi_circ_fn
+    circ_dist_fn
+    triangle_fn
+    super_fn
 
     
 Temporal operations

@@ -135,6 +135,8 @@ from .izhikevich import (
     izhikevich_recurrent_step,
 )
 
+from .superspike import super_fn
+
 from .tsodyks_makram import TsodyksMakramParameters, TsodyksMakramState, stp_step
 
 __all__ = [
@@ -146,6 +148,7 @@ __all__ = [
     "heavi_tanh_fn",
     "triangle_fn",
     "logistic_fn",
+    "super_fn",
     # Adjoint LIF
     "LIFFeedForwardAdjointFunction",
     "LIFFeedForwardSparseAdjointFunction",
