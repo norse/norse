@@ -47,19 +47,13 @@ sphinx:
   - 'sphinx.ext.autosummary'
   - 'sphinx.ext.intersphinx'
   - 'sphinx.ext.viewcode'
-  # - 'autoapi.extension'
-  # - 'sphinxcontrib.katex'
-  # local_extensions:
-  #   norse: '../norse'
+  # local_extension:
+    # norse: "../"
   config:
-    # autoapi_dirs: 
-    # - "../norse"
-    # autoapi_ignore:
-    # - "*test*"
-    # autoapi_generate_api_docs: true
-    # autoapi_template_dir: "_templates"
-    # autoapi_type: "python"
     autosummary_generate: true
-    # templates_path:
-    # - "_templates"
-    # katex_prerender: true
+    templates_path:
+    - "_templates"
+    # autosectionlabel throws warnings if section names are duplicated.
+    # The following tells autosectionlabel to not throw a warning for
+    # duplicated section names that are in different documents.
+    autosectionlabel_prefix_document: true

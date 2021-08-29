@@ -6,6 +6,7 @@ from norse.torch.functional.threshold import threshold
 
 class IzhikevichParameters(NamedTuple):
     """Parametrization of av Izhikevich neuron
+
     Parameters:
         a (float): time scale of the recovery variable u. Smaller values result in slower recovery in 1/ms
         b (float): sensitivity of the recovery variable u to the subthreshold fluctuations of the membrane potential v. Greater values couple v and u more strongly resulting in possible subthreshold oscillations and low-threshold spiking dynamics
@@ -36,6 +37,7 @@ class IzhikevichParameters(NamedTuple):
 
 class IzhikevichState(NamedTuple):
     """State of a Izhikevich neuron
+
     Parameters:
         v (torch.Tensor): membrane potential
         u (torch.Tensor): membrane recovery variable
@@ -47,6 +49,7 @@ class IzhikevichState(NamedTuple):
 
 class IzhikevichRecurrentState(NamedTuple):
     """State of a Izhikevich neuron
+
     Parameters:
         v (torch.Tensor): membrane potential
         u (torch.Tensor): membrane recovery variable

@@ -2,7 +2,7 @@ Complete API
 =============
 
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :recursive:
  
     norse

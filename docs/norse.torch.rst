@@ -14,7 +14,7 @@ Containers
 
 .. currentmodule:: norse.torch.module
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
 
     Lift <lift.Lift>
@@ -22,21 +22,22 @@ Containers
     RegularizationCell <regularization.RegularizationCell>
 
 
-Threshold models
-----------------
+.. TODO: After threshold implementation
+.. Threshold models
+.. ----------------
 
-.. currentmodule:: norse.torch.functional
-.. autosummary::
-    :toctree:
-    :nosignatures:
+.. .. currentmodule:: norse.torch
+.. .. autosummary::
+..     :toctree: generated
+..     :nosignatures:
 
-    HeaviErfc <threshold.HeaviErfc>
-    HeaviTanh <threshold.HeaviTanh>
-    Logistic <threshold.Logistic>
-    HeaviCirc <threshold.HeaviCirc>
-    CircDist <threshold.CircDist>
-    Triangle <threshold.Triangle>
-    SuperSpike <superspike.SuperSpike>
+..     functional.threshold.HeaviErfc
+..     functional.threshold.HeaviTanh
+..     functional.threshold.Logistic
+..     functional.threshold.HeaviCirc
+..     functional.threshold.CircDist
+..     functional.threshold.Triangle
+..     functional.superspike.SuperSpike
 
 
 Encoding
@@ -44,7 +45,7 @@ Encoding
     
 .. currentmodule:: norse.torch.module.encode
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
 
     ConstantCurrentLIFEncoder
@@ -61,7 +62,7 @@ Convolutions
 
 .. currentmodule:: norse.torch.module.conv
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
 
     LConv2d
@@ -76,11 +77,12 @@ Izhikevich
 
 .. currentmodule:: norse.torch.module.izhikevich
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
 
-    IzhikevichParameters <norse.torch.functional.izhikevich.IzhikevichParameters>
-    IzhikevichState <norse.torch.functional.izhikevich.IzhikevichState>
+    IzhikevichParameters
+    IzhikevichState
+    IzhikevichSpikingBehavior
 
     Izhikevich
     IzhikevichCell
@@ -92,8 +94,11 @@ Leaky integrator
 
 .. currentmodule:: norse.torch.module.leaky_integrator
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
+
+    LIState
+    LIParameters
 
     LICell
     LILinearCell
@@ -104,7 +109,7 @@ Leaky integrate-and-fire (LIF)
 
 .. currentmodule:: norse.torch
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
 
     LIFParameters <functional.lif.LIFParameters>
@@ -122,7 +127,7 @@ LIF, conductance based
 
 .. currentmodule:: norse.torch.module.coba_lif
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
 
     CobaLIFCell
@@ -133,7 +138,7 @@ LIF, adaptive exponential
 
 .. currentmodule:: norse.torch.module.lif_adex
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
 
     LIFAdEx
@@ -146,7 +151,7 @@ LIF, exponential
 
 .. currentmodule:: norse.torch.module.lif_ex
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
 
     LIFEx
@@ -159,7 +164,7 @@ Long short-term memory (LSNN)
 
 .. currentmodule:: norse.torch.module.lsnn
 .. autosummary::
-    :toctree: _autosummary
+    :toctree: generated
     :nosignatures:
 
     LSNN

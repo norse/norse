@@ -33,14 +33,15 @@ class IzhikevichCell(SNNCell):
     .. math::
         \\text{if} v = 30 \\text{mV, then} v = c \\text{and} u = u + d
 
+    Example with tonic spiking:
+    >>> from norse.torch import IzhikevichCell, tonic_spiking
+    >>> batch_size = 16
+    >>> cell = IzhikevichCell(tonic_spiking)
+    >>> input = torch.randn(batch_size, 10)
+    >>> output, s0 = cell(input)
+
     Parameters:
         spiking_method (IzhikevichSpikingBehavior) : parameters and initial state of the neuron
-    Example with tonic spiking:
-        >>> from norse.torch import IzhikevichCell, tonic_spiking
-        >>> batch_size = 16
-        >>> cell = IzhikevichCell(tonic_spiking)
-        >>> input = torch.randn(batch_size, 10)
-        >>> output, s0 = cell(input)
     """
 
     def __init__(self, spiking_method: IzhikevichSpikingBehavior, **kwargs):
@@ -71,11 +72,12 @@ class IzhikevichRecurrentCell(SNNRecurrentCell):
         \\text{if} v = 30 \\text{mV, then} v = c \\text{and} u = u + d
 
     Example with tonic spiking:
-        >>> from norse.torch import IzhikevichRecurrentCell, tonic_spiking
-        >>> batch_size = 16
-        >>> data = torch.zeros(5, 2) # 5 batches, 2 neurons
-        >>> l = IzhikevichRecurrentCell(2, 4)
-        >>> l(data) # Returns tuple of (Tensor(5, 4), IzhikevichState)
+    >>> from norse.torch import IzhikevichRecurrentCell, tonic_spiking
+    >>> batch_size = 16
+    >>> data = torch.zeros(5, 2) # 5 batches, 2 neurons
+    >>> l = IzhikevichRecurrentCell(2, 4)
+    >>> l(data) # Returns tuple of (Tensor(5, 4), IzhikevichState)
+
     Parameters:
         input_size (int): Size of the input. Also known as the number of input features. Defaults to None
         hidden_size (int): Size of the hidden state. Also known as the number of input features. Defaults to None
@@ -139,10 +141,12 @@ class Izhikevich(SNN):
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
+
     Example:
         >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
         >>> l = Izhikevich()
         >>> l(data) # Returns tuple of (Tensor(10, 5, 2), IzhikevichState)
+
     Parameters:
         p (IzhikevichParameters): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
@@ -169,10 +173,12 @@ class IzhikevichRecurrent(SNNRecurrent):
     that the layer keeps track of temporal sequences of spikes.
     After application, the layer returns a tuple containing
       (spikes from all timesteps, state from the last timestep).
+
     Example:
-        >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
-        >>> l = Izhikevich()
-        >>> l(data) # Returns tuple of (Tensor(10, 5, 2), IzhikevichState)
+    >>> data = torch.zeros(10, 5, 2) # 10 timesteps, 5 batches, 2 neurons
+    >>> l = Izhikevich()
+    >>> l(data) # Returns tuple of (Tensor(10, 5, 2), IzhikevichState)
+
     Parameters:
         p (IzhikevichParameters): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
