@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-from norse.torch.functional.izhikevich import IzhikevichSpikingBehavior, izhikevich_step
+from norse.torch.functional.izhikevich import IzhikevichSpikingBehavior, izhikevich_feed_forward_step
 
 
 def _detach_tensor(tensor: torch.Tensor):
@@ -308,7 +308,7 @@ def plot_izhikevich(
             input_current = current * torch.ones(1)
         else:
             input_current = 0 * torch.ones(1)
-        _, s = izhikevich_step(input_current, s, p)
+        _, s = izhikevich_feed_forward_step(input_current, s, p)
         cs.append(input_current)
     fig = plt.figure()
     ax1 = fig.add_subplot(111)

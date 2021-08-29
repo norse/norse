@@ -24,7 +24,7 @@ list_method = [
     izhikevich.integrator,
     izhikevich.rebound_spike,
     izhikevich.rebound_burst,
-    izhikevich.threshhold_variability,
+    izhikevich.threshold_variability,
     izhikevich.bistability,
     izhikevich.dap,
     izhikevich.accomodation,

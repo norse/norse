@@ -2,6 +2,16 @@
 Stateless spiking neural network components.
 """
 
+from .adjoint.lif_adjoint import (
+    lif_feed_forward_adjoint_step_sparse,
+    lif_feed_forward_adjoint_step,
+)
+from .adjoint.lif_refrac_adjoint import (
+    lif_refrac_feed_forward_adjoint_step,
+    lif_refrac_feed_forward_step,
+)
+from .adjoint.lsnn_adjoint import lsnn_feed_forward_adjoint_step
+
 from .coba_lif import (
     CobaLIFState,
     CobaLIFParameters,
@@ -28,6 +38,14 @@ from .encode import (
     spike_latency_lif_encode,
 )
 from .heaviside import heaviside
+
+from .iaf import (
+    IAFFeedForwardState,
+    IAFParameters,
+    IAFState,
+    iaf_step,
+    iaf_feed_forward_step,
+)
 from .leaky_integrator import LIParameters, LIState, li_feed_forward_step, li_step
 from .lif import (
     LIFFeedForwardState,
@@ -107,90 +125,61 @@ from .izhikevich import (
     integrator,
     rebound_spike,
     rebound_burst,
-    threshhold_variability,
+    threshold_variability,
     bistability,
     dap,
     accomodation,
     inhibition_induced_spiking,
     inhibition_induced_bursting,
-    izhikevich_step,
+    izhikevich_feed_forward_step,
     izhikevich_recurrent_step,
 )
 
+from .tsodyks_makram import TsodyksMakramParameters, TsodyksMakramState, stp_step
+
 __all__ = [
-    "CobaLIFState",
-    "CobaLIFParameters",
-    "CobaLIFFeedForwardState",
-    "coba_lif_feed_forward_step",
-    "coba_lif_step",
-    "CorrelationSensorParameters",
-    "CorrelationSensorState",
-    "correlation_based_update",
-    "correlation_sensor_step",
-    "constant_current_lif_encode",
-    "euclidean_distance",
-    "gaussian_rbf",
-    "poisson_encode",
-    "population_encode",
-    "signed_poisson_encode",
-    "spike_latency_encode",
-    "spike_latency_lif_encode",
+    # Activation functions
     "heaviside",
-    "LIParameters",
-    "LIState",
-    "li_feed_forward_step",
-    "li_step",
-    "LIFFeedForwardState",
-    "LIFParameters",
-    "LIFState",
-    "lif_current_encoder",
-    "lif_feed_forward_step",
-    "lif_step",
-    "LIFAdExFeedForwardState",
-    "LIFAdExParameters",
-    "LIFAdExState",
-    "lif_adex_current_encoder",
-    "lif_adex_feed_forward_step",
-    "lif_adex_step",
-    "LIFCorrelationParameters",
-    "LIFCorrelationState",
-    "lif_correlation_step",
-    "LIFExFeedForwardState",
-    "LIFExParameters",
-    "LIFExState",
-    "lif_ex_current_encoder",
-    "lif_ex_feed_forward_step",
-    "lif_ex_step",
-    "lif_mc_feed_forward_step",
-    "lif_mc_step",
-    "lif_mc_refrac_feed_forward_step",
-    "lif_mc_refrac_step",
-    "lift",
-    "LIFRefracFeedForwardState",
-    "LIFRefracParameters",
-    "LIFRefracState",
-    "lif_refrac_feed_forward_step",
-    "lif_refrac_step",
-    "logical_and",
-    "logical_or",
-    "logical_xor",
-    "LSNNFeedForwardState",
-    "LSNNParameters",
-    "LSNNState",
-    "lsnn_feed_forward_step",
-    "lsnn_step",
-    "regularize_step",
-    "spike_accumulator",
-    "voltage_accumulator",
-    "STDPSensorParameters",
-    "STDPSensorState",
-    "stdp_sensor_step",
     "circ_dist_fn",
     "heavi_circ_fn",
     "heavi_erfc_fn",
     "heavi_tanh_fn",
     "triangle_fn",
     "logistic_fn",
+    # Adjoint LIF
+    "LIFFeedForwardAdjointFunction",
+    "LIFFeedForwardSparseAdjointFunction",
+    "lif_feed_forward_adjoint_step",
+    "lif_feed_forward_adjoint_step_sparse",
+    # Adjoint refractory LIF
+    "LIFAdjointRefracFeedForwardFunction",
+    "lif_refrac_feed_forward_adjoint_step"
+    # Adjoint LSNN
+    "LSNNFeedForwardAdjointFunction",
+    "lsnn_feed_forward_adjoint_step",
+    # Correlation sensor
+    "CorrelationSensorParameters",
+    "CorrelationSensorState",
+    "correlation_based_update",
+    "correlation_sensor_step",
+    # Encoders
+    "constant_current_lif_encode",
+    "euclidean_distance",
+    "gaussian_rbf",
+    "poisson_encode",
+    "poisson_encode_step",
+    "population_encode",
+    "signed_poisson_encode",
+    "signed_poisson_encode_step",
+    "spike_latency_encode",
+    "spike_latency_lif_encode",
+    # IAF
+    "IAFFeedForwardState",
+    "IAFParameters",
+    "IAFState",
+    "iaf_step",
+    "iaf_feed_forward_step",
+    # Izhikevich
     "IzhikevichParameters",
     "IzhikevichSpikingBehavior",
     "IzhikevichState",
@@ -216,6 +205,79 @@ __all__ = [
     "accomodation",
     "inhibition_induced_spiking",
     "inhibition_induced_bursting",
-    "izhikevich_step",
+    "izhikevich_feed_forward_step",
     "izhikevich_recurrent_step",
+    # Leaky integrator
+    "LIParameters",
+    "LIState",
+    "li_feed_forward_step",
+    "li_step",
+    # LIF
+    "LIFFeedForwardState",
+    "LIFParameters",
+    "LIFState",
+    "lif_current_encoder",
+    "lif_feed_forward_step",
+    "lif_step",
+    # LIF Conductance based
+    "CobaLIFState",
+    "CobaLIFParameters",
+    "CobaLIFFeedForwardState",
+    "coba_lif_feed_forward_step",
+    "coba_lif_step",
+    # LIF AdEx
+    "LIFAdExFeedForwardState",
+    "LIFAdExParameters",
+    "LIFAdExState",
+    "lif_adex_current_encoder",
+    "lif_adex_feed_forward_step",
+    "lif_adex_step",
+    # LIF Correlation
+    "LIFCorrelationParameters",
+    "LIFCorrelationState",
+    "lif_correlation_step",
+    # LIF Ex
+    "LIFExFeedForwardState",
+    "LIFExParameters",
+    "LIFExState",
+    "lif_ex_current_encoder",
+    "lif_ex_feed_forward_step",
+    "lif_ex_step",
+    # LIF MC
+    "lif_mc_feed_forward_step",
+    "lif_mc_step",
+    "lif_mc_refrac_feed_forward_step",
+    "lif_mc_refrac_step",
+    # Lifting
+    "lift",
+    # LIF refraec
+    "LIFRefracFeedForwardState",
+    "LIFRefracParameters",
+    "LIFRefracState",
+    "lif_refrac_step",
+    "lif_refrac_feed_forward_step",
+    "lif_refrac_feed_forward_adjoint_step",
+    # Logic
+    "logical_and",
+    "logical_or",
+    "logical_xor",
+    # LSNN
+    "LSNNFeedForwardState",
+    "LSNNParameters",
+    "LSNNState",
+    "lsnn_step",
+    "lsnn_feed_forward_step",
+    "lsnn_feed_forward_adjoint_step",
+    # Regularization
+    "regularize_step",
+    "spike_accumulator",
+    "voltage_accumulator",
+    # STDP
+    "STDPSensorParameters",
+    "STDPSensorState",
+    "stdp_sensor_step",
+    # TDP
+    "TsodyksMakramParameters",
+    "TsodyksMakramState",
+    "stp_step",
 ]

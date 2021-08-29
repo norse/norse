@@ -6,16 +6,54 @@ norse.torch.functional
     :local:
     :backlinks: top
 
-    
-Temporal operations
--------------------
 
+Encoding
+--------
+    
 .. currentmodule:: norse.torch.functional
 .. autosummary::
     :toctree: generated
     :nosignatures:
 
-    lift <lift.lift>
+    constant_current_lif_encode
+    gaussian_rbf
+    euclidean_distance
+    population_encode
+    poisson_encode
+    poisson_encode_step
+    signed_poisson_encode
+    signed_poisson_encode_step
+    spike_latency_lif_encode
+    spike_latency_encode
+    lif_current_encoder
+    lif_adex_current_encoder
+    lif_ex_current_encoder
+
+Logical
+-------
+
+.. currentmodule:: norse.torch.functional.logical
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    logical_and
+    logical_xor
+    logical_or
+    muller_c
+    posedge_detector
+
+Regularization
+--------------
+
+.. currentmodule:: norse.torch.functional.regularization
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    regularize_step
+    spike_accumulator
+    voltage_accumulator
 
 
 Threshold functions
@@ -35,25 +73,17 @@ Threshold functions
     triangle_fn <threshold.triangle_fn>
     super_fn <superspike.super_fn>
 
-
-Encoding
---------
     
-.. currentmodule:: norse.torch.functional.encode
+Temporal operations
+-------------------
+
+.. currentmodule:: norse.torch.functional
 .. autosummary::
     :toctree: generated
     :nosignatures:
 
-    constant_current_lif_encode
-    gaussian_rbf
-    euclidean_distance
-    population_encode
-    poisson_encode
-    poisson_encode_step
-    signed_poisson_encode
-    signed_poisson_encode_step
-    spike_latency_lif_encode
-    spike_latency_encode
+    lift <lift.lift>
+
 
 Neuron models
 -------------
@@ -73,16 +103,34 @@ Integrate-and-fire (IAF)
 Izhikevich
 ^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.izhikevich
+.. currentmodule:: norse.torch.functional.izhikevich
 .. autosummary::
     :toctree: generated
     :nosignatures:
 
-    Izhikevich
-    IzhikevichCell
-    IzhikevichRecurrent
-    IzhikevichRecurrentCell
-
+    IzhikevichParameters
+    IzhikevichSpikingBehavior
+    tonic_spiking
+    tonic_bursting
+    phasic_spiking
+    phasic_bursting
+    mixed_mode
+    spike_frequency_adaptation
+    class_1_exc
+    class_2_exc
+    spike_latency
+    subthreshold_oscillation
+    resonator
+    integrator,
+    rebound_spike,
+    rebound_burst,
+    threshhold_variability,
+    bistability,
+    dap,
+    accomodation,
+    inhibition_induced_spiking,
+    inhibition_induced_bursting,
+    izhikevich_feed_forward_step
 
 Leaky integrator
 ^^^^^^^^^^^^^^^^
@@ -100,7 +148,7 @@ Leaky integrator
 Leaky integrate-and-fire (LIF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.functional.lif
+.. currentmodule:: norse.torch.functional
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -110,8 +158,8 @@ Leaky integrate-and-fire (LIF)
     lif_feed_forward_integral
     lif_feed_forward_step
     lif_feed_forward_step_sparse
-    lif_feed_forward_adjoint_step <norse.torch.functional.adjoint.lif_adjoint.lif_feed_forward_adjoint_step>
-    lif_feed_forward_adjoint_step_sparse <norse.torch.functional.adjoint.lif_adjoint.lif_feed_forward_adjoint_step_sparse>
+    lif_feed_forward_adjoint_step
+    lif_feed_forward_adjoint_step_sparse
 
     
 LIF, conductance based
@@ -122,6 +170,7 @@ LIF, conductance based
     :toctree: generated
     :nosignatures:
 
+    CobaLIFParameters
     CobaLIFFeedForwardState
     coba_lif_feed_forward_step
     
@@ -129,38 +178,92 @@ LIF, conductance based
 LIF, adaptive exponential
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.lif_adex
+.. currentmodule:: norse.torch.functional.lif_adex
 .. autosummary::
     :toctree: generated
     :nosignatures:
 
-    LIFAdEx
-    LIFAdExCell
-    LIFAdExRecurrent
-    LIFAdExRecurrentCell
+    LIFAdExParameters
+    LIFAdExFeedForwardState
+
+    lif_adex_feed_forward_step
+    lif_adex_current_encoder
 
 LIF, exponential
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.lif_ex
+.. currentmodule:: norse.torch.functional.lif_ex
 .. autosummary::
     :toctree: generated
     :nosignatures:
 
-    LIFEx
-    LIFExCell
-    LIFExRecurrent
-    LIFExRecurrentCell
+    LIFExParameters
+    LIFExFeedForwardState
+    lif_ex_feed_forward_step
+    lif_ex_current_encoder
+
+LIF, multicompartmental (MC)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. currentmodule:: norse.torch.functional
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    lif_mc_feed_forward_step
+    lif_mc_refrac_feed_forward_step
+
+LIF, refractory
+^^^^^^^^^^^^^^^
+
+.. currentmodule:: norse.torch.functional
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    LIFRefracParameters
+    LIFRefracFeedForwardState
+    lif_refrac_feed_forward_step
+    lif_refrac_feed_forward_adjoint_step
 
 Long short-term memory (LSNN)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.lsnn
+.. currentmodule:: norse.torch.functional
 .. autosummary::
     :toctree: generated
     :nosignatures:
 
-    LSNN
-    LSNNCell
-    LSNNRecurrent
-    LSNNRecurrentCell
+    LSNNParameters
+    LSNNFeedForwardState
+    lsnn_feed_forward_step
+    lsnn_feed_forward_adjoint_step
+
+
+Plasticity models
+-----------------
+
+Spike-time dependent plasticity (STDP)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. currentmodule:: norse.torch.functional
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    STDPSensorParameters
+    STDPSensorState
+    stdp_sensor_step
+
+Tsodyks-Markram timing-dependent plasticity (TDP)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. currentmodule:: norse.torch.functional
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    TsodyksMakramParameters
+    TsodyksMakramState
+    stp_step
+

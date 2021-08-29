@@ -4,7 +4,7 @@ from ..functional.izhikevich import (
     IzhikevichState,
     IzhikevichRecurrentState,
     IzhikevichSpikingBehavior,
-    izhikevich_step,
+    izhikevich_feed_forward_step,
     izhikevich_recurrent_step,
 )
 
@@ -46,7 +46,7 @@ class IzhikevichCell(SNNCell):
 
     def __init__(self, spiking_method: IzhikevichSpikingBehavior, **kwargs):
         super().__init__(
-            izhikevich_step, self.initial_state, spiking_method.p, **kwargs
+            izhikevich_feed_forward_step, self.initial_state, spiking_method.p, **kwargs
         )
         self.spiking_method = spiking_method
 
@@ -155,7 +155,7 @@ class Izhikevich(SNN):
 
     def __init__(self, spiking_method: IzhikevichSpikingBehavior, **kwargs):
         super().__init__(
-            activation=izhikevich_step,
+            activation=izhikevich_feed_forward_step,
             state_fallback=self.initial_state,
             p=spiking_method.p,
             **kwargs,

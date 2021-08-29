@@ -62,6 +62,7 @@ class IzhikevichRecurrentState(NamedTuple):
 
 class IzhikevichSpikingBehavior(NamedTuple):
     """Spiking behavior of a Izhikevich neuron
+
     Parameters:
         p (IzhikevichParameters) : parameters of the Izhikevich neuron model
         s (IzhikevichState) : state of the Izhikevich neuron model
@@ -81,7 +82,8 @@ def create_izhikevich_spiking_behavior(
     tau_inv: float = 250,
 ) -> IzhikevichSpikingBehavior:
     """
-    A function that allows for the creation of custom Izhikevich neurons models, as well as a visualization of their behavior on a 250 ms time window
+    A function that allows for the creation of custom Izhikevich neurons models, as well as a visualization of their behavior on a 250 ms time window.
+
     Parameters:
         a (float): time scale of the recovery variable u. Smaller values result in slower recovery in 1/ms
         b (float): sensitivity of the recovery variable u to the subthreshold fluctuations of the membrane potential v. Greater values couple v and u more strongly resulting in possible subthreshold oscillations and low-threshold spiking dynamics
@@ -234,12 +236,12 @@ rebound_burst = IzhikevichSpikingBehavior(
     ),
 )
 
-threshhold_variability_p = IzhikevichParameters(a=0.03, b=0.25, c=-60, d=4, tau_inv=250)
-threshhold_variability = IzhikevichSpikingBehavior(
-    p=threshhold_variability_p,
+threshold_variability_p = IzhikevichParameters(a=0.03, b=0.25, c=-60, d=4, tau_inv=250)
+threshold_variability = IzhikevichSpikingBehavior(
+    p=threshold_variability_p,
     s=IzhikevichState(
         v=torch.tensor(-64.0, requires_grad=True),
-        u=torch.tensor(-64) * threshhold_variability_p.b,
+        u=torch.tensor(-64) * threshold_variability_p.b,
     ),
 )
 
@@ -288,7 +290,7 @@ inhibition_induced_bursting = IzhikevichSpikingBehavior(
 )
 
 
-def izhikevich_step(
+def izhikevich_feed_forward_step(
     input_current: torch.Tensor,
     s: IzhikevichState,
     p: IzhikevichParameters,
