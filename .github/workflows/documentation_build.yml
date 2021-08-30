@@ -15,10 +15,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-      - name: Fix sphinx-jupyterbook-latex bug
-        run: pip install git+https://github.com/jegp/sphinx-jupyterbook-latex
       - name: Install system dependencies
         run: sudo apt update && sudo apt install g++ -y
+      - name: Fix sphinx-jupyterbook-latex bug
+        run: pip install git+https://github.com/jegp/sphinx-jupyterbook-latex
       - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
