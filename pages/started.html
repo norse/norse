@@ -1,0 +1,1207 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2. Quickstart &#8212; Norse v0.0.7</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe,.cell"
+        const thebe_selector_input = "pre,.cell_input div.highlight"
+        const thebe_selector_output = ".output,.cell_output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. Working with Norse" href="working.html" />
+    <link rel="prev" title="1. Installing Norse" href="installing.html" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Norse v0.0.7</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../index.html">
+   Getting started
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  First steps
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="installing.html">
+   1. Installing Norse
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   2. Quickstart
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="working.html">
+   3. Working with Norse
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Usage docs
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="spiking.html">
+   4. Introduction to spiking systems
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="learning.html">
+   5. Learning with spikes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tasks.html">
+   6. Running Tasks
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hardware.html">
+   7. Hardware acceleration
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="papers.html">
+   8. Papers citing Norse
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="about.html">
+   9. About Norse
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Python API
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../norse.torch.html">
+   norse.torch
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.Lift.html">
+     Lift
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.SequentialState.html">
+     SequentialState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.RegularizationCell.html">
+     RegularizationCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.encode.ConstantCurrentLIFEncoder.html">
+     ConstantCurrentLIFEncoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.encode.PoissonEncoder.html">
+     PoissonEncoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.encode.PoissonEncoderStep.html">
+     PoissonEncoderStep
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.encode.PopulationEncoder.html">
+     PopulationEncoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.encode.SignedPoissonEncoder.html">
+     SignedPoissonEncoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.encode.SpikeLatencyEncoder.html">
+     SpikeLatencyEncoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.encode.SpikeLatencyLIFEncoder.html">
+     SpikeLatencyLIFEncoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.conv.LConv2d.html">
+     LConv2d
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.izhikevich.IzhikevichState.html">
+     IzhikevichState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.izhikevich.IzhikevichSpikingBehavior.html">
+     IzhikevichSpikingBehavior
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.izhikevich.Izhikevich.html">
+     Izhikevich
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.izhikevich.IzhikevichCell.html">
+     IzhikevichCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.izhikevich.IzhikevichRecurrent.html">
+     IzhikevichRecurrent
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.izhikevich.IzhikevichRecurrentCell.html">
+     IzhikevichRecurrentCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.leaky_integrator.LIState.html">
+     LIState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.leaky_integrator.LIParameters.html">
+     LIParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.leaky_integrator.LI.html">
+     LI
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.leaky_integrator.LICell.html">
+     LICell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.leaky_integrator.LILinearCell.html">
+     LILinearCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.LIFParameters.html">
+     LIFParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.LIFState.html">
+     LIFState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.LIF.html">
+     LIF
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.LIFCell.html">
+     LIFCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.LIFRecurrent.html">
+     LIFRecurrent
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.LIFRecurrentCell.html">
+     LIFRecurrentCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.coba_lif.CobaLIFCell.html">
+     CobaLIFCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lif_adex.LIFAdEx.html">
+     LIFAdEx
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lif_adex.LIFAdExCell.html">
+     LIFAdExCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lif_adex.LIFAdExRecurrent.html">
+     LIFAdExRecurrent
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lif_adex.LIFAdExRecurrentCell.html">
+     LIFAdExRecurrentCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lif_ex.LIFEx.html">
+     LIFEx
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lif_ex.LIFExCell.html">
+     LIFExCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lif_ex.LIFExRecurrent.html">
+     LIFExRecurrent
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lif_ex.LIFExRecurrentCell.html">
+     LIFExRecurrentCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lsnn.LSNN.html">
+     LSNN
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lsnn.LSNNCell.html">
+     LSNNCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lsnn.LSNNRecurrent.html">
+     LSNNRecurrent
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.module.lsnn.LSNNRecurrentCell.html">
+     LSNNRecurrentCell
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../norse.torch.functional.html">
+   norse.torch.functional
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.constant_current_lif_encode.html">
+     norse.torch.functional.constant_current_lif_encode
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.gaussian_rbf.html">
+     norse.torch.functional.gaussian_rbf
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.euclidean_distance.html">
+     norse.torch.functional.euclidean_distance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.population_encode.html">
+     norse.torch.functional.population_encode
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.poisson_encode.html">
+     norse.torch.functional.poisson_encode
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.poisson_encode_step.html">
+     norse.torch.functional.poisson_encode_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.signed_poisson_encode.html">
+     norse.torch.functional.signed_poisson_encode
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.signed_poisson_encode_step.html">
+     norse.torch.functional.signed_poisson_encode_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.spike_latency_lif_encode.html">
+     norse.torch.functional.spike_latency_lif_encode
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.spike_latency_encode.html">
+     norse.torch.functional.spike_latency_encode
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_current_encoder.html">
+     norse.torch.functional.lif_current_encoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_adex_current_encoder.html">
+     norse.torch.functional.lif_adex_current_encoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_ex_current_encoder.html">
+     norse.torch.functional.lif_ex_current_encoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.logical.logical_and.html">
+     norse.torch.functional.logical.logical_and
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.logical.logical_xor.html">
+     norse.torch.functional.logical.logical_xor
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.logical.logical_or.html">
+     norse.torch.functional.logical.logical_or
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.logical.muller_c.html">
+     norse.torch.functional.logical.muller_c
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.logical.posedge_detector.html">
+     norse.torch.functional.logical.posedge_detector
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.regularization.regularize_step.html">
+     norse.torch.functional.regularization.regularize_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.regularization.spike_accumulator.html">
+     norse.torch.functional.regularization.spike_accumulator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.regularization.voltage_accumulator.html">
+     norse.torch.functional.regularization.voltage_accumulator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.heaviside.html">
+     norse.torch.functional.heaviside
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.heavi_erfc_fn.html">
+     norse.torch.functional.heavi_erfc_fn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.heavi_tanh_fn.html">
+     norse.torch.functional.heavi_tanh_fn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.logistic_fn.html">
+     norse.torch.functional.logistic_fn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.heavi_circ_fn.html">
+     norse.torch.functional.heavi_circ_fn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.circ_dist_fn.html">
+     norse.torch.functional.circ_dist_fn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.triangle_fn.html">
+     norse.torch.functional.triangle_fn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.super_fn.html">
+     norse.torch.functional.super_fn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lift.html">
+     norse.torch.functional.lift
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.iaf.IAFParameters.html">
+     IAFParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.iaf.IAFFeedForwardState.html">
+     IAFFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.iaf.iaf_feed_forward_step.html">
+     norse.torch.functional.iaf.iaf_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.IzhikevichParameters.html">
+     IzhikevichParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.IzhikevichSpikingBehavior.html">
+     IzhikevichSpikingBehavior
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.tonic_spiking.html">
+     norse.torch.functional.izhikevich.tonic_spiking
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.tonic_bursting.html">
+     norse.torch.functional.izhikevich.tonic_bursting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.phasic_spiking.html">
+     norse.torch.functional.izhikevich.phasic_spiking
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.phasic_bursting.html">
+     norse.torch.functional.izhikevich.phasic_bursting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.mixed_mode.html">
+     norse.torch.functional.izhikevich.mixed_mode
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.spike_frequency_adaptation.html">
+     norse.torch.functional.izhikevich.spike_frequency_adaptation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.class_1_exc.html">
+     norse.torch.functional.izhikevich.class_1_exc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.class_2_exc.html">
+     norse.torch.functional.izhikevich.class_2_exc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.spike_latency.html">
+     norse.torch.functional.izhikevich.spike_latency
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.subthreshold_oscillation.html">
+     norse.torch.functional.izhikevich.subthreshold_oscillation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.resonator.html">
+     norse.torch.functional.izhikevich.resonator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.izhikevich.izhikevich_feed_forward_step.html">
+     norse.torch.functional.izhikevich.izhikevich_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.leaky_integrator.LIParameters.html">
+     LIParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.leaky_integrator.LIState.html">
+     LIState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.leaky_integrator.li_feed_forward_step.html">
+     norse.torch.functional.leaky_integrator.li_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.LIFParameters.html">
+     LIFParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.LIFFeedForwardState.html">
+     LIFFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_feed_forward_step.html">
+     norse.torch.functional.lif_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_feed_forward_adjoint_step.html">
+     norse.torch.functional.lif_feed_forward_adjoint_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_feed_forward_adjoint_step_sparse.html">
+     norse.torch.functional.lif_feed_forward_adjoint_step_sparse
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.coba_lif.CobaLIFParameters.html">
+     CobaLIFParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.coba_lif.CobaLIFFeedForwardState.html">
+     CobaLIFFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.coba_lif.coba_lif_feed_forward_step.html">
+     norse.torch.functional.coba_lif.coba_lif_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_adex.LIFAdExParameters.html">
+     LIFAdExParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_adex.LIFAdExFeedForwardState.html">
+     LIFAdExFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_adex.lif_adex_feed_forward_step.html">
+     norse.torch.functional.lif_adex.lif_adex_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_adex.lif_adex_current_encoder.html">
+     norse.torch.functional.lif_adex.lif_adex_current_encoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_ex.LIFExParameters.html">
+     LIFExParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_ex.LIFExFeedForwardState.html">
+     LIFExFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_ex.lif_ex_feed_forward_step.html">
+     norse.torch.functional.lif_ex.lif_ex_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_ex.lif_ex_current_encoder.html">
+     norse.torch.functional.lif_ex.lif_ex_current_encoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_mc_feed_forward_step.html">
+     norse.torch.functional.lif_mc_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_mc_refrac_feed_forward_step.html">
+     norse.torch.functional.lif_mc_refrac_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.LIFRefracParameters.html">
+     LIFRefracParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.LIFRefracFeedForwardState.html">
+     LIFRefracFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_refrac_feed_forward_step.html">
+     norse.torch.functional.lif_refrac_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lif_refrac_feed_forward_adjoint_step.html">
+     norse.torch.functional.lif_refrac_feed_forward_adjoint_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.LSNNParameters.html">
+     LSNNParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.LSNNFeedForwardState.html">
+     LSNNFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lsnn_feed_forward_step.html">
+     norse.torch.functional.lsnn_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.lsnn_feed_forward_adjoint_step.html">
+     norse.torch.functional.lsnn_feed_forward_adjoint_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.STDPSensorParameters.html">
+     STDPSensorParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.STDPSensorState.html">
+     STDPSensorState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.stdp_sensor_step.html">
+     norse.torch.functional.stdp_sensor_step
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.TsodyksMakramParameters.html">
+     TsodyksMakramParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.TsodyksMakramState.html">
+     TsodyksMakramState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../generated/norse.torch.functional.stp_step.html">
+     norse.torch.functional.stp_step
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api.html">
+   Complete API
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../generated/norse.html">
+     norse
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../generated/norse.benchmark.html">
+       norse.benchmark
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+      <label for="toctree-checkbox-5">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../generated/norse.benchmark.benchmark.html">
+         norse.benchmark.benchmark
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../generated/norse.benchmark.norse_lif.html">
+         norse.benchmark.norse_lif
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../generated/norse.dataset.html">
+       norse.dataset
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+      <label for="toctree-checkbox-6">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../generated/norse.dataset.memory.html">
+         norse.dataset.memory
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../generated/norse.task.html">
+       norse.task
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+      <label for="toctree-checkbox-7">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../generated/norse.task.correlation_experiment.html">
+         norse.task.correlation_experiment
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../generated/norse.torch.html">
+       norse.torch
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+      <label for="toctree-checkbox-8">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../generated/norse.torch.functional.html">
+         norse.torch.functional
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../generated/norse.torch.models.html">
+         norse.torch.models
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../generated/norse.torch.module.html">
+         norse.torch.module
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../generated/norse.utils.html">
+       norse.utils
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/pages/started.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/norse/norse"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2Fpages/started.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/norse/norse/edit/master/docs/pages/started.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/norse/norse/HEAD/v2/gh/norse/norse/master?urlpath=tree/docs/pages/started.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/norse/norse/blob/master/docs/pages/started.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        <button type="button" class="btn btn-secondary topbarbtn"
+            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
+                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#building-models-in-norse">
+   2.1. Building Models in Norse
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#applying-neuron-models">
+   2.2. Applying neuron models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bonus-applying-neuron-models-with-predefined-state">
+     2.2.1. Bonus: Applying neuron models with predefined state
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="quickstart">
+<span id="page-started"></span><h1><span class="section-number">2. </span>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<p>This notebook quickly demonstrates how you can create biological realistic neural network models that can be used for deep learning.</p>
+<p>To use Norse effectively, you need to know two things</p>
+<ol class="simple">
+<li><p>How to build neuron models</p></li>
+<li><p>How to apply neuron models</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can execute the code below by hitting <i class="fas fa-rocket"></i> above and pressing <i class="fas fa-play"></i> Live Code.</p>
+</div>
+<div class="section" id="building-models-in-norse">
+<h2><span class="section-number">2.1. </span>Building Models in Norse<a class="headerlink" href="#building-models-in-norse" title="Permalink to this headline">¶</a></h2>
+<p>Norse is designed to be as simple as possible to use; our neuron models integrate seamlessly with PyTorch - with a single caveat: state.
+Neurons need to remember their history, similar to recurrent networks in PyTorch. Therefore, we cannot wrap models with the regular <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html"><code class="docutils literal notranslate"><span class="pre">torch.nn.Sequential</span></code></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Further details on state handling in <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a></p>
+</div>
+<p>Our solution is to provide our own <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.module.sequential.SequentialState.html"><code class="docutils literal notranslate"><span class="pre">norse.torch.SequentialState</span></code></a> module, which makes it trivial to construct spiking networks:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">norse</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">torch</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
+    <span class="n">norse</span><span class="o">.</span><span class="n">torch</span><span class="o">.</span><span class="n">LIF</span><span class="p">(),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice how similar this looks to PyTorch’s <code class="docutils literal notranslate"><span class="pre">Sequential</span></code>. The only difference is that we have replaced one activation function with a <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.module.lif.LIF.html">leaky integrate-and-fire (LIF)</a> model, which is a widely used <a class="reference external" href="https://en.wikipedia.org/wiki/Biological_neuron_model">biological neuron model</a>.</p>
+</div>
+<div class="section" id="applying-neuron-models">
+<h2><span class="section-number">2.2. </span>Applying neuron models<a class="headerlink" href="#applying-neuron-models" title="Permalink to this headline">¶</a></h2>
+<p>If you are familiar with recurrent networks in PyTorch, you will know that they return not one, but two values: the actual model <code class="docutils literal notranslate"><span class="pre">output</span></code> <em>and</em> the model <code class="docutils literal notranslate"><span class="pre">state</span></code> (see e. g. <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.RNN.html#torch.nn.RNN">PyTorch’s RNN module</a>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Because of their recurrent nature, <strong>neurons exist in time</strong>. A neuron needs time to emit <a class="reference external" href="https://en.wikipedia.org/wiki/Action_potential">action potentials/spikes</a>, so we will always assume that the <strong>outer dimension</strong> of the input tensor is time.</p>
+<p>Below, we show how you can take a tensor with 4 timesteps (the outer dimension) and apply it to 2 neurons (inner dimension). The linear layer should, then, reduce this to a single neuron simulated over 4 timesteps.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">output</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0.2075],
+        [0.2075],
+        [0.2075],
+        [0.2075]], grad_fn=&lt;AddmmBackward&gt;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Perfect! The output looks as we would expect: it’s a <code class="docutils literal notranslate"><span class="pre">(4,1)</span></code> tensor. 4 timesteps, 1 output neuron.</p>
+<div class="section" id="bonus-applying-neuron-models-with-predefined-state">
+<h3><span class="section-number">2.2.1. </span>Bonus: Applying neuron models with predefined state<a class="headerlink" href="#bonus-applying-neuron-models-with-predefined-state" title="Permalink to this headline">¶</a></h3>
+<p>Before we conclude, note that you can inject a different state if you wish to influence the neuron starting state. Below, we simply use the state we stored above in the <code class="docutils literal notranslate"><span class="pre">state</span></code> variable. The page on <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a> will demonstrate how to configure this in depth.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="p">,</span> <span class="n">next_state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is, honestly, everything you need to get started. Provided you have knowledge with building and training models in PyTorch, you can keep working as you have done so far. If you are new to PyTorch, we highly recommend their suite of tutorials: <a class="reference external" href="https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html">https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html</a></p>
+<hr class="docutils" />
+<p>If you need to simulate more complex settings or configure your own neuron models, please continue to read about <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a>, <a class="reference internal" href="spiking.html#page-spiking"><span class="std std-ref">Introduction to spiking systems</span></a>, and <a class="reference internal" href="learning.html#page-learning"><span class="std std-ref">Learning with spikes</span></a>.</p>
+<p><img alt="Norse" src="../_images/logo.png" /></p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "norse/norse",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./pages"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="installing.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title"><span class="section-number">1. </span>Installing Norse</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="working.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title"><span class="section-number">3. </span>Working with Norse</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Norse.ai<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+
+
+
+  </body>
+</html>
