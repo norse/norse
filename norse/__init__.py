@@ -4,3 +4,5 @@
 from . import benchmark, dataset, task, torch, utils
 
 __all__ = ["benchmark", "dataset", "task", "torch", "utils"]
+
+__version__ = "0.0.7RC3"

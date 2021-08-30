@@ -3,7 +3,10 @@
 This checklist exists to ensure releases are correctly packaged and published.
 
 * Bump the version number
-  * in `setup.py` and `meta.yaml`
+  * `setup.py`
+  * `publish/conda/meta.yaml`
+  * `norse/__init__.py`
+  * `docs/_config.yml`
 * Deploy to PyPi
   * Ensure the action is properly deployed
   * If it fails, reproduce manually with `manylinux` (`quay.io/pypa/manylinux2014_x86_64`)
