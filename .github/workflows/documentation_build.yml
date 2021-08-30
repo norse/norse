@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  publish-docs:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps: 
@@ -17,10 +17,12 @@ jobs:
           python-version: '3.x'
       - name: Fix sphinx-jupyterbook-latex bug
         run: pip install git+https://github.com/jegp/sphinx-jupyterbook-latex
-      - name: Compile docs
+      - name: Install system dependencies
+        run: sudo apt update && sudo apt install g++ -y
+      - name: Install python dependencies
         run: |
-          sudo apt update && sudo apt install g++ -y
           python -m pip install --upgrade pip
-          pip install -r docs/requirements-dev.txt
+          pip install -r docs/requirements.txt
           pip install -e .
-          jupyter-book build docs
+      - name: Compile docs
+        run: jupyter-book build docs
