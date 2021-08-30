@@ -13,7 +13,10 @@ from .adjoint.lif_refrac_adjoint import (
     lif_refrac_feed_forward_step,
     LIFAdjointRefracFeedForwardFunction,
 )
-from .adjoint.lsnn_adjoint import lsnn_feed_forward_adjoint_step
+from .adjoint.lsnn_adjoint import (
+    lsnn_feed_forward_adjoint_step,
+    LSNNFeedForwardAdjointFunction,
+)
 
 from .coba_lif import (
     CobaLIFState,
