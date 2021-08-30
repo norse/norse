@@ -2,15 +2,15 @@ from typing import Tuple
 
 import torch
 
-from ..lif_refrac import (
+from norse.torch.functional.lif_refrac import (
     LIFRefracState,
     LIFRefracFeedForwardState,
     LIFRefracParameters,
     lif_refrac_step,
     lif_refrac_feed_forward_step,
 )
-from ..lif import LIFState, LIFFeedForwardState
-from ..heaviside import heaviside
+from norse.torch.functional.lif import LIFState, LIFFeedForwardState
+from norse.torch.functional.heaviside import heaviside
 
 
 class LIFAdjointRefracFunction(torch.autograd.Function):

@@ -1,7 +1,7 @@
 import torch
 
-from ..lif_mc import lif_mc_step
-from ..lif import LIFState, LIFParameters
+from norse.torch.functional.lif_mc import lif_mc_step
+from norse.torch.functional.lif import LIFState, LIFParameters
 
 from typing import Tuple
 

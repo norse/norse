@@ -3,7 +3,7 @@ from typing import Tuple
 import torch
 import torch.jit
 
-from ..lsnn import (
+from norse.torch.functional.lsnn import (
     LSNNState,
     LSNNFeedForwardState,
     LSNNParameters,
