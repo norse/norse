@@ -8,7 +8,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-from norse.torch.functional.izhikevich import IzhikevichSpikingBehavior, izhikevich_feed_forward_step
+from norse.torch.functional.izhikevich import (
+    IzhikevichSpikingBehavior,
+    izhikevich_feed_forward_step,
+)
 
 
 def _detach_tensor(tensor: torch.Tensor):

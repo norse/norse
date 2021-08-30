@@ -128,6 +128,7 @@ class CircDist(torch.autograd.Function):
     .. math::
         h(x,\alpha) = 0.5 + 0.5 * \frac{x}{\sqrt{x^2 + alpha^2}}
     """
+
     @staticmethod
     def forward(ctx, x, alpha):
         ctx.save_for_backward(x)
