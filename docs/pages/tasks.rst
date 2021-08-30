@@ -20,7 +20,7 @@ and many more parameters.
 
 Another very important parameter determines which backpropagation model to use.
 This is particularly important for spiking neural network models and is described in more 
-detail on the page about :ref:`page-spike-learning`.
+detail on the page about :ref:`page-learning`.
 
 All programs below are built with `Abseil Python <https://github.com/abseil/abseil-py>`_ which
 gives you extensive command line interface (CLI) help descriptions, where you can look up further
