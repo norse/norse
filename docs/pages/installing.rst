@@ -1,7 +1,7 @@
 .. _page-installing:
 
 Installing Norse
--------------------
+----------------
 
 We have chosen to build Norse with new features such as `type hints <https://docs.python.org/3/whatsnew/3.7.html#whatsnew37-pep560>`_. For
 that reason **we require Python version 3.7 or higher**. 
@@ -99,3 +99,5 @@ GPU acceleration
 
 If you would like to have GPU hardware acceleration, you will have to enable the
 NVIDIA runtime, as described here: https://developer.nvidia.com/nvidia-container-runtime.
+
+For more information, please refer to our page on :ref:`page-hardware`.

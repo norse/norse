@@ -1,7 +1,7 @@
 import torch
 import torch.jit
 
-from ..lif import (
+from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
     LIFParameters,

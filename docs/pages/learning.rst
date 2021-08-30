@@ -1,4 +1,4 @@
-.. _page-spike-learning:
+.. _page-learning:
 
 Learning with spikes
 ------------------------------------------
