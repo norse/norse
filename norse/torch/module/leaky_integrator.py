@@ -66,7 +66,7 @@ class LICell(SNNCell):
 
 
 class LI(SNN):
-    r"""A neuron layer that wraps a leaky-integrator :class:`LICell` in time, but 
+    r"""A neuron layer that wraps a leaky-integrator :class:`LICell` in time, but
     *without* recurrence. The layer iterates over the  _outer_ dimension of the input.
     More specifically it implements a discretized version of the ODE
 
@@ -82,7 +82,7 @@ class LI(SNN):
 
     .. math::
         i = i + w i_{\text{in}}
-    
+
     After application, the layer returns a tuple containing
       (voltages from all timesteps, state from the last timestep).
 

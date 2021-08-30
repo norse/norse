@@ -5,10 +5,13 @@ Stateless spiking neural network components.
 from .adjoint.lif_adjoint import (
     lif_feed_forward_adjoint_step_sparse,
     lif_feed_forward_adjoint_step,
+    LIFFeedForwardAdjointFunction,
+    LIFFeedForwardSparseAdjointFunction,
 )
 from .adjoint.lif_refrac_adjoint import (
     lif_refrac_feed_forward_adjoint_step,
     lif_refrac_feed_forward_step,
+    LIFAdjointRefracFeedForwardFunction,
 )
 from .adjoint.lsnn_adjoint import lsnn_feed_forward_adjoint_step
 
@@ -156,7 +159,7 @@ __all__ = [
     "lif_feed_forward_adjoint_step_sparse",
     # Adjoint refractory LIF
     "LIFAdjointRefracFeedForwardFunction",
-    "lif_refrac_feed_forward_adjoint_step"
+    "lif_refrac_feed_forward_adjoint_step",
     # Adjoint LSNN
     "LSNNFeedForwardAdjointFunction",
     "lsnn_feed_forward_adjoint_step",
@@ -202,7 +205,7 @@ __all__ = [
     "integrator",
     "rebound_spike",
     "rebound_burst",
-    "threshhold_variability",
+    "threshold_variability",
     "bistability",
     "dap",
     "accomodation",
