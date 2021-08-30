@@ -70,7 +70,7 @@ But too far away from that threshold indicates that the contribution
 of the neuron is unimportant because it would require a large
 modification to that particular neuron to *not* impact the output.
 
-Conversely, if the the neuron membrane voltage is much lower 
+Conversely, if the neuron membrane voltage is much lower 
 than the threshold, the neuron is probably not
 going to fire, and the gradient contribution is equally low.
 
