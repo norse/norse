@@ -131,6 +131,8 @@ jobs:
         uses: lukka/run-vcpkg@v7
         with:
           setupOnly: true
+          # Location of the vcpkg submodule in the Git repository.
+          vcpkgDirectory: '${{ github.workspace }}/norse/csrc'
       - name: Install CMAKE
         run: |
           $VCPKG_ROOT/vcpkg install vcpkg-cmake
