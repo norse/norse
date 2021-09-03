@@ -103,7 +103,7 @@ as demonstrated in the [PyTorch Lightning MNIST task variant](https://github.com
 python -m norse.task.mnist_pl --gpus=4
 ```
 
-Read more in our {ref}`page-spiking` and visit our [Jupyter Notebook examples](https://github.com/norse/notebooks>). 
+Read more in our {ref}`page-spiking` and visit our [Jupyter Notebook examples](https://github.com/norse/notebooks). 
 
 ## Advanced uses and opimizations
 
