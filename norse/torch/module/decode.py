@@ -28,5 +28,6 @@ class SpikeTimeDecoder(torch.nn.Module):
             [0, 1, 0, 1]])
     """
 
-    def forward(self, input_tensor: torch.Tensor):
+    @staticmethod
+    def forward(input_tensor: torch.Tensor):
         return spike_time_decode(input_tensor)
