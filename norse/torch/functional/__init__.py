@@ -31,6 +31,7 @@ from .correlation_sensor import (
     correlation_based_update,
     correlation_sensor_step,
 )
+from .decode import sum_decode, spike_time_decode
 from .encode import (
     constant_current_lif_encode,
     euclidean_distance,
@@ -171,6 +172,9 @@ __all__ = [
     "CorrelationSensorState",
     "correlation_based_update",
     "correlation_sensor_step",
+    # Decoders
+    "sum_decode",
+    "spike_time_decode",
     # Encoders
     "constant_current_lif_encode",
     "euclidean_distance",

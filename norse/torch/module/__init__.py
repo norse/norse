@@ -4,6 +4,7 @@ Modules for spiking neural network, adhering to the ``torch.nn.Module`` interfac
 
 from .coba_lif import CobaLIFCell, CobaLIFParameters, CobaLIFState
 from .conv import LConv2d
+from .decode import SpikeTimeDecoder
 from .encode import (
     ConstantCurrentLIFEncoder,
     PoissonEncoder,
@@ -85,6 +86,7 @@ __all__ = [
     "SignedPoissonEncoder",
     "SpikeLatencyEncoder",
     "SpikeLatencyLIFEncoder",
+    "SpikeTimeDecoder",
     "LI",
     "LICell",
     "LILinearCell",

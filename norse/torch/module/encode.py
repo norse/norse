@@ -1,5 +1,5 @@
 """
-Stateful encoders as torch modules.
+Encoders as torch modules.
 """
 
 from typing import Union, Callable
