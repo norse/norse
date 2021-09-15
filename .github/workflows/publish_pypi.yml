@@ -6,13 +6,14 @@ on:
 
 jobs:
   linux-build:
+    name: "Build and package: manylinux"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build manylinux Python wheels
         uses: RalfG/python-wheels-manylinux-build@v0.3.4-manylinux2014_x86_64
         with:
-          python-versions: "cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310"
+          python-versions: "cp37-cp37m cp38-cp38 cp39-cp39"
           build-requirements: "torch"
       - name: Publish wheels to PyPI
         env:
@@ -22,6 +23,7 @@ jobs:
           twine upload dist/*
 
   mac-windows-build:
+    name: "Build and package: ${{ matrix.os }} v${{ matrix.python-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -35,10 +37,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install build dependencies
         run: |
-          python3 -m pip install build
-      - name: Build dist
-        run: |
-          python3 -m build -o dist .
+          pip install setuptools wheel pytest-xdist
+          pip install -e .
+      - name: Run unit tests
+        run: pytest -n auto norse
+      - name: Build wheel
+        run: python setup.py bdist_wheel sdist
       - name: Publish wheels to PyPI
         env:
           TWINE_USERNAME: __token__

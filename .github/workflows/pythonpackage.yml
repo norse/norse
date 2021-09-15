@@ -1,55 +1,17 @@
 name: Python package
 
-on: [push, pull_request]
+on: 
+  push:
+    branches-ignore:
+      - master
 
 jobs:
-  build-python:
-    runs-on: ${{ matrix.config.os }}
-    strategy:
-      max-parallel: 4
-      matrix:
-        config:
-          - { name: "Windows MSVC", os: windows-latest }
-          - { name: "Ubuntu gcc", os: ubuntu-latest }
-          - { name: "MacOS clang", os: macos-latest }
-        python-version: [3.7, 3.8, 3.9]
-
-    name: "Build Python: ${{ matrix.config.os}} Python v${{ matrix.python-version }}"
-    steps:
-      - uses: actions/checkout@master
-      - name: Cache
-        if: ${{ !env.ACT }} # Cache not working due to https://github.com/nektos/act/issues/329
-        uses: actions/cache@v2
-        env:
-          # Increase this value to reset cache if environment.yaml has not changed
-          CACHE_NUMBER: 0
-        with:
-          path: ~/python_pkgs_dir
-          key: ${{ runner.os }}-python${{ matrix.python-version }}-${{ env.CACHE_NUMBER }}
-      - name: Install Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: (Ubuntu) Install GCC
-        if: ${{ matrix.config.os == 'ubuntu-latest' }}
-        run: |
-          sudo apt update
-          sudo apt install g++ -y
-      - name: (Windows) Set build environment
-        if: ${{ matrix.config.os == 'windows-latest' }}
-        run: |
-          publish/set_win_env.bat
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -e .
-          pip install pytest-xdist tensorboard
-      - name: Run unit tests
-        run: pytest -n auto norse
-
-  build-python-checks:
+  build-python-ubuntu:
+    name: "Code quality checks v${{ matrix.python-version }}"
     runs-on: ubuntu-latest
-    name: "Build Python: type checking, linting, and coverage"
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
     steps:
       - uses: actions/checkout@master
       - name: Cache
@@ -61,23 +23,31 @@ jobs:
         with:
           path: ~/cpp_pkgs_dir
           key: ubuntu-python-latest-${{ env.CACHE_NUMBER }}
+      
+      # Setup dependencies
       - name: Install Python
         uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
       - name: Install GCC
         run: |
           sudo apt update
           sudo apt install g++ -y
-      - name: Install dependencies
-        run: |
-          pip install -e .
-          pip install -r requirements.txt
-          pip install -r requirements-dev.txt
+      - name: Install test dependencies
+        run: pip install pytest-cov pytest-xdist pytype black 
+      - name: Install optional libraries
+        run: pip install matplotlib tensorboard pytorch-lightning
+      - name: Install package
+        run: pip install -e .
+      
+      # Test, type check, and lint
       - name: Run unit tests
-        run: pytest norse --cov=./ --cov-report=xml
+        run: pytest norse -n auto --cov=./ --cov-report=xml
       - name: Type check
         run: pytype norse -j 4
       - name: Lint
         run: black --check norse
+
       - name: Upload coverage
         uses: codecov/codecov-action@v1
         with:
@@ -86,3 +56,25 @@ jobs:
           env_vars: OS,PYTHON
           name: codecov-umbrella
           fail_ci_if_error: true
+
+  build-python-mac-windows:
+    name: "Build and package ${{ matrix.os }} v${{ matrix.python-version }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install build dependencies
+        run: |
+          pip install setuptools wheel pytest-xdist tensorboard
+          pip install -e .
+      - name: Run unit tests
+        run: pytest -n auto norse
+      - name: Build wheel
+        run: python setup.py bdist_wheel sdist

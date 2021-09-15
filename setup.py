@@ -14,18 +14,16 @@ with open(path.join(pwd, "requirements.txt")) as fp:
 with open(path.join(pwd, "README.md"), encoding="utf-8") as fp:
     readme_text = fp.read()
 
-if os.name == 'nt':
-    cpp_extension = CppExtension(
-        name="norse_op",
-        sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
-        extra_compile_args=["-O3", "/std:c++17"],
-    )
+if os.name == "nt":
+    compile_args = ["/std:c++17"]
 else:
-    cpp_extension = CppExtension(
-        name="norse_op",
-        sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
-        extra_compile_args=["-O3"],
-    )
+    compile_args = ["-O3"]
+
+cpp_extension = CppExtension(
+    name="norse_op",
+    sources=["norse/csrc/op.cpp", "norse/csrc/super.cpp"],
+    extra_compile_args=compile_args,
+)
 
 setup(
     install_requires=install_requires,
