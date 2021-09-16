@@ -16,12 +16,12 @@ class SequentialState(torch.nn.Sequential):
     Example:
         >>> import torch
         >>> import norse.torch as snn
-        >>> data = torch.ones(1, 16, 8, 4)         # Single timestep
+        >>> data = torch.ones(1, 1, 16, 8, 4)         # Single timestep, Single Batch, 16 channels
         >>> model = snn.SequentialState(
-        >>>   snn.Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)
-        >>>   torch.nn.Flatten(2),                 # (1, 8, 12)
-        >>>   snn.LIFRecurrent(12, 6),             # (1, 8, 6)
-        >>>   snn.LIFRecurrent(6, 1)               # (1, 8, 1)
+        >>>   snn.Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 1, 8, 6, 2)
+        >>>   torch.nn.Flatten(3),                 # (1, 1, 8, 12)
+        >>>   snn.LIFRecurrent(12, 6),             # (1, 1, 8, 6)
+        >>>   snn.LIFRecurrent(6, 1)               # (1, 1, 8, 1)
         >>> )
         >>> model(data)
 
