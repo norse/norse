@@ -987,12 +987,12 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; import norse.torch as snn</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.ones(1, 16, 8, 4)         # Single timestep</span>
+<span class="sd">        &gt;&gt;&gt; data = torch.ones(1, 1, 16, 8, 4)         # Single timestep, Single Batch, 16 channels</span>
 <span class="sd">        &gt;&gt;&gt; model = snn.SequentialState(</span>
-<span class="sd">        &gt;&gt;&gt;   snn.Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 8, 6, 2)</span>
-<span class="sd">        &gt;&gt;&gt;   torch.nn.Flatten(2),                 # (1, 8, 12)</span>
-<span class="sd">        &gt;&gt;&gt;   snn.LIFRecurrent(12, 6),             # (1, 8, 6)</span>
-<span class="sd">        &gt;&gt;&gt;   snn.LIFRecurrent(6, 1)               # (1, 8, 1)</span>
+<span class="sd">        &gt;&gt;&gt;   snn.Lift(torch.nn.Conv2d(16, 8, 3)), # (1, 1, 8, 6, 2)</span>
+<span class="sd">        &gt;&gt;&gt;   torch.nn.Flatten(3),                 # (1, 1, 8, 12)</span>
+<span class="sd">        &gt;&gt;&gt;   snn.LIFRecurrent(12, 6),             # (1, 1, 8, 6)</span>
+<span class="sd">        &gt;&gt;&gt;   snn.LIFRecurrent(6, 1)               # (1, 1, 8, 1)</span>
 <span class="sd">        &gt;&gt;&gt; )</span>
 <span class="sd">        &gt;&gt;&gt; model(data)</span>
 
