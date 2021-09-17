@@ -1026,13 +1026,13 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#defining-our-activation-function">
-     4.1.1. Defining our activation function
+    <a class="reference internal nav-link" href="#defining-our-first-neuron-model">
+     4.1.1. Defining our first neuron model
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#defining-our-data">
-     4.1.2. Defining our data
+    <a class="reference internal nav-link" href="#defining-our-input-spikes">
+     4.1.2. Defining our input spikes
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -1041,6 +1041,16 @@
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#our-first-spiking-neuron">
+   4.2. Our first Spiking Neuron
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#encoding-data-into-spikes">
+   4.3. Encoding Data Into Spikes
+  </a>
  </li>
 </ul>
 
@@ -1055,10 +1065,13 @@
                 
   <div class="section" id="introduction-to-spiking-systems">
 <span id="page-spiking"></span><h1><span class="section-number">4. </span>Introduction to spiking systems<a class="headerlink" href="#introduction-to-spiking-systems" title="Permalink to this headline">¶</a></h1>
-<p>Regular artificial neural networks (as we know them from <a class="reference external" href="https://pytorch.org">PyTorch</a>) consist of neuron layers, that basically takes input vectors and sends it through a function (typically sigmoidal).
-The issue with this approach is that the temporal dimension is mostly ignored.
-In biology, neural networks are living things that change over time and where sparseness plays a critical role.
-Norse attempts to explore state-of-the-art methods <strong>and</strong> the desirable properties of spiking neural networks to achieve lower energy consumption and better performance.</p>
+<p>Artificial neural networks (as we know them from <a class="reference external" href="https://pytorch.org">PyTorch</a>) typically consist of linear transformations (such as Convolutions) and point-wise non-linearities such as the infamous rectified linear unit (ReLU). In contrast spiking neural networks take their inspiration from biological
+neurons. They operate on spikes - events in time - which are combined by linear transformations and integrated by neuron circuits models, such as the LIF
+neuron model. In other words compared to artificial neural networks, where operation on temporal data is a choice, all spiking neural networks operate on
+temporal data. One way to look spiking neural networks is to regard them as specific <em>recurrent neural networks</em> (RNNs) with the sequence dimension explicitely identified with time and with the values at each timestep that are exchanged between layers restricted to binary values.</p>
+<p>Norse implements state-of-the-art methods to train spiking neural networks in a way that is convenient and accessible to a machine learning researcher.
+The eventual goal is to fully explore the sparse information processing of spiking neural networks on neuromorphic hardware. But even if you are not motivated by such application and just curious how information processing can be done by systems whose behaviour is closer to that of biological brains, this
+library might be for you.</p>
 <p>In this page we will cover how to</p>
 <ol class="simple">
 <li><p>Simulate neurons</p></li>
@@ -1074,7 +1087,7 @@ Norse attempts to explore state-of-the-art methods <strong>and</strong> the desi
 <p>Neurons consist of two things: the <strong>activation function</strong> and the <strong>neuron membrane state</strong>. To start working with them, we first have to import Norse:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">norse</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">norse</span>
 <span class="n">norse</span><span class="o">.</span><span class="n">__version__</span>
 </pre></div>
 </div>
@@ -1085,12 +1098,12 @@ Norse attempts to explore state-of-the-art methods <strong>and</strong> the desi
 </div>
 </div>
 </div>
-<div class="section" id="defining-our-activation-function">
-<h3><span class="section-number">4.1.1. </span>Defining our activation function<a class="headerlink" href="#defining-our-activation-function" title="Permalink to this headline">¶</a></h3>
-<p>If you are familiar with machine/deep learning, you recognize the <code class="docutils literal notranslate"><span class="pre">ReLU</span></code> or <code class="docutils literal notranslate"><span class="pre">LSTM</span></code> <strong>activation functions</strong>. One of the functions we have added is the <span class="xref myst"><strong>leaky integrator</strong></span>. This particular activation function takes input current and stores it inside its neuron membrane.</p>
+<div class="section" id="defining-our-first-neuron-model">
+<h3><span class="section-number">4.1.1. </span>Defining our first neuron model<a class="headerlink" href="#defining-our-first-neuron-model" title="Permalink to this headline">¶</a></h3>
+<p>If you are familiar with machine/deep learning, you recognize the <code class="docutils literal notranslate"><span class="pre">LSTM</span></code> <em>recurrent neural network</em>, which is applied to a sequence of values. One of the simples neuron models, we have added is the <span class="xref myst"><strong>leaky integrator</strong></span>. This particular model integrates an input current and on a “membrane” modelled by a <em>leaky</em> capacitor.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">activation</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">torch</span><span class="o">.</span><span class="n">LI</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">activation</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">torch</span><span class="o">.</span><span class="n">LI</span><span class="p">()</span>
 <span class="n">activation</span>
 </pre></div>
 </div>
@@ -1102,19 +1115,19 @@ Norse attempts to explore state-of-the-art methods <strong>and</strong> the desi
 </div>
 </div>
 </div>
-<div class="section" id="defining-our-data">
-<h3><span class="section-number">4.1.2. </span>Defining our data<a class="headerlink" href="#defining-our-data" title="Permalink to this headline">¶</a></h3>
-<p>We can now create random input data <span class="math notranslate nohighlight">\(\in \mathcal{N}(0, 1)\)</span> for 100 timesteps using torch:</p>
+<div class="section" id="defining-our-input-spikes">
+<h3><span class="section-number">4.1.2. </span>Defining our input spikes<a class="headerlink" href="#defining-our-input-spikes" title="Permalink to this headline">¶</a></h3>
+<p>By convention most of our neuron models expect to operate on <em>input spikes</em>. In a time discretised setting this is just a sequence of tensors containing binary values. By default we place spikes on a grid spaced by <span class="math notranslate nohighlight">\(1 \text{ms}\)</span>. So we can define an <em>input spike sequence</em> with spikes at <span class="math notranslate nohighlight">\(20 \text{ms}\)</span> and
+<span class="math notranslate nohighlight">\(100 \text{ms}\)</span> and use the Leaky Integrator (LI) to process it, resulting in a <em>voltage trace</em>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([100, 1])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="n">voltage_trace</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1122,30 +1135,148 @@ Norse attempts to explore state-of-the-art methods <strong>and</strong> the desi
 </div>
 <div class="section" id="visualizing-neuron-voltage">
 <h3><span class="section-number">4.1.3. </span>Visualizing neuron voltage<a class="headerlink" href="#visualizing-neuron-voltage" title="Permalink to this headline">¶</a></h3>
-<p>Since this simulation happened over 100 timesteps, we expect the model to output the evolution of the membrane potential which can plot.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>We encourage the reader to re-run the code with a different datasample. What happens? What happens if you increase the number of timesteps?</p>
-</div>
+<p>Since this simulation happened over 1000 timesteps (1 second), we expect the model to output the evolution of the membrane potential (the voltage trace), which we can plot:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">voltages</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">voltages</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time [ms]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;membrane potential&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">voltage_trace</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f77453c0550&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.lines.Line2D at 0x7fcbf487d6a0&gt;
 </pre></div>
 </div>
 <img alt="../_images/spiking_8_1.png" src="../_images/spiking_8_1.png" />
 </div>
 </div>
-<p>… To be continued …</p>
+<p>The time course of the membrane potential for this given input is influenced by the parameters passed to the leaky integrator, we can repeat the experiment with different values. Here we simulate 5 neurons by simply increasing the input dimensionality of the input spike train.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">norse.torch.module</span> <span class="k">as</span> <span class="nn">nm</span>
+
+<span class="n">num_neurons</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">tau_mem_inv</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">200</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mf">12.5</span><span class="p">])</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="n">num_neurons</span><span class="p">)</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="n">voltage_trace</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">LI</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">nm</span><span class="o">.</span><span class="n">LIParameters</span><span class="p">(</span><span class="n">tau_mem_inv</span><span class="o">=</span><span class="n">tau_mem_inv</span><span class="p">,</span> <span class="n">tau_syn_inv</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">200</span><span class="p">)))(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time [ms]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;membrane potential&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_neurons</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">voltage_trace</span><span class="o">.</span><span class="n">detach</span><span class="p">()[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;tau_mem_inv = </span><span class="si">{</span><span class="n">tau_mem_inv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fcbf478c460&gt;
+</pre></div>
+</div>
+<img alt="../_images/spiking_10_1.png" src="../_images/spiking_10_1.png" />
+</div>
+</div>
+<p>As you can see as the membrane time constant <span class="math notranslate nohighlight">\(\tau_\text{mem}\)</span> is increased (and consequentely its inverse decreased), the decay of the membrane voltage is slower, but it also reaches a smaller value. The value of the synaptic time constant <span class="math notranslate nohighlight">\(\tau_\text{syn}\)</span> in turn influences how quickly the synaptic input decays exponentially</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_neurons</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">tau_syn_inv</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">200</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mf">12.5</span><span class="p">])</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="n">num_neurons</span><span class="p">)</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="n">voltage_trace</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">LI</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">nm</span><span class="o">.</span><span class="n">LIParameters</span><span class="p">(</span><span class="n">tau_mem_inv</span><span class="o">=</span><span class="n">tau_syn_inv</span><span class="p">,</span> <span class="n">tau_syn_inv</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">50</span><span class="p">)))(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time [ms]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;membrane potential&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_neurons</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">voltage_trace</span><span class="o">.</span><span class="n">detach</span><span class="p">()[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;tau_syn_inv = </span><span class="si">{</span><span class="n">tau_syn_inv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fcc8067bf10&gt;
+</pre></div>
+</div>
+<img alt="../_images/spiking_12_1.png" src="../_images/spiking_12_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="our-first-spiking-neuron">
+<h2><span class="section-number">4.2. </span>Our first Spiking Neuron<a class="headerlink" href="#our-first-spiking-neuron" title="Permalink to this headline">¶</a></h2>
+<p>Spikes that stimulate a neuron in close succession lead to an increasingly higher membrane potential, which is in some sense the foundational principle of information processing with spiking neurons: If one replaces the Leaky Integrator with a Leaky Integrate and <em>Fire</em> neuron model (<code class="docutils literal notranslate"><span class="pre">LIF</span></code>) one arrives at the simplest <em>spiking</em> neuron model implemented in norse. Since we only return the spike train produced by a <code class="docutils literal notranslate"><span class="pre">LIF</span></code> neuron by default we define a simple helper function first, which also records the voltage trace. To do so we use the <code class="docutils literal notranslate"><span class="pre">LIFCell</span></code> module, which only computes the state evolution for one timestep.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">integrate_and_record</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="n">input_spike_train</span><span class="p">):</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">input_spike_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">spikes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">voltage_trace</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+            <span class="n">z</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">input_spike_train</span><span class="p">[</span><span class="n">ts</span><span class="p">],</span> <span class="n">s</span><span class="p">)</span>
+            <span class="n">spikes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+            <span class="n">voltage_trace</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">spikes</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">voltage_trace</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">integrate</span>
+
+<span class="n">v_th</span> <span class="o">=</span> <span class="mf">0.4</span>
+<span class="n">cell</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">nm</span><span class="o">.</span><span class="n">LIFParameters</span><span class="p">(</span><span class="n">tau_mem_inv</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">tau_syn_inv</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">v_th</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)))</span>
+<span class="n">lif_integrate</span> <span class="o">=</span> <span class="n">integrate_and_record</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+<span class="n">cell</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LIFCell(p=LIFParameters(tau_syn_inv=tensor(50), tau_mem_inv=tensor(20), v_leak=tensor(0.), v_th=tensor(0.4000), v_reset=tensor(0.), method=&#39;super&#39;, alpha=tensor(100.)), dt=0.001)
+</pre></div>
+</div>
+</div>
+</div>
+<p>By repeating the same experiment, that is stimulating the <code class="docutils literal notranslate"><span class="pre">LI</span></code> and <code class="docutils literal notranslate"><span class="pre">LIF</span></code> neuron with spikes at <span class="math notranslate nohighlight">\(20, 100, 130\)</span> milliseconds, we immediately see the difference: Once the LIF neuron reaches its threshold value <span class="math notranslate nohighlight">\(0.4\)</span> it <em>fires</em> resulting in an output spike and a reset of its membrane voltage to <span class="math notranslate nohighlight">\(0\)</span>. The output spike train produced by a <code class="docutils literal notranslate"><span class="pre">LIF</span></code> neuron could be used for further processing by other neurons.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_neurons</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">tau_syn_inv</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">20</span><span class="p">])</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="n">num_neurons</span><span class="p">)</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">130</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="n">voltage_trace</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">LI</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">nm</span><span class="o">.</span><span class="n">LIParameters</span><span class="p">(</span><span class="n">tau_mem_inv</span><span class="o">=</span><span class="n">tau_syn_inv</span><span class="p">,</span> <span class="n">tau_syn_inv</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">50</span><span class="p">)))(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">zs</span><span class="p">,</span> <span class="n">lif_voltage_trace</span> <span class="o">=</span> <span class="n">lif_integrate</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time [ms]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;membrane potential&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">voltage_trace</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;LI&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lif_voltage_trace</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;LIF&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fcbf46ebfa0&gt;
+</pre></div>
+</div>
+<img alt="../_images/spiking_16_1.png" src="../_images/spiking_16_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="encoding-data-into-spikes">
+<h2><span class="section-number">4.3. </span>Encoding Data Into Spikes<a class="headerlink" href="#encoding-data-into-spikes" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have seen how spiking neurons can be simulated in Norse, you might wonder how do you get Spikes in the first place?</p>
 </div>
 </div>
 
