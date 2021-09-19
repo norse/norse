@@ -83,10 +83,11 @@ class SequentialState(torch.nn.Sequential):
 
     def remove_forward_state_hooks(self):
         """
-        Disables the forward state hooks, registered in :meth:`register_forward_state_hooks`_.
+        Disables and discards the forward state hooks, registered in :meth:`register_forward_state_hooks`_.
         """
         for handle in self.forward_state_hooks:
             handle.remove()
+        self.forward_state_hooks.clear()
 
     def forward(self, input_tensor: torch.Tensor, state: Union[list, None] = None):
         """

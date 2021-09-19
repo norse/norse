@@ -128,6 +128,7 @@ def test_sequential_forward_state_hook():
     model(data, s)
     assert hasattr(states[0], "v")  # isinstance is broken for namedtuple
     model.remove_forward_state_hooks()
+    assert len(model.forward_state_hooks) == 0
     model(data, s)
     assert len(spikes) == 4
 
