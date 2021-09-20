@@ -37,7 +37,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install build dependencies
         run: |
-          pip install setuptools wheel pytest-xdist
+          pip install setuptools wheel pytest-xdist tensorboard
           pip install -e .
       - name: Run unit tests
         run: pytest -n auto norse
