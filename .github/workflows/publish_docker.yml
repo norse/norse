@@ -20,7 +20,7 @@ jobs:
           username: "norse+github_actions"
           password: ${{ secrets.QUAY_TOKEN }}
 
-      - name: Build and push vanilla
+      - name: Build and push vanilla Python version
         id: docker_build_vanilla
         uses: docker/build-push-action@v2
         with:
@@ -30,3 +30,14 @@ jobs:
           tags: quay.io/norse/norse:${{ env.GITHUB_REF }},quay.io/norse/norse:latest
       - name: Image digest
         run: echo ${{ steps.docker_build_vanilla.outputs.digest }}
+
+      - name: Build and push CUDA version
+        id: docker_build_cuda
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: publish/Dockerfile.cuda
+          push: true
+          tags: quay.io/norse/norse:${{ env.GITHUB_REF }}-cuda,quay.io/norse/norse:latest-cuda
+      - name: Image digest
+        run: echo ${{ steps.docker_build_cuda.outputs.digest }}
