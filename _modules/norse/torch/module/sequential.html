@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/sphinx-book-theme.e2363ea40746bee74734a24ffefccd78.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.css" />
@@ -1054,10 +1054,11 @@
 
 <div class="viewcode-block" id="SequentialState.remove_forward_state_hooks"><a class="viewcode-back" href="../../../../generated/norse.torch.module.SequentialState.html#norse.torch.module.SequentialState.remove_forward_state_hooks">[docs]</a>    <span class="k">def</span> <span class="nf">remove_forward_state_hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Disables the forward state hooks, registered in :meth:`register_forward_state_hooks`_.</span>
+<span class="sd">        Disables and discards the forward state hooks, registered in :meth:`register_forward_state_hooks`_.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">handle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_state_hooks</span><span class="p">:</span>
-            <span class="n">handle</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span></div>
+            <span class="n">handle</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forward_state_hooks</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SequentialState.forward"><a class="viewcode-back" href="../../../../generated/norse.torch.module.SequentialState.html#norse.torch.module.SequentialState.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1096,7 +1097,7 @@
         
         </div>
     </div>
-    <footer class="footer mt-5 mt-md-0">
+    <footer class="footer">
     <div class="container">
       <p>
         
