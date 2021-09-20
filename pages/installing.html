@@ -1002,13 +1002,6 @@
   <a class="reference internal nav-link" href="#installation-steps">
    1.2. Installation steps
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#windows">
-     1.2.1. Windows
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#optional-dependencies">
@@ -1079,17 +1072,12 @@ python setup.py install
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Installing with <a class="reference external" href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a></p></li>
+<li><p>Installing with <a class="reference external" href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a>, available on [quay.io](<a class="reference external" href="https://quay.io/norse/norse">https://quay.io/norse/norse</a>)</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker pull quay.io/norse/norse
+<span class="c1"># Or, using CUDA</span>
+docker pull quay.io/norse/norse:latest-cuda
 </pre></div>
-</div>
-<div class="section" id="windows">
-<h3><span class="section-number">1.2.1. </span>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
-<p>We strongly recommend you use the Docker approach when installing Norse on Windows.
-Please see <a class="reference external" href="https://docs.docker.com/docker-for-windows/install/">the installation guide for Windows</a> for accurate instructions.</p>
-<p>We also provide a Docker image bundled with Conda, available like so:
-<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">quay.io/norse/norse:conda-latest</span></code>.</p>
 </div>
 </div>
 <div class="section" id="optional-dependencies">
@@ -1117,9 +1105,10 @@ jupyter notebook --notebook-dir<span class="o">=</span>/work --ip <span class="m
 And voila!</p>
 <div class="section" id="gpu-acceleration">
 <h3><span class="section-number">1.4.1. </span>GPU acceleration<a class="headerlink" href="#gpu-acceleration" title="Permalink to this headline">¶</a></h3>
-<p>If you would like to have GPU hardware acceleration, you will have to enable the
-NVIDIA runtime, as described here: <a class="reference external" href="https://developer.nvidia.com/nvidia-container-runtime">https://developer.nvidia.com/nvidia-container-runtime</a>.</p>
-<p>For more information, please refer to our page on <a class="reference internal" href="hardware.html#page-hardware"><span class="std std-ref">Hardware acceleration</span></a>.</p>
+<p>If you would like to have GPU hardware acceleration when running the <code class="docutils literal notranslate"><span class="pre">latest-cuda</span></code> version of the
+docker container, you will have to enable the NVIDIA runtime,
+as described here: <a class="reference external" href="https://developer.nvidia.com/nvidia-container-runtime">https://developer.nvidia.com/nvidia-container-runtime</a>.</p>
+<p>For more information on hardware acceleration, please refer to our page on <a class="reference internal" href="hardware.html#page-hardware"><span class="std std-ref">Hardware acceleration</span></a>.</p>
 </div>
 </div>
 </div>

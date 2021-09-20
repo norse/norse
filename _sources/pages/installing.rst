@@ -48,21 +48,13 @@ Note that the following commands require access to a
     cd norse
     python setup.py install
 
-* Installing with `Docker <https://en.wikipedia.org/wiki/Docker_(software)>`_
+* Installing with `Docker <https://en.wikipedia.org/wiki/Docker_(software)>`_, available on [quay.io](https://quay.io/norse/norse)
 
 .. code:: bash
     
     docker pull quay.io/norse/norse
-
-
-Windows
-^^^^^^^
-
-We strongly recommend you use the Docker approach when installing Norse on Windows.
-Please see `the installation guide for Windows <https://docs.docker.com/docker-for-windows/install/>`_ for accurate instructions. 
-
-We also provide a Docker image bundled with Conda, available like so: 
-``docker pull quay.io/norse/norse:conda-latest``.
+    # Or, using CUDA
+    docker pull quay.io/norse/norse:latest-cuda
 
 
 Optional dependencies
@@ -97,7 +89,8 @@ And voila!
 GPU acceleration
 ^^^^^^^^^^^^^^^^
 
-If you would like to have GPU hardware acceleration, you will have to enable the
-NVIDIA runtime, as described here: https://developer.nvidia.com/nvidia-container-runtime.
+If you would like to have GPU hardware acceleration when running the ``latest-cuda`` version of the
+docker container, you will have to enable the NVIDIA runtime, 
+as described here: https://developer.nvidia.com/nvidia-container-runtime.
 
-For more information, please refer to our page on :ref:`page-hardware`.
+For more information on hardware acceleration, please refer to our page on :ref:`page-hardware`.
