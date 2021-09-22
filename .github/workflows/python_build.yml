@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-manylinux:
-    name: "Build and package: manylinux"
+    name: "Build: manylinux"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,7 +16,7 @@ jobs:
           build-requirements: "torch"
 
   build-python-ubuntu:
-    name: "Code quality checks v${{ matrix.python-version }}"
+    name: "Build and test: Python v${{ matrix.python-version }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -67,7 +67,7 @@ jobs:
           fail_ci_if_error: true
 
   build-python-mac-windows:
-    name: "Build and package ${{ matrix.os }} v${{ matrix.python-version }}"
+    name: "Build and test for ${{ matrix.os }}: Python v${{ matrix.python-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

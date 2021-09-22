@@ -8,13 +8,13 @@ env:
 
 jobs:
   build-cpp:
+    name: "Build and test: C++ ${{ matrix.config.name}}"
     runs-on: ${{ matrix.config.os }}
     strategy:
       max-parallel: 4
       matrix:
         config:
           - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
-    name: "Build C++ - ${{ matrix.config.name}}"
     steps:
       - uses: actions/checkout@v2
       - name: Cache
