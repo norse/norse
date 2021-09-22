@@ -5,7 +5,7 @@ on:
 
 jobs:
   publish-manylinux:
-    name: "Build and package: manylinux"
+    name: "Publish: manylinux wheels"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,14 +14,15 @@ jobs:
         with:
           python-versions: "cp37-cp37m cp38-cp38 cp39-cp39"
           build-requirements: "torch"
+      - name: Publish to PyPi
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_PUBLISH_KEY }}
         run: |
-          twine upload dist/*
+          twine upload dist/*-manylinux*.whl
 
   publish-mac-windows:
-    name: "Build and package: ${{ matrix.os }} v${{ matrix.python-version }}"
+    name: "Publish: ${{ matrix.os }} v${{ matrix.python-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
