@@ -4,18 +4,18 @@ on:
   pull_request:
 
 jobs:
-  build-manylinux:
-    name: "Build for manylinux"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build manylinux Python wheels
-        uses: RalfG/python-wheels-manylinux-build@v0.3.4-manylinux2014_x86_64
-        with:
-          python-versions: "cp37-cp37m cp38-cp38 cp39-cp39"
-          build-requirements: "torch"
-          system-packages: "gcc-c++"
-          pre-build-command: 'source publish/setup_libtorch.sh 1.9.1'
+  # build-manylinux:
+  #   name: "Build for manylinux"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Build manylinux Python wheels
+  #       uses: RalfG/python-wheels-manylinux-build@v0.3.4-manylinux2014_x86_64
+  #       with:
+  #         python-versions: "cp37-cp37m cp38-cp38 cp39-cp39"
+  #         build-requirements: "torch"
+  #         system-packages: "gcc-c++"
+  #         pre-build-command: 'source publish/setup_libtorch.sh 1.9.1'
 
   build-python-ubuntu:
     name: "Build and analyze for ubuntu-latest: Python v3.9"
