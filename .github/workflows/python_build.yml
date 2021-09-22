@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-manylinux:
-    name: "Build: manylinux"
+    name: "Build for manylinux"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,11 +17,11 @@ jobs:
           pre-build-command: 'sh publish/setup_libtorch.sh 1.9.1'
 
   build-python-ubuntu:
-    name: "Build and test: Python v${{ matrix.python-version }}"
+    name: "Build and analyze for ubuntu-latest: Python v3.9"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.9]
     steps:
       - uses: actions/checkout@master
       - name: Cache
