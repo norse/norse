@@ -1,11 +1,10 @@
 name: Publish full version docker images
 
 on:
-  release:
-    types: [published]
+  pull_request:
 
 jobs:
-  publish-docker:
+  build-docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,18 +25,17 @@ jobs:
         with:
           context: .
           file: publish/Dockerfile
-          push: true
-          tags: quay.io/norse/norse:${{ env.GITHUB_REF }},quay.io/norse/norse:latest
-      - name: Image digest
+          push: false
+      - name: Image digest vanilla
         run: echo ${{ steps.docker_build_vanilla.outputs.digest }}
 
-      - name: Build and push CUDA version
+      - name: Build CUDA version
         id: docker_build_cuda
         uses: docker/build-push-action@v2
         with:
           context: .
           file: publish/Dockerfile.cuda
-          push: true
-          tags: quay.io/norse/norse:${{ env.GITHUB_REF }}-cuda,quay.io/norse/norse:latest-cuda
-      - name: Image digest
+          push: false
+          tags: quay.io/norse/norse:latest-cuda
+      - name: Image digest cuda
         run: echo ${{ steps.docker_build_cuda.outputs.digest }}

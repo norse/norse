@@ -2,10 +2,9 @@ name: Publish To Pypi
 
 on:
   release:
-    types: [published]
 
 jobs:
-  linux-build:
+  publish-manylinux:
     name: "Build and package: manylinux"
     runs-on: ubuntu-latest
     steps:
@@ -15,19 +14,18 @@ jobs:
         with:
           python-versions: "cp37-cp37m cp38-cp38 cp39-cp39"
           build-requirements: "torch"
-      - name: Publish wheels to PyPI
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_PUBLISH_KEY }}
         run: |
           twine upload dist/*
 
-  mac-windows-build:
+  publish-mac-windows:
     name: "Build and package: ${{ matrix.os }} v${{ matrix.python-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ macos-latest, windows-latest]
+        os: [macos-latest, windows-latest]
         python-version: [3.7, 3.8, 3.9]
     steps:
       - uses: actions/checkout@v2
@@ -44,6 +42,7 @@ jobs:
       - name: Build wheel
         run: python setup.py bdist_wheel sdist
       - name: Publish wheels to PyPI
+        if: startsWith(github.ref, 'refs/tags/v') # Only publish if new tag
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_PUBLISH_KEY }}
