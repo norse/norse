@@ -198,3 +198,11 @@ def test_lif_datatype():
         assert s.v.dtype == torch.float32
         assert s.i.dtype == torch.float32
         assert z.is_sparse is sparse
+
+
+def test_lif_params_non_tensor():
+    p = LIFParameters(
+        tau_mem_inv=2, tau_syn_inv=1, v_leak=0.3, v_th=0.5, v_reset=0, alpha=20
+    )
+    LIFCell(p=p)(torch.ones(2, 3))
+    LIF(p=p)(torch.ones(2, 3))
