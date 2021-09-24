@@ -71,7 +71,15 @@ class LIFCell(SNNCell):
             if p.method == "adjoint"
             else lif_feed_forward_step_sparse,
             state_fallback=self.initial_state,
-            p=p,
+            p=LIFParameters(
+                torch.as_tensor(p.tau_syn_inv),
+                torch.as_tensor(p.tau_mem_inv),
+                torch.as_tensor(p.v_leak),
+                torch.as_tensor(p.v_th),
+                torch.as_tensor(p.v_reset),
+                p.method,
+                torch.as_tensor(p.alpha),
+            ),
             **kwargs,
         )
 
@@ -79,7 +87,7 @@ class LIFCell(SNNCell):
         state = LIFFeedForwardState(
             v=torch.full(
                 input_tensor.shape,
-                self.p.v_leak.detach(),
+                torch.as_tensor(self.p.v_leak).detach(),
                 device=input_tensor.device,
                 dtype=torch.float32,
             ),
@@ -154,7 +162,15 @@ class LIFRecurrentCell(SNNRecurrentCell):
             if p.method == "adjoint"
             else lif_step_sparse,
             state_fallback=self.initial_state,
-            p=p,
+            p=LIFParameters(
+                torch.as_tensor(p.tau_syn_inv),
+                torch.as_tensor(p.tau_mem_inv),
+                torch.as_tensor(p.v_leak),
+                torch.as_tensor(p.v_th),
+                torch.as_tensor(p.v_reset),
+                p.method,
+                torch.as_tensor(p.alpha),
+            ),
             input_size=input_size,
             hidden_size=hidden_size,
             **kwargs,
@@ -176,7 +192,7 @@ class LIFRecurrentCell(SNNRecurrentCell):
             ),
             v=torch.full(
                 dims,
-                self.p.v_leak.detach(),
+                torch.as_tensor(self.p.v_leak).detach(),
                 device=input_tensor.device,
                 dtype=torch.float32,
             ),
@@ -218,7 +234,15 @@ class LIF(SNN):
             if p.method == "adjoint"
             else lif_feed_forward_step_sparse,
             state_fallback=self.initial_state,
-            p=p,
+            p=LIFParameters(
+                torch.as_tensor(p.tau_syn_inv),
+                torch.as_tensor(p.tau_mem_inv),
+                torch.as_tensor(p.v_leak),
+                torch.as_tensor(p.v_th),
+                torch.as_tensor(p.v_reset),
+                p.method,
+                torch.as_tensor(p.alpha),
+            ),
             **kwargs,
         )
 
@@ -226,7 +250,7 @@ class LIF(SNN):
         state = LIFFeedForwardState(
             v=torch.full(
                 input_tensor.shape[1:],  # Assume first dimension is time
-                self.p.v_leak.detach(),
+                torch.as_tensor(self.p.v_leak).detach(),
                 device=input_tensor.device,
                 dtype=torch.float32,
             ),
@@ -282,7 +306,15 @@ class LIFRecurrent(SNNRecurrent):
             state_fallback=self.initial_state,
             input_size=input_size,
             hidden_size=hidden_size,
-            p=p,
+            p=LIFParameters(
+                torch.as_tensor(p.tau_syn_inv),
+                torch.as_tensor(p.tau_mem_inv),
+                torch.as_tensor(p.v_leak),
+                torch.as_tensor(p.v_th),
+                torch.as_tensor(p.v_reset),
+                p.method,
+                torch.as_tensor(p.alpha),
+            ),
             **kwargs,
         )
 
@@ -305,7 +337,7 @@ class LIFRecurrent(SNNRecurrent):
             ),
             v=torch.full(
                 dims,
-                self.p.v_leak.detach(),
+                torch.as_tensor(self.p.v_leak).detach(),
                 device=input_tensor.device,
                 dtype=torch.float32,
             ),
