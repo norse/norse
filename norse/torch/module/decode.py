@@ -15,17 +15,27 @@ class SpikeTimeDecoder(torch.nn.Module):
 
     Example:
     >>> x = torch.tensor([0, 0, 0, 1, 0])
-    >>> SpikeTimeDecoder()(x)
-    tensor([[3]])
+    >>> spike_time_decode(x)
+    >>> # tensor([[3]])
 
-    >>> import norse.torch as nt
-    >>> model = nt.SequentialState(
-    >>>     nt.LIFCell(),
-    >>>     nt.SpikeTimeDecoder()
-    >>> )
-    >>> x, _ = model(torch.ones(10, 2))
-    tensor([[6, 6, 9, 9]
-            [0, 1, 0, 1]])
+    >>> x = torch.tensor([[0, 1], [1, 1], [0, 0]])
+    >>> spike_time_decode(x)
+    >>> # tensor([[0, 1, 1],
+    >>> #         [1, 0, 1]])
+
+    >>> x = torch.tensor([[0, 1, 0], [1, 1, 1], [0, 0, 1]], dtype=torch.float32, requires_grad=True)
+    >>> spike_time_decode(x)
+    >>> # torch.tensor([[0, 1, 1, 1, 2],
+    >>> #               [1, 0, 1, 2, 2]])
+
+    Arguments:
+        tensor (torch.Tensor): A tensor of spikes (1's)
+
+    Returns:
+        A tensor of shape (``ndims``, ``nvalues``) where ``ndims`` is the number of
+        dimensions in the tensor and ``nvalues`` are the spike-events that
+        occured in the input tensor.
+        Note that the returned tensor uses floats to support the flow of gradients.
     """
 
     @staticmethod

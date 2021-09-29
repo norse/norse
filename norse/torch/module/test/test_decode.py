@@ -7,7 +7,7 @@ from norse.torch.module.sequential import SequentialState
 
 def test_spike_time_decode():
     x = torch.tensor([[0, 1], [1, 1], [0, 0]])
-    y = torch.tensor([[0, 1, 1], [1, 0, 1]])
+    y = torch.tensor([[0, 1, 1], [1, 0, 1]]).float()
     assert torch.allclose(SpikeTimeDecoder()(x), y)
 
 
