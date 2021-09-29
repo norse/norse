@@ -23,7 +23,7 @@ class LIFMCRefracRecurrentCell(SNNRecurrentCell):
     ):
         # pytype: disable=wrong-arg-types
         super().__init__(
-            activation=None,
+            activation=lif_mc_refrac_step,
             state_fallback=self.initial_state,
             input_size=input_size,
             hidden_size=hidden_size,
