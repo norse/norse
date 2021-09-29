@@ -5,7 +5,9 @@ import torch
 
 from ..functional.lif_refrac import LIFRefracParameters, LIFRefracState
 from ..functional.lif import LIFState
-from ..functional.lif_mc_refrac import lif_mc_refrac_step
+from ..functional.lif_mc_refrac import (
+    lif_mc_refrac_step,
+)
 
 from norse.torch.module.snn import SNNRecurrentCell
 
@@ -19,6 +21,7 @@ class LIFMCRefracRecurrentCell(SNNRecurrentCell):
         g_coupling: Optional[torch.Tensor] = None,
         **kwargs
     ):
+        # pytype: disable=wrong-arg-types
         super().__init__(
             activation=None,
             state_fallback=self.initial_state,
@@ -27,6 +30,7 @@ class LIFMCRefracRecurrentCell(SNNRecurrentCell):
             p=p,
             **kwargs
         )
+        # pytype: enable=wrong-arg-types
 
         self.g_coupling = (
             g_coupling
