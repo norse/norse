@@ -124,28 +124,23 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="learning.html">
-   5. Learning with spikes
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="tasks.html">
-   6. Running Tasks
+   5. Running Tasks
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="hardware.html">
-   7. Hardware acceleration
+   6. Hardware acceleration
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="papers.html">
-   8. Papers citing Norse
+   7. Papers citing Norse
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="about.html">
-   9. About Norse
+   8. About Norse
   </a>
  </li>
 </ul>
@@ -1060,21 +1055,9 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#solving-deep-learning-problems-with-norse">
-   3.3. Solving deep learning problems with Norse
+  <a class="reference internal nav-link" href="#examples-of-deep-learning-problems-in-norse">
+   3.3. Examples of deep learning problems in Norse
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#porting-existing-deep-learning-problems">
-     3.3.1. Porting existing deep learning problems
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#extending-existing-models">
-     3.3.2. Extending existing models
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -1140,16 +1123,14 @@ spikes. In Norse, we refer to that as the <strong>neuron state</strong>.</p>
 </div>
 </div>
 </div>
-<div class="margin figure align-default" id="fig-working-ap">
-<img alt="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Action_potential_basic_shape.svg/220px-Action_potential_basic_shape.svg.png" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Action_potential_basic_shape.svg/220px-Action_potential_basic_shape.svg.png" />
-<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Shape of a typical action potential. The membrane potential remains near a baseline level until at some point in time, it abruptly spikes upward and then rapidly falls.</span><a class="headerlink" href="#fig-working-ap" title="Permalink to this image">¶</a></p>
-<div class="legend">
-<p>(c) CC BY-SA 3.0</p>
-</div>
+<div class="figure align-default" id="started-lif">
+<img alt="no-current" class="bg-primary mb-1" src="../_images/lif_integration.gif" />
+<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Three examples of how the LIF neuron model responds to three different, but constant, input currents: 0.0, 0.1, and 0.3. At 0.3, we see that the neuron fires a series of spikes, followed by a membrane “reset”.
+Note that the neuron parameters are non-biological and that the memebrane voltage threshold is 1.</span><a class="headerlink" href="#started-lif" title="Permalink to this image">¶</a></p>
 </div>
 <p>States typically consist of two values: <code class="docutils literal notranslate"><span class="pre">v</span></code> (voltage), and <code class="docutils literal notranslate"><span class="pre">i</span></code> (current).</p>
 <ul class="simple">
-<li><p>Voltage (<code class="docutils literal notranslate"><span class="pre">v</span></code>) illustrates the difference in “electic tension” in the neuron membrane. The higher the value, the more tension and better chance to arrive at a spike. In <a class="reference internal" href="#fig-working-ap"><span class="std std-numref">Fig. 3.2</span></a> the spike arrives at the peak of the curve, followed by an immediate reset and recovery. This is crucial for emitting spikes: if the voltage never increases - no spike!</p></li>
+<li><p>Voltage (<code class="docutils literal notranslate"><span class="pre">v</span></code>) illustrates the difference in “electic tension” in the neuron membrane. The higher the value, the more tension and better chance to arrive at a spike. In <code class="xref std std-numref docutils literal notranslate"><span class="pre">fig_working_ap</span></code> the spike arrives at the peak of the curve, followed by an immediate reset and recovery. This is crucial for emitting spikes: if the voltage never increases - no spike!</p></li>
 <li><p>Current (<code class="docutils literal notranslate"><span class="pre">i</span></code>) illustrates the incoming current, which will be integrated into the membrane potential <code class="docutils literal notranslate"><span class="pre">v</span></code> and decays over time.</p></li>
 </ul>
 </div>
@@ -1176,7 +1157,8 @@ We provide a long list of neuron model implementations, as listed <a class="refe
 </tr>
 </tbody>
 </table>
-<p>In other words, the LSNNCell<code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">*not*</span> <span class="pre">recurrent,</span> <span class="pre">and</span> <span class="pre">expects</span> <span class="pre">the</span> <span class="pre">input</span> <span class="pre">data</span> <span class="pre">to</span> <span class="pre">*not*</span> <span class="pre">have</span> <span class="pre">time,</span> <span class="pre">while</span> <span class="pre">the</span></code>LSNNRecurrent`` <em>is</em> recurrent and expects the input to have time in the <em>first</em> dimension.</p>
+<p>In other words, the <code class="docutils literal notranslate"><span class="pre">LSNNCell</span></code> is <em>not</em> recurrent, and expects the input data to <em>not</em> have time, while the
+<code class="docutils literal notranslate"><span class="pre">LSNNRecurrent</span></code> <em>is</em> recurrent and expects the input to have time in the <em>first</em> dimension.</p>
 </div>
 </div>
 <div class="section" id="norse-workflow">
@@ -1195,32 +1177,22 @@ Apart from that, Norse works like you would expect any PyTorch module to work.</
 </ol>
 <div class="section" id="deciding-on-neuron-models">
 <h3><span class="section-number">3.2.1. </span>Deciding on neuron models<a class="headerlink" href="#deciding-on-neuron-models" title="Permalink to this headline">¶</a></h3>
-<p>The choice of neuron model depends on the task.
-The <a class="reference external" href="https://neuronaldynamics.epfl.ch/online/Ch5.S2.html">leaky integrate-and-fire neuron model</a> is one of the
-most common.
-Many more neuron models exist and can be found in our documentation: <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.html#neuron-models">https://norse.github.io/norse/generated/norse.torch.html#neuron-models</a></p>
+<p>The choice of neuron model depends on the task. Should the model be biologically plausible? Computationally efficient? …
+Two popular choices of models are the <a class="reference external" href="https://norse.github.io/norse/norse.torch.html#leaky-integrate-and-fire-lif">leaky integrate-and-fire neuron model</a>, which will provide spiking output of either <code class="docutils literal notranslate"><span class="pre">0</span></code>s or <code class="docutils literal notranslate"><span class="pre">1</span></code>s. Another model is the <a class="reference external" href="https://norse.github.io/norse/norse.torch.html#leaky-integrator">leaky integrator</a>, which will provide a voltage scalar output.
+Many more neuron models exist and can be found in our documentation: <a class="reference external" href="https://norse.github.io/norse/norse.torch.html#neuron-models">https://norse.github.io/norse/norse.torch.html#neuron-models</a></p>
 </div>
 <div class="section" id="deciding-on-learning-plasiticy-models">
 <h3><span class="section-number">3.2.2. </span>Deciding on learning/plasiticy models<a class="headerlink" href="#deciding-on-learning-plasiticy-models" title="Permalink to this headline">¶</a></h3>
-<p>Optimisation is mainly done using PyTorch’s optimizers, as seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py#L100">MNIST task</a>. We have implemented <a class="reference external" href="https://arxiv.org/abs/1705.11146v2">SuperSpike</a> and many other <a class="reference external" href="https://arxiv.org/abs/1901.09948">surrogate gradient methods</a> that lets you seamlessly integrate with Norse.</p>
-<p>For more details, see <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.functional.html#id1">our documentation on activation functions</a>.</p>
+<p>Optimization can be done using PyTorch’s gradient-based optimizations, as seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py#L100">MNIST task</a>. We have implemented <a class="reference external" href="https://arxiv.org/abs/1705.11146v2">SuperSpike</a> and many other <a class="reference external" href="https://arxiv.org/abs/1901.09948">surrogate gradient methods</a> that lets you seamlessly integrate with Norse. The surrogate gradient methods are documented here: <a class="reference external" href="https://norse.github.io/norse/norse.torch.functional.html#threshold-functions">https://norse.github.io/norse/norse.torch.functional.html#threshold-functions</a></p>
+<p>If you require biological/local learning, we support plasticity via <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.functional.stdp.html#module-norse.torch.functional.stdp">STDP</a> and <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.functional.tsodyks_makram.html#module-norse.torch.functional.tsodyks_makram">Tsodyks-Markram</a> models.</p>
 </div>
 </div>
-<div class="section" id="solving-deep-learning-problems-with-norse">
-<h2><span class="section-number">3.3. </span>Solving deep learning problems with Norse<a class="headerlink" href="#solving-deep-learning-problems-with-norse" title="Permalink to this headline">¶</a></h2>
-<p>As you have seen, Norse can be applied immediately for both fundamental research and deep learning problems.
-Below, we will show how two such problems have been solved.</p>
-<div class="section" id="porting-existing-deep-learning-problems">
-<h3><span class="section-number">3.3.1. </span>Porting existing deep learning problems<a class="headerlink" href="#porting-existing-deep-learning-problems" title="Permalink to this headline">¶</a></h3>
-<p>A classical example of deep learning can be seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py">MNIST task</a>
-where we convert the MNIST dataset into sparse discrete events and solve the task with &gt;90% accuracy using convolutions.</p>
-</div>
-<div class="section" id="extending-existing-models">
-<h3><span class="section-number">3.3.2. </span>Extending existing models<a class="headerlink" href="#extending-existing-models" title="Permalink to this headline">¶</a></h3>
-<p>An example of this can be seen in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/memory.py">memory task</a>,
-where <a class="reference external" href="https://github.com/IGITUGraz/LSNN-official">adaptive long short-term spiking neural networks</a>
-are added to solve temporal memory problems.</p>
-</div>
+<div class="section" id="examples-of-deep-learning-problems-in-norse">
+<h2><span class="section-number">3.3. </span>Examples of deep learning problems in Norse<a class="headerlink" href="#examples-of-deep-learning-problems-in-norse" title="Permalink to this headline">¶</a></h2>
+<p>Norse can be applied immediately for both fundamental research and deep learning problems.</p>
+<p>To <strong>port existing deep learning problems</strong>, we can simply 1) replicate ANN architecture, 2) lift the signal in time (to allow the neurons time to react to the input signal), and 3) replace the ANN activation functions with SNN activation functions.</p>
+<p>We have several examples of that in our <a class="reference external" href="https://norse.github.io/norse/pages/tasks.html">tasks section</a>, and <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist.py">MNIST</a> is one of them; here we 1) build a convolutional network, 2) convert the MNIST dataset into sparse discrete events and 3) solve the task with LIF models, achieving &gt;90% accuracy.</p>
+<p>We can also <strong>replicate experiments from the literature</strong>, as shown in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/memory.py">memory task</a> example. Here we use <a class="reference external" href="https://github.com/IGITUGraz/LSNN-official">adaptive long short-term spiking neural networks</a> to solve temporal memory problems.</p>
 </div>
 </div>
 

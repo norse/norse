@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>7. Hardware acceleration &#8212; Norse v0.0.7</title>
+    <title>6. Hardware acceleration &#8212; Norse v0.0.7</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet" />
   <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -51,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="8. Papers citing Norse" href="papers.html" />
-    <link rel="prev" title="6. Running Tasks" href="tasks.html" />
+    <link rel="next" title="7. Papers citing Norse" href="papers.html" />
+    <link rel="prev" title="5. Running Tasks" href="tasks.html" />
 
 
   </head>
@@ -122,28 +122,23 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="learning.html">
-   5. Learning with spikes
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="tasks.html">
-   6. Running Tasks
+   5. Running Tasks
   </a>
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   7. Hardware acceleration
+   6. Hardware acceleration
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="papers.html">
-   8. Papers citing Norse
+   7. Papers citing Norse
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="about.html">
-   9. About Norse
+   8. About Norse
   </a>
  </li>
 </ul>
@@ -995,7 +990,7 @@
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#accelerating-norse-models-with-to">
-   7.1. Accelerating Norse models with
+   6.1. Accelerating Norse models with
    <code class="docutils literal notranslate">
     <span class="pre">
      .to
@@ -1005,7 +1000,7 @@
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#accelerating-norse-nested-models">
-   7.2. Accelerating Norse nested models
+   6.2. Accelerating Norse nested models
   </a>
  </li>
 </ul>
@@ -1020,14 +1015,14 @@
               <div>
                 
   <div class="section" id="hardware-acceleration">
-<span id="page-hardware"></span><h1><span class="section-number">7. </span>Hardware acceleration<a class="headerlink" href="#hardware-acceleration" title="Permalink to this headline">¶</a></h1>
+<span id="page-hardware"></span><h1><span class="section-number">6. </span>Hardware acceleration<a class="headerlink" href="#hardware-acceleration" title="Permalink to this headline">¶</a></h1>
 <p>Norse is built on top of <a class="reference external" href="https://pytorch.org">PyTorch</a> which has excellent support for hardware acceleration.
 This article will cover how Norse can be accelerated with GPUs through the <a class="reference external" href="https://en.wikipedia.org/wiki/CUDA">CUDA platform</a>.</p>
 <p>Since Norse is using PyTorch primitives, it is worth familiarising yourself with the use of GPUs in PyTorch.
 Here is a tutorial describing how to use GPUs with the <code class="docutils literal notranslate"><span class="pre">to</span></code> method in PyTorch:
 <a class="reference external" href="https://pytorch.org/tutorials/beginner/nn_tutorial.html#using-your-gpu">https://pytorch.org/tutorials/beginner/nn_tutorial.html#using-your-gpu</a></p>
 <div class="section" id="accelerating-norse-models-with-to">
-<h2><span class="section-number">7.1. </span>Accelerating Norse models with <code class="docutils literal notranslate"><span class="pre">.to</span></code><a class="headerlink" href="#accelerating-norse-models-with-to" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.1. </span>Accelerating Norse models with <code class="docutils literal notranslate"><span class="pre">.to</span></code><a class="headerlink" href="#accelerating-norse-models-with-to" title="Permalink to this headline">¶</a></h2>
 <p>To accelerate neuron models in Norse, one simply has to call the <code class="docutils literal notranslate"><span class="pre">.to</span></code> method on models and data:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span>
 <span class="n">LIFCell</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
@@ -1039,7 +1034,7 @@ Here is a tutorial describing how to use GPUs with the <code class="docutils lit
 </div>
 </div>
 <div class="section" id="accelerating-norse-nested-models">
-<h2><span class="section-number">7.2. </span>Accelerating Norse nested models<a class="headerlink" href="#accelerating-norse-nested-models" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.2. </span>Accelerating Norse nested models<a class="headerlink" href="#accelerating-norse-nested-models" title="Permalink to this headline">¶</a></h2>
 <p>It might be necessary to sometimes build your own nested <cite>torch.nn</cite> modules.
 We recommend that you adhere to the PyTorch
 <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">torch.nn.Module</a>
@@ -1122,7 +1117,7 @@ or
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
-                <p class="prevnext-title"><span class="section-number">6. </span>Running Tasks</p>
+                <p class="prevnext-title"><span class="section-number">5. </span>Running Tasks</p>
             </div>
         </a>
     </div>
@@ -1130,7 +1125,7 @@ or
         <a class="right-next" href="papers.html" title="next page">
             <div class="prevnext-info">
                 <p class="prevnext-label">next</p>
-                <p class="prevnext-title"><span class="section-number">8. </span>Papers citing Norse</p>
+                <p class="prevnext-title"><span class="section-number">7. </span>Papers citing Norse</p>
             </div>
             <i class="prevnext-label fas fa-angle-right"></i>
         </a>
