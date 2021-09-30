@@ -55,6 +55,7 @@ class LIFMCRecurrentCell(SNNRecurrentCell):
         g_coupling: Optional[torch.Tensor] = None,
         **kwargs
     ):
+        # pytype: disable=wrong-arg-types
         super().__init__(
             activation=None,
             state_fallback=self.initial_state,
@@ -63,6 +64,7 @@ class LIFMCRecurrentCell(SNNRecurrentCell):
             p=p,
             **kwargs
         )
+        # pytype: enable=wrong-arg-types
         self.g_coupling = (
             g_coupling
             if g_coupling is not None
