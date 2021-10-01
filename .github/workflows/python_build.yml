@@ -1,16 +1,28 @@
-name: Python package
+name: Build Python
 
-on: 
+on:
   pull_request:
-  push:
 
 jobs:
+  # build-manylinux:
+  #   name: "Build for manylinux"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Build manylinux Python wheels
+  #       uses: RalfG/python-wheels-manylinux-build@v0.3.4-manylinux2014_x86_64
+  #       with:
+  #         python-versions: "cp37-cp37m cp38-cp38 cp39-cp39"
+  #         build-requirements: "torch"
+  #         system-packages: "gcc-c++"
+  #         pre-build-command: 'source publish/setup_libtorch.sh 1.9.1'
+
   build-python-ubuntu:
-    name: "Code quality checks v${{ matrix.python-version }}"
+    name: "Build and analyze for ubuntu-latest: Python v3.9"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.9]
     steps:
       - uses: actions/checkout@master
       - name: Cache
@@ -22,7 +34,7 @@ jobs:
         with:
           path: ~/cpp_pkgs_dir
           key: ubuntu-python-latest-${{ env.CACHE_NUMBER }}
-      
+
       # Setup dependencies
       - name: Install Python
         uses: actions/setup-python@v2
@@ -33,12 +45,12 @@ jobs:
           sudo apt update
           sudo apt install g++ -y
       - name: Install test dependencies
-        run: pip install pytest-cov pytest-xdist pytype black 
+        run: pip install pytest-cov pytest-xdist pytype black
       - name: Install optional libraries
         run: pip install matplotlib tensorboard pytorch-lightning
       - name: Install package
         run: pip install -e .
-      
+
       # Test, type check, and lint
       - name: Run unit tests
         run: pytest norse -n auto --cov=./ --cov-report=xml
@@ -57,7 +69,7 @@ jobs:
           fail_ci_if_error: true
 
   build-python-mac-windows:
-    name: "Build and package ${{ matrix.os }} v${{ matrix.python-version }}"
+    name: "Build and test for ${{ matrix.os }}: Python v${{ matrix.python-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

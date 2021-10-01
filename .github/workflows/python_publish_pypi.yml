@@ -1,0 +1,55 @@
+name: Publish To Pypi
+
+on:
+  release:
+
+jobs:
+  # Currently stuck since manylinux 2014 doesn't include the required GCC v3.4.21 as required by the C++ code
+  #   Later: try with manylinux 2 - https://github.com/pypa/manylinux/issues/1012
+  # publish-manylinux:
+  #   name: "Publish: manylinux wheels"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Build manylinux Python wheels
+  #       uses: RalfG/python-wheels-manylinux-build@v0.3.4-manylinux2014_x86_64
+  #       with:
+  #         python-versions: "cp37-cp37m cp38-cp38 cp39-cp39"
+  #         build-requirements: "torch"
+  #         system-packages: "gcc-c++"
+  #         pre-build-command: 'source publish/setup_libtorch.sh 1.9.1'
+  #     - name: Publish to PyPi
+  #       env:
+  #         TWINE_USERNAME: __token__
+  #         TWINE_PASSWORD: ${{ secrets.PYPI_PUBLISH_KEY }}
+  #       run: |
+  #         twine upload dist/*-manylinux*.whl
+
+  publish-mac-windows:
+    name: "Publish: ${{ matrix.os }} v${{ matrix.python-version }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.7, 3.8, 3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install build dependencies
+        run: |
+          pip install setuptools wheel pytest-xdist tensorboard matplotlib
+          pip install -e .
+      - name: Run unit tests
+        run: pytest -n auto norse
+      - name: Build wheel
+        run: python setup.py bdist_wheel sdist
+      - name: Publish wheels to PyPI
+        if: startsWith(github.ref, 'refs/tags/v') # Only publish if new tag
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_PUBLISH_KEY }}
+        run: |
+          twine upload dist/*

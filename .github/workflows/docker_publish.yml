@@ -1,0 +1,83 @@
+name: Publish docker images
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish-docker-latest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          registry: quay.io
+          username: "norse+github_actions"
+          password: ${{ secrets.QUAY_TOKEN }}
+
+      - name: Build and push vanilla Python version
+        id: docker_build_vanilla
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: publish/Dockerfile
+          push: true
+          tags: quay.io/norse/norse:latest
+      - name: Image digest vanilla
+        run: echo ${{ steps.docker_build_vanilla.outputs.digest }}
+
+      - name: Build and push CUDA version
+        id: docker_build_cuda
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: publish/Dockerfile.cuda
+          push: true
+          tags: quay.io/norse/norse:latest-cuda
+      - name: Image digest cuda
+        run: echo ${{ steps.docker_build_cuda.outputs.digest }}
+
+  publish-docker-tag:
+    if: startsWith(github.ref, 'refs/tags/v') # Only run if new tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          registry: quay.io
+          username: "norse+github_actions"
+          password: ${{ secrets.QUAY_TOKEN }}
+
+      - name: Build and push vanilla Python version
+        if: startsWith(github.ref, 'refs/tags/v') # Only publish if new tag
+        id: docker_build_vanilla
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: publish/Dockerfile
+          push: true
+          tags: quay.io/norse/norse:${{ env.GITHUB_REF }}
+      - name: Image digest
+        run: echo ${{ steps.docker_build_vanilla.outputs.digest }}
+
+      - name: Build and push CUDA version
+        id: docker_build_cuda
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: publish/Dockerfile.cuda
+          push: true
+          tags: quay.io/norse/norse:${{ env.GITHUB_REF }}-cuda
+      - name: Image digest
+        run: echo ${{ steps.docker_build_cuda.outputs.digest }}
