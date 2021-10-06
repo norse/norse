@@ -40,14 +40,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install build dependencies
         run: |
-          pip install setuptools wheel pytest-xdist tensorboard matplotlib
+          pip install setuptools wheel pytest-xdist tensorboard matplotlib twine
           pip install -e .
       - name: Run unit tests
         run: pytest -n auto norse
       - name: Build wheel
         run: python setup.py bdist_wheel sdist
       - name: Publish wheels to PyPI
-        if: startsWith(github.ref, 'refs/tags/v') # Only publish if new tag
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_PUBLISH_KEY }}
