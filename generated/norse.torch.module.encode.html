@@ -22,8 +22,8 @@
       
 
     
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -33,17 +33,17 @@
     
   <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
 
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script >
+    <script>
         const thebe_selector = ".thebe,.cell"
         const thebe_selector_input = "pre,.cell_input div.highlight"
         const thebe_selector_output = ".output,.cell_output"
@@ -88,7 +88,7 @@
   </a>
  </li>
 </ul>
-<p class="caption">
+<p class="caption" role="heading">
  <span class="caption-text">
   First steps
  </span>
@@ -110,7 +110,7 @@
   </a>
  </li>
 </ul>
-<p class="caption">
+<p class="caption" role="heading">
  <span class="caption-text">
   Usage docs
  </span>
@@ -142,7 +142,7 @@
   </a>
  </li>
 </ul>
-<p class="caption">
+<p class="caption" role="heading">
  <span class="caption-text">
   Python API
  </span>
@@ -1001,28 +1001,28 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.ConstantCurrentLIFEncoder.html#norse.torch.module.encode.ConstantCurrentLIFEncoder" title="norse.torch.module.encode.ConstantCurrentLIFEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConstantCurrentLIFEncoder</span></code></a>(seq_length, p[, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.ConstantCurrentLIFEncoder.html#norse.torch.module.encode.ConstantCurrentLIFEncoder" title="norse.torch.module.encode.ConstantCurrentLIFEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConstantCurrentLIFEncoder</span></code></a>(seq_length[, p, dt])</p></td>
 <td><p>Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that occur during a number of timesteps/iterations (seq_length).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.module.encode.PoissonEncoder.html#norse.torch.module.encode.PoissonEncoder" title="norse.torch.module.encode.PoissonEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoissonEncoder</span></code></a>(seq_length, f_max, dt)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.module.encode.PoissonEncoder.html#norse.torch.module.encode.PoissonEncoder" title="norse.torch.module.encode.PoissonEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoissonEncoder</span></code></a>(seq_length[, f_max, dt])</p></td>
 <td><p>Encodes a tensor of input values, which are assumed to be in the range [0,1] into a tensor of one dimension higher of binary values, which represent input spikes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.PoissonEncoderStep.html#norse.torch.module.encode.PoissonEncoderStep" title="norse.torch.module.encode.PoissonEncoderStep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoissonEncoderStep</span></code></a>(f_max, dt)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.PoissonEncoderStep.html#norse.torch.module.encode.PoissonEncoderStep" title="norse.torch.module.encode.PoissonEncoderStep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoissonEncoderStep</span></code></a>([f_max, dt])</p></td>
 <td><p>Encodes a tensor of input values, which are assumed to be in the range [0,1] into a tensor of binary values, which represent input spikes.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.module.encode.PopulationEncoder.html#norse.torch.module.encode.PopulationEncoder" title="norse.torch.module.encode.PopulationEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PopulationEncoder</span></code></a>(out_features, scale, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.module.encode.PopulationEncoder.html#norse.torch.module.encode.PopulationEncoder" title="norse.torch.module.encode.PopulationEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PopulationEncoder</span></code></a>(out_features, scale, ...)</p></td>
 <td><p>Encodes a set of input values into population codes, such that each singular input value is represented by a list of numbers (typically calculated by a radial basis kernel), whose length is equal to the out_features.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.SignedPoissonEncoder.html#norse.torch.module.encode.SignedPoissonEncoder" title="norse.torch.module.encode.SignedPoissonEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignedPoissonEncoder</span></code></a>(seq_length, f_max, dt)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.SignedPoissonEncoder.html#norse.torch.module.encode.SignedPoissonEncoder" title="norse.torch.module.encode.SignedPoissonEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignedPoissonEncoder</span></code></a>(seq_length[, f_max, dt])</p></td>
 <td><p>Encodes a tensor of input values, which are assumed to be in the range [-1,1] into a tensor of one dimension higher of values in {-1,0,1}, which represent signed input spikes.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignedPoissonEncoderStep</span></code>(f_max, dt)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignedPoissonEncoderStep</span></code>([f_max, dt])</p></td>
 <td><p>Encodes a tensor of input values, which are assumed to be in the range [-1,1] into a tensor of values in {-1,0,1}, which represent signed input spikes.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.SpikeLatencyEncoder.html#norse.torch.module.encode.SpikeLatencyEncoder" title="norse.torch.module.encode.SpikeLatencyEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeLatencyEncoder</span></code></a>()</p></td>
 <td><p>For all neurons, remove all but the first spike.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.module.encode.SpikeLatencyLIFEncoder.html#norse.torch.module.encode.SpikeLatencyLIFEncoder" title="norse.torch.module.encode.SpikeLatencyLIFEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeLatencyLIFEncoder</span></code></a>(seq_length[, p, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.module.encode.SpikeLatencyLIFEncoder.html#norse.torch.module.encode.SpikeLatencyLIFEncoder" title="norse.torch.module.encode.SpikeLatencyLIFEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeLatencyLIFEncoder</span></code></a>(seq_length[, p, dt])</p></td>
 <td><p>Encodes an input value by the time the first spike occurs.</p></td>
 </tr>
 </tbody>
