@@ -6,7 +6,7 @@ from multiprocessing.shared_memory import ShareableList
 from multiprocessing.managers import SharedMemoryManager
 
 # pytype: disable=import-error
-from pygenn.genn_model import GeNNModel, init_var
+from pygenn.genn_model import GeNNModel
 from pygenn.genn_wrapper import NO_DELAY
 
 # pytype: enable=import-error
@@ -36,7 +36,6 @@ if __name__ == "__main__":
     model.dT = parameters.dt
     np.random.seed(0)
 
-    weight_init = init_var("Uniform", {"min": 0.0, "max": 1.0})
     layers = []
     for i in range(parameters.batch_size):
         # Note: weights, parameters and poisson rate are magic numbers that seem to generate reasonable spike activity
@@ -74,7 +73,7 @@ if __name__ == "__main__":
             f"LIF{i}",
             "StaticPulse",
             {},
-            {"g": weight_init},
+            {"g": weights},
             {},
             {},
             "DeltaCurr",
@@ -89,9 +88,11 @@ if __name__ == "__main__":
     start = time.time()
     for _ in range(parameters.sequence_length):
         model.step_time()
-    end = time.time()
-    
+
+    # Not sure if this should be within or outside the timing section
     model.pull_recording_buffers_from_device()
+    end = time.time()
+
     parameter_list[0] = end - start
     parameter_list[1] = sum(len(layer.spike_recording_data[0]) for layer in layers)
     parameter_list.shm.close()
