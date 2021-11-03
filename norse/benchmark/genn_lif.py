@@ -6,7 +6,7 @@ from multiprocessing.shared_memory import ShareableList
 from multiprocessing.managers import SharedMemoryManager
 
 # pytype: disable=import-error
-from pygenn.genn_model import GeNNModel
+from pygenn.genn_model import GeNNModel, init_var
 from pygenn.genn_wrapper import NO_DELAY
 
 # pytype: enable=import-error
@@ -36,9 +36,9 @@ if __name__ == "__main__":
     model.dT = parameters.dt
     np.random.seed(0)
 
+    weight_init = init_var("Uniform", {"min": 0.0, "max": 1.0})
     layers = []
     for i in range(parameters.batch_size):
-        ones = np.ones(parameters.features)
         # Note: weights, parameters and poisson rate are magic numbers that seem to generate reasonable spike activity
         weights = np.random.rand(parameters.features, parameters.features).flatten() * 8
         model.add_neuron_population(
@@ -58,10 +58,12 @@ if __name__ == "__main__":
             "Ioffset": 0.0,
             "TauRefrac": 0.1,
         }
-        lif_vars = {"V": 0.0 * ones, "RefracTime": 0.0 * ones}
+        lif_vars = {"V": 0.0, "RefracTime": 0.0}
         layer = model.add_neuron_population(
             f"LIF{i}", parameters.features, "LIF", lif_params, lif_vars
         )
+        layer.spike_recording_enabled = True
+        
         layers.append(layer)
         # From https://github.com/genn-team/genn/blob/master/userproject/PoissonIzh_project/model/PoissonIzh.cc#L93
         model.add_synapse_population(
@@ -72,7 +74,7 @@ if __name__ == "__main__":
             f"LIF{i}",
             "StaticPulse",
             {},
-            {"g": weights},
+            {"g": weight_init},
             {},
             {},
             "DeltaCurr",
@@ -81,21 +83,15 @@ if __name__ == "__main__":
         )
 
     model.build()
-    model.load()
+    model.load(num_recording_timesteps=parameters.sequence_length)
 
     # Run simulation
     start = time.time()
-    layer_spikes = []
     for _ in range(parameters.sequence_length):
         model.step_time()
-        timestep_spikes = []
-        # From https://github.com/neworderofjamie/pygenn_ml_tutorial/blob/master/tutorial_1.py
-        for layer in layers:
-            layer.pull_current_spikes_from_device()
-            timestep_spikes.append(np.copy(layer.current_spikes))
-        layer_spikes.append(timestep_spikes)
     end = time.time()
-
+    
+    model.pull_recording_buffers_from_device()
     parameter_list[0] = end - start
-    parameter_list[1] = len(np.array(layer_spikes).flatten())
+    parameter_list[1] = sum(len(layer.spike_recording_data[0]) for layer in layers)
     parameter_list.shm.close()
