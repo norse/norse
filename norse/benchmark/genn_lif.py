@@ -11,7 +11,7 @@ from pygenn.genn_wrapper import NO_DELAY
 
 # pytype: enable=import-error
 
-from .benchmark import BenchmarkParameters
+from norse.benchmark.benchmark import BenchmarkParameters
 
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
