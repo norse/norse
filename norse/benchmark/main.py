@@ -13,9 +13,8 @@ import pandas as pd
 # pytype: enable=import-error
 import time
 import gc
-import torch
 
-from .benchmark import *
+from benchmark import *
 
 FLAGS = flags.FLAGS
 
@@ -26,16 +25,16 @@ flags.DEFINE_integer(
 )
 flags.DEFINE_integer("start", 250, "Start of the number of inputs to sweep")
 flags.DEFINE_integer("step", 250, "Steps in which to sweep over the number of inputs")
-flags.DEFINE_integer("stop", 5000, "Number of inputs to sweep to")
+flags.DEFINE_integer("stop", 5001, "Number of inputs to sweep to")
 flags.DEFINE_integer("sequence_length", 1000, "Number of timesteps to simulate")
 flags.DEFINE_float("dt", 0.001, "Simulation timestep")
 flags.DEFINE_enum("device", "cuda", ["cuda", "cpu"], "Device to use [cpu, cuda]")
-flags.DEFINE_integer("runs", 20, "Number of runs per simulation step")
+flags.DEFINE_integer("runs", 5, "Number of runs per simulation step")
 flags.DEFINE_bool("profile", False, "Profile Norse benchmark? (Only works for Norse)")
 
-flags.DEFINE_bool("bindsnet", True, "Benchmark Bindsnet?")
-flags.DEFINE_bool("genn", True, "Benchmark GeNN?")
-flags.DEFINE_bool("norse", True, "Benchmark Norse?")
+flags.DEFINE_bool("bindsnet", False, "Benchmark Bindsnet?")
+flags.DEFINE_bool("genn", False, "Benchmark GeNN?")
+flags.DEFINE_bool("norse", False, "Benchmark Norse?")
 
 
 def benchmark(
@@ -64,8 +63,12 @@ def benchmark(
                 # Clean up by GC and empty cache
                 # Thanks to https://github.com/BindsNET/bindsnet/issues/425#issuecomment-721780231
                 gc.collect()
-                with torch.no_grad():
-                    torch.cuda.empty_cache()
+                try:
+                    import torch
+                    with torch.no_grad():
+                        torch.cuda.empty_cache()
+                except:
+                    pass
         except KeyboardInterrupt:
             raise KeyboardInterrupt()
         except RuntimeError as e:

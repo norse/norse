@@ -10,7 +10,7 @@ from bindsnet.network.monitors import Monitor
 
 # pytype: enable=import-error
 
-from .benchmark import BenchmarkParameters
+from benchmark import BenchmarkParameters
 
 
 class BindsNetModule(torch.nn.Module):

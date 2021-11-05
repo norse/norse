@@ -1,0 +1,18 @@
+FROM nvidia/cuda:11.4.2-devel-ubuntu20.04
+
+# Non-interactive
+ENV DEBIAN_FRONTEND noninteractive
+ENV DEBCONF_NONINTERACTIVE_SEEN true
+RUN apt update && apt install -y \
+    git python3-pip libglib2.0-0 libgl-dev
+
+# Setup env
+ENV CUDA_PATH=/usr/local/cuda
+ENV PATH=$PATH:$CUDA_PATH/bin
+
+# Install bindsnet
+RUN pip install absl-py
+RUN pip install git+https://github.com/BindsNET/bindsnet
+
+# Install correct version of torch 
+RUN pip3 install torch==1.9.1+cu111 torchvision==0.10.1+cu111 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html

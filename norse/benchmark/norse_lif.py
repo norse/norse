@@ -5,10 +5,11 @@ from norse.torch.functional.lif import (
     LIFFeedForwardState,
     LIFParametersJIT,
     _lif_feed_forward_step_jit,
+    lif_feed_forward_step,
 )
 from norse.torch.module.encode import PoissonEncoder
 
-from norse.benchmark.benchmark import BenchmarkParameters
+from benchmark import BenchmarkParameters
 
 
 class LIFBenchmark(torch.jit.ScriptModule):
@@ -17,7 +18,6 @@ class LIFBenchmark(torch.jit.ScriptModule):
         self.fc = torch.nn.Linear(parameters.features, parameters.features, bias=False)
         self.dt = parameters.dt
 
-    @torch.jit.script_method
     def forward(
         self, input_spikes: torch.Tensor, p: LIFParametersJIT, s: LIFFeedForwardState
     ):
@@ -29,7 +29,7 @@ class LIFBenchmark(torch.jit.ScriptModule):
 
         for ts in range(sequence_length):
             x = self.fc(input_spikes[ts])
-            z, s = _lif_feed_forward_step_jit(input_tensor=x, state=s, p=p, dt=self.dt)
+            z, s = lif_feed_forward_step(input_tensor=x, state=s, p=p, dt=self.dt)
             spikes[ts] = z
 
         return spikes
