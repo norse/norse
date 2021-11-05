@@ -8,7 +8,7 @@ from norse.torch.functional.lif import (
 )
 from norse.torch.module.encode import PoissonEncoder
 
-from .benchmark import BenchmarkParameters
+from norse.benchmark.benchmark import BenchmarkParameters
 
 
 class LIFBenchmark(torch.jit.ScriptModule):
