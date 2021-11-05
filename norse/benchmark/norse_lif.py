@@ -3,13 +3,15 @@ import torch
 
 from norse.torch.functional.lif import (
     LIFFeedForwardState,
-    LIFParametersJIT,
+    LIFParameters,
     _lif_feed_forward_step_jit,
     lif_feed_forward_step,
 )
 from norse.torch.module.encode import PoissonEncoder
 
+# pytype: disable=import-error
 from benchmark import BenchmarkParameters
+# pytype: enable=import-error
 
 
 class LIFBenchmark(torch.jit.ScriptModule):
@@ -19,7 +21,7 @@ class LIFBenchmark(torch.jit.ScriptModule):
         self.dt = parameters.dt
 
     def forward(
-        self, input_spikes: torch.Tensor, p: LIFParametersJIT, s: LIFFeedForwardState
+        self, input_spikes: torch.Tensor, p: LIFParameters, s: LIFFeedForwardState
     ):
         sequence_length, batch_size, features = input_spikes.shape
         # spikes = torch.jit.annotate(List[Tensor], [])
@@ -44,15 +46,7 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
                 parameters.batch_size, parameters.features, device=parameters.device
             )
         ).contiguous()
-        p = LIFParametersJIT(
-            tau_syn_inv=torch.as_tensor(1.0 / 5e-3),
-            tau_mem_inv=torch.as_tensor(1.0 / 1e-2),
-            v_leak=torch.as_tensor(0.0),
-            v_th=torch.as_tensor(1.0),
-            v_reset=torch.as_tensor(0.0),
-            method="super",
-            alpha=torch.as_tensor(0.0),
-        )
+        p = LIFParameters()
         s = LIFFeedForwardState(
             v=p.v_leak,
             i=torch.zeros(

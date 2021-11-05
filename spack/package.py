@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-from spack import *
+from spack import version, depends_on, PythonPackage
 
 class PyNorse(PythonPackage):
     """A deep learning library for spiking neural networks."""

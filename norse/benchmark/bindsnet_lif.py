@@ -8,9 +8,8 @@ from bindsnet.network.nodes import LIFNodes, Input
 from bindsnet.encoding import poisson
 from bindsnet.network.monitors import Monitor
 
-# pytype: enable=import-error
-
 from benchmark import BenchmarkParameters
+# pytype: enable=import-error
 
 
 class BindsNetModule(torch.nn.Module):

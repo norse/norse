@@ -9,9 +9,8 @@ from multiprocessing.managers import SharedMemoryManager
 from pygenn.genn_model import GeNNModel
 from pygenn.genn_wrapper import NO_DELAY
 
-# pytype: enable=import-error
-
 from benchmark import BenchmarkParameters
+# pytype: enable=import-error
 
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
