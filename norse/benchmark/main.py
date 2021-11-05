@@ -106,15 +106,15 @@ def collect(data: BenchmarkData, label: str) -> dict:
 def main(argv):
     # pytype: disable=import-error
     if FLAGS.bindsnet:
-        from norse.benchmark import bindsnet_lif
+        import bindsnet_lif
 
         run_benchmark(bindsnet_lif.lif_feed_forward_benchmark, "BindsNET_lif")
     if FLAGS.genn:
-        from norse.benchmark import genn_lif
+        import genn_lif
 
         run_benchmark(genn_lif.lif_feed_forward_benchmark, "GeNN_lif")
     if FLAGS.norse:
-        from norse.benchmark import norse_lif
+        import norse_lif
 
         if FLAGS.profile:
             import torch.autograd.profiler as profiler
