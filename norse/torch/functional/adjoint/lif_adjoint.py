@@ -335,7 +335,7 @@ class LIFFeedForwardSparseAdjointFunction(torch.autograd.Function):
             size=z.size(),
             device=z.device,
         ).coalesce()
-        lambda_v = (ones - z) #* lambda_v + jump_term * lambda_v + output_term
+        lambda_v = ones - z  # * lambda_v + jump_term * lambda_v + output_term
         dinput = lambda_i
 
         return (dinput, lambda_v, lambda_i, None, None)

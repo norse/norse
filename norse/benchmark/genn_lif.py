@@ -62,7 +62,7 @@ if __name__ == "__main__":
             f"LIF{i}", parameters.features, "LIF", lif_params, lif_vars
         )
         layer.spike_recording_enabled = True
-        
+
         layers.append(layer)
         # From https://github.com/genn-team/genn/blob/master/userproject/PoissonIzh_project/model/PoissonIzh.cc#L93
         model.add_synapse_population(
