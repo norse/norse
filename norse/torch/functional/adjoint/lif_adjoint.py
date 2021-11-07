@@ -291,10 +291,9 @@ class LIFFeedForwardSparseAdjointFunction(torch.autograd.Function):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         ctx.p = p
         ctx.dt = dt
-        z_new, s_new = lif_feed_forward_step(
+        z_new, s_new = lif_feed_forward_step_sparse(
             input, LIFFeedForwardState(v, i), p=p, dt=dt
         )
-        z_new = z_new.to_sparse().coalesce()
 
         # dv before spiking
         dv_m = p.tau_mem_inv * ((p.v_leak - v) + i)
@@ -302,7 +301,7 @@ class LIFFeedForwardSparseAdjointFunction(torch.autograd.Function):
         dv_p = p.tau_mem_inv * ((p.v_leak - s_new.v) + i)
 
         ctx.save_for_backward(z_new, dv_m.sparse_mask(z_new), dv_p.sparse_mask(z_new))
-        return z_new, s_new.v, s_new.i
+        return z_new.to_dense(), s_new.v, s_new.i
 
     @staticmethod
     def backward(
@@ -311,10 +310,9 @@ class LIFFeedForwardSparseAdjointFunction(torch.autograd.Function):
         z, dv_m, dv_p = ctx.saved_tensors
         p = ctx.p
         dt = ctx.dt
-        if not lambda_v.is_sparse:
-            lambda_v = lambda_v.to_sparse()
-        if not lambda_i.is_sparse:
-            lambda_i = lambda_i.to_sparse()
+        dv_m = dv_m.to_dense()
+        dv_p = dv_p.to_dense()
+        z = z.to_dense()
 
         # lambda_i decay
         dlambda_i = p.tau_syn_inv * (lambda_v - lambda_i)
@@ -323,19 +321,13 @@ class LIFFeedForwardSparseAdjointFunction(torch.autograd.Function):
         # lambda_v decay
         lambda_v = lambda_v - p.tau_mem_inv * dt * lambda_v
 
-        output_term = z * (dv_m ** -1) * doutput
-        # output_term[output_term != output_term] = 0.0
+        output_term = z * (1 / dv_m) * doutput
+        output_term[output_term != output_term] = 0.0
 
-        jump_term = z * dv_p * (dv_m ** -1)
-        # jump_term[jump_term != jump_term] = 0.0
+        jump_term = z * (dv_p / dv_m)
+        jump_term[jump_term != jump_term] = 0.0
 
-        ones = torch.sparse_coo_tensor(
-            indices=z.indices(),
-            values=torch.full_like(z.values(), 1),
-            size=z.size(),
-            device=z.device,
-        ).coalesce()
-        lambda_v = ones - z  # * lambda_v + jump_term * lambda_v + output_term
+        lambda_v = (1 - z) * lambda_v + jump_term * lambda_v + output_term
         dinput = lambda_i
 
         return (dinput, lambda_v, lambda_i, None, None)
