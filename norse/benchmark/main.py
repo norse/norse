@@ -9,6 +9,7 @@ import numpy as np
 
 # pytype: disable=import-error
 import pandas as pd
+
 # pytype: enable=import-error
 
 import time
@@ -16,6 +17,7 @@ import gc
 
 # pytype: disable=import-error
 from benchmark import BenchmarkConfig, BenchmarkData, BenchmarkParameters
+
 # pytype: enable=import-error
 
 FLAGS = flags.FLAGS

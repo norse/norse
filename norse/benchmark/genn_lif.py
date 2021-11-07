@@ -10,6 +10,7 @@ from pygenn.genn_model import GeNNModel
 from pygenn.genn_wrapper import NO_DELAY
 
 from benchmark import BenchmarkParameters
+
 # pytype: enable=import-error
 
 

@@ -11,6 +11,7 @@ from norse.torch.module.encode import PoissonEncoder
 
 # pytype: disable=import-error
 from benchmark import BenchmarkParameters
+
 # pytype: enable=import-error
 
 

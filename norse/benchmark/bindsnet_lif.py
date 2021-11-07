@@ -9,6 +9,7 @@ from bindsnet.encoding import poisson
 from bindsnet.network.monitors import Monitor
 
 from benchmark import BenchmarkParameters
+
 # pytype: enable=import-error
 
 
