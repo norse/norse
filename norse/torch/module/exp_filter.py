@@ -15,10 +15,10 @@ class ExpFilter(torch.nn.Module):
     output from the network.
     
     .. math::
-    s(t) = x(y) + (1 - \alpha) * s(t - \Delta t),
+    s(t) = x(y) + \alpha * s(t - \Delta t),
     where smoothing factor
     .. math::
-        \alpha = 1 - e^{-\Delta t * \tau_{filter_inv}}.
+        \alpha = e^{-\Delta t * \tau_{filter_inv}}.
         
     After application, the layer returns smoothed data. 
     """
@@ -35,7 +35,7 @@ class ExpFilter(torch.nn.Module):
         super(ExpFilter, self).__init__()
         self.input_size = torch.as_tensor(input_size)
         self.output_size = torch.as_tensor(output_size)
-        self.parameter = 1 - math.exp(-dt * tau_filter_inv)
+        self.parameter = math.exp(-dt * tau_filter_inv)
         
         if input_weights is not None:
             self.input_weights = input_weights
