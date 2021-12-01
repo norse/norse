@@ -58,12 +58,12 @@ def test_lif_cpp_and_jit_step():
 
     for i, result in enumerate(results):
         z, s = lif_step(x, s, input_weights, recurrent_weights)
-        assert torch.equal(z, result.float())
-        assert torch.equal(z, cpp_results[i])
-        assert torch.equal(s.v, cpp_states[i].v)
+        assert torch.allclose(z, result.float())
+        assert torch.allclose(z, cpp_results[i])
+        assert torch.allclose(s.v, cpp_states[i].v)
         assert s.v.dtype == torch.float32
-        assert torch.equal(s.z, cpp_states[i].z)
-        assert torch.equal(s.i, cpp_states[i].i)
+        assert torch.allclose(s.z, cpp_states[i].z)
+        assert torch.allclose(s.i, cpp_states[i].i)
         assert s.i.dtype == torch.float32
 
 
