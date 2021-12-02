@@ -1,8 +1,7 @@
-r"""Exponential smoothing is rule of thumb techique for smoothing 
-        time series data using the exponential window function.
-
-          
-    """
+r"""
+Exponential smoothing is rule of thumb techique for smoothing 
+time series data using the exponential window function.
+"""
 
 import torch
 import math
@@ -33,7 +32,6 @@ class ExpFilter(torch.nn.Module):
     therefore
     .. math::
         out(t) = \alpha out(t - \Delta t) + W_{in}x(t) + bias
-
     """
 
     def __init__(

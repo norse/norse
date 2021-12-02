@@ -1,13 +1,12 @@
 r"""
-A `Exponential smoothing or exponential filter <https://wiki2.org/en/Exponential_smoothing>`_
+An `Exponential smoothing or exponential filter <https://wiki2.org/en/Exponential_smoothing>`_
 that smoothing time series data using the exponential window function.
 
 .. math::
    s(t) = x(y) + \alpha * s(t - \Delta t),
 where smoothing factor
 .. math::
-    \alpha = 1 - e^{-\Delta t * \tau_{filter_inv}}.
-    
+    \alpha = e^{-\Delta t * \tau_{filter_inv}}.
 """
 
 import torch
