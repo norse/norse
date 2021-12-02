@@ -7,6 +7,7 @@ r"""Exponential smoothing is rule of thumb techique for smoothing
 import torch
 import math
 from ..functional.filter import exp_filter_step
+from typing import Optional
 
 class ExpFilter(torch.nn.Module):
     r""" 
@@ -15,12 +16,23 @@ class ExpFilter(torch.nn.Module):
     output from the network.
     
     .. math::
-    s(t) = x(y) + \alpha * s(t - \Delta t),
+        s(t) = x(t) + \alpha * s(t - \Delta t),
     where smoothing factor
     .. math::
-        \alpha = e^{-\Delta t * \tau_{filter_inv}}.
+        \alpha = e^{-\Delta t * \tau_{filter_inv}}, 
+    
         
     After application, the layer returns smoothed data. 
+    Since a linear layer is applied,
+    .. math:: 
+        out(t) = \alpha * out(t - \Delta t) + y,
+    where
+    .. math:: 
+        y = W_{in}x + bias,
+    therefore
+    .. math::  
+        out(t) = \alpha out(t - \Delta t) + W_{in}x(t) + bias
+        
     """
     
     def __init__(
@@ -36,16 +48,12 @@ class ExpFilter(torch.nn.Module):
         self.input_size = torch.as_tensor(input_size)
         self.output_size = torch.as_tensor(output_size)
         self.parameter = math.exp(-dt * tau_filter_inv)
-        
-        if input_weights is not None:
-            self.input_weights = input_weights
-        else: 
-            k = torch.sqrt(1.0 / self.input_size)
-            self.input_weights = -k + 2 * k * torch.rand(output_size, input_size) # from - sqrt(k) to sqrt(k) (like Linear layer)
         self.linear = torch.nn.Linear(input_size, output_size, bias=bias)
-        with torch.no_grad():
-            self.linear.weight.copy_(self.input_weights)
-            
+        if input_weights is not None:
+            with torch.no_grad():
+                self.linear.weight.copy_(input_weights)
+        
+        
     def extra_repr(self) -> str:
         return f"input_size={self.input_size}, output_size={self.output_size}, parameter={self.parameter}"
         
@@ -59,3 +67,4 @@ class ExpFilter(torch.nn.Module):
             out = exp_filter_step(outputs[-1], input_tensor[ts + 1], self.parameter)
             outputs.append(out)
         return torch.stack(outputs)
+

@@ -11,7 +11,6 @@ where smoothing factor
     
 """
 
-
 import torch
 
 @torch.jit.script
