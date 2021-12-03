@@ -13,15 +13,15 @@ def test_exp_filter_step():
     actual = exp_filter_step(
         input_data_old_value, input_data_new_value, filter_parameter
     )
-    assert torch.equal(actual, prediction)
+    assert torch.allclose(actual, prediction)
 
 
 def test_exp_filter_step_2():
     input_data_old_value = torch.tensor([1])
     input_data_new_value = torch.tensor([0])
     filter_parameter = 1
-    prediction = torch.tensor([1])
+    prediction = torch.tensor([1], dtype=torch.float32)
     actual = exp_filter_step(
         input_data_old_value, input_data_new_value, filter_parameter
     )
-    assert torch.equal(actual, prediction)
+    assert torch.allclose(actual, prediction)

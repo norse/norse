@@ -1,5 +1,5 @@
 r"""
-Exponential smoothing is rule of thumb techique for smoothing 
+Exponential smoothing is rule of thumb techique for smoothing
 time series data using the exponential window function.
 """
 
