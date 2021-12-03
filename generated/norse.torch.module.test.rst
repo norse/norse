@@ -30,6 +30,7 @@ norse.torch.module.test
    norse.torch.module.test.test_coba
    norse.torch.module.test.test_conv
    norse.torch.module.test.test_encode
+   norse.torch.module.test.test_exp_filter
    norse.torch.module.test.test_izhikevich
    norse.torch.module.test.test_leaky_integrator
    norse.torch.module.test.test_lif

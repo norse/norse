@@ -32,6 +32,7 @@ norse.torch.functional
    norse.torch.functional.correlation_sensor
    norse.torch.functional.decode
    norse.torch.functional.encode
+   norse.torch.functional.filter
    norse.torch.functional.heaviside
    norse.torch.functional.iaf
    norse.torch.functional.izhikevich

@@ -30,6 +30,7 @@ norse.torch.functional.test
    norse.torch.functional.test.test_coba_lif
    norse.torch.functional.test.test_decode
    norse.torch.functional.test.test_encode
+   norse.torch.functional.test.test_exp_filter
    norse.torch.functional.test.test_heaviside
    norse.torch.functional.test.test_iaf
    norse.torch.functional.test.test_izhikevich

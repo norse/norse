@@ -30,6 +30,7 @@ norse.torch.module
    norse.torch.module.coba_lif
    norse.torch.module.conv
    norse.torch.module.encode
+   norse.torch.module.exp_filter
    norse.torch.module.izhikevich
    norse.torch.module.leaky_integrator
    norse.torch.module.lif

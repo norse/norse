@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>norse.torch.module.encode &#8212; Norse v0.0.7</title>
+    <title>norse.torch.module.exp_filter &#8212; Norse v0.0.7</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -51,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="norse.torch.module.exp_filter" href="norse.torch.module.exp_filter.html" />
-    <link rel="prev" title="norse.torch.module.conv" href="norse.torch.module.conv.html" />
+    <link rel="next" title="norse.torch.module.izhikevich" href="norse.torch.module.izhikevich.html" />
+    <link rel="prev" title="norse.torch.module.encode" href="norse.torch.module.encode.html" />
 
 
   </head>
@@ -940,7 +940,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/generated/norse.torch.module.encode.rst"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/generated/norse.torch.module.exp_filter.rst"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
@@ -960,10 +960,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2Fgenerated/norse.torch.module.encode.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2Fgenerated/norse.torch.module.exp_filter.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/norse/norse/edit/master/docs/generated/norse.torch.module.encode.rst"><button
+        <a class="edit-button" href="https://github.com/norse/norse/edit/master/docs/generated/norse.torch.module.exp_filter.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -991,9 +991,10 @@
         
               <div>
                 
-  <div class="section" id="module-norse.torch.module.encode">
-<span id="norse-torch-module-encode"></span><h1>norse.torch.module.encode<a class="headerlink" href="#module-norse.torch.module.encode" title="Permalink to this headline">¶</a></h1>
-<p>Stateful encoders as torch modules.</p>
+  <div class="section" id="module-norse.torch.module.exp_filter">
+<span id="norse-torch-module-exp-filter"></span><h1>norse.torch.module.exp_filter<a class="headerlink" href="#module-norse.torch.module.exp_filter" title="Permalink to this headline">¶</a></h1>
+<p>Exponential smoothing is rule of thumb techique for smoothing
+time series data using the exponential window function.</p>
 <p class="rubric">Classes</p>
 <table class="longtable table autosummary">
 <colgroup>
@@ -1001,29 +1002,8 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.ConstantCurrentLIFEncoder.html#norse.torch.module.encode.ConstantCurrentLIFEncoder" title="norse.torch.module.encode.ConstantCurrentLIFEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConstantCurrentLIFEncoder</span></code></a>(seq_length[, p, dt])</p></td>
-<td><p>Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that occur during a number of timesteps/iterations (seq_length).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.module.encode.PoissonEncoder.html#norse.torch.module.encode.PoissonEncoder" title="norse.torch.module.encode.PoissonEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoissonEncoder</span></code></a>(seq_length[, f_max, dt])</p></td>
-<td><p>Encodes a tensor of input values, which are assumed to be in the range [0,1] into a tensor of one dimension higher of binary values, which represent input spikes.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.PoissonEncoderStep.html#norse.torch.module.encode.PoissonEncoderStep" title="norse.torch.module.encode.PoissonEncoderStep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoissonEncoderStep</span></code></a>([f_max, dt])</p></td>
-<td><p>Encodes a tensor of input values, which are assumed to be in the range [0,1] into a tensor of binary values, which represent input spikes.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.module.encode.PopulationEncoder.html#norse.torch.module.encode.PopulationEncoder" title="norse.torch.module.encode.PopulationEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PopulationEncoder</span></code></a>(out_features, scale, ...)</p></td>
-<td><p>Encodes a set of input values into population codes, such that each singular input value is represented by a list of numbers (typically calculated by a radial basis kernel), whose length is equal to the out_features.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.SignedPoissonEncoder.html#norse.torch.module.encode.SignedPoissonEncoder" title="norse.torch.module.encode.SignedPoissonEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignedPoissonEncoder</span></code></a>(seq_length[, f_max, dt])</p></td>
-<td><p>Encodes a tensor of input values, which are assumed to be in the range [-1,1] into a tensor of one dimension higher of values in {-1,0,1}, which represent signed input spikes.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignedPoissonEncoderStep</span></code>([f_max, dt])</p></td>
-<td><p>Encodes a tensor of input values, which are assumed to be in the range [-1,1] into a tensor of values in {-1,0,1}, which represent signed input spikes.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.module.encode.SpikeLatencyEncoder.html#norse.torch.module.encode.SpikeLatencyEncoder" title="norse.torch.module.encode.SpikeLatencyEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeLatencyEncoder</span></code></a>()</p></td>
-<td><p>For all neurons, remove all but the first spike.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.module.encode.SpikeLatencyLIFEncoder.html#norse.torch.module.encode.SpikeLatencyLIFEncoder" title="norse.torch.module.encode.SpikeLatencyLIFEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeLatencyLIFEncoder</span></code></a>(seq_length[, p, dt])</p></td>
-<td><p>Encodes an input value by the time the first spike occurs.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExpFilter</span></code>(input_size, output_size[, ...])</p></td>
+<td><p>A exponential smoothing layer.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1054,17 +1034,17 @@
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="norse.torch.module.conv.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="norse.torch.module.encode.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">norse.torch.module.conv</p>
+            <p class="prev-next-title">norse.torch.module.encode</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="norse.torch.module.exp_filter.html" title="next page">
+    <a class='right-next' id="next-link" href="norse.torch.module.izhikevich.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">norse.torch.module.exp_filter</p>
+        <p class="prev-next-title">norse.torch.module.izhikevich</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
