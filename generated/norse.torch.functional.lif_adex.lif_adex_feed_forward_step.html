@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>norse.torch.functional.lif_adex.lif_adex_feed_forward_step &#8212; Norse v0.0.7</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet" />
-  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -42,7 +42,7 @@
     <script src="../_static/copybutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
@@ -90,7 +90,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   First steps
  </span>
@@ -112,7 +112,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Usage docs
  </span>
@@ -144,7 +144,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Python API
  </span>
@@ -997,7 +997,7 @@
 <h1>norse.torch.functional.lif_adex.lif_adex_feed_forward_step<a class="headerlink" href="#norse-torch-functional-lif-adex-lif-adex-feed-forward-step" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="norse.torch.functional.lif_adex.lif_adex_feed_forward_step">
-<span class="sig-prename descclassname"><span class="pre">norse.torch.functional.lif_adex.</span></span><span class="sig-name descname"><span class="pre">lif_adex_feed_forward_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="norse.torch.functional.lif_adex.LIFAdExFeedForwardState.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><span class="pre">norse.torch.functional.lif_adex.LIFAdExFeedForwardState</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">LIFAdExFeedForwardState(v=0,</span> <span class="pre">i=0,</span> <span class="pre">a=0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="norse.torch.functional.lif_adex.LIFAdExParameters.html#norse.torch.functional.lif_adex.LIFAdExParameters" title="norse.torch.functional.lif_adex.LIFAdExParameters"><span class="pre">norse.torch.functional.lif_adex.LIFAdExParameters</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">LIFAdExParameters(adaptation_current=tensor(4),</span> <span class="pre">adaptation_spike=tensor(0.0200),</span> <span class="pre">delta_T=tensor(0.5000),</span> <span class="pre">tau_ada_inv=tensor(2.),</span> <span class="pre">tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="norse.torch.functional.lif_adex.LIFAdExFeedForwardState.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><span class="pre">norse.torch.functional.lif_adex.LIFAdExFeedForwardState</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/norse/torch/functional/lif_adex.html#lif_adex_feed_forward_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.lif_adex.lif_adex_feed_forward_step" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">norse.torch.functional.lif_adex.</span></span><span class="sig-name descname"><span class="pre">lif_adex_feed_forward_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="norse.torch.functional.lif_adex.LIFAdExFeedForwardState.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><span class="pre">norse.torch.functional.lif_adex.LIFAdExFeedForwardState</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LIFAdExFeedForwardState(v=0,</span> <span class="pre">i=0,</span> <span class="pre">a=0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="norse.torch.functional.lif_adex.LIFAdExParameters.html#norse.torch.functional.lif_adex.LIFAdExParameters" title="norse.torch.functional.lif_adex.LIFAdExParameters"><span class="pre">norse.torch.functional.lif_adex.LIFAdExParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LIFAdExParameters(adaptation_current=tensor(4),</span> <span class="pre">adaptation_spike=tensor(0.0200),</span> <span class="pre">delta_T=tensor(0.5000),</span> <span class="pre">tau_ada_inv=tensor(2.),</span> <span class="pre">tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=100.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="norse.torch.functional.lif_adex.LIFAdExFeedForwardState.html#norse.torch.functional.lif_adex.LIFAdExFeedForwardState" title="norse.torch.functional.lif_adex.LIFAdExFeedForwardState"><span class="pre">norse.torch.functional.lif_adex.LIFAdExFeedForwardState</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/norse/torch/functional/lif_adex.html#lif_adex_feed_forward_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.functional.lif_adex.lif_adex_feed_forward_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a single euler-integration step of an adaptive exponential
 LIF neuron-model adapted from
 <a class="reference external" href="http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model">http://www.scholarpedia.org/article/Adaptive_exponential_integrate-and-fire_model</a>.
@@ -1056,31 +1056,22 @@ dt (float): Integration timestep to use</p>
               </div>
               
         
-            
-
-
-
-<div class='prev-next-bottom'>
-    
-    <div id="prev">
-        <a class="left-prev" href="norse.torch.functional.lif_adex.LIFAdExFeedForwardState.html" title="previous page">
-            <i class="prevnext-label fas fa-angle-left"></i>
-            <div class="prevnext-info">
-                <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">LIFAdExFeedForwardState</p>
-            </div>
-        </a>
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="norse.torch.functional.lif_adex.LIFAdExFeedForwardState.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">LIFAdExFeedForwardState</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="norse.torch.functional.lif_adex.lif_adex_current_encoder.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">norse.torch.functional.lif_adex.lif_adex_current_encoder</p>
     </div>
-     <div id="next">
-        <a class="right-next" href="norse.torch.functional.lif_adex.lif_adex_current_encoder.html" title="next page">
-            <div class="prevnext-info">
-                <p class="prevnext-label">next</p>
-                <p class="prevnext-title">norse.torch.functional.lif_adex.lif_adex_current_encoder</p>
-            </div>
-            <i class="prevnext-label fas fa-angle-right"></i>
-        </a>
-     </div>
-
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
         
         </div>
@@ -1101,9 +1092,8 @@ dt (float): Integration timestep to use</p>
       </div>
     </div>
   
-  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
-  
 
 
 
