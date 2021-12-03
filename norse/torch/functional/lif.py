@@ -413,28 +413,13 @@ def lif_feed_forward_step_sparse(
     i_decayed = state.i + di
 
     # compute new spikes
-    thresholds = (v_decayed - p.v_th).to_sparse().coalesce()
-    jumps = threshold(thresholds.values(), p.method, p.alpha)
-    z_new = torch.sparse_coo_tensor(
-        indices=thresholds.indices(),
-        values=jumps,
-        size=v_decayed.size(),
-        device=thresholds.device,
-    ).coalesce()
-    # z_new = threshold((v_decayed - p.v_th).to_dense(), p.method, p.alpha)
-    # z_new = z_new.to_sparse().coalesce()
+    z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
-    ones = torch.sparse_coo_tensor(
-        indices=z_new.indices(),
-        values=torch.full_like(z_new.values(), 1),
-        size=z_new.size(),
-        device=z_new.device,
-    )
-    v_new = (ones - z_new) * v_decayed.to_sparse() + z_new * p.v_reset
+    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
     # compute current jumps
     i_new = i_decayed + input_tensor
 
-    return z_new, LIFFeedForwardState(v=v_new, i=i_new)
+    return z_new.to_sparse(), LIFFeedForwardState(v=v_new, i=i_new)
 
 
 def lif_current_encoder(
