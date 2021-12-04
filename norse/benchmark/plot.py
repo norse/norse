@@ -50,8 +50,17 @@ def render_frames(frames, title):
     ax.set_xlim(xmin, xmax)
     ax.set_xticks(np.arange(xmin, xmax + 1, 500))
     ax.set_title(title)
-    ax.set_xlabel("Neurons")
+    ax.set_xlabel("Number of neurons")
     ax.set_ylabel("Running time in seconds")
+    ax.legend(loc='upper left')
+    return ax
+
+
+def accumulate_files(files):
+    dfs = []
+    for f in files:
+        dfs.append(pd.read_csv(f))
+    return dfs
 
 
 if __name__ == "__main__":
@@ -68,10 +77,7 @@ if __name__ == "__main__":
     parser.add_argument("--title", type=str, default="", help="Figure title")
     args = parser.parse_args()
 
-    files = args.files
-    dfs = []
-    for f in files:
-        dfs.append(pd.read_csv(f))
+    dfs = accumulate_files(args.files)
     if args.to:
         save_frames(dfs, args.title, args.to)
     else:

@@ -13,6 +13,7 @@ from norse.torch.functional.lif import (
     lif_feed_forward_step,
     lif_feed_forward_integral,
     _lif_feed_forward_step_jit,
+    _lif_feed_forward_integral_jit,
     lif_current_encoder,
 )
 
@@ -202,6 +203,17 @@ def test_lif_feed_forward_integrate_cpp():
     expected_v = torch.tensor(0.7717)
 
     _, s = lif_feed_forward_integral(x, s)
+    assert torch.allclose(expected_v, s.v[0], atol=1e-4)
+
+
+def test_lif_feed_forward_integrate_jit():
+    assert norse.utils.IS_OPS_LOADED == True
+    x = torch.ones(9, 2)
+    s = LIFFeedForwardState(v=torch.zeros(2), i=torch.zeros(2))
+
+    expected_v = torch.tensor(0.7717)
+
+    _, s = _lif_feed_forward_integral_jit(x, s)
     assert torch.allclose(expected_v, s.v[0], atol=1e-4)
 
 

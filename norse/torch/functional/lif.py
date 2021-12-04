@@ -398,6 +398,64 @@ def lif_feed_forward_integral(
     return z, LIFState(z=z, v=v, i=i)
 
 
+@torch.jit.script
+def _lif_feed_forward_integral_jit(
+    input_tensor: torch.Tensor,
+    state: LIFFeedForwardState,
+    p: LIFParametersJIT = LIFParameters(),
+    dt: float = 0.001,
+) -> Tuple[torch.Tensor, LIFFeedForwardState]:
+    r"""Computes multiple euler-integration steps of a LIF neuron-model. More
+    specifically it integrates the following ODE
+
+    .. math::
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
+        \end{align*}
+
+    together with the jump condition
+
+    .. math::
+        z = \Theta(v - v_{\text{th}})
+
+    and transition equations
+
+    .. math::
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            i &= i + i_{\text{in}}
+        \end{align*}
+
+    Parameters:
+        input_tensor (torch.Tensor): the input spikes with the outer dimension assumed to be timesteps
+        s (LIFState): current state of the LIF neuron
+        p (LIFParameters): parameters of a leaky integrate and fire neuron
+        dt (float): Integration timestep to use
+    """
+    outputs = []
+
+    for input_spikes in input_tensor:
+        # compute voltage updates
+        dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
+        v_decayed = state.v + dv
+
+        # compute current updates
+        di = -dt * p.tau_syn_inv * state.i
+        i_decayed = state.i + di
+
+        # compute new spikes
+        z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+        # compute reset
+        v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+        # compute current jumps
+        i_new = i_decayed + input_spikes
+
+        outputs.append(z_new)
+        state = LIFFeedForwardState(v=v_new, i=i_new)
+    return torch.stack(outputs), state
+
+
 def lif_feed_forward_step_sparse(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState,

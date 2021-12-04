@@ -4,8 +4,7 @@ import torch
 from norse.torch.functional.lif import (
     LIFFeedForwardState,
     LIFParameters,
-    _lif_feed_forward_step_jit,
-    lif_feed_forward_step,
+    _lif_feed_forward_integral_jit,
 )
 from norse.torch.module.encode import PoissonEncoder
 
@@ -17,47 +16,64 @@ from benchmark import BenchmarkParameters
 
 class LIFBenchmark(torch.jit.ScriptModule):
     def __init__(self, parameters):
-        super(LIFBenchmark, self).__init__()
+        super().__init__()
         self.fc = torch.nn.Linear(parameters.features, parameters.features, bias=False)
         self.dt = parameters.dt
 
     def forward(
         self, input_spikes: torch.Tensor, p: LIFParameters, s: LIFFeedForwardState
     ):
-        sequence_length, batch_size, features = input_spikes.shape
-        # spikes = torch.jit.annotate(List[Tensor], [])
-        spikes = torch.empty(
-            (sequence_length, batch_size, features), device=input_spikes.device
-        )
-
-        for ts in range(sequence_length):
-            x = self.fc(input_spikes[ts])
-            z, s = lif_feed_forward_step(input_tensor=x, state=s, p=p, dt=self.dt)
-            spikes[ts] = z
-
-        return spikes
+        x = self.fc(input_spikes)
+        return _lif_feed_forward_integral_jit(input_tensor=x, state=s, p=p, dt=self.dt)
 
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     with torch.no_grad():
         model = LIFBenchmark(parameters).to(parameters.device)
-        input_spikes = PoissonEncoder(parameters.sequence_length, dt=parameters.dt)(
-            0.3
-            * torch.ones(
-                parameters.batch_size, parameters.features, device=parameters.device
-            )
-        ).contiguous()
+        input_sequence = torch.randn(
+            parameters.sequence_length,
+            parameters.batch_size,
+            parameters.features,
+            device=parameters.device,
+        )
         p = LIFParameters()
         s = LIFFeedForwardState(
-            v=p.v_leak,
+            v=torch.full(
+                (parameters.batch_size, parameters.features),
+                p.v_leak,
+                device=parameters.device,
+            ),
             i=torch.zeros(
                 parameters.batch_size,
                 parameters.features,
                 device=parameters.device,
             ),
         )
+
+        # Warmup cuda stream
+        index = torch.as_tensor(0)
+        g = torch.cuda.CUDAGraph()
+        stream = torch.cuda.Stream()
+        stream.wait_stream(torch.cuda.current_stream())
+        with torch.cuda.stream(stream):
+            for i in range(2):
+                _ = model(input_sequence, p, s)
+        torch.cuda.current_stream().wait_stream(stream)
+        with torch.cuda.graph(g):
+            _ = model(input_sequence, p, s)
+
+        # Set real data
+        poisson_data = PoissonEncoder(parameters.sequence_length, dt=parameters.dt)(
+            0.3
+            * torch.ones(
+                parameters.batch_size, parameters.features, device=parameters.device
+            )
+        ).contiguous()
+        input_sequence.copy_(poisson_data)
+
+        # Start recording
         start = time.time()
-        model(input_spikes, p, s)
+        g.replay()
         end = time.time()
         duration = end - start
         return duration
