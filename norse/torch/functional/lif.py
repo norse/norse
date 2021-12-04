@@ -402,7 +402,7 @@ def lif_feed_forward_integral(
 def _lif_feed_forward_integral_jit(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState,
-    p: LIFParametersJIT = LIFParameters(),
+    p: LIFParametersJIT,
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
     r"""Computes multiple euler-integration steps of a LIF neuron-model. More

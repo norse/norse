@@ -51,12 +51,11 @@ def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
         )
 
         # Warmup cuda stream
-        index = torch.as_tensor(0)
         g = torch.cuda.CUDAGraph()
         stream = torch.cuda.Stream()
         stream.wait_stream(torch.cuda.current_stream())
         with torch.cuda.stream(stream):
-            for i in range(2):
+            for _ in range(2):
                 _ = model(input_sequence, p, s)
         torch.cuda.current_stream().wait_stream(stream)
         with torch.cuda.graph(g):

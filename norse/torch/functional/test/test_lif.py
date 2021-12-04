@@ -213,7 +213,7 @@ def test_lif_feed_forward_integrate_jit():
 
     expected_v = torch.tensor(0.7717)
 
-    _, s = _lif_feed_forward_integral_jit(x, s)
+    _, s = _lif_feed_forward_integral_jit(x, s, LIFParameters())
     assert torch.allclose(expected_v, s.v[0], atol=1e-4)
 
 

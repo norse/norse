@@ -52,7 +52,7 @@ def render_frames(frames, title):
     ax.set_title(title)
     ax.set_xlabel("Number of neurons")
     ax.set_ylabel("Running time in seconds")
-    ax.legend(loc='upper left')
+    ax.legend(loc="upper left")
     return ax
 
 
