@@ -125,7 +125,7 @@ class LIFSparseAdjointRefractFunction(torch.autograd.Function):
         p: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-        ctx.tau_sys_inv = p.lif.tau_sys_inv
+        ctx.tau_sys_inv = p.lif.tau_syn_inv
         ctx.tau_mem_inv = p.lif.tau_mem_inv
         ctx.v_th = p.lif.v_th
         ctx.v_reset = p.lif.v_reset
@@ -171,7 +171,7 @@ class LIFSparseAdjointRefractFunction(torch.autograd.Function):
             input_weights,
             recurrent_weights,
         ) = ctx.saved_tensors
-        tau_syn_inv = ctx.tau_sys_inv
+        tau_syn_inv = ctx.tau_syn_inv
         tau_mem_inv = ctx.taus_mem_inv
         dt = ctx.dt
         dv_m = dv_m.to_dense()
