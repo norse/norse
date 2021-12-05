@@ -178,6 +178,14 @@ def test_lif_refrac_recurrent_layer_backward_iteration():
     loss.backward()
 
 
+def test_lif_refrac_recurrent_layer_backward():
+    model = LIFRefracRecurrent(6, 6)
+    data = torch.ones(10, 6)
+    out, _ = model(data)
+    loss = out.sum()
+    loss.backward()
+
+
 def test_lif_recurrent_layer_backward():
     model = LIFRefracRecurrent(6, 6)
     data = torch.ones(10, 6)

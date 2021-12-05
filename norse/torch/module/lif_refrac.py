@@ -232,6 +232,8 @@ class LIFRefracRecurrent(SNNRecurrent):
             if p.lif.method == "adjoint"
             else lif_refrac_step_sparse,
             state_fallback=self.initial_state,
+            input_size=input_size,
+            hidden_size=hidden_size,
             p=LIFRefracParameters(
                 LIFParameters(
                     torch.as_tensor(p.lif.tau_syn_inv),
@@ -240,19 +242,17 @@ class LIFRefracRecurrent(SNNRecurrent):
                     torch.as_tensor(p.lif.v_th),
                     torch.as_tensor(p.lif.v_reset),
                     p.lif.method,
-                    torch.as_tensor(p.alpha),
+                    torch.as_tensor(p.lif.alpha),
                 ),
                 torch.as_tensor(p.rho_reset),
             ),
-            input_size=input_size,
-            hidden_size=hidden_size,
             **kwargs,
         )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFRefracState:
-        dims = (*input_tensor.shape[:-1], self.hidden_size)
+        dims = (*input_tensor.shape[1:-1], self.hidden_size)
         lif_state = LIFState(
-            z=torch.zeors(
+            z=torch.zeros(
                 *dims, device=input_tensor.device, dtype=input_tensor.dtype
             ).to_sparse()
             if input_tensor.is_sparse
@@ -261,7 +261,7 @@ class LIFRefracRecurrent(SNNRecurrent):
             ),
             v=torch.full(
                 dims,
-                torch.as_tensor(self.p.v_leak).detach(),
+                torch.as_tensor(self.p.lif.v_leak).detach(),
                 device=input_tensor.device,
                 dtype=torch.float32,
             ),
@@ -273,7 +273,7 @@ class LIFRefracRecurrent(SNNRecurrent):
         )
         state = LIFRefracState(
             lif_state,
-            torch.zeors(*dims, device=input_tensor.device, dtype=torch.float32),
+            torch.zeros(*dims, device=input_tensor.device, dtype=torch.float32),
         )
         state.lif.v.requires_grad = True
         return state
