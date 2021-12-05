@@ -162,7 +162,7 @@ class LIFSparseAdjointRefractFunction(torch.autograd.Function):
         lambda_rho: torch.Tensor,
     ):
         (
-            input,
+            input_tensor,
             z,
             refrac_count,
             refrac_period_end,
@@ -174,19 +174,20 @@ class LIFSparseAdjointRefractFunction(torch.autograd.Function):
         tau_syn_inv = ctx.tau_syn_inv
         tau_mem_inv = ctx.taus_mem_inv
         dt = ctx.dt
+        refrac_mask = heaviside(refrac_count)
         dv_m = dv_m.to_dense()
         dv_p = dv_p.to_dense()
         z = z.to_dense()
 
-        dw_input = lambda_i.t().mm(input)
+        dw_input = lambda_i.t().mm(input_tensor)
         dw_rec = lambda_i.t().mm(z)
 
         # lambda_i decay
-        dlambda_i = tau_syn_inv * (lambda_v - lambda_i)
+        dlambda_i = tau_syn_inv * ((1 - refrac_mask) * lambda_v - lambda_i)
         lambda_i = lambda_i + dt * dlambda_i
 
         # lambda_v decay
-        lambda_v = lambda_v - tau_mem_inv * dt * lambda_v
+        lambda_v = lambda_v - (1 - refrac_mask) * tau_mem_inv * dt * lambda_v
 
         output_term = z * (1 / dv_m) * (doutput)
         output_term[output_term != output_term] = 0.0
