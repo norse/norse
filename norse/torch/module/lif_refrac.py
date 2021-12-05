@@ -226,10 +226,10 @@ class LIFRefracRecurrent(SNNRecurrent):
     ):
         super().__init__(
             activation=lif_refrac_adjoint_step
-            if p.method == "adjoint"
+            if p.lif.method == "adjoint"
             else lif_refrac_step,
             activation_sparse=lif_refrac_adjoint_step_sparse
-            if p.method == "adjoint"
+            if p.lif.method == "adjoint"
             else lif_refrac_step_sparse,
             state_fallback=self.initial_state,
             p=LIFRefracParameters(
@@ -239,7 +239,7 @@ class LIFRefracRecurrent(SNNRecurrent):
                     torch.as_tensor(p.lif.v_leak),
                     torch.as_tensor(p.lif.v_th),
                     torch.as_tensor(p.lif.v_reset),
-                    p.method,
+                    p.lif.method,
                     torch.as_tensor(p.alpha),
                 ),
                 torch.as_tensor(p.rho_reset),
