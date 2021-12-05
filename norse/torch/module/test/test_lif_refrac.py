@@ -2,7 +2,11 @@ import torch
 
 from norse.torch.functional.lif import LIFState, LIFFeedForwardState
 from norse.torch.functional.lif_refrac import LIFRefracState, LIFRefracFeedForwardState
-from norse.torch.module.lif_refrac import LIFRefracCell, LIFRefracRecurrentCell
+from norse.torch.module.lif_refrac import (
+    LIFRefracCell,
+    LIFRefracRecurrentCell,
+    LIFRefracRecurrent,
+)
 
 
 def test_lif_refrac_cell():
@@ -146,3 +150,37 @@ def test_lif_refrac_feedforward_backward():
     x = torch.randn(batch_size, 20, 30)
     out, _ = cell(x)
     out.sum().backward()
+
+
+def test_lif_refrac_recurrent_sequence():
+    l1 = LIFRefracRecurrent(8, 6)
+    l2 = LIFRefracRecurrent(6, 4)
+    l3 = LIFRefracRecurrent(4, 1)
+    z = torch.ones(10, 1, 8)
+    z, s1 = l1(z)
+    z, s2 = l2(z)
+    z, s3 = l3(z)
+    assert s1.lif.v.shape == (1, 6)
+    assert s2.lif.v.shape == (1, 4)
+    assert s3.lif.v.shape == (1, 1)
+    assert s1.rho.shape == (1, 6)
+    assert s2.rho.shape == (1, 4)
+    assert s3.rho.shape == (1, 1)
+    assert z.shape == (10, 1, 1)
+
+
+def test_lif_refrac_recurrent_layer_backward_iteration():
+    model = LIFRefracRecurrent(6, 6)
+    data = torch.ones(10, 6)
+    out, s = model(data)
+    out, _ = model(out, s)
+    loss = out.sum()
+    loss.backward()
+
+
+def test_lif_recurrent_layer_backward():
+    model = LIFRefracRecurrent(6, 6)
+    data = torch.ones(10, 6)
+    out, _ = model(data)
+    loss = out.sum()
+    loss.backward()
