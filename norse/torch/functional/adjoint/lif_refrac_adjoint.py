@@ -124,7 +124,7 @@ class LIFSparseAdjointRefractFunction(torch.autograd.Function):
         recurrent_weights: torch.Tensor,
         p: LIFRefracParameters = LIFRefracParameters(),
         dt: float = 0.001,
-    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         ctx.tau_sys_inv = p.lif.tau_sys_inv
         ctx.tau_mem_inv = p.lif.tau_mem_inv
         ctx.v_th = p.lif.v_th
@@ -137,9 +137,9 @@ class LIFSparseAdjointRefractFunction(torch.autograd.Function):
         )
 
         # dv before spiking
-        dv_m = p.tau_mem_inv * ((p.lif.v_leak - s_new.lif.v) + s.lif.i)
+        dv_m = p.lif.tau_mem_inv * ((p.lif.v_leak - s_new.lif.v) + s.lif.i)
         # dev after spiking
-        dv_p = p.tau_mem_inv * ((p.lif.v_leak - s_new.lif.v) + s.lif.i)
+        dv_p = p.lif.tau_mem_inv * ((p.lif.v_leak - s_new.lif.v) + s.lif.i)
         refrac_period_end = (s.rho == 1).float()
         ctx.save_for_backward(
             input,
