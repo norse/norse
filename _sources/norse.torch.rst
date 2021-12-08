@@ -228,6 +228,37 @@ LIF, exponential
     LIFExRecurrent
     LIFExRecurrentCell
 
+LIF, multicompartmental
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. currentmodule:: norse.torch.module.lif_mc
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    LIFMCRecurrentCell
+
+LIF, multicompartmental with refraction
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. currentmodule:: norse.torch.module.lif_mc_refrac
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    LIFMCRefracRecurrentCell
+
+LIF, refractory
+^^^^^^^^^^^^^^^
+
+.. currentmodule:: norse.torch.module.lif_refrac
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    LIFRefracCell
+    LIFRefracRecurrentCell
+    
 Long short-term memory (LSNN)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
