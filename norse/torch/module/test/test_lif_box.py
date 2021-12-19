@@ -15,6 +15,6 @@ def test_lif_box_cell_feed_forward_step_batch():
 def test_lif_box_cell_backward():
     x = torch.ones(2, 1)
 
-    z, _ = LIFBoxCell()(x)
+    z, s = LIFBoxCell()(x)
     z.sum().backward()
-    z.grad
+    assert s.v.grad_fn is not None

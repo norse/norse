@@ -1,6 +1,6 @@
 import torch
 
-from norse.torch.functional.iaf import IAFFeedForwardState, iaf_feed_forward_step
+from norse.torch.functional.iaf import IAFFeedForwardState
 from norse.torch.module.iaf import IAFCell
 
 
@@ -16,6 +16,6 @@ def test_iaf_cell_feed_forward_step_batch():
 def test_iaf_cell_backward():
     x = torch.ones(2, 1)
 
-    z, _ = IAFCell()(x)
+    z, s = IAFCell()(x)
     z.sum().backward()
-    z.grad
+    assert s.v.grad_fn is not None

@@ -24,4 +24,4 @@ def test_lif_feed_forward_step_backward():
 
     z, s = lif_box_feed_forward_step(x, s)
     z.sum().backward()
-    z.grad
+    assert s.v.grad_fn is not None
