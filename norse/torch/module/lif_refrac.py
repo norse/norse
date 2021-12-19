@@ -19,33 +19,33 @@ from norse.torch.module.snn import SNNCell, SNNRecurrentCell, SNNRecurrent
 
 
 class LIFRefracCell(SNNCell):
-    """Module that computes a single euler-integration step of a
+    r"""Module that computes a single euler-integration step of a
     LIF neuron-model with absolute refractory period *without* recurrence.
     More specifically it implements one integration step of the following ODE.
 
     .. math::
-        \\begin{align*}
-            \\dot{v} &= 1/\\tau_{\\text{mem}} (1-\\Theta(\\rho)) \
-            (v_{\\text{leak}} - v + i) \\\\
-            \\dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
-            \\dot{\\rho} &= -1/\\tau_{\\text{refrac}} \\Theta(\\rho)
-        \\end{align*}
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (1-\Theta(\rho)) \
+            (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i \\
+            \dot{\rho} &= -1/\tau_{\text{refrac}} \Theta(\rho)
+        \end{align*}
 
     together with the jump condition
 
     .. math::
-        \\begin{align*}
-            z &= \\Theta(v - v_{\\text{th}}) \\\\
-            z_r &= \\Theta(-\\rho)
-        \\end{align*}
+        \begin{align*}
+            z &= \Theta(v - v_{\text{th}}) \\
+            z_r &= \Theta(-\rho)
+        \end{align*}
 
     and transition equations
 
     .. math::
-        \\begin{align*}
-            v &= (1-z) v + z v_{\\text{reset}} \\\\
-            \\rho &= \\rho + z_r \\rho_{\\text{reset}}
-        \\end{align*}
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            \rho &= \rho + z_r \rho_{\text{reset}}
+        \end{align*}
 
     Parameters:
         p (LIFRefracParameters): parameters of the lif neuron
@@ -97,37 +97,37 @@ class LIFRefracCell(SNNCell):
 
 
 class LIFRefracRecurrentCell(SNNRecurrentCell):
-    """Module that computes a single euler-integration step of a LIF
+    r"""Module that computes a single euler-integration step of a LIF
     neuron-model with absolute refractory period. More specifically it
     implements one integration step of the following ODE.
 
     .. math::
-        \\begin{align*}
-            \\dot{v} &= 1/\\tau_{\\text{mem}} (1-\\Theta(\\rho)) \
-            (v_{\\text{leak}} - v + i) \\\\
-            \\dot{i} &= -1/\\tau_{\\text{syn}} i \\\\
-            \\dot{\\rho} &= -1/\\tau_{\\text{refrac}} \\Theta(\\rho)
-        \\end{align*}
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (1-\Theta(\rho)) \
+            (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i \\
+            \dot{\rho} &= -1/\tau_{\text{refrac}} \Theta(\rho)
+        \end{align*}
 
     together with the jump condition
 
     .. math::
-        \\begin{align*}
-            z &= \\Theta(v - v_{\\text{th}}) \\\\
-            z_r &= \\Theta(-\\rho)
-        \\end{align*}
+        \begin{align*}
+            z &= \Theta(v - v_{\text{th}}) \\
+            z_r &= \Theta(-\rho)
+        \end{align*}
 
     and transition equations
 
     .. math::
-        \\begin{align*}
-            v &= (1-z) v + z v_{\\text{reset}} \\\\
-            i &= i + w_{\\text{input}} z_{\\text{in}} \\\\
-            i &= i + w_{\\text{rec}} z_{\\text{rec}} \\\\
-            \\rho &= \\rho + z_r \\rho_{\\text{reset}}
-        \\end{align*}
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            i &= i + w_{\text{input}} z_{\text{in}} \\
+            i &= i + w_{\text{rec}} z_{\text{rec}} \\
+            \rho &= \rho + z_r \rho_{\text{reset}}
+        \end{align*}
 
-    where :math:`z_{\\text{rec}}` and :math:`z_{\\text{in}}` are the
+    where :math:`z_{\text{rec}}` and :math:`z_{\text{in}}` are the
     recurrent and input spikes respectively.
 
     Parameters:
