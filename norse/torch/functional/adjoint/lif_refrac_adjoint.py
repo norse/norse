@@ -113,7 +113,7 @@ def lif_refrac_adjoint_step(
     return z, LIFRefracState(LIFState(z, v, i), rho)
 
 
-class LIFSparseAdjointRefractFunction(torch.autograd.Function):
+class LIFSparseAdjointRefracFunction(torch.autograd.Function):
     @staticmethod
     def forward(
         ctx,
@@ -222,8 +222,8 @@ def lif_refrac_adjoint_step_sparse(
     p: LIFRefracParameters,
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFRefracState]:
-    z, v, i, rho = LIFSparseAdjointRefractFunction.apply(
-        input, s.lif, s.lif, s.lif, s.rho, input_weights, recurrent_weights, p, dt
+    z, v, i, rho = LIFSparseAdjointRefracFunction.apply(
+        input, s.lif, s.rho, input_weights, recurrent_weights, p, dt
     )
 
     return z, LIFRefracState(LIFState(z, v, i), rho)
