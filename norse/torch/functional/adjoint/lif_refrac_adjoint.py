@@ -215,7 +215,7 @@ class LIFSparseAdjointRefracFunction(torch.autograd.Function):
 
 
 def lif_refrac_adjoint_step_sparse(
-    intput: torch.Tensor,
+    input: torch.Tensor,
     s: LIFRefracState,
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
