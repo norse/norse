@@ -69,6 +69,12 @@ from .lif_adex import (
     lif_adex_feed_forward_step,
     lif_adex_step,
 )
+from .lif_box import (
+    LIFBoxParameters,
+    LIFBoxState,
+    LIFBoxFeedForwardState,
+    lif_box_feed_forward_step,
+)
 from .lif_correlation import (
     LIFCorrelationParameters,
     LIFCorrelationState,
@@ -241,6 +247,11 @@ __all__ = [
     "lif_adex_current_encoder",
     "lif_adex_feed_forward_step",
     "lif_adex_step",
+    # LIF box
+    "LIFBoxParameters",
+    "LIFBoxState",
+    "LIFBoxFeedForwardState",
+    "lif_box_feed_forward_step",
     # LIF Correlation
     "LIFCorrelationParameters",
     "LIFCorrelationState",
