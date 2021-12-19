@@ -97,7 +97,6 @@ def compute_refractory_update(
 
 
 def lif_refrac_step_sparse(
-    self,
     input_tensor: torch.Tensor,
     state: LIFRefracState,
     input_weights: torch.Tensor,
