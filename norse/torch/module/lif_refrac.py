@@ -1,6 +1,6 @@
 import torch
 
-from ..functional.lif import LIFState, LIFFeedForwardState, LIFParameters
+from norse.torch.functional.lif import LIFState, LIFFeedForwardState, LIFParameters
 
 from norse.torch.functional.lif_refrac import (
     LIFRefracParameters,
