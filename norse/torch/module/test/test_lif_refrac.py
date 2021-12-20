@@ -186,7 +186,7 @@ def test_lif_refrac_recurrent_layer_backward():
     loss.backward()
 
 
-def test_lif_refrac_recurrent_layer_backward():
+def test_lif_refrac_recurrent_layer_backward_state():
     model = LIFRefracRecurrent(6, 6)
     data = torch.ones(10, 6)
     out, s = model(data)
