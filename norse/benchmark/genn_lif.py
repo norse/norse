@@ -44,7 +44,7 @@ if __name__ == "__main__":
         parameters.features,
         "PoissonNew",
         {"rate": 100},
-        {"timeStepToSpike": 1},
+        {"timeStepToSpike": 0},
     )
     # From https://neuralensemble.org/docs/PyNN/reference/neuronmodels.html#pyNN.standardmodels.cells.IF_curr_exp
     lif_params = {
