@@ -15,7 +15,7 @@ import time
 import gc
 import torch
 
-from .benchmark import *
+from norse.benchmark.benchmark import *
 
 FLAGS = flags.FLAGS
 
