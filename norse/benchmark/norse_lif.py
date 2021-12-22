@@ -13,7 +13,6 @@ from benchmark import BenchmarkParameters
 
 # pytype: enable=import-error
 
-
 class LIFBenchmark(torch.jit.ScriptModule):
     def __init__(self, parameters):
         super().__init__()

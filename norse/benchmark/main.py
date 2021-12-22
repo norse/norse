@@ -111,11 +111,11 @@ def collect(data: BenchmarkData, label: str) -> dict:
 def main(argv):
     # pytype: disable=import-error
     if FLAGS.bindsnet:
-        import bindsnet_lif
+        from norse.benchmark import bindsnet_lif
 
         run_benchmark(bindsnet_lif.lif_feed_forward_benchmark, "BindsNET_lif")
     if FLAGS.genn:
-        import genn_lif
+        from norse.benchmark import genn_lif
 
         run_benchmark(genn_lif.lif_feed_forward_benchmark, "GeNN_lif")
     if FLAGS.norse:
