@@ -13,6 +13,7 @@ norse.torch.functional.test.test\_iaf
 
    .. autosummary::
    
+      test_iaf_feed_forward_step_backward
       test_iaf_feed_forward_step_batch
       test_iaf_step_batch
    

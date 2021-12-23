@@ -205,6 +205,21 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../../generated/norse.torch.module.iaf.IAFFeedForwardState.html">
+     IAFFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../generated/norse.torch.module.iaf.IAFParameters.html">
+     IAFParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../generated/norse.torch.module.iaf.IAFCell.html">
+     IAFCell
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichState.html">
      IzhikevichState
     </a>
@@ -287,6 +302,21 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../../generated/norse.torch.LIFRecurrentCell.html">
      LIFRecurrentCell
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../generated/norse.torch.module.lif_box.LIFBoxFeedForwardState.html">
+     LIFBoxFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../generated/norse.torch.module.lif_box.LIFBoxParameters.html">
+     LIFBoxParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../generated/norse.torch.module.lif_box.LIFBoxCell.html">
+     LIFBoxCell
     </a>
    </li>
    <li class="toctree-l2">
@@ -662,6 +692,21 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../../generated/norse.torch.functional.lif_box.LIFBoxFeedForwardState.html">
+     LIFBoxFeedForwardState
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../generated/norse.torch.functional.lif_box.LIFBoxParameters.html">
+     LIFBoxParameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../generated/norse.torch.functional.lif_box.lif_box_feed_forward_step.html">
+     norse.torch.functional.lif_box.lif_box_feed_forward_step
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../../generated/norse.torch.functional.coba_lif.CobaLIFParameters.html">
      CobaLIFParameters
     </a>
@@ -989,8 +1034,8 @@
 <span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
 
 
-<div class="viewcode-block" id="IAFParameters"><a class="viewcode-back" href="../../../../generated/norse.torch.functional.iaf.IAFParameters.html#norse.torch.functional.iaf.IAFParameters">[docs]</a><span class="k">class</span> <span class="nc">IAFParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parametrization of a LIF neuron</span>
+<div class="viewcode-block" id="IAFParameters"><a class="viewcode-back" href="../../../../generated/norse.torch.module.iaf.IAFParameters.html#norse.torch.functional.iaf.IAFParameters">[docs]</a><span class="k">class</span> <span class="nc">IAFParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parametrization of an integrate-and-fire neuron</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        v_th (torch.Tensor): threshold potential in mV</span>
@@ -1007,7 +1052,7 @@
 
 
 <span class="k">class</span> <span class="nc">IAFState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;State of a IAF neuron</span>
+    <span class="sd">&quot;&quot;&quot;State of an integrate-and-fire neuron</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        z (torch.Tensor): recurrent spikes</span>
@@ -1018,8 +1063,8 @@
     <span class="n">v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
 
 
-<div class="viewcode-block" id="IAFFeedForwardState"><a class="viewcode-back" href="../../../../generated/norse.torch.functional.iaf.IAFFeedForwardState.html#norse.torch.functional.iaf.IAFFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">IAFFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;State of a feed forward IAF neuron</span>
+<div class="viewcode-block" id="IAFFeedForwardState"><a class="viewcode-back" href="../../../../generated/norse.torch.module.iaf.IAFFeedForwardState.html#norse.torch.functional.iaf.IAFFeedForwardState">[docs]</a><span class="k">class</span> <span class="nc">IAFFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;State of a feed forward integrate-and-fire neuron</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        v (torch.Tensor): membrane potential</span>
@@ -1055,6 +1100,27 @@
     <span class="n">p</span><span class="p">:</span> <span class="n">IAFParameters</span> <span class="o">=</span> <span class="n">IAFParameters</span><span class="p">(),</span>
     <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">IAFFeedForwardState</span><span class="p">]:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Feedforward step of an integrate-and-fire neuron, computing a single step</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \dot{v} = v</span>
+
+<span class="sd">    together with the jump condition</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        z = \Theta(v - v_{\text{th}})</span>
+
+<span class="sd">    and transition equation</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        v = (1-z) v + z v_{\text{reset}}</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        input_tensor (torch.Tensor): the input spikes at the current time step</span>
+<span class="sd">        state (IAFFeedForwardState): current state of the LIF neuron</span>
+<span class="sd">        p (IAFParameters): parameters of a leaky integrate and fire neuron</span>
+<span class="sd">        dt (float): Integration timestep to use (unused, but added for compatibility)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># compute new spikes</span>
     <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
     <span class="c1"># compute reset</span>

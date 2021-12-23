@@ -31,10 +31,12 @@ norse.torch.module.test
    norse.torch.module.test.test_conv
    norse.torch.module.test.test_encode
    norse.torch.module.test.test_exp_filter
+   norse.torch.module.test.test_iaf
    norse.torch.module.test.test_izhikevich
    norse.torch.module.test.test_leaky_integrator
    norse.torch.module.test.test_lif
    norse.torch.module.test.test_lif_adex
+   norse.torch.module.test.test_lif_box
    norse.torch.module.test.test_lif_correlation
    norse.torch.module.test.test_lif_ex
    norse.torch.module.test.test_lif_mc
