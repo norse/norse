@@ -92,7 +92,9 @@ if __name__ == "__main__":
     end = time.time()
 
     parameter_list[0] = end - start
-    parameter_list[1] = sum(len(batch_spikes[0]) 
-                            for batch_spikes in layer.spike_recording_data
-                            for layer in layers)
+    parameter_list[1] = sum(
+        len(batch_spikes[0])
+        for batch_spikes in layer.spike_recording_data
+        for layer in layers
+    )
     parameter_list.shm.close()
