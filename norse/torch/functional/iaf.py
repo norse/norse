@@ -4,7 +4,7 @@ from norse.torch.functional.threshold import threshold
 
 
 class IAFParameters(NamedTuple):
-    """Parametrization of a LIF neuron
+    """Parametrization of an integrate-and-fire neuron
 
     Parameters:
         v_th (torch.Tensor): threshold potential in mV
@@ -21,7 +21,7 @@ class IAFParameters(NamedTuple):
 
 
 class IAFState(NamedTuple):
-    """State of a IAF neuron
+    """State of an integrate-and-fire neuron
 
     Parameters:
         z (torch.Tensor): recurrent spikes
@@ -33,7 +33,7 @@ class IAFState(NamedTuple):
 
 
 class IAFFeedForwardState(NamedTuple):
-    """State of a feed forward IAF neuron
+    """State of a feed forward integrate-and-fire neuron
 
     Parameters:
         v (torch.Tensor): membrane potential
@@ -69,6 +69,27 @@ def iaf_feed_forward_step(
     p: IAFParameters = IAFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, IAFFeedForwardState]:
+    r"""Feedforward step of an integrate-and-fire neuron, computing a single step
+
+    .. math::
+        \dot{v} = v
+
+    together with the jump condition
+
+    .. math::
+        z = \Theta(v - v_{\text{th}})
+
+    and transition equation
+
+    .. math::
+        v = (1-z) v + z v_{\text{reset}}
+
+    Parameters:
+        input_tensor (torch.Tensor): the input spikes at the current time step
+        state (IAFFeedForwardState): current state of the LIF neuron
+        p (IAFParameters): parameters of a leaky integrate and fire neuron
+        dt (float): Integration timestep to use (unused, but added for compatibility)
+    """
     # compute new spikes
     z_new = threshold(state.v - p.v_th, p.method, p.alpha)
     # compute reset
