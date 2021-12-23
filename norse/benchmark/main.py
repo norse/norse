@@ -1,9 +1,7 @@
+from argparse import ArgumentParser
 from functools import partial
+import logging
 from typing import Callable
-
-from absl import app
-from absl import flags
-from absl import logging
 
 import numpy as np
 
@@ -19,26 +17,6 @@ import gc
 from benchmark import BenchmarkConfig, BenchmarkData, BenchmarkParameters
 
 # pytype: enable=import-error
-
-FLAGS = flags.FLAGS
-
-flags.DEFINE_integer(
-    "batch_size",
-    32,
-    "Number of data points per batch",
-)
-flags.DEFINE_integer("start", 250, "Start of the number of inputs to sweep")
-flags.DEFINE_integer("step", 250, "Steps in which to sweep over the number of inputs")
-flags.DEFINE_integer("stop", 5001, "Number of inputs to sweep to")
-flags.DEFINE_integer("sequence_length", 1000, "Number of timesteps to simulate")
-flags.DEFINE_float("dt", 0.001, "Simulation timestep")
-flags.DEFINE_enum("device", "cuda", ["cuda", "cpu"], "Device to use [cpu, cuda]")
-flags.DEFINE_integer("runs", 5, "Number of runs per simulation step")
-flags.DEFINE_bool("profile", False, "Profile Norse benchmark? (Only works for Norse)")
-
-flags.DEFINE_bool("bindsnet", False, "Benchmark Bindsnet?")
-flags.DEFINE_bool("genn", False, "Benchmark GeNN?")
-flags.DEFINE_bool("norse", False, "Benchmark Norse?")
 
 
 def benchmark(
@@ -108,44 +86,44 @@ def collect(data: BenchmarkData, label: str) -> dict:
     }
 
 
-def main(argv):
+def main(args):
     # pytype: disable=import-error
-    if FLAGS.bindsnet:
-        from norse.benchmark import bindsnet_lif
+    if args.bindsnet:
+        import bindsnet_lif
 
-        run_benchmark(bindsnet_lif.lif_feed_forward_benchmark, "BindsNET_lif")
-    if FLAGS.genn:
-        from norse.benchmark import genn_lif
+        run_benchmark(args, bindsnet_lif.lif_feed_forward_benchmark, "BindsNET_lif")
+    if args.genn:
+        import genn_lif
 
-        run_benchmark(genn_lif.lif_feed_forward_benchmark, "GeNN_lif")
-    if FLAGS.norse:
-        from norse.benchmark import norse_lif
+        run_benchmark(args, genn_lif.lif_feed_forward_benchmark, "GeNN_lif")
+    if args.norse:
+        import norse_lif
 
-        if FLAGS.profile:
+        if args.profile:
             import torch.autograd.profiler as profiler
 
             with profiler.profile(
-                profile_memory=True, use_cuda=(FLAGS.device == "cuda")
+                profile_memory=True, use_cuda=(args.device == "cuda")
             ) as prof:
-                run_benchmark(norse_lif.lif_feed_forward_benchmark, "Norse_lif")
+                run_benchmark(args, norse_lif.lif_feed_forward_benchmark, "Norse_lif")
             prof.export_chrome_trace("trace.json")
         else:
             run_benchmark(norse_lif.lif_feed_forward_benchmark, "Norse_lif")
     # pytype: enable=import-error
 
 
-def run_benchmark(function, label):
+def run_benchmark(args, function, label):
     config = BenchmarkConfig(
-        batch_size=FLAGS.batch_size,
-        device=FLAGS.device,
-        dt=FLAGS.dt,
+        batch_size=args.batch_size,
+        device=args.device,
+        dt=args.dt,
         label=label,
-        runs=FLAGS.runs,
-        sequence_length=FLAGS.sequence_length,
-        start=FLAGS.start,
-        stop=FLAGS.stop,
-        step=FLAGS.step,
-        profile=FLAGS.profile,
+        runs=args.runs,
+        sequence_length=args.sequence_length,
+        start=args.start,
+        stop=args.stop,
+        step=args.step,
+        profile=args.profile,
     )
 
     collector = partial(collect, label=label)
@@ -157,4 +135,62 @@ def run_benchmark(function, label):
 
 
 if __name__ == "__main__":
-    app.run(main)
+    parser = ArgumentParser("SNN library benchmarks")
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=32,
+        help="Number of data points per batch",
+    )
+    parser.add_argument(
+        "--start", type=int, default=250, help="Start of the number of inputs to sweep"
+    )
+    parser.add_argument(
+        "--step",
+        type=int,
+        default=250,
+        help="Steps in which to sweep over the number of inputs",
+    )
+    parser.add_argument(
+        "--stop", type=int, default=5001, help="Number of inputs to sweep to"
+    )
+    parser.add_argument(
+        "--sequence_length",
+        type=int,
+        default=1000,
+        help="Number of timesteps to simulate",
+    )
+    parser.add_argument("--dt", type=float, default=0.001, help="Simulation timestep")
+    parser.add_argument(
+        "--device",
+        type=str,
+        default="cuda",
+        choices=["cuda", "cpu"],
+        help="Device to use [cpu, cuda]",
+    )
+    parser.add_argument(
+        "--runs", type=int, default=5, help="Number of runs per simulation step"
+    )
+    parser.add_argument(
+        "--profile",
+        default=False,
+        action="store_true",
+        help="Profile Norse benchmark? (Only works for Norse)",
+    )
+    parser.add_argument(
+        "--bindsnet",
+        default=False,
+        action="store_true",
+        help="Benchmark Bindsnet?",
+    )
+    parser.add_argument(
+        "--genn", default=False, action="store_true", help="Benchmark GeNN?"
+    )
+    parser.add_argument(
+        "--norse",
+        default=False,
+        action="store_true",
+        help="Benchmark Norse?",
+    )
+    args = parser.parse_args()
+    main(args)

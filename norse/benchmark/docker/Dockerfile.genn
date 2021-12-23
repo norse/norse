@@ -15,6 +15,6 @@ ENV PATH=$PATH:/genn/bin
 # Install PyGeNN
 RUN env
 RUN make DYNAMIC=1 LIBRARY_DIRECTORY=/genn/pygenn/genn_wrapper -j 4 
-RUN pip3 install numpy absl-py pandas matplotlib
+RUN pip3 install numpy pandas matplotlib
 RUN python3 setup.py develop
 
