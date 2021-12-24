@@ -1,5 +1,6 @@
 import torch
 
+
 from norse.torch.functional.lif import LIFState, LIFFeedForwardState
 from norse.torch.functional.lif_refrac import (
     LIFRefracState,

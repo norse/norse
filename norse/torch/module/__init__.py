@@ -52,6 +52,7 @@ from .lif_mc_refrac import LIFMCRefracRecurrentCell
 from .lif_refrac import (
     LIFRefracCell,
     LIFRefracRecurrentCell,
+    LIFRefracRecurrent,
     LIFRefracFeedForwardState,
     LIFRefracParameters,
     LIFRefracState,
@@ -141,6 +142,7 @@ __all__ = [
     "LIFMCRefracRecurrentCell",
     "LIFRefracCell",
     "LIFRefracRecurrentCell",
+    "LIFRefracRecurrent",
     "LIFRefracFeedForwardState",
     "LIFRefracParameters",
     "LIFRefracState",

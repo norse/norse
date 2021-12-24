@@ -7,6 +7,7 @@ from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
     lif_step,
+    lif_step_sparse,
     lif_feed_forward_step,
 )
 from norse.torch.functional.threshold import threshold
@@ -93,6 +94,21 @@ def compute_refractory_update(
     ) + z_new * p.rho_reset
 
     return v_new, z_new, rho_new
+
+
+def lif_refrac_step_sparse(
+    input_tensor: torch.Tensor,
+    state: LIFRefracState,
+    input_weights: torch.Tensor,
+    recurrent_weights: torch.Tensor,
+    p: LIFRefracParameters = LIFRefracParameters(),
+    dt: float = 0.001,
+) -> Tuple[torch.Tensor, LIFRefracState]:
+    z_sparse, s_new = lif_step_sparse(
+        input_tensor, state.lif, input_weights, recurrent_weights, p.lif, dt
+    )
+    v_new, z_sparse, rho_new = compute_refractory_update(state, z_sparse, s_new.v, p)
+    return z_sparse, LIFRefracState(LIFState(z_sparse, v_new, s_new.i), rho_new)
 
 
 def lif_refrac_step(
