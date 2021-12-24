@@ -1038,6 +1038,7 @@
     <span class="n">LIFState</span><span class="p">,</span>
     <span class="n">LIFFeedForwardState</span><span class="p">,</span>
     <span class="n">lif_step</span><span class="p">,</span>
+    <span class="n">lif_step_sparse</span><span class="p">,</span>
     <span class="n">lif_feed_forward_step</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
@@ -1124,6 +1125,21 @@
     <span class="p">)</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">rho_reset</span>
 
     <span class="k">return</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">rho_new</span>
+
+
+<span class="k">def</span> <span class="nf">lif_refrac_step_sparse</span><span class="p">(</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LIFRefracState</span><span class="p">,</span>
+    <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">]:</span>
+    <span class="n">z_sparse</span><span class="p">,</span> <span class="n">s_new</span> <span class="o">=</span> <span class="n">lif_step_sparse</span><span class="p">(</span>
+        <span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">lif</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="p">,</span> <span class="n">dt</span>
+    <span class="p">)</span>
+    <span class="n">v_new</span><span class="p">,</span> <span class="n">z_sparse</span><span class="p">,</span> <span class="n">rho_new</span> <span class="o">=</span> <span class="n">compute_refractory_update</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">z_sparse</span><span class="p">,</span> <span class="n">s_new</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">z_sparse</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">(</span><span class="n">LIFState</span><span class="p">(</span><span class="n">z_sparse</span><span class="p">,</span> <span class="n">v_new</span><span class="p">,</span> <span class="n">s_new</span><span class="o">.</span><span class="n">i</span><span class="p">),</span> <span class="n">rho_new</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">lif_refrac_step</span><span class="p">(</span>

@@ -1038,6 +1038,7 @@
     <span class="n">LIFRefracFeedForwardState</span><span class="p">,</span>
     <span class="n">LIFRefracParameters</span><span class="p">,</span>
     <span class="n">lif_refrac_step</span><span class="p">,</span>
+    <span class="n">lif_refrac_step_sparse</span><span class="p">,</span>
     <span class="n">lif_refrac_feed_forward_step</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.lif</span> <span class="kn">import</span> <span class="n">LIFState</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span>
@@ -1140,6 +1141,122 @@
     <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">rho</span> <span class="o">=</span> <span class="n">LIFAdjointRefracFunction</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
         <span class="nb">input</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span>
     <span class="p">)</span>
+    <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">(</span><span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">rho</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">LIFSparseAdjointRefracFunction</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="n">ctx</span><span class="p">,</span>
+        <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">lif_state</span><span class="p">:</span> <span class="n">LIFState</span><span class="p">,</span>
+        <span class="n">rho</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">tau_sys_inv</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">tau_syn_inv</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">tau_mem_inv</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">v_th</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_th</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">v_reset</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_reset</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">rho_reset</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">rho_reset</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">LIFRefracState</span><span class="p">(</span><span class="n">lif_state</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
+        <span class="n">z_new</span><span class="p">,</span> <span class="n">s_new</span> <span class="o">=</span> <span class="n">lif_refrac_step_sparse</span><span class="p">(</span>
+            <span class="nb">input</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span>
+        <span class="p">)</span>
+
+        <span class="c1"># dv before spiking</span>
+        <span class="n">dv_m</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">s_new</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+        <span class="c1"># dev after spiking</span>
+        <span class="n">dv_p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">s_new</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">refrac_period_end</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">rho</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">save_for_backward</span><span class="p">(</span>
+            <span class="nb">input</span><span class="p">,</span>
+            <span class="n">z_new</span><span class="p">,</span>
+            <span class="n">s_new</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span>
+            <span class="n">refrac_period_end</span><span class="p">,</span>
+            <span class="n">dv_m</span><span class="o">.</span><span class="n">sparse_mask</span><span class="p">(</span><span class="n">z_new</span><span class="p">),</span>
+            <span class="n">dv_p</span><span class="o">.</span><span class="n">sparse_mask</span><span class="p">(</span><span class="n">z_new</span><span class="p">),</span>
+            <span class="n">input_weights</span><span class="p">,</span>
+            <span class="n">recurrent_weights</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">z_new</span><span class="p">,</span> <span class="n">s_new</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">s_new</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">i</span><span class="p">,</span> <span class="n">s_new</span><span class="o">.</span><span class="n">rho</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span>
+        <span class="n">ctx</span><span class="p">,</span>
+        <span class="n">doutput</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">lambda_v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">lambda_i</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">lambda_rho</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="p">(</span>
+            <span class="n">input_tensor</span><span class="p">,</span>
+            <span class="n">z</span><span class="p">,</span>
+            <span class="n">refrac_count</span><span class="p">,</span>
+            <span class="n">refrac_period_end</span><span class="p">,</span>
+            <span class="n">dv_m</span><span class="p">,</span>
+            <span class="n">dv_p</span><span class="p">,</span>
+            <span class="n">input_weights</span><span class="p">,</span>
+            <span class="n">recurrent_weights</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="n">tau_syn_inv</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tau_syn_inv</span>
+        <span class="n">tau_mem_inv</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">taus_mem_inv</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">dt</span>
+        <span class="n">refrac_mask</span> <span class="o">=</span> <span class="n">heaviside</span><span class="p">(</span><span class="n">refrac_count</span><span class="p">)</span>
+        <span class="n">dv_m</span> <span class="o">=</span> <span class="n">dv_m</span><span class="o">.</span><span class="n">to_dense</span><span class="p">()</span>
+        <span class="n">dv_p</span> <span class="o">=</span> <span class="n">dv_p</span><span class="o">.</span><span class="n">to_dense</span><span class="p">()</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">to_dense</span><span class="p">()</span>
+
+        <span class="n">dw_input</span> <span class="o">=</span> <span class="n">lambda_i</span><span class="o">.</span><span class="n">t</span><span class="p">()</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
+        <span class="n">dw_rec</span> <span class="o">=</span> <span class="n">lambda_i</span><span class="o">.</span><span class="n">t</span><span class="p">()</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+        <span class="c1"># lambda_i decay</span>
+        <span class="n">dlambda_i</span> <span class="o">=</span> <span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">refrac_mask</span><span class="p">)</span> <span class="o">*</span> <span class="n">lambda_v</span> <span class="o">-</span> <span class="n">lambda_i</span><span class="p">)</span>
+        <span class="n">lambda_i</span> <span class="o">=</span> <span class="n">lambda_i</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">dlambda_i</span>
+
+        <span class="c1"># lambda_v decay</span>
+        <span class="n">lambda_v</span> <span class="o">=</span> <span class="n">lambda_v</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">refrac_mask</span><span class="p">)</span> <span class="o">*</span> <span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">lambda_v</span>
+
+        <span class="n">output_term</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">dv_m</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">doutput</span><span class="p">)</span>
+        <span class="n">output_term</span><span class="p">[</span><span class="n">output_term</span> <span class="o">!=</span> <span class="n">output_term</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">jump_term</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="p">(</span><span class="n">dv_p</span> <span class="o">/</span> <span class="n">dv_m</span><span class="p">)</span>
+        <span class="n">jump_term</span><span class="p">[</span><span class="n">jump_term</span> <span class="o">!=</span> <span class="n">jump_term</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">lambda_v</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span> <span class="o">*</span> <span class="n">lambda_v</span> <span class="o">+</span> <span class="n">jump_term</span> <span class="o">*</span> <span class="n">lambda_v</span> <span class="o">+</span> <span class="n">output_term</span>
+        <span class="n">lambda_rho</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mi">1</span> <span class="o">-</span> <span class="n">refrac_period_end</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">lambda_rho</span> <span class="o">+</span> <span class="n">refrac_period_end</span> <span class="o">*</span> <span class="n">lambda_v</span> <span class="o">*</span> <span class="n">dv_p</span>
+        <span class="n">dinput</span> <span class="o">=</span> <span class="n">lambda_i</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">input_weights</span><span class="p">)</span>
+        <span class="n">drecurrent</span> <span class="o">=</span> <span class="n">lambda_i</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">recurrent_weights</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">dinput</span><span class="p">,</span>
+            <span class="n">drecurrent</span><span class="p">,</span>
+            <span class="n">lambda_v</span><span class="p">,</span>
+            <span class="n">lambda_i</span><span class="p">,</span>
+            <span class="n">lambda_rho</span><span class="p">,</span>
+            <span class="n">dw_input</span><span class="p">,</span>
+            <span class="n">dw_rec</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">lif_refrac_adjoint_step_sparse</span><span class="p">(</span>
+    <span class="nb">input</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">s</span><span class="p">:</span> <span class="n">LIFRefracState</span><span class="p">,</span>
+    <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">recurrent_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span><span class="p">,</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">]:</span>
+    <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">rho</span> <span class="o">=</span> <span class="n">LIFSparseAdjointRefracFunction</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="nb">input</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">lif</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span>
+    <span class="p">)</span>
+
     <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFRefracState</span><span class="p">(</span><span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">rho</span><span class="p">)</span>
 
 

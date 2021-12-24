@@ -18,6 +18,7 @@ norse.torch.module.lif\_refrac
    .. autosummary::
    
       LIFRefracCell
+      LIFRefracRecurrent
       LIFRefracRecurrentCell
    
    

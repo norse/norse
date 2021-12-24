@@ -14,6 +14,7 @@ norse.torch.functional.adjoint.lif\_refrac\_adjoint
    .. autosummary::
    
       lif_refrac_adjoint_step
+      lif_refrac_adjoint_step_sparse
       lif_refrac_feed_forward_adjoint_step
    
    
@@ -26,6 +27,7 @@ norse.torch.functional.adjoint.lif\_refrac\_adjoint
    
       LIFAdjointRefracFeedForwardFunction
       LIFAdjointRefracFunction
+      LIFSparseAdjointRefracFunction
    
    
 

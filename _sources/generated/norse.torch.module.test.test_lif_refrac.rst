@@ -21,6 +21,10 @@ norse.torch.module.test.test\_lif\_refrac
       test_lif_refrac_feedforward
       test_lif_refrac_feedforward_backward
       test_lif_refrac_feedforward_cell
+      test_lif_refrac_recurrent_layer_backward
+      test_lif_refrac_recurrent_layer_backward_iteration
+      test_lif_refrac_recurrent_layer_backward_state
+      test_lif_refrac_recurrent_sequence
    
    
 
