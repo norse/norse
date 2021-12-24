@@ -11,8 +11,6 @@ from pygenn.genn_wrapper import NO_DELAY
 
 from benchmark import BenchmarkParameters
 
-from benchmark import BenchmarkParameters
-
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
     shared = SharedMemoryManager()

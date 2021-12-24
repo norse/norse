@@ -1,5 +1,4 @@
 import torch
-import pytest
 
 import norse
 from norse.torch.functional.lif import (

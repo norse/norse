@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # pytype: enable=import-error
-import math
 import numpy as np
 
 

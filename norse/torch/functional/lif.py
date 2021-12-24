@@ -37,8 +37,6 @@ except ModuleNotFoundError:  # pragma: no cover
     pass
 
 from norse.torch.functional.threshold import threshold
-from norse.torch.functional.lift import lift
-import norse.utils
 
 
 class LIFParameters(NamedTuple):

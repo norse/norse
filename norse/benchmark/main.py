@@ -91,11 +91,13 @@ def main(args):
     if args.bindsnet:
         import bindsnet_lif
 
-        run_benchmark(args, bindsnet_lif.lif_feed_forward_benchmark, "BindsNET_lif")
+        run_benchmark(
+            args, bindsnet_lif.lif_feed_forward_benchmark, label="BindsNET_lif"
+        )
     if args.genn:
         import genn_lif
 
-        run_benchmark(args, genn_lif.lif_feed_forward_benchmark, "GeNN_lif")
+        run_benchmark(args, genn_lif.lif_feed_forward_benchmark, label="GeNN_lif")
     if args.norse:
         import norse_lif
 
@@ -105,10 +107,12 @@ def main(args):
             with profiler.profile(
                 profile_memory=True, use_cuda=(args.device == "cuda")
             ) as prof:
-                run_benchmark(args, norse_lif.lif_feed_forward_benchmark, "Norse_lif")
+                run_benchmark(
+                    args, norse_lif.lif_feed_forward_benchmark, label="Norse_lif"
+                )
             prof.export_chrome_trace("trace.json")
         else:
-            run_benchmark(norse_lif.lif_feed_forward_benchmark, "Norse_lif")
+            run_benchmark(args, norse_lif.lif_feed_forward_benchmark, label="Norse_lif")
     # pytype: enable=import-error
 
 
