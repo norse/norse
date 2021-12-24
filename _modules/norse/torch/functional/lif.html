@@ -878,11 +878,6 @@
          norse.benchmark.benchmark
         </a>
        </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../../../../generated/norse.benchmark.norse_lif.html">
-         norse.benchmark.norse_lif
-        </a>
-       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -1068,8 +1063,6 @@
     <span class="k">pass</span>
 
 <span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
-<span class="kn">from</span> <span class="nn">norse.torch.functional.lift</span> <span class="kn">import</span> <span class="n">lift</span>
-<span class="kn">import</span> <span class="nn">norse.utils</span>
 
 
 <div class="viewcode-block" id="LIFParameters"><a class="viewcode-back" href="../../../../generated/norse.torch.functional.LIFParameters.html#norse.torch.LIFParameters">[docs]</a><span class="k">class</span> <span class="nc">LIFParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -1266,27 +1259,10 @@
 <span class="sd">        p (LIFParameters): parameters of a leaky integrate and fire neuron</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">norse</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">IS_OPS_LOADED</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">norse_op</span><span class="o">.</span><span class="n">lif_super_step</span><span class="p">(</span>
-                <span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-            <span class="k">pass</span>
-    <span class="n">jit_params</span> <span class="o">=</span> <span class="n">LIFParametersJIT</span><span class="p">(</span>
-        <span class="n">tau_syn_inv</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span><span class="p">,</span>
-        <span class="n">tau_mem_inv</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span><span class="p">,</span>
-        <span class="n">v_leak</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="p">,</span>
-        <span class="n">v_th</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span>
-        <span class="n">v_reset</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">v_reset</span><span class="p">,</span>
-        <span class="n">method</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
-        <span class="n">alpha</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">),</span>
+    <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">norse_op</span><span class="o">.</span><span class="n">lif_super_step</span><span class="p">(</span>
+        <span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">_lif_step_jit</span><span class="p">(</span>
-        <span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">jit_params</span><span class="p">,</span> <span class="n">dt</span>
-    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">lif_step_integral</span><span class="p">(</span>
@@ -1334,22 +1310,10 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        A tuple of (spike output from all timesteps, neuron state from the final timestep)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">norse</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">IS_OPS_LOADED</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">norse_op</span><span class="o">.</span><span class="n">lif_super_integral</span><span class="p">(</span>
-                <span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-            <span class="k">pass</span>
-    <span class="k">return</span> <span class="n">lift</span><span class="p">(</span><span class="n">_lif_step_jit</span><span class="p">)(</span>
-        <span class="n">input_tensor</span><span class="o">=</span><span class="n">input_tensor</span><span class="p">,</span>
-        <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
-        <span class="n">input_weights</span><span class="o">=</span><span class="n">input_weights</span><span class="p">,</span>
-        <span class="n">recurrent_weights</span><span class="o">=</span><span class="n">recurrent_weights</span><span class="p">,</span>
-        <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
-        <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span>
+    <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">norse_op</span><span class="o">.</span><span class="n">lif_super_integral</span><span class="p">(</span>
+        <span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">input_weights</span><span class="p">,</span> <span class="n">recurrent_weights</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span>
     <span class="p">)</span>
+    <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
 
 
 <span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">script</span>
@@ -1416,22 +1380,8 @@
 <span class="sd">        p (LIFParameters): parameters of a leaky integrate and fire neuron</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">norse</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">IS_OPS_LOADED</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">norse_op</span><span class="o">.</span><span class="n">lif_super_feed_forward_step</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-            <span class="k">pass</span>
-    <span class="n">jit_params</span> <span class="o">=</span> <span class="n">LIFParametersJIT</span><span class="p">(</span>
-        <span class="n">tau_syn_inv</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span><span class="p">,</span>
-        <span class="n">tau_mem_inv</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span><span class="p">,</span>
-        <span class="n">v_leak</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="p">,</span>
-        <span class="n">v_th</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span>
-        <span class="n">v_reset</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">v_reset</span><span class="p">,</span>
-        <span class="n">method</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
-        <span class="n">alpha</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">),</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">_lif_feed_forward_step_jit</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">jit_params</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span></div>
+    <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">norse_op</span><span class="o">.</span><span class="n">lif_super_feed_forward_step</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">lif_feed_forward_integral</span><span class="p">(</span>
@@ -1468,17 +1418,66 @@
 <span class="sd">        p (LIFParameters): parameters of a leaky integrate and fire neuron</span>
 <span class="sd">        dt (float): Integration timestep to use</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">norse</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">IS_OPS_LOADED</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">norse_op</span><span class="o">.</span><span class="n">lif_super_feed_forward_integral</span><span class="p">(</span>
-                <span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-            <span class="k">pass</span>
-    <span class="k">return</span> <span class="n">lift</span><span class="p">(</span><span class="n">lif_feed_forward_step</span><span class="p">)(</span>
-        <span class="n">input_tensor</span><span class="o">=</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span>
-    <span class="p">)</span>
+    <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">norse_op</span><span class="o">.</span><span class="n">lif_super_feed_forward_integral</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">LIFState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+
+
+<span class="nd">@torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">script</span>
+<span class="k">def</span> <span class="nf">_lif_feed_forward_integral_jit</span><span class="p">(</span>
+    <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">LIFFeedForwardState</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">:</span> <span class="n">LIFParametersJIT</span><span class="p">,</span>
+    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">]:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes multiple euler-integration steps of a LIF neuron-model. More</span>
+<span class="sd">    specifically it integrates the following ODE</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \begin{align*}</span>
+<span class="sd">            \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\</span>
+<span class="sd">            \dot{i} &amp;= -1/\tau_{\text{syn}} i</span>
+<span class="sd">        \end{align*}</span>
+
+<span class="sd">    together with the jump condition</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        z = \Theta(v - v_{\text{th}})</span>
+
+<span class="sd">    and transition equations</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \begin{align*}</span>
+<span class="sd">            v &amp;= (1-z) v + z v_{\text{reset}} \\</span>
+<span class="sd">            i &amp;= i + i_{\text{in}}</span>
+<span class="sd">        \end{align*}</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        input_tensor (torch.Tensor): the input spikes with the outer dimension assumed to be timesteps</span>
+<span class="sd">        s (LIFState): current state of the LIF neuron</span>
+<span class="sd">        p (LIFParameters): parameters of a leaky integrate and fire neuron</span>
+<span class="sd">        dt (float): Integration timestep to use</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">input_spikes</span> <span class="ow">in</span> <span class="n">input_tensor</span><span class="p">:</span>
+        <span class="c1"># compute voltage updates</span>
+        <span class="n">dv</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_mem_inv</span> <span class="o">*</span> <span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">v_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dv</span>
+
+        <span class="c1"># compute current updates</span>
+        <span class="n">di</span> <span class="o">=</span> <span class="o">-</span><span class="n">dt</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">tau_syn_inv</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span>
+        <span class="n">i_decayed</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">i</span> <span class="o">+</span> <span class="n">di</span>
+
+        <span class="c1"># compute new spikes</span>
+        <span class="n">z_new</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="n">v_decayed</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">v_th</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="c1"># compute reset</span>
+        <span class="n">v_new</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">z_new</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_decayed</span> <span class="o">+</span> <span class="n">z_new</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">v_reset</span>
+        <span class="c1"># compute current jumps</span>
+        <span class="n">i_new</span> <span class="o">=</span> <span class="n">i_decayed</span> <span class="o">+</span> <span class="n">input_spikes</span>
+
+        <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z_new</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">v_new</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i_new</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span> <span class="n">state</span>
 
 
 <span class="k">def</span> <span class="nf">lif_feed_forward_step_sparse</span><span class="p">(</span>
