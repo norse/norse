@@ -8,16 +8,11 @@ of Norse by comparing future performance with past releases.
 BindsNET and GeNN are two of the closest competitors in the SNN space - at
 least in terms of performance.
 The graph below shows a benchmark between Norse, BindsNET, and GeNN simulating
-poisson encoded input to a single layer of LIF neurons. The simulation ran on a
-Intel i7-5930K 6-core CPU machine with a NVIDIA GTX Titan X card (12 Gb RAM) for 1000 
+poisson encoded input to a linearly weighted layer of LIF neurons. The simulation ran on a
+AMD Ryzen Threadripper 3960X 24-Core machine with a NVIDIA RTX 3090 24 GB RAM GPU for 1000 
 timesteps with a time-delta of 0.001 seconds and a batch-size of 32.
-Each line indicates the mean running time out of 20 repeated runs and the coloured
-area indicates where ~95% of the runtimes fell.
+Each line indicates the mean runtime out of 5 repeated runs, with 2 standard deviations (~95%) engraved.
 
-The benchmark indicates that for a single layer of less than 4500 LIF neurons, Norse outperforms both competitors.
-For larger numbers of neurons per layer, GeNN is likely faster due to the fact that they do not use matrix multiplications, but event based processing. 
-This scales with the number of events to be processes as opposed to quadratically in the case of Norse and BindsNET.
-This limitation is straight-forward to overcome, if one uses the fact that only (sparse) bit-vectors need to processed, 
-although it is rare to see that many neurons in a single layer in machine-learning tasks.
+The benchmark indicates that for a single layer of <= 5000 LIF neurons, Norse outperforms BindsNET by a factor of >10, rivals GeNN for smaller layers, but fails to keep up with GeNN's precompiled GPU code for larger layers.
 
 ![](lif_benchmark.png)

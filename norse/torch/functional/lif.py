@@ -37,8 +37,6 @@ except ModuleNotFoundError:  # pragma: no cover
     pass
 
 from norse.torch.functional.threshold import threshold
-from norse.torch.functional.lift import lift
-import norse.utils
 
 
 class LIFParameters(NamedTuple):
@@ -235,27 +233,10 @@ def lif_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-
-    if norse.utils.IS_OPS_LOADED:
-        try:
-            z, v, i = norse_op.lif_super_step(
-                input_tensor, state, input_weights, recurrent_weights, p, dt
-            )
-            return z, LIFState(z=z, v=v, i=i)
-        except NameError:  # pragma: no cover
-            pass
-    jit_params = LIFParametersJIT(
-        tau_syn_inv=p.tau_syn_inv,
-        tau_mem_inv=p.tau_mem_inv,
-        v_leak=p.v_leak,
-        v_th=p.v_th,
-        v_reset=p.v_reset,
-        method=p.method,
-        alpha=torch.as_tensor(p.alpha),
+    z, v, i = norse_op.lif_super_step(
+        input_tensor, state, input_weights, recurrent_weights, p, dt
     )
-    return _lif_step_jit(
-        input_tensor, state, input_weights, recurrent_weights, jit_params, dt
-    )
+    return z, LIFState(z=z, v=v, i=i)
 
 
 def lif_step_integral(
@@ -303,22 +284,10 @@ def lif_step_integral(
     Returns:
         A tuple of (spike output from all timesteps, neuron state from the final timestep)
     """
-    if norse.utils.IS_OPS_LOADED:
-        try:
-            z, v, i = norse_op.lif_super_integral(
-                input_tensor, state, input_weights, recurrent_weights, p, dt
-            )
-            return z, LIFState(z=z, v=v, i=i)
-        except NameError:  # pragma: no cover
-            pass
-    return lift(_lif_step_jit)(
-        input_tensor=input_tensor,
-        state=state,
-        input_weights=input_weights,
-        recurrent_weights=recurrent_weights,
-        p=p,
-        dt=dt,
+    z, v, i = norse_op.lif_super_integral(
+        input_tensor, state, input_weights, recurrent_weights, p, dt
     )
+    return z, LIFState(z=z, v=v, i=i)
 
 
 @torch.jit.script
@@ -385,22 +354,8 @@ def lif_feed_forward_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    if norse.utils.IS_OPS_LOADED:
-        try:
-            z, v, i = norse_op.lif_super_feed_forward_step(input_tensor, state, p, dt)
-            return z, LIFFeedForwardState(v=v, i=i)
-        except NameError:  # pragma: no cover
-            pass
-    jit_params = LIFParametersJIT(
-        tau_syn_inv=p.tau_syn_inv,
-        tau_mem_inv=p.tau_mem_inv,
-        v_leak=p.v_leak,
-        v_th=p.v_th,
-        v_reset=p.v_reset,
-        method=p.method,
-        alpha=torch.as_tensor(p.alpha),
-    )
-    return _lif_feed_forward_step_jit(input_tensor, state=state, p=jit_params, dt=dt)
+    z, v, i = norse_op.lif_super_feed_forward_step(input_tensor, state, p, dt)
+    return z, LIFFeedForwardState(v=v, i=i)
 
 
 def lif_feed_forward_integral(
@@ -437,17 +392,66 @@ def lif_feed_forward_integral(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    if norse.utils.IS_OPS_LOADED:
-        try:
-            z, v, i = norse_op.lif_super_feed_forward_integral(
-                input_tensor, state, p, dt
-            )
-            return z, LIFState(z=z, v=v, i=i)
-        except NameError:  # pragma: no cover
-            pass
-    return lift(lif_feed_forward_step)(
-        input_tensor=input_tensor, state=state, p=p, dt=dt
-    )
+    z, v, i = norse_op.lif_super_feed_forward_integral(input_tensor, state, p, dt)
+    return z, LIFState(z=z, v=v, i=i)
+
+
+@torch.jit.script
+def _lif_feed_forward_integral_jit(
+    input_tensor: torch.Tensor,
+    state: LIFFeedForwardState,
+    p: LIFParametersJIT,
+    dt: float = 0.001,
+) -> Tuple[torch.Tensor, LIFFeedForwardState]:
+    r"""Computes multiple euler-integration steps of a LIF neuron-model. More
+    specifically it integrates the following ODE
+
+    .. math::
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+            \dot{i} &= -1/\tau_{\text{syn}} i
+        \end{align*}
+
+    together with the jump condition
+
+    .. math::
+        z = \Theta(v - v_{\text{th}})
+
+    and transition equations
+
+    .. math::
+        \begin{align*}
+            v &= (1-z) v + z v_{\text{reset}} \\
+            i &= i + i_{\text{in}}
+        \end{align*}
+
+    Parameters:
+        input_tensor (torch.Tensor): the input spikes with the outer dimension assumed to be timesteps
+        s (LIFState): current state of the LIF neuron
+        p (LIFParameters): parameters of a leaky integrate and fire neuron
+        dt (float): Integration timestep to use
+    """
+    outputs = []
+
+    for input_spikes in input_tensor:
+        # compute voltage updates
+        dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
+        v_decayed = state.v + dv
+
+        # compute current updates
+        di = -dt * p.tau_syn_inv * state.i
+        i_decayed = state.i + di
+
+        # compute new spikes
+        z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+        # compute reset
+        v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+        # compute current jumps
+        i_new = i_decayed + input_spikes
+
+        outputs.append(z_new)
+        state = LIFFeedForwardState(v=v_new, i=i_new)
+    return torch.stack(outputs), state
 
 
 def lif_feed_forward_step_sparse(

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # pytype: enable=import-error
-import math
+import numpy as np
 
 
 def plot_frames(frames, title):
@@ -19,7 +19,9 @@ def save_frames(frames, title, filename):
 
 
 def render_frames(frames, title):
-    ax = plt.gca(yscale="log")
+    plt.figure(figsize=(8, 5))
+    ax = plt.gca()
+    ax.set_yscale("log")
     for frame in frames:
         label = frame["label"][0].replace("_lif", "")
         plt.fill_between(
@@ -44,10 +46,20 @@ def render_frames(frames, title):
     xmin = frame["input_features"].min()
     xmax = frame["input_features"].max()
 
-    ax.set_xlim(math.floor(xmin / 1000), math.ceil(xmax / 1000) * 1000)
+    ax.set_xlim(xmin, xmax)
+    ax.set_xticks(np.arange(xmin, xmax + 1, 500))
     ax.set_title(title)
-    ax.set_xlabel("No. of features")
+    ax.set_xlabel("Number of neurons")
     ax.set_ylabel("Running time in seconds")
+    ax.legend(loc="upper left")
+    return ax
+
+
+def accumulate_files(files):
+    dfs = []
+    for f in files:
+        dfs.append(pd.read_csv(f))
+    return dfs
 
 
 if __name__ == "__main__":
@@ -64,10 +76,7 @@ if __name__ == "__main__":
     parser.add_argument("--title", type=str, default="", help="Figure title")
     args = parser.parse_args()
 
-    files = args.files
-    dfs = []
-    for f in files:
-        dfs.append(pd.read_csv(f))
+    dfs = accumulate_files(args.files)
     if args.to:
         save_frames(dfs, args.title, args.to)
     else:
