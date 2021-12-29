@@ -1,12 +1,16 @@
-name: Publish to Conda
+name: Build Conda
 
 on:
-  release:
+  pull_request:
+
+runs:
+  using: "docker"
+  image: "publish/conda/Dockerfile.conda"
 
 jobs:
-  publish-conda:
-    name: "Publish: Conda"
+  build-conda:
     runs-on: ubuntu-latest
+    name: "Build: Conda"
     steps:
       - uses: actions/checkout@v2
       - name: Set env
@@ -16,5 +20,3 @@ jobs:
         with:
           subDir: "publish/conda"
           platforms: "win osx linux"
-          anacondatoken: ${{ secrets.ANACONDA_TOKEN }}
-          publishFlags: "-u norse"
