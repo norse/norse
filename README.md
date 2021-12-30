@@ -32,9 +32,9 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 
 ## 1. Getting started
 
-To try Norse, the best option is to run one of the [jupyter notebooks](https://github.com/norse/notebooks/tree/master/) on Google collab. 
+The fastest way to try Norse is via the [jupyter notebooks on Google collab](https://github.com/norse/notebooks/tree/master/).
 
-Alternatively, [you can install Norse](#installation) and run one of the [included tasks](https://norse.github.io/norse/tasks.html) such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database):
+Alternatively, [you can install Norse locally](#installation) and run one of the [included tasks](https://norse.github.io/norse/tasks.html) such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database):
 ```bash
 python -m norse.task.mnist
 ```
@@ -48,8 +48,8 @@ Here, we describe how to install Norse and start to apply it in your own work.
 ### 2.1. Installation
 <a name="installation"></a>
 
-We assume you are using Python version 3.7+, are in a terminal friendly environment, and have installed the necessary requirements. 
-[Read more in our documentation](https://norse.github.io/norse/installing.html).
+We assume you are using **Python version 3.7+** and have **installed PyTorch version 1.9 or higher**. 
+[Read more about the prerequisites in our documentation](https://norse.github.io/norse/installing.html).
 
 <table>
 <thead>
