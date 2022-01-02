@@ -37,7 +37,7 @@ class LIFAdjointFunction(torch.autograd.Function):
         )
 
         # dv before spiking
-        dv_m = p.tau_mem_inv * ((p.v_leak - s_new.v) + s.i)
+        dv_m = p.tau_mem_inv * ((p.v_leak - s.v) + s.i)
         # dv after spiking
         dv_p = p.tau_mem_inv * ((p.v_leak - s_new.v) + s.i)
 
