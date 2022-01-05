@@ -14,7 +14,7 @@ This has the benefit that your models are hardware accelerated, providing the [p
 To install Norse, you need the following two dependencies:
 1. `pip` - the [Python package manager](https://pypi.org/project/pip/)
    * This is preinstalled in most Linux and Unix distros
-   * Note that Python must be version 3.7 or higher
+   * Note that Norse requires Python >= 3.7
 2. `torch` - the [deep learning accelerator](https://pytorch.org/get-started/locally/)
    * Please follow the guide available here https://pytorch.org/get-started/locally/
    * Select the CUDA version if you require GPU hardware acceleration
@@ -92,7 +92,7 @@ Because we are relying on optimised C++ for some of the hotspots in the library,
 For that reason, we recommend [following the PyTorch "Get Started" guide](https://pytorch.org/get-started/locally/) as the first step.
 
 You might also have to install Python headers if you have not already done that.
-In Debian-based distros (like Ubuntu), this can be done by running ``apt install python3-dev`.
+In Debian-based distros (like Ubuntu), this can be done by running `apt install python3-dev`.
 
 ### Common problems
 
@@ -106,4 +106,13 @@ Try to
 3. reinstall Norse with your preferred method
 
 See this issue for more information: https://github.com/norse/norse/issues/280
+```
+
+```{admonition} UnsatisfiableError: The following specifications were found to be incompatible with each other
+:class: warning
+
+This can happen during installation from Conda of Norse<=0.07.
+A solution is to add the `conda-forge` channel, like so: `conda install -c norse -c conda-forge norse`
+
+Or, when creating an environment: `conda create -d -c norse -n temptest2 python==3.9 norse==0.0.7`
 ```

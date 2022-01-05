@@ -80,6 +80,7 @@ conda install -c norse norse
 </tr>
 </table>
 
+For troubleshooting, please refer to our [installation guide](https://norse.github.io/norse/pages/installing.html#installation-troubleshooting), [create an issue on GitHub](https://github.com/norse/norse/issues) or [write us on Discord](https://discord.gg/7fGN359).
 
 ### 2.2. Running examples
 
