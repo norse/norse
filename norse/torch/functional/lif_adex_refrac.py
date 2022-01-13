@@ -115,7 +115,7 @@ def lif_adex_refrac_step(
 
 def lif_adex_refrac_feed_forward_step(
     input_tensor: torch.Tensor,
-    state: LIFAdExRefracState,
+    state: LIFAdExRefracFeedForwardState,
     p: LIFAdExRefracParameters = LIFAdExRefracParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.tensor, LIFAdExRefracFeedForwardState]:
