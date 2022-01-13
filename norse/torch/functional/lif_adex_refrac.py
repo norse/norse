@@ -17,9 +17,6 @@ class LIFAdExRefracParameters(NamedTuple):
     rho_reset: torch.Tensor = torch.as_tensor(5.0)
 
 
-print("1")
-
-
 class LIFAdExRefracState(NamedTuple):
     """State of a LIFAdExRefrac neuron with absolute refractory period.
 
