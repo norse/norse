@@ -13,7 +13,7 @@ from norse.torch.functional.lif_adex_refrac import (
     lif_adex_refrac_feed_forward_step,
 )
 
-from norse.torch.module.snn import SNN, SNNCell, SNNRecurrentCell, SNNRecurrent
+from norse.torch.module.snn import SNNCell, SNNRecurrentCell, SNNRecurrent
 
 
 class LIFAdExRefracCell(SNNCell):

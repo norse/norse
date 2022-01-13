@@ -21,6 +21,7 @@ def test_lif_adex_refrac_cell():
     assert state.lif_adex.i.shape == (5, 4)
     assert state.lif_adex.z.shape == (5, 4)
     assert state.lif_adex.a.shape == (5, 4)
+    assert out.shape == (5, 4)
 
 
 def test_lif_adex_refrac_cell_state():
@@ -123,7 +124,7 @@ def test_lif_refrac_cell_autapses():
             a=torch.zeros(1, 2),
         ),
     )
-    z, s_full = cell(torch.zeros(1, 2), s1)
+    _, s_full = cell(torch.zeros(1, 2), s1)
     s2 = LIFAdExRefracState(
         rho=torch.zeros(1, 2),
         lif_adex=LIFAdExState(
