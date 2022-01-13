@@ -134,7 +134,7 @@ def test_lif_refrac_cell_autapses():
             a=torch.zeros(1, 2),
         ),
     )
-    z, s_part = cell(torch.zeros(1, 2), s2)
+    _, s_part = cell(torch.zeros(1, 2), s2)
 
     assert not s_full.lif_adex.i[0, 0] == s_part.lif_adex.i[0, 0]
 
@@ -154,7 +154,7 @@ def test_lif_adex_refrac_cell_no_autapses():
             a=torch.zeros(1, 2),
         ),
     )
-    z, s_full = cell(torch.zeros(1, 2), s1)
+    _, s_full = cell(torch.zeros(1, 2), s1)
     s2 = LIFAdExRefracState(
         rho=torch.zeros(1, 2),
         lif_adex=LIFAdExState(

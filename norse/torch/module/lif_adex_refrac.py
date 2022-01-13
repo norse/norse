@@ -51,7 +51,6 @@ class LIFAdExRefracCell(SNNCell):
             >>> lif_ex = LIFAdExCell()
             >>> data = torch.randn(batch_size, 20, 30)
             >>> output, s0 = lif_ex(data)
-        
     """
 
     def __init__(
