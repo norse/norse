@@ -13,8 +13,11 @@ from norse.torch.functional.threshold import threshold
 
 
 class LIFAdExRefracParameters(NamedTuple):
-    lif_adex: LIFAdExParameters()
+    lif_adex: LIFAdExParameters = LIFAdExParameters()
     rho_reset: torch.Tensor = torch.as_tensor(5.0)
+
+
+print("1")
 
 
 class LIFAdExRefracState(NamedTuple):
@@ -114,7 +117,6 @@ def lif_adex_refrac_step(
 
 
 def lif_adex_refrac_feed_forward_step(
-    
     input_tensor: torch.Tensor,
     state: LIFAdExRefracState,
     p: LIFAdExRefracParameters = LIFAdExRefracParameters(),

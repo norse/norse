@@ -69,7 +69,7 @@ class LIFAdExRefracCell(SNNCell):
     ) -> LIFAdExRefracFeedForwardState:
         state = LIFAdExRefracFeedForwardState(
             LIFAdExFeedForwardState(
-                v=self.p.v_leak.detach(),
+                v=self.p.lif_adex.v_leak.detach(),
                 i=torch.zeros(
                     *input_tensor.shape,
                     device=input_tensor.device,
@@ -133,7 +133,7 @@ class LIFAdExRefracRecurrentCell(SNNRecurrentCell):
         self,
         input_size: int,
         hidden_size: int,
-        p: LIFAdExRefracParameters,
+        p: LIFAdExRefracParameters = LIFAdExRefracParameters(),
         **kwargs,
     ) -> None:
         super().__init__(
@@ -156,7 +156,7 @@ class LIFAdExRefracRecurrentCell(SNNRecurrentCell):
                 ),
                 v=torch.full(
                     dims,
-                    self.p.v_leak.detach(),
+                    self.p.lif_adex.v_leak.detach(),
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
@@ -223,7 +223,7 @@ class LIFAdExRefracRecurrent(SNNRecurrent):
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFAdExRefracState:
         dims = (
-            *input_tensor.shape[1:],
+            *input_tensor.shape[1:-1],
             self.hidden_size,
         )
 
@@ -236,7 +236,7 @@ class LIFAdExRefracRecurrent(SNNRecurrent):
                 ),
                 v=torch.full(
                     dims,
-                    self.p.v_leak.detach(),
+                    self.p.lif_adex.v_leak.detach(),
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
@@ -250,10 +250,10 @@ class LIFAdExRefracRecurrent(SNNRecurrent):
                     device=input_tensor.device,
                     dtype=input_tensor.dtype,
                 ),
-                rho=torch.zeros(
-                    *dims, device=input_tensor.device, dtype=input_tensor.dtype
-                ),
-            )
+            ),
+            rho=torch.zeros(
+                *dims, device=input_tensor.device, dtype=input_tensor.dtype
+            ),
         )
         state.lif_adex.v.requires_grad = True
         return state
