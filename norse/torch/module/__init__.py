@@ -2,6 +2,13 @@
 Modules for spiking neural network, adhering to the ``torch.nn.Module`` interface.
 """
 
+from .lif_adex_refrac import (
+    LIFAdExRefracParameters,
+    LIFAdExRefracCell,
+    LIFAdExRefracRecurrentCell,
+    LIFAdExRefracRecurrent,
+    LIFAdExRefracFeedForwardState,
+)
 from .coba_lif import CobaLIFCell, CobaLIFParameters, CobaLIFState
 from .conv import LConv2d
 from .encode import (
@@ -78,6 +85,12 @@ from .izhikevich import (
 )
 
 __all__ = [
+    #LIFAdExRafrac
+    "LIFAdExRefracParameters",
+    "LIFAdExRefracCell",
+    "LIFAdExRefracRecurrentCell",
+    "LIFAdExRefracRecurrent",
+    "LIFAdExRefracFeedForwardState",
     "CobaLIFCell",
     "CobaLIFState",
     "CobaLIFParameters",
