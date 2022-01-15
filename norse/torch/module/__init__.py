@@ -86,7 +86,7 @@ from .izhikevich import (
 )
 
 __all__ = [
-    #LIFAdExRafrac
+    # LIFAdExRafrac
     "LIFAdExRefracState",
     "LIFAdExRefracParameters",
     "LIFAdExRefracCell",
