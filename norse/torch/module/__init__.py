@@ -8,6 +8,7 @@ from .lif_adex_refrac import (
     LIFAdExRefracRecurrentCell,
     LIFAdExRefracRecurrent,
     LIFAdExRefracFeedForwardState,
+    LIFAdExRefracState,
 )
 from .coba_lif import CobaLIFCell, CobaLIFParameters, CobaLIFState
 from .conv import LConv2d
@@ -86,6 +87,7 @@ from .izhikevich import (
 
 __all__ = [
     #LIFAdExRafrac
+    "LIFAdExRefracState",
     "LIFAdExRefracParameters",
     "LIFAdExRefracCell",
     "LIFAdExRefracRecurrentCell",
