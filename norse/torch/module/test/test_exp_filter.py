@@ -38,7 +38,7 @@ def test_ExpFilter_forward_ones_weights_without_bias():
     )
     model_parameter = torch.exp(torch.tensor([-1e-3])).item()
     data = torch.tensor([1, 0, 0], dtype=torch.float32).reshape(3, 1, 1)
-    prediction = torch.tensor([1, model_parameter, model_parameter ** 2]).reshape(
+    prediction = torch.tensor([1, model_parameter, model_parameter**2]).reshape(
         3, 1, 1
     )
     actual = filter_layer(data)
