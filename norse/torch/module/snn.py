@@ -181,6 +181,9 @@ class SNN(torch.nn.Module):
         dt (float): Time step to use in integration. Defaults to 0.001.
         activation_sparse (Optional[FeedforwardActivation]): A Sparse activation function - if it exists
             for the neuron model
+        record_states (bool): If True, the module will record and return a state object for each timestep
+            during simulation (note that this will consume memory). If False (default), we only return the
+            final state during simulation.
     """
 
     def __init__(
@@ -190,6 +193,7 @@ class SNN(torch.nn.Module):
         p: Any,
         dt: float = 0.001,
         activation_sparse: Optional[FeedforwardActivation] = None,
+        record_states: bool = False,
     ):
         super().__init__()
         self.activation = activation
@@ -197,6 +201,7 @@ class SNN(torch.nn.Module):
         self.state_fallback = state_fallback
         self.p = p
         self.dt = dt
+        self.record_states = record_states
 
     def extra_repr(self) -> str:
         return f"p={self.p}, dt={self.dt}"
@@ -206,6 +211,7 @@ class SNN(torch.nn.Module):
 
         T = input_tensor.shape[0]
         outputs = []
+        states = []
 
         activation = (
             self.activation_sparse
@@ -221,8 +227,10 @@ class SNN(torch.nn.Module):
                 self.dt,
             )
             outputs.append(out)
+            if self.record_states:
+                states.append(state)
 
-        return torch.stack(outputs), state
+        return torch.stack(outputs), state if not self.record_states else states
 
 
 class SNNRecurrent(torch.nn.Module):
@@ -249,6 +257,9 @@ class SNNRecurrent(torch.nn.Module):
         dt (float): Time step to use in integration. Defaults to 0.001.
         activation_sparse (Optional[RecurrentActivation]): A Sparse activation function - if it exists
             for the neuron model
+        record_states (bool): If True, the module will record and return a state object for each timestep
+            during simulation (note that this will consume memory). If False (default), we only return the
+            final state during simulation.
     """
 
     def __init__(
@@ -263,6 +274,7 @@ class SNNRecurrent(torch.nn.Module):
         autapses: bool = False,
         dt: float = 0.001,
         activation_sparse: Optional[RecurrentActivation] = None,
+        record_states: bool = False,
     ):
         super().__init__()
         self.activation = activation
@@ -273,6 +285,7 @@ class SNNRecurrent(torch.nn.Module):
         self.dt = dt
         self.input_size = torch.as_tensor(input_size)
         self.hidden_size = torch.as_tensor(hidden_size)
+        self.record_states = record_states
 
         if input_weights is not None:
             self.input_weights = input_weights
@@ -306,6 +319,7 @@ class SNNRecurrent(torch.nn.Module):
 
         T = input_tensor.shape[0]
         outputs = []
+        states = []
 
         activation = (
             self.activation_sparse
@@ -323,5 +337,7 @@ class SNNRecurrent(torch.nn.Module):
                 self.dt,
             )
             outputs.append(out)
+            if self.record_states:
+                states.append(state)
 
-        return torch.stack(outputs), state
+        return torch.stack(outputs), state if not self.record_states else states
