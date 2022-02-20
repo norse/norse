@@ -1,7 +1,13 @@
 # pytype: skip-file
 from typing import NamedTuple
 import torch
-from norse.torch.functional.lif import lif_step, LIFState, LIFParameters
+from norse.torch.functional.lif import (
+    LIFFeedForwardState,
+    lif_feed_forward_step,
+    lif_step,
+    LIFState,
+    LIFParameters,
+)
 from norse.torch.module import lif, snn
 
 
@@ -145,6 +151,50 @@ def test_snn_repr():
     assert str(n) == f"SNN(p={MockParams()}, dt=0.001)"
     n = lif.LIF(p=LIFParameters())
     assert str(n) == f"LIF(p={LIFParameters()}, dt=0.001)"
+
+
+def test_snn_record_state():
+    n = snn.SNN(
+        lif_feed_forward_step,
+        lambda x: LIFFeedForwardState(v=torch.zeros(3), i=torch.zeros(3)),
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        record_states=False,
+    )
+    _, y = n(torch.zeros(3, 1))
+    assert isinstance(y, LIFFeedForwardState)
+
+    n = snn.SNN(
+        lif_feed_forward_step,
+        lambda x: LIFFeedForwardState(v=torch.zeros(3), i=torch.zeros(3)),
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        record_states=True,
+    )
+    _, y = n(torch.zeros(3, 1))
+    assert isinstance(y, list)
+
+
+def test_snn_recurrent_record_state():
+    n = snn.SNNRecurrent(
+        lif_step,
+        lambda x: LIFState(v=torch.zeros(3), i=torch.zeros(3), z=torch.ones(3)),
+        2,
+        3,
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        record_states=False,
+    )
+    _, y = n(torch.zeros(3, 2))
+    assert isinstance(y, LIFState)
+
+    n = snn.SNNRecurrent(
+        lif_step,
+        lambda x: LIFState(v=torch.zeros(3), i=torch.zeros(3), z=torch.ones(3)),
+        2,
+        3,
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        record_states=True,
+    )
+    _, y = n(torch.zeros(3, 2))
+    assert isinstance(y, list)
 
 
 def test_snn_recurrent_repr():
