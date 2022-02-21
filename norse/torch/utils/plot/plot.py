@@ -2,7 +2,7 @@
 Utilities for plotting spikes in layers over time in 2D and 3D.
 """
 
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,17 +15,20 @@ from norse.torch.functional.izhikevich import (
 
 
 def _detach_tensor(tensor: torch.Tensor):
-    if tensor.requires_grad:
-        return tensor.detach().cpu()
+    if isinstance(tensor, torch.Tensor):
+        if tensor.requires_grad:
+            return tensor.detach().cpu()
+        else:
+            return tensor.cpu()
     else:
-        return tensor.cpu()
+        return tensor
 
 
 def plot_heatmap_2d(
     data: torch.Tensor,
     axes: Optional[plt.Axes] = None,
     show_colorbar: bool = False,
-    **kwargs
+    **kwargs,
 ):
     """
     Plots a heatmat of two-dimensional data
@@ -120,6 +123,48 @@ def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs)
     return ax
 
 
+def plot_neuron_states(
+    states: List[Any],
+    *variables: str,
+    label: bool = True,
+    axes: plt.Axes = None,
+    **kwargs,
+):
+    """
+    Plots state variables in a line plot based on a list of states over time.
+
+    Example:
+        >>> cell = LIF()
+        >>> _, states = cell(torch.ones(10, 3))
+        >>> plot_neuron_states(states, "i")
+
+    Arguments:
+        states (List[Any]): A list of state tuples containing state variables.
+            We assume the list is ordered by time.
+        *variables (str): A set of variables to plot.
+        label (bool): Whether or not to render the label in the plot.
+        axes (plt.Axes): An axes object to render on, if given.
+
+    Returns:
+        A plt.Axes object for further manipulation or rendering.
+    """
+    assert len(variables) > 0, "0 variables were given to render, we require at least 1"
+
+    if axes is None:
+        axes = plt.gca()
+    for variable in variables:
+        values = [
+            np.array(_detach_tensor(getattr(state, variable))) for state in states
+        ]
+        if label:
+            axes.plot(values, label=variable, **kwargs)
+        else:
+            axes.plot(values, **kwargs)
+    if label:
+        axes.legend()
+    return axes
+
+
 def plot_histogram_2d(spikes: torch.Tensor, axes: Optional[plt.Axes] = None, **kwargs):
     """
     Plots a histogram of 1-dimensional data.
@@ -151,7 +196,6 @@ def plot_histogram_2d(spikes: torch.Tensor, axes: Optional[plt.Axes] = None, **k
         An :class:`matplotlib.axes.Axes`.
     """
     ax = axes if axes is not None else plt.gca()
-    kwargs["density"] = kwargs.get("density", True)
     plt.hist(_detach_tensor(spikes).numpy(), **kwargs)
     return ax
 
@@ -160,7 +204,7 @@ def plot_scatter_3d(
     spikes: torch.Tensor,
     axes: Optional[List[plt.Axes]] = None,
     show_colorbar: bool = True,
-    **kwargs
+    **kwargs,
 ):
     """
     Plots spike activity in time. If multiple layers are given, the layers will be
@@ -261,6 +305,9 @@ def plot_spikes_2d(spikes: torch.Tensor, axes: plt.Axes = None, **kwargs):
         An :class:`matplotlib.axes.Axes` object
     """
     kwargs["cmap"] = kwargs.get("cmap", "binary")
+    if axes is None:
+        axes = plt.gca()
+    axes.set_yticks(range(spikes.shape[-1]))
     return plot_heatmap_2d(spikes, axes=axes, **kwargs)
 
 
