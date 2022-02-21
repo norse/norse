@@ -55,7 +55,6 @@ Regularization
     spike_accumulator
     voltage_accumulator
 
-
 Threshold functions
 -------------------
 
