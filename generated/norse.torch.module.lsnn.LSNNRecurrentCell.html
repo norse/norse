@@ -37,9 +37,12 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -1084,23 +1087,23 @@
 neuron-model <em>with</em> recurrence. More specifically it implements one
 integration step of the following ODE</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\\begin{align*}
-    \dot{v} &amp;= 1/\\tau_{\\text{mem}} (v_{\\text{leak}} - v + i) \\\\
-    \dot{i} &amp;= -1/\\tau_{\\text{syn}} i \\\\
-    \dot{b} &amp;= -1/\\tau_{b} b
+\[\begin{split}\begin{align*}
+    \dot{v} &amp;= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+    \dot{i} &amp;= -1/\tau_{\text{syn}} i \\
+    \dot{b} &amp;= -1/\tau_{b} b
 \end{align*}\end{split}\]</div>
 <p>together with the jump condition</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}z = \Theta(v - v_{\\text{th}} + b)\end{split}\]</div>
+\[z = \Theta(v - v_{\text{th}} + b)\]</div>
 <p>and transition equations</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\\begin{align*}
-    v &amp;= (1-z) v + z v_{\\text{reset}} \\\\
-    i &amp;= i + w_{\\text{input}} z_{\\text{in}} \\\\
-    i &amp;= i + w_{\\text{rec}} z_{\\text{rec}} \\\\
-    b &amp;= b + \\beta z
+\[\begin{split}\begin{align*}
+    v &amp;= (1-z) v + z v_{\text{reset}} \\
+    i &amp;= i + w_{\text{input}} z_{\text{in}} \\
+    i &amp;= i + w_{\text{rec}} z_{\text{rec}} \\
+    b &amp;= b + \beta z
 \end{align*}\end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(z_{\\text{rec}}\)</span> and <span class="math notranslate nohighlight">\(z_{\\text{in}}\)</span> are the
+<p>where <span class="math notranslate nohighlight">\(z_{\text{rec}}\)</span> and <span class="math notranslate nohighlight">\(z_{\text{in}}\)</span> are the
 recurrent and input spikes respectively.</p>
 <dl class="simple">
 <dt>Parameters:</dt><dd><p>input_size (int): Size of the input. Also known as the number of input features.
