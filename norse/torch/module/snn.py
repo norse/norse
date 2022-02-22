@@ -2,7 +2,7 @@
 Base module for spiking neural network (SNN) modules.
 """
 
-from typing import Any, Callable, Optional, Tuple
+from typing import Any, Callable, List, Optional, Tuple
 import torch
 
 FeedforwardActivation = Callable[
@@ -16,6 +16,33 @@ RecurrentActivation = Callable[
     [torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.nn.Module, float],
     Tuple[torch.Tensor, torch.Tensor],
 ]
+
+
+def _merge_states(states: List[Any]):
+    """
+    Merges states recursively by using :method:`torch.stack` on individual state variables to
+    produce a single output tuple, with an extra outer dimension.
+
+    Arguments:
+        states (List[Tuple]): The input list of states to merge
+
+    Return:
+        A single state of the same type as the first state in the input list of states, but with
+        its members replaced with a stacked version of the members from the input states.
+    """
+    state_dict = states[0]._asdict()
+    cls = states[0].__class__
+    keys = list(state_dict.keys())
+    tuples = [isinstance(s, tuple) for s in state_dict.values()]
+    output_dict = {}
+    for key, nested in zip(keys, tuples):
+        if nested:
+            nested_list = [getattr(s, key) for s in states]
+            output_dict[key] = _merge_states(nested_list)
+        else:
+            values = [getattr(s, key) for s in states]
+            output_dict[key] = torch.stack(values)
+    return cls(**output_dict)
 
 
 class SNNCell(torch.nn.Module):
@@ -230,7 +257,9 @@ class SNN(torch.nn.Module):
             if self.record_states:
                 states.append(state)
 
-        return torch.stack(outputs), state if not self.record_states else states
+        return torch.stack(outputs), state if not self.record_states else _merge_states(
+            states
+        )
 
 
 class SNNRecurrent(torch.nn.Module):
@@ -340,4 +369,6 @@ class SNNRecurrent(torch.nn.Module):
             if self.record_states:
                 states.append(state)
 
-        return torch.stack(outputs), state if not self.record_states else states
+        return torch.stack(outputs), state if not self.record_states else _merge_states(
+            states
+        )
