@@ -250,7 +250,7 @@ def spike_latency_lif_encode(
     """
     voltage = torch.zeros_like(input_current)
     z = torch.zeros_like(input_current)
-    mask = torch.zeros_like(input_current).byte()
+    mask = torch.zeros_like(input_current).bool()
     spikes = []
 
     for _ in range(seq_length):
