@@ -205,6 +205,7 @@ def test_snn_recurrent_record_state():
     assert y.i.shape == (3, 4)
     assert y.z.shape == (3, 4)
 
+
 def test_snn_record_nested_state():
     n = lif_refrac.LIFRefracRecurrent(
         2,
@@ -215,6 +216,7 @@ def test_snn_record_nested_state():
     assert isinstance(y, LIFRefracState)
     assert isinstance(y.lif, LIFState)
     assert y.rho.shape == (3, 4)
+
 
 def test_snn_recurrent_repr():
     n = snn.SNNRecurrent(None, None, 1, 2, MockParams())
