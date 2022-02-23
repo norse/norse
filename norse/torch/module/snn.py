@@ -2,7 +2,7 @@
 Base module for spiking neural network (SNN) modules.
 """
 
-from typing import Any, Callable, Optional, Tuple
+from typing import Any, Callable, List, Optional, Tuple
 import torch
 
 FeedforwardActivation = Callable[
@@ -16,6 +16,33 @@ RecurrentActivation = Callable[
     [torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.nn.Module, float],
     Tuple[torch.Tensor, torch.Tensor],
 ]
+
+
+def _merge_states(states: List[Any]):
+    """
+    Merges states recursively by using :method:`torch.stack` on individual state variables to
+    produce a single output tuple, with an extra outer dimension.
+
+    Arguments:
+        states (List[Tuple]): The input list of states to merge
+
+    Return:
+        A single state of the same type as the first state in the input list of states, but with
+        its members replaced with a stacked version of the members from the input states.
+    """
+    state_dict = states[0]._asdict()
+    cls = states[0].__class__
+    keys = list(state_dict.keys())
+    tuples = [isinstance(s, tuple) for s in state_dict.values()]
+    output_dict = {}
+    for key, nested in zip(keys, tuples):
+        if nested:
+            nested_list = [getattr(s, key) for s in states]
+            output_dict[key] = _merge_states(nested_list)
+        else:
+            values = [getattr(s, key) for s in states]
+            output_dict[key] = torch.stack(values)
+    return cls(**output_dict)
 
 
 class SNNCell(torch.nn.Module):
@@ -181,6 +208,9 @@ class SNN(torch.nn.Module):
         dt (float): Time step to use in integration. Defaults to 0.001.
         activation_sparse (Optional[FeedforwardActivation]): A Sparse activation function - if it exists
             for the neuron model
+        record_states (bool): If True, the module will record and return a state object for each timestep
+            during simulation (note that this will consume memory). If False (default), we only return the
+            final state during simulation.
     """
 
     def __init__(
@@ -190,6 +220,7 @@ class SNN(torch.nn.Module):
         p: Any,
         dt: float = 0.001,
         activation_sparse: Optional[FeedforwardActivation] = None,
+        record_states: bool = False,
     ):
         super().__init__()
         self.activation = activation
@@ -197,6 +228,7 @@ class SNN(torch.nn.Module):
         self.state_fallback = state_fallback
         self.p = p
         self.dt = dt
+        self.record_states = record_states
 
     def extra_repr(self) -> str:
         return f"p={self.p}, dt={self.dt}"
@@ -206,6 +238,7 @@ class SNN(torch.nn.Module):
 
         T = input_tensor.shape[0]
         outputs = []
+        states = []
 
         activation = (
             self.activation_sparse
@@ -221,8 +254,12 @@ class SNN(torch.nn.Module):
                 self.dt,
             )
             outputs.append(out)
+            if self.record_states:
+                states.append(state)
 
-        return torch.stack(outputs), state
+        return torch.stack(outputs), state if not self.record_states else _merge_states(
+            states
+        )
 
 
 class SNNRecurrent(torch.nn.Module):
@@ -249,6 +286,9 @@ class SNNRecurrent(torch.nn.Module):
         dt (float): Time step to use in integration. Defaults to 0.001.
         activation_sparse (Optional[RecurrentActivation]): A Sparse activation function - if it exists
             for the neuron model
+        record_states (bool): If True, the module will record and return a state object for each timestep
+            during simulation (note that this will consume memory). If False (default), we only return the
+            final state during simulation.
     """
 
     def __init__(
@@ -263,6 +303,7 @@ class SNNRecurrent(torch.nn.Module):
         autapses: bool = False,
         dt: float = 0.001,
         activation_sparse: Optional[RecurrentActivation] = None,
+        record_states: bool = False,
     ):
         super().__init__()
         self.activation = activation
@@ -273,6 +314,7 @@ class SNNRecurrent(torch.nn.Module):
         self.dt = dt
         self.input_size = torch.as_tensor(input_size)
         self.hidden_size = torch.as_tensor(hidden_size)
+        self.record_states = record_states
 
         if input_weights is not None:
             self.input_weights = input_weights
@@ -306,6 +348,7 @@ class SNNRecurrent(torch.nn.Module):
 
         T = input_tensor.shape[0]
         outputs = []
+        states = []
 
         activation = (
             self.activation_sparse
@@ -323,5 +366,9 @@ class SNNRecurrent(torch.nn.Module):
                 self.dt,
             )
             outputs.append(out)
+            if self.record_states:
+                states.append(state)
 
-        return torch.stack(outputs), state
+        return torch.stack(outputs), state if not self.record_states else _merge_states(
+            states
+        )

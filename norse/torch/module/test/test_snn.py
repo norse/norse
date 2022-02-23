@@ -1,8 +1,15 @@
 # pytype: skip-file
 from typing import NamedTuple
 import torch
-from norse.torch.functional.lif import lif_step, LIFState, LIFParameters
-from norse.torch.module import lif, snn
+from norse.torch.functional.lif import (
+    LIFFeedForwardState,
+    lif_feed_forward_step,
+    lif_step,
+    LIFState,
+    LIFParameters,
+)
+from norse.torch.functional.lif_refrac import LIFRefracState
+from norse.torch.module import lif, snn, lif_refrac
 
 
 class MockParams(NamedTuple):
@@ -145,6 +152,70 @@ def test_snn_repr():
     assert str(n) == f"SNN(p={MockParams()}, dt=0.001)"
     n = lif.LIF(p=LIFParameters())
     assert str(n) == f"LIF(p={LIFParameters()}, dt=0.001)"
+
+
+def test_snn_record_state():
+    n = snn.SNN(
+        lif_feed_forward_step,
+        lambda x: LIFFeedForwardState(v=torch.zeros(1), i=torch.zeros(1)),
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        record_states=False,
+    )
+    _, y = n(torch.zeros(3, 1))
+    assert isinstance(y, LIFFeedForwardState)
+
+    n = snn.SNN(
+        lif_feed_forward_step,
+        lambda x: LIFFeedForwardState(v=torch.zeros(1), i=torch.zeros(1)),
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        record_states=True,
+    )
+    _, y = n(torch.zeros(3, 1))
+    assert isinstance(y, LIFFeedForwardState)
+    assert y.v.shape == (3, 1)
+    assert y.i.shape == (3, 1)
+
+
+def test_snn_recurrent_record_state():
+    n = snn.SNNRecurrent(
+        lif_step,
+        lambda x: LIFState(v=torch.zeros(4), i=torch.zeros(4), z=torch.ones(4)),
+        2,
+        4,
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        record_states=False,
+    )
+    _, y = n(torch.zeros(3, 2))
+    assert isinstance(y, LIFState)
+    assert y.v.shape == (4,)
+    assert y.i.shape == (4,)
+    assert y.z.shape == (4,)
+
+    n = snn.SNNRecurrent(
+        lif_step,
+        lambda x: LIFState(v=torch.zeros(4), i=torch.zeros(4), z=torch.ones(4)),
+        2,
+        4,
+        p=LIFParameters(v_th=torch.as_tensor(0.1)),
+        record_states=True,
+    )
+    _, y = n(torch.zeros(3, 2))
+    assert isinstance(y, LIFState)
+    assert y.v.shape == (3, 4)
+    assert y.i.shape == (3, 4)
+    assert y.z.shape == (3, 4)
+
+
+def test_snn_record_nested_state():
+    n = lif_refrac.LIFRefracRecurrent(
+        2,
+        4,
+        record_states=True,
+    )
+    _, y = n(torch.zeros(3, 2))
+    assert isinstance(y, LIFRefracState)
+    assert isinstance(y.lif, LIFState)
+    assert y.rho.shape == (3, 4)
 
 
 def test_snn_recurrent_repr():
