@@ -3,6 +3,8 @@ norse.torch.utils
 
 Utilities for spiking neural networks based on `PyTorch <https://pytorch.org>`_.
 
+Packages and subpackages may depend on Matplotlib and Tensorboard.
+
 .. contents:: norse.torch.utils
     :depth: 2
     :local:

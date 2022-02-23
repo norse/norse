@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>norse.torch.utils.plot.plot &#8212; Norse v0.0.7</title>
+    <title>norse.torch.utils.tensorboard.tensorboard &#8212; Norse v0.0.7</title>
     
   <link href="../../../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -1097,7 +1097,7 @@ const thebe_selector_output = ".output, .cell_output"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2F_modules/norse/torch/utils/plot/plot.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2F_modules/norse/torch/utils/tensorboard/tensorboard.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -1136,376 +1136,194 @@ const thebe_selector_output = ".output, .cell_output"
             
               <div>
                 
-  <h1>Source code for norse.torch.utils.plot.plot</h1><div class="highlight"><pre>
+  <h1>Source code for norse.torch.utils.tensorboard.tensorboard</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Utilities for plotting spikes in layers over time in 2D and 3D.</span>
+<span class="sd">Tensorboard related utilities.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-
-<span class="kn">from</span> <span class="nn">norse.torch.functional.izhikevich</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">IzhikevichSpikingBehavior</span><span class="p">,</span>
-    <span class="n">izhikevich_feed_forward_step</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
 
 
-<span class="k">def</span> <span class="nf">_detach_tensor</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">tensor</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">tensor</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">tensor</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">tensor</span>
-
-
-<div class="viewcode-block" id="plot_heatmap_2d"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.plot.plot_heatmap_2d.html#norse.torch.utils.plot.plot_heatmap_2d">[docs]</a><span class="k">def</span> <span class="nf">plot_heatmap_2d</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">axes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">show_colorbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="k">def</span> <span class="nf">__generate_hook</span><span class="p">(</span>
+    <span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">counter_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">aggregation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
+    <span class="k">def</span> <span class="nf">hook</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">aggregation</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">aggregation</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">f</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">))</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">hook</span>
+
+
+<div class="viewcode-block" id="hook_spike_activity_mean"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.tensorboard.hook_spike_activity_mean.html#norse.torch.utils.tensorboard.hook_spike_activity_mean">[docs]</a><span class="k">def</span> <span class="nf">hook_spike_activity_mean</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">writer</span><span class="p">:</span> <span class="n">SummaryWriter</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots a heatmat of two-dimensional data</span>
+<span class="sd">    Generates a hook that can be applied to stateful torch Modules.</span>
+<span class="sd">    The hook plots the *mean neuron activity* as a line, assuming that the module output is a</span>
+<span class="sd">    tuple of (spikes, state). That is, this will not work on modules that only</span>
+<span class="sd">    returns a single tensor as output (i. e. have no state).</span>
+
+<span class="sd">    Read more about hooks in PyTorch Modules in the</span>
+<span class="sd">    `Module documentation &lt;https://pytorch.org/docs/stable/generated/torch.nn.Module.html&gt;`_.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.randn(28, 28)</span>
-<span class="sd">        &gt;&gt;&gt; plot_heatmap_2d(data)</span>
-
-<span class="sd">    .. plot::</span>
-
-<span class="sd">        import torch</span>
-<span class="sd">        from norse.torch.utils.plot import plot_heatmap_2d</span>
-<span class="sd">        data = torch.randn(28, 28)</span>
-<span class="sd">        plot_heatmap_2d(data)</span>
-<span class="sd">        plt.show()</span>
+<span class="sd">        &gt;&gt;&gt; from torch.utils.tensorboard import SummaryWriter</span>
+<span class="sd">        &gt;&gt;&gt; import norse.torch as snn</span>
+<span class="sd">        &gt;&gt;&gt; from snn.util import tensorboard</span>
+<span class="sd">        &gt;&gt;&gt; hook = tensorboard.hook_spike_activity_mean(&quot;lif&quot;, SummaryWriter())</span>
+<span class="sd">        &gt;&gt;&gt; snn.LIFCell().register_forward_hook(hook)</span>
 
 <span class="sd">    Arguments:</span>
-<span class="sd">        data (torch.Tensor): A tensor of data to plot in two dimensions</span>
-<span class="sd">                             (typically spikes with time in the first dimension and</span>
-<span class="sd">                             neuron id in the second).</span>
-<span class="sd">        axes (matplotlib.axes.Axes): The matplotlib axis to plot on, if any.</span>
-<span class="sd">                                     Defaults to :meth:`matplotlib.pyplot.gca`</span>
-<span class="sd">        show_colorbar (bool): Show a colorbar (True) or not (False).</span>
-<span class="sd">        kwargs: Specific key-value arguments to style the figure</span>
-<span class="sd">                fed to the :meth:`matplotlib.pyplot.imshow` function.</span>
+<span class="sd">        key (str): The name of the module as referred to in Tensorboard</span>
+<span class="sd">        writer (SummaryWriter): The Tensorboard Writer to log to.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A :class:`matplotlib.axes.Axes`.</span>
+<span class="sd">        A hook that will plot the mean neuron spike activity when registered</span>
+<span class="sd">        to a Torch module.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span> <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;aspect&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">)</span>
-    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;interpolation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span>
-
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">_detach_tensor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">show_colorbar</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ax</span></div>
+    <span class="k">return</span> <span class="n">__generate_hook</span><span class="p">(</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_image</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="s2">&quot;norse_hook_spike_activity_mean&quot;</span><span class="p">,</span> <span class="n">aggregation</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_heatmap_3d"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.plot.plot_heatmap_3d.html#norse.torch.utils.plot.plot_heatmap_3d">[docs]</a><span class="k">def</span> <span class="nf">plot_heatmap_3d</span><span class="p">(</span><span class="n">spikes</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">show_colorbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="hook_spike_activity_sum"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.tensorboard.hook_spike_activity_sum.html#norse.torch.utils.tensorboard.hook_spike_activity_sum">[docs]</a><span class="k">def</span> <span class="nf">hook_spike_activity_sum</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">writer</span><span class="p">:</span> <span class="n">SummaryWriter</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots heatmaps for some activity in several layers.</span>
-<span class="sd">    Expects a named tensor with names=(&#39;L&#39;, &#39;X&#39;, &#39;Y&#39;).</span>
-<span class="sd">    Instead of using the :meth:`matplotlib.pyplot.imshow` matplotlib function,</span>
-<span class="sd">    we make use of the :meth:`matplotlib.pyplot.scatter` function to disperse points in 3d.</span>
+<span class="sd">    Generates a hook that can be applied to stateful torch Modules.</span>
+<span class="sd">    The hook plots the *summed neuron activity* as a line, assuming that the module output is a</span>
+<span class="sd">    tuple of (spikes, state). That is, this will not work on modules that only</span>
+<span class="sd">    returns a single tensor as output (i. e. have no state).</span>
+
+<span class="sd">    Read more about hooks in PyTorch Modules in the</span>
+<span class="sd">    `Module documentation &lt;https://pytorch.org/docs/stable/generated/torch.nn.Module.html&gt;`_.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; import torch</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.utils.plot import plot_heatmap_3d</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.randn(4, 28, 28, names=(&#39;L&#39;, &#39;X&#39;, &#39;Y&#39;))</span>
-<span class="sd">        &gt;&gt;&gt; plot_heatmap_3d(data)</span>
-<span class="sd">        &gt;&gt;&gt; plt.show()</span>
-
-<span class="sd">    .. plot::</span>
-
-<span class="sd">        import torch</span>
-<span class="sd">        from norse.torch.utils.plot import plot_heatmap_3d</span>
-<span class="sd">        data = torch.randn(4, 28, 28, names=(&#39;L&#39;, &#39;X&#39;, &#39;Y&#39;))</span>
-<span class="sd">        plot_heatmap_3d(data)</span>
-<span class="sd">        plt.show()</span>
+<span class="sd">        &gt;&gt;&gt; from torch.utils.tensorboard import SummaryWriter</span>
+<span class="sd">        &gt;&gt;&gt; import norse.torch as snn</span>
+<span class="sd">        &gt;&gt;&gt; from snn.util import tensorboard</span>
+<span class="sd">        &gt;&gt;&gt; hook = tensorboard.hook_spike_activity_sum(&quot;lif&quot;, SummaryWriter())</span>
+<span class="sd">        &gt;&gt;&gt; snn.LIFCell().register_forward_hook(hook)</span>
 
 <span class="sd">    Arguments:</span>
-<span class="sd">        spikes (torch.NamedTensor): A tensor named with four dimensions: T (time), L (layer), X, Y.</span>
-<span class="sd">                                    Expected to be in the range :math:`[0, 1]`.</span>
-<span class="sd">        show_colorbar (bool): Show a colorbar (True) or not (False).</span>
-<span class="sd">        kwargs: Specific key-value arguments to style the figure</span>
-<span class="sd">                fed to the :meth:`matplotlib.pyplot.scatter` function.</span>
+<span class="sd">        key (str): The name of the module as referred to in Tensorboard</span>
+<span class="sd">        writer (SummaryWriter): The Tensorboard Writer to log to.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An :class:`matplotlib.axes.Axes` object</span>
+<span class="sd">        A hook that will plot the mean neuron spike activity when registered</span>
+<span class="sd">        to a Torch module.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">spikes</span> <span class="o">=</span> <span class="n">_detach_tensor</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="o">.</span><span class="n">align_to</span><span class="p">(</span><span class="o">*</span><span class="s2">&quot;LXY&quot;</span><span class="p">)</span>
-    <span class="n">L</span> <span class="o">=</span> <span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
-    <span class="n">unnamed</span> <span class="o">=</span> <span class="n">spikes</span> <span class="o">+</span> <span class="mf">1e-10</span>  <span class="c1"># Add infinitely small amount to &quot;trigger&quot; all pixels</span>
-    <span class="n">unnamed</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Unnamed tensor required for to_sparse</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">unnamed</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span><span class="o">.</span><span class="n">coalesce</span><span class="p">()</span>
-
-    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">invert_zaxis</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">indices</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">indices</span><span class="p">()[</span><span class="mi">2</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">indices</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">show_colorbar</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ax</span></div>
+    <span class="k">return</span> <span class="n">__generate_hook</span><span class="p">(</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="s2">&quot;norse_hook_spike_activity_sum&quot;</span><span class="p">,</span> <span class="n">aggregation</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_neuron_states"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.plot.plot_neuron_states.html#norse.torch.utils.plot.plot_neuron_states">[docs]</a><span class="k">def</span> <span class="nf">plot_neuron_states</span><span class="p">(</span>
-    <span class="n">states</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
-    <span class="o">*</span><span class="n">variables</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="hook_spike_histogram_mean"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.tensorboard.hook_spike_histogram_mean.html#norse.torch.utils.tensorboard.hook_spike_histogram_mean">[docs]</a><span class="k">def</span> <span class="nf">hook_spike_histogram_mean</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">writer</span><span class="p">:</span> <span class="n">SummaryWriter</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots state variables in a line plot based on a list of states over time.</span>
+<span class="sd">    Generates a hook that can be applied to stateful torch Modules.</span>
+<span class="sd">    The hook shows a histogram of *mean neuron activity*, assuming that the module output is a</span>
+<span class="sd">    tuple of (spikes, state). That is, this will not work on modules that only</span>
+<span class="sd">    returns a single tensor as output (i. e. have no state).</span>
+
+<span class="sd">    Read more about hooks in PyTorch Modules in the</span>
+<span class="sd">    `Module documentation &lt;https://pytorch.org/docs/stable/generated/torch.nn.Module.html&gt;`_.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; cell = LIF()</span>
-<span class="sd">        &gt;&gt;&gt; _, states = cell(torch.ones(10, 3))</span>
-<span class="sd">        &gt;&gt;&gt; plot_neuron_states(states, &quot;i&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; from torch.utils.tensorboard import SummaryWriter</span>
+<span class="sd">        &gt;&gt;&gt; import norse.torch as snn</span>
+<span class="sd">        &gt;&gt;&gt; from snn.util import tensorboard</span>
+<span class="sd">        &gt;&gt;&gt; hook = tensorboard.hook_spike_histogram_mean(&quot;lif&quot;, SummaryWriter())</span>
+<span class="sd">        &gt;&gt;&gt; snn.LIFCell().register_forward_hook(hook)</span>
 
 <span class="sd">    Arguments:</span>
-<span class="sd">        states (List[Any]): A list of state tuples containing state variables.</span>
-<span class="sd">            We assume the list is ordered by time.</span>
-<span class="sd">        *variables (str): A set of variables to plot.</span>
-<span class="sd">        label (bool): Whether or not to render the label in the plot.</span>
-<span class="sd">        axes (plt.Axes): An axes object to render on, if given.</span>
+<span class="sd">        key (str): The name of the module as referred to in Tensorboard</span>
+<span class="sd">        writer (SummaryWriter): The Tensorboard Writer to log to.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A plt.Axes object for further manipulation or rendering.</span>
+<span class="sd">        A hook that will plot the mean neuron spike activity when registered</span>
+<span class="sd">        to a Torch module.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;0 variables were given to render, we require at least 1&quot;</span>
-
-    <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_detach_tensor</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">variable</span><span class="p">)))</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span>
-        <span class="p">]</span>
-        <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
-            <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
-        <span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">axes</span></div>
+    <span class="k">return</span> <span class="n">__generate_hook</span><span class="p">(</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_histogram</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">,</span>
+        <span class="s2">&quot;norse_hook_spike_activity_mean&quot;</span><span class="p">,</span>
+        <span class="n">aggregation</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_histogram_2d"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.plot.plot_histogram_2d.html#norse.torch.utils.plot.plot_histogram_2d">[docs]</a><span class="k">def</span> <span class="nf">plot_histogram_2d</span><span class="p">(</span><span class="n">spikes</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="hook_spike_histogram_sum"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.tensorboard.hook_spike_histogram_sum.html#norse.torch.utils.tensorboard.hook_spike_histogram_sum">[docs]</a><span class="k">def</span> <span class="nf">hook_spike_histogram_sum</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">writer</span><span class="p">:</span> <span class="n">SummaryWriter</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots a histogram of 1-dimensional data.</span>
+<span class="sd">    Generates a hook that can be applied to stateful torch Modules.</span>
+<span class="sd">    The hook shows a histogram of the *summed neuron activity*, assuming that the module</span>
+<span class="sd">    output is a tuple of (spikes, state). That is, this will not work on modules that only</span>
+<span class="sd">    returns a single tensor as output (i. e. have no state).</span>
+
+<span class="sd">    Read more about hooks in PyTorch Modules in the</span>
+<span class="sd">    `Module documentation &lt;https://pytorch.org/docs/stable/generated/torch.nn.Module.html&gt;`_.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; cell = LIF()</span>
-<span class="sd">        &gt;&gt;&gt; data = torch.ones(10, 10) + torch.randn(10, 10)</span>
-<span class="sd">        &gt;&gt;&gt; spikes, state = cell(data)</span>
-<span class="sd">        &gt;&gt;&gt; plot_histogram_2d(state.v)</span>
-
-<span class="sd">    .. plot::</span>
-
-<span class="sd">        import torch</span>
-<span class="sd">        from norse.torch import LIF</span>
-<span class="sd">        from norse.torch.utils.plot import plot_histogram_2d</span>
-<span class="sd">        spikes, state = LIF()(torch.ones(10, 10) + torch.randn(10, 10))</span>
-<span class="sd">        plot_histogram_2d(state.v)</span>
-<span class="sd">        plt.show()</span>
-
+<span class="sd">        &gt;&gt;&gt; from torch.utils.tensorboard import SummaryWriter</span>
+<span class="sd">        &gt;&gt;&gt; import norse.torch as snn</span>
+<span class="sd">        &gt;&gt;&gt; from snn.util import tensorboard</span>
+<span class="sd">        &gt;&gt;&gt; hook = tensorboard.hook_spike_histogram_sum(&quot;lif&quot;, SummaryWriter())</span>
+<span class="sd">        &gt;&gt;&gt; snn.LIFCell().register_forward_hook(hook)</span>
 
 <span class="sd">    Arguments:</span>
-<span class="sd">        data (torch.Tensor): A tensor of single-dimensional data.</span>
-<span class="sd">        axes (matplotlib.axes.Axes): The matplotlib axis to plot on, if any.</span>
-<span class="sd">                                     Defaults to :meth:`matplotlib.pyplot.gca`</span>
-<span class="sd">        kwargs: Specific key-value arguments to style the figure</span>
-<span class="sd">                fed to the :meth:`matplotlib.pyplot.hist` function.</span>
+<span class="sd">        key (str): The name of the module as referred to in Tensorboard</span>
+<span class="sd">        writer (SummaryWriter): The Tensorboard Writer to log to.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An :class:`matplotlib.axes.Axes`.</span>
+<span class="sd">        A hook that will plot the mean neuron spike activity when registered</span>
+<span class="sd">        to a Torch module.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span> <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">_detach_tensor</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ax</span></div>
+    <span class="k">return</span> <span class="n">__generate_hook</span><span class="p">(</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">add_histogram</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">,</span>
+        <span class="s2">&quot;norse_hook_spike_activity_mean&quot;</span><span class="p">,</span>
+        <span class="n">aggregation</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_scatter_3d"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.plot.plot_scatter_3d.html#norse.torch.utils.plot.plot_scatter_3d">[docs]</a><span class="k">def</span> <span class="nf">plot_scatter_3d</span><span class="p">(</span>
-    <span class="n">spikes</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">axes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">show_colorbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="hook_spike_image"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.tensorboard.hook_spike_image.html#norse.torch.utils.tensorboard.hook_spike_image">[docs]</a><span class="k">def</span> <span class="nf">hook_spike_image</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">writer</span><span class="p">:</span> <span class="n">SummaryWriter</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots spike activity in time. If multiple layers are given, the layers will be</span>
-<span class="sd">    shown in subplots.</span>
-<span class="sd">    Expects a named tensor in three dimensions (L, X, Y) or four, with time (T, L, X, Y).</span>
+<span class="sd">    Generates a hook that can be applied to stateful torch Modules.</span>
+<span class="sd">    The hook plots the *spiked* output, assuming that the module output is a</span>
+<span class="sd">    tuple of (spikes, state). That is, this will not work on modules that only</span>
+<span class="sd">    returns a single tensor as output (i. e. have no state).</span>
+
+<span class="sd">    Read more about hooks in PyTorch Modules in the</span>
+<span class="sd">    `Module documentation &lt;https://pytorch.org/docs/stable/generated/torch.nn.Module.html&gt;`_.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; distribution = torch.distributions.bernoulli.Bernoulli(torch.tensor([0.02]))</span>
-<span class="sd">        &gt;&gt;&gt; data = distribution.sample(sample_shape=(3, 100, 10, 10)).squeeze()</span>
-<span class="sd">        &gt;&gt;&gt; data.names = (&#39;L&#39;, &#39;T&#39;, &#39;X&#39;, &#39;Y&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; plot_scatter_3d(data)</span>
-
-<span class="sd">    .. plot::</span>
-
-<span class="sd">        import torch</span>
-<span class="sd">        from norse.torch.utils.plot import plot_scatter_3d</span>
-<span class="sd">        plt.figure(figsize=(10, 3))</span>
-<span class="sd">        distribution = torch.distributions.bernoulli.Bernoulli(torch.tensor([0.02]))</span>
-<span class="sd">        data = distribution.sample(sample_shape=(3, 100, 10, 10)).squeeze()</span>
-<span class="sd">        data.names=(&#39;L&#39;, &#39;T&#39;, &#39;X&#39;, &#39;Y&#39;)</span>
-<span class="sd">        plot_scatter_3d(data)</span>
-<span class="sd">        plt.show()</span>
+<span class="sd">        &gt;&gt;&gt; from torch.utils.tensorboard import SummaryWriter</span>
+<span class="sd">        &gt;&gt;&gt; import norse.torch as snn</span>
+<span class="sd">        &gt;&gt;&gt; from snn.util import tensorboard</span>
+<span class="sd">        &gt;&gt;&gt; hook = tensorboard.hook_spike_image(&quot;lif&quot;, SummaryWriter())</span>
+<span class="sd">        &gt;&gt;&gt; snn.LIFCell().register_forward_hook(hook)</span>
 
 <span class="sd">    Arguments:</span>
-<span class="sd">        spikes (torch.NamedTensor): A tensor named with four dimensions: T (time), L (layer), X, Y.</span>
-<span class="sd">                                    Expected to be in the range :math:`[0, 1]`.</span>
-<span class="sd">        axes (List[plt.Axes]): A list of Axes that should have the same length as the L dimension in</span>
-<span class="sd">                               the spike tensor. Defaults to None, which will generate a grid for you.</span>
-<span class="sd">        show_colorbar (bool): Show a colorbar (True) or not (False).</span>
-<span class="sd">        kwargs: Specific key-value arguments to style the figure</span>
-<span class="sd">                fed to the :meth:`matplotlib.pyplot.scatter` function.</span>
+<span class="sd">        key (str): The name of the module as referred to in Tensorboard</span>
+<span class="sd">        writer (SummaryWriter): The Tensorboard Writer to log to.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A list of :class:`matplotlib.axes.Axes`</span>
+<span class="sd">        A hook that will plot the spike activity as an image when registered</span>
+<span class="sd">        to a Torch module.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">spikes</span> <span class="o">=</span> <span class="n">_detach_tensor</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="o">.</span><span class="n">align_to</span><span class="p">(</span><span class="o">*</span><span class="s2">&quot;TLXY&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">spikes</span> <span class="o">=</span> <span class="n">_detach_tensor</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="o">.</span><span class="n">align_to</span><span class="p">(</span><span class="o">*</span><span class="s2">&quot;LXY&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">T</span> <span class="o">=</span> <span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">L</span> <span class="o">=</span> <span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">L</span> <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">axes</span>
-    <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">axis</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axes</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">axis</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">axis</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
-            <span class="n">axes</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">ax</span>
-
-        <span class="n">unnamed</span> <span class="o">=</span> <span class="n">spikes</span><span class="p">[:,</span> <span class="n">l</span><span class="p">]</span>
-        <span class="n">unnamed</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Unnamed tensor required for to_sparse</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">unnamed</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span><span class="o">.</span><span class="n">coalesce</span><span class="p">()</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">invert_zaxis</span><span class="p">()</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">indices</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">indices</span><span class="p">()[</span><span class="mi">2</span><span class="p">],</span> <span class="n">s</span><span class="o">.</span><span class="n">indices</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
-    <span class="k">if</span> <span class="n">show_colorbar</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.04</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">axes</span></div>
-
-
-<div class="viewcode-block" id="plot_spikes_2d"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.plot.plot_spikes_2d.html#norse.torch.utils.plot.plot_spikes_2d">[docs]</a><span class="k">def</span> <span class="nf">plot_spikes_2d</span><span class="p">(</span><span class="n">spikes</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots a 2D diagram of spikes. Works similar to the :meth:`plot_heatmap_2d` but</span>
-<span class="sd">    in black and white.</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; import torch</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch import LIF</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.utils.plot import plot_spikes_2d</span>
-<span class="sd">        &gt;&gt;&gt; spikes, _ = LIF()(torch.randn(200, 10))</span>
-<span class="sd">        &gt;&gt;&gt; plot_spikes_2d(spikes)</span>
-<span class="sd">        &gt;&gt;&gt; plt.show()</span>
-
-<span class="sd">    .. plot::</span>
-
-<span class="sd">        import torch</span>
-<span class="sd">        from norse.torch import LIF</span>
-<span class="sd">        from norse.torch.utils.plot import plot_spikes_2d</span>
-<span class="sd">        plt.figure(figsize=(8, 4))</span>
-<span class="sd">        spikes, _ = LIF()(torch.randn(200, 10))</span>
-<span class="sd">        plot_spikes_2d(spikes)</span>
-<span class="sd">        plt.show()</span>
-
-
-<span class="sd">    Arguments:</span>
-<span class="sd">        spikes (torch.Tensor): A tensor of spikes from a single layer in two dimensions.</span>
-<span class="sd">        axes (matplotlib.axes.Axes): The matplotlib axis to plot on, if any.</span>
-<span class="sd">                                     Defaults to :meth:`matplotlib.pyplot.gca`</span>
-<span class="sd">        kwargs: Specific key-value arguments to style the figure</span>
-<span class="sd">                fed to the :meth:`matplotlib.pyplot.imshow` function.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        An :class:`matplotlib.axes.Axes` object</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cmap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cmap&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-    <span class="n">ytick_step</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">axes</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">ytick_step</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">plot_heatmap_2d</span><span class="p">(</span><span class="n">spikes</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="plot_izhikevich"><a class="viewcode-back" href="../../../../../generated/norse.torch.utils.plot.plot_izhikevich.html#norse.torch.utils.plot.plot_izhikevich">[docs]</a><span class="k">def</span> <span class="nf">plot_izhikevich</span><span class="p">(</span>
-    <span class="n">behavior</span><span class="p">:</span> <span class="n">IzhikevichSpikingBehavior</span><span class="p">,</span>
-    <span class="n">current</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="n">time_print</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span>
-    <span class="n">time_current</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
-    <span class="n">timestep_print</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes and plots a 2D visualisation of the behavior of an Izhikevich neuron model.</span>
-<span class="sd">    By default, the time window is 250ms with a time step of 0.1ms</span>
-
-<span class="sd">    Example :</span>
-<span class="sd">        &gt;&gt;&gt; import torch</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch import tonic_spiking</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch.utils.plot import plot_izhikevich</span>
-<span class="sd">        &gt;&gt;&gt; plot_izhikevich(tonic_spiking)</span>
-
-<span class="sd">    .. plot::</span>
-
-<span class="sd">        import torch</span>
-<span class="sd">        from norse.torch import tonic_spiking</span>
-<span class="sd">        from norse.torch.utils.plot import plot_izhikevich</span>
-<span class="sd">        plot_izhikevich(tonic_spiking)</span>
-
-<span class="sd">    Arguments :</span>
-<span class="sd">        behavior (IzhikevichSpikingBehavior) : behavior of an Izhikevich neuron</span>
-<span class="sd">        current (float) : strengh of the input current, defaults to 1</span>
-<span class="sd">        time_print (float) : size of the time window for simulation (in ms)</span>
-<span class="sd">        time_current (float) : time at which the input current goes from 0 to current (in ms)</span>
-<span class="sd">        timestep_print (float) : timestep of the simulation (in ms)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">p</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">behavior</span>
-    <span class="n">T1</span> <span class="o">=</span> <span class="n">time_current</span>
-    <span class="n">vs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">us</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">cs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">time_print</span><span class="p">,</span> <span class="n">timestep_print</span><span class="p">):</span>
-        <span class="n">vs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-        <span class="n">us</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">timestep_print</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">T1</span><span class="p">:</span>
-            <span class="n">input_current</span> <span class="o">=</span> <span class="n">current</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">input_current</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">izhikevich_feed_forward_step</span><span class="p">(</span><span class="n">input_current</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-        <span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_current</span><span class="p">)</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Membrane potential (mV)&quot;</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (ms)&quot;</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">vs</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">cs</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">__generate_hook</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">add_image</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="s2">&quot;norse_hook_spike_image&quot;</span><span class="p">)</span></div>
 </pre></div>
 
               </div>
