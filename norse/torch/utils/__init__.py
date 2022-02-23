@@ -8,11 +8,11 @@ import logging
 try:
     from .plot import *
 except ImportError as e:
-    logging.debug("Failed to import Norse plotting utilities", e)
+    logging.debug(f"Failed to import Norse plotting utilities: {e}")
 
 try:
     from .tensorboard import *
 except ImportError as e:
-    logging.debug("Failed to import Norse Tensorboard utilities", e)
+    logging.debug(f"Failed to import Norse plotting utilities: {e}")
 
 del logging
