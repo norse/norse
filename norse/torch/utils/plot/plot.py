@@ -64,7 +64,7 @@ def plot_heatmap_2d(
 
     pos = plt.imshow(_detach_tensor(data).T, **kwargs)
     if show_colorbar:
-        ax.colorbar(pos, ax=ax)
+        plt.colorbar(pos, ax=ax)
     return ax
 
 
@@ -307,7 +307,8 @@ def plot_spikes_2d(spikes: torch.Tensor, axes: plt.Axes = None, **kwargs):
     kwargs["cmap"] = kwargs.get("cmap", "binary")
     if axes is None:
         axes = plt.gca()
-    axes.set_yticks(range(spikes.shape[-1]))
+    ytick_step = max(1, spikes.shape[-1] // 10)
+    axes.set_yticks(range(0, spikes.shape[-1], ytick_step))
     return plot_heatmap_2d(spikes, axes=axes, **kwargs)
 
 

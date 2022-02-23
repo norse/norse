@@ -3,19 +3,16 @@ Utilities for Norse networks in Torch.
 
 Packages and subpackages may depend on Matplotlib and Tensorboard.
 """
+import logging
 
-from .tensorboard import (
-    hook_spike_activity_mean,
-    hook_spike_activity_sum,
-    hook_spike_histogram_mean,
-    hook_spike_histogram_sum,
-    hook_spike_image,
-)
+try:
+    from .plot import *
+except ImportError as e:
+    logging.debug(f"Failed to import Norse plotting utilities: {e}")
 
-__all__ = [
-    "hook_spike_activity_mean",
-    "hook_spike_activity_sum",
-    "hook_spike_histogram_mean",
-    "hook_spike_histogram_sum",
-    "hook_spike_image",
-]
+try:
+    from .tensorboard import *
+except ImportError as e:
+    logging.debug(f"Failed to import Norse plotting utilities: {e}")
+
+del logging
