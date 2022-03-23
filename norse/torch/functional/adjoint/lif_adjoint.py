@@ -11,6 +11,7 @@ from norse.torch.functional.lif import (
     lif_step_sparse,
 )
 from typing import Tuple
+from norse.torch.functional.threshold import SurrogateMethod
 
 
 class LIFAdjointFunction(torch.autograd.Function):
@@ -215,7 +216,7 @@ class LIFFeedForwardAdjointFunction(torch.autograd.Function):
         input: torch.Tensor,
         v: torch.Tensor,
         i: torch.Tensor,
-        p: LIFParameters = LIFParameters(),
+        p: LIFParameters = LIFParameters(method=SurrogateMethod.Heaviside),
         dt: float = 0.001,
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         ctx.p = p

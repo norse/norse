@@ -2,7 +2,7 @@ from typing import NamedTuple, Tuple
 
 import torch
 
-from norse.torch.functional.threshold import threshold
+from norse.torch.functional.threshold import threshold, SurrogateMethod
 
 
 class CobaLIFState(NamedTuple):
@@ -39,7 +39,7 @@ class CobaLIFParameters(NamedTuple):
         v_rest (torch.Tensor): rest membrane potential
         v_reset (torch.Tensor): reset membrane potential
         v_thresh (torch.Tensor): threshold membrane potential
-        method (str): method to determine the spike threshold
+        method (SurrogateMethod): method to determine the spike threshold
                       (relevant for surrogate gradients)
         alpha (float): hyper parameter to use in surrogate gradient computation
     """
@@ -53,7 +53,7 @@ class CobaLIFParameters(NamedTuple):
     v_rest: torch.Tensor = torch.as_tensor(-20)
     v_reset: torch.Tensor = torch.as_tensor(-70)
     v_thresh: torch.Tensor = torch.as_tensor(-10)
-    method: str = "super"
+    method: SurrogateMethod = SurrogateMethod.Super
     alpha: float = 100.0
 
 

@@ -19,6 +19,7 @@ from norse.torch.module.encode import ConstantCurrentLIFEncoder
 from norse.torch.module.lif import LIFRecurrentCell
 from norse.torch.module.lsnn import LSNNRecurrentCell, LSNNParameters
 from norse.torch.module.leaky_integrator import LILinearCell
+from norse.torch.functional.threshold import SurrogateMethod
 
 
 class ANNPolicy(torch.nn.Module):
@@ -53,7 +54,7 @@ class Policy(torch.nn.Module):
         self.lif = LIFRecurrentCell(
             2 * self.state_dim,
             self.hidden_features,
-            p=LIFParameters(method="super", alpha=100.0),
+            p=LIFParameters(method=SurrogateMethod.Super, alpha=100.0),
         )
         self.dropout = torch.nn.Dropout(p=0.5)
         self.readout = LILinearCell(self.hidden_features, self.output_features)
@@ -87,7 +88,7 @@ class Policy(torch.nn.Module):
 
 
 class LSNNPolicy(torch.nn.Module):
-    def __init__(self, model="super"):
+    def __init__(self, model=SurrogateMethod.Super):
         super(LSNNPolicy, self).__init__()
         self.state_dim = 4
         self.input_features = 16
@@ -190,7 +191,7 @@ def main(args):
     elif args.policy == "snn":
         policy = Policy().to(device)
     elif args.policy == "lsnn":
-        policy = LSNNPolicy(model=args.model).to(device)
+        policy = LSNNPolicy().to(device)
     optimizer = torch.optim.Adam(policy.parameters(), lr=args.learning_rate)
 
     running_rewards = []

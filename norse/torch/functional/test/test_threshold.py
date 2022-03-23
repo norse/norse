@@ -3,6 +3,7 @@ from pytest import raises
 
 
 from norse.torch.functional.threshold import (
+    SurrogateMethod,
     threshold,
     sign,
     heavi_erfc_fn,
@@ -70,21 +71,14 @@ def test_circ_dist_fn_backward():
     assert torch.sum(x.grad < 0) == 10
 
 
-def test_threshold_throws():
-    alpha = 10.0
-    x = torch.ones(10)
-
-    with raises(ValueError):
-        _ = threshold(x, "noasd", alpha)
-
-
 def test_threshold_backward():
     alpha = 10.0
     x = torch.ones(10)
 
-    methods = ["super", "tanh", "triangle", "circ", "heavi_erfc"]
+    for method in SurrogateMethod:
+        if method == SurrogateMethod.Heaviside:
+            continue
 
-    for method in methods:
         x = torch.ones(10, requires_grad=True)
         out = threshold(x, method, alpha)
         out.backward(torch.ones(10))
@@ -101,9 +95,7 @@ def test_threshold_backward():
 def test_threshold():
     alpha = 10.0
 
-    methods = ["super", "heaviside", "tanh", "triangle", "circ", "heavi_erfc"]
-
-    for method in methods:
+    for method in SurrogateMethod:
         x = torch.ones(10)
         out = threshold(x, method, alpha)
         assert torch.equal(out, torch.ones(10))
@@ -120,15 +112,7 @@ def test_threshold():
 def test_sign():
     alpha = 10.0
 
-    methods = [
-        "super",
-        "heaviside",
-        "tanh",
-        "triangle",
-        "circ",
-    ]
-
-    for method in methods:
+    for method in SurrogateMethod:
         x = torch.ones(10)
         out = sign(x, method, alpha)
         assert torch.equal(out, torch.ones(10))

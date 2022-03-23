@@ -1,6 +1,7 @@
 import torch
 
 from norse.torch.functional.lif import LIFParameters
+from norse.torch.functional.threshold import SurrogateMethod
 from norse.torch.module.leaky_integrator import LILinearCell
 from norse.torch.module.lif import LIFCell
 
@@ -16,7 +17,11 @@ class ConvNet(torch.nn.Module):
     """
 
     def __init__(
-        self, num_channels=1, feature_size=28, method="super", dtype=torch.float
+        self,
+        num_channels=1,
+        feature_size=28,
+        method=SurrogateMethod.Super,
+        dtype=torch.float,
     ):
         super(ConvNet, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -51,7 +56,7 @@ class ConvNet(torch.nn.Module):
             z = 10 * self.conv2(z)
             z, s1 = self.lif1(z, s1)
             z = torch.nn.functional.max_pool2d(z, 2, 2)
-            z = z.view(-1, self.features ** 2 * 50)
+            z = z.view(-1, self.features**2 * 50)
             z = self.fc1(z)
             z, s2 = self.lif2(z, s2)
             v, so = self.out(torch.nn.functional.relu(z), so)
@@ -70,7 +75,11 @@ class ConvNet4(torch.nn.Module):
     """
 
     def __init__(
-        self, num_channels=1, feature_size=28, method="super", dtype=torch.float
+        self,
+        num_channels=1,
+        feature_size=28,
+        method=SurrogateMethod.Super,
+        dtype=torch.float,
     ):
         super(ConvNet4, self).__init__()
         self.features = int(((feature_size - 4) / 2 - 4) / 2)
@@ -110,7 +119,7 @@ class ConvNet4(torch.nn.Module):
             z = 10 * self.conv2(z)
             z, s1 = self.lif1(z, s1)
             z = torch.nn.functional.max_pool2d(z, 2, 2)
-            z = z.view(-1, self.features ** 2 * 64)
+            z = z.view(-1, self.features**2 * 64)
             z = self.fc1(z)
             z, s2 = self.lif2(z, s2)
             v, so = self.out(torch.nn.functional.relu(z), so)

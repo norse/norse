@@ -1,6 +1,6 @@
 import torch
 from typing import NamedTuple, Tuple
-from norse.torch.functional.threshold import threshold
+from norse.torch.functional.threshold import threshold, SurrogateMethod
 
 
 class IAFParameters(NamedTuple):
@@ -9,14 +9,14 @@ class IAFParameters(NamedTuple):
     Parameters:
         v_th (torch.Tensor): threshold potential in mV
         v_reset (torch.Tensor): reset potential in mV
-        method (str): method to determine the spike threshold
+        method (SurrogateMethod): method to determine the spike threshold
                       (relevant for surrogate gradients)
         alpha (float): hyper parameter to use in surrogate gradient computation
     """
 
     v_th: torch.Tensor = torch.as_tensor(1.0)
     v_reset: torch.Tensor = torch.as_tensor(0.0)
-    method: str = "super"
+    method: SurrogateMethod = SurrogateMethod.Super
     alpha: float = torch.as_tensor(100.0)
 
 

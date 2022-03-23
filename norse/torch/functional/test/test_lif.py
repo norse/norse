@@ -15,6 +15,7 @@ from norse.torch.functional.lif import (
     _lif_feed_forward_integral_jit,
     lif_current_encoder,
 )
+from norse.torch.functional.threshold import SurrogateMethod
 
 
 def test_lif_jit_back():
@@ -43,7 +44,7 @@ def test_lif_heavi():
     s = LIFState(z=torch.ones(2, 1), v=torch.zeros(2, 1), i=torch.zeros(2, 1))
     input_weights = torch.ones(1, 1) * 10
     recurrent_weights = torch.ones(1, 1)
-    p = LIFParameters(method="heaviside")
+    p = LIFParameters(method=SurrogateMethod.Heaviside)
     _, s = lif_step(x, s, input_weights, recurrent_weights, p)
     z, s = lif_step(x, s, input_weights, recurrent_weights, p)
     assert z.max() > 0
@@ -74,13 +75,13 @@ def test_lif_feed_forward_step_jit():
     s = LIFFeedForwardState(v=torch.zeros(10), i=torch.zeros(10))
 
     p = LIFParametersJIT(
-        torch.as_tensor(1.0 / 5e-3),
-        torch.as_tensor(1.0 / 1e-2),
-        torch.as_tensor(0.0),
-        torch.as_tensor(1.0),
-        torch.as_tensor(0.0),
-        "super",
-        torch.as_tensor(0.0),
+        1.0 / 5e-3,
+        1.0 / 1e-2,
+        0.0,
+        1.0,
+        0.0,
+        SurrogateMethod.Super,
+        100.0,
     )
 
     results = [0.0, 0.1, 0.27, 0.487, 0.7335, 0.9963, 0.0, 0.3951, 0.7717, 0.0]

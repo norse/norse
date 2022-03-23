@@ -10,6 +10,7 @@ from norse.torch.functional.lif import (
     LIFParameters,
 )
 from norse.torch.functional.lift import lift
+from norse.torch.functional.threshold import SurrogateMethod
 
 
 def test_lift_without_state_or_parameters():
@@ -34,7 +35,8 @@ def test_lift_with_state_without_parameters():
 def test_lift_with_state_and_parameters():
     data = torch.ones(3, 2, 1)
     lifted = lift(
-        lif_feed_forward_step, p=LIFParameters(v_th=torch.as_tensor(0.3), method="tanh")
+        lif_feed_forward_step,
+        p=LIFParameters(v_th=torch.as_tensor(0.3), method=SurrogateMethod.Tanh),
     )
     z, s = lifted(
         data,

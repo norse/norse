@@ -33,10 +33,11 @@ import torch.jit
 
 try:
     import norse_op
-except ModuleNotFoundError:  # pragma: no cover
+except (ModuleNotFoundError, ImportError):  # pragma: no cover
     pass
 
-from norse.torch.functional.threshold import threshold
+
+from norse.torch.functional.threshold import threshold, SurrogateMethod
 
 
 class LIFParameters(NamedTuple):
@@ -50,7 +51,7 @@ class LIFParameters(NamedTuple):
         v_leak (torch.Tensor): leak potential in mV
         v_th (torch.Tensor): threshold potential in mV
         v_reset (torch.Tensor): reset potential in mV
-        method (str): method to determine the spike threshold
+        method (SurrogateMethod): method to determine the spike threshold
                       (relevant for surrogate gradients)
         alpha (float): hyper parameter to use in surrogate gradient computation
     """
@@ -60,7 +61,7 @@ class LIFParameters(NamedTuple):
     v_leak: torch.Tensor = torch.as_tensor(0.0)
     v_th: torch.Tensor = torch.as_tensor(1.0)
     v_reset: torch.Tensor = torch.as_tensor(0.0)
-    method: str = "super"
+    method: SurrogateMethod = SurrogateMethod.Super
     alpha: float = torch.as_tensor(100.0)
 
 
@@ -115,18 +116,18 @@ class LIFParametersJIT(NamedTuple):
         v_leak (torch.Tensor): leak potential in mV
         v_th (torch.Tensor): threshold potential in mV
         v_reset (torch.Tensor): reset potential in mV
-        method (str): method to determine the spike threshold
+        method (SurrogateMethod): method to determine the spike threshold
                       (relevant for surrogate gradients)
         alpha (torch.Tensor): hyper parameter to use in surrogate gradient computation
     """
 
-    tau_syn_inv: torch.Tensor
-    tau_mem_inv: torch.Tensor
-    v_leak: torch.Tensor
-    v_th: torch.Tensor
-    v_reset: torch.Tensor
-    method: str
-    alpha: torch.Tensor
+    tau_syn_inv: float = 1.0 / 5e-3
+    tau_mem_inv: float = 1.0 / 1e-2
+    v_leak: float = 0.0
+    v_th: float = 1.0
+    v_reset: float = 0.0
+    method: SurrogateMethod = SurrogateMethod.Super
+    alpha: float = 100.0
 
 
 @torch.jit.script
@@ -392,10 +393,11 @@ def lif_feed_forward_step(
     return z, state
 
 
-def lif_feed_forward_integral(
+@torch.jit.script
+def _lif_feed_forward_integral_jit(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState,
-    p: LIFParameters = LIFParameters(),
+    p: LIFParametersJIT,
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
     r"""Computes multiple euler-integration steps of a LIF neuron-model. More
@@ -449,11 +451,10 @@ def lif_feed_forward_integral(
     return torch.stack(outputs), state
 
 
-@torch.jit.script
-def _lif_feed_forward_integral_jit(
+def lif_feed_forward_integral(
     input_tensor: torch.Tensor,
     state: LIFFeedForwardState,
-    p: LIFParametersJIT,
+    p: LIFParameters = LIFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIFFeedForwardState]:
     r"""Computes multiple euler-integration steps of a LIF neuron-model. More

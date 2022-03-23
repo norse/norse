@@ -6,14 +6,14 @@ template <torch::Tensor f(torch::Tensor, torch::Tensor)>
 auto lif_feed_forward_step(torch::Tensor input_tensor,
                            std::tuple<torch::Tensor, torch::Tensor> s,
                            std::tuple<torch::Tensor, torch::Tensor, torch::Tensor,
-                                      torch::Tensor, torch::Tensor, std::string, torch::Tensor>
+                                      torch::Tensor, torch::Tensor, int, torch::Tensor>
                                p,
                            double dt)
     -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor>
 {
   auto [v, i] = s;
   auto [tau_syn_inv, tau_mem_inv, v_leak, v_th, v_reset, m, alpha] = p;
-  
+
   // compute current jumps
   auto i_jump = (i + input_tensor);
 
@@ -38,7 +38,7 @@ template <torch::Tensor f(torch::Tensor, torch::Tensor)>
 auto lif_feed_forward_integral(torch::Tensor input_tensor,
                                std::tuple<torch::Tensor, torch::Tensor> s,
                                std::tuple<torch::Tensor, torch::Tensor, torch::Tensor,
-                                          torch::Tensor, torch::Tensor, std::string, torch::Tensor>
+                                          torch::Tensor, torch::Tensor, int, torch::Tensor>
                                    p,
                                double dt)
     -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor>
@@ -65,7 +65,7 @@ auto lif_step(torch::Tensor input_tensor,
               std::tuple<torch::Tensor, torch::Tensor, torch::Tensor> s,
               torch::Tensor input_weights, torch::Tensor recurrent_weights,
               std::tuple<torch::Tensor, torch::Tensor, torch::Tensor,
-                         torch::Tensor, torch::Tensor, std::string, torch::Tensor>
+                         torch::Tensor, torch::Tensor, int, torch::Tensor>
                   p,
               double dt)
     -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor>
@@ -98,7 +98,7 @@ auto lif_integral(torch::Tensor input_tensor,
                   std::tuple<torch::Tensor, torch::Tensor, torch::Tensor> s,
                   torch::Tensor input_weights, torch::Tensor recurrent_weights,
                   std::tuple<torch::Tensor, torch::Tensor, torch::Tensor,
-                             torch::Tensor, torch::Tensor, std::string, torch::Tensor>
+                             torch::Tensor, torch::Tensor, int, torch::Tensor>
                       p,
                   double dt)
     -> std::tuple<torch::Tensor, torch::Tensor, torch::Tensor>

@@ -1,3 +1,4 @@
+from enum import Enum
 import torch
 import torch.jit
 import numpy as np
@@ -6,6 +7,15 @@ from norse.torch.functional.heaviside import heaviside
 from norse.torch.functional.superspike import super_fn
 
 superspike_fn = super_fn
+
+
+class SurrogateMethod(Enum):
+    Heaviside = 1
+    Super = 2
+    Triangle = 3
+    Tanh = 4
+    Circ = 5
+    HeaviErfc = 6
 
 
 class HeaviErfc(torch.autograd.Function):
@@ -108,8 +118,8 @@ class HeaviCirc(torch.autograd.Function):
         return (
             dy
             * (
-                -(x.pow(2) / (2 * (alpha ** 2 + x.pow(2)).pow(1.5)))
-                + 1 / (2 * (alpha ** 2 + x.pow(2)).sqrt())
+                -(x.pow(2) / (2 * (alpha**2 + x.pow(2)).pow(1.5)))
+                + 1 / (2 * (alpha**2 + x.pow(2)).sqrt())
             )
             * 2
             * alpha,
@@ -135,7 +145,7 @@ class CircDist(torch.autograd.Function):
         ctx.alpha = alpha
 
         return torch.distributions.bernoulli.Bernoulli(
-            0.5 + 0.5 * (x / (x.pow(2) + alpha ** 2).sqrt())
+            0.5 + 0.5 * (x / (x.pow(2) + alpha**2).sqrt())
         ).sample()
 
     @staticmethod
@@ -145,8 +155,8 @@ class CircDist(torch.autograd.Function):
         return (
             dy
             * (
-                -(x.pow(2) / (2 * (alpha ** 2 + x.pow(2)).pow(1.5)))
-                + 1 / (2 * (alpha ** 2 + x.pow(2)).sqrt())
+                -(x.pow(2) / (2 * (alpha**2 + x.pow(2)).pow(1.5)))
+                + 1 / (2 * (alpha**2 + x.pow(2)).sqrt())
             )
             * 2
             * alpha,
@@ -192,18 +202,18 @@ def triangle_fn(x: torch.Tensor, alpha: float = 0.3) -> torch.Tensor:
     return Triangle.apply(x, alpha)
 
 
-def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
-    if method == "heaviside":
+def threshold(x: torch.Tensor, method: SurrogateMethod, alpha: float) -> torch.Tensor:
+    if method == SurrogateMethod.Heaviside:
         return heaviside(x)
-    elif method == "super":
+    elif method == SurrogateMethod.Super:
         return superspike_fn(x, torch.as_tensor(alpha))
-    elif method == "triangle":
+    elif method == SurrogateMethod.Triangle:
         return triangle_fn(x, alpha)
-    elif method == "tanh":
+    elif method == SurrogateMethod.Tanh:
         return heavi_tanh_fn(x, alpha)
-    elif method == "circ":
+    elif method == SurrogateMethod.Circ:
         return heavi_circ_fn(x, alpha)
-    elif method == "heavi_erfc":
+    elif method == SurrogateMethod.HeaviErfc:
         return heavi_erfc_fn(x, alpha)
     else:
         raise ValueError(
@@ -213,5 +223,5 @@ def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
         )
 
 
-def sign(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
+def sign(x: torch.Tensor, method: SurrogateMethod, alpha: float) -> torch.Tensor:
     return 2 * threshold(x, method, alpha) - 1

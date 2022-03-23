@@ -8,7 +8,7 @@ auto p = std::make_tuple(torch::full({1}, 1.0 / 5e-3),
                          torch::full({1}, 1.0 / 1e-2),
                          torch::zeros({1}),
                          torch::ones({1}),
-                         torch::zeros({1}), "", torch::full({1}, 100.0));
+                         torch::zeros({1}), 0, torch::full({1}, 100.0));
 double dt = 0.001;
 
 // LIF FF

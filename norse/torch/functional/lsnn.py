@@ -30,7 +30,7 @@ from typing import NamedTuple, Tuple
 
 import torch
 
-from norse.torch.functional.threshold import threshold
+from norse.torch.functional.threshold import threshold, SurrogateMethod
 
 
 class LSNNParameters(NamedTuple):
@@ -46,6 +46,8 @@ class LSNNParameters(NamedTuple):
         v_th (torch.Tensor): threshold potential
         v_reset (torch.Tensor): reset potential
         beta (torch.Tensor): adaptation constant
+        method (SurrogateMethod): method to determine the spike threshold (relevant for surrogate gradients)
+        alpha (float): hyper parameter to use in surrogate gradient computation
     """
 
     tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
@@ -55,7 +57,7 @@ class LSNNParameters(NamedTuple):
     v_th: torch.Tensor = torch.as_tensor(1.0)
     v_reset: torch.Tensor = torch.as_tensor(0.0)
     beta: torch.Tensor = torch.as_tensor(1.8)
-    method: str = "super"
+    method: SurrogateMethod = SurrogateMethod.Super
     alpha: float = 100.0
 
 

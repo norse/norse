@@ -7,5 +7,5 @@ try:
 
     IS_OPS_LOADED = True
     del torch  # Unload torch again to allow importing norse.torch
-except ModuleNotFoundError:
+except (ModuleNotFoundError, ImportError):
     IS_OPS_LOADED = False
