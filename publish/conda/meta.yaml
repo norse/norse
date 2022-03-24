@@ -34,30 +34,30 @@ outputs:
         - pytest -n 4 -vv
     requirements:
       script:
-        - python -m pip install --no-deps --ignore-installed -e .
-    
+        - python -m pip install --ignore-installed -e .
       build:
         - cmake
-        - gxx_linux-64
         - {{ compiler('cxx') }} # [win]
-        - pytorch>=1.9.0
       host:
-        - numpy {{ numpy }}
+        - python
+        - numpy=1.19
         - setuptools
+        - pyyaml
+        - mkl=2020.2 # [x86_64]
+        - mkl-include # [x86_64]
         - typing_extensions
-        - dataclasses
+        - dataclasses # [py36]
         - ninja
-        - libuv
-        - pkg-config
-        - pip
+        - libuv # [win]
+        - libuv # [unix]
+        - pkg-config # [unix]
       run:
         - python
-        - pip
-        - pytorch>=1.9.0
-        - torchvision
-        - dataclasses
+        - pytorch>=1.9
+        - torchvision>=0.10
         - ninja
         - typing_extensions
+        - blas * mkl
 
 about:
   home: https://github.com/norse/norse
@@ -74,4 +74,4 @@ about:
 
 extra:
   recipe-maintainers:
-    - jegp
+    - Jens E. Pedersen <jens@jepedersen.dk>

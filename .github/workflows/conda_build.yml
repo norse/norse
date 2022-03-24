@@ -1,20 +1,18 @@
-name: Publish to Conda
+name: Build Conda
 
 on:
-  release:
+  pull_request:
 
 jobs:
-  publish-conda:
-    name: "Publish: Conda"
+  build-conda:
+    name: "Build: Conda"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set env
         run: echo "name=RELEASE_VERSION" >> $GITHUB_ENV
-      - name: publish-to-conda
+      - name: build-with-conda
         uses: jegp/conda-package-publish-action@master
         with:
           subDir: "publish/conda"
           platforms: "win osx linux"
-          anacondatoken: ${{ secrets.ANACONDA_TOKEN }}
-          publishFlags: "-u norse"

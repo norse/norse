@@ -6,8 +6,4 @@ network functionality.
 
 from .models import *
 from .module import *
-
-try:
-    from .utils import *
-except ImportError:
-    pass
+from .utils import *
