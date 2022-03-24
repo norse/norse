@@ -261,6 +261,7 @@ class SNN(torch.nn.Module):
             states
         )
 
+
 class SNNRecurrent(torch.nn.Module):
     """
     The base module for recurrent spiking neural networks (RSNN) *with* time.

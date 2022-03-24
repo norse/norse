@@ -13,7 +13,6 @@ from norse.torch.functional.lif_refrac import LIFRefracState
 from norse.torch.module import lif, snn, lif_refrac
 
 
-
 class MockParams(NamedTuple):
     my_param: int = -15
     method: str = "bob"
