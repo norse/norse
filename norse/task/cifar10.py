@@ -155,6 +155,7 @@ def main(args):
     # Load datasets
     transform_train = torchvision.transforms.Compose(
         [
+            torchvision.transforms.ToTensor(),
             torchvision.transforms.RandomCrop(32, padding=4),
             torchvision.transforms.RandomHorizontalFlip(),
         ]
