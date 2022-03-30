@@ -51,6 +51,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -1368,7 +1370,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 <div class="section" id="containers">
 <h2><a class="toc-backref" href="#id1">Containers</a><a class="headerlink" href="#containers" title="Permalink to this headline">¶</a></h2>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1388,7 +1390,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 <div class="section" id="encoding">
 <h2><a class="toc-backref" href="#id1">Encoding</a><a class="headerlink" href="#encoding" title="Permalink to this headline">¶</a></h2>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1420,7 +1422,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 <div class="section" id="convolutions">
 <h2><a class="toc-backref" href="#id1">Convolutions</a><a class="headerlink" href="#convolutions" title="Permalink to this headline">¶</a></h2>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1437,7 +1439,7 @@ const thebe_selector_output = ".output, .cell_output"
 <div class="section" id="integrate-and-fire">
 <h3><a class="toc-backref" href="#id1">Integrate-and-fire</a><a class="headerlink" href="#integrate-and-fire" title="Permalink to this headline">¶</a></h3>
 <p>Simple integrators that sums up incoming signals until a threshold.</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1457,7 +1459,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 <div class="section" id="izhikevich">
 <h3><a class="toc-backref" href="#id1">Izhikevich</a><a class="headerlink" href="#izhikevich" title="Permalink to this headline">¶</a></h3>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1514,7 +1516,7 @@ this case the neuron membrane) and <em>current</em> is the rate of change or the
 amount of current being added/subtracted at each timestep.</p>
 <p>More information can be found on
 <a class="reference external" href="https://en.wikipedia.org/wiki/Leaky_integrator">Wikipedia</a>.</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1564,7 +1566,7 @@ gradient approach that uses the <code class="xref py py-mod docutils literal not
 <a class="reference external" href="https://en.wikipedia.org/wiki/Biological_neuron_model#Leaky_integrate-and-fire">Wikipedia</a>
 or in the book <a class="reference external" href="https://neuronaldynamics.epfl.ch/online/Ch5.html">*Neuron Dynamics* by W. Gerstner et al.,
 freely available online</a>.</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1596,7 +1598,7 @@ freely available online</a>.</p>
 <p>A simplified version of the popular leaky integrate-and-fire neuron model that combines a <a class="reference internal" href="generated/norse.torch.functional.leaky_integrator.html#module-norse.torch.functional.leaky_integrator" title="norse.torch.functional.leaky_integrator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">norse.torch.functional.leaky_integrator</span></code></a> with spike thresholds to produce events (spikes).
 Compared to the <a class="reference internal" href="generated/norse.torch.functional.lif.html#module-norse.torch.functional.lif" title="norse.torch.functional.lif"><code class="xref py py-mod docutils literal notranslate"><span class="pre">norse.torch.functional.lif</span></code></a> modules, this model leaves out the current term, making it computationally simpler but impossible to implement in physical systems because currents cannot “jump” in nature.
 It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as “current boxes”.</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1616,7 +1618,7 @@ It is these sudden current jumps that gives the model its name, because the shif
 </div>
 <div class="section" id="lif-conductance-based">
 <h3><a class="toc-backref" href="#id1">LIF, conductance based</a><a class="headerlink" href="#lif-conductance-based" title="Permalink to this headline">¶</a></h3>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1630,7 +1632,7 @@ It is these sudden current jumps that gives the model its name, because the shif
 </div>
 <div class="section" id="lif-adaptive-exponential">
 <h3><a class="toc-backref" href="#id1">LIF, adaptive exponential</a><a class="headerlink" href="#lif-adaptive-exponential" title="Permalink to this headline">¶</a></h3>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1653,7 +1655,7 @@ It is these sudden current jumps that gives the model its name, because the shif
 </div>
 <div class="section" id="lif-exponential">
 <h3><a class="toc-backref" href="#id1">LIF, exponential</a><a class="headerlink" href="#lif-exponential" title="Permalink to this headline">¶</a></h3>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1676,7 +1678,7 @@ It is these sudden current jumps that gives the model its name, because the shif
 </div>
 <div class="section" id="lif-multicompartmental">
 <h3><a class="toc-backref" href="#id1">LIF, multicompartmental</a><a class="headerlink" href="#lif-multicompartmental" title="Permalink to this headline">¶</a></h3>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1690,7 +1692,7 @@ It is these sudden current jumps that gives the model its name, because the shif
 </div>
 <div class="section" id="lif-multicompartmental-with-refraction">
 <h3><a class="toc-backref" href="#id1">LIF, multicompartmental with refraction</a><a class="headerlink" href="#lif-multicompartmental-with-refraction" title="Permalink to this headline">¶</a></h3>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1704,7 +1706,7 @@ It is these sudden current jumps that gives the model its name, because the shif
 </div>
 <div class="section" id="lif-refractory">
 <h3><a class="toc-backref" href="#id1">LIF, refractory</a><a class="headerlink" href="#lif-refractory" title="Permalink to this headline">¶</a></h3>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -1721,7 +1723,7 @@ It is these sudden current jumps that gives the model its name, because the shif
 </div>
 <div class="section" id="long-short-term-memory-lsnn">
 <h3><a class="toc-backref" href="#id1">Long short-term memory (LSNN)</a><a class="headerlink" href="#long-short-term-memory-lsnn" title="Permalink to this headline">¶</a></h3>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
