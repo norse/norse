@@ -8,6 +8,7 @@ from norse.torch.functional.lif import (
     LIFState,
     LIFParameters,
 )
+
 from norse.torch.functional.lif_refrac import LIFRefracState
 from norse.torch.module import lif, snn, lif_refrac
 
@@ -187,6 +188,7 @@ def test_snn_recurrent_record_state():
     )
     _, y = n(torch.zeros(3, 2))
     assert isinstance(y, LIFState)
+
     assert y.v.shape == (4,)
     assert y.i.shape == (4,)
     assert y.z.shape == (4,)
@@ -200,6 +202,7 @@ def test_snn_recurrent_record_state():
         record_states=True,
     )
     _, y = n(torch.zeros(3, 2))
+
     assert isinstance(y, LIFState)
     assert y.v.shape == (3, 4)
     assert y.i.shape == (3, 4)
