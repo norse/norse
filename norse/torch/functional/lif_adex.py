@@ -86,7 +86,7 @@ def lif_adex_step(
 
     .. math::
         \begin{align*}
-            \dot{v} &= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right)\right) \\
+            \dot{v} &= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right) - a\right) \\
             \dot{i} &= -1/\tau_{\text{syn}} i \\
             \dot{a} &= 1/\tau_{\text{ada}} \left( a_{current} (V - v_{\text{leak}}) - a \right)
         \end{align*}
@@ -162,7 +162,7 @@ def lif_adex_feed_forward_step(
 
     .. math::
         \begin{align*}
-            \dot{v} &= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right)\right) \\
+            \dot{v} &= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right ) - a\right) \\
             \dot{i} &= -1/\tau_{\text{syn}} i \\
             \dot{a} &= 1/\tau_{\text{ada}} \left( a_{current} (V - v_{\text{leak}}) - a \right)
         \end{align*}
@@ -229,7 +229,7 @@ def lif_adex_current_encoder(
 
     .. math::
         \begin{align*}
-            \dot{v} &= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right)\right) \\
+            \dot{v} &= 1/\tau_{\text{mem}} \left(v_{\text{leak}} - v + i + \Delta_T exp\left({{v - v_{\text{th}}} \over {\Delta_T}}\right) - a\right) \\
             \dot{i} &= -1/\tau_{\text{syn}} i \\
             \dot{a} &= 1/\tau_{\text{ada}} \left( a_{current} (V - v_{\text{leak}}) - a \right)
         \end{align*}
