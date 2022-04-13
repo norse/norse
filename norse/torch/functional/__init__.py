@@ -97,6 +97,7 @@ from .lif_refrac import (
     lif_refrac_feed_forward_step,
     lif_refrac_step,
 )
+from .lif_cg import lif_cg_feed_forward_step
 from .lift import lift
 from .logical import logical_and, logical_or, logical_xor
 from .lsnn import (
@@ -268,6 +269,8 @@ __all__ = [
     "lif_mc_step",
     "lif_mc_refrac_feed_forward_step",
     "lif_mc_refrac_step",
+    # LIF CG
+    "lif_cg_feed_forward_step",
     # Lifting
     "lift",
     # LIF refraec
