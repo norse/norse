@@ -113,6 +113,13 @@ def main(args):
             prof.export_chrome_trace("trace.json")
         else:
             run_benchmark(args, norse_lif.lif_feed_forward_benchmark, label="Norse_lif")
+    if args.norse_cg: 
+        import norse_lif_cg
+
+        run_benchmark(args, norse_lif_cg.lif_cell_benchmark, label="Norse_lif")
+        run_benchmark(args, norse_lif_cg.lif_cell_cg_benchmark, label="Norse_lif_cg")
+
+    
     # pytype: enable=import-error
 
 
@@ -195,6 +202,12 @@ if __name__ == "__main__":
         default=False,
         action="store_true",
         help="Benchmark Norse?",
+    )
+    parser.add_argument(
+        "--norse_cg",
+        default=False,
+        action="store_true",
+        help="Benchmark Norse with Cuda Graph?",
     )
     args = parser.parse_args()
     main(args)
