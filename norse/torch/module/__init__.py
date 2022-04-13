@@ -57,6 +57,7 @@ from .lif_refrac import (
     LIFRefracParameters,
     LIFRefracState,
 )
+from .lif_cg import LIFCellCG
 from .lift import Lift
 from .lsnn import (
     LSNNCell,
@@ -106,6 +107,7 @@ __all__ = [
     # LIF
     "LIF",
     "LIFCell",
+    "LIFCellCG",
     "LIFRecurrent",
     "LIFRecurrentCell",
     "LIFFeedForwardState",
