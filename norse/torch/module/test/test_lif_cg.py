@@ -1,9 +1,7 @@
 import torch
 
 from norse.torch.module import encode
-from norse.torch.functional.lif import LIFState, LIFParameters
 from norse.torch.module.lif import LIFCell
-
 from norse.torch.module.lif_cg import LIFCellCG
 
 
