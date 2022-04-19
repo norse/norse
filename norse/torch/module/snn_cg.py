@@ -3,7 +3,7 @@ import warnings
 from typing import Any, Callable, Optional
 
 from norse.torch.functional.lif import LIFFeedForwardState
-from norse.torch.module.snn import SNN, FeedforwardActivation
+from norse.torch.module.snn import SNNCell, FeedforwardActivation
 
 # ===================================================================
 # Implement various SNN cells using CUDA Graphs
@@ -11,7 +11,7 @@ from norse.torch.module.snn import SNN, FeedforwardActivation
 # ===================================================================
 
 
-class SNNCellCG(SNN):
+class SNNCellCG(SNNCell):
     """
     Initializes a feedforward neuron cell *without* time.
     Accelerated forward pass using Pytorch with CUDA Graphs.
