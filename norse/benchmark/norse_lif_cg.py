@@ -16,7 +16,8 @@ from benchmark import BenchmarkParameters
 # pytype: enable=import-error
 
 # =================================
-# Benchmark LIFCell 
+# Benchmark LIFCell
+
 
 class LIFBenchmark(torch.nn.Module):
     """
@@ -26,6 +27,7 @@ class LIFBenchmark(torch.nn.Module):
         parameters (BenchmarkParameters): parameters for benchmarking
         p (LIFParameters): LIFCell parameters
     """
+
     def __init__(self, parameters, p: LIFParameters):
         super().__init__()
         self.fc = torch.nn.Linear(parameters.features, parameters.features, bias=True)
@@ -44,10 +46,10 @@ class LIFBenchmark(torch.nn.Module):
         seq_len, batch_size, _ = input_spikes.shape
 
         state = None
-        
+
         for t_step in range(seq_len):
             input = input_spikes[t_step, :, :]
-            z, state = self.lif(self.fc(input), state) 
+            z, state = self.lif(self.fc(input), state)
 
         return z, state
 
@@ -55,13 +57,14 @@ class LIFBenchmark(torch.nn.Module):
 class LIFCGBenchmark(torch.nn.Module):
     """
     Simple SNN with one linear layer + LIFCell.
-    LIFCell exploits CUDA graphs, as described in: 
+    LIFCell exploits CUDA graphs, as described in:
     <https://pytorch.org/blog/accelerating-pytorch-with-cuda-graphs/>
 
     Args:
         parameters (BenchmarkParameters): parameters for benchmarking
         p (LIFParameters): LIFCell parameters
     """
+
     def __init__(self, parameters, p: LIFParameters):
         super().__init__()
         self.fc = torch.nn.Linear(parameters.features, parameters.features, bias=True)
@@ -84,10 +87,10 @@ class LIFCGBenchmark(torch.nn.Module):
 
         for t_step in range(seq_len):
             input = input_spikes[t_step, :, :]
-            z, state = self.lif_cg(input, state) 
-        
+            z, state = self.lif_cg(input, state)
+
         return z, state
-        
+
 
 def lif_cell_benchmark(parameters: BenchmarkParameters):
     """
@@ -104,7 +107,12 @@ def lif_cell_benchmark(parameters: BenchmarkParameters):
 
     # Set real data
     encoder = PoissonEncoder(parameters.sequence_length, dt=parameters.dt)
-    poisson_data = encoder(0.3 * torch.ones(parameters.batch_size, parameters.features, device=parameters.device))
+    poisson_data = encoder(
+        0.3
+        * torch.ones(
+            parameters.batch_size, parameters.features, device=parameters.device
+        )
+    )
 
     # Start recording
     start = time.time()
@@ -117,7 +125,7 @@ def lif_cell_benchmark(parameters: BenchmarkParameters):
 def lif_cell_cg_benchmark(parameters: BenchmarkParameters):
     """
     Benchmark LIFCell
-    LIFCell exploits CUDA graphs, as described in: 
+    LIFCell exploits CUDA graphs, as described in:
     <https://pytorch.org/blog/accelerating-pytorch-with-cuda-graphs/>
 
     Args:
@@ -131,7 +139,12 @@ def lif_cell_cg_benchmark(parameters: BenchmarkParameters):
 
     # Set real data
     encoder = PoissonEncoder(parameters.sequence_length, dt=parameters.dt)
-    poisson_data = encoder(0.3 * torch.ones(parameters.batch_size, parameters.features, device=parameters.device))
+    poisson_data = encoder(
+        0.3
+        * torch.ones(
+            parameters.batch_size, parameters.features, device=parameters.device
+        )
+    )
 
     # Start recording
     start = time.time()

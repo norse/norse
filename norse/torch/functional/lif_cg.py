@@ -9,6 +9,7 @@ except ModuleNotFoundError:  # pragma: no cover
 
 from norse.torch.functional.lif import LIFParameters, LIFFeedForwardState
 
+
 def lif_cg_feed_forward_step(
     input_tensor: torch.Tensor,
     state_v: torch.Tensor = None,

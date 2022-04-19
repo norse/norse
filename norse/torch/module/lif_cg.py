@@ -1,4 +1,4 @@
-import torch 
+import torch
 
 from norse.torch.functional.lif import (
     LIFFeedForwardState,

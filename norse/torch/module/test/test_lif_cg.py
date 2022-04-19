@@ -23,7 +23,7 @@ class SNCGNetwork(torch.nn.Module):
         seq_len, batch_size, _ = encoded_input.shape
 
         s1 = None
-        so = None 
+        so = None
 
         spike_count = 0
 
@@ -34,7 +34,7 @@ class SNCGNetwork(torch.nn.Module):
 
             spike_count += zo
 
-        return spike_count/seq_len
+        return spike_count / seq_len
 
 
 class SNNetwork(torch.nn.Module):
@@ -55,7 +55,7 @@ class SNNetwork(torch.nn.Module):
         seq_len, batch_size, _ = encoded_input.shape
 
         s1 = None
-        so = None 
+        so = None
 
         spike_count = 0
 
@@ -66,7 +66,7 @@ class SNNetwork(torch.nn.Module):
 
             spike_count += zo
 
-        return spike_count/seq_len
+        return spike_count / seq_len
 
 
 def test_lif_cg_cell_feedforward():
@@ -89,18 +89,26 @@ def test_lif_cg_cell_match_feedforward():
 
     for i, x in enumerate(s_cg_cell):
         assert s_cg_cell[i].shape == s_cell[i].shape
-        assert (s_cg_cell[i] == s_cell[i]).all(), f"cg state: {s_cg_cell[i]}\nLIFCell state: {s_cell[i]}"
+        assert (
+            s_cg_cell[i] == s_cell[i]
+        ).all(), f"cg state: {s_cg_cell[i]}\nLIFCell state: {s_cell[i]}"
     assert out_cg_cell.shape == out_cell.shape
-    assert (out_cg_cell == out_cell).all(), f"cg output: {out_cg_cell}\nLIFCell output: {out_cell}"
+    assert (
+        out_cg_cell == out_cell
+    ).all(), f"cg output: {out_cg_cell}\nLIFCell output: {out_cell}"
 
     out_cg_cell, s_cg_cell = cg_cell(data, s_cg_cell)
     out_cell, s_cell = cell(data, s_cell)
-    
+
     for i, x in enumerate(s_cg_cell):
         assert s_cg_cell[i].shape == s_cell[i].shape
-        assert (s_cg_cell[i] == s_cell[i]).all(), f"cg state: {s_cg_cell[i]}\nLIFCell state: {s_cell[i]}"
+        assert (
+            s_cg_cell[i] == s_cell[i]
+        ).all(), f"cg state: {s_cg_cell[i]}\nLIFCell state: {s_cell[i]}"
     assert out_cg_cell.shape == out_cell.shape
-    assert (out_cg_cell == out_cell).all(), f"cg output: {out_cg_cell}\nLIFCell output: {out_cell}"
+    assert (
+        out_cg_cell == out_cell
+    ).all(), f"cg output: {out_cg_cell}\nLIFCell output: {out_cell}"
 
 
 def test_lif_cg_feedforward_cell_backward():
@@ -134,11 +142,11 @@ def test_lif_cg_match_feedforward_cell_backward():
     out, s = cell(data)
     out, _ = cell(out, s)
     loss = out.sum()
-    
-    loss.backward()
-    data_grad = data.grad 
 
-    assert loss == cg_loss 
+    loss.backward()
+    data_grad = data.grad
+
+    assert loss == cg_loss
     assert (data_grad == cg_data_grad).all()
 
     gradient_flow = True
@@ -151,8 +159,8 @@ def test_backward_model():
     hidden_features = 20
     out_features = 1
     batch_size = 1
-    data = 100*torch.ones(batch_size, in_features, device="cuda")
-    
+    data = 100 * torch.ones(batch_size, in_features, device="cuda")
+
     # model
     model = SNCGNetwork(in_features, hidden_features, out_features)
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
@@ -177,8 +185,8 @@ def test_forward_model_cg_match():
     hidden_features = 20
     out_features = 1
     batch_size = 1
-    data = 100*torch.ones(batch_size, in_features, device="cuda")
-    
+    data = 100 * torch.ones(batch_size, in_features, device="cuda")
+
     # model
     cg_model = SNCGNetwork(in_features, hidden_features, out_features)
     model = SNNetwork(in_features, hidden_features, out_features)
@@ -188,10 +196,3 @@ def test_forward_model_cg_match():
     spike_count = model(data)
 
     assert cg_spike_count == spike_count
-
-
-
-
-
-
-
