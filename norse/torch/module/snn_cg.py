@@ -54,41 +54,11 @@ class SNNCellCG(SNNCell):
             stacklevel=2,
         )
 
-        # configure internal CUDAGraph
-        self.config = True
-
         # graphed callable
         self.activation_cg = None
 
     def forward(self, input_tensor: torch.Tensor, state: Optional[Any] = None):
         state = state if state is not None else self.state_fallback(input_tensor)
-
-        if self.config:
-            # capture input
-            sample_args = (
-                torch.randn(
-                    input_tensor.shape, device=input_tensor.device, requires_grad=True
-                ),
-            )  # account for input tensor
-            for state_variable in state:
-                sample_args += (
-                    torch.randn(
-                        state_variable.shape,
-                        device=state_variable.device,
-                        requires_grad=True,
-                    ),
-                )  # account for state
-
-            if self.activation_sparse is not None and input_tensor.is_sparse:
-                raise NotImplementedError(
-                    "Cuda Graph version for sparse activation not yet implemented!"
-                )
-            else:
-                self.activation_cg = torch.cuda.make_graphed_callables(
-                    self.activation, sample_args
-                )
-
-            self.config = False
 
         # collect inputs
         sample_args = (input_tensor,)

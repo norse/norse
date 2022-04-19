@@ -80,19 +80,52 @@ class LIFCellCG(SNNCellCG):
             **kwargs,
         )
 
-    def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
-        state = LIFFeedForwardState(
-            v=torch.full(
-                input_tensor.shape,
-                torch.as_tensor(self.p.v_leak).detach(),
-                device=input_tensor.device,
-                dtype=torch.float32,
+    def initial_state(
+        self, input_tensor: torch.Tensor, state: LIFFeedForwardState = None
+    ) -> LIFFeedForwardState:
+        if not state:
+            state = LIFFeedForwardState(
+                v=torch.full(
+                    input_tensor.shape,
+                    torch.as_tensor(self.p.v_leak).detach(),
+                    device=input_tensor.device,
+                    dtype=torch.float32,
+                ),
+                i=torch.zeros(
+                    *input_tensor.shape,
+                    device=input_tensor.device,
+                    dtype=torch.float32,
+                ),
+            )
+            state.v.requires_grad = True
+        else:
+            if not state.v.requires_grad:
+                raise ValueError(
+                    "Gradients of state variable v need to be computed, i.e. ensure that state.v.requires_grad = True."
+                )
+
+        # configure internal CUDAGraph
+        sample_args = (
+            torch.randn(
+                input_tensor.shape, device=input_tensor.device, requires_grad=True
             ),
-            i=torch.zeros(
-                *input_tensor.shape,
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
-        )
-        state.v.requires_grad = True
+        )  # account for input tensor
+        for state_variable in state:
+            sample_args += (
+                torch.randn(
+                    state_variable.shape,
+                    device=state_variable.device,
+                    requires_grad=True,
+                ),
+            )  # account for state
+
+        if self.activation_sparse is not None and input_tensor.is_sparse:
+            raise NotImplementedError(
+                "Cuda Graph version for sparse activation not yet implemented!"
+            )
+        else:
+            self.activation_cg = torch.cuda.make_graphed_callables(
+                self.activation, sample_args
+            )
+
         return state

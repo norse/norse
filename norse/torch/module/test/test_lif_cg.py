@@ -1,4 +1,5 @@
 import torch
+from norse.torch.functional.lif import LIFFeedForwardState
 
 from norse.torch.module import encode
 from norse.torch.module.lif import LIFCell
@@ -109,6 +110,31 @@ def test_lif_cg_cell_match_feedforward():
     assert (
         out_cg_cell == out_cell
     ).all(), f"cg output: {out_cg_cell}\nLIFCell output: {out_cell}"
+
+
+def test_lif_cg_cell_pre_defined_state():
+    cell = LIFCellCG()
+    data = torch.randn(5, 2, device="cuda")
+    state = LIFFeedForwardState(
+        v=torch.full(
+            data.shape,
+            torch.as_tensor(0.0).detach(),
+            device=data.device,
+            dtype=torch.float32,
+        ),
+        i=torch.zeros(
+            *data.shape,
+            device=data.device,
+            dtype=torch.float32,
+        ),
+    )
+    state.v.requires_grad = True
+    state = cell.initial_state(data, state)
+    out, s = cell(data, state)
+
+    for x in s:
+        assert x.shape == (5, 2)
+    assert out.shape == (5, 2)
 
 
 def test_lif_cg_feedforward_cell_backward():
