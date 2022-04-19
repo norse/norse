@@ -1,9 +1,15 @@
+import sys
 import torch
-from norse.torch.functional.lif import LIFFeedForwardState
+import pytest
 
+from norse.torch.functional.lif import LIFFeedForwardState
 from norse.torch.module import encode
 from norse.torch.module.lif import LIFCell
 from norse.torch.module.lif_cg import LIFCellCG
+
+# skip test when using macos
+if sys.platform.startswith("macos"):
+    pytest.skip("skipping CUDA Graph tests for mac", allow_module_level=True)
 
 
 class SNCGNetwork(torch.nn.Module):
