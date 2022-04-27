@@ -195,11 +195,13 @@ The list of projects below serves to illustrate the state of the art, while expl
 
 Contributions are warmly encouraged and always welcome. However, we also have high expectations around the code base so if you wish to contribute, please refer to our [contribution guidelines](contributing.md).
 
-## 6. Credits
+## 6. Credit and governance
 
 Norse is created by
 * [Christian Pehle](https://www.kip.uni-heidelberg.de/people/10110) (@GitHub [cpehle](https://github.com/cpehle/)), PostDoc at University of Heidelberg, Germany.
 * [Jens E. Pedersen](https://www.kth.se/profile/jeped) (@GitHub [jegp](https://github.com/jegp/)), doctoral student at KTH Royal Institute of Technology, Sweden.
+
+To ensure the survival and prosperity of Norse, it is being governed according to [meritocratic](https://en.wikipedia.org/wiki/Meritocracy) principles, as described in the [governance document](GOVERNANCE.md).
 
 More information about Norse can be found [in our documentation](https://norse.github.io/norse/about.html). The research has received funding from the EC Horizon 2020 Framework Programme under Grant Agreements 785907 and 945539 (HBP) and by the Deutsche Forschungsgemeinschaft (DFG, German Research Fundation) under Germany's Excellence Strategy EXC 2181/1 - 390900948 (the Heidelberg STRUCTURES Excellence Cluster).
 
