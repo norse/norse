@@ -22,7 +22,6 @@ class SpikesToTimesDecoder(torch.nn.Module):
         :param spike_count: number of elements (ascending) to return for each output channel.
         :param convert_indices_to_times: Whether to return times or indices along input's time axis
         :param dt: time step of input's time axis (needed for conversion of indices to times)
-        :param device: cpu, gpu etc.
         """
         super().__init__()
         self.spike_count = spike_count
@@ -36,7 +35,7 @@ class SpikesToTimesDecoder(torch.nn.Module):
 
         :param spike_input: spike tensor with 0s and 1s (indicating spikes)
         """
-        spike_indices = self.decoding_fn(spike_input, self.spike_count, self.device)
+        spike_indices = self.decoding_fn(spike_input, self.spike_count)
         if self.convert_to_time:
             spike_indices = spike_indices * self.dt
         return spike_indices
@@ -50,7 +49,7 @@ class SpikesToTimesDecoder(torch.nn.Module):
         """
 
         @staticmethod
-        def forward(ctx, spike_input, spike_count, device):
+        def forward(ctx, spike_input, spike_count):
             """
             Return indices of first spike_count spikes (if spike_count < spike_input.shape[0],
             i.e. its time dim). If less than spike_count spikes happened along a output trace,
@@ -96,4 +95,4 @@ class SpikesToTimesDecoder(torch.nn.Module):
 
             grad_input = -1.0 * grad_output * grad_local
 
-            return grad_input, None, None
+            return grad_input, None
