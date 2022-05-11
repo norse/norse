@@ -71,3 +71,19 @@ def test_backward():
     result.backward()
     expected_grad[1, :, :] = -decoder_w_time.dt
     assert torch.equal(test_input.grad, expected_grad)
+
+
+def test_jit():
+    test_input = torch.zeros((2, 1, 1))
+    test_input[1, :, :] = 1.0
+
+    traced_decoder_module = torch.jit.trace_module(
+        SpikesToTimesDecoder(
+            spike_count=torch.as_tensor(2), convert_indices_to_times=True, dt=1e-3
+        ),
+        inputs={"forward": torch.zeros(1, 1, 1)},
+    )
+
+    assert torch.equal(
+        traced_decoder_module(test_input), torch.tensor([[[1e-3]], [[torch.inf]]])
+    )
