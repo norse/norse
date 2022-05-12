@@ -3,8 +3,8 @@ import torch
 
 class ToSpikeTimes(torch.autograd.Function):
     """Convert spike input with shape [time_steps x batch_size x output_size]
-        to the indices of spike times, shape [spike_count x batch_size x
-        output_size]. If no spike is present, time or index is set to inf.
+    to the indices of spike times, shape [spike_count x batch_size x
+    output_size]. If no spike is present, time or index is set to inf.
     """
 
     @staticmethod
@@ -33,7 +33,7 @@ class ToSpikeTimes(torch.autograd.Function):
     @staticmethod
     def backward(ctx, grad_output):
         """Local gradient is set -1 for spike whose index was returned by forward, and 0 for no
-            spike or if a spikes index wasn't returned in forward call.
+        spike or if a spikes index wasn't returned in forward call.
         """
         (spike_indices, spk_rec) = ctx.saved_tensors
         spikeidcs_size, batch_size, out_size = spike_indices.shape

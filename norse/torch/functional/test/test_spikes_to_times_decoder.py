@@ -4,7 +4,8 @@ from norse.torch.functional.spikes_to_times_decoder import ToSpikeTimes
 
 def test_zero_input():
     assert torch.allclose(
-        ToSpikeTimes.apply(torch.zeros(10, 1, 1), torch.as_tensor(10)), torch.as_tensor(torch.inf)
+        ToSpikeTimes.apply(torch.zeros(10, 1, 1), torch.as_tensor(10)),
+        torch.as_tensor(torch.inf),
     )
 
 
