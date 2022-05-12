@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>norse.torch.functional.stdp &#8212; Norse v0.0.7</title>
+    <title>norse.torch.module.test.test_spikes_to_times_decoder &#8212; Norse v0.0.7</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -55,8 +55,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="norse.torch.functional.stdp_sensor" href="norse.torch.functional.stdp_sensor.html" />
-    <link rel="prev" title="norse.torch.functional.spikes_to_times_decoder" href="norse.torch.functional.spikes_to_times_decoder.html" />
+    <link rel="next" title="norse.torch.module.test.test_training" href="norse.torch.module.test.test_training.html" />
+    <link rel="prev" title="norse.torch.module.test.test_snn" href="norse.torch.module.test.test_snn.html" />
 
 
   </head>
@@ -1026,7 +1026,7 @@ const thebe_selector_output = ".output, .cell_output"
        </i>
       </label>
       <ul class="current">
-       <li class="toctree-l4 current active">
+       <li class="toctree-l4">
         <a class="reference internal" href="norse.torch.functional.html">
          norse.torch.functional
         </a>
@@ -1036,7 +1036,7 @@ const thebe_selector_output = ".output, .cell_output"
          norse.torch.models
         </a>
        </li>
-       <li class="toctree-l4">
+       <li class="toctree-l4 current active">
         <a class="reference internal" href="norse.torch.module.html">
          norse.torch.module
         </a>
@@ -1098,7 +1098,7 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/generated/norse.torch.functional.stdp.rst"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/generated/norse.torch.module.test.test_spikes_to_times_decoder.rst"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
@@ -1118,10 +1118,10 @@ const thebe_selector_output = ".output, .cell_output"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2Fgenerated/norse.torch.functional.stdp.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2Fgenerated/norse.torch.module.test.test_spikes_to_times_decoder.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/norse/norse/edit/master/docs/generated/norse.torch.functional.stdp.rst"><button
+        <a class="edit-button" href="https://github.com/norse/norse/edit/master/docs/generated/norse.torch.module.test.test_spikes_to_times_decoder.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -1148,7 +1148,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>norse.torch.functional.stdp</h1>
+                <h1>norse.torch.module.test.test_spikes_to_times_decoder</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -1159,8 +1159,8 @@ const thebe_selector_output = ".output, .cell_output"
             
               <div>
                 
-  <div class="section" id="module-norse.torch.functional.stdp">
-<span id="norse-torch-functional-stdp"></span><h1>norse.torch.functional.stdp<a class="headerlink" href="#module-norse.torch.functional.stdp" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-norse.torch.module.test.test_spikes_to_times_decoder">
+<span id="norse-torch-module-test-test-spikes-to-times-decoder"></span><h1>norse.torch.module.test.test_spikes_to_times_decoder<a class="headerlink" href="#module-norse.torch.module.test.test_spikes_to_times_decoder" title="Permalink to this headline">¶</a></h1>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <colgroup>
@@ -1168,26 +1168,20 @@ const thebe_selector_output = ".output, .cell_output"
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">stdp_step_conv2d</span></code>(z_pre, z_post, w, state_stdp)</p></td>
-<td><p>STDP step for a conv2d LIF layer. Input:     z_pre (torch.tensor): Presynaptic activity z: {0,1} -&gt; {no spike, spike}     z_post (torch.tensor): Postsynaptic activity z: {0,1} -&gt; {no spike, spike}     w (torch.Tensor): Weight tensor connecting the pre- and postsynaptic layers     state_stdp (STDPState): STDP state     p_stdp (STDPParameters): Parameters of STDP     dt (float): Time-resolution Output:     w (torch.tensor): Updated synaptic weights     state_stdp (STDPState): Updated STDP state.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_backward</span></code>()</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">stdp_step_linear</span></code>(z_pre, z_post, w, state_stdp)</p></td>
-<td><p>STDP step for a FF LIF layer. Input:     z_pre (torch.Tensor): Presynaptic activity z: {0,1} -&gt; {no spike, spike}     z_post (torch.Tensor): Postsynaptic activity z: {0,1} -&gt; {no spike, spike}     w (torch.Tensor): Weight tensor connecting the pre- and postsynaptic layers     state_stdp (STDPState): STDP state     p_stdp (STDPParameters): Parameters of STDP     dt (float): Time-resolution Output:     w (torch.tensor): Updated synaptic weights     state_stdp (STDPState): Updated STDP state.</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_jit</span></code>()</p></td>
+<td><p></p></td>
 </tr>
-</tbody>
-</table>
-<p class="rubric">Classes</p>
-<table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">STDPParameters</span></code>([a_pre, a_post, tau_pre_inv, ...])</p></td>
-<td><p>STDP parameters. Parameters:     a_pre (torch.Tensor): Contribution of presynaptic spikes to trace     a_post (torch.Tensor): Contribution of postsynaptic spikes to trace     tau_pre_inv (torch.Tensor): Inverse decay time constant of presynaptic spike trace in 1/s     tau_post_inv (torch.Tensor): Inverse decay time constant of postsynaptic spike trace in 1/s     w_min (torch.Tensor): Lower bound on synaptic weights (should be &lt; w_max)     w_max (torch.Tensor): Upper bound on synaptic weight (should be &gt; w_min)     eta_plus (torch.Tensor): Learning rate for synaptic potentiation (0 &lt; eta_plus &lt;&lt; 1)     eta_minus (torch.Tensor): Learning rate for synaptic depression (0 &lt; eta_minus &lt;&lt; 1)     stdp_algorithm (string): Algorithm for STDP updates. Options in {&quot;additive&quot;,&quot;additive_step&quot;,&quot;multiplicative_pow&quot;,&quot;multiplicative_relu&quot;}     mu (torch.Tensor): Exponent for multiplicative STDP (0 &lt;= mu &lt;= 1)     hardbound (boolean): Impose hardbounds by clipping (recommended unles eta_* &lt;&lt; 1)     convolutional (boolean): Convolutional weighting kernel     stride (int): Stride for convolution     padding (int): Padding for convolution     dilation (int): Dilation for convolution.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_ones_input</span></code>()</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">STDPState</span></code>(t_pre, t_post)</p></td>
-<td><p>State of spike-timing-dependent plasticity (STDP). Parameters:     t_pre (torch.Tensor): presynaptic spike trace     t_post (torch.Tensor): postsynaptic spike trace.</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_single_spike_input_with_time</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_zero_input</span></code>()</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1218,17 +1212,17 @@ const thebe_selector_output = ".output, .cell_output"
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="norse.torch.functional.spikes_to_times_decoder.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="norse.torch.module.test.test_snn.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">norse.torch.functional.spikes_to_times_decoder</p>
+            <p class="prev-next-title">norse.torch.module.test.test_snn</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="norse.torch.functional.stdp_sensor.html" title="next page">
+    <a class='right-next' id="next-link" href="norse.torch.module.test.test_training.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">norse.torch.functional.stdp_sensor</p>
+        <p class="prev-next-title">norse.torch.module.test.test_training</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

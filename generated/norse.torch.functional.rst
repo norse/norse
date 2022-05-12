@@ -49,6 +49,7 @@ norse.torch.functional
    norse.torch.functional.logical
    norse.torch.functional.lsnn
    norse.torch.functional.regularization
+   norse.torch.functional.spikes_to_times_decoder
    norse.torch.functional.stdp
    norse.torch.functional.stdp_sensor
    norse.torch.functional.superspike

@@ -46,6 +46,7 @@ norse.torch.functional.test
    norse.torch.functional.test.test_logical
    norse.torch.functional.test.test_lsnn
    norse.torch.functional.test.test_regularization
+   norse.torch.functional.test.test_spikes_to_times_decoder
    norse.torch.functional.test.test_stdp
    norse.torch.functional.test.test_stdp_sensor
    norse.torch.functional.test.test_superspike

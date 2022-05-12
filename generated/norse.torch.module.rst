@@ -47,5 +47,6 @@ norse.torch.module
    norse.torch.module.regularization
    norse.torch.module.sequential
    norse.torch.module.snn
+   norse.torch.module.spikes_to_times_decoder
    norse.torch.module.test
 
