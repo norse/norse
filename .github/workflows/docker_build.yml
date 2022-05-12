@@ -1,8 +1,9 @@
 name: Build docker images
 
 on:
-  pull_request:
-
+  push:
+    branches:
+      - master
 jobs:
   build-docker:
     runs-on: ubuntu-latest
