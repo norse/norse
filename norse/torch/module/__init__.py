@@ -76,6 +76,7 @@ from .izhikevich import (
     Izhikevich,
     IzhikevichRecurrent,
 )
+from .spikes_to_times_decoder import SpikesToTimesDecoder
 
 __all__ = [
     "CobaLIFCell",
@@ -156,4 +157,6 @@ __all__ = [
     "LSNNState",
     "RegularizationCell",
     "SequentialState",
+    # Decoder
+    "SpikesToTimesDecoder",
 ]
