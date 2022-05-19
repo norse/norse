@@ -43,28 +43,27 @@ class IAFFeedForwardState(NamedTuple):
 
 
 def iaf_step(
-    input_tensor: torch.Tensor,
+    input_spikes: torch.Tensor,
     state: IAFState,
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
     p: IAFParameters = IAFParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, IAFState]:
-    # compute new spikes
-    z_new = threshold(state.v - p.v_th, p.method, p.alpha)
-    # compute reset
-    v_new = (1 - z_new) * state.v + z_new * p.v_reset
     v_new = (
-        v_new
-        + torch.nn.functional.linear(input_tensor, input_weights)
+        state.v
+        + torch.nn.functional.linear(input_spikes, input_weights)
         + torch.nn.functional.linear(state.z, recurrent_weights)
     )
-
+    # compute new spikes
+    z_new = threshold(v_new - p.v_th, p.method, p.alpha)
+    # compute reset
+    v_new = (1 - z_new) * v_new + z_new * p.v_reset
     return z_new, IAFState(z_new, v_new)
 
 
 def iaf_feed_forward_step(
-    input_tensor: torch.Tensor,
+    input_spikes: torch.Tensor,
     state: IAFFeedForwardState,
     p: IAFParameters = IAFParameters(),
     dt: float = 0.001,
@@ -85,16 +84,16 @@ def iaf_feed_forward_step(
         v = (1-z) v + z v_{\text{reset}}
 
     Parameters:
-        input_tensor (torch.Tensor): the input spikes at the current time step
+        input_spikes (torch.Tensor): the input spikes at the current time step
         state (IAFFeedForwardState): current state of the LIF neuron
         p (IAFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use (unused, but added for compatibility)
     """
-    # compute new spikes
-    z_new = threshold(state.v - p.v_th, p.method, p.alpha)
-    # compute reset
-    v_new = (1 - z_new) * state.v + z_new * p.v_reset
     # compute current jumps
-    v_new = v_new + input_tensor
+    v_new = state.v + input_spikes
+    # compute new spikes
+    z_new = threshold(v_new - p.v_th, p.method, p.alpha)
+    # compute reset
+    v_new = (1 - z_new) * v_new + z_new * p.v_reset
 
     return z_new, IAFFeedForwardState(v=v_new)

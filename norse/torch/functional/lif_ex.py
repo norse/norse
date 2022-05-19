@@ -102,32 +102,33 @@ def lif_ex_step(
         p (LIFExParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
+    # compute current jumps
+    i_jump = (
+        state.i
+        + torch.nn.functional.linear(input_tensor, input_weights)
+        + torch.nn.functional.linear(state.z, recurrent_weights)
+    )
+
     # compute voltage updates
     dv_leak = p.v_leak - state.v
     dv_exp = p.delta_T * torch.exp((state.v - p.v_th) / p.delta_T)
-    dv = dt * p.tau_mem_inv * (dv_leak + dv_exp + state.i)
+    dv = dt * p.tau_mem_inv * (dv_leak + dv_exp + i_jump)
     v_decayed = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * state.i
-    i_decayed = state.i + di
+    di = -dt * p.tau_syn_inv * i_jump
+    i_decayed = i_jump + di
 
     # compute new spikes
     z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
-    # compute current jumps
-    i_new = (
-        i_decayed
-        + torch.nn.functional.linear(input_tensor, input_weights)
-        + torch.nn.functional.linear(state.z, recurrent_weights)
-    )
 
-    return z_new, LIFExState(z_new, v_new, i_new)
+    return z_new, LIFExState(z_new, v_new, i_decayed)
 
 
 def lif_ex_feed_forward_step(
-    input_tensor: torch.Tensor,
+    input_spikes: torch.Tensor,
     state: LIFExFeedForwardState = LIFExFeedForwardState(0, 0),
     p: LIFExParameters = LIFExParameters(),
     dt: float = 0.001,
@@ -161,29 +162,29 @@ def lif_ex_feed_forward_step(
     arbitrary pytorch module (such as a convolution) to input spikes.
 
     Parameters:
-        input_tensor (torch.Tensor): the input spikes at the current time step
+        input_spikes (torch.Tensor): the input spikes at the current time step
         state (LIFExFeedForwardState): current state of the LIF neuron
         p (LIFExParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
+    # compute current jumps
+    i_jump = state.i + input_spikes
     # compute voltage updates
     dv_leak = p.v_leak - state.v
     dv_exp = p.delta_T * torch.exp((state.v - p.v_th) / p.delta_T)
-    dv = dt * p.tau_mem_inv * (dv_leak + dv_exp + state.i)
+    dv = dt * p.tau_mem_inv * (dv_leak + dv_exp + i_jump)
     v_decayed = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * state.i
-    i_decayed = state.i + di
+    di = -dt * p.tau_syn_inv * i_jump
+    i_decayed = i_jump + di
 
     # compute new spikes
     z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
-    # compute current jumps
-    i_new = i_decayed + input_tensor
 
-    return z_new, LIFExFeedForwardState(v_new, i_new)
+    return z_new, LIFExFeedForwardState(v_new, i_decayed)
 
 
 def lif_ex_current_encoder(
