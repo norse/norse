@@ -225,17 +225,23 @@ def stdp_step_conv2d(
     )
 
     # STDP weight update
-    dw_plus = p_stdp.A_plus(w) * torch.einsum(
-        "bik,bjk->ij",
-        z_post.view(batch_size, out_channels, -1),
-        state_stdp_t_pre_uf,
-    ).view(w.shape)
+    dw_plus = (
+        p_stdp.A_plus(w)
+        * torch.einsum(
+            "bik,bjk->ij",
+            z_post.view(batch_size, out_channels, -1),
+            state_stdp_t_pre_uf,
+        ).view(w.shape)
+    )
 
-    dw_minus = p_stdp.A_minus(w) * torch.einsum(
-        "bik,bjk->ij",
-        state_stdp.t_post.view(batch_size, out_channels, -1),
-        z_pre_uf,
-    ).view(w.shape)
+    dw_minus = (
+        p_stdp.A_minus(w)
+        * torch.einsum(
+            "bik,bjk->ij",
+            state_stdp.t_post.view(batch_size, out_channels, -1),
+            z_pre_uf,
+        ).view(w.shape)
+    )
 
     w = w + (dw_plus - dw_minus)
 

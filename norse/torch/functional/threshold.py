@@ -108,8 +108,8 @@ class HeaviCirc(torch.autograd.Function):
         return (
             dy
             * (
-                -(x.pow(2) / (2 * (alpha**2 + x.pow(2)).pow(1.5)))
-                + 1 / (2 * (alpha**2 + x.pow(2)).sqrt())
+                -(x.pow(2) / (2 * (alpha ** 2 + x.pow(2)).pow(1.5)))
+                + 1 / (2 * (alpha ** 2 + x.pow(2)).sqrt())
             )
             * 2
             * alpha,
@@ -135,7 +135,7 @@ class CircDist(torch.autograd.Function):
         ctx.alpha = alpha
 
         return torch.distributions.bernoulli.Bernoulli(
-            0.5 + 0.5 * (x / (x.pow(2) + alpha**2).sqrt())
+            0.5 + 0.5 * (x / (x.pow(2) + alpha ** 2).sqrt())
         ).sample()
 
     @staticmethod
@@ -145,8 +145,8 @@ class CircDist(torch.autograd.Function):
         return (
             dy
             * (
-                -(x.pow(2) / (2 * (alpha**2 + x.pow(2)).pow(1.5)))
-                + 1 / (2 * (alpha**2 + x.pow(2)).sqrt())
+                -(x.pow(2) / (2 * (alpha ** 2 + x.pow(2)).pow(1.5)))
+                + 1 / (2 * (alpha ** 2 + x.pow(2)).sqrt())
             )
             * 2
             * alpha,

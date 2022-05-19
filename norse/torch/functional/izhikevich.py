@@ -297,7 +297,7 @@ def izhikevich_feed_forward_step(
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, IzhikevichState]:
     v_ = s.v + p.tau_inv * dt * (
-        p.sq * s.v**2 + p.mn * s.v + p.bias - s.u + input_current
+        p.sq * s.v ** 2 + p.mn * s.v + p.bias - s.u + input_current
     )
     u_ = s.u + p.tau_inv * dt * p.a * (p.b * s.v - s.u)
     z_ = threshold(v_ - p.v_th, p.method, p.alpha)
@@ -317,7 +317,7 @@ def izhikevich_recurrent_step(
     input_current = torch.nn.functional.linear(input_current, input_weights)
     recurrent_current = torch.nn.functional.linear(s.z, recurrent_weights)
     v_ = s.v + p.tau_inv * dt * (
-        p.sq * s.v**2 + p.mn * s.v + p.bias - s.u + input_current + recurrent_current
+        p.sq * s.v ** 2 + p.mn * s.v + p.bias - s.u + input_current + recurrent_current
     )
     u_ = s.u + p.tau_inv * dt * p.a * (p.b * s.v - s.u)
     z_ = threshold(v_ - p.v_th, p.method, p.alpha)

@@ -13,7 +13,7 @@ auto lif_feed_forward_step(torch::Tensor input_tensor,
 {
   auto [v, i] = s;
   auto [tau_syn_inv, tau_mem_inv, v_leak, v_th, v_reset, m, alpha] = p;
-
+  
   // compute current jumps
   auto i_jump = (i + input_tensor);
 

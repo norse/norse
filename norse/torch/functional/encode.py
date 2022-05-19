@@ -64,7 +64,7 @@ def gaussian_rbf(tensor: torch.Tensor, sigma: float = 1):
         tensor (torch.Tensor): The tensor containing distance values to convert to radial bases
         sigma (float): The spread of the gaussian distribution. Defaults to 1.
     """
-    return torch.exp(-tensor / (2 * sigma**2))
+    return torch.exp(-tensor / (2 * sigma ** 2))
 
 
 def euclidean_distance(x, y):

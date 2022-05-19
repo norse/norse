@@ -17,17 +17,6 @@ from norse.torch.functional.lif import (
 )
 
 
-def test_lif_cpp_back():
-    x = torch.ones(2)
-    s = LIFState(z=torch.zeros(1), v=torch.zeros(1), i=torch.zeros(1))
-    s.v.requires_grad = True
-    input_weights = torch.ones(2)
-    recurrent_weights = torch.ones(1)
-    _, s = lif_step(x, s, input_weights, recurrent_weights)
-    z, s = lif_step(x, s, input_weights, recurrent_weights)
-    z.sum().backward()
-
-
 def test_lif_jit_back():
     x = torch.ones(2)
     s = LIFState(z=torch.zeros(1), v=torch.zeros(1), i=torch.zeros(1))
@@ -99,25 +88,3 @@ def test_lif_feed_forward_step_jit():
     for result in results:
         _, s = _lif_feed_forward_step_jit(x, s, p)
         assert torch.allclose(torch.as_tensor(result), s.v, atol=1e-4)
-
-
-def test_lif_current_encoder():
-    x = torch.ones(10)
-    v = torch.zeros(10)
-
-    results = [
-        0.1,
-        0.19,
-        0.2710,
-        0.3439,
-        0.4095,
-        0.4686,
-        0.5217,
-        0.5695,
-        0.6126,
-        0.6513,
-    ]
-
-    for result in results:
-        _, v = lif_current_encoder(x, v)
-        assert torch.allclose(torch.as_tensor(result), v, atol=1e-4)
