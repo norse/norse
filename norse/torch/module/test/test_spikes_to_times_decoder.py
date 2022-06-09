@@ -72,6 +72,19 @@ def test_backward():
     expected_grad[1, :, :] = -decoder_w_time.dt
     assert torch.equal(test_input.grad, expected_grad)
 
+    # test backward for 1 < spike_count < test_input.shape[0]
+    test_input = torch.ones(10, 3, 2)
+    test_input.requires_grad_(True)
+
+    decoder = SpikesToTimesDecoder(spike_count=2, convert_indices_to_times=False)
+    spike_times = decoder(test_input)
+    scale_parameters = torch.arange(2 * 3 * 2).reshape(spike_times.shape)
+    result = torch.sum(spike_times * scale_parameters)
+    result.backward()
+    expected_grad = torch.zeros_like(test_input)
+    expected_grad[:2, :, :] = -scale_parameters
+    assert torch.equal(test_input.grad, expected_grad)
+
 
 def test_jit():
     test_input = torch.zeros((2, 1, 1))
