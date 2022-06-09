@@ -51,8 +51,6 @@ class ToSpikeTimes(torch.autograd.Function):
             .repeat(spikeidcs_size)[noninf_spike_indices],
         )
 
-        grad_local[grad_local_indices] = 1.0
+        grad_local[grad_local_indices] = -1.0 * grad_output.flatten()
 
-        grad_input = -1.0 * grad_output * grad_local
-
-        return grad_input, None
+        return grad_local, None
