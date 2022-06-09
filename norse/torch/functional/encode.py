@@ -250,15 +250,16 @@ def spike_latency_lif_encode(
     """
     voltage = torch.zeros_like(input_current)
     z = torch.zeros_like(input_current)
-    mask = torch.zeros_like(input_current).bool()
+    mask = torch.zeros_like(input_current)
+    zeros_mask = torch.zeros_like(input_current)
     spikes = []
 
     for _ in range(seq_length):
         z, voltage = lif_current_encoder(
             input_current=input_current, voltage=voltage, p=p, dt=dt
         )
-        spikes += [torch.where(mask, torch.zeros_like(z), z)]
-        mask[z.bool()] = 1
+        spikes.append(torch.where(mask > 0, zeros_mask, z))
+        mask += z
 
     return torch.stack(spikes)
 
@@ -285,10 +286,10 @@ def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     Returns:
         A tensor where the first spike (1) is retained in the sequence
     """
-    mask = torch.zeros(input_spikes.size()[1:], device=input_spikes.device).byte()
+    mask = torch.zeros(input_spikes.size()[1:], device=input_spikes.device)
     spikes = []
     zero_spikes = torch.zeros_like(input_spikes[0])
     for index in range(input_spikes.shape[0]):
-        spikes.append(torch.where(mask, zero_spikes, input_spikes[index]))
-        mask[input_spikes[index].bool()] = 1
+        spikes.append(torch.where(mask > 0, zero_spikes, input_spikes[index]))
+        mask += spikes[-1]
     return torch.stack(spikes)
