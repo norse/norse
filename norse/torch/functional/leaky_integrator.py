@@ -70,7 +70,7 @@ class LIParameters(NamedTuple):
 
 
 def li_step(
-    input_tensor: torch.Tensor,
+    input_spikes: torch.Tensor,
     state: LIState,
     input_weights: torch.Tensor,
     p: LIParameters = LIParameters(),
@@ -93,24 +93,24 @@ def li_step(
         i = i + w i_{\text{in}}
 
     Parameters:
-        input_tensor (torch.Tensor); Input spikes
+        input_spikes (torch.Tensor); Input spikes
         s (LIState): state of the leaky integrator
         input_weights (torch.Tensor): weights for incoming spikes
         p (LIParameters): parameters of the leaky integrator
         dt (float): integration timestep to use
     """
+    # compute current jumps
+    i_jump = state.i + torch.nn.functional.linear(input_spikes, input_weights)
 
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
+    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_jump)
     v_new = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * state.i
-    i_decayed = state.i + di
+    di = -dt * p.tau_syn_inv * i_jump
+    i_decayed = i_jump + di
 
-    # compute current jumps
-    i_new = i_decayed + torch.nn.functional.linear(input_tensor, input_weights)
-    return v_new, LIState(v_new, i_new)
+    return v_new, LIState(v_new, i_decayed)
 
 
 # @torch.jit.script
@@ -120,14 +120,14 @@ def li_feed_forward_step(
     p: LIParameters = LIParameters(),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIState]:
+    # compute current jumps
+    i_jump = state.i + input_tensor
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
+    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_jump)
     v_new = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * state.i
-    i_decayed = state.i + di
+    di = -dt * p.tau_syn_inv * i_jump
+    i_decayed = i_jump + di
 
-    # compute current jumps
-    i_new = i_decayed + input_tensor
-    return v_new, LIState(v_new, i_new)
+    return v_new, LIState(v_new, i_decayed)

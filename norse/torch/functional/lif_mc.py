@@ -32,15 +32,16 @@ def lif_mc_step(
         p (LIFParameters): neuron parameters
         dt (float): Integration timestep to use
     """
-    v_new = state.v + dt * torch.nn.functional.linear(state.v, g_coupling)
-    return lif_step(
+    z, s = lif_step(
         input_tensor,
-        LIFState(state.z, v_new, state.i),
+        state,
         input_weights,
         recurrent_weights,
         p,
         dt,
     )
+    v_new = s.v + dt * torch.nn.functional.linear(s.v, g_coupling)
+    return z, LIFState(s.z, v_new, s.i)
 
 
 def lif_mc_feed_forward_step(
