@@ -9,7 +9,7 @@ See the :mod:`.leaky_integrator` module for more information.
 .. math::
     \begin{align*}
         \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
-        \dot{i} &= 1/\tau_{\text{syn}} i
+        \dot{i} &= -1/\tau_{\text{syn}} i
     \end{align*}
 
 The F in LIF stands for the thresholded "firing" events that occur if the
