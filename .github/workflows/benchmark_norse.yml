@@ -25,8 +25,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pwd && ls
           pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
           pip3 install pandas matplotlib
+          pip3 install -e .
 
       - name: Run benchmark with CUDA
         run: cd norse/benchmark && python3 -m norse.benchmark.main --norse --device cuda
