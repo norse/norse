@@ -1,0 +1,40 @@
+name: Benchmark Norse
+
+on: 
+  push:
+    tags:
+      - 'v**'
+      - '!v**RC**'
+    branches:
+      - feature-ci-benchmark
+
+
+jobs:
+  benchmark-norse:
+    # Only run on self-hosted Hugin machine
+    runs-on: [self-hosted]
+    container: 
+      options: --gpus
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: |
+          pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+          pip3 install pandas matplotlib
+
+      - name: Run benchmark with CUDA
+        run: cd norse/benchmark && python3 -m norse.benchmark.main --norse --device cuda
+
+      - name: Renew plot
+        run: python3 -m norse.benchmark.plot norse/benchmark/benchmark_results.csv --to norse/benchmark/norse_lif_benchmark.png
+
+      - name: Commit results
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ env.GITHUB_REF }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}

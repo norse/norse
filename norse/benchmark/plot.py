@@ -22,26 +22,27 @@ def render_frames(frames, title):
     plt.figure(figsize=(8, 5))
     ax = plt.gca()
     ax.set_yscale("log")
-    for frame in frames:
-        label = frame["label"][0].replace("_lif", "")
-        plt.fill_between(
-            frame["input_features"],
-            frame["duration_mean"] - frame["duration_std"] * 2,
-            frame["duration_mean"] + frame["duration_std"] * 2,
-            alpha=0.2,
-        )
-        frame.plot(y="duration_mean", x="input_features", ax=ax, label=label)
-        # Plot the crash, if any
-        is_na = frame["duration_mean"].isnull()
-        if is_na.any():
-            last_index = is_na[is_na == True].index[0] - 1
-            last_value = frame.loc[last_index]
-            plt.scatter(
-                x=[last_value["input_features"]],
-                y=[last_value["duration_mean"]],
-                color=ax.lines[-1].get_color(),
-                s=60,
+    for group in frames:
+        for label, frame in group.groupby("label"):
+            label = label.replace("lif", "LIF")
+            plt.fill_between(
+                frame["input_features"],
+                frame["duration_mean"] - frame["duration_std"] * 2,
+                frame["duration_mean"] + frame["duration_std"] * 2,
+                alpha=0.2,
             )
+            frame.plot(y="duration_mean", x="input_features", ax=ax, label=label)
+            # Plot the crash, if any
+            is_na = frame["duration_mean"].isnull()
+            if is_na.any():
+                last_index = is_na[is_na == True].index[0] - 1
+                last_value = frame.loc[last_index]
+                plt.scatter(
+                    x=[last_value["input_features"]],
+                    y=[last_value["duration_mean"]],
+                    color=ax.lines[-1].get_color(),
+                    s=60,
+                )
 
     xmin = frame["input_features"].min()
     xmax = frame["input_features"].max()
@@ -53,13 +54,6 @@ def render_frames(frames, title):
     ax.set_ylabel("Running time in seconds")
     ax.legend(loc="upper left")
     return ax
-
-
-def accumulate_files(files):
-    dfs = []
-    for f in files:
-        dfs.append(pd.read_csv(f))
-    return dfs
 
 
 if __name__ == "__main__":
@@ -76,7 +70,7 @@ if __name__ == "__main__":
     parser.add_argument("--title", type=str, default="", help="Figure title")
     args = parser.parse_args()
 
-    dfs = accumulate_files(args.files)
+    dfs = [pd.read_csv(f) for f in args.files]
     if args.to:
         save_frames(dfs, args.title, args.to)
     else:
