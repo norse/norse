@@ -37,5 +37,5 @@ jobs:
       - name: Commit results
         uses: ad-m/github-push-action@master
         with:
-          branch: ${{ env.GITHUB_REF }}
+          branch: ${{ github.ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
