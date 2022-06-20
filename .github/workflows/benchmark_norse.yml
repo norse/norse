@@ -14,17 +14,17 @@ jobs:
     # Only run on self-hosted Hugin machine
     runs-on: self-hosted
     container: 
-      image: python:3.10
+      image: pytorch/manylinux-cuda113
       options: --gpus 1
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+          # pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
 
       - name: Install dependencies
         run: |
           pwd && ls
           pip3 install --upgrade pip
-          pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
           pip3 install pandas matplotlib
           pip3 install -e .
 
@@ -39,3 +39,10 @@ jobs:
         with:
           branch: ${{ github.ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      
+      # Clean-up to address https://github.com/actions/checkout/issues/211
+      - name: Clean up GitHub workspace
+        uses: docker://ubuntu:latest
+        with:
+          args: find /__w/. -name . -o -prune -exec rm -rf -- {} +
