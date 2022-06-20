@@ -12,9 +12,9 @@ on:
 jobs:
   benchmark-norse:
     # Only run on self-hosted Hugin machine
-    runs-on: [self-hosted]
+    runs-on: self-hosted
     container: 
-      options: --gpus
+      options: "--gpus 1"
     steps:
       - name: Checkout
         uses: actions/checkout@v1
