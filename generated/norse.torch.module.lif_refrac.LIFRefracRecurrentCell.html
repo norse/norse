@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LIFRefracRecurrentCell &#8212; Norse v0.0.7</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>norse.torch.module.lif_refrac.LIFRefracRecurrentCell &#8212; Norse v0.0.7</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,12 +37,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -57,12 +56,30 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="LSNN" href="norse.torch.module.lsnn.LSNN.html" />
-    <link rel="prev" title="LIFRefracCell" href="norse.torch.module.lif_refrac.LIFRefracCell.html" />
+    <link rel="next" title="norse.torch.module.lsnn.LSNN" href="norse.torch.module.lsnn.LSNN.html" />
+    <link rel="prev" title="norse.torch.module.lif_refrac.LIFRefracCell" href="norse.torch.module.lif_refrac.LIFRefracCell.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
 
-
+    <!-- Google Analytics -->
+    
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -71,10 +88,15 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
       
       <img src="../_static/logo.png" class="logo" alt="logo">
       
@@ -87,14 +109,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../index.html">
-   Getting started
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Getting started
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   First steps
  </span>
@@ -178,257 +201,257 @@ const thebe_selector_output = ".output, .cell_output"
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.Lift.html">
-     Lift
+     norse.torch.module.Lift
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.SequentialState.html">
-     SequentialState
+     norse.torch.module.SequentialState
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.RegularizationCell.html">
-     RegularizationCell
+     norse.torch.module.RegularizationCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.encode.ConstantCurrentLIFEncoder.html">
-     ConstantCurrentLIFEncoder
+     norse.torch.module.encode.ConstantCurrentLIFEncoder
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.encode.PoissonEncoder.html">
-     PoissonEncoder
+     norse.torch.module.encode.PoissonEncoder
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.encode.PoissonEncoderStep.html">
-     PoissonEncoderStep
+     norse.torch.module.encode.PoissonEncoderStep
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.encode.PopulationEncoder.html">
-     PopulationEncoder
+     norse.torch.module.encode.PopulationEncoder
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.encode.SignedPoissonEncoder.html">
-     SignedPoissonEncoder
+     norse.torch.module.encode.SignedPoissonEncoder
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.encode.SpikeLatencyEncoder.html">
-     SpikeLatencyEncoder
+     norse.torch.module.encode.SpikeLatencyEncoder
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.encode.SpikeLatencyLIFEncoder.html">
-     SpikeLatencyLIFEncoder
+     norse.torch.module.encode.SpikeLatencyLIFEncoder
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.conv.LConv2d.html">
-     LConv2d
+     norse.torch.module.conv.LConv2d
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.iaf.IAFFeedForwardState.html">
-     IAFFeedForwardState
+     norse.torch.module.iaf.IAFFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.iaf.IAFParameters.html">
-     IAFParameters
+     norse.torch.module.iaf.IAFParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.iaf.IAFCell.html">
-     IAFCell
+     norse.torch.module.iaf.IAFCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.izhikevich.IzhikevichState.html">
-     IzhikevichState
+     norse.torch.module.izhikevich.IzhikevichState
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.izhikevich.IzhikevichSpikingBehavior.html">
-     IzhikevichSpikingBehavior
+     norse.torch.module.izhikevich.IzhikevichSpikingBehavior
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.izhikevich.Izhikevich.html">
-     Izhikevich
+     norse.torch.module.izhikevich.Izhikevich
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.izhikevich.IzhikevichCell.html">
-     IzhikevichCell
+     norse.torch.module.izhikevich.IzhikevichCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.izhikevich.IzhikevichRecurrent.html">
-     IzhikevichRecurrent
+     norse.torch.module.izhikevich.IzhikevichRecurrent
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.izhikevich.IzhikevichRecurrentCell.html">
-     IzhikevichRecurrentCell
+     norse.torch.module.izhikevich.IzhikevichRecurrentCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.leaky_integrator.LIState.html">
-     LIState
+     norse.torch.module.leaky_integrator.LIState
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.leaky_integrator.LIParameters.html">
-     LIParameters
+     norse.torch.module.leaky_integrator.LIParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.leaky_integrator.LI.html">
-     LI
+     norse.torch.module.leaky_integrator.LI
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.leaky_integrator.LICell.html">
-     LICell
+     norse.torch.module.leaky_integrator.LICell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.leaky_integrator.LILinearCell.html">
-     LILinearCell
+     norse.torch.module.leaky_integrator.LILinearCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.LIFParameters.html">
-     LIFParameters
+     norse.torch.LIFParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.LIFState.html">
-     LIFState
+     norse.torch.LIFState
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.LIF.html">
-     LIF
+     norse.torch.LIF
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.LIFCell.html">
-     LIFCell
+     norse.torch.LIFCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.LIFRecurrent.html">
-     LIFRecurrent
+     norse.torch.LIFRecurrent
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.LIFRecurrentCell.html">
-     LIFRecurrentCell
+     norse.torch.LIFRecurrentCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_box.LIFBoxFeedForwardState.html">
-     LIFBoxFeedForwardState
+     norse.torch.module.lif_box.LIFBoxFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_box.LIFBoxParameters.html">
-     LIFBoxParameters
+     norse.torch.module.lif_box.LIFBoxParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_box.LIFBoxCell.html">
-     LIFBoxCell
+     norse.torch.module.lif_box.LIFBoxCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.coba_lif.CobaLIFCell.html">
-     CobaLIFCell
+     norse.torch.module.coba_lif.CobaLIFCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_adex.LIFAdEx.html">
-     LIFAdEx
+     norse.torch.module.lif_adex.LIFAdEx
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_adex.LIFAdExCell.html">
-     LIFAdExCell
+     norse.torch.module.lif_adex.LIFAdExCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_adex.LIFAdExRecurrent.html">
-     LIFAdExRecurrent
+     norse.torch.module.lif_adex.LIFAdExRecurrent
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_adex.LIFAdExRecurrentCell.html">
-     LIFAdExRecurrentCell
+     norse.torch.module.lif_adex.LIFAdExRecurrentCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_ex.LIFEx.html">
-     LIFEx
+     norse.torch.module.lif_ex.LIFEx
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_ex.LIFExCell.html">
-     LIFExCell
+     norse.torch.module.lif_ex.LIFExCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_ex.LIFExRecurrent.html">
-     LIFExRecurrent
+     norse.torch.module.lif_ex.LIFExRecurrent
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_ex.LIFExRecurrentCell.html">
-     LIFExRecurrentCell
+     norse.torch.module.lif_ex.LIFExRecurrentCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_mc.LIFMCRecurrentCell.html">
-     LIFMCRecurrentCell
+     norse.torch.module.lif_mc.LIFMCRecurrentCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell.html">
-     LIFMCRefracRecurrentCell
+     norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lif_refrac.LIFRefracCell.html">
-     LIFRefracCell
+     norse.torch.module.lif_refrac.LIFRefracCell
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     LIFRefracRecurrentCell
+     norse.torch.module.lif_refrac.LIFRefracRecurrentCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lsnn.LSNN.html">
-     LSNN
+     norse.torch.module.lsnn.LSNN
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lsnn.LSNNCell.html">
-     LSNNCell
+     norse.torch.module.lsnn.LSNNCell
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lsnn.LSNNRecurrent.html">
-     LSNNRecurrent
+     norse.torch.module.lsnn.LSNNRecurrent
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.module.lsnn.LSNNRecurrentCell.html">
-     LSNNRecurrentCell
+     norse.torch.module.lsnn.LSNNRecurrentCell
     </a>
    </li>
   </ul>
@@ -595,12 +618,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.iaf.IAFParameters.html">
-     IAFParameters
+     norse.torch.functional.iaf.IAFParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.iaf.IAFFeedForwardState.html">
-     IAFFeedForwardState
+     norse.torch.functional.iaf.IAFFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
@@ -610,12 +633,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.izhikevich.IzhikevichParameters.html">
-     IzhikevichParameters
+     norse.torch.functional.izhikevich.IzhikevichParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.izhikevich.IzhikevichSpikingBehavior.html">
-     IzhikevichSpikingBehavior
+     norse.torch.functional.izhikevich.IzhikevichSpikingBehavior
     </a>
    </li>
    <li class="toctree-l2">
@@ -680,12 +703,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.leaky_integrator.LIParameters.html">
-     LIParameters
+     norse.torch.functional.leaky_integrator.LIParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.leaky_integrator.LIState.html">
-     LIState
+     norse.torch.functional.leaky_integrator.LIState
     </a>
    </li>
    <li class="toctree-l2">
@@ -695,12 +718,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.LIFParameters.html">
-     LIFParameters
+     norse.torch.functional.LIFParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.LIFFeedForwardState.html">
-     LIFFeedForwardState
+     norse.torch.functional.LIFFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
@@ -720,12 +743,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.lif_box.LIFBoxFeedForwardState.html">
-     LIFBoxFeedForwardState
+     norse.torch.functional.lif_box.LIFBoxFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.lif_box.LIFBoxParameters.html">
-     LIFBoxParameters
+     norse.torch.functional.lif_box.LIFBoxParameters
     </a>
    </li>
    <li class="toctree-l2">
@@ -735,12 +758,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.coba_lif.CobaLIFParameters.html">
-     CobaLIFParameters
+     norse.torch.functional.coba_lif.CobaLIFParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.coba_lif.CobaLIFFeedForwardState.html">
-     CobaLIFFeedForwardState
+     norse.torch.functional.coba_lif.CobaLIFFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
@@ -750,12 +773,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.lif_adex.LIFAdExParameters.html">
-     LIFAdExParameters
+     norse.torch.functional.lif_adex.LIFAdExParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.lif_adex.LIFAdExFeedForwardState.html">
-     LIFAdExFeedForwardState
+     norse.torch.functional.lif_adex.LIFAdExFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
@@ -770,12 +793,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.lif_ex.LIFExParameters.html">
-     LIFExParameters
+     norse.torch.functional.lif_ex.LIFExParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.lif_ex.LIFExFeedForwardState.html">
-     LIFExFeedForwardState
+     norse.torch.functional.lif_ex.LIFExFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
@@ -800,12 +823,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.LIFRefracParameters.html">
-     LIFRefracParameters
+     norse.torch.functional.LIFRefracParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.LIFRefracFeedForwardState.html">
-     LIFRefracFeedForwardState
+     norse.torch.functional.LIFRefracFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
@@ -820,12 +843,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.LSNNParameters.html">
-     LSNNParameters
+     norse.torch.functional.LSNNParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.LSNNFeedForwardState.html">
-     LSNNFeedForwardState
+     norse.torch.functional.LSNNFeedForwardState
     </a>
    </li>
    <li class="toctree-l2">
@@ -840,12 +863,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.STDPSensorParameters.html">
-     STDPSensorParameters
+     norse.torch.functional.STDPSensorParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.STDPSensorState.html">
-     STDPSensorState
+     norse.torch.functional.STDPSensorState
     </a>
    </li>
    <li class="toctree-l2">
@@ -855,12 +878,12 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.TsodyksMakramParameters.html">
-     TsodyksMakramParameters
+     norse.torch.functional.TsodyksMakramParameters
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="norse.torch.functional.TsodyksMakramState.html">
-     TsodyksMakramState
+     norse.torch.functional.TsodyksMakramState
     </a>
    </li>
    <li class="toctree-l2">
@@ -977,6 +1000,11 @@ const thebe_selector_output = ".output, .cell_output"
          norse.benchmark.benchmark
         </a>
        </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="norse.benchmark.norse_lif.html">
+         norse.benchmark.norse_lif
+        </a>
+       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -1062,12 +1090,17 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
 </div>
 
 
@@ -1075,82 +1108,170 @@ const thebe_selector_output = ".output, .cell_output"
 
 
           
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
     
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
+    <div class="header-article row sticky-top noprint">
         
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/generated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.rst"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/norse/norse"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2Fgenerated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/norse/norse/edit/master/docs/generated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/generated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
     </div>
 </div>
 
-            <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/norse/norse"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2Fgenerated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/norse/norse/edit/master/docs/generated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.rst"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
-    </div>
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
 </div>
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
-        </div>
-
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-        </div>
     </div>
-</div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>LIFRefracRecurrentCell</h1>
+                <h1>norse.torch.module.lif_refrac.LIFRefracRecurrentCell</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -1158,14 +1279,15 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="section" id="lifrefracrecurrentcell">
-<h1>LIFRefracRecurrentCell<a class="headerlink" href="#lifrefracrecurrentcell" title="Permalink to this headline">¶</a></h1>
+  <section id="norse-torch-module-lif-refrac-lifrefracrecurrentcell">
+<h1>norse.torch.module.lif_refrac.LIFRefracRecurrentCell<a class="headerlink" href="#norse-torch-module-lif-refrac-lifrefracrecurrentcell" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.lif_refrac.</span></span><span class="sig-name descname"><span class="pre">LIFRefracRecurrentCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="norse.torch.functional.LIFRefracParameters.html#norse.torch.functional.LIFRefracParameters" title="norse.torch.functional.lif_refrac.LIFRefracParameters"><span class="pre">norse.torch.functional.lif_refrac.LIFRefracParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LIFRefracParameters(lif=LIFParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=tensor(100.)),</span> <span class="pre">rho_reset=tensor(5.))</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_refrac.html#LIFRefracRecurrentCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">norse.torch.module.lif_refrac.</span></span><span class="sig-name descname"><span class="pre">LIFRefracRecurrentCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="norse.torch.functional.LIFRefracParameters.html#norse.torch.functional.LIFRefracParameters" title="norse.torch.functional.lif_refrac.LIFRefracParameters"><span class="pre">norse.torch.functional.lif_refrac.LIFRefracParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LIFRefracParameters(lif=LIFParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=tensor(100.)),</span> <span class="pre">rho_reset=tensor(5.))</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_refrac.html#LIFRefracRecurrentCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell" title="Permalink to this definition">#</a></dt>
 <dd><p>Module that computes a single euler-integration step of a LIF
 neuron-model with absolute refractory period. More specifically it
 implements one integration step of the following ODE.</p>
@@ -1208,912 +1330,167 @@ autapses (bool): Allow self-connections in the recurrence? Defaults to False.</p
 </pre></div>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.add_module">
-<span class="sig-name descname"><span class="pre">add_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.add_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds a child module to the current module.</p>
-<p>The module can be accessed as an attribute using the given name.</p>
-<dl>
-<dt>Args:</dt><dd><dl class="simple">
-<dt>name (string): name of the child module. The child module can be</dt><dd><p>accessed from this module using the given name</p>
-</dd>
-</dl>
-<p>module (Module): child module to be added to the module.</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="norse.torch.functional.LIFRefracParameters.html#norse.torch.functional.LIFRefracParameters" title="norse.torch.functional.lif_refrac.LIFRefracParameters"><span class="pre">norse.torch.functional.lif_refrac.LIFRefracParameters</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LIFRefracParameters(lif=LIFParameters(tau_syn_inv=tensor(200.),</span> <span class="pre">tau_mem_inv=tensor(100.),</span> <span class="pre">v_leak=tensor(0.),</span> <span class="pre">v_th=tensor(1.),</span> <span class="pre">v_reset=tensor(0.),</span> <span class="pre">method='super',</span> <span class="pre">alpha=tensor(100.)),</span> <span class="pre">rho_reset=tensor(5.))</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/norse/torch/module/lif_refrac.html#LIFRefracRecurrentCell.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.apply">
-<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies <code class="docutils literal notranslate"><span class="pre">fn</span></code> recursively to every submodule (as returned by <code class="docutils literal notranslate"><span class="pre">.children()</span></code>)
-as well as self. Typical use includes initializing the parameters of a model
-(see also <span class="xref std std-ref">nn-init-doc</span>).</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>fn (<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> -&gt; None): function to be applied to each submodule</p>
-</dd>
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">init_weights</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">==</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">init_weights</span><span class="p">)</span>
-<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">Parameter containing:</span>
-<span class="go">tensor([[ 1.,  1.],</span>
-<span class="go">        [ 1.,  1.]])</span>
-<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">Parameter containing:</span>
-<span class="go">tensor([[ 1.,  1.],</span>
-<span class="go">        [ 1.,  1.]])</span>
-<span class="go">Sequential(</span>
-<span class="go">  (0): Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">  (1): Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">)</span>
-<span class="go">Sequential(</span>
-<span class="go">  (0): Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">  (1): Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">)</span>
-</pre></div>
-</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.__init__" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(input_size, hidden_size[, p])</p></td>
+<td><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_module</span></code>(name, module)</p></td>
+<td><p>Adds a child module to the current module.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply</span></code>(fn)</p></td>
+<td><p>Applies <code class="docutils literal notranslate"><span class="pre">fn</span></code> recursively to every submodule (as returned by <code class="docutils literal notranslate"><span class="pre">.children()</span></code>) as well as self.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bfloat16</span></code>()</p></td>
+<td><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">bfloat16</span></code> datatype.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">buffers</span></code>([recurse])</p></td>
+<td><p>Returns an iterator over module buffers.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">children</span></code>()</p></td>
+<td><p>Returns an iterator over immediate children modules.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cpu</span></code>()</p></td>
+<td><p>Moves all model parameters and buffers to the CPU.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cuda</span></code>([device])</p></td>
+<td><p>Moves all model parameters and buffers to the GPU.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">double</span></code>()</p></td>
+<td><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">double</span></code> datatype.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code>()</p></td>
+<td><p>Sets the module in evaluation mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">extra_repr</span></code>()</p></td>
+<td><p>Set the extra representation of the module</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>()</p></td>
+<td><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">float</span></code> datatype.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code>(input_tensor[, state])</p></td>
+<td><p>Defines the computation performed at every call.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_buffer</span></code>(target)</p></td>
+<td><p>Returns the buffer given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throws an error.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_extra_state</span></code>()</p></td>
+<td><p>Returns any extra state to include in the module's state_dict.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_parameter</span></code>(target)</p></td>
+<td><p>Returns the parameter given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throws an error.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_submodule</span></code>(target)</p></td>
+<td><p>Returns the submodule given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists, otherwise throws an error.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">half</span></code>()</p></td>
+<td><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">half</span></code> datatype.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">initial_state</span></code>(input_tensor)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_state_dict</span></code>(state_dict[, strict])</p></td>
+<td><p>Copies parameters and buffers from <code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code> into this module and its descendants.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">modules</span></code>()</p></td>
+<td><p>Returns an iterator over all modules in the network.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">named_buffers</span></code>([prefix, recurse])</p></td>
+<td><p>Returns an iterator over module buffers, yielding both the name of the buffer as well as the buffer itself.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">named_children</span></code>()</p></td>
+<td><p>Returns an iterator over immediate children modules, yielding both the name of the module as well as the module itself.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">named_modules</span></code>([memo, prefix, remove_duplicate])</p></td>
+<td><p>Returns an iterator over all modules in the network, yielding both the name of the module as well as the module itself.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">named_parameters</span></code>([prefix, recurse])</p></td>
+<td><p>Returns an iterator over module parameters, yielding both the name of the parameter as well as the parameter itself.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">parameters</span></code>([recurse])</p></td>
+<td><p>Returns an iterator over module parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_backward_hook</span></code>(hook)</p></td>
+<td><p>Registers a backward hook on the module.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_buffer</span></code>(name, tensor[, persistent])</p></td>
+<td><p>Adds a buffer to the module.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_forward_hook</span></code>(hook)</p></td>
+<td><p>Registers a forward hook on the module.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_forward_pre_hook</span></code>(hook)</p></td>
+<td><p>Registers a forward pre-hook on the module.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_full_backward_hook</span></code>(hook)</p></td>
+<td><p>Registers a backward hook on the module.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_module</span></code>(name, module)</p></td>
+<td><p>Alias for <code class="xref py py-func docutils literal notranslate"><span class="pre">add_module()</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_parameter</span></code>(name, param)</p></td>
+<td><p>Adds a parameter to the module.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">requires_grad_</span></code>([requires_grad])</p></td>
+<td><p>Change if autograd should record operations on parameters in this module.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_extra_state</span></code>(state)</p></td>
+<td><p>This function is called from <code class="xref py py-func docutils literal notranslate"><span class="pre">load_state_dict()</span></code> to handle any extra state found within the <cite>state_dict</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">share_memory</span></code>()</p></td>
+<td><p>See <code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.share_memory_()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code>([destination, prefix, keep_vars])</p></td>
+<td><p>Returns a dictionary containing a whole state of the module.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to</span></code>(*args, **kwargs)</p></td>
+<td><p>Moves and/or casts the parameters and buffers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_empty</span></code>(*, device)</p></td>
+<td><p>Moves the parameters and buffers to the specified device without copying storage.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code>([mode])</p></td>
+<td><p>Sets the module in training mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code>(dst_type)</p></td>
+<td><p>Casts all parameters and buffers to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dst_type</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">xpu</span></code>([device])</p></td>
+<td><p>Moves all model parameters and buffers to the XPU.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">zero_grad</span></code>([set_to_none])</p></td>
+<td><p>Sets gradients of all model parameters to zero.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">T_destination</span></code></p></td>
+<td><p>alias of TypeVar('T_destination', bound=<code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code>])</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump_patches</span></code></p></td>
+<td><p>This allows better BC support for <code class="xref py py-meth docutils literal notranslate"><span class="pre">load_state_dict()</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.bfloat16">
-<span class="sig-name descname"><span class="pre">bfloat16</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.bfloat16" title="Permalink to this definition">¶</a></dt>
-<dd><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">bfloat16</span></code> datatype.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method modifies the module in-place.</p>
-</div>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.buffers">
-<span class="sig-name descname"><span class="pre">buffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.buffers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator over module buffers.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>recurse (bool): if True, then yields buffers of this module</dt><dd><p>and all submodules. Otherwise, yields only buffers that
-are direct members of this module.</p>
-</dd>
-</dl>
-</dd>
-<dt>Yields:</dt><dd><p>torch.Tensor: module buffer</p>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">buf</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">buffers</span><span class="p">():</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">buf</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
-<span class="go">&lt;class &#39;torch.Tensor&#39;&gt; (20L,)</span>
-<span class="go">&lt;class &#39;torch.Tensor&#39;&gt; (20L, 1L, 5L, 5L)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.children">
-<span class="sig-name descname"><span class="pre">children</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.children" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator over immediate children modules.</p>
-<dl class="simple">
-<dt>Yields:</dt><dd><p>Module: a child module</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.cpu">
-<span class="sig-name descname"><span class="pre">cpu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.cpu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Moves all model parameters and buffers to the CPU.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method modifies the module in-place.</p>
-</div>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.cuda">
-<span class="sig-name descname"><span class="pre">cuda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.device</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.cuda" title="Permalink to this definition">¶</a></dt>
-<dd><p>Moves all model parameters and buffers to the GPU.</p>
-<p>This also makes associated parameters and buffers different objects. So
-it should be called before constructing optimizer if the module will
-live on GPU while being optimized.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method modifies the module in-place.</p>
-</div>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>device (int, optional): if specified, all parameters will be</dt><dd><p>copied to that device</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.double">
-<span class="sig-name descname"><span class="pre">double</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.double" title="Permalink to this definition">¶</a></dt>
-<dd><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">double</span></code> datatype.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method modifies the module in-place.</p>
-</div>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.eval">
-<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.eval" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the module in evaluation mode.</p>
-<p>This has any effect only on certain modules. See documentations of
-particular modules for details of their behaviors in training/evaluation
-mode, if they are affected, e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">Dropout</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchNorm</span></code>,
-etc.</p>
-<p>This is equivalent with <code class="xref py py-meth docutils literal notranslate"><span class="pre">self.train(False)</span></code>.</p>
-<p>See <span class="xref std std-ref">locally-disable-grad-doc</span> for a comparison between
-<cite>.eval()</cite> and several similar mechanisms that may be confused with it.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.extra_repr">
-<span class="sig-name descname"><span class="pre">extra_repr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.extra_repr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the extra representation of the module</p>
-<p>To print customized extra information, you should re-implement
-this method in your own modules. Both single-line and multi-line
-strings are acceptable.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.float">
-<span class="sig-name descname"><span class="pre">float</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.float" title="Permalink to this definition">¶</a></dt>
-<dd><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">float</span></code> datatype.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method modifies the module in-place.</p>
-</div>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_buffer">
-<span class="sig-name descname"><span class="pre">get_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_buffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the buffer given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists,
-otherwise throws an error.</p>
-<p>See the docstring for <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> for a more detailed
-explanation of this method’s functionality as well as how to
-correctly specify <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>target: The fully-qualified string name of the buffer</dt><dd><p>to look for. (See <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> for how to specify a
-fully-qualified string.)</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>torch.Tensor: The buffer referenced by <code class="docutils literal notranslate"><span class="pre">target</span></code></p>
-</dd>
-<dt>Raises:</dt><dd><dl class="simple">
-<dt>AttributeError: If the target string references an invalid</dt><dd><p>path or resolves to something that is not a
-buffer</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_extra_state">
-<span class="sig-name descname"><span class="pre">get_extra_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_extra_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns any extra state to include in the module’s state_dict.
-Implement this and a corresponding <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.set_extra_state" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.set_extra_state"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_extra_state()</span></code></a> for your module
-if you need to store extra state. This function is called when building the
-module’s <cite>state_dict()</cite>.</p>
-<p>Note that extra state should be pickleable to ensure working serialization
-of the state_dict. We only provide provide backwards compatibility guarantees
-for serializing Tensors; other objects may break backwards compatibility if
-their serialized pickled form changes.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>object: Any extra state to store in the module’s state_dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_parameter">
-<span class="sig-name descname"><span class="pre">get_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.parameter.Parameter</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_parameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the parameter given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists,
-otherwise throws an error.</p>
-<p>See the docstring for <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> for a more detailed
-explanation of this method’s functionality as well as how to
-correctly specify <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>target: The fully-qualified string name of the Parameter</dt><dd><p>to look for. (See <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> for how to specify a
-fully-qualified string.)</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>torch.nn.Parameter: The Parameter referenced by <code class="docutils literal notranslate"><span class="pre">target</span></code></p>
-</dd>
-<dt>Raises:</dt><dd><dl class="simple">
-<dt>AttributeError: If the target string references an invalid</dt><dd><p>path or resolves to something that is not an
-<code class="docutils literal notranslate"><span class="pre">nn.Parameter</span></code></p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_submodule">
-<span class="sig-name descname"><span class="pre">get_submodule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.Module</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_submodule" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the submodule given by <code class="docutils literal notranslate"><span class="pre">target</span></code> if it exists,
-otherwise throws an error.</p>
-<p>For example, let’s say you have an <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> <code class="docutils literal notranslate"><span class="pre">A</span></code> that
-looks like this:</p>
-<p>(The diagram shows an <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> <code class="docutils literal notranslate"><span class="pre">A</span></code>. <code class="docutils literal notranslate"><span class="pre">A</span></code> has a nested
-submodule <code class="docutils literal notranslate"><span class="pre">net_b</span></code>, which itself has two submodules <code class="docutils literal notranslate"><span class="pre">net_c</span></code>
-and <code class="docutils literal notranslate"><span class="pre">linear</span></code>. <code class="docutils literal notranslate"><span class="pre">net_c</span></code> then has a submodule <code class="docutils literal notranslate"><span class="pre">conv</span></code>.)</p>
-<p>To check whether or not we have the <code class="docutils literal notranslate"><span class="pre">linear</span></code> submodule, we
-would call <code class="docutils literal notranslate"><span class="pre">get_submodule(&quot;net_b.linear&quot;)</span></code>. To check whether
-we have the <code class="docutils literal notranslate"><span class="pre">conv</span></code> submodule, we would call
-<code class="docutils literal notranslate"><span class="pre">get_submodule(&quot;net_b.net_c.conv&quot;)</span></code>.</p>
-<p>The runtime of <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> is bounded by the degree
-of module nesting in <code class="docutils literal notranslate"><span class="pre">target</span></code>. A query against
-<code class="docutils literal notranslate"><span class="pre">named_modules</span></code> achieves the same result, but it is O(N) in
-the number of transitive modules. So, for a simple check to see
-if some submodule exists, <code class="docutils literal notranslate"><span class="pre">get_submodule</span></code> should always be
-used.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>target: The fully-qualified string name of the submodule</dt><dd><p>to look for. (See above example for how to specify a
-fully-qualified string.)</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>torch.nn.Module: The submodule referenced by <code class="docutils literal notranslate"><span class="pre">target</span></code></p>
-</dd>
-<dt>Raises:</dt><dd><dl class="simple">
-<dt>AttributeError: If the target string references an invalid</dt><dd><p>path or resolves to something that is not an
-<code class="docutils literal notranslate"><span class="pre">nn.Module</span></code></p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.half">
-<span class="sig-name descname"><span class="pre">half</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.half" title="Permalink to this definition">¶</a></dt>
-<dd><p>Casts all floating point parameters and buffers to <code class="docutils literal notranslate"><span class="pre">half</span></code> datatype.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method modifies the module in-place.</p>
-</div>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.load_state_dict">
-<span class="sig-name descname"><span class="pre">load_state_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.OrderedDict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.load_state_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copies parameters and buffers from <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a> into
-this module and its descendants. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">strict</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then
-the keys of <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a> must exactly match the keys returned
-by this module’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code> function.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>state_dict (dict): a dict containing parameters and</dt><dd><p>persistent buffers.</p>
-</dd>
-<dt>strict (bool, optional): whether to strictly enforce that the keys</dt><dd><p>in <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a> match the keys returned by this module’s
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">state_dict()</span></code> function. Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> with <code class="docutils literal notranslate"><span class="pre">missing_keys</span></code> and <code class="docutils literal notranslate"><span class="pre">unexpected_keys</span></code> fields:</dt><dd><ul class="simple">
-<li><p><strong>missing_keys</strong> is a list of str containing the missing keys</p></li>
-<li><p><strong>unexpected_keys</strong> is a list of str containing the unexpected keys</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt>Note:</dt><dd><p>If a parameter or buffer is registered as <code class="docutils literal notranslate"><span class="pre">None</span></code> and its corresponding key
-exists in <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>, <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.load_state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.load_state_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_state_dict()</span></code></a> will raise a
-<code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.modules">
-<span class="sig-name descname"><span class="pre">modules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.modules" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator over all modules in the network.</p>
-<dl class="simple">
-<dt>Yields:</dt><dd><p>Module: a module in the network</p>
-</dd>
-<dt>Note:</dt><dd><p>Duplicate modules are returned only once. In the following
-example, <code class="docutils literal notranslate"><span class="pre">l</span></code> will be returned only once.</p>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">modules</span><span class="p">()):</span>
-<span class="go">        print(idx, &#39;-&gt;&#39;, m)</span>
-
-<span class="go">0 -&gt; Sequential(</span>
-<span class="go">  (0): Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">  (1): Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">)</span>
-<span class="go">1 -&gt; Linear(in_features=2, out_features=2, bias=True)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.named_buffers">
-<span class="sig-name descname"><span class="pre">named_buffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.named_buffers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator over module buffers, yielding both the
-name of the buffer as well as the buffer itself.</p>
-<dl>
-<dt>Args:</dt><dd><p>prefix (str): prefix to prepend to all buffer names.
-recurse (bool): if True, then yields buffers of this module</p>
-<blockquote>
-<div><p>and all submodules. Otherwise, yields only buffers that
-are direct members of this module.</p>
-</div></blockquote>
-</dd>
-<dt>Yields:</dt><dd><p>(string, torch.Tensor): Tuple containing the name and buffer</p>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">buf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_buffers</span><span class="p">():</span>
-<span class="gp">&gt;&gt;&gt; </span>   <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;running_var&#39;</span><span class="p">]:</span>
-<span class="gp">&gt;&gt;&gt; </span>       <span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.named_children">
-<span class="sig-name descname"><span class="pre">named_children</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.named_children" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator over immediate children modules, yielding both
-the name of the module as well as the module itself.</p>
-<dl class="simple">
-<dt>Yields:</dt><dd><p>(string, Module): Tuple containing a name and child module</p>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">named_children</span><span class="p">():</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;conv4&#39;</span><span class="p">,</span> <span class="s1">&#39;conv5&#39;</span><span class="p">]:</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="nb">print</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.named_modules">
-<span class="sig-name descname"><span class="pre">named_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_duplicate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.named_modules" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator over all modules in the network, yielding
-both the name of the module as well as the module itself.</p>
-<dl>
-<dt>Args:</dt><dd><p>memo: a memo to store the set of modules already added to the result
-prefix: a prefix that will be added to the name of the module
-remove_duplicate: whether to remove the duplicated module instances in the result</p>
-<blockquote>
-<div><p>or not</p>
-</div></blockquote>
-</dd>
-<dt>Yields:</dt><dd><p>(string, Module): Tuple of name and module</p>
-</dd>
-<dt>Note:</dt><dd><p>Duplicate modules are returned only once. In the following
-example, <code class="docutils literal notranslate"><span class="pre">l</span></code> will be returned only once.</p>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">named_modules</span><span class="p">()):</span>
-<span class="go">        print(idx, &#39;-&gt;&#39;, m)</span>
-
-<span class="go">0 -&gt; (&#39;&#39;, Sequential(</span>
-<span class="go">  (0): Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">  (1): Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="go">))</span>
-<span class="go">1 -&gt; (&#39;0&#39;, Linear(in_features=2, out_features=2, bias=True))</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.named_parameters">
-<span class="sig-name descname"><span class="pre">named_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.nn.parameter.Parameter</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.named_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator over module parameters, yielding both the
-name of the parameter as well as the parameter itself.</p>
-<dl>
-<dt>Args:</dt><dd><p>prefix (str): prefix to prepend to all parameter names.
-recurse (bool): if True, then yields parameters of this module</p>
-<blockquote>
-<div><p>and all submodules. Otherwise, yields only parameters that
-are direct members of this module.</p>
-</div></blockquote>
-</dd>
-<dt>Yields:</dt><dd><p>(string, Parameter): Tuple containing the name and parameter</p>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">():</span>
-<span class="gp">&gt;&gt;&gt; </span>   <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;bias&#39;</span><span class="p">]:</span>
-<span class="gp">&gt;&gt;&gt; </span>       <span class="nb">print</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.parameters">
-<span class="sig-name descname"><span class="pre">parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.parameter.Parameter</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator over module parameters.</p>
-<p>This is typically passed to an optimizer.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>recurse (bool): if True, then yields parameters of this module</dt><dd><p>and all submodules. Otherwise, yields only parameters that
-are direct members of this module.</p>
-</dd>
-</dl>
-</dd>
-<dt>Yields:</dt><dd><p>Parameter: module parameter</p>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">param</span><span class="p">),</span> <span class="n">param</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
-<span class="go">&lt;class &#39;torch.Tensor&#39;&gt; (20L,)</span>
-<span class="go">&lt;class &#39;torch.Tensor&#39;&gt; (20L, 1L, 5L, 5L)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_backward_hook">
-<span class="sig-name descname"><span class="pre">register_backward_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.utils.hooks.RemovableHandle</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_backward_hook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Registers a backward hook on the module.</p>
-<p>This function is deprecated in favor of <code class="xref py py-meth docutils literal notranslate"><span class="pre">register_full_backward_hook()</span></code> and
-the behavior of this function will change in future versions.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><dl class="simple">
-<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
-<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_buffer">
-<span class="sig-name descname"><span class="pre">register_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persistent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_buffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds a buffer to the module.</p>
-<p>This is typically used to register a buffer that should not to be
-considered a model parameter. For example, BatchNorm’s <code class="docutils literal notranslate"><span class="pre">running_mean</span></code>
-is not a parameter, but is part of the module’s state. Buffers, by
-default, are persistent and will be saved alongside parameters. This
-behavior can be changed by setting <code class="xref py py-attr docutils literal notranslate"><span class="pre">persistent</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code>. The
-only difference between a persistent buffer and a non-persistent buffer
-is that the latter will not be a part of this module’s
-<a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
-<p>Buffers can be accessed as attributes using given names.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>name (string): name of the buffer. The buffer can be accessed</dt><dd><p>from this module using the given name</p>
-</dd>
-<dt>tensor (Tensor or None): buffer to be registered. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, then operations</dt><dd><p>that run on buffers, such as <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.cuda" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.cuda"><code class="xref py py-attr docutils literal notranslate"><span class="pre">cuda</span></code></a>, are ignored. If <code class="docutils literal notranslate"><span class="pre">None</span></code>,
-the buffer is <strong>not</strong> included in the module’s <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
-</dd>
-<dt>persistent (bool): whether the buffer is part of this module’s</dt><dd><p><a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s1">&#39;running_mean&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_features</span><span class="p">))</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_forward_hook">
-<span class="sig-name descname"><span class="pre">register_forward_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.utils.hooks.RemovableHandle</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_forward_hook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Registers a forward hook on the module.</p>
-<p>The hook will be called every time after <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.forward" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> has computed an output.
-It should have the following signature:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hook</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">modified</span> <span class="n">output</span>
-</pre></div>
-</div>
-<p>The input contains only the positional arguments given to the module.
-Keyword arguments won’t be passed to the hooks and only to the <code class="docutils literal notranslate"><span class="pre">forward</span></code>.
-The hook can modify the output. It can modify the input inplace but
-it will not have effect on forward since this is called after
-<a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.forward" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> is called.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><dl class="simple">
-<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
-<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_forward_pre_hook">
-<span class="sig-name descname"><span class="pre">register_forward_pre_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.utils.hooks.RemovableHandle</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_forward_pre_hook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Registers a forward pre-hook on the module.</p>
-<p>The hook will be called every time before <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.forward" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> is invoked.
-It should have the following signature:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hook</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">modified</span> <span class="nb">input</span>
-</pre></div>
-</div>
-<p>The input contains only the positional arguments given to the module.
-Keyword arguments won’t be passed to the hooks and only to the <code class="docutils literal notranslate"><span class="pre">forward</span></code>.
-The hook can modify the input. User can either return a tuple or a
-single modified value in the hook. We will wrap the value into a tuple
-if a single value is returned(unless that value is already a tuple).</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><dl class="simple">
-<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
-<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_full_backward_hook">
-<span class="sig-name descname"><span class="pre">register_full_backward_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.utils.hooks.RemovableHandle</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_full_backward_hook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Registers a backward hook on the module.</p>
-<p>The hook will be called every time the gradients with respect to module
-inputs are computed. The hook should have the following signature:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hook</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">grad_input</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">Tensor</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
-</pre></div>
-</div>
-<p>The <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_input</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_output</span></code> are tuples that contain the gradients
-with respect to the inputs and outputs respectively. The hook should
-not modify its arguments, but it can optionally return a new gradient with
-respect to the input that will be used in place of <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_input</span></code> in
-subsequent computations. <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_input</span></code> will only correspond to the inputs given
-as positional arguments and all kwarg arguments are ignored. Entries
-in <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_input</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">grad_output</span></code> will be <code class="docutils literal notranslate"><span class="pre">None</span></code> for all non-Tensor
-arguments.</p>
-<p>For technical reasons, when this hook is applied to a Module, its forward function will
-receive a view of each Tensor passed to the Module. Similarly the caller will receive a view
-of each Tensor returned by the Module’s forward function.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Modifying inputs or outputs inplace is not allowed when using backward hooks and
-will raise an error.</p>
-</div>
-<dl class="simple">
-<dt>Returns:</dt><dd><dl class="simple">
-<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.hooks.RemovableHandle</span></code>:</dt><dd><p>a handle that can be used to remove the added hook by calling
-<code class="docutils literal notranslate"><span class="pre">handle.remove()</span></code></p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_module">
-<span class="sig-name descname"><span class="pre">register_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.modules.module.Module</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.add_module" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.add_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_module()</span></code></a>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_parameter">
-<span class="sig-name descname"><span class="pre">register_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.nn.parameter.Parameter</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.register_parameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds a parameter to the module.</p>
-<p>The parameter can be accessed as an attribute using given name.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>name (string): name of the parameter. The parameter can be accessed</dt><dd><p>from this module using the given name</p>
-</dd>
-<dt>param (Parameter or None): parameter to be added to the module. If</dt><dd><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, then operations that run on parameters, such as <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.cuda" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.cuda"><code class="xref py py-attr docutils literal notranslate"><span class="pre">cuda</span></code></a>,
-are ignored. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the parameter is <strong>not</strong> included in the
-module’s <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">state_dict</span></code></a>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.requires_grad_">
-<span class="sig-name descname"><span class="pre">requires_grad_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requires_grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.requires_grad_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Change if autograd should record operations on parameters in this
-module.</p>
-<p>This method sets the parameters’ <code class="xref py py-attr docutils literal notranslate"><span class="pre">requires_grad</span></code> attributes
-in-place.</p>
-<p>This method is helpful for freezing part of the module for finetuning
-or training parts of a model individually (e.g., GAN training).</p>
-<p>See <span class="xref std std-ref">locally-disable-grad-doc</span> for a comparison between
-<cite>.requires_grad_()</cite> and several similar mechanisms that may be confused with it.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>requires_grad (bool): whether autograd should record operations on</dt><dd><p>parameters in this module. Default: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.set_extra_state">
-<span class="sig-name descname"><span class="pre">set_extra_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.set_extra_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function is called from <a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.load_state_dict" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.load_state_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_state_dict()</span></code></a> to handle any extra state
-found within the <cite>state_dict</cite>. Implement this function and a corresponding
-<a class="reference internal" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_extra_state" title="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.get_extra_state"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_extra_state()</span></code></a> for your module if you need to store extra state within its
-<cite>state_dict</cite>.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>state (dict): Extra state from the <cite>state_dict</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.share_memory">
-<span class="sig-name descname"><span class="pre">share_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.share_memory" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.share_memory_()</span></code></p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict">
-<span class="sig-name descname"><span class="pre">state_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.state_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a dictionary containing a whole state of the module.</p>
-<p>Both parameters and persistent buffers (e.g. running averages) are
-included. Keys are corresponding parameter and buffer names.
-Parameters and buffers set to <code class="docutils literal notranslate"><span class="pre">None</span></code> are not included.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>dict:</dt><dd><p>a dictionary containing a whole state of the module</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">module</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="go">[&#39;bias&#39;, &#39;weight&#39;]</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.to">
-<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.to" title="Permalink to this definition">¶</a></dt>
-<dd><p>Moves and/or casts the parameters and buffers.</p>
-<p>This can be called as</p>
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memory_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">torch.channels_last</span></span></em><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<p>Its signature is similar to <code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.to()</span></code>, but only accepts
-floating point or complex <code class="xref py py-attr docutils literal notranslate"><span class="pre">dtype</span></code>s. In addition, this method will
-only cast the floating point or complex parameters and buffers to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dtype</span></code>
-(if given). The integral parameters and buffers will be moved
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">device</span></code>, if that is given, but with dtypes unchanged. When
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">non_blocking</span></code> is set, it tries to convert/move asynchronously
-with respect to the host if possible, e.g., moving CPU Tensors with
-pinned memory to CUDA devices.</p>
-<p>See below for examples.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method modifies the module in-place.</p>
-</div>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>device (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.device</span></code>): the desired device of the parameters</dt><dd><p>and buffers in this module</p>
-</dd>
-<dt>dtype (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.dtype</span></code>): the desired floating point or complex dtype of</dt><dd><p>the parameters and buffers in this module</p>
-</dd>
-<dt>tensor (torch.Tensor): Tensor whose dtype and device are the desired</dt><dd><p>dtype and device for all parameters and buffers in this module</p>
-</dd>
-<dt>memory_format (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.memory_format</span></code>): the desired memory</dt><dd><p>format for 4D parameters and buffers in this module (keyword
-only argument)</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-<p>Examples:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
-<span class="go">Parameter containing:</span>
-<span class="go">tensor([[ 0.1913, -0.3420],</span>
-<span class="go">        [-0.5113, -0.2325]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
-<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
-<span class="go">Parameter containing:</span>
-<span class="go">tensor([[ 0.1913, -0.3420],</span>
-<span class="go">        [-0.5113, -0.2325]], dtype=torch.float64)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gpu1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">gpu1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">half</span><span class="p">,</span> <span class="n">non_blocking</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
-<span class="go">Parameter containing:</span>
-<span class="go">tensor([[ 0.1914, -0.3420],</span>
-<span class="go">        [-0.5112, -0.2324]], dtype=torch.float16, device=&#39;cuda:1&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cpu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">cpu</span><span class="p">)</span>
-<span class="go">Linear(in_features=2, out_features=2, bias=True)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
-<span class="go">Parameter containing:</span>
-<span class="go">tensor([[ 0.1914, -0.3420],</span>
-<span class="go">        [-0.5112, -0.2324]], dtype=torch.float16)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cdouble</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="o">.</span><span class="n">weight</span>
-<span class="go">Parameter containing:</span>
-<span class="go">tensor([[ 0.3741+0.j,  0.2382+0.j],</span>
-<span class="go">        [ 0.5593+0.j, -0.4443+0.j]], dtype=torch.complex128)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">linear</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cdouble</span><span class="p">))</span>
-<span class="go">tensor([[0.6122+0.j, 0.1150+0.j],</span>
-<span class="go">        [0.6122+0.j, 0.1150+0.j],</span>
-<span class="go">        [0.6122+0.j, 0.1150+0.j]], dtype=torch.complex128)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.to_empty">
-<span class="sig-name descname"><span class="pre">to_empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.device</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.to_empty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Moves the parameters and buffers to the specified device without copying storage.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>device (<code class="xref py py-class docutils literal notranslate"><span class="pre">torch.device</span></code>): The desired device of the parameters</dt><dd><p>and buffers in this module.</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.train">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the module in training mode.</p>
-<p>This has any effect only on certain modules. See documentations of
-particular modules for details of their behaviors in training/evaluation
-mode, if they are affected, e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">Dropout</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchNorm</span></code>,
-etc.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>mode (bool): whether to set training mode (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or evaluation</dt><dd><p>mode (<code class="docutils literal notranslate"><span class="pre">False</span></code>). Default: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.type">
-<span class="sig-name descname"><span class="pre">type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dst_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.dtype</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Casts all parameters and buffers to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dst_type</span></code>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method modifies the module in-place.</p>
-</div>
-<dl class="simple">
-<dt>Args:</dt><dd><p>dst_type (type or string): the desired type</p>
-</dd>
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.xpu">
-<span class="sig-name descname"><span class="pre">xpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.device</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.nn.modules.module.T</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.xpu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Moves all model parameters and buffers to the XPU.</p>
-<p>This also makes associated parameters and buffers different objects. So
-it should be called before constructing optimizer if the module will
-live on XPU while being optimized.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method modifies the module in-place.</p>
-</div>
-<dl class="simple">
-<dt>Arguments:</dt><dd><dl class="simple">
-<dt>device (int, optional): if specified, all parameters will be</dt><dd><p>copied to that device</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>Module: self</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="norse.torch.module.lif_refrac.LIFRefracRecurrentCell.zero_grad">
-<span class="sig-name descname"><span class="pre">zero_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_to_none</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.zero_grad" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets gradients of all model parameters to zero. See similar function
-under <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.Optimizer</span></code> for more context.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>set_to_none (bool): instead of setting to zero, set the grads to None.</dt><dd><p>See <code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.optim.Optimizer.zero_grad()</span></code> for details.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -2137,44 +1514,47 @@ under <code class="xref py py-class docutils literal notranslate"><span class="p
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="norse.torch.module.lif_refrac.LIFRefracCell.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">LIFRefracCell</p>
+            <p class="prev-next-title">norse.torch.module.lif_refrac.LIFRefracCell</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="norse.torch.module.lsnn.LSNN.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">LSNN</p>
+        <p class="prev-next-title">norse.torch.module.lsnn.LSNN</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Norse.ai<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Norse.ai<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
-
-
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 
 
   </body>

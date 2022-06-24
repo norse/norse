@@ -13,7 +13,6 @@ norse.torch.module.test.test\_exp\_filter
 
    .. autosummary::
    
-      test_ExpFilter_forward_few_inputs
       test_ExpFilter_forward_ones_weights
       test_ExpFilter_forward_ones_weights_without_bias
       test_ExpFilter_forward_parameter_one_and_ones_weights_without_bias
