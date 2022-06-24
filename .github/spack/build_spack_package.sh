@@ -27,7 +27,7 @@ spack repo add "${TMP_DIR}/custom_repo"
 PACKAGE_PYTORCH="py-torch~cuda~mkldnn~distributed~nccl"
 
 # the ubuntu CI runner runs on multiple cpu archs; compile for an old one
-ARCH="linux-ubuntu20.04-sandybridge"
+ARCH="linux-ubuntu20.04-x86_64"
 
 spack spec -I py-norse@master ^${PACKAGE_PYTORCH} arch=${ARCH}
 
