@@ -4,6 +4,7 @@ set -euxo pipefail
 shopt -s inherit_errexit
 
 WORKSPACE=${PWD}
+BUILDCACHE_MIRROR=${WORKSPACE}/.spack-cache/mirror
 
 TMP_DIR=$(mktemp -d)
 cd "${TMP_DIR}"
@@ -31,10 +32,25 @@ ARCH="linux-ubuntu20.04-x86_64"
 
 spack spec -I py-norse@master ^${PACKAGE_PYTORCH} arch=${ARCH}
 
+# enable buildcache (for faster CI)
+spack mirror add spack_ci_cache ${BUILDCACHE_MIRROR}
+spack buildcache update-index -d ${BUILDCACHE_MIRROR}
+
 # drop staged builds anyways
 spack clean --stage
 
 if spack find py-norse; then
    spack uninstall --yes-to-all --all py-norse
 fi
-spack dev-build --source-path "${WORKSPACE}" py-norse@master ^${PACKAGE_PYTORCH} arch=${ARCH}
+
+ret=0
+spack dev-build --source-path "${WORKSPACE}" py-norse@master ^${PACKAGE_PYTORCH} arch=${ARCH} || ret=$?
+
+# fill build cache
+mkdir -p ${BUILDCACHE_MIRROR}
+for s in $(spack find --no-groups -L | cut -f 1 -d ' ' ); do
+    spack buildcache create -d ${BUILDCACHE_MIRROR} -a -u --only package "/$s"
+done
+
+# return exit code from spack call
+exit $ret
