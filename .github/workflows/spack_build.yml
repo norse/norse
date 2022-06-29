@@ -16,7 +16,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.spack-cache
-          key: cache-${{ github.sha }}
+          key: cache-${{ github.ref }}
           restore-keys: cache-
       - name: Build norse's Spack package
         run: .github/spack/build_spack_package.sh
