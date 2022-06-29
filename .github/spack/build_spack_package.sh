@@ -4,7 +4,7 @@ set -euxo pipefail
 shopt -s inherit_errexit
 
 WORKSPACE=${PWD}
-BUILDCACHE_MIRROR=${WORKSPACE}/.spack-cache/mirror
+BUILDCACHE_MIRROR=~/.spack-cache/mirror
 
 TMP_DIR=$(mktemp -d)
 cd "${TMP_DIR}"
