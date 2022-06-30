@@ -45,10 +45,19 @@ spack spec -I py-norse@master ^${PACKAGE_PYTORCH} arch=${ARCH}
 
 # enable buildcache (for faster CI)
 spack mirror add spack_ci_cache "${BUILDCACHE_MIRROR}"
+
+# drop py-norse CI builds from build cache
+rm -rf "${BUILDCACHE_MIRROR}"/build_cache/*/*/py-norse-master
+rm -rf "${BUILDCACHE_MIRROR}"/build_cache/*-py-norse-master-*.json
+
+# (re)index the cache
 spack buildcache update-index -d "${BUILDCACHE_MIRROR}"
 
 echo "Build cache contents:"
-spack buildcache list
+spack buildcache list -aL
+
+echo "Installed spack packages (pre-build):"
+spack find -L
 
 # drop staged builds anyways
 spack clean --stage
@@ -60,8 +69,8 @@ fi
 ret=0
 spack dev-build --source-path "${WORKSPACE}" py-norse@master ^${PACKAGE_PYTORCH} arch=${ARCH} || ret=$?
 
-echo "Installed spack packages:"
-spack find --no-groups -L
+echo "Installed spack packages (post-build):"
+spack find -L
 
 # fill build cache
 mkdir -p "${BUILDCACHE_MIRROR}"
