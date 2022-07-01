@@ -32,6 +32,7 @@
       ~Izhikevich.get_submodule
       ~Izhikevich.half
       ~Izhikevich.initial_state
+      ~Izhikevich.ipu
       ~Izhikevich.load_state_dict
       ~Izhikevich.modules
       ~Izhikevich.named_buffers
@@ -44,6 +45,7 @@
       ~Izhikevich.register_forward_hook
       ~Izhikevich.register_forward_pre_hook
       ~Izhikevich.register_full_backward_hook
+      ~Izhikevich.register_load_state_dict_post_hook
       ~Izhikevich.register_module
       ~Izhikevich.register_parameter
       ~Izhikevich.requires_grad_

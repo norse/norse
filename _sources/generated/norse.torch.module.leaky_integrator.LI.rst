@@ -32,6 +32,7 @@
       ~LI.get_submodule
       ~LI.half
       ~LI.initial_state
+      ~LI.ipu
       ~LI.load_state_dict
       ~LI.modules
       ~LI.named_buffers
@@ -44,6 +45,7 @@
       ~LI.register_forward_hook
       ~LI.register_forward_pre_hook
       ~LI.register_full_backward_hook
+      ~LI.register_load_state_dict_post_hook
       ~LI.register_module
       ~LI.register_parameter
       ~LI.requires_grad_

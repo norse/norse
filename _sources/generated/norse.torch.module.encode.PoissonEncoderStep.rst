@@ -31,6 +31,7 @@
       ~PoissonEncoderStep.get_parameter
       ~PoissonEncoderStep.get_submodule
       ~PoissonEncoderStep.half
+      ~PoissonEncoderStep.ipu
       ~PoissonEncoderStep.load_state_dict
       ~PoissonEncoderStep.modules
       ~PoissonEncoderStep.named_buffers
@@ -43,6 +44,7 @@
       ~PoissonEncoderStep.register_forward_hook
       ~PoissonEncoderStep.register_forward_pre_hook
       ~PoissonEncoderStep.register_full_backward_hook
+      ~PoissonEncoderStep.register_load_state_dict_post_hook
       ~PoissonEncoderStep.register_module
       ~PoissonEncoderStep.register_parameter
       ~PoissonEncoderStep.requires_grad_

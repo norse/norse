@@ -31,6 +31,7 @@
       ~RegularizationCell.get_parameter
       ~RegularizationCell.get_submodule
       ~RegularizationCell.half
+      ~RegularizationCell.ipu
       ~RegularizationCell.load_state_dict
       ~RegularizationCell.modules
       ~RegularizationCell.named_buffers
@@ -43,6 +44,7 @@
       ~RegularizationCell.register_forward_hook
       ~RegularizationCell.register_forward_pre_hook
       ~RegularizationCell.register_full_backward_hook
+      ~RegularizationCell.register_load_state_dict_post_hook
       ~RegularizationCell.register_module
       ~RegularizationCell.register_parameter
       ~RegularizationCell.requires_grad_

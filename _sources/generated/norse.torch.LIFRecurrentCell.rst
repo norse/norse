@@ -32,6 +32,7 @@
       ~LIFRecurrentCell.get_submodule
       ~LIFRecurrentCell.half
       ~LIFRecurrentCell.initial_state
+      ~LIFRecurrentCell.ipu
       ~LIFRecurrentCell.load_state_dict
       ~LIFRecurrentCell.modules
       ~LIFRecurrentCell.named_buffers
@@ -44,6 +45,7 @@
       ~LIFRecurrentCell.register_forward_hook
       ~LIFRecurrentCell.register_forward_pre_hook
       ~LIFRecurrentCell.register_full_backward_hook
+      ~LIFRecurrentCell.register_load_state_dict_post_hook
       ~LIFRecurrentCell.register_module
       ~LIFRecurrentCell.register_parameter
       ~LIFRecurrentCell.requires_grad_

@@ -32,6 +32,7 @@
       ~LSNN.get_submodule
       ~LSNN.half
       ~LSNN.initial_state
+      ~LSNN.ipu
       ~LSNN.load_state_dict
       ~LSNN.modules
       ~LSNN.named_buffers
@@ -44,6 +45,7 @@
       ~LSNN.register_forward_hook
       ~LSNN.register_forward_pre_hook
       ~LSNN.register_full_backward_hook
+      ~LSNN.register_load_state_dict_post_hook
       ~LSNN.register_module
       ~LSNN.register_parameter
       ~LSNN.requires_grad_

@@ -32,6 +32,7 @@
       ~IzhikevichCell.get_submodule
       ~IzhikevichCell.half
       ~IzhikevichCell.initial_state
+      ~IzhikevichCell.ipu
       ~IzhikevichCell.load_state_dict
       ~IzhikevichCell.modules
       ~IzhikevichCell.named_buffers
@@ -44,6 +45,7 @@
       ~IzhikevichCell.register_forward_hook
       ~IzhikevichCell.register_forward_pre_hook
       ~IzhikevichCell.register_full_backward_hook
+      ~IzhikevichCell.register_load_state_dict_post_hook
       ~IzhikevichCell.register_module
       ~IzhikevichCell.register_parameter
       ~IzhikevichCell.requires_grad_

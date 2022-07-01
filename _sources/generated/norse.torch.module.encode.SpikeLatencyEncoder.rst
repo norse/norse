@@ -31,6 +31,7 @@
       ~SpikeLatencyEncoder.get_parameter
       ~SpikeLatencyEncoder.get_submodule
       ~SpikeLatencyEncoder.half
+      ~SpikeLatencyEncoder.ipu
       ~SpikeLatencyEncoder.load_state_dict
       ~SpikeLatencyEncoder.modules
       ~SpikeLatencyEncoder.named_buffers
@@ -43,6 +44,7 @@
       ~SpikeLatencyEncoder.register_forward_hook
       ~SpikeLatencyEncoder.register_forward_pre_hook
       ~SpikeLatencyEncoder.register_full_backward_hook
+      ~SpikeLatencyEncoder.register_load_state_dict_post_hook
       ~SpikeLatencyEncoder.register_module
       ~SpikeLatencyEncoder.register_parameter
       ~SpikeLatencyEncoder.requires_grad_

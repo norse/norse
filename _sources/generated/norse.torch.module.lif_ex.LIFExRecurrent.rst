@@ -32,6 +32,7 @@
       ~LIFExRecurrent.get_submodule
       ~LIFExRecurrent.half
       ~LIFExRecurrent.initial_state
+      ~LIFExRecurrent.ipu
       ~LIFExRecurrent.load_state_dict
       ~LIFExRecurrent.modules
       ~LIFExRecurrent.named_buffers
@@ -44,6 +45,7 @@
       ~LIFExRecurrent.register_forward_hook
       ~LIFExRecurrent.register_forward_pre_hook
       ~LIFExRecurrent.register_full_backward_hook
+      ~LIFExRecurrent.register_load_state_dict_post_hook
       ~LIFExRecurrent.register_module
       ~LIFExRecurrent.register_parameter
       ~LIFExRecurrent.requires_grad_

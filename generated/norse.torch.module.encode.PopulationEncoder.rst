@@ -31,6 +31,7 @@
       ~PopulationEncoder.get_parameter
       ~PopulationEncoder.get_submodule
       ~PopulationEncoder.half
+      ~PopulationEncoder.ipu
       ~PopulationEncoder.load_state_dict
       ~PopulationEncoder.modules
       ~PopulationEncoder.named_buffers
@@ -43,6 +44,7 @@
       ~PopulationEncoder.register_forward_hook
       ~PopulationEncoder.register_forward_pre_hook
       ~PopulationEncoder.register_full_backward_hook
+      ~PopulationEncoder.register_load_state_dict_post_hook
       ~PopulationEncoder.register_module
       ~PopulationEncoder.register_parameter
       ~PopulationEncoder.requires_grad_

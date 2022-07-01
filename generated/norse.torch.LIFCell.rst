@@ -32,6 +32,7 @@
       ~LIFCell.get_submodule
       ~LIFCell.half
       ~LIFCell.initial_state
+      ~LIFCell.ipu
       ~LIFCell.load_state_dict
       ~LIFCell.modules
       ~LIFCell.named_buffers
@@ -44,6 +45,7 @@
       ~LIFCell.register_forward_hook
       ~LIFCell.register_forward_pre_hook
       ~LIFCell.register_full_backward_hook
+      ~LIFCell.register_load_state_dict_post_hook
       ~LIFCell.register_module
       ~LIFCell.register_parameter
       ~LIFCell.requires_grad_

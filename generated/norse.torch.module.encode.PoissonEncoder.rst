@@ -31,6 +31,7 @@
       ~PoissonEncoder.get_parameter
       ~PoissonEncoder.get_submodule
       ~PoissonEncoder.half
+      ~PoissonEncoder.ipu
       ~PoissonEncoder.load_state_dict
       ~PoissonEncoder.modules
       ~PoissonEncoder.named_buffers
@@ -43,6 +44,7 @@
       ~PoissonEncoder.register_forward_hook
       ~PoissonEncoder.register_forward_pre_hook
       ~PoissonEncoder.register_full_backward_hook
+      ~PoissonEncoder.register_load_state_dict_post_hook
       ~PoissonEncoder.register_module
       ~PoissonEncoder.register_parameter
       ~PoissonEncoder.requires_grad_

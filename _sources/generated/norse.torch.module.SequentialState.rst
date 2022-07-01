@@ -32,6 +32,7 @@
       ~SequentialState.get_parameter
       ~SequentialState.get_submodule
       ~SequentialState.half
+      ~SequentialState.ipu
       ~SequentialState.load_state_dict
       ~SequentialState.modules
       ~SequentialState.named_buffers
@@ -45,6 +46,7 @@
       ~SequentialState.register_forward_pre_hook
       ~SequentialState.register_forward_state_hooks
       ~SequentialState.register_full_backward_hook
+      ~SequentialState.register_load_state_dict_post_hook
       ~SequentialState.register_module
       ~SequentialState.register_parameter
       ~SequentialState.remove_forward_state_hooks

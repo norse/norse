@@ -31,6 +31,7 @@
       ~SignedPoissonEncoder.get_parameter
       ~SignedPoissonEncoder.get_submodule
       ~SignedPoissonEncoder.half
+      ~SignedPoissonEncoder.ipu
       ~SignedPoissonEncoder.load_state_dict
       ~SignedPoissonEncoder.modules
       ~SignedPoissonEncoder.named_buffers
@@ -43,6 +44,7 @@
       ~SignedPoissonEncoder.register_forward_hook
       ~SignedPoissonEncoder.register_forward_pre_hook
       ~SignedPoissonEncoder.register_full_backward_hook
+      ~SignedPoissonEncoder.register_load_state_dict_post_hook
       ~SignedPoissonEncoder.register_module
       ~SignedPoissonEncoder.register_parameter
       ~SignedPoissonEncoder.requires_grad_

@@ -31,6 +31,7 @@
       ~CobaLIFCell.get_parameter
       ~CobaLIFCell.get_submodule
       ~CobaLIFCell.half
+      ~CobaLIFCell.ipu
       ~CobaLIFCell.load_state_dict
       ~CobaLIFCell.modules
       ~CobaLIFCell.named_buffers
@@ -43,6 +44,7 @@
       ~CobaLIFCell.register_forward_hook
       ~CobaLIFCell.register_forward_pre_hook
       ~CobaLIFCell.register_full_backward_hook
+      ~CobaLIFCell.register_load_state_dict_post_hook
       ~CobaLIFCell.register_module
       ~CobaLIFCell.register_parameter
       ~CobaLIFCell.requires_grad_

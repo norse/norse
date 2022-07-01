@@ -32,6 +32,7 @@
       ~LICell.get_submodule
       ~LICell.half
       ~LICell.initial_state
+      ~LICell.ipu
       ~LICell.load_state_dict
       ~LICell.modules
       ~LICell.named_buffers
@@ -44,6 +45,7 @@
       ~LICell.register_forward_hook
       ~LICell.register_forward_pre_hook
       ~LICell.register_full_backward_hook
+      ~LICell.register_load_state_dict_post_hook
       ~LICell.register_module
       ~LICell.register_parameter
       ~LICell.requires_grad_

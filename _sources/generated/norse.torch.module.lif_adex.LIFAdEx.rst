@@ -32,6 +32,7 @@
       ~LIFAdEx.get_submodule
       ~LIFAdEx.half
       ~LIFAdEx.initial_state
+      ~LIFAdEx.ipu
       ~LIFAdEx.load_state_dict
       ~LIFAdEx.modules
       ~LIFAdEx.named_buffers
@@ -44,6 +45,7 @@
       ~LIFAdEx.register_forward_hook
       ~LIFAdEx.register_forward_pre_hook
       ~LIFAdEx.register_full_backward_hook
+      ~LIFAdEx.register_load_state_dict_post_hook
       ~LIFAdEx.register_module
       ~LIFAdEx.register_parameter
       ~LIFAdEx.requires_grad_

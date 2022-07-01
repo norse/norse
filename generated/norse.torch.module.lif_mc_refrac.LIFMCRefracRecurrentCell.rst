@@ -32,6 +32,7 @@
       ~LIFMCRefracRecurrentCell.get_submodule
       ~LIFMCRefracRecurrentCell.half
       ~LIFMCRefracRecurrentCell.initial_state
+      ~LIFMCRefracRecurrentCell.ipu
       ~LIFMCRefracRecurrentCell.load_state_dict
       ~LIFMCRefracRecurrentCell.modules
       ~LIFMCRefracRecurrentCell.named_buffers
@@ -44,6 +45,7 @@
       ~LIFMCRefracRecurrentCell.register_forward_hook
       ~LIFMCRefracRecurrentCell.register_forward_pre_hook
       ~LIFMCRefracRecurrentCell.register_full_backward_hook
+      ~LIFMCRefracRecurrentCell.register_load_state_dict_post_hook
       ~LIFMCRefracRecurrentCell.register_module
       ~LIFMCRefracRecurrentCell.register_parameter
       ~LIFMCRefracRecurrentCell.requires_grad_

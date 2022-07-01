@@ -31,6 +31,7 @@
       ~Lift.get_parameter
       ~Lift.get_submodule
       ~Lift.half
+      ~Lift.ipu
       ~Lift.load_state_dict
       ~Lift.modules
       ~Lift.named_buffers
@@ -43,6 +44,7 @@
       ~Lift.register_forward_hook
       ~Lift.register_forward_pre_hook
       ~Lift.register_full_backward_hook
+      ~Lift.register_load_state_dict_post_hook
       ~Lift.register_module
       ~Lift.register_parameter
       ~Lift.requires_grad_

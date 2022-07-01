@@ -31,6 +31,7 @@
       ~SpikeLatencyLIFEncoder.get_parameter
       ~SpikeLatencyLIFEncoder.get_submodule
       ~SpikeLatencyLIFEncoder.half
+      ~SpikeLatencyLIFEncoder.ipu
       ~SpikeLatencyLIFEncoder.load_state_dict
       ~SpikeLatencyLIFEncoder.modules
       ~SpikeLatencyLIFEncoder.named_buffers
@@ -43,6 +44,7 @@
       ~SpikeLatencyLIFEncoder.register_forward_hook
       ~SpikeLatencyLIFEncoder.register_forward_pre_hook
       ~SpikeLatencyLIFEncoder.register_full_backward_hook
+      ~SpikeLatencyLIFEncoder.register_load_state_dict_post_hook
       ~SpikeLatencyLIFEncoder.register_module
       ~SpikeLatencyLIFEncoder.register_parameter
       ~SpikeLatencyLIFEncoder.requires_grad_

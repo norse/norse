@@ -31,6 +31,7 @@
       ~LILinearCell.get_parameter
       ~LILinearCell.get_submodule
       ~LILinearCell.half
+      ~LILinearCell.ipu
       ~LILinearCell.load_state_dict
       ~LILinearCell.modules
       ~LILinearCell.named_buffers
@@ -43,6 +44,7 @@
       ~LILinearCell.register_forward_hook
       ~LILinearCell.register_forward_pre_hook
       ~LILinearCell.register_full_backward_hook
+      ~LILinearCell.register_load_state_dict_post_hook
       ~LILinearCell.register_module
       ~LILinearCell.register_parameter
       ~LILinearCell.requires_grad_

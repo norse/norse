@@ -32,6 +32,7 @@
       ~LIFBoxCell.get_submodule
       ~LIFBoxCell.half
       ~LIFBoxCell.initial_state
+      ~LIFBoxCell.ipu
       ~LIFBoxCell.load_state_dict
       ~LIFBoxCell.modules
       ~LIFBoxCell.named_buffers
@@ -44,6 +45,7 @@
       ~LIFBoxCell.register_forward_hook
       ~LIFBoxCell.register_forward_pre_hook
       ~LIFBoxCell.register_full_backward_hook
+      ~LIFBoxCell.register_load_state_dict_post_hook
       ~LIFBoxCell.register_module
       ~LIFBoxCell.register_parameter
       ~LIFBoxCell.requires_grad_

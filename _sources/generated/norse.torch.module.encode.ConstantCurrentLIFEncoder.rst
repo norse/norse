@@ -31,6 +31,7 @@
       ~ConstantCurrentLIFEncoder.get_parameter
       ~ConstantCurrentLIFEncoder.get_submodule
       ~ConstantCurrentLIFEncoder.half
+      ~ConstantCurrentLIFEncoder.ipu
       ~ConstantCurrentLIFEncoder.load_state_dict
       ~ConstantCurrentLIFEncoder.modules
       ~ConstantCurrentLIFEncoder.named_buffers
@@ -43,6 +44,7 @@
       ~ConstantCurrentLIFEncoder.register_forward_hook
       ~ConstantCurrentLIFEncoder.register_forward_pre_hook
       ~ConstantCurrentLIFEncoder.register_full_backward_hook
+      ~ConstantCurrentLIFEncoder.register_load_state_dict_post_hook
       ~ConstantCurrentLIFEncoder.register_module
       ~ConstantCurrentLIFEncoder.register_parameter
       ~ConstantCurrentLIFEncoder.requires_grad_

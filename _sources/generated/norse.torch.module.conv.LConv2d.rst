@@ -31,6 +31,7 @@
       ~LConv2d.get_parameter
       ~LConv2d.get_submodule
       ~LConv2d.half
+      ~LConv2d.ipu
       ~LConv2d.load_state_dict
       ~LConv2d.modules
       ~LConv2d.named_buffers
@@ -43,6 +44,7 @@
       ~LConv2d.register_forward_hook
       ~LConv2d.register_forward_pre_hook
       ~LConv2d.register_full_backward_hook
+      ~LConv2d.register_load_state_dict_post_hook
       ~LConv2d.register_module
       ~LConv2d.register_parameter
       ~LConv2d.requires_grad_

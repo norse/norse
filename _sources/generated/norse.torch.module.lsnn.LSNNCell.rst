@@ -32,6 +32,7 @@
       ~LSNNCell.get_submodule
       ~LSNNCell.half
       ~LSNNCell.initial_state
+      ~LSNNCell.ipu
       ~LSNNCell.load_state_dict
       ~LSNNCell.modules
       ~LSNNCell.named_buffers
@@ -44,6 +45,7 @@
       ~LSNNCell.register_forward_hook
       ~LSNNCell.register_forward_pre_hook
       ~LSNNCell.register_full_backward_hook
+      ~LSNNCell.register_load_state_dict_post_hook
       ~LSNNCell.register_module
       ~LSNNCell.register_parameter
       ~LSNNCell.requires_grad_

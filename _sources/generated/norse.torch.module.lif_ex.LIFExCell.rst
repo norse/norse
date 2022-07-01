@@ -32,6 +32,7 @@
       ~LIFExCell.get_submodule
       ~LIFExCell.half
       ~LIFExCell.initial_state
+      ~LIFExCell.ipu
       ~LIFExCell.load_state_dict
       ~LIFExCell.modules
       ~LIFExCell.named_buffers
@@ -44,6 +45,7 @@
       ~LIFExCell.register_forward_hook
       ~LIFExCell.register_forward_pre_hook
       ~LIFExCell.register_full_backward_hook
+      ~LIFExCell.register_load_state_dict_post_hook
       ~LIFExCell.register_module
       ~LIFExCell.register_parameter
       ~LIFExCell.requires_grad_

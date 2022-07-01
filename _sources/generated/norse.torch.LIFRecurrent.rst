@@ -32,6 +32,7 @@
       ~LIFRecurrent.get_submodule
       ~LIFRecurrent.half
       ~LIFRecurrent.initial_state
+      ~LIFRecurrent.ipu
       ~LIFRecurrent.load_state_dict
       ~LIFRecurrent.modules
       ~LIFRecurrent.named_buffers
@@ -44,6 +45,7 @@
       ~LIFRecurrent.register_forward_hook
       ~LIFRecurrent.register_forward_pre_hook
       ~LIFRecurrent.register_full_backward_hook
+      ~LIFRecurrent.register_load_state_dict_post_hook
       ~LIFRecurrent.register_module
       ~LIFRecurrent.register_parameter
       ~LIFRecurrent.requires_grad_
