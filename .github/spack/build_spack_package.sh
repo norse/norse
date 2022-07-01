@@ -4,7 +4,7 @@ set -euxo pipefail
 shopt -s inherit_errexit
 
 WORKSPACE=${PWD}
-BUILDCACHE_MIRROR=${WORKSPACE}/.spack-cache/mirror
+BUILDCACHE_MIRROR=~/.spack-cache/mirror
 
 TMP_DIR=$(mktemp -d)
 cd "${TMP_DIR}"
@@ -44,8 +44,8 @@ spack spec py-norse@master ^${PACKAGE_PYTORCH}
 spack spec -I py-norse@master ^${PACKAGE_PYTORCH} arch=${ARCH}
 
 # enable buildcache (for faster CI)
-spack mirror add spack_ci_cache ${BUILDCACHE_MIRROR}
-spack buildcache update-index -d ${BUILDCACHE_MIRROR}
+spack mirror add spack_ci_cache "${BUILDCACHE_MIRROR}"
+spack buildcache update-index -d "${BUILDCACHE_MIRROR}"
 
 echo "Build cache contents:"
 spack buildcache list
@@ -64,9 +64,9 @@ echo "Installed spack packages:"
 spack find --no-groups -L
 
 # fill build cache
-mkdir -p ${BUILDCACHE_MIRROR}
+mkdir -p "${BUILDCACHE_MIRROR}"
 for s in $(spack find --no-groups -L | cut -f 1 -d ' ' ); do
-    spack buildcache create -d ${BUILDCACHE_MIRROR} -a -u --only package "/$s"
+    spack buildcache create -d "${BUILDCACHE_MIRROR}" -a -u --only package "/$s"
 done
 
 echo "Build cache:"
