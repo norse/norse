@@ -39,16 +39,16 @@ spack compilers
 
 echo "spack spec of increasing specificity:"
 spack spec ${PACKAGE_PYTORCH}
-spack spec py-norse@master
-spack spec py-norse@master ^${PACKAGE_PYTORCH}
-spack spec -I py-norse@master ^${PACKAGE_PYTORCH} arch=${ARCH}
+spack spec py-norse@main
+spack spec py-norse@main ^${PACKAGE_PYTORCH}
+spack spec -I py-norse@main ^${PACKAGE_PYTORCH} arch=${ARCH}
 
 # enable buildcache (for faster CI)
 spack mirror add spack_ci_cache "${BUILDCACHE_MIRROR}"
 
 # drop py-norse CI builds from build cache
-rm -rf "${BUILDCACHE_MIRROR}"/build_cache/*/*/py-norse-master
-rm -rf "${BUILDCACHE_MIRROR}"/build_cache/*-py-norse-master-*.json
+rm -rf "${BUILDCACHE_MIRROR}"/build_cache/*/*/py-norse-main
+rm -rf "${BUILDCACHE_MIRROR}"/build_cache/*-py-norse-main-*.json
 
 # (re)index the cache
 spack buildcache update-index -d "${BUILDCACHE_MIRROR}"
@@ -67,7 +67,7 @@ if spack find py-norse; then
 fi
 
 ret=0
-spack dev-build --source-path "${WORKSPACE}" py-norse@master ^${PACKAGE_PYTORCH} arch=${ARCH} || ret=$?
+spack dev-build --source-path "${WORKSPACE}" py-norse@main ^${PACKAGE_PYTORCH} arch=${ARCH} || ret=$?
 
 echo "Installed spack packages (post-build):"
 spack find -L

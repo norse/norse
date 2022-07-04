@@ -13,7 +13,7 @@ class PyNorse(PythonPackage):
     git = "https://github.com/norse/norse.git"
     pypi = "norse/norse-0.0.7.post1.tar.gz"
 
-    version("master", branch="master")
+    version("main", branch="main")
     version(
         "0.0.7.post1",
         sha256="aeea3bd08f47fcfe3b301f1190928dec482938956a1ab8ba568851deed94bda5",
