@@ -1,7 +1,8 @@
-name: Build via Spack
+name: Build via Spack (nightly)
 
 on:
-  pull_request:
+  schedule:
+    - cron: '4 2 * * *'
 
 jobs:
   build:
@@ -16,7 +17,6 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.spack-cache
-          key: cache-spack-${{ github.ref }}
-          restore-keys: cache-spack-main-latest
+          key: cache-spack-main-latest
       - name: Build norse's Spack package
         run: .github/spack/build_spack_package.sh
