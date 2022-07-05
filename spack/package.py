@@ -13,7 +13,7 @@ class PyNorse(PythonPackage):
     git = "https://github.com/norse/norse.git"
     pypi = "norse/norse-0.0.7.post1.tar.gz"
 
-    version("master", branch="master")
+    version("main", branch="main")
     version(
         "0.0.7.post1",
         sha256="aeea3bd08f47fcfe3b301f1190928dec482938956a1ab8ba568851deed94bda5",
@@ -25,6 +25,9 @@ class PyNorse(PythonPackage):
     depends_on("py-torchvision@0.10.0:", type=("build", "run"))
     depends_on("py-setuptools", type=("build", "run"))
     depends_on("py-pybind11", type=("build", "link", "run"))
+
+    # ninja preferred when building a py-torch extension (from py-torch package)
+    depends_on('ninja@1.5:', when='^py-torch@1.1:', type='build')
 
     def setup_build_environment(self, env):
         include = []
