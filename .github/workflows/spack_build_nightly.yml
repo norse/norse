@@ -11,12 +11,21 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python-version: [3.9]
+        spack-python: ['python@3.7', 'python@3.10']
+        spack-pytorch: ['py-torch@1.9', 'py-torch@1.11']
+        exclude:
+          # dep. py-torchvision for py-torch@1.9 is limited to python@3.6:3.9
+          - spack-python: 'python@3.10'
+            spack-pytorch: 'py-torch@1.9'
     steps:
       - uses: actions/checkout@master
       - name: Spack cache
         uses: actions/cache@v2
         with:
           path: ~/.spack-cache
-          key: cache-spack-main-latest
+          key: cache-spack-main-latest-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.spack-python }}-${{ matrix.spack-pytorch }}
       - name: Build norse's Spack package
+        env:
+          MATRIX_SPACK_PYTHON: ${{ matrix.spack-python }}
+          MATRIX_SPACK_PYTORCH: ${{ matrix.spack-pytorch }}
         run: .github/spack/build_spack_package.sh

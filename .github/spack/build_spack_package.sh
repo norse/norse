@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euxo pipefail
+set -euo pipefail
 shopt -s inherit_errexit
 
 WORKSPACE=${PWD}
@@ -19,13 +19,27 @@ git clone --depth 1 --branch "${SPACK_BRANCH}" "${SPACK_REPO}" spack
 
 source spack/share/spack/setup-env.sh
 
+# ignore existing installed or buildcache packages for concretization
+spack config --scope defaults add concretizer:reuse:false
+
 spack repo create custom_repo
 mkdir -p custom_repo/packages/py-norse
 cp "$WORKSPACE/spack/package.py" custom_repo/packages/py-norse
 spack repo add "${TMP_DIR}/custom_repo"
 
 # we install a stripped down py-torch (no cuda, mpi, ...)
-PACKAGE_PYTORCH="py-torch~cuda~mkldnn~rocm~distributed~onnx_ml~xnnpack~valgrind"
+PACKAGE_PYTORCH_VARIANT="~cuda~mkldnn~rocm~distributed~onnx_ml~xnnpack~valgrind"
+PACKAGE_PYTORCH="py-torch${PACKAGE_PYTORCH_VARIANT}"
+
+# pin specific py-torch version if provided by env var
+if [ -n "${MATRIX_SPACK_PYTORCH}" ]; then
+    PACKAGE_PYTORCH="${MATRIX_SPACK_PYTORCH}${PACKAGE_PYTORCH_VARIANT}"
+fi
+
+# pin specific python version if provided by env var
+if [ -n "${MATRIX_SPACK_PYTHON}" ]; then
+    PACKAGE_PYTORCH="${PACKAGE_PYTORCH} ^${MATRIX_SPACK_PYTHON}"
+fi
 
 # the ubuntu CI runner runs on multiple cpu archs; compile for an old one
 ARCH="linux-ubuntu20.04-x86_64"
@@ -38,10 +52,15 @@ spack compiler find /usr/bin
 spack compilers
 
 echo "spack spec of increasing specificity:"
-spack spec ${PACKAGE_PYTORCH}
-spack spec py-norse@main
-spack spec py-norse@main ^${PACKAGE_PYTORCH}
-spack spec -I py-norse@main ^${PACKAGE_PYTORCH} arch=${ARCH}
+
+echo "spack spec -t ${PACKAGE_PYTORCH}"
+spack spec -t "${PACKAGE_PYTORCH}"
+echo "spack spec -t py-norse@main"
+spack spec -t py-norse@main
+echo "spack spec -t py-norse@main ^${PACKAGE_PYTORCH}"
+spack spec -t py-norse@main "^${PACKAGE_PYTORCH}"
+echo "spack spec -t -I py-norse@main ^${PACKAGE_PYTORCH} arch=${ARCH}"
+spack spec -t -I py-norse@main "^${PACKAGE_PYTORCH}" "arch=${ARCH}"
 
 # enable buildcache (for faster CI)
 spack mirror add spack_ci_cache "${BUILDCACHE_MIRROR}"
@@ -67,7 +86,7 @@ if spack find py-norse; then
 fi
 
 ret=0
-spack dev-build --source-path "${WORKSPACE}" py-norse@main ^${PACKAGE_PYTORCH} arch=${ARCH} || ret=$?
+spack dev-build --source-path "${WORKSPACE}" py-norse@main "^${PACKAGE_PYTORCH}" "arch=${ARCH}" || ret=$?
 
 echo "Installed spack packages (post-build):"
 spack find -L
