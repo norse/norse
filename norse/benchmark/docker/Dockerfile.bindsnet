@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.4.2-devel-ubuntu20.04
+FROM nvidia/cuda:11.7.0-devel-ubuntu20.04
 
 # Non-interactive
 ENV DEBIAN_FRONTEND noninteractive
@@ -10,8 +10,8 @@ RUN apt update && apt install -y \
 ENV CUDA_PATH=/usr/local/cuda
 ENV PATH=$PATH:$CUDA_PATH/bin
 
+# Install torch 
+RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+
 # Install bindsnet
 RUN pip install git+https://github.com/BindsNET/bindsnet
-
-# Install correct version of torch 
-RUN pip3 install torch==1.9.1+cu111 torchvision==0.10.1+cu111 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html

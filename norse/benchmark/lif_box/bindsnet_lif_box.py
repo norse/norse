@@ -4,11 +4,11 @@ import torch
 # pytype: disable=import-error
 from bindsnet.network import Network
 from bindsnet.network.topology import Connection
-from bindsnet.network.nodes import LIFNodes, Input
+from bindsnet.network.nodes import IFNodes, Input
 from bindsnet.encoding import poisson
 from bindsnet.network.monitors import Monitor
 
-from benchmark import BenchmarkParameters
+from ..benchmark import BenchmarkParameters
 
 # pytype: enable=import-error
 
@@ -17,7 +17,7 @@ class BindsNetModule(torch.nn.Module):
     def __init__(self, parameters: BenchmarkParameters):
         super(BindsNetModule, self).__init__()
         network = Network(batch_size=parameters.batch_size, dt=parameters.dt)
-        lif_nodes = LIFNodes(n=parameters.features)
+        lif_nodes = IFNodes(n=parameters.features)
         monitor = Monitor(
             obj=lif_nodes, state_vars=("s"), time=parameters.sequence_length
         )
@@ -38,25 +38,29 @@ class BindsNetModule(torch.nn.Module):
         self.monitor = monitor
 
     def forward(self, input_data):
+        self.network.reset_state_variables()
         self.network.run(
             inputs=input_data, time=self.parameters.dt * self.parameters.sequence_length
         )
-        return self.monitor.get("s")
+
+        spikes = self.monitor.get("s")
+        return spikes
 
 
-def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
+def lif_box_feed_forward_benchmark(parameters: BenchmarkParameters):
     with torch.no_grad():
         network = BindsNetModule(parameters)
         input_data = {
             "Input": poisson(
                 datum=torch.rand(
                     (parameters.batch_size, parameters.features),
-                    device=parameters.device,
+                    # device="cpu",
                 ).contiguous(),
                 time=parameters.sequence_length,
                 device=parameters.device,
             )
         }
+        input_data["Input"] = input_data["Input"].to(parameters.device)
 
         start = time.time()
         network(input_data)

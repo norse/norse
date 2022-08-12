@@ -3,6 +3,7 @@ from functools import partial
 import logging
 from pathlib import Path
 from typing import Callable
+import tqdm
 
 import numpy as np
 
@@ -15,6 +16,8 @@ import gc
 
 # pytype: disable=import-error
 from .benchmark import BenchmarkConfig, BenchmarkData, BenchmarkParameters
+from .lif_box import main as lif_box_main
+from .lif import main as lif_main
 
 # pytype: enable=import-error
 
@@ -28,7 +31,9 @@ def benchmark(
     Benchmarks a model with the given configurations
     """
     results = []
-    for features in range(config.start, config.stop, config.step):
+    for features in tqdm.tqdm(
+        range(config.start, config.stop, config.step), desc=f"{config.label} - Features"
+    ):
         parameters = BenchmarkParameters(
             device=config.device,
             dt=config.dt,
@@ -39,7 +44,7 @@ def benchmark(
 
         durations = []
         try:
-            for _ in range(config.runs):
+            for _ in tqdm.tqdm(range(config.runs), desc="Runs", leave=False):
                 duration = model(parameters)
                 durations.append(duration)
                 # Clean up by GC and empty cache
@@ -86,43 +91,6 @@ def collect(data: BenchmarkData, label: str) -> dict:
     }
 
 
-def main(args):
-    # pytype: disable=import-error
-    if args.bindsnet:
-        import bindsnet_lif
-
-        run_benchmark(
-            args, bindsnet_lif.lif_feed_forward_benchmark, label="BindsNET_lif"
-        )
-    if args.genn:
-        import genn_lif
-
-        run_benchmark(args, genn_lif.lif_feed_forward_benchmark, label="GeNN_lif")
-    if args.norse:
-        import norse
-        from . import norse_lif
-
-        if args.profile:
-            import torch.autograd.profiler as profiler
-
-            with profiler.profile(
-                profile_memory=True, use_cuda=(args.device == "cuda")
-            ) as prof:
-                run_benchmark(
-                    args,
-                    norse_lif.lif_feed_forward_benchmark,
-                    label=f"Norse v{norse.__version__} lif",
-                )
-            prof.export_chrome_trace("trace.json")
-        else:
-            run_benchmark(
-                args,
-                norse_lif.lif_feed_forward_benchmark,
-                label=f"Norse v{norse.__version__} lif",
-            )
-    # pytype: enable=import-error
-
-
 def run_benchmark(args, function, label):
     config = BenchmarkConfig(
         batch_size=args.batch_size,
@@ -147,61 +115,8 @@ def run_benchmark(args, function, label):
 
 if __name__ == "__main__":
     parser = ArgumentParser("SNN library benchmarks")
-    parser.add_argument(
-        "--batch_size",
-        type=int,
-        default=32,
-        help="Number of data points per batch",
-    )
-    parser.add_argument(
-        "--start", type=int, default=250, help="Start of the number of inputs to sweep"
-    )
-    parser.add_argument(
-        "--step",
-        type=int,
-        default=250,
-        help="Steps in which to sweep over the number of inputs",
-    )
-    parser.add_argument(
-        "--stop", type=int, default=5001, help="Number of inputs to sweep to"
-    )
-    parser.add_argument(
-        "--sequence_length",
-        type=int,
-        default=1000,
-        help="Number of timesteps to simulate",
-    )
-    parser.add_argument("--dt", type=float, default=0.001, help="Simulation timestep")
-    parser.add_argument(
-        "--device",
-        type=str,
-        default="cuda",
-        choices=["cuda", "cpu"],
-        help="Device to use [cpu, cuda]",
-    )
-    parser.add_argument(
-        "--runs", type=int, default=5, help="Number of runs per simulation step"
-    )
-    parser.add_argument(
-        "--profile",
-        default=False,
-        action="store_true",
-        help="Profile Norse benchmark? (Only works for Norse)",
-    )
-    parser.add_argument(
-        "--bindsnet",
-        default=False,
-        action="store_true",
-        help="Benchmark Bindsnet?",
-    )
-    parser.add_argument(
-        "--genn", default=False, action="store_true", help="Benchmark GeNN?"
-    )
-    parser.add_argument(
-        "--norse",
-        default=False,
-        action="store_true",
-        help="Benchmark Norse?",
-    )
+    subparsers = parser.add_subparsers(help="Task types", required=True)
+    lif_main.init_parser(subparsers.add_parser("lif"))
+    lif_box_main.init_parser(subparsers.add_parser("lif_box"))
     args = parser.parse_args()
-    main(args)
+    args.func(args, run_benchmark)
