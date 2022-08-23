@@ -24,10 +24,10 @@ class LSNNLIFNet(torch.nn.Module):
         self.neurons_per_layer = input_features // 2
 
         self.lsnn_cell = LSNNRecurrentCell(
-            input_features, self.neurons_per_layer, p=p_lsnn, dt=dt
+            input_features, self.neurons_per_layer, p_lsnn, dt=dt
         )
         self.lif_cell = LIFRecurrentCell(
-            input_features, self.neurons_per_layer, p=p_lif, dt=dt
+            input_features, self.neurons_per_layer, p_lif, dt=dt
         )
 
     def forward(self, input_spikes: torch.Tensor, state: Optional[Tuple[Any, Any]]):
@@ -55,11 +55,10 @@ class MemoryNet(pl.LightningModule):
         self.regularization_target = args.regularization_target / (
             self.seq_length * args.seq_repetitions
         )
-        self.log("Neuron model", args.neuron_model)
         p_lsnn = LSNNParameters(
             method=args.model,
             v_th=torch.as_tensor(0.5),
-            tau_adapt_inv=torch.as_tensor(1 / 1200.0),
+            tau_adapt_inv=1 / torch.as_tensor(2000 * args.dt).exp(),
             beta=torch.as_tensor(1.8),
         )
         p_lif = LIFParameters(
@@ -127,7 +126,7 @@ class MemoryNet(pl.LightningModule):
         betas = torch.stack(seq_betas) if len(seq_betas) > 0 else None
         return spikes, readouts, betas
 
-    def testing_step(self, batch, batch_idx):
+    def test_step(self, batch, batch_idx):
         xs, ys = batch
         spikes, readouts, betas = self(xs)
         # Loss: Difference between recall activity and recall pattern
@@ -152,8 +151,8 @@ class MemoryNet(pl.LightningModule):
             spikes[:, random_index],
             betas[:, random_index] if betas is not None else None,
         )
-        self.logger.experiment.add_figure("Test readout", figure, self.current_epoch)
-        self.log_dict(values, self.current_epoch)
+        self.logger.experiment.add_figure("Test readout", figure)
+        self.log_dict(values)
 
         # Early stopping when loss <= 0.05
         if loss <= 0.05:
@@ -175,7 +174,7 @@ class MemoryNet(pl.LightningModule):
             (spikes.mean(0).mean(0) - self.regularization_target) ** 2
             * self.regularization_factor
         ).sum()
-        self.log("loss_reg", loss_reg, self.current_epoch)
+        self.log("loss_reg", loss_reg)
         return loss + loss_reg
 
     def validation_step(self, batch, batch_idx):
@@ -203,8 +202,8 @@ class MemoryNet(pl.LightningModule):
             spikes[:, random_index],
             betas[:, random_index] if betas is not None else None,
         )
-        self.logger.experiment.add_figure("Readout", figure, self.current_epoch)
-        self.log_dict(values, self.current_epoch)
+        self.logger.experiment.add_figure("Readout", figure)
+        self.log_dict(values)
 
         # Early stopping when loss <= 0.05
         if loss <= 0.05:
@@ -326,15 +325,15 @@ def main(args):
     val_loader = torch.utils.data.DataLoader(dataset_val, batch_size=batch_size)
     test_loader = torch.utils.data.DataLoader(dataset_test, batch_size=batch_size)
     trainer = pl.Trainer.from_argparse_args(args, callbacks=[checkpoint])
-    trainer.fit(model, train_dataloader=train_loader, val_dataloaders=val_loader)
-    trainer.test(model=model, test_dataloaders=test_loader)
+    trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=val_loader)
+    trainer.test(model=model, dataloaders=test_loader)
 
 
 if __name__ == "__main__":
     parser = ArgumentParser("Memory task with spiking neural networks")
     parser = pl.Trainer.add_argparse_args(parser)
     parser.set_defaults(
-        max_epochs=1000, auto_select_gpus=True, progress_bar_refresh_rate=1
+        max_epochs=300, auto_select_gpus=True, progress_bar_refresh_rate=1
     )
     parser.add_argument(
         "--batch_size",
