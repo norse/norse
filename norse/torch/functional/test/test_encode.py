@@ -27,7 +27,6 @@ def test_encode_population():
     )
     assert torch.allclose(actual, expected)
 
-
 def test_encode_population_scale():
     data = torch.as_tensor([0, 0.5, 1])
     out_features = 3
@@ -44,10 +43,15 @@ def test_encode_population_scale():
 
 
 def test_encode_population_batch():
-    data = torch.as_tensor([[0, 0, 0], [0.5, 0.5, 0.5], [1, 1, 1]])
+    data = torch.as_tensor([[0, 0, 0, 0], [0.5, 0.5, 0.5, 0.5], [1, 1, 1, 1]])
     out_features = 3
     actual = population_encode(data, out_features)
-    assert actual.shape == (3, 3, 3)
+    assert actual.shape == (3, 4, 3)
+
+    data = torch.randn(10, 2, 3)
+    out_features = 8
+    actual = population_encode(data, out_features)
+    assert actual.shape == (10, 2, 3, 8)
 
 
 def test_constant_current_lif_encode():
