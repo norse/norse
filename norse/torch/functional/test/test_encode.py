@@ -27,6 +27,7 @@ def test_encode_population():
     )
     assert torch.allclose(actual, expected)
 
+
 def test_encode_population_scale():
     data = torch.as_tensor([0, 0.5, 1])
     out_features = 3

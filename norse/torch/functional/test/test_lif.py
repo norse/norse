@@ -29,7 +29,7 @@ def test_lif_cpp_back():
 
 
 def test_lif_jit_back():
-    x = torch.ones(2)
+    x = torch.ones(2, requires_grad=True)
     s = LIFState(z=torch.zeros(1), v=torch.zeros(1), i=torch.zeros(1))
     s.v.requires_grad = True
     input_weights = torch.ones(2)
@@ -46,6 +46,7 @@ def test_lif_jit_back():
     )
     _, s = _lif_step_jit(x, s, input_weights, recurrent_weights, p=jit_params)
     z, s = _lif_step_jit(x, s, input_weights, recurrent_weights, p=jit_params)
+    print(x.shape, z.shape, input_weights.shape, recurrent_weights.shape)
     z.sum().backward()
 
 
