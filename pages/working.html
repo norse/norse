@@ -1506,14 +1506,14 @@ spikes. In Norse, we refer to that as the <strong>neuron state</strong>.</p>
 <p>In code, it looks like this:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">norse</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import torch
+import norse.torch as norse
 
-<span class="n">cell</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">LIFCell</span><span class="p">()</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">spikes</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>        <span class="c1"># First run is done without any state</span>
-<span class="c1"># ...</span>
-<span class="n">spikes</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span> <span class="c1"># Now we pass in the previous state</span>
+cell = norse.LIFCell()
+data = torch.ones(1)
+spikes, state = cell(data)        # First run is done without any state
+# ...
+spikes, state = cell(data, state) # Now we pass in the previous state
 </pre></div>
 </div>
 </div>

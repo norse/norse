@@ -70,6 +70,7 @@
       ~LConv2d.T_destination
       ~LConv2d.dump_patches
       ~LConv2d.bias
+      ~LConv2d.in_channels
       ~LConv2d.out_channels
       ~LConv2d.kernel_size
       ~LConv2d.stride

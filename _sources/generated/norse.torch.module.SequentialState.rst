@@ -24,6 +24,7 @@
       ~SequentialState.cuda
       ~SequentialState.double
       ~SequentialState.eval
+      ~SequentialState.extend
       ~SequentialState.extra_repr
       ~SequentialState.float
       ~SequentialState.forward
@@ -32,6 +33,7 @@
       ~SequentialState.get_parameter
       ~SequentialState.get_submodule
       ~SequentialState.half
+      ~SequentialState.insert
       ~SequentialState.ipu
       ~SequentialState.load_state_dict
       ~SequentialState.modules
@@ -40,6 +42,7 @@
       ~SequentialState.named_modules
       ~SequentialState.named_parameters
       ~SequentialState.parameters
+      ~SequentialState.pop
       ~SequentialState.register_backward_hook
       ~SequentialState.register_buffer
       ~SequentialState.register_forward_hook

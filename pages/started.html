@@ -1430,13 +1430,13 @@ Neurons need to remember their history, similar to recurrent networks in PyTorch
 <p>Our solution is to provide our own <a class="reference external" href="https://norse.github.io/norse/generated/norse.torch.module.sequential.SequentialState.html"><code class="docutils literal notranslate"><span class="pre">norse.torch.SequentialState</span></code></a> module, which makes it trivial to construct spiking networks:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">norse</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import torch
+import norse
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">norse</span><span class="o">.</span><span class="n">torch</span><span class="o">.</span><span class="n">SequentialState</span><span class="p">(</span>
-    <span class="n">norse</span><span class="o">.</span><span class="n">torch</span><span class="o">.</span><span class="n">LIF</span><span class="p">(),</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">)</span>
+model = norse.torch.SequentialState(
+    norse.torch.LIF(),
+    torch.nn.Linear(2, 1)
+)
 </pre></div>
 </div>
 </div>
@@ -1448,7 +1448,7 @@ Neurons need to remember their history, similar to recurrent networks in PyTorch
 <p>If you are familiar with recurrent networks in PyTorch, you will know that they return not one, but two values: the actual model <code class="docutils literal notranslate"><span class="pre">output</span></code> <em>and</em> the model <code class="docutils literal notranslate"><span class="pre">state</span></code> (see e. g. <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.RNN.html#torch.nn.RNN">PyTorch’s RNN module</a>).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>output, state = model(torch.ones(4, 2))
 </pre></div>
 </div>
 </div>
@@ -1457,16 +1457,16 @@ Neurons need to remember their history, similar to recurrent networks in PyTorch
 <p>Below, we show how you can take a tensor with 4 timesteps (the outer dimension) and apply it to 2 neurons (inner dimension). The linear layer should, then, reduce this to a single neuron simulated over 4 timesteps.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">output</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>output, state = model(torch.ones(4, 2))
+output
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-0.5872],
-        [-0.5872],
-        [-0.5872],
-        [-0.5872]], grad_fn=&lt;AddmmBackward0&gt;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-0.5733],
+        [-0.5733],
+        [-0.5733],
+        [-0.5733]], grad_fn=&lt;AddmmBackward0&gt;)
 </pre></div>
 </div>
 </div>
@@ -1477,7 +1477,7 @@ Neurons need to remember their history, similar to recurrent networks in PyTorch
 <p>Before we conclude, note that you can inject a different state if you wish to influence the neuron starting state. Below, we simply use the state we stored above in the <code class="docutils literal notranslate"><span class="pre">state</span></code> variable. The page on <a class="reference internal" href="working.html#page-working"><span class="std std-ref">Working with Norse</span></a> will demonstrate how to configure this in depth.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="p">,</span> <span class="n">next_state</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>output, next_state = model(torch.ones(4, 2), state=state)
 </pre></div>
 </div>
 </div>
