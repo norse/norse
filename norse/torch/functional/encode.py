@@ -120,11 +120,11 @@ def population_encode(
         Note: An extra step is required to convert the values to spikes, see above.
     """
     # Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py
-    size = (input_values.size(0), out_features) + input_values.size()[1:]
+    size = input_values.shape + (out_features,)
     if not scale:
         scale = input_values.max()
     centres = torch.linspace(0, scale, out_features).expand(size)
-    x = input_values.unsqueeze(1).expand(size)
+    x = input_values.unsqueeze(-1).expand(size)
     distances = distance_function(x, centres) * scale
     return kernel(distances)
 
