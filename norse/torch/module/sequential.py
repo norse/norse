@@ -12,6 +12,7 @@ class SequentialState(torch.nn.Sequential):
 
     Arguments:
       args (*torch.nn.Module): A list of modules to sequentially apply in the forward pass
+      count_synops (bool): Count the number of synaptic operations. Defaults to False. Note that this may increase memory consumption.
 
     Example:
         >>> import torch
@@ -39,7 +40,7 @@ class SequentialState(torch.nn.Sequential):
         >>> model(data)
     """
 
-    def __init__(self, *args: torch.nn.Module):
+    def __init__(self, *args: torch.nn.Module, count_synops: bool = False):
         super(SequentialState, self).__init__()
         self.stateful_layers = []
         self.forward_state_hooks = []
@@ -50,6 +51,13 @@ class SequentialState(torch.nn.Sequential):
             self.stateful_layers.append(
                 "state" in signature.parameters or isinstance(module, torch.nn.RNNBase)
             )
+
+        if count_synops:
+            synops = torch.as_tensor(0)
+            self.register_buffer("synops", synops)
+            def count_synops(m, input, output):
+                self.register_buffer("synops", self.get_buffer("synops") + output[0].sum())
+            self.register_forward_state_hooks(count_synops)
 
     def register_forward_state_hooks(
         self,

@@ -44,7 +44,6 @@ def _merge_states(states: List[Any]):
             output_dict[key] = torch.stack(values)
     return cls(**output_dict)
 
-
 class SNNCell(torch.nn.Module):
     """
     Initializes a feedforward neuron cell *without* time.
@@ -69,8 +68,9 @@ class SNNCell(torch.nn.Module):
         p: Any,
         dt: float = 0.001,
         activation_sparse: Optional[FeedforwardActivation] = None,
+        **kwargs
     ):
-        super().__init__()
+        super().__init__(**kwargs)
         self.activation = activation
         self.activation_sparse = activation_sparse
         self.state_fallback = state_fallback

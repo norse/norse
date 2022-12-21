@@ -144,3 +144,17 @@ def test_sequential_debug_hook_twice():
     model.register_forward_state_hooks(dub)
     with pytest.raises(ValueError):
         model.register_forward_state_hooks(dub)
+
+def test_sequential_synops():
+    model = norse.SequentialState(
+        torch.nn.Linear(1, 10, bias=False),
+        norse.LIF(),
+        count_synops=True
+    )
+    model[0].weight = torch.nn.Parameter(torch.ones(10, 1))
+
+    _, s = model(torch.ones(1, 1))
+    assert model.get_buffer("synops") == 0
+    for i in range(6):
+        model(torch.ones(1, 1), s)
+    assert model.get_buffer("synops") == 10
