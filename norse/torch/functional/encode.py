@@ -134,6 +134,7 @@ def poisson_encode(
     seq_length: int,
     f_max: float = 100,
     dt: float = 0.001,
+    seed = None,
 ) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
@@ -151,6 +152,9 @@ def poisson_encode(
     Returns:
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
+
+    if seed!=None:
+        torch.manual_seed(seed)
     return (
         torch.rand(seq_length, *input_values.shape, device=input_values.device).float()
         < dt * f_max * input_values

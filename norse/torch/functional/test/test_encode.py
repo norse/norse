@@ -8,6 +8,7 @@ from norse.torch.functional.encode import (
     constant_current_lif_encode,
     spike_latency_lif_encode,
     spike_latency_encode,
+    poisson_encode,
 )
 
 # Fixes a linting error:
@@ -129,3 +130,12 @@ def test_spike_latency_encode_without_batch_3():
         ]
     )
     assert torch.equal(actual, expected)
+
+def test_poisson_encode():
+    data = torch.as_tensor([0, 0.5, 1])
+    out_features = 3
+    pop_encoded = population_encode(data, out_features)
+    spikes = poisson_encode(pop_encoded, 1,seed=1).squeeze()
+    print(spikes)
+
+test_poisson_encode()
