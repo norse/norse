@@ -148,6 +148,7 @@ def poisson_encode(
         sequence_length (int): Number of time steps in the resulting spike train.
         f_max (float): Maximal frequency (in Hertz) which will be emitted.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
+        seed (int): Seed value for torch's random number generator. Set default to None so that different random outputs are generated when seed value not mentioned.
 
     Returns:
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).

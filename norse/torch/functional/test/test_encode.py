@@ -132,10 +132,11 @@ def test_spike_latency_encode_without_batch_3():
     assert torch.equal(actual, expected)
 
 def test_poisson_encode():
-    data = torch.as_tensor([0, 0.5, 1])
-    out_features = 3
-    pop_encoded = population_encode(data, out_features)
-    spikes = poisson_encode(pop_encoded, 1,seed=1).squeeze()
-    print(spikes)
+    data = torch.as_tensor([0.,0.5,1.0])
+    seq_length = 10
+    
+    spikes_seed0 = poisson_encode(data,seq_length,seed=0).squeeze()
+    
+    spikes_seed1 = poisson_encode(data,seq_length,seed=1).squeeze()
 
-test_poisson_encode()
+    assert torch.equal(spikes_seed0,spikes_seed1)==False
