@@ -134,7 +134,8 @@ def poisson_encode(
     seq_length: int,
     f_max: float = 100,
     dt: float = 0.001,
-    seed = None,
+    seed_generator: torch.Generator = None,
+    
 ) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
@@ -148,16 +149,15 @@ def poisson_encode(
         sequence_length (int): Number of time steps in the resulting spike train.
         f_max (float): Maximal frequency (in Hertz) which will be emitted.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
-        seed (int): Seed value for torch's random number generator. Set default to None so that different random outputs are generated when seed value not mentioned.
+        seed_generator (torch.Generator): Generator for pseudorandom numbers. Usually, generator.manual_seed(seed value) is passed as the argument
 
     Returns:
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
+    # if seed_generator is not None:
 
-    if seed!=None:
-        torch.manual_seed(seed)
     return (
-        torch.rand(seq_length, *input_values.shape, device=input_values.device).float()
+        torch.rand(seq_length, *input_values.shape, device=input_values.device,generator = seed_generator).float()
         < dt * f_max * input_values
     ).float()
 
