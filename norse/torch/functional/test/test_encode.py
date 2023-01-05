@@ -143,9 +143,9 @@ def test_poisson_encode():
     seq_length = 10
 
     
-    spikes_seed0 = poisson_encode(data,seq_length,seed_generator=seed0).squeeze()
+    spikes_seed0 = poisson_encode(data,seq_length,generator=seed0).squeeze()
     
-    spikes_seed1 = poisson_encode(data,seq_length,seed_generator=seed0).squeeze()
+    spikes_seed1 = poisson_encode(data,seq_length,generator=seed0).squeeze()
     
     print("seed0 spikes:",spikes_seed0)
     print("seed1 spikes:",spikes_seed1)
