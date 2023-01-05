@@ -154,8 +154,6 @@ def poisson_encode(
     Returns:
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
-    # if seed_generator is not None:
-
     return (
         torch.rand(seq_length, *input_values.shape, device=input_values.device,generator = generator).float()
         < dt * f_max * input_values
