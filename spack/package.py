@@ -27,7 +27,7 @@ class PyNorse(PythonPackage):
     depends_on("py-pybind11", type=("build", "link", "run"))
 
     # ninja preferred when building a py-torch extension (from py-torch package)
-    depends_on('ninja@1.5:', when='^py-torch@1.1:', type='build')
+    depends_on("ninja@1.5:", when="^py-torch@1.1:", type="build")
 
     def setup_build_environment(self, env):
         include = []
