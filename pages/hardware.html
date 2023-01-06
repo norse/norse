@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>6. Hardware acceleration &#8212; Norse v0.0.7</title>
+    <title>7. Hardware acceleration &#8212; Norse v0.0.7</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -54,8 +54,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="7. Papers citing Norse" href="papers.html" />
-    <link rel="prev" title="5. Running Tasks" href="tasks.html" />
+    <link rel="next" title="8. Papers citing Norse" href="papers.html" />
+    <link rel="prev" title="6. Parameter learning in Spiking Neural Networks" href="parameters.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -153,19 +153,24 @@ const thebe_selector_output = ".output, .cell_output"
    5. Running Tasks
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="parameters.html">
+   6. Parameter learning in Spiking Neural Networks
+  </a>
+ </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   6. Hardware acceleration
+   7. Hardware acceleration
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="papers.html">
-   7. Papers citing Norse
+   8. Papers citing Norse
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="about.html">
-   8. About Norse
+   9. About Norse
   </a>
  </li>
 </ul>
@@ -177,7 +182,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="development.html">
-   9. Development Documentation
+   10. Development Documentation
   </a>
  </li>
 </ul>
@@ -1281,7 +1286,7 @@ title="Print to PDF"
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#accelerating-norse-models-with-to">
-   6.1. Accelerating Norse models with
+   7.1. Accelerating Norse models with
    <code class="docutils literal notranslate">
     <span class="pre">
      .to
@@ -1291,7 +1296,7 @@ title="Print to PDF"
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#accelerating-norse-nested-models">
-   6.2. Accelerating Norse nested models
+   7.2. Accelerating Norse nested models
   </a>
  </li>
 </ul>
@@ -1315,7 +1320,7 @@ title="Print to PDF"
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#accelerating-norse-models-with-to">
-   6.1. Accelerating Norse models with
+   7.1. Accelerating Norse models with
    <code class="docutils literal notranslate">
     <span class="pre">
      .to
@@ -1325,7 +1330,7 @@ title="Print to PDF"
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#accelerating-norse-nested-models">
-   6.2. Accelerating Norse nested models
+   7.2. Accelerating Norse nested models
   </a>
  </li>
 </ul>
@@ -1339,14 +1344,14 @@ title="Print to PDF"
               <div>
                 
   <section id="hardware-acceleration">
-<span id="page-hardware"></span><h1><span class="section-number">6. </span>Hardware acceleration<a class="headerlink" href="#hardware-acceleration" title="Permalink to this headline">#</a></h1>
+<span id="page-hardware"></span><h1><span class="section-number">7. </span>Hardware acceleration<a class="headerlink" href="#hardware-acceleration" title="Permalink to this headline">#</a></h1>
 <p>Norse is built on top of <a class="reference external" href="https://pytorch.org">PyTorch</a> which has excellent support for hardware acceleration.
 This article will cover how Norse can be accelerated with GPUs through the <a class="reference external" href="https://en.wikipedia.org/wiki/CUDA">CUDA platform</a>.</p>
 <p>Since Norse is using PyTorch primitives, it is worth familiarising yourself with the use of GPUs in PyTorch.
 Here is a tutorial describing how to use GPUs with the <code class="docutils literal notranslate"><span class="pre">to</span></code> method in PyTorch:
 <a class="reference external" href="https://pytorch.org/tutorials/beginner/nn_tutorial.html#using-your-gpu">https://pytorch.org/tutorials/beginner/nn_tutorial.html#using-your-gpu</a></p>
 <section id="accelerating-norse-models-with-to">
-<h2><span class="section-number">6.1. </span>Accelerating Norse models with <code class="docutils literal notranslate"><span class="pre">.to</span></code><a class="headerlink" href="#accelerating-norse-models-with-to" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">7.1. </span>Accelerating Norse models with <code class="docutils literal notranslate"><span class="pre">.to</span></code><a class="headerlink" href="#accelerating-norse-models-with-to" title="Permalink to this headline">#</a></h2>
 <p>To accelerate neuron models in Norse, one simply has to call the <code class="docutils literal notranslate"><span class="pre">.to</span></code> method on models and data:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse.torch.module.lif</span> <span class="kn">import</span> <span class="n">LIFCell</span>
 <span class="n">LIFCell</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
@@ -1358,7 +1363,7 @@ Here is a tutorial describing how to use GPUs with the <code class="docutils lit
 </div>
 </section>
 <section id="accelerating-norse-nested-models">
-<h2><span class="section-number">6.2. </span>Accelerating Norse nested models<a class="headerlink" href="#accelerating-norse-nested-models" title="Permalink to this headline">#</a></h2>
+<h2><span class="section-number">7.2. </span>Accelerating Norse nested models<a class="headerlink" href="#accelerating-norse-nested-models" title="Permalink to this headline">#</a></h2>
 <p>It might be necessary to sometimes build your own nested <cite>torch.nn</cite> modules.
 We recommend that you adhere to the PyTorch
 <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">torch.nn.Module</a>
@@ -1434,17 +1439,17 @@ or
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="tasks.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="parameters.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title"><span class="section-number">5. </span>Running Tasks</p>
+            <p class="prev-next-title"><span class="section-number">6. </span>Parameter learning in Spiking Neural Networks</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="papers.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">7. </span>Papers citing Norse</p>
+        <p class="prev-next-title"><span class="section-number">8. </span>Papers citing Norse</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
