@@ -135,7 +135,6 @@ def poisson_encode(
     f_max: float = 100,
     dt: float = 0.001,
     generator: torch.Generator = None,
-    
 ) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
@@ -155,7 +154,12 @@ def poisson_encode(
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
     return (
-        torch.rand(seq_length, *input_values.shape, device=input_values.device,generator = generator).float()
+        torch.rand(
+            seq_length,
+            *input_values.shape,
+            device=input_values.device,
+            generator=generator
+        ).float()
         < dt * f_max * input_values
     ).float()
 
@@ -182,13 +186,18 @@ def poisson_encode_step(
         A tensor containing binary values in .
     """
     return (
-        torch.rand(*input_values.shape, device=input_values.device,generator=generator).float()
+        torch.rand(
+            *input_values.shape, device=input_values.device, generator=generator
+        ).float()
         < dt * f_max * input_values
     ).float()
 
 
 def signed_poisson_encode(
-    input_values: torch.Tensor, seq_length: int, f_max: float = 100, dt: float = 0.001,
+    input_values: torch.Tensor,
+    seq_length: int,
+    f_max: float = 100,
+    dt: float = 0.001,
     generator: torch.Generator = None,
 ) -> torch.Tensor:
     """
@@ -209,14 +218,17 @@ def signed_poisson_encode(
     return (
         torch.sign(input_values)
         * (
-            torch.rand(seq_length, *input_values.shape,generator=generator).float()
+            torch.rand(seq_length, *input_values.shape, generator=generator).float()
             < dt * f_max * torch.abs(input_values)
         ).float()
     )
 
 
 def signed_poisson_encode_step(
-    input_values: torch.Tensor, f_max: float = 1000, dt: float = 0.001, generator: torch.Generator = None,
+    input_values: torch.Tensor,
+    f_max: float = 1000,
+    dt: float = 0.001,
+    generator: torch.Generator = None,
 ) -> torch.Tensor:
     """
     Creates a poisson distributed signed spike vector, when
@@ -233,7 +245,9 @@ def signed_poisson_encode_step(
     return (
         torch.sign(input_values)
         * (
-            torch.rand(*input_values.shape, device=input_values.device,generator=generator).float()
+            torch.rand(
+                *input_values.shape, device=input_values.device, generator=generator
+            ).float()
             < dt * f_max * torch.abs(input_values)
         ).float()
     )
