@@ -1471,29 +1471,29 @@ This has the benefit that your models are hardware accelerated, providing the <a
 <a class="reference external" href="https://en.wikipedia.org/wiki/Command-line_interface">command line interface</a>.</p>
 <section id="installing-with-pip">
 <h3><span class="section-number">1.2.1. </span>Installing with <a class="reference external" href="https://pypi.org/project/pip/"><code class="docutils literal notranslate"><span class="pre">pip</span></code></a><a class="headerlink" href="#installing-with-pip" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install norse
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>norse
 </pre></div>
 </div>
 </section>
 <section id="installing-from-conda">
 <h3><span class="section-number">1.2.2. </span>Installing from <a class="reference external" href="https://docs.conda.io/en/latest/">Conda</a><a class="headerlink" href="#installing-from-conda" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install -c norse norse
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>norse<span class="w"> </span>norse
 </pre></div>
 </div>
 </section>
 <section id="installing-with-docker">
 <h3><span class="section-number">1.2.3. </span>Installing with <a class="reference external" href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a><a class="headerlink" href="#installing-with-docker" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker pull quay.io/norse/norse
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>quay.io/norse/norse
 <span class="c1"># Or, using CUDA</span>
-docker pull quay.io/norse/norse:latest-cuda
+docker<span class="w"> </span>pull<span class="w"> </span>quay.io/norse/norse:latest-cuda
 </pre></div>
 </div>
 </section>
 <section id="installing-from-source">
 <h3><span class="section-number">1.2.4. </span>Installing from source<a class="headerlink" href="#installing-from-source" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/norse/norse
-<span class="nb">cd</span> norse
-python setup.py install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/norse/norse
+<span class="nb">cd</span><span class="w"> </span>norse
+python<span class="w"> </span>setup.py<span class="w"> </span>install
 </pre></div>
 </div>
 </section>
@@ -1510,9 +1510,9 @@ filesystem is isolated. Without going into details, here are three steps you can
 take to create a <a class="reference external" href="https://jupyter.org/">Jupyter Notebook</a> environment with
 Docker. You will have to replace <code class="docutils literal notranslate"><span class="pre">/your/directory</span></code> with the <strong>full</strong> path to
 your current directory.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run -it -p <span class="m">8888</span>:8888 -v /your/directory:/work quay.io/norse/norse bash
-pip3 install jupyter
-jupyter notebook --notebook-dir<span class="o">=</span>/work --ip <span class="m">0</span>.0.0.0 --allow-root
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:8888<span class="w"> </span>-v<span class="w"> </span>/your/directory:/work<span class="w"> </span>quay.io/norse/norse<span class="w"> </span>bash
+pip3<span class="w"> </span>install<span class="w"> </span>jupyter
+jupyter<span class="w"> </span>notebook<span class="w"> </span>--notebook-dir<span class="o">=</span>/work<span class="w"> </span>--ip<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--allow-root
 </pre></div>
 </div>
 <p>The command line will now show you a URL you can copy-paste into your browser.

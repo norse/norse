@@ -1223,7 +1223,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="SequentialState"><a class="viewcode-back" href="../../../../generated/norse.torch.module.SequentialState.html#norse.torch.module.SequentialState">[docs]</a><span class="k">class</span> <span class="nc">SequentialState</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A sequential model that works like PyTorch&#39;s ``Sequential`` with the</span>
 <span class="sd">    addition that it handles neuron states.</span>
 
@@ -1273,7 +1273,7 @@ title="Open an issue"
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">forward_hook</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Registers hooks for all state*ful* layers.</span>
 
 <span class="sd">        Hooks can be removed by calling :meth:`remove_state_hooks`_.</span>
@@ -1300,7 +1300,7 @@ title="Open an issue"
                 <span class="bp">self</span><span class="o">.</span><span class="n">forward_state_hooks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">remove_forward_state_hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Disables and discards the forward state hooks, registered in :meth:`register_forward_state_hooks`_.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">handle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_state_hooks</span><span class="p">:</span>
@@ -1308,7 +1308,7 @@ title="Open an issue"
         <span class="bp">self</span><span class="o">.</span><span class="n">forward_state_hooks</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Feeds the input to the modules with the given state-list.</span>
 <span class="sd">        If the state is None, the initial state is set to None for each of the modules.</span>
 

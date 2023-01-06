@@ -1240,7 +1240,7 @@ title="Open an issue"
 <div class="viewcode-block" id="spike_accumulator"><a class="viewcode-back" href="../../../../generated/norse.torch.functional.regularization.spike_accumulator.html#norse.torch.functional.regularization.spike_accumulator">[docs]</a><span class="k">def</span> <span class="nf">spike_accumulator</span><span class="p">(</span>
     <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A spike accumulator that aggregates spikes and returns the total sum as an integer.</span>
 
 <span class="sd">    Parameters:</span>
@@ -1259,7 +1259,7 @@ title="Open an issue"
 <div class="viewcode-block" id="voltage_accumulator"><a class="viewcode-back" href="../../../../generated/norse.torch.functional.regularization.voltage_accumulator.html#norse.torch.functional.regularization.voltage_accumulator">[docs]</a><span class="k">def</span> <span class="nf">voltage_accumulator</span><span class="p">(</span>
     <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A spike accumulator that aggregates membrane potentials over time. Requires that the</span>
 <span class="sd">    input state ``s`` has a ``v`` property (for voltage).</span>
 
@@ -1284,7 +1284,7 @@ title="Open an issue"
     <span class="n">accumulator</span><span class="p">:</span> <span class="n">Accumulator</span> <span class="o">=</span> <span class="n">spike_accumulator</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes one step for a regularizer that aggregates some information (based on the</span>
 <span class="sd">    spike_accumulator function), which is pushed forward and returned for future</span>
 <span class="sd">    inclusion in an error term.</span>

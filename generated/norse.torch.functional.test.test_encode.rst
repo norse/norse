@@ -17,6 +17,7 @@ norse.torch.functional.test.test\_encode
       test_encode_population
       test_encode_population_batch
       test_encode_population_scale
+      test_poisson_encode
       test_spike_latency_encode_with_batch
       test_spike_latency_encode_without_batch
       test_spike_latency_encode_without_batch_2

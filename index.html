@@ -1426,7 +1426,7 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 <h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">#</a></h1>
 <p>To try Norse, the best option is to run one of the <a class="reference external" href="https://github.com/norse/notebooks/tree/master/">jupyter notebooks</a> on Google collab.</p>
 <p>Alternatively, <a class="reference external" href="#installation">you can install Norse</a> and run one of the <a class="reference external" href="https://norse.github.io/norse/tasks.html">included tasks</a> such as <a class="reference external" href="https://en.wikipedia.org/wiki/MNIST_database">MNIST</a>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m norse.task.mnist
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>norse.task.mnist
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="pages/started.html#page-started"><span class="std std-ref">Quickstart</span></a> and <a class="reference internal" href="pages/working.html#page-working"><span class="std std-ref">Working with Norse</span></a> pages show how to build your own models with Norse while explaining a few fundamental concepts around spiking neural networks.</p>
@@ -1470,24 +1470,24 @@ They can be run by invoking the <code class="docutils literal notranslate"><span
 More information and tasks are available <a class="reference external" href="https://norse.github.io/norse/tasks.html">in our documentation</a> and in your console by typing: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">norse.task.&lt;task&gt;</span> <span class="pre">--help</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;task&gt;</span></code> is one of the task names.</p>
 <ul>
 <li><p>To train an MNIST classification network, invoke</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m norse.task.mnist
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>norse.task.mnist
 </pre></div>
 </div>
 </li>
 <li><p>To train a CIFAR classification network, invoke</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m norse.task.cifar10
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>norse.task.cifar10
 </pre></div>
 </div>
 </li>
 <li><p>To train the cartpole balancing task with Policy gradient, invoke</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m norse.task.cartpole
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>norse.task.cartpole
 </pre></div>
 </div>
 </li>
 </ul>
 <p>Norse is compatible with <a class="reference external" href="https://pytorch-lightning.readthedocs.io/en/stable/">PyTorch Lightning</a>,
 as demonstrated in the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/task/mnist_pl.py">PyTorch Lightning MNIST task variant</a> (requires PyTorch lightning):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m norse.task.mnist_pl --gpus<span class="o">=</span><span class="m">4</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>norse.task.mnist_pl<span class="w"> </span>--gpus<span class="o">=</span><span class="m">4</span>
 </pre></div>
 </div>
 <p>Read more in our <a class="reference internal" href="pages/spiking.html#page-spiking"><span class="std std-ref">Introduction to spiking systems</span></a> and visit our <a class="reference external" href="https://github.com/norse/notebooks">Jupyter Notebook examples</a>.</p>
@@ -1519,19 +1519,19 @@ The page on <a class="reference internal" href="pages/hardware.html#page-hardwar
 <section id="citation">
 <h1>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">#</a></h1>
 <p>If you use Norse in your work, please cite it as follows:</p>
-<div class="highlight-BibTex notranslate"><div class="highlight"><pre><span></span><span class="nc">@software</span><span class="p">{</span><span class="nl">norse2021</span><span class="p">,</span><span class="w"></span>
+<div class="highlight-BibTex notranslate"><div class="highlight"><pre><span></span><span class="nc">@software</span><span class="p">{</span><span class="nl">norse2021</span><span class="p">,</span>
 <span class="w">  </span><span class="na">author</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{Pehle, Christian and</span>
-<span class="s">                  Pedersen, Jens Egholm}</span><span class="p">,</span><span class="w"></span>
+<span class="s">                  Pedersen, Jens Egholm}</span><span class="p">,</span>
 <span class="w">  </span><span class="na">title</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{{Norse -  A deep learning library for spiking </span>
-<span class="s">                   neural networks}}</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="na">month</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="nv">jan</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="na">year</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="m">2021</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="na">note</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{Documentation: https://norse.ai/docs/}</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="na">publisher</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{Zenodo}</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="na">version</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{0.0.6}</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="na">doi</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{10.5281/zenodo.4422025}</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="na">url</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{https://doi.org/10.5281/zenodo.4422025}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="s">                   neural networks}}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="nv">jan</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="m">2021</span><span class="p">,</span>
+<span class="w">  </span><span class="na">note</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{Documentation: https://norse.ai/docs/}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{Zenodo}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">version</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{0.0.6}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">doi</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{10.5281/zenodo.4422025}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{https://doi.org/10.5281/zenodo.4422025}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Norse is actively applied and cited in the literature. We are keeping track of the papers cited by Norse <a class="reference external" href="https://norse.github.io/norse/papers.html">in our documentation</a>.</p>
