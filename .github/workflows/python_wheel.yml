@@ -20,10 +20,12 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel --output-dir dist
         env:
-          CIBW_BUILD: "cp*-*64"
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux1
+          CIBW_BUILD: "cp3{7,8,9,10}-*64"
+          CIBW_ENVIRONMENT: PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cpu
+          # CIBW_MANYLINUX_X86_64_IMAGE: manylinux1
           CIBW_BEFORE_BUILD: pip install .
           CIBW_SKIP: "*musllinux*"
+          CIBW_REPAIR_WHEEL_COMMAND: 'export LD_LIBRARY_PATH=$(python -c "import os,torch; print(os.path.dirname(torch.__file__) + \"/lib/\")") && auditwheel repair -w {dest_dir} {wheel}'
 
       - uses: actions/upload-artifact@v3
         with:
