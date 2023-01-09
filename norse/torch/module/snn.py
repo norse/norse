@@ -44,7 +44,16 @@ def _merge_states(states: List[Any]):
             output_dict[key] = torch.stack(values)
     return cls(**output_dict)
 
-class SNNCell(torch.nn.Module):
+
+class SNNBaseClass(torch.nn.Module):
+    """
+    A base class for all spiking neuron modules.
+    """
+
+    pass
+
+
+class SNNCell(SNNBaseClass):
     """
     Initializes a feedforward neuron cell *without* time.
 
@@ -68,7 +77,7 @@ class SNNCell(torch.nn.Module):
         p: Any,
         dt: float = 0.001,
         activation_sparse: Optional[FeedforwardActivation] = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(**kwargs)
         self.activation = activation
@@ -88,7 +97,7 @@ class SNNCell(torch.nn.Module):
             return self.activation(input_tensor, state, self.p, self.dt)
 
 
-class SNNRecurrentCell(torch.nn.Module):
+class SNNRecurrentCell(SNNBaseClass):
     """
     The base module for recurrent neuron cell *without* time.
 
@@ -192,7 +201,7 @@ class SNNRecurrentCell(torch.nn.Module):
             )
 
 
-class SNN(torch.nn.Module):
+class SNN(SNNBaseClass):
     """
     The base module for spiking neural networks (RSNN) *with* time (*without* recurrence).
 
@@ -262,7 +271,7 @@ class SNN(torch.nn.Module):
         )
 
 
-class SNNRecurrent(torch.nn.Module):
+class SNNRecurrent(SNNBaseClass):
     """
     The base module for recurrent spiking neural networks (RSNN) *with* time.
 

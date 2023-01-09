@@ -12,6 +12,7 @@ from .encode import (
     SpikeLatencyEncoder,
     SpikeLatencyLIFEncoder,
 )
+from . import hooks
 from .iaf import IAFFeedForwardState, IAFCell, IAFParameters
 from .leaky_integrator import LI, LICell, LILinearCell, LIParameters, LIState
 from .lif import (
@@ -79,6 +80,7 @@ from .izhikevich import (
 from .spikes_to_times_decoder import SpikesToTimesDecoder
 
 __all__ = [
+    "hooks",
     "CobaLIFCell",
     "CobaLIFState",
     "CobaLIFParameters",
