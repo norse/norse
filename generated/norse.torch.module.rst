@@ -36,6 +36,7 @@ norse.torch.module
    norse.torch.module.leaky_integrator
    norse.torch.module.lif
    norse.torch.module.lif_adex
+   norse.torch.module.lif_adex_refrac
    norse.torch.module.lif_box
    norse.torch.module.lif_correlation
    norse.torch.module.lif_ex

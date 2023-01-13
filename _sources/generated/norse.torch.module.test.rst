@@ -36,6 +36,7 @@ norse.torch.module.test
    norse.torch.module.test.test_leaky_integrator
    norse.torch.module.test.test_lif
    norse.torch.module.test.test_lif_adex
+   norse.torch.module.test.test_lif_adex_refrac
    norse.torch.module.test.test_lif_box
    norse.torch.module.test.test_lif_correlation
    norse.torch.module.test.test_lif_ex
