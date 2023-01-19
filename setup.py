@@ -38,7 +38,7 @@ setup(
     author_email="christian.pehle@gmail.com, jens@jepedersen.dk",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
