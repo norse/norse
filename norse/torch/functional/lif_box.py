@@ -48,7 +48,6 @@ class LIFBoxFeedForwardState(NamedTuple):
 
     Parameters:
         v (torch.Tensor): membrane potential
-        i (torch.Tensor): synaptic input current
     """
 
     v: torch.Tensor
@@ -95,3 +94,49 @@ def lif_box_feed_forward_step(
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
 
     return z_new, LIFBoxFeedForwardState(v=v_new)
+
+def lif_box_feed_forward_integral(
+        input_tensor: torch.Tensor,
+        state: LIFBoxFeedForwardState,
+        p: LIFBoxParameters = LIFBoxParameters(),
+        dt: float = 0.001,
+) -> Tuple[torch.Tensor,LIFBoxFeedForwardState]:
+    r"""Computes multiple euler-integration steps of LIF Box neuron model. It follows the following ODE
+
+    .. math::
+        \dot{v} = 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i)
+
+    together with the jump condition
+
+    .. math::
+        z = \Theta(v - v_{\text{th}})
+
+    and transition equations
+
+    .. math::
+        v = (1-z) v + z v_{\text{reset}}
+
+    Parameters:
+        input_tensor (torch.Tensor): the input spikes at the current time step
+        state (LIFBoxFeedForwardState): current state of the LIF neuron
+        p (LIFBoxParameters): parameters of a leaky integrate and fire neuron
+        dt (float): Integration timestep to use
+    
+    """
+    outputs = []
+    for input_spikes in input_tensor:
+
+        #compute voltage updates
+        dv = dt*p.tau_mem_inv * ((p.v_leak - state.v)+input_spikes)
+        v_decayed = state.v + dv
+
+        # compute new spikes
+        z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
+        # compute reset
+        v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+
+        outputs.append(z_new)
+        state = LIFBoxFeedForwardState(v=v_new)
+
+    return torch.stack(outputs),state
+        

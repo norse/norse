@@ -3,12 +3,9 @@ Compared to the :mod:`norse.torch.functional.lif` modules, this model leaves out
 It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as "current boxes".
 """
 import torch
-from norse.torch.functional.lif_box import (
-    LIFBoxFeedForwardState,
-    LIFBoxParameters,
-    lif_box_feed_forward_step,
-)
-from norse.torch.module.snn import SNNCell
+from norse.torch.functional.lif_box import LIFBoxFeedForwardState,LIFBoxParameters,lif_box_feed_forward_step
+
+from norse.torch.module.snn import SNNCell,SNN
 
 
 class LIFBoxCell(SNNCell):
@@ -45,6 +42,33 @@ class LIFBoxCell(SNNCell):
         state = LIFBoxFeedForwardState(
             v=torch.full(
                 input_tensor.shape,
+                torch.as_tensor(self.p.v_leak).detach(),
+                device=input_tensor.device,
+                dtype=torch.float32,
+            )
+        )
+        state.v.requires_grad = True
+        return state
+    
+class LIFBox(SNN):
+    def __init__(self, p: LIFBoxParameters = LIFBoxParameters(), **kwargs):
+        super().__init__(
+            activation=lif_box_feed_forward_step,
+            state_fallback=self.initial_state,
+            p = LIFBoxParameters(
+                torch.as_tensor(p.tau_mem_inv),
+                torch.as_tensor(p.v_leak),
+                torch.as_tensor(p.v_th),
+                torch.as_tensor(p.v_reset),
+                p.method,
+                torch.as_tensor(p.alpha),
+            ), 
+            **kwargs)
+    
+    def initial_state(self, input_tensor: torch.Tensor) -> LIFBoxFeedForwardState:
+        state = LIFBoxFeedForwardState(
+            v=torch.full(
+                input_tensor.shape[1:],  # Assume first dimension is time
                 torch.as_tensor(self.p.v_leak).detach(),
                 device=input_tensor.device,
                 dtype=torch.float32,
