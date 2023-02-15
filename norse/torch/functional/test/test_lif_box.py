@@ -3,6 +3,7 @@ import torch
 from norse.torch.functional.lif_box import (
     LIFBoxFeedForwardState,
     lif_box_feed_forward_step,
+    lif_box_feed_forward_integral,
 )
 
 
@@ -25,3 +26,12 @@ def test_lif_feed_forward_step_backward():
     z, s = lif_box_feed_forward_step(x, s)
     z.sum().backward()
     assert s.v.grad_fn is not None
+
+
+def test_lif_feed_forward_integral():
+    data = torch.randn(10, 5, 4)
+    s = LIFBoxFeedForwardState(v=10)
+
+    out, _ = lif_box_feed_forward_integral(data, s)
+
+    assert out.shape == (10, 5, 4)

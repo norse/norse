@@ -1,6 +1,6 @@
 import torch
 from norse.torch.functional.lif_box import LIFBoxFeedForwardState
-from norse.torch.module.lif_box import LIFBoxCell,LIFBox
+from norse.torch.module.lif_box import LIFBoxCell, LIFBox
 
 
 def test_lif_box_cell_feed_forward_step_batch():
@@ -19,10 +19,10 @@ def test_lif_box_cell_backward():
     z.sum().backward()
     assert s.v.grad_fn is not None
 
+
 def test_lif_box_in_time():
     layer = LIFBox()
     data = torch.randn(10, 5, 2)
     out, _ = layer(data)
 
     assert out.shape == (10, 5, 2)
-    

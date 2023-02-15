@@ -95,12 +95,13 @@ def lif_box_feed_forward_step(
 
     return z_new, LIFBoxFeedForwardState(v=v_new)
 
+
 def lif_box_feed_forward_integral(
-        input_tensor: torch.Tensor,
-        state: LIFBoxFeedForwardState,
-        p: LIFBoxParameters = LIFBoxParameters(),
-        dt: float = 0.001,
-) -> Tuple[torch.Tensor,LIFBoxFeedForwardState]:
+    input_tensor: torch.Tensor,
+    state: LIFBoxFeedForwardState,
+    p: LIFBoxParameters = LIFBoxParameters(),
+    dt: float = 0.001,
+) -> Tuple[torch.Tensor, LIFBoxFeedForwardState]:
     r"""Computes multiple euler-integration steps of LIF Box neuron model. It follows the following ODE
 
     .. math::
@@ -121,13 +122,12 @@ def lif_box_feed_forward_integral(
         state (LIFBoxFeedForwardState): current state of the LIF neuron
         p (LIFBoxParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
-    
+
     """
     outputs = []
     for input_spikes in input_tensor:
-
-        #compute voltage updates
-        dv = dt*p.tau_mem_inv * ((p.v_leak - state.v)+input_spikes)
+        # compute voltage updates
+        dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + input_spikes)
         v_decayed = state.v + dv
 
         # compute new spikes
@@ -138,5 +138,4 @@ def lif_box_feed_forward_integral(
         outputs.append(z_new)
         state = LIFBoxFeedForwardState(v=v_new)
 
-    return torch.stack(outputs),state
-        
+    return torch.stack(outputs), state
