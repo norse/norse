@@ -32,7 +32,12 @@ from .lif_adex import (
     LIFAdExParameters,
     LIFAdExState,
 )
-from .lif_box import LIFBoxFeedForwardState, LIFBoxParameters, LIFBoxCell
+from .lif_box import (
+    LIFBoxFeedForwardState,
+    LIFBoxParameters,
+    LIFBoxCell,
+    LIFBox,
+)
 from .lif_correlation import (
     LIFCorrelation,
     LIFCorrelationParameters,
@@ -127,6 +132,7 @@ __all__ = [
     "LIFBoxFeedForwardState",
     "LIFBoxParameters",
     "LIFBoxCell",
+    "LIFBox",
     # LIF Correlation
     "LIFCorrelation",
     "LIFCorrelationParameters",
