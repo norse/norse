@@ -100,38 +100,3 @@ def test_ExpFilterforward_():
         )
     actual = filter_layer(data)
     assert torch.allclose(actual, prediction)
-
-
-def test_ExpFilter_forward_few_inputs():
-    # parameter = 1e-3; weights = random and feature_size = 4; with bias
-    feature_size = 4
-    output_size = 1
-    tau_filter_inv = 1  # => parameter = exp(-1e-3)
-    filter_layer = ExpFilter(
-        feature_size, output_size, tau_filter_inv=tau_filter_inv, bias=True
-    )
-    for name, param in filter_layer.named_parameters():
-        if name == "linear.weight":
-            weight = param
-        if name == "linear.bias":
-            bias = param
-    model_parameter = torch.exp(torch.tensor([-1e-3])).item()
-    timestep = 10
-    batch_size = 2
-
-    data = torch.rand(size=(timestep, batch_size, feature_size))
-    data_after_linear_layer = torch.zeros((data.shape[0], data.shape[1], 1))
-    for i in range(data.shape[0]):
-        for j in range(data.shape[1]):
-            data_after_linear_layer[i, j] = (
-                torch.mm(data[i, j : j + 1], weight.T) + bias
-            )
-    prediction = torch.zeros((data.shape[0], data.shape[1], 1))
-    prediction[0] = data_after_linear_layer[0]
-
-    for i in range(prediction.shape[0] - 1):
-        prediction[i + 1] += (
-            prediction[i] * model_parameter + data_after_linear_layer[i + 1]
-        )
-    actual = filter_layer(data)
-    assert torch.allclose(actual, prediction)

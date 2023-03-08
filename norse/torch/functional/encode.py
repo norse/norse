@@ -120,11 +120,11 @@ def population_encode(
         Note: An extra step is required to convert the values to spikes, see above.
     """
     # Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py
-    size = (input_values.size(0), out_features) + input_values.size()[1:]
+    size = input_values.shape + (out_features,)
     if not scale:
         scale = input_values.max()
     centres = torch.linspace(0, scale, out_features).expand(size)
-    x = input_values.unsqueeze(1).expand(size)
+    x = input_values.unsqueeze(-1).expand(size)
     distances = distance_function(x, centres) * scale
     return kernel(distances)
 
@@ -134,6 +134,7 @@ def poisson_encode(
     seq_length: int,
     f_max: float = 100,
     dt: float = 0.001,
+    generator: torch.Generator = None,
 ) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
@@ -147,12 +148,18 @@ def poisson_encode(
         sequence_length (int): Number of time steps in the resulting spike train.
         f_max (float): Maximal frequency (in Hertz) which will be emitted.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
+        generator (torch.Generator): Generator for pseudorandom numbers. Usually, generator.manual_seed(seed value) is passed as the argument
 
     Returns:
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
     return (
-        torch.rand(seq_length, *input_values.shape, device=input_values.device).float()
+        torch.rand(
+            seq_length,
+            *input_values.shape,
+            device=input_values.device,
+            generator=generator
+        ).float()
         < dt * f_max * input_values
     ).float()
 
@@ -161,6 +168,7 @@ def poisson_encode_step(
     input_values: torch.Tensor,
     f_max: float = 1000,
     dt: float = 0.001,
+    generator: torch.Generator = None,
 ) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
@@ -178,13 +186,19 @@ def poisson_encode_step(
         A tensor containing binary values in .
     """
     return (
-        torch.rand(*input_values.shape, device=input_values.device).float()
+        torch.rand(
+            *input_values.shape, device=input_values.device, generator=generator
+        ).float()
         < dt * f_max * input_values
     ).float()
 
 
 def signed_poisson_encode(
-    input_values: torch.Tensor, seq_length: int, f_max: float = 100, dt: float = 0.001
+    input_values: torch.Tensor,
+    seq_length: int,
+    f_max: float = 100,
+    dt: float = 0.001,
+    generator: torch.Generator = None,
 ) -> torch.Tensor:
     """
     Encodes a tensor of input values, which are assumed to be in the
@@ -196,6 +210,7 @@ def signed_poisson_encode(
         sequence_length (int): Number of time steps in the resulting spike train.
         f_max (float): Maximal frequency (in Hertz) which will be emitted.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
+        generator (torch.Generator): Generator for pseudorandom numbers. Usually, generator.manual_seed(seed value) is passed as the argument
 
     Returns:
         A tensor with an extra dimension of size `seq_length` containing values in {-1,0,1}
@@ -203,14 +218,17 @@ def signed_poisson_encode(
     return (
         torch.sign(input_values)
         * (
-            torch.rand(seq_length, *input_values.shape).float()
+            torch.rand(seq_length, *input_values.shape, generator=generator).float()
             < dt * f_max * torch.abs(input_values)
         ).float()
     )
 
 
 def signed_poisson_encode_step(
-    input_values: torch.Tensor, f_max: float = 1000, dt: float = 0.001
+    input_values: torch.Tensor,
+    f_max: float = 1000,
+    dt: float = 0.001,
+    generator: torch.Generator = None,
 ) -> torch.Tensor:
     """
     Creates a poisson distributed signed spike vector, when
@@ -219,6 +237,7 @@ def signed_poisson_encode_step(
         input_values (torch.Tensor): Input data tensor with values assumed to be in the interval [-1,1].
         f_max (float): Maximal frequency (in Hertz) which will be emitted.
         dt (float): Integration time step (should coincide with the integration time step used in the model)
+        generator (torch.Generator): Generator for pseudorandom numbers. Usually, generator.manual_seed(seed value) is passed as the argument
 
     Returns:
         A tensor containing values in {-1,0,1}.
@@ -226,7 +245,9 @@ def signed_poisson_encode_step(
     return (
         torch.sign(input_values)
         * (
-            torch.rand(*input_values.shape, device=input_values.device).float()
+            torch.rand(
+                *input_values.shape, device=input_values.device, generator=generator
+            ).float()
             < dt * f_max * torch.abs(input_values)
         ).float()
     )
@@ -250,15 +271,16 @@ def spike_latency_lif_encode(
     """
     voltage = torch.zeros_like(input_current)
     z = torch.zeros_like(input_current)
-    mask = torch.zeros_like(input_current).bool()
+    mask = torch.zeros_like(input_current)
+    zeros_mask = torch.zeros_like(input_current)
     spikes = []
 
     for _ in range(seq_length):
         z, voltage = lif_current_encoder(
             input_current=input_current, voltage=voltage, p=p, dt=dt
         )
-        spikes += [torch.where(mask, torch.zeros_like(z), z)]
-        mask[z.bool()] = 1
+        spikes.append(torch.where(mask > 0, zeros_mask, z))
+        mask += z
 
     return torch.stack(spikes)
 
@@ -285,10 +307,10 @@ def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
     Returns:
         A tensor where the first spike (1) is retained in the sequence
     """
-    mask = torch.zeros(input_spikes.size()[1:], device=input_spikes.device).byte()
+    mask = torch.zeros(input_spikes.size()[1:], device=input_spikes.device)
     spikes = []
     zero_spikes = torch.zeros_like(input_spikes[0])
     for index in range(input_spikes.shape[0]):
-        spikes.append(torch.where(mask, zero_spikes, input_spikes[index]))
-        mask[input_spikes[index].bool()] = 1
+        spikes.append(torch.where(mask > 0, zero_spikes, input_spikes[index]))
+        mask += spikes[-1]
     return torch.stack(spikes)

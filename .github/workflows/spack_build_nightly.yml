@@ -1,7 +1,8 @@
-name: Build via Spack
+name: Build via Spack (nightly)
 
 on:
-  pull_request:
+  schedule:
+    - cron: '4 2 * * *'
 
 jobs:
   build:
@@ -22,10 +23,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.spack-cache
-          key: cache-spack-${{ github.ref }}-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.spack-python }}-${{ matrix.spack-pytorch }}
-          restore-keys: |
-            cache-spack-main-latest-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.spack-python }}-${{ matrix.spack-pytorch }}
-            cache-spack-main-latest
+          key: cache-spack-main-latest-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.spack-python }}-${{ matrix.spack-pytorch }}
       - name: Build norse's Spack package
         env:
           MATRIX_SPACK_PYTHON: ${{ matrix.spack-python }}

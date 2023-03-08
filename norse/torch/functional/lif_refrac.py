@@ -82,7 +82,7 @@ def compute_refractory_update(
         state (LIFRefracState): Initial state of the refractory neuron.
         z_new (torch.Tensor): New spikes that were generated.
         v_new (torch.Tensor): New voltage after the lif update step.
-        p (torch.Tensor): Refractoryp.
+        p (LIFRefracParameters): Refractory Parameters.
     """
     refrac_mask = threshold(state.rho, p.lif.method, p.lif.alpha)
     v_new = (1 - refrac_mask) * v_new + refrac_mask * state.lif.v

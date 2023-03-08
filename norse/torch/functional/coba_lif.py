@@ -69,7 +69,7 @@ default_bio_parameters = CobaLIFParameters(
 
 
 def coba_lif_step(
-    input_tensor: torch.Tensor,
+    input_spikes: torch.Tensor,
     state: CobaLIFState,
     input_weights: torch.Tensor,
     recurrent_weights: torch.Tensor,
@@ -79,7 +79,7 @@ def coba_lif_step(
     """Euler integration step for a conductance based LIF neuron.
 
     Parameters:
-        input_tensor (torch.Tensor): the input spikes at the current time step
+        input_spikes (torch.Tensor): the input spikes at the current time step
         s (CobaLIFState): current state of the neuron
         input_weights (torch.Tensor): input weights
             (sign determines  contribution to inhibitory / excitatory input)
@@ -88,24 +88,24 @@ def coba_lif_step(
         p (CobaLIFParameters): parameters of the neuron
         dt (float): Integration time step
     """
-    dg_e = -dt * p.tau_syn_exc_inv * state.g_e
-    g_e = state.g_e + dg_e
-    dg_i = -dt * p.tau_syn_inh_inv * state.g_i
-    g_i = state.g_i + dg_i
-
-    g_e = g_e + torch.nn.functional.linear(
-        input_tensor, torch.nn.functional.relu(input_weights)
+    # conductance jumps
+    g_e = state.g_e + torch.nn.functional.linear(
+        input_spikes, torch.nn.functional.relu(input_weights)
     )
-    g_i = g_i + torch.nn.functional.linear(
-        input_tensor, torch.nn.functional.relu(-input_weights)
+    g_i = state.g_i + torch.nn.functional.linear(
+        input_spikes, torch.nn.functional.relu(-input_weights)
     )
 
-    g_e = g_e + torch.nn.functional.linear(
+    g_e = state.g_e + torch.nn.functional.linear(
         state.z, torch.nn.functional.relu(recurrent_weights)
     )
-    g_i = g_i + torch.nn.functional.linear(
+    g_i = state.g_i + torch.nn.functional.linear(
         state.z, torch.nn.functional.relu(-recurrent_weights)
     )
+    dg_e = -dt * p.tau_syn_exc_inv * g_e
+    g_e = g_e + dg_e
+    dg_i = -dt * p.tau_syn_inh_inv * g_i
+    g_i = g_i + dg_i
 
     dv = (
         dt
@@ -151,13 +151,14 @@ def coba_lif_feed_forward_step(
         p (CobaLIFParameters): parameters of the neuron
         dt (float): Integration time step
     """
-    dg_e = -dt * p.tau_syn_exc_inv * state.g_e
-    g_e = state.g_e + dg_e
-    dg_i = -dt * p.tau_syn_inh_inv * state.g_i
-    g_i = state.g_i + dg_i
+    # conductance jumps
+    g_e = state.g_e + torch.nn.functional.relu(input_tensor)
+    g_i = state.g_i + torch.nn.functional.relu(-input_tensor)
 
-    g_e = g_e + torch.nn.functional.relu(input_tensor)
-    g_i = g_i + torch.nn.functional.relu(-input_tensor)
+    dg_e = -dt * p.tau_syn_exc_inv * g_e
+    g_e = g_e + dg_e
+    dg_i = -dt * p.tau_syn_inh_inv * g_i
+    g_i = g_i + dg_i
 
     dv = (
         dt

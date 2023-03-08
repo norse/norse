@@ -13,19 +13,21 @@ auto lif_feed_forward_step(torch::Tensor input_tensor,
 {
   auto [v, i] = s;
   auto [tau_syn_inv, tau_mem_inv, v_leak, v_th, v_reset, m, alpha] = p;
-  auto dv = dt * tau_mem_inv * ((v_leak - v) + i);
+
+  // compute current jumps
+  auto i_jump = (i + input_tensor);
+
+  auto dv = dt * tau_mem_inv * ((v_leak - v) + i_jump);
   auto v_decayed = v + dv;
 
   // compute current updates
-  auto di = -dt * tau_syn_inv * i;
-  auto i_decayed = i + di;
+  auto di = -dt * tau_syn_inv * i_jump;
+  auto i_new = i_jump + di;
 
   // compute new spikes
   auto z_new = f(v_decayed - v_th, alpha);
   // compute reset
   auto v_new = (1 - z_new) * v_decayed + z_new * v_reset;
-  // compute current jumps
-  auto i_new = (i_decayed + input_tensor);
 
   return {z_new, v_new, i_new};
 }
@@ -70,21 +72,22 @@ auto lif_step(torch::Tensor input_tensor,
 {
   auto [z, v, i] = s;
   auto [tau_syn_inv, tau_mem_inv, v_leak, v_th, v_reset, m, alpha] = p;
-  auto dv = dt * tau_mem_inv * ((v_leak - v) + i);
+  // compute current jumps
+  auto i_jump =
+      (i + torch::nn::functional::linear(input_tensor, input_weights) +
+       torch::nn::functional::linear(z, recurrent_weights));
+  auto dv = dt * tau_mem_inv * ((v_leak - v) + i_jump);
   auto v_decayed = v + dv;
 
   // compute current updates
-  auto di = -dt * tau_syn_inv * i;
-  auto i_decayed = i + di;
+  auto di = -dt * tau_syn_inv * i_jump;
+  auto i_new = i_jump + di;
 
   // compute new spikes
   auto z_new = f(v_decayed - v_th, alpha);
   // compute reset
   auto v_new = (1 - z_new) * v_decayed + z_new * v_reset;
-  // compute current jumps
-  auto i_new =
-      (i_decayed + torch::nn::functional::linear(input_tensor, input_weights) +
-       torch::nn::functional::linear(z, recurrent_weights));
+
   return {z_new, v_new, i_new};
 }
 

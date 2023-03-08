@@ -5,4 +5,4 @@ from . import benchmark, dataset, task, torch, utils
 
 __all__ = ["benchmark", "dataset", "task", "torch", "utils"]
 
-__version__ = "0.0.7"
+__version__ = "1.0.0"

@@ -9,7 +9,7 @@ from norse.torch.functional.lif import (
 from norse.torch.module.encode import PoissonEncoder
 
 # pytype: disable=import-error
-from benchmark import BenchmarkParameters
+from .benchmark import BenchmarkParameters
 
 # pytype: enable=import-error
 

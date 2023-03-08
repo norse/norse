@@ -8,6 +8,7 @@ from norse.torch.functional.encode import (
     constant_current_lif_encode,
     spike_latency_lif_encode,
     spike_latency_encode,
+    poisson_encode,
 )
 
 # Fixes a linting error:
@@ -44,10 +45,15 @@ def test_encode_population_scale():
 
 
 def test_encode_population_batch():
-    data = torch.as_tensor([[0, 0, 0], [0.5, 0.5, 0.5], [1, 1, 1]])
+    data = torch.as_tensor([[0, 0, 0, 0], [0.5, 0.5, 0.5, 0.5], [1, 1, 1, 1]])
     out_features = 3
     actual = population_encode(data, out_features)
-    assert actual.shape == (3, 3, 3)
+    assert actual.shape == (3, 4, 3)
+
+    data = torch.randn(10, 2, 3)
+    out_features = 8
+    actual = population_encode(data, out_features)
+    assert actual.shape == (10, 2, 3, 8)
 
 
 def test_constant_current_lif_encode():
@@ -124,3 +130,24 @@ def test_spike_latency_encode_without_batch_3():
         ]
     )
     assert torch.equal(actual, expected)
+
+
+def test_poisson_encode():
+
+    generator0 = torch.Generator()
+    generator1 = torch.Generator()
+
+    seed0 = generator0.manual_seed(45)
+    seed1 = generator1.manual_seed(1043)
+
+    data = torch.as_tensor([0.0, 0.5, 1.0])
+    seq_length = 10
+
+    spikes_seed0 = poisson_encode(data, seq_length, generator=seed0).squeeze()
+
+    spikes_seed1 = poisson_encode(data, seq_length, generator=seed0).squeeze()
+
+    print("seed0 spikes:", spikes_seed0)
+    print("seed1 spikes:", spikes_seed1)
+
+    assert torch.equal(spikes_seed0, spikes_seed1) == False

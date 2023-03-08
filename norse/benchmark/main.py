@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from functools import partial
 import logging
+from pathlib import Path
 from typing import Callable
 
 import numpy as np
@@ -10,11 +11,10 @@ import pandas as pd
 
 # pytype: enable=import-error
 
-import time
 import gc
 
 # pytype: disable=import-error
-from benchmark import BenchmarkConfig, BenchmarkData, BenchmarkParameters
+from .benchmark import BenchmarkConfig, BenchmarkData, BenchmarkParameters
 
 # pytype: enable=import-error
 
@@ -99,7 +99,8 @@ def main(args):
 
         run_benchmark(args, genn_lif.lif_feed_forward_benchmark, label="GeNN_lif")
     if args.norse:
-        import norse_lif
+        import norse
+        from . import norse_lif
 
         if args.profile:
             import torch.autograd.profiler as profiler
@@ -108,7 +109,9 @@ def main(args):
                 profile_memory=True, use_cuda=(args.device == "cuda")
             ) as prof:
                 run_benchmark(
-                    args, norse_lif.lif_feed_forward_benchmark, label="Norse_lif"
+                    args,
+                    norse_lif.lif_feed_forward_benchmark,
+                    label=f"Norse v{norse.__version__} lif",
                 )
             prof.export_chrome_trace("trace.json")
         else:
@@ -119,6 +122,12 @@ def main(args):
         run_benchmark(args, norse_lif_cg.lif_cell_benchmark, label="Norse_lif")
         run_benchmark(args, norse_lif_cg.lif_cell_cg_benchmark, label="Norse_lif_cg")
 
+    else:
+        run_benchmark(
+                args,
+                norse_lif.lif_feed_forward_benchmark,
+                label=f"Norse v{norse.__version__} lif",
+        )
     # pytype: enable=import-error
 
 
@@ -139,9 +148,9 @@ def run_benchmark(args, function, label):
     collector = partial(collect, label=label)
     results = benchmark(function, collector, config)
 
-    timestamp = time.strftime("%Y-%m-%d-%H-%M-%S")
-    filename = f"{timestamp}-{label}.csv"
-    pd.DataFrame(results).to_csv(filename)
+    filename = f"benchmark_results.csv"
+    is_file = Path(filename).is_file()
+    pd.DataFrame(results).to_csv(filename, mode="a", index=False, header=not is_file)
 
 
 if __name__ == "__main__":

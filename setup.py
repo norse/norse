@@ -29,7 +29,7 @@ setup(
     install_requires=install_requires,
     setup_requires=["setuptools", "wheel", "torch"],
     name="norse",
-    version="0.0.7-1",
+    version="1.0.0",
     description="A library for deep learning with spiking neural networks",
     long_description=readme_text,
     long_description_content_type="text/markdown",
@@ -38,7 +38,7 @@ setup(
     author_email="christian.pehle@gmail.com, jens@jepedersen.dk",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
