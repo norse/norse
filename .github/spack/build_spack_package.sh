@@ -22,13 +22,19 @@ source spack/share/spack/setup-env.sh
 # ignore existing installed or buildcache packages for concretization
 spack config --scope defaults add concretizer:reuse:false
 
+cat <<EOF > spack/etc/spack/packages.yaml
+packages:
+  all:
+    compiler: [$COMPILER_VERSION]
+EOF
+
 spack repo create custom_repo
 mkdir -p custom_repo/packages/py-norse
 cp "$WORKSPACE/spack/package.py" custom_repo/packages/py-norse
 spack repo add "${TMP_DIR}/custom_repo"
 
 # we install a stripped down py-torch (no cuda, mpi, ...)
-PACKAGE_PYTORCH_VARIANT="~cuda~mkldnn~rocm~distributed~onnx_ml~xnnpack~valgrind"
+PACKAGE_PYTORCH_VARIANT="~cuda~mkldnn~rocm~distributed~onnx_ml~xnnpack~valgrind~breakpad"
 PACKAGE_PYTORCH="py-torch${PACKAGE_PYTORCH_VARIANT}"
 
 # pin specific py-torch version if provided by env var
@@ -42,7 +48,10 @@ if [ -n "${MATRIX_SPACK_PYTHON}" ]; then
 fi
 
 # the ubuntu CI runner runs on multiple cpu archs; compile for an old one
-ARCH="linux-ubuntu20.04-x86_64"
+ARCH="linux-ubuntu22.04-x86_64_v4"
+
+# do some more cache cleaning
+spack clean -fmp
 
 # trigger spack's bootstrapping
 spack spec zlib
@@ -61,6 +70,8 @@ echo "spack spec -t py-norse@main ^${PACKAGE_PYTORCH}"
 spack spec -t py-norse@main "^${PACKAGE_PYTORCH}"
 echo "spack spec -t -I py-norse@main ^${PACKAGE_PYTORCH} arch=${ARCH}"
 spack spec -t -I py-norse@main "^${PACKAGE_PYTORCH}" "arch=${ARCH}"
+
+mkdir -p "${BUILDCACHE_MIRROR}"/build_cache
 
 # enable buildcache (for faster CI)
 spack mirror add spack_ci_cache "${BUILDCACHE_MIRROR}"
