@@ -133,7 +133,6 @@ def test_spike_latency_encode_without_batch_3():
 
 
 def test_poisson_encode():
-
     generator0 = torch.Generator()
     generator1 = torch.Generator()
 

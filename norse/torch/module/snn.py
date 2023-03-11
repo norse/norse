@@ -333,6 +333,7 @@ class SNNRecurrent(torch.nn.Module):
         if not autapses:
             with torch.no_grad():
                 self.recurrent_weights.fill_diagonal_(0.0)
+
             # Eradicate gradient updates from autapses
             def autapse_hook(gradient):
                 return gradient.clone().fill_diagonal_(0.0)

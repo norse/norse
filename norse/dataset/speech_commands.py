@@ -121,7 +121,7 @@ def label_to_index(dataset):
     }
     all_labels = set()
 
-    for (_, _, label, _, _) in dataset:
+    for _, _, label, _, _ in dataset:
         all_labels.add(label)
 
     unknown = all_labels - known
