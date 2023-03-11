@@ -34,7 +34,7 @@ cp "$WORKSPACE/spack/package.py" custom_repo/packages/py-norse
 spack repo add "${TMP_DIR}/custom_repo"
 
 # we install a stripped down py-torch (no cuda, mpi, ...)
-PACKAGE_PYTORCH_VARIANT="~cuda~mkldnn~rocm~distributed~onnx_ml~xnnpack~valgrind~breakpad
+PACKAGE_PYTORCH_VARIANT="~cuda~mkldnn~rocm~distributed~onnx_ml~xnnpack~valgrind~breakpad"
 PACKAGE_PYTORCH="py-torch${PACKAGE_PYTORCH_VARIANT}"
 
 # pin specific py-torch version if provided by env var
