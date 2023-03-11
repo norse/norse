@@ -1,0 +1,62 @@
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/asyncio/base_events.py", line 647, in run_until_complete
+    return future.result()
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import torch
+from ipywidgets import interact, IntSlider, FloatSlider
+from functools import partial
+IntSlider = partial(IntSlider, continuous_update=False)
+FloatSlider = partial(FloatSlider, continuous_update=False)
+
+
+@interact(
+    tau_mem=FloatSlider(min=10,max=200,step=1.0, value=10),
+    tau_syn=FloatSlider(min=10,max=200,step=1.0, value=20),
+    t0=IntSlider(min=0, max=1000, step=1, value=20),
+    t1=IntSlider(min=0, max=1000, step=1, value=100),
+)
+def experiment(tau_mem, tau_syn, t0, t1):
+    plt.figure()
+    num_neurons = 1
+    tau_mem_inv = torch.tensor([1/(tau_mem * 0.001)])
+    tau_syn_inv = torch.tensor([1/(tau_syn * 0.001)])
+    data = torch.zeros(1000,num_neurons)
+    data[t0] =  1.0
+    data[t1] = 1.0
+
+    voltage_trace, _ = norse.torch.LI(p=norse.torch.LIParameters(tau_mem_inv=tau_mem_inv, tau_syn_inv=tau_syn_inv))(data)
+    plt.xlabel('time [ms]')
+    plt.ylabel('membrane potential')
+    for i in range(num_neurons):
+        plt.plot(voltage_trace.detach()[:,i])
+    plt.axvline(t0, color='red', alpha=0.9)
+    plt.axvline(t1, color='red', alpha=0.9)
+    plt.show()
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[5], line 2[0m
+[1;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01mtorch[39;00m
+[0;32m----> 2[0m [38;5;28;01mfrom[39;00m [38;5;21;01mipywidgets[39;00m [38;5;28;01mimport[39;00m interact, IntSlider, FloatSlider
+[1;32m      3[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfunctools[39;00m [38;5;28;01mimport[39;00m partial
+[1;32m      4[0m IntSlider [38;5;241m=[39m partial(IntSlider, continuous_update[38;5;241m=[39m[38;5;28;01mFalse[39;00m)
+
+[0;31mModuleNotFoundError[0m: No module named 'ipywidgets'
+ModuleNotFoundError: No module named 'ipywidgets'
+
