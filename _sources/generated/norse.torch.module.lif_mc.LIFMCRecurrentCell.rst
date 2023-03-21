@@ -45,9 +45,11 @@
       ~LIFMCRecurrentCell.register_forward_hook
       ~LIFMCRecurrentCell.register_forward_pre_hook
       ~LIFMCRecurrentCell.register_full_backward_hook
+      ~LIFMCRecurrentCell.register_full_backward_pre_hook
       ~LIFMCRecurrentCell.register_load_state_dict_post_hook
       ~LIFMCRecurrentCell.register_module
       ~LIFMCRecurrentCell.register_parameter
+      ~LIFMCRecurrentCell.register_state_dict_pre_hook
       ~LIFMCRecurrentCell.requires_grad_
       ~LIFMCRecurrentCell.set_extra_state
       ~LIFMCRecurrentCell.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LIFMCRecurrentCell.T_destination
+      ~LIFMCRecurrentCell.call_super_init
       ~LIFMCRecurrentCell.dump_patches
       ~LIFMCRecurrentCell.training
    

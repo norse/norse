@@ -44,9 +44,11 @@
       ~LILinearCell.register_forward_hook
       ~LILinearCell.register_forward_pre_hook
       ~LILinearCell.register_full_backward_hook
+      ~LILinearCell.register_full_backward_pre_hook
       ~LILinearCell.register_load_state_dict_post_hook
       ~LILinearCell.register_module
       ~LILinearCell.register_parameter
+      ~LILinearCell.register_state_dict_pre_hook
       ~LILinearCell.requires_grad_
       ~LILinearCell.set_extra_state
       ~LILinearCell.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~LILinearCell.T_destination
+      ~LILinearCell.call_super_init
       ~LILinearCell.dump_patches
       ~LILinearCell.training
    

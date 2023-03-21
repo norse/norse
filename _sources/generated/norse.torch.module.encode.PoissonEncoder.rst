@@ -44,9 +44,11 @@
       ~PoissonEncoder.register_forward_hook
       ~PoissonEncoder.register_forward_pre_hook
       ~PoissonEncoder.register_full_backward_hook
+      ~PoissonEncoder.register_full_backward_pre_hook
       ~PoissonEncoder.register_load_state_dict_post_hook
       ~PoissonEncoder.register_module
       ~PoissonEncoder.register_parameter
+      ~PoissonEncoder.register_state_dict_pre_hook
       ~PoissonEncoder.requires_grad_
       ~PoissonEncoder.set_extra_state
       ~PoissonEncoder.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~PoissonEncoder.T_destination
+      ~PoissonEncoder.call_super_init
       ~PoissonEncoder.dump_patches
       ~PoissonEncoder.training
    

@@ -45,9 +45,11 @@
       ~LSNNRecurrentCell.register_forward_hook
       ~LSNNRecurrentCell.register_forward_pre_hook
       ~LSNNRecurrentCell.register_full_backward_hook
+      ~LSNNRecurrentCell.register_full_backward_pre_hook
       ~LSNNRecurrentCell.register_load_state_dict_post_hook
       ~LSNNRecurrentCell.register_module
       ~LSNNRecurrentCell.register_parameter
+      ~LSNNRecurrentCell.register_state_dict_pre_hook
       ~LSNNRecurrentCell.requires_grad_
       ~LSNNRecurrentCell.set_extra_state
       ~LSNNRecurrentCell.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LSNNRecurrentCell.T_destination
+      ~LSNNRecurrentCell.call_super_init
       ~LSNNRecurrentCell.dump_patches
       ~LSNNRecurrentCell.training
    

@@ -45,9 +45,11 @@
       ~LIFRefracCell.register_forward_hook
       ~LIFRefracCell.register_forward_pre_hook
       ~LIFRefracCell.register_full_backward_hook
+      ~LIFRefracCell.register_full_backward_pre_hook
       ~LIFRefracCell.register_load_state_dict_post_hook
       ~LIFRefracCell.register_module
       ~LIFRefracCell.register_parameter
+      ~LIFRefracCell.register_state_dict_pre_hook
       ~LIFRefracCell.requires_grad_
       ~LIFRefracCell.set_extra_state
       ~LIFRefracCell.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LIFRefracCell.T_destination
+      ~LIFRefracCell.call_super_init
       ~LIFRefracCell.dump_patches
       ~LIFRefracCell.training
    

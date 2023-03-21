@@ -44,9 +44,11 @@
       ~SignedPoissonEncoder.register_forward_hook
       ~SignedPoissonEncoder.register_forward_pre_hook
       ~SignedPoissonEncoder.register_full_backward_hook
+      ~SignedPoissonEncoder.register_full_backward_pre_hook
       ~SignedPoissonEncoder.register_load_state_dict_post_hook
       ~SignedPoissonEncoder.register_module
       ~SignedPoissonEncoder.register_parameter
+      ~SignedPoissonEncoder.register_state_dict_pre_hook
       ~SignedPoissonEncoder.requires_grad_
       ~SignedPoissonEncoder.set_extra_state
       ~SignedPoissonEncoder.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~SignedPoissonEncoder.T_destination
+      ~SignedPoissonEncoder.call_super_init
       ~SignedPoissonEncoder.dump_patches
       ~SignedPoissonEncoder.training
    

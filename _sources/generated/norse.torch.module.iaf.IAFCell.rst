@@ -45,9 +45,11 @@
       ~IAFCell.register_forward_hook
       ~IAFCell.register_forward_pre_hook
       ~IAFCell.register_full_backward_hook
+      ~IAFCell.register_full_backward_pre_hook
       ~IAFCell.register_load_state_dict_post_hook
       ~IAFCell.register_module
       ~IAFCell.register_parameter
+      ~IAFCell.register_state_dict_pre_hook
       ~IAFCell.requires_grad_
       ~IAFCell.set_extra_state
       ~IAFCell.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~IAFCell.T_destination
+      ~IAFCell.call_super_init
       ~IAFCell.dump_patches
       ~IAFCell.training
    

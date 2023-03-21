@@ -45,9 +45,11 @@
       ~LIFAdEx.register_forward_hook
       ~LIFAdEx.register_forward_pre_hook
       ~LIFAdEx.register_full_backward_hook
+      ~LIFAdEx.register_full_backward_pre_hook
       ~LIFAdEx.register_load_state_dict_post_hook
       ~LIFAdEx.register_module
       ~LIFAdEx.register_parameter
+      ~LIFAdEx.register_state_dict_pre_hook
       ~LIFAdEx.requires_grad_
       ~LIFAdEx.set_extra_state
       ~LIFAdEx.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LIFAdEx.T_destination
+      ~LIFAdEx.call_super_init
       ~LIFAdEx.dump_patches
       ~LIFAdEx.training
    

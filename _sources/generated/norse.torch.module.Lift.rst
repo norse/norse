@@ -44,9 +44,11 @@
       ~Lift.register_forward_hook
       ~Lift.register_forward_pre_hook
       ~Lift.register_full_backward_hook
+      ~Lift.register_full_backward_pre_hook
       ~Lift.register_load_state_dict_post_hook
       ~Lift.register_module
       ~Lift.register_parameter
+      ~Lift.register_state_dict_pre_hook
       ~Lift.requires_grad_
       ~Lift.set_extra_state
       ~Lift.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~Lift.T_destination
+      ~Lift.call_super_init
       ~Lift.dump_patches
       ~Lift.training
    

@@ -44,9 +44,11 @@
       ~SpikeLatencyLIFEncoder.register_forward_hook
       ~SpikeLatencyLIFEncoder.register_forward_pre_hook
       ~SpikeLatencyLIFEncoder.register_full_backward_hook
+      ~SpikeLatencyLIFEncoder.register_full_backward_pre_hook
       ~SpikeLatencyLIFEncoder.register_load_state_dict_post_hook
       ~SpikeLatencyLIFEncoder.register_module
       ~SpikeLatencyLIFEncoder.register_parameter
+      ~SpikeLatencyLIFEncoder.register_state_dict_pre_hook
       ~SpikeLatencyLIFEncoder.requires_grad_
       ~SpikeLatencyLIFEncoder.set_extra_state
       ~SpikeLatencyLIFEncoder.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~SpikeLatencyLIFEncoder.T_destination
+      ~SpikeLatencyLIFEncoder.call_super_init
       ~SpikeLatencyLIFEncoder.dump_patches
       ~SpikeLatencyLIFEncoder.training
    

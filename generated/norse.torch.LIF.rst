@@ -45,9 +45,11 @@
       ~LIF.register_forward_hook
       ~LIF.register_forward_pre_hook
       ~LIF.register_full_backward_hook
+      ~LIF.register_full_backward_pre_hook
       ~LIF.register_load_state_dict_post_hook
       ~LIF.register_module
       ~LIF.register_parameter
+      ~LIF.register_state_dict_pre_hook
       ~LIF.requires_grad_
       ~LIF.set_extra_state
       ~LIF.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LIF.T_destination
+      ~LIF.call_super_init
       ~LIF.dump_patches
       ~LIF.training
    

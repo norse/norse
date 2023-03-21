@@ -45,9 +45,11 @@
       ~LSNNRecurrent.register_forward_hook
       ~LSNNRecurrent.register_forward_pre_hook
       ~LSNNRecurrent.register_full_backward_hook
+      ~LSNNRecurrent.register_full_backward_pre_hook
       ~LSNNRecurrent.register_load_state_dict_post_hook
       ~LSNNRecurrent.register_module
       ~LSNNRecurrent.register_parameter
+      ~LSNNRecurrent.register_state_dict_pre_hook
       ~LSNNRecurrent.requires_grad_
       ~LSNNRecurrent.set_extra_state
       ~LSNNRecurrent.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LSNNRecurrent.T_destination
+      ~LSNNRecurrent.call_super_init
       ~LSNNRecurrent.dump_patches
       ~LSNNRecurrent.training
    

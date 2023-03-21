@@ -44,9 +44,11 @@
       ~SpikeLatencyEncoder.register_forward_hook
       ~SpikeLatencyEncoder.register_forward_pre_hook
       ~SpikeLatencyEncoder.register_full_backward_hook
+      ~SpikeLatencyEncoder.register_full_backward_pre_hook
       ~SpikeLatencyEncoder.register_load_state_dict_post_hook
       ~SpikeLatencyEncoder.register_module
       ~SpikeLatencyEncoder.register_parameter
+      ~SpikeLatencyEncoder.register_state_dict_pre_hook
       ~SpikeLatencyEncoder.requires_grad_
       ~SpikeLatencyEncoder.set_extra_state
       ~SpikeLatencyEncoder.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~SpikeLatencyEncoder.T_destination
+      ~SpikeLatencyEncoder.call_super_init
       ~SpikeLatencyEncoder.dump_patches
       ~SpikeLatencyEncoder.training
    

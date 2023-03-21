@@ -45,9 +45,11 @@
       ~LIFBoxCell.register_forward_hook
       ~LIFBoxCell.register_forward_pre_hook
       ~LIFBoxCell.register_full_backward_hook
+      ~LIFBoxCell.register_full_backward_pre_hook
       ~LIFBoxCell.register_load_state_dict_post_hook
       ~LIFBoxCell.register_module
       ~LIFBoxCell.register_parameter
+      ~LIFBoxCell.register_state_dict_pre_hook
       ~LIFBoxCell.requires_grad_
       ~LIFBoxCell.set_extra_state
       ~LIFBoxCell.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LIFBoxCell.T_destination
+      ~LIFBoxCell.call_super_init
       ~LIFBoxCell.dump_patches
       ~LIFBoxCell.training
    

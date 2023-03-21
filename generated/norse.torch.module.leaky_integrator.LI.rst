@@ -45,9 +45,11 @@
       ~LI.register_forward_hook
       ~LI.register_forward_pre_hook
       ~LI.register_full_backward_hook
+      ~LI.register_full_backward_pre_hook
       ~LI.register_load_state_dict_post_hook
       ~LI.register_module
       ~LI.register_parameter
+      ~LI.register_state_dict_pre_hook
       ~LI.requires_grad_
       ~LI.set_extra_state
       ~LI.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LI.T_destination
+      ~LI.call_super_init
       ~LI.dump_patches
       ~LI.training
    

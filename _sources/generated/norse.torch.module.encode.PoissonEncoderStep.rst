@@ -44,9 +44,11 @@
       ~PoissonEncoderStep.register_forward_hook
       ~PoissonEncoderStep.register_forward_pre_hook
       ~PoissonEncoderStep.register_full_backward_hook
+      ~PoissonEncoderStep.register_full_backward_pre_hook
       ~PoissonEncoderStep.register_load_state_dict_post_hook
       ~PoissonEncoderStep.register_module
       ~PoissonEncoderStep.register_parameter
+      ~PoissonEncoderStep.register_state_dict_pre_hook
       ~PoissonEncoderStep.requires_grad_
       ~PoissonEncoderStep.set_extra_state
       ~PoissonEncoderStep.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~PoissonEncoderStep.T_destination
+      ~PoissonEncoderStep.call_super_init
       ~PoissonEncoderStep.dump_patches
       ~PoissonEncoderStep.training
    

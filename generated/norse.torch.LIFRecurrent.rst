@@ -45,9 +45,11 @@
       ~LIFRecurrent.register_forward_hook
       ~LIFRecurrent.register_forward_pre_hook
       ~LIFRecurrent.register_full_backward_hook
+      ~LIFRecurrent.register_full_backward_pre_hook
       ~LIFRecurrent.register_load_state_dict_post_hook
       ~LIFRecurrent.register_module
       ~LIFRecurrent.register_parameter
+      ~LIFRecurrent.register_state_dict_pre_hook
       ~LIFRecurrent.requires_grad_
       ~LIFRecurrent.set_extra_state
       ~LIFRecurrent.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LIFRecurrent.T_destination
+      ~LIFRecurrent.call_super_init
       ~LIFRecurrent.dump_patches
       ~LIFRecurrent.training
    

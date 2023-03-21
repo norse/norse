@@ -44,9 +44,11 @@
       ~ConstantCurrentLIFEncoder.register_forward_hook
       ~ConstantCurrentLIFEncoder.register_forward_pre_hook
       ~ConstantCurrentLIFEncoder.register_full_backward_hook
+      ~ConstantCurrentLIFEncoder.register_full_backward_pre_hook
       ~ConstantCurrentLIFEncoder.register_load_state_dict_post_hook
       ~ConstantCurrentLIFEncoder.register_module
       ~ConstantCurrentLIFEncoder.register_parameter
+      ~ConstantCurrentLIFEncoder.register_state_dict_pre_hook
       ~ConstantCurrentLIFEncoder.requires_grad_
       ~ConstantCurrentLIFEncoder.set_extra_state
       ~ConstantCurrentLIFEncoder.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~ConstantCurrentLIFEncoder.T_destination
+      ~ConstantCurrentLIFEncoder.call_super_init
       ~ConstantCurrentLIFEncoder.dump_patches
       ~ConstantCurrentLIFEncoder.training
    

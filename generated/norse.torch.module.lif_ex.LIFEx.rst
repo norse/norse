@@ -45,9 +45,11 @@
       ~LIFEx.register_forward_hook
       ~LIFEx.register_forward_pre_hook
       ~LIFEx.register_full_backward_hook
+      ~LIFEx.register_full_backward_pre_hook
       ~LIFEx.register_load_state_dict_post_hook
       ~LIFEx.register_module
       ~LIFEx.register_parameter
+      ~LIFEx.register_state_dict_pre_hook
       ~LIFEx.requires_grad_
       ~LIFEx.set_extra_state
       ~LIFEx.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LIFEx.T_destination
+      ~LIFEx.call_super_init
       ~LIFEx.dump_patches
       ~LIFEx.training
    

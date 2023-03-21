@@ -49,9 +49,11 @@
       ~SequentialState.register_forward_pre_hook
       ~SequentialState.register_forward_state_hooks
       ~SequentialState.register_full_backward_hook
+      ~SequentialState.register_full_backward_pre_hook
       ~SequentialState.register_load_state_dict_post_hook
       ~SequentialState.register_module
       ~SequentialState.register_parameter
+      ~SequentialState.register_state_dict_pre_hook
       ~SequentialState.remove_forward_state_hooks
       ~SequentialState.requires_grad_
       ~SequentialState.set_extra_state
@@ -73,6 +75,7 @@
    .. autosummary::
    
       ~SequentialState.T_destination
+      ~SequentialState.call_super_init
       ~SequentialState.dump_patches
       ~SequentialState.training
    

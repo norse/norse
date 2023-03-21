@@ -45,9 +45,11 @@
       ~IzhikevichRecurrentCell.register_forward_hook
       ~IzhikevichRecurrentCell.register_forward_pre_hook
       ~IzhikevichRecurrentCell.register_full_backward_hook
+      ~IzhikevichRecurrentCell.register_full_backward_pre_hook
       ~IzhikevichRecurrentCell.register_load_state_dict_post_hook
       ~IzhikevichRecurrentCell.register_module
       ~IzhikevichRecurrentCell.register_parameter
+      ~IzhikevichRecurrentCell.register_state_dict_pre_hook
       ~IzhikevichRecurrentCell.requires_grad_
       ~IzhikevichRecurrentCell.set_extra_state
       ~IzhikevichRecurrentCell.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~IzhikevichRecurrentCell.T_destination
+      ~IzhikevichRecurrentCell.call_super_init
       ~IzhikevichRecurrentCell.dump_patches
       ~IzhikevichRecurrentCell.training
    

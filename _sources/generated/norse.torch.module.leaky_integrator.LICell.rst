@@ -45,9 +45,11 @@
       ~LICell.register_forward_hook
       ~LICell.register_forward_pre_hook
       ~LICell.register_full_backward_hook
+      ~LICell.register_full_backward_pre_hook
       ~LICell.register_load_state_dict_post_hook
       ~LICell.register_module
       ~LICell.register_parameter
+      ~LICell.register_state_dict_pre_hook
       ~LICell.requires_grad_
       ~LICell.set_extra_state
       ~LICell.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LICell.T_destination
+      ~LICell.call_super_init
       ~LICell.dump_patches
       ~LICell.training
    

@@ -45,9 +45,11 @@
       ~IzhikevichRecurrent.register_forward_hook
       ~IzhikevichRecurrent.register_forward_pre_hook
       ~IzhikevichRecurrent.register_full_backward_hook
+      ~IzhikevichRecurrent.register_full_backward_pre_hook
       ~IzhikevichRecurrent.register_load_state_dict_post_hook
       ~IzhikevichRecurrent.register_module
       ~IzhikevichRecurrent.register_parameter
+      ~IzhikevichRecurrent.register_state_dict_pre_hook
       ~IzhikevichRecurrent.requires_grad_
       ~IzhikevichRecurrent.set_extra_state
       ~IzhikevichRecurrent.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~IzhikevichRecurrent.T_destination
+      ~IzhikevichRecurrent.call_super_init
       ~IzhikevichRecurrent.dump_patches
       ~IzhikevichRecurrent.training
    

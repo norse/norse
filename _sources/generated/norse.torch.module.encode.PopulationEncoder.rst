@@ -44,9 +44,11 @@
       ~PopulationEncoder.register_forward_hook
       ~PopulationEncoder.register_forward_pre_hook
       ~PopulationEncoder.register_full_backward_hook
+      ~PopulationEncoder.register_full_backward_pre_hook
       ~PopulationEncoder.register_load_state_dict_post_hook
       ~PopulationEncoder.register_module
       ~PopulationEncoder.register_parameter
+      ~PopulationEncoder.register_state_dict_pre_hook
       ~PopulationEncoder.requires_grad_
       ~PopulationEncoder.set_extra_state
       ~PopulationEncoder.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~PopulationEncoder.T_destination
+      ~PopulationEncoder.call_super_init
       ~PopulationEncoder.dump_patches
       ~PopulationEncoder.training
    

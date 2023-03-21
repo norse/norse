@@ -45,9 +45,11 @@
       ~LIFCell.register_forward_hook
       ~LIFCell.register_forward_pre_hook
       ~LIFCell.register_full_backward_hook
+      ~LIFCell.register_full_backward_pre_hook
       ~LIFCell.register_load_state_dict_post_hook
       ~LIFCell.register_module
       ~LIFCell.register_parameter
+      ~LIFCell.register_state_dict_pre_hook
       ~LIFCell.requires_grad_
       ~LIFCell.set_extra_state
       ~LIFCell.share_memory
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LIFCell.T_destination
+      ~LIFCell.call_super_init
       ~LIFCell.dump_patches
       ~LIFCell.training
    

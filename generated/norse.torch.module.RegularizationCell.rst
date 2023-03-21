@@ -44,9 +44,11 @@
       ~RegularizationCell.register_forward_hook
       ~RegularizationCell.register_forward_pre_hook
       ~RegularizationCell.register_full_backward_hook
+      ~RegularizationCell.register_full_backward_pre_hook
       ~RegularizationCell.register_load_state_dict_post_hook
       ~RegularizationCell.register_module
       ~RegularizationCell.register_parameter
+      ~RegularizationCell.register_state_dict_pre_hook
       ~RegularizationCell.requires_grad_
       ~RegularizationCell.set_extra_state
       ~RegularizationCell.share_memory
@@ -67,6 +69,7 @@
    .. autosummary::
    
       ~RegularizationCell.T_destination
+      ~RegularizationCell.call_super_init
       ~RegularizationCell.dump_patches
       ~RegularizationCell.training
    

@@ -44,9 +44,11 @@
       ~LConv2d.register_forward_hook
       ~LConv2d.register_forward_pre_hook
       ~LConv2d.register_full_backward_hook
+      ~LConv2d.register_full_backward_pre_hook
       ~LConv2d.register_load_state_dict_post_hook
       ~LConv2d.register_module
       ~LConv2d.register_parameter
+      ~LConv2d.register_state_dict_pre_hook
       ~LConv2d.requires_grad_
       ~LConv2d.reset_parameters
       ~LConv2d.set_extra_state
@@ -68,6 +70,7 @@
    .. autosummary::
    
       ~LConv2d.T_destination
+      ~LConv2d.call_super_init
       ~LConv2d.dump_patches
       ~LConv2d.bias
       ~LConv2d.in_channels
