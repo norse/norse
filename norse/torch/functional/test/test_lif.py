@@ -1,6 +1,6 @@
+import pytest, os
 import torch
 
-import norse
 from norse.torch.functional.lif import (
     LIFState,
     LIFFeedForwardState,
@@ -56,6 +56,7 @@ def test_lif_feed_forward_step_batch():
     assert z.shape == (2, 1)
 
 
+@pytest.mark.skipif(os.name == "nt", reason="Windows does not support torch.compile")
 def test_lif_feed_forward_step_compile():
     x = torch.ones(10)
     s = LIFFeedForwardState(v=torch.zeros(10), i=torch.zeros(10))
@@ -115,6 +116,7 @@ def test_lif_integral():
     assert torch.allclose(s.v, torch.tensor([0.7717]), atol=1e-4)
 
 
+@pytest.mark.skipif(os.name == "nt", reason="Windows does not support torch.compile")
 def test_lif_integral_compile():
     x = torch.ones(8, 1)
     s = LIFFeedForwardState(v=torch.zeros(1), i=torch.zeros(1))

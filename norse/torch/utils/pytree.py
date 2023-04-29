@@ -1,7 +1,7 @@
 import functools
 from numbers import Number
 import typing
-from typing import Any, Callable, Optional, Tuple, Type, TypeVar
+from typing import Any, Callable, Type, TypeVar
 
 import torch
 from torch.utils._pytree import (

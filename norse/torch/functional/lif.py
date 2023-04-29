@@ -27,7 +27,7 @@ gradient approach that uses the :mod:`.heaviside` step function:
     H[n]=\begin{cases} 0, & n <= 0 \\ 1, & n \gt 0 \end{cases}
 
 """
-from typing import NamedTuple, Optional, Tuple
+from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
@@ -37,7 +37,6 @@ except ModuleNotFoundError:  # pragma: no cover
     pass
 
 from norse.torch.functional.threshold import threshold
-from norse.torch.utils.pytree import StateTuple, MultipleInheritanceNamedTupleMeta
 
 
 class LIFParameters(NamedTuple):

@@ -1,4 +1,4 @@
-import pytest
+import pytest, os
 
 import torch
 from torch import nn
@@ -13,6 +13,7 @@ def test_state_sequence():
     assert s[0].v.shape == (1, 6)
 
 
+@pytest.mark.skipif(os.name == "nt", reason="Windows does not support torch.compile")
 def test_state_sequence_compile():
     d = torch.ones(10, 1, 20)
     l = norse.LIFRecurrent(20, 6)
