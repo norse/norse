@@ -22,10 +22,10 @@ del logging
 
 
 def clone_tensor(x: Union[torch.Tensor, Number], device: Optional[str] = None):
-    if isinstance(x, torch.Tensor):
-        cloned = x.detach().clone()
-    elif isinstance(x, Number):
+    if isinstance(x, Number):
         cloned = torch.as_tensor(x)
+    elif isinstance(x, torch.Tensor):
+        cloned = x.detach().clone()
     else:
         raise ValueError("Expected tensor or number, but received ", x)
     if device is not None:

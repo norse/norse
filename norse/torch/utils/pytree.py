@@ -1,7 +1,9 @@
 import functools
 from numbers import Number
 import typing
-from typing import Any, Callable, Type, TypeVar
+# pytype: disable=import-error
+from typing import Any, Callable, Type, TypeVar, NamedTupleMeta
+# pytype: enable=import-error
 
 import torch
 from torch.utils._pytree import (
@@ -50,7 +52,7 @@ def register_tuple(typ: Any):
     _register_pytree_node(typ, _namedtuple_flatten, _namedtuple_unflatten)
 
 
-class MultipleInheritanceNamedTupleMeta(typing.NamedTupleMeta):
+class MultipleInheritanceNamedTupleMeta(NamedTupleMeta):
     """A meta class to instantiate and register named tuples"""
 
     def __new__(mcls, typename, bases, ns):

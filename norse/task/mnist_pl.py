@@ -11,7 +11,9 @@ import torch
 import torch.utils.data
 import torchvision
 
+# pytype: disable=import-error
 import pytorch_lightning as pl
+# pytype: enable=import-error
 
 import norse.torch as norse
 

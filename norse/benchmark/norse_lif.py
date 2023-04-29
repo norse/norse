@@ -4,7 +4,7 @@ import torch
 from norse.torch.functional.lif import (
     LIFFeedForwardState,
     LIFParameters,
-    _lif_feed_forward_integral_jit,
+    lif_feed_forward_integral,
 )
 from norse.torch.module.encode import PoissonEncoder
 
@@ -24,7 +24,7 @@ class LIFBenchmark(torch.jit.ScriptModule):
         self, input_spikes: torch.Tensor, p: LIFParameters, s: LIFFeedForwardState
     ):
         x = self.fc(input_spikes)
-        return _lif_feed_forward_integral_jit(input_tensor=x, state=s, p=p, dt=self.dt)
+        return lif_feed_forward_integral(input_tensor=x, state=s, p=p, dt=self.dt)
 
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
