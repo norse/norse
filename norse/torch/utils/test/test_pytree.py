@@ -39,12 +39,14 @@ def test_state_clone():
 
 
 def test_to_device():
-    if torch.has_cuda:
+    try:
         r = torch.randn(2)
         s = MockState(r)
         sg = s.to("cuda")
         assert sg.x.device.type == "cuda"
         assert sg.y.device.type == "cuda"
+    except RuntimeError:
+        pass  # Ignore non-cuda systems
 
     s = MockState(torch.randn(2))
     s.cpu()
