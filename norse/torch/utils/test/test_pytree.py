@@ -46,7 +46,7 @@ def test_to_device():
         sg = s.to("cuda")
         assert sg.x.device.type == "cuda"
         assert sg.y.device.type == "cuda"
-    except RuntimeError:
+    except (RuntimeError, AssertionError):
         pass  # Ignore non-cuda systems
 
     s = MockState(torch.randn(2))
