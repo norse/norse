@@ -32,8 +32,34 @@ def test_lif_cell_feedforward():
     assert out.shape == (5, 2)
 
 
+import torch._dynamo
+
+torch._dynamo.config.verbose = True
+
+
+def test_lif_cell_feedforward_compile():
+    layer = LIFCell()
+    layer = torch.compile(layer)
+    data = torch.randn(5, 4)
+    out, s = layer(data)
+    assert out.shape == (5, 4)
+    for x in s:
+        assert x.shape == (5, 4)
+
+
 def test_lif_recurrent_cell():
     cell = LIFRecurrentCell(2, 4)
+    data = torch.randn(5, 2)
+    out, s = cell(data)
+
+    for x in s:
+        assert x.shape == (5, 4)
+    assert out.shape == (5, 4)
+
+
+def test_lif_recurrent_cell_compile():
+    cell = LIFRecurrentCell(2, 4)
+    cell = torch.compile(cell)
     data = torch.randn(5, 2)
     out, s = cell(data)
 
@@ -122,6 +148,16 @@ def test_lif_recurrent_cell_backward():
 
 def test_lif_feedforward_layer():
     layer = LIF()
+    data = torch.randn(10, 5, 4)
+    out, s = layer(data)
+    assert out.shape == (10, 5, 4)
+    for x in s:
+        assert x.shape == (5, 4)
+
+
+def test_lif_feedforward_layer_compile():
+    layer = LIF()
+    layer = torch.compile(layer)
     data = torch.randn(10, 5, 4)
     out, s = layer(data)
     assert out.shape == (10, 5, 4)

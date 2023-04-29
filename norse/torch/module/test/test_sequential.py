@@ -13,6 +13,16 @@ def test_state_sequence():
     assert s[0].v.shape == (1, 6)
 
 
+def test_state_sequence_compile():
+    d = torch.ones(10, 1, 20)
+    l = norse.LIFRecurrent(20, 6)
+    m = norse.SequentialState(l)
+    m = torch.compile(m)
+    z, s = m(d)
+    assert z.shape == (10, 1, 6)
+    assert s[0].v.shape == (1, 6)
+
+
 def test_state_sequence_apply_no_state():
     d = torch.ones(10, 1, 1)
     m = norse.SequentialState(nn.Linear(1, 1), norse.LIFCell())

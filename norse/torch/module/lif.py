@@ -22,6 +22,7 @@ from norse.torch.functional.adjoint.lif_adjoint import (
     lif_feed_forward_adjoint_step_sparse,
 )
 from norse.torch.module.snn import SNN, SNNCell, SNNRecurrent, SNNRecurrentCell
+from norse.torch.utils import clone_tensor
 
 
 class LIFCell(SNNCell):
@@ -85,12 +86,7 @@ class LIFCell(SNNCell):
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
         state = LIFFeedForwardState(
-            v=torch.full(
-                input_tensor.shape,
-                torch.as_tensor(self.p.v_leak).detach(),
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
+            v=clone_tensor(self.p.v_leak),
             i=torch.zeros(
                 *input_tensor.shape,
                 device=input_tensor.device,
