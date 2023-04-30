@@ -1,8 +1,10 @@
 import functools
 from numbers import Number
 import typing
+
 # pytype: disable=import-error
 from typing import Any, Callable, Type, TypeVar, NamedTupleMeta
+
 # pytype: enable=import-error
 
 import torch

@@ -10,6 +10,7 @@ import torch.utils.data
 
 # pytype: disable=import-error
 import pytorch_lightning as pl
+
 # pytype: enable=import-error
 
 from norse.dataset.memory import MemoryStoreRecallDataset

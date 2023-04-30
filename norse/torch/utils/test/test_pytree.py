@@ -9,6 +9,7 @@ import norse.torch.utils.pytree as pytree
 
 # pytype: disable=wrong-arg-count,wrong-keyword-args,unsupported-operands
 
+
 class MockState(pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta):
     x: torch.Tensor
     y: torch.Tensor = torch.randn(10, 2)
