@@ -1,4 +1,4 @@
-import pytest, os
+import pytest, platform
 import torch
 
 from norse.torch.functional.lif import LIFState, LIFParameters
@@ -38,7 +38,9 @@ import torch._dynamo
 torch._dynamo.config.verbose = True
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support torch.compile")
+@pytest.mark.skipif(
+    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+)
 def test_lif_cell_feedforward_compile():
     layer = LIFCell()
     layer = torch.compile(layer)
@@ -59,7 +61,9 @@ def test_lif_recurrent_cell():
     assert out.shape == (5, 4)
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support torch.compile")
+@pytest.mark.skipif(
+    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+)
 def test_lif_recurrent_cell_compile():
     cell = LIFRecurrentCell(2, 4)
     cell = torch.compile(cell)
@@ -158,7 +162,9 @@ def test_lif_feedforward_layer():
         assert x.shape == (5, 4)
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support torch.compile")
+@pytest.mark.skipif(
+    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+)
 def test_lif_feedforward_layer_compile():
     layer = LIF()
     layer = torch.compile(layer)
