@@ -33,11 +33,6 @@ def test_lif_cell_feedforward():
     assert out.shape == (5, 2)
 
 
-import torch._dynamo
-
-torch._dynamo.config.verbose = True
-
-
 @pytest.mark.skipif(
     not platform.system() == "Linux", reason="Only Linux supports torch.compile"
 )
