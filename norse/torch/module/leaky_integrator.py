@@ -34,11 +34,6 @@ class LICell(SNNCell):
         \end{align*}
 
 
-    and transition equations
-
-    .. math::
-        i = i + w i_{\text{in}}
-
     Parameters:
         p (LIParameters): parameters of the leaky integrator
         dt (float): integration timestep to use

@@ -23,7 +23,6 @@ def test_tonic_spiking():
             input_current = 0 * torch.ones(1)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
         cs.append(input_current)
-    return vs, cs
 
 
 def test_phasic_spiking():
@@ -43,7 +42,6 @@ def test_phasic_spiking():
             input_current = 0 * torch.ones(1)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
         cs.append(input_current)
-    return vs, cs
 
 
 def test_tonic_bursting():
@@ -64,7 +62,6 @@ def test_tonic_bursting():
         _, s = izhikevich_feed_forward_step(input_current, s, p)
 
         cs.append(input_current)
-    return vs, cs
 
 
 def test_phasic_bursting():
@@ -83,7 +80,6 @@ def test_phasic_bursting():
             input_current = 0 * torch.ones(1)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
         cs.append(input_current)
-    return vs, cs
 
 
 def test_mixed_mode():
@@ -103,7 +99,6 @@ def test_mixed_mode():
             input_current = 0 * torch.ones(1)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
         cs.append(input_current)
-    return vs, cs
 
 
 def test_spike_frequency_adaptation():
@@ -124,7 +119,6 @@ def test_spike_frequency_adaptation():
         _, s = izhikevich_feed_forward_step(input_current, s, p)
 
         cs.append(input_current)
-    return vs, cs
 
 
 def test_class_1_exc():
@@ -145,7 +139,6 @@ def test_class_1_exc():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs
 
 
 def test_class_2_exc():
@@ -166,7 +159,6 @@ def test_class_2_exc():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs
 
 
 def test_spike_latency():
@@ -187,7 +179,6 @@ def test_spike_latency():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_subthreshold_oscillation():
@@ -208,7 +199,6 @@ def test_subthreshold_oscillation():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_resonator():
@@ -238,7 +228,6 @@ def test_resonator():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_integrator():
@@ -268,7 +257,6 @@ def test_integrator():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_rebound_spike():
@@ -290,7 +278,6 @@ def test_rebound_spike():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_rebound_burst():
@@ -312,7 +299,6 @@ def test_rebound_burst():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_threshhold_variability():
@@ -337,7 +323,6 @@ def test_threshhold_variability():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_bistability():
@@ -360,7 +345,6 @@ def test_bistability():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_dap():
@@ -382,7 +366,6 @@ def test_dap():
 
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_inhibition_induced_spiking():
@@ -401,7 +384,6 @@ def test_inhibition_induced_spiking():
             input_current = 75.0 * torch.ones(1)
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_inhibition_induced_bursting():
@@ -421,7 +403,6 @@ def test_inhibition_induced_bursting():
             input_current = 75.0 * torch.ones(1)
         cs.append(input_current)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
-    return vs, cs
 
 
 def test_creation():
