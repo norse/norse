@@ -33,13 +33,10 @@ class LICell(SNNCell):
             \dot{i} &= -1/\tau_{\text{syn}} i
         \end{align*}
 
-<<<<<<< HEAD
     and transition equations
 
     .. math::
         i = i + w i_{\text{in}}
-=======
->>>>>>> bad809a6 (Added leaky integrator box. Cleaned up tests)
 
     Parameters:
         p (LIParameters): parameters of the leaky integrator
