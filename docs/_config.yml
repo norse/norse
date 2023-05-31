@@ -61,6 +61,8 @@ sphinx:
   - 'sphinx.ext.autosummary'
   - 'sphinx.ext.intersphinx'
   - 'sphinx.ext.viewcode'
+  - 'matplotlib.sphinxext.mathmpl'
+  - 'matplotlib.sphinxext.plot_directive'
   config:
     autosummary_generate: true
     # templates_path:
@@ -69,3 +71,15 @@ sphinx:
     # The following tells autosectionlabel to not throw a warning for
     # duplicated section names that are in different documents.
     autosectionlabel_prefix_document: true
+    intersphinx_mapping:
+      python:
+      - 'https://docs.python.org/3'
+      - null
+      matplotlib:
+      - 'http://matplotlib.sourceforge.net/'
+      - null
+      torch:
+      - "https://pytorch.org/docs/stable/"
+      - null
+    hoverxref_intersphinx:
+     - "sphinxproof"

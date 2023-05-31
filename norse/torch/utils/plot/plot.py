@@ -56,7 +56,7 @@ def plot_heatmap_2d(
                 fed to the :meth:`matplotlib.pyplot.imshow` function.
 
     Returns:
-        A :class:`matplotlib.axes.Axes`.
+        A :matplotlib:class:`matplotlib.axes.Axes`.
     """
     ax = axes if axes is not None else plt.gca()
     kwargs["aspect"] = kwargs.get("aspect", "auto")
@@ -94,11 +94,10 @@ def plot_heatmap_3d(spikes: torch.Tensor, show_colorbar: bool = False, **kwargs)
         spikes (torch.NamedTensor): A tensor named with four dimensions: T (time), L (layer), X, Y.
                                     Expected to be in the range :math:`[0, 1]`.
         show_colorbar (bool): Show a colorbar (True) or not (False).
-        kwargs: Specific key-value arguments to style the figure
-                fed to the :meth:`matplotlib.pyplot.scatter` function.
+        kwargs: Specific key-value arguments to style the figure fed to the :meth:`matplotlib.pyplot.scatter` function.
 
     Returns:
-        An :class:`matplotlib.axes.Axes` object
+        An :matplotlib:class:`matplotlib.axes.Axes` object
     """
     spikes = _detach_tensor(spikes).align_to(*"LXY")
     L = spikes.shape[0]
@@ -138,6 +137,15 @@ def plot_neuron_states(
         >>> _, states = cell(torch.ones(10, 3))
         >>> plot_neuron_states(states, "i")
 
+    .. plot::
+
+        import torch
+        from norse.torch import LIF
+        from norse.torch.utils.plot import plot_neuron_states
+        data = torch.ones(10, 3) * torch.tensor([0.0, 0.1, 0.3])
+        _, states = LIF(record_states=True)(data)
+        plot_neuron_states(states, "i")
+
     Arguments:
         states (List[Any]): A list of state tuples containing state variables.
             We assume the list is ordered by time.
@@ -153,9 +161,7 @@ def plot_neuron_states(
     if axes is None:
         axes = plt.gca()
     for variable in variables:
-        values = [
-            np.array(_detach_tensor(getattr(state, variable))) for state in states
-        ]
+        values = getattr(states, variable)
         if label:
             axes.plot(values, label=variable, **kwargs)
         else:
@@ -189,11 +195,10 @@ def plot_histogram_2d(spikes: torch.Tensor, axes: Optional[plt.Axes] = None, **k
         data (torch.Tensor): A tensor of single-dimensional data.
         axes (matplotlib.axes.Axes): The matplotlib axis to plot on, if any.
                                      Defaults to :meth:`matplotlib.pyplot.gca`
-        kwargs: Specific key-value arguments to style the figure
-                fed to the :meth:`matplotlib.pyplot.hist` function.
+        kwargs: Specific key-value arguments to style the figure fed to the :meth:`matplotlib.pyplot.hist` function.
 
     Returns:
-        An :class:`matplotlib.axes.Axes`.
+        An :matplotlib:class:`matplotlib.axes.Axes`.
     """
     ax = axes if axes is not None else plt.gca()
     plt.hist(_detach_tensor(spikes).numpy(), **kwargs)
@@ -238,7 +243,7 @@ def plot_scatter_3d(
                 fed to the :meth:`matplotlib.pyplot.scatter` function.
 
     Returns:
-        A list of :class:`matplotlib.axes.Axes`
+        A list of :matplotlib:class:`matplotlib.axes.Axes`
     """
     if len(spikes.shape) > 3:
         spikes = _detach_tensor(spikes).align_to(*"TLXY")
@@ -299,10 +304,10 @@ def plot_spikes_2d(spikes: torch.Tensor, axes: plt.Axes = None, **kwargs):
         axes (matplotlib.axes.Axes): The matplotlib axis to plot on, if any.
                                      Defaults to :meth:`matplotlib.pyplot.gca`
         kwargs: Specific key-value arguments to style the figure
-                fed to the :meth:`matplotlib.pyplot.imshow` function.
+                fed to the :matplotlib:meth:`matplotlib.pyplot.imshow` function.
 
     Returns:
-        An :class:`matplotlib.axes.Axes` object
+        An :matplotlib:class:`matplotlib.axes.Axes` object
     """
     kwargs["cmap"] = kwargs.get("cmap", "binary")
     if axes is None:
@@ -325,16 +330,17 @@ def plot_izhikevich(
 
     Example :
         >>> import torch
-        >>> from norse.torch import tonic_spiking
+        >>> from norse.torch.functional import tonic_spiking
         >>> from norse.torch.utils.plot import plot_izhikevich
         >>> plot_izhikevich(tonic_spiking)
 
     .. plot::
 
         import torch
-        from norse.torch import tonic_spiking
+        from norse.torch.functional import tonic_spiking
         from norse.torch.utils.plot import plot_izhikevich
         plot_izhikevich(tonic_spiking)
+        plt.show()
 
     Arguments :
         behavior (IzhikevichSpikingBehavior) : behavior of an Izhikevich neuron
@@ -358,9 +364,10 @@ def plot_izhikevich(
         if t > T1:
             input_current = current * torch.ones(1)
         else:
-            input_current = 0 * torch.ones(1)
+            input_current = torch.zeros(1)
         _, s = izhikevich_feed_forward_step(input_current, s, p)
         cs.append(input_current)
+    cs = torch.stack(cs)
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
     ax1.set_ylabel("Membrane potential (mV)")
