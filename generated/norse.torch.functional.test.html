@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -337,7 +338,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="norse.html">norse</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="norse.benchmark.html">norse.benchmark</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="norse.benchmark.benchmark.html">norse.benchmark.benchmark</a></li>
+<li class="toctree-l4"><a class="reference internal" href="norse.benchmark.main.html">norse.benchmark.main</a></li>
 <li class="toctree-l4"><a class="reference internal" href="norse.benchmark.norse_lif.html">norse.benchmark.norse_lif</a></li>
+<li class="toctree-l4"><a class="reference internal" href="norse.benchmark.plot.html">norse.benchmark.plot</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="norse.dataset.html">norse.dataset</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -345,8 +348,11 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="norse.task.html">norse.task</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="norse.task.cifar10.html">norse.task.cifar10</a></li>
 <li class="toctree-l4"><a class="reference internal" href="norse.task.correlation_experiment.html">norse.task.correlation_experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="norse.task.memory.html">norse.task.memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="norse.task.mnist.html">norse.task.mnist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="norse.task.mnist_pl.html">norse.task.mnist_pl</a></li>
 </ul>
 </li>
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="norse.torch.html">norse.torch</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
@@ -630,16 +636,22 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="norse.torch.functional.test.test_lif_refrac.html#module-norse.torch.functional.test.test_lif_refrac" title="norse.torch.functional.test.test_lif_refrac"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_lif_refrac</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.functional.test.test_logical.html#module-norse.torch.functional.test.test_logical" title="norse.torch.functional.test.test_logical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_logical</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.functional.test.test_lift.html#module-norse.torch.functional.test.test_lift" title="norse.torch.functional.test.test_lift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_lift</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.functional.test.test_lsnn.html#module-norse.torch.functional.test.test_lsnn" title="norse.torch.functional.test.test_lsnn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_lsnn</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.functional.test.test_logical.html#module-norse.torch.functional.test.test_logical" title="norse.torch.functional.test.test_logical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_logical</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.functional.test.test_regularization.html#module-norse.torch.functional.test.test_regularization" title="norse.torch.functional.test.test_regularization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_regularization</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.functional.test.test_lsnn.html#module-norse.torch.functional.test.test_lsnn" title="norse.torch.functional.test.test_lsnn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_lsnn</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.functional.test.test_spikes_to_times_decoder.html#module-norse.torch.functional.test.test_spikes_to_times_decoder" title="norse.torch.functional.test.test_spikes_to_times_decoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_spikes_to_times_decoder</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.functional.test.test_regularization.html#module-norse.torch.functional.test.test_regularization" title="norse.torch.functional.test.test_regularization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_regularization</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.functional.test.test_spikes_to_times_decoder.html#module-norse.torch.functional.test.test_spikes_to_times_decoder" title="norse.torch.functional.test.test_spikes_to_times_decoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_spikes_to_times_decoder</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.functional.test.test_stdp.html#module-norse.torch.functional.test.test_stdp" title="norse.torch.functional.test.test_stdp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_stdp</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.functional.test.test_stdp_sensor.html#module-norse.torch.functional.test.test_stdp_sensor" title="norse.torch.functional.test.test_stdp_sensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_stdp_sensor</span></code></a></p></td>
@@ -648,7 +660,10 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="norse.torch.functional.test.test_superspike.html#module-norse.torch.functional.test.test_superspike" title="norse.torch.functional.test.test_superspike"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_superspike</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.functional.test.test_tsodyks_makram.html#module-norse.torch.functional.test.test_tsodyks_makram" title="norse.torch.functional.test.test_tsodyks_makram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_tsodyks_makram</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.functional.test.test_threshold.html#module-norse.torch.functional.test.test_threshold" title="norse.torch.functional.test.test_threshold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_threshold</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="norse.torch.functional.test.test_tsodyks_makram.html#module-norse.torch.functional.test.test_tsodyks_makram" title="norse.torch.functional.test.test_tsodyks_makram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norse.torch.functional.test.test_tsodyks_makram</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>

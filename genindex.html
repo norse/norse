@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -334,7 +335,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2 has-children"><a class="reference internal" href="generated/norse.html">norse</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="generated/norse.benchmark.html">norse.benchmark</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="generated/norse.benchmark.benchmark.html">norse.benchmark.benchmark</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/norse.benchmark.main.html">norse.benchmark.main</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/norse.benchmark.norse_lif.html">norse.benchmark.norse_lif</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/norse.benchmark.plot.html">norse.benchmark.plot</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="generated/norse.dataset.html">norse.dataset</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -342,8 +345,11 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="generated/norse.task.html">norse.task</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/norse.task.cifar10.html">norse.task.cifar10</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/norse.task.correlation_experiment.html">norse.task.correlation_experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/norse.task.memory.html">norse.task.memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/norse.task.mnist.html">norse.task.mnist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/norse.task.mnist_pl.html">norse.task.mnist_pl</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="generated/norse.torch.html">norse.torch</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -1003,7 +1009,11 @@ document.write(`
 </li>
         <li><a href="generated/norse.benchmark.benchmark.html#module-norse.benchmark.benchmark">norse.benchmark.benchmark</a>
 </li>
+        <li><a href="generated/norse.benchmark.main.html#module-norse.benchmark.main">norse.benchmark.main</a>
+</li>
         <li><a href="generated/norse.benchmark.norse_lif.html#module-norse.benchmark.norse_lif">norse.benchmark.norse_lif</a>
+</li>
+        <li><a href="generated/norse.benchmark.plot.html#module-norse.benchmark.plot">norse.benchmark.plot</a>
 </li>
         <li><a href="generated/norse.dataset.html#module-norse.dataset">norse.dataset</a>
 </li>
@@ -1011,9 +1021,15 @@ document.write(`
 </li>
         <li><a href="generated/norse.task.html#module-norse.task">norse.task</a>
 </li>
+        <li><a href="generated/norse.task.cifar10.html#module-norse.task.cifar10">norse.task.cifar10</a>
+</li>
         <li><a href="generated/norse.task.correlation_experiment.html#module-norse.task.correlation_experiment">norse.task.correlation_experiment</a>
 </li>
+        <li><a href="generated/norse.task.memory.html#module-norse.task.memory">norse.task.memory</a>
+</li>
         <li><a href="generated/norse.task.mnist.html#module-norse.task.mnist">norse.task.mnist</a>
+</li>
+        <li><a href="generated/norse.task.mnist_pl.html#module-norse.task.mnist_pl">norse.task.mnist_pl</a>
 </li>
         <li><a href="generated/norse.torch.html#module-norse.torch">norse.torch</a>
 </li>
@@ -1121,6 +1137,8 @@ document.write(`
 </li>
         <li><a href="generated/norse.torch.functional.test.test_lif_refrac.html#module-norse.torch.functional.test.test_lif_refrac">norse.torch.functional.test.test_lif_refrac</a>
 </li>
+        <li><a href="generated/norse.torch.functional.test.test_lift.html#module-norse.torch.functional.test.test_lift">norse.torch.functional.test.test_lift</a>
+</li>
         <li><a href="generated/norse.torch.functional.test.test_logical.html#module-norse.torch.functional.test.test_logical">norse.torch.functional.test.test_logical</a>
 </li>
         <li><a href="generated/norse.torch.functional.test.test_lsnn.html#module-norse.torch.functional.test.test_lsnn">norse.torch.functional.test.test_lsnn</a>
@@ -1129,9 +1147,13 @@ document.write(`
 </li>
         <li><a href="generated/norse.torch.functional.test.test_spikes_to_times_decoder.html#module-norse.torch.functional.test.test_spikes_to_times_decoder">norse.torch.functional.test.test_spikes_to_times_decoder</a>
 </li>
+        <li><a href="generated/norse.torch.functional.test.test_stdp.html#module-norse.torch.functional.test.test_stdp">norse.torch.functional.test.test_stdp</a>
+</li>
         <li><a href="generated/norse.torch.functional.test.test_stdp_sensor.html#module-norse.torch.functional.test.test_stdp_sensor">norse.torch.functional.test.test_stdp_sensor</a>
 </li>
         <li><a href="generated/norse.torch.functional.test.test_superspike.html#module-norse.torch.functional.test.test_superspike">norse.torch.functional.test.test_superspike</a>
+</li>
+        <li><a href="generated/norse.torch.functional.test.test_threshold.html#module-norse.torch.functional.test.test_threshold">norse.torch.functional.test.test_threshold</a>
 </li>
         <li><a href="generated/norse.torch.functional.test.test_tsodyks_makram.html#module-norse.torch.functional.test.test_tsodyks_makram">norse.torch.functional.test.test_tsodyks_makram</a>
 </li>
@@ -1148,6 +1170,8 @@ document.write(`
         <li><a href="generated/norse.torch.models.test.html#module-norse.torch.models.test">norse.torch.models.test</a>
 </li>
         <li><a href="generated/norse.torch.models.test.test_conv.html#module-norse.torch.models.test.test_conv">norse.torch.models.test.test_conv</a>
+</li>
+        <li><a href="generated/norse.torch.models.test.test_mobilenet.html#module-norse.torch.models.test.test_mobilenet">norse.torch.models.test.test_mobilenet</a>
 </li>
         <li><a href="generated/norse.torch.models.test.test_vgg.html#module-norse.torch.models.test.test_vgg">norse.torch.models.test.test_vgg</a>
 </li>
@@ -1211,6 +1235,8 @@ document.write(`
 </li>
         <li><a href="generated/norse.torch.module.test.test_iaf.html#module-norse.torch.module.test.test_iaf">norse.torch.module.test.test_iaf</a>
 </li>
+        <li><a href="generated/norse.torch.module.test.test_izhikevich.html#module-norse.torch.module.test.test_izhikevich">norse.torch.module.test.test_izhikevich</a>
+</li>
         <li><a href="generated/norse.torch.module.test.test_leaky_integrator.html#module-norse.torch.module.test.test_leaky_integrator">norse.torch.module.test.test_leaky_integrator</a>
 </li>
         <li><a href="generated/norse.torch.module.test.test_lif.html#module-norse.torch.module.test.test_lif">norse.torch.module.test.test_lif</a>
@@ -1236,6 +1262,8 @@ document.write(`
         <li><a href="generated/norse.torch.module.test.test_lsnn.html#module-norse.torch.module.test.test_lsnn">norse.torch.module.test.test_lsnn</a>
 </li>
         <li><a href="generated/norse.torch.module.test.test_regularization.html#module-norse.torch.module.test.test_regularization">norse.torch.module.test.test_regularization</a>
+</li>
+        <li><a href="generated/norse.torch.module.test.test_sequential.html#module-norse.torch.module.test.test_sequential">norse.torch.module.test.test_sequential</a>
 </li>
         <li><a href="generated/norse.torch.module.test.test_snn.html#module-norse.torch.module.test.test_snn">norse.torch.module.test.test_snn</a>
 </li>
@@ -1292,10 +1320,24 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    norse.benchmark.main
+
+      <ul>
+        <li><a href="generated/norse.benchmark.main.html#module-norse.benchmark.main">module</a>
+</li>
+      </ul></li>
+      <li>
     norse.benchmark.norse_lif
 
       <ul>
         <li><a href="generated/norse.benchmark.norse_lif.html#module-norse.benchmark.norse_lif">module</a>
+</li>
+      </ul></li>
+      <li>
+    norse.benchmark.plot
+
+      <ul>
+        <li><a href="generated/norse.benchmark.plot.html#module-norse.benchmark.plot">module</a>
 </li>
       </ul></li>
       <li>
@@ -1320,6 +1362,13 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    norse.task.cifar10
+
+      <ul>
+        <li><a href="generated/norse.task.cifar10.html#module-norse.task.cifar10">module</a>
+</li>
+      </ul></li>
+      <li>
     norse.task.correlation_experiment
 
       <ul>
@@ -1327,10 +1376,24 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    norse.task.memory
+
+      <ul>
+        <li><a href="generated/norse.task.memory.html#module-norse.task.memory">module</a>
+</li>
+      </ul></li>
+      <li>
     norse.task.mnist
 
       <ul>
         <li><a href="generated/norse.task.mnist.html#module-norse.task.mnist">module</a>
+</li>
+      </ul></li>
+      <li>
+    norse.task.mnist_pl
+
+      <ul>
+        <li><a href="generated/norse.task.mnist_pl.html#module-norse.task.mnist_pl">module</a>
 </li>
       </ul></li>
       <li>
@@ -1705,6 +1768,13 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    norse.torch.functional.test.test_lift
+
+      <ul>
+        <li><a href="generated/norse.torch.functional.test.test_lift.html#module-norse.torch.functional.test.test_lift">module</a>
+</li>
+      </ul></li>
+      <li>
     norse.torch.functional.test.test_logical
 
       <ul>
@@ -1725,6 +1795,8 @@ document.write(`
         <li><a href="generated/norse.torch.functional.test.test_regularization.html#module-norse.torch.functional.test.test_regularization">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     norse.torch.functional.test.test_spikes_to_times_decoder
 
@@ -1732,8 +1804,13 @@ document.write(`
         <li><a href="generated/norse.torch.functional.test.test_spikes_to_times_decoder.html#module-norse.torch.functional.test.test_spikes_to_times_decoder">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    norse.torch.functional.test.test_stdp
+
+      <ul>
+        <li><a href="generated/norse.torch.functional.test.test_stdp.html#module-norse.torch.functional.test.test_stdp">module</a>
+</li>
+      </ul></li>
       <li>
     norse.torch.functional.test.test_stdp_sensor
 
@@ -1746,6 +1823,13 @@ document.write(`
 
       <ul>
         <li><a href="generated/norse.torch.functional.test.test_superspike.html#module-norse.torch.functional.test.test_superspike">module</a>
+</li>
+      </ul></li>
+      <li>
+    norse.torch.functional.test.test_threshold
+
+      <ul>
+        <li><a href="generated/norse.torch.functional.test.test_threshold.html#module-norse.torch.functional.test.test_threshold">module</a>
 </li>
       </ul></li>
       <li>
@@ -1802,6 +1886,13 @@ document.write(`
 
       <ul>
         <li><a href="generated/norse.torch.models.test.test_conv.html#module-norse.torch.models.test.test_conv">module</a>
+</li>
+      </ul></li>
+      <li>
+    norse.torch.models.test.test_mobilenet
+
+      <ul>
+        <li><a href="generated/norse.torch.models.test.test_mobilenet.html#module-norse.torch.models.test.test_mobilenet">module</a>
 </li>
       </ul></li>
       <li>
@@ -2022,6 +2113,13 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    norse.torch.module.test.test_izhikevich
+
+      <ul>
+        <li><a href="generated/norse.torch.module.test.test_izhikevich.html#module-norse.torch.module.test.test_izhikevich">module</a>
+</li>
+      </ul></li>
+      <li>
     norse.torch.module.test.test_leaky_integrator
 
       <ul>
@@ -2110,6 +2208,13 @@ document.write(`
 
       <ul>
         <li><a href="generated/norse.torch.module.test.test_regularization.html#module-norse.torch.module.test.test_regularization">module</a>
+</li>
+      </ul></li>
+      <li>
+    norse.torch.module.test.test_sequential
+
+      <ul>
+        <li><a href="generated/norse.torch.module.test.test_sequential.html#module-norse.torch.module.test.test_sequential">module</a>
 </li>
       </ul></li>
       <li>

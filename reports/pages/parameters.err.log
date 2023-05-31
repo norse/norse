@@ -15,32 +15,45 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-from tqdm.notebook import tqdm, trange
-
-def train(model, device, train_loader, optimizer, epoch, max_epochs):
-    model.train()
-    losses = []
-
-    for (data, target) in tqdm(train_loader, leave=False):
-        data, target = data.to(device), target.to(device)
-        optimizer.zero_grad()
-        output = model(data)
-        loss = torch.nn.functional.nll_loss(output, target)
-        loss.backward()
-        optimizer.step()
-        losses.append(loss.item())
-
-    mean_loss = np.mean(losses)
-    return losses, mean_loss
+model_after = run_training(model, optimizer, epochs=10)
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-Cell [0;32mIn[11], line 1[0m
-[0;32m----> 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtqdm[39;00m[38;5;21;01m.[39;00m[38;5;21;01mnotebook[39;00m [38;5;28;01mimport[39;00m tqdm, trange
-[1;32m      3[0m [38;5;28;01mdef[39;00m [38;5;21mtrain[39m(model, device, train_loader, optimizer, epoch, max_epochs):
-[1;32m      4[0m     model[38;5;241m.[39mtrain()
+[0;31mImportError[0m                               Traceback (most recent call last)
+Cell [0;32mIn[17], line 1[0m
+[0;32m----> 1[0m model_after [38;5;241m=[39m [43mrun_training[49m[43m([49m[43mmodel[49m[43m,[49m[43m [49m[43moptimizer[49m[43m,[49m[43m [49m[43mepochs[49m[38;5;241;43m=[39;49m[38;5;241;43m10[39;49m[43m)[49m
 
-[0;31mModuleNotFoundError[0m: No module named 'tqdm'
+Cell [0;32mIn[14], line 9[0m, in [0;36mrun_training[0;34m(model, optimizer, epochs)[0m
+[1;32m      5[0m accuracies [38;5;241m=[39m []
+[1;32m      7[0m torch[38;5;241m.[39mautograd[38;5;241m.[39mset_detect_anomaly([38;5;28;01mTrue[39;00m)
+[0;32m----> 9[0m [38;5;28;01mfor[39;00m epoch [38;5;129;01min[39;00m [43mtrange[49m[43m([49m[43mepochs[49m[43m)[49m:
+[1;32m     10[0m     training_loss, mean_loss [38;5;241m=[39m train(model, DEVICE, train_loader, optimizer, epoch, max_epochs[38;5;241m=[39mEPOCHS)
+[1;32m     11[0m     test_loss, accuracy [38;5;241m=[39m test(model, DEVICE, test_loader, epoch)
+
+File [0;32m/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/tqdm/notebook.py:316[0m, in [0;36mtnrange[0;34m(*args, **kwargs)[0m
+[1;32m    314[0m [38;5;28;01mdef[39;00m [38;5;21mtnrange[39m([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs):
+[1;32m    315[0m [38;5;250m    [39m[38;5;124;03m"""Shortcut for `tqdm.notebook.tqdm(range(*args), **kwargs)`."""[39;00m
+[0;32m--> 316[0m     [38;5;28;01mreturn[39;00m [43mtqdm_notebook[49m[43m([49m[38;5;28;43mrange[39;49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m)[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/tqdm/notebook.py:238[0m, in [0;36mtqdm_notebook.__init__[0;34m(self, *args, **kwargs)[0m
+[1;32m    236[0m unit_scale [38;5;241m=[39m [38;5;241m1[39m [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39munit_scale [38;5;129;01mis[39;00m [38;5;28;01mTrue[39;00m [38;5;28;01melse[39;00m [38;5;28mself[39m[38;5;241m.[39munit_scale [38;5;129;01mor[39;00m [38;5;241m1[39m
+[1;32m    237[0m total [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mtotal [38;5;241m*[39m unit_scale [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mtotal [38;5;28;01melse[39;00m [38;5;28mself[39m[38;5;241m.[39mtotal
+[0;32m--> 238[0m [38;5;28mself[39m[38;5;241m.[39mcontainer [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mstatus_printer[49m[43m([49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mfp[49m[43m,[49m[43m [49m[43mtotal[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mdesc[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mncols[49m[43m)[49m
+[1;32m    239[0m [38;5;28mself[39m[38;5;241m.[39mcontainer[38;5;241m.[39mpbar [38;5;241m=[39m proxy([38;5;28mself[39m)
+[1;32m    240[0m [38;5;28mself[39m[38;5;241m.[39mdisplayed [38;5;241m=[39m [38;5;28;01mFalse[39;00m
+
+File [0;32m/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/tqdm/notebook.py:113[0m, in [0;36mtqdm_notebook.status_printer[0;34m(_, total, desc, ncols)[0m
+[1;32m    104[0m [38;5;66;03m# Fallback to text bar if there's no total[39;00m
+[1;32m    105[0m [38;5;66;03m# DEPRECATED: replaced with an 'info' style bar[39;00m
+[1;32m    106[0m [38;5;66;03m# if not total:[39;00m
+[0;32m   (...)[0m
+[1;32m    110[0m 
+[1;32m    111[0m [38;5;66;03m# Prepare IPython progress bar[39;00m
+[1;32m    112[0m [38;5;28;01mif[39;00m IProgress [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:  [38;5;66;03m# #187 #451 #558 #872[39;00m
+[0;32m--> 113[0m     [38;5;28;01mraise[39;00m [38;5;167;01mImportError[39;00m(WARN_NOIPYW)
+[1;32m    114[0m [38;5;28;01mif[39;00m total:
+[1;32m    115[0m     pbar [38;5;241m=[39m IProgress([38;5;28mmin[39m[38;5;241m=[39m[38;5;241m0[39m, [38;5;28mmax[39m[38;5;241m=[39mtotal)
+
+[0;31mImportError[0m: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
 

@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -334,7 +335,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../generated/norse.html">norse</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../generated/norse.benchmark.html">norse.benchmark</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../generated/norse.benchmark.benchmark.html">norse.benchmark.benchmark</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../generated/norse.benchmark.main.html">norse.benchmark.main</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../generated/norse.benchmark.norse_lif.html">norse.benchmark.norse_lif</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../generated/norse.benchmark.plot.html">norse.benchmark.plot</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../generated/norse.dataset.html">norse.dataset</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -342,8 +345,11 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../generated/norse.task.html">norse.task</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../generated/norse.task.cifar10.html">norse.task.cifar10</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../generated/norse.task.correlation_experiment.html">norse.task.correlation_experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../generated/norse.task.memory.html">norse.task.memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../generated/norse.task.mnist.html">norse.task.mnist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../generated/norse.task.mnist_pl.html">norse.task.mnist_pl</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../generated/norse.torch.html">norse.torch</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -564,7 +570,7 @@ document.write(`
 <span class="sd">                fed to the :meth:`matplotlib.pyplot.imshow` function.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A :class:`matplotlib.axes.Axes`.</span>
+<span class="sd">        A :matplotlib:class:`matplotlib.axes.Axes`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span> <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;aspect&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">)</span>
@@ -602,11 +608,10 @@ document.write(`
 <span class="sd">        spikes (torch.NamedTensor): A tensor named with four dimensions: T (time), L (layer), X, Y.</span>
 <span class="sd">                                    Expected to be in the range :math:`[0, 1]`.</span>
 <span class="sd">        show_colorbar (bool): Show a colorbar (True) or not (False).</span>
-<span class="sd">        kwargs: Specific key-value arguments to style the figure</span>
-<span class="sd">                fed to the :meth:`matplotlib.pyplot.scatter` function.</span>
+<span class="sd">        kwargs: Specific key-value arguments to style the figure fed to the :meth:`matplotlib.pyplot.scatter` function.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An :class:`matplotlib.axes.Axes` object</span>
+<span class="sd">        An :matplotlib:class:`matplotlib.axes.Axes` object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">spikes</span> <span class="o">=</span> <span class="n">_detach_tensor</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="o">.</span><span class="n">align_to</span><span class="p">(</span><span class="o">*</span><span class="s2">&quot;LXY&quot;</span><span class="p">)</span>
     <span class="n">L</span> <span class="o">=</span> <span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -646,6 +651,15 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt; _, states = cell(torch.ones(10, 3))</span>
 <span class="sd">        &gt;&gt;&gt; plot_neuron_states(states, &quot;i&quot;)</span>
 
+<span class="sd">    .. plot::</span>
+
+<span class="sd">        import torch</span>
+<span class="sd">        from norse.torch import LIF</span>
+<span class="sd">        from norse.torch.utils.plot import plot_neuron_states</span>
+<span class="sd">        data = torch.ones(10, 3) * torch.tensor([0.0, 0.1, 0.3])</span>
+<span class="sd">        _, states = LIF(record_states=True)(data)</span>
+<span class="sd">        plot_neuron_states(states, &quot;i&quot;)</span>
+
 <span class="sd">    Arguments:</span>
 <span class="sd">        states (List[Any]): A list of state tuples containing state variables.</span>
 <span class="sd">            We assume the list is ordered by time.</span>
@@ -661,9 +675,7 @@ document.write(`
     <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_detach_tensor</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">variable</span><span class="p">)))</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span>
-        <span class="p">]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">variable</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
             <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">variable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -697,11 +709,10 @@ document.write(`
 <span class="sd">        data (torch.Tensor): A tensor of single-dimensional data.</span>
 <span class="sd">        axes (matplotlib.axes.Axes): The matplotlib axis to plot on, if any.</span>
 <span class="sd">                                     Defaults to :meth:`matplotlib.pyplot.gca`</span>
-<span class="sd">        kwargs: Specific key-value arguments to style the figure</span>
-<span class="sd">                fed to the :meth:`matplotlib.pyplot.hist` function.</span>
+<span class="sd">        kwargs: Specific key-value arguments to style the figure fed to the :meth:`matplotlib.pyplot.hist` function.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An :class:`matplotlib.axes.Axes`.</span>
+<span class="sd">        An :matplotlib:class:`matplotlib.axes.Axes`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span> <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">_detach_tensor</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -746,7 +757,7 @@ document.write(`
 <span class="sd">                fed to the :meth:`matplotlib.pyplot.scatter` function.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A list of :class:`matplotlib.axes.Axes`</span>
+<span class="sd">        A list of :matplotlib:class:`matplotlib.axes.Axes`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
         <span class="n">spikes</span> <span class="o">=</span> <span class="n">_detach_tensor</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="o">.</span><span class="n">align_to</span><span class="p">(</span><span class="o">*</span><span class="s2">&quot;TLXY&quot;</span><span class="p">)</span>
@@ -807,10 +818,10 @@ document.write(`
 <span class="sd">        axes (matplotlib.axes.Axes): The matplotlib axis to plot on, if any.</span>
 <span class="sd">                                     Defaults to :meth:`matplotlib.pyplot.gca`</span>
 <span class="sd">        kwargs: Specific key-value arguments to style the figure</span>
-<span class="sd">                fed to the :meth:`matplotlib.pyplot.imshow` function.</span>
+<span class="sd">                fed to the :matplotlib:meth:`matplotlib.pyplot.imshow` function.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An :class:`matplotlib.axes.Axes` object</span>
+<span class="sd">        An :matplotlib:class:`matplotlib.axes.Axes` object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cmap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cmap&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -833,16 +844,17 @@ document.write(`
 
 <span class="sd">    Example :</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
-<span class="sd">        &gt;&gt;&gt; from norse.torch import tonic_spiking</span>
+<span class="sd">        &gt;&gt;&gt; from norse.torch.functional import tonic_spiking</span>
 <span class="sd">        &gt;&gt;&gt; from norse.torch.utils.plot import plot_izhikevich</span>
 <span class="sd">        &gt;&gt;&gt; plot_izhikevich(tonic_spiking)</span>
 
 <span class="sd">    .. plot::</span>
 
 <span class="sd">        import torch</span>
-<span class="sd">        from norse.torch import tonic_spiking</span>
+<span class="sd">        from norse.torch.functional import tonic_spiking</span>
 <span class="sd">        from norse.torch.utils.plot import plot_izhikevich</span>
 <span class="sd">        plot_izhikevich(tonic_spiking)</span>
+<span class="sd">        plt.show()</span>
 
 <span class="sd">    Arguments :</span>
 <span class="sd">        behavior (IzhikevichSpikingBehavior) : behavior of an Izhikevich neuron</span>
@@ -866,9 +878,10 @@ document.write(`
         <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">T1</span><span class="p">:</span>
             <span class="n">input_current</span> <span class="o">=</span> <span class="n">current</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">input_current</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">input_current</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">izhikevich_feed_forward_step</span><span class="p">(</span><span class="n">input_current</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
         <span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_current</span><span class="p">)</span>
+    <span class="n">cs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Membrane potential (mV)&quot;</span><span class="p">)</span>
