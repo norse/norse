@@ -9,7 +9,7 @@ from multiprocessing.managers import SharedMemoryManager
 from pygenn.genn_model import GeNNModel, init_var
 from pygenn.genn_wrapper import NO_DELAY
 
-from benchmark import BenchmarkParameters
+from norse.benchmark.benchmark import BenchmarkParameters
 
 
 def lif_feed_forward_benchmark(parameters: BenchmarkParameters):

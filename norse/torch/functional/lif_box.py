@@ -48,7 +48,6 @@ class LIFBoxFeedForwardState(NamedTuple):
 
     Parameters:
         v (torch.Tensor): membrane potential
-        i (torch.Tensor): synaptic input current
     """
 
     v: torch.Tensor

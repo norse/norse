@@ -33,7 +33,7 @@ import torch.jit
 
 try:
     import norse_op
-except ModuleNotFoundError:  # pragma: no cover
+except (ModuleNotFoundError, ImportError):  # pragma: no cover
     pass
 
 from norse.torch.functional.threshold import threshold

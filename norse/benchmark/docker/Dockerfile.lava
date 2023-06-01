@@ -4,9 +4,10 @@ RUN apt update && apt install -y \
     git python3-pip
 
 # Install torch 
+RUN pip3 install --upgrade pip
 RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
 
-# Install norse
-RUN pip install --upgrade pip
-RUN pip install pandas
-RUN pip install git+https://github.com/norse/norse
+# Install lava-dl
+RUN pip install poetry pandas tqdm
+RUN git clone https://github.com/lava-nc/lava-dl
+RUN cd lava-dl && poetry install && pip3 install -e .

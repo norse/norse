@@ -7,6 +7,9 @@ import pandas as pd
 # pytype: enable=import-error
 import numpy as np
 
+plt.style.use("./norse/benchmark/plots.mplstyle")
+# plt.rcParams["axes.prop_cycle"] = plt.cycler("color", plt.cm.tab20.colors)
+
 
 def plot_frames(frames, title):
     render_frames(frames, title)
@@ -15,16 +18,16 @@ def plot_frames(frames, title):
 
 def save_frames(frames, title, filename):
     render_frames(frames, title)
-    plt.savefig(filename)
+    plt.savefig(filename, dpi=300)
 
 
 def render_frames(frames, title):
-    plt.figure(figsize=(8, 5))
+    plt.figure(figsize=(6, 4))
     ax = plt.gca()
     ax.set_yscale("log")
     for group in frames:
         for label, frame in group.groupby("label"):
-            label = label.replace("lif", "LIF")
+            label = label.split("_")[0]
             plt.fill_between(
                 frame["input_features"],
                 frame["duration_mean"] - frame["duration_std"] * 2,
@@ -48,11 +51,13 @@ def render_frames(frames, title):
     xmax = frame["input_features"].max()
 
     ax.set_xlim(xmin, xmax)
-    ax.set_xticks(np.arange(xmin, xmax + 1, 500))
+    ax.set_xticks(np.arange(0, xmax + xmin, 1000).tolist())
+
     ax.set_title(title)
     ax.set_xlabel("Number of neurons")
-    ax.set_ylabel("Running time in seconds")
-    ax.legend(loc="upper left")
+    ax.set_ylabel("Mean running time in seconds")
+    ax.legend(ncol=2, loc=(0.5, 0.1))
+    plt.tight_layout()
     return ax
 
 

@@ -1,51 +1,42 @@
 import time
 import torch
 
-from norse.torch.functional.lif import (
-    LIFFeedForwardState,
-    LIFParameters,
-    _lif_feed_forward_integral_jit,
+from ..benchmark import BenchmarkParameters
+from norse.torch.functional.lif_box import (
+    LIFBoxParameters,
+    LIFBoxFeedForwardState,
+    lif_box_feed_forward_step,
 )
 from norse.torch.module.encode import PoissonEncoder
 
-# pytype: disable=import-error
-from .benchmark import BenchmarkParameters
 
-# pytype: enable=import-error
-
-
-class LIFBenchmark(torch.jit.ScriptModule):
+class LIFBoxBenchmark(torch.jit.ScriptModule):
     def __init__(self, parameters):
         super().__init__()
         self.fc = torch.nn.Linear(parameters.features, parameters.features, bias=False)
         self.dt = parameters.dt
 
     def forward(
-        self, input_spikes: torch.Tensor, p: LIFParameters, s: LIFFeedForwardState
+        self, input_spikes: torch.Tensor, p: LIFBoxParameters, s: LIFBoxFeedForwardState
     ):
         x = self.fc(input_spikes)
-        return _lif_feed_forward_integral_jit(input_tensor=x, state=s, p=p, dt=self.dt)
+        return lif_box_feed_forward_step(input_tensor=x, state=s, p=p, dt=self.dt)
 
 
-def lif_feed_forward_benchmark(parameters: BenchmarkParameters):
+def lif_box_feed_forward_benchmark(parameters: BenchmarkParameters):
     with torch.no_grad():
-        model = LIFBenchmark(parameters).to(parameters.device)
+        model = LIFBoxBenchmark(parameters).to(parameters.device)
         input_sequence = torch.randn(
             parameters.sequence_length,
             parameters.batch_size,
             parameters.features,
             device=parameters.device,
         )
-        p = LIFParameters()
-        s = LIFFeedForwardState(
+        p = LIFBoxParameters()
+        s = LIFBoxFeedForwardState(
             v=torch.full(
                 (parameters.batch_size, parameters.features),
-                p.v_leak,
-                device=parameters.device,
-            ),
-            i=torch.zeros(
-                parameters.batch_size,
-                parameters.features,
+                0,
                 device=parameters.device,
             ),
         )
