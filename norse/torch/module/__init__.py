@@ -85,6 +85,7 @@ from .izhikevich import (
     Izhikevich,
     IzhikevichRecurrent,
 )
+from .receptive_field import SpatialReceptiveField2d
 from .spikes_to_times_decoder import SpikesToTimesDecoder
 
 __all__ = [
@@ -102,6 +103,7 @@ __all__ = [
     "PoissonEncoder",
     "PopulationEncoder",
     "SignedPoissonEncoder",
+    "SpatialReceptiveField2d",
     "SpikeLatencyEncoder",
     "SpikeLatencyLIFEncoder",
     # Integrate-and-fire
