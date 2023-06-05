@@ -1,6 +1,10 @@
 import torch
 
-from norse.torch.module.leaky_integrator_box import LIBoxCell, LIBoxState, LIBoxParameters
+from norse.torch.module.leaky_integrator_box import (
+    LIBoxCell,
+    LIBoxState,
+    LIBoxParameters,
+)
 
 
 def test_li_box_cell():
