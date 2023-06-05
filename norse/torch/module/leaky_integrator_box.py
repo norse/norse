@@ -9,8 +9,6 @@ See :mod:`norse.torch.functional.leaky_integrator_box` for more information.
 """
 
 import torch
-import torch.jit
-import numpy as np
 
 from norse.torch.module.snn import SNN, SNNCell
 
@@ -23,7 +21,7 @@ from ..functional.leaky_integrator_box import (
 
 
 class LIBoxCell(SNNCell):
-    """
+    r"""
     Leaky integrator cell without current terms.
     More specifically it implements a discretized version of the ODE
 
