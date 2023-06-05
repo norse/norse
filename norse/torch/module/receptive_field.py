@@ -55,17 +55,3 @@ class SpatialReceptiveField2d(torch.nn.Module):
 
     def forward(self, x: torch.Tensor):
         return self.conv(x)
-
-
-class SpatioTemporalReceptiveField2d(torch.nn.Module):
-    def __init__(
-        self,
-        in_channels: int,
-        n_scales: int,
-        n_angles: int,
-        n_ratios: int,
-        n_times: int,
-        size: int,
-        activation: SNNCell = LIBoxCell,
-    ):
-        """Creates a spatio-temporal receptive field for 2-dimensional inputs."""
