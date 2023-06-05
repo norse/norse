@@ -33,7 +33,6 @@ class LICell(SNNCell):
             \dot{i} &= -1/\tau_{\text{syn}} i
         \end{align*}
 
-
     and transition equations
 
     .. math::
@@ -76,7 +75,6 @@ class LI(SNN):
             \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
             \dot{i} &= -1/\tau_{\text{syn}} i
         \end{align*}
-
 
     and transition equations
 

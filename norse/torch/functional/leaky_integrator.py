@@ -113,7 +113,6 @@ def li_step(
     return v_new, LIState(v_new, i_decayed)
 
 
-# @torch.jit.script
 def li_feed_forward_step(
     input_tensor: torch.Tensor,
     state: LIState,

@@ -53,6 +53,12 @@ from .iaf import (
     iaf_feed_forward_step,
 )
 from .leaky_integrator import LIParameters, LIState, li_feed_forward_step, li_step
+from .leaky_integrator_box import (
+    LIBoxParameters,
+    LIBoxState,
+    li_box_feed_forward_step,
+    li_box_step,
+)
 from .lif import (
     LIFFeedForwardState,
     LIFParameters,
@@ -227,6 +233,11 @@ __all__ = [
     "LIState",
     "li_feed_forward_step",
     "li_step",
+    # Leaky integrator box
+    "LIBoxParameters",
+    "LIBoxState",
+    "li_box_feed_forward_step",
+    "li_box_step",
     # LIF
     "LIFFeedForwardState",
     "LIFParameters",

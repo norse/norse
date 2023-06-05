@@ -20,8 +20,9 @@ from .encode import (
     SpikeLatencyEncoder,
     SpikeLatencyLIFEncoder,
 )
-from .iaf import IAFFeedForwardState, IAFCell, IAFParameters
+from .iaf import IAFFeedForwardState, IAF, IAFCell, IAFParameters
 from .leaky_integrator import LI, LICell, LILinearCell, LIParameters, LIState
+from .leaky_integrator_box import LIBoxCell, LIBoxParameters, LIBoxState
 from .lif import (
     LIFCell,
     LIFRecurrentCell,
@@ -105,6 +106,7 @@ __all__ = [
     "SpikeLatencyLIFEncoder",
     # Integrate-and-fire
     "IAFFeedForwardState",
+    "IAF",
     "IAFCell",
     "IAFParameters",
     # Izhikevich
@@ -114,10 +116,15 @@ __all__ = [
     "IzhikevichRecurrent",
     # Leaky integrator
     "LI",
+    "LIBoxCell",
     "LICell",
     "LILinearCell",
     "LIParameters",
     "LIState",
+    # Leaky integrator box
+    "LIBoxCell",
+    "LIBoxParameters",
+    "LIBoxState",
     # LIF
     "LIF",
     "LIFCell",
