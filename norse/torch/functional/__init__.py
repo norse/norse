@@ -155,8 +155,8 @@ from .izhikevich import (
 
 from .receptive_field import (
     gaussian_kernel,
-    receptive_field,
-    receptive_fields_with_derivatives,
+    spatial_receptive_field,
+    spatial_receptive_fields_with_derivatives,
 )
 
 from .superspike import super_fn
@@ -307,8 +307,8 @@ __all__ = [
     "lsnn_feed_forward_adjoint_step",
     # Receptive fields
     "gaussian_kernel",
-    "receptive_field",
-    "receptive_fields_with_derivatives",
+    "spatial_receptive_field",
+    "spatial_receptive_fields_with_derivatives",
     # Regularization
     "regularize_step",
     "spike_accumulator",

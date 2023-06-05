@@ -68,6 +68,16 @@ Convolutions
     LConv2d
 
 
+Receptive fields
+
+.. currentmodule:: norse.torch.module.receptive_field
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    SpatialReceptiveField2d
+    SpatioTemporalReceptiveField2d
+
 Neuron models
 -------------
 

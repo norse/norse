@@ -85,7 +85,7 @@ from .izhikevich import (
     Izhikevich,
     IzhikevichRecurrent,
 )
-from .receptive_field import SpatialReceptiveField2d
+from .receptive_field import SpatialReceptiveField2d, SpatioTemporalReceptiveField2d
 from .spikes_to_times_decoder import SpikesToTimesDecoder
 
 __all__ = [
@@ -180,6 +180,9 @@ __all__ = [
     "LSNNState",
     "RegularizationCell",
     "SequentialState",
+    # Receptive fields
+    "SpatialReceptiveField2d",
+    "SpatioTemporalReceptiveField2d",
     # Decoder
     "SpikesToTimesDecoder",
 ]
