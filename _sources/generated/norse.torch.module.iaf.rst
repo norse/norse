@@ -17,6 +17,7 @@ norse.torch.module.iaf
 
    .. autosummary::
    
+      IAF
       IAFCell
    
    

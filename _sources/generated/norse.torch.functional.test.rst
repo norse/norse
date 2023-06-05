@@ -35,6 +35,7 @@ norse.torch.functional.test
    norse.torch.functional.test.test_iaf
    norse.torch.functional.test.test_izhikevich
    norse.torch.functional.test.test_leaky_integrator
+   norse.torch.functional.test.test_leaky_integrator_box
    norse.torch.functional.test.test_lif
    norse.torch.functional.test.test_lif_adex
    norse.torch.functional.test.test_lif_adex_refrac

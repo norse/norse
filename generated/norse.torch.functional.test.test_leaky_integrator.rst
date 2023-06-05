@@ -13,8 +13,8 @@ norse.torch.functional.test.test\_leaky\_integrator
 
    .. autosummary::
    
-      test_lif_feed_forward_step
-      test_lif_step
+      test_li_feed_forward_step
+      test_li_step
    
    
 
