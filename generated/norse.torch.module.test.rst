@@ -46,6 +46,7 @@ norse.torch.module.test
    norse.torch.module.test.test_lif_refrac
    norse.torch.module.test.test_lift
    norse.torch.module.test.test_lsnn
+   norse.torch.module.test.test_receptive_field
    norse.torch.module.test.test_regularization
    norse.torch.module.test.test_sequential
    norse.torch.module.test.test_snn

@@ -323,6 +323,17 @@ Long short-term memory (LSNN)
     lsnn_feed_forward_adjoint_step
 
 
+Receptive fields
+----------------
+
+.. currentmodule:: norse.torch.functional.receptive_field
+.. autosummary::
+    :toctree: generated
+
+    gaussian_kernel
+    spatial_receptive_field
+    spatial_receptive_fields_with_derivatives
+
 Plasticity models
 -----------------
 
@@ -349,4 +360,3 @@ Tsodyks-Markram timing-dependent plasticity (TDP)
     TsodyksMakramParameters
     TsodyksMakramState
     stp_step
-

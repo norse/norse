@@ -1,0 +1,707 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>norse.torch.module.receptive_field &#8212; Norse v1.0.0</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../_static/copybutton.js"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/norse/torch/module/receptive_field';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../../../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../index.html">
+                    Getting started
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">First steps</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/installing.html">1. Installing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/started.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/working.html">3. Working with Norse</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage docs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/spiking.html">4. Introduction to spiking systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/tasks.html">5. Running Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/parameters.html">6. Parameter learning in Spiking Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/hardware.html">7. Hardware acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/papers.html">8. Papers citing Norse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/about.html">9. About Norse</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development docs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../pages/development.html">10. Development Documentation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../norse.torch.html">norse.torch</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.Lift.html">norse.torch.module.Lift</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.SequentialState.html">norse.torch.module.SequentialState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.RegularizationCell.html">norse.torch.module.RegularizationCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.encode.ConstantCurrentLIFEncoder.html">norse.torch.module.encode.ConstantCurrentLIFEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.encode.PoissonEncoder.html">norse.torch.module.encode.PoissonEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.encode.PoissonEncoderStep.html">norse.torch.module.encode.PoissonEncoderStep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.encode.PopulationEncoder.html">norse.torch.module.encode.PopulationEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.encode.SignedPoissonEncoder.html">norse.torch.module.encode.SignedPoissonEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.encode.SpikeLatencyEncoder.html">norse.torch.module.encode.SpikeLatencyEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.encode.SpikeLatencyLIFEncoder.html">norse.torch.module.encode.SpikeLatencyLIFEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.conv.LConv2d.html">norse.torch.module.conv.LConv2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.receptive_field.SpatialReceptiveField2d.html">norse.torch.module.receptive_field.SpatialReceptiveField2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.receptive_field.TemporalReceptiveField.html">norse.torch.module.receptive_field.TemporalReceptiveField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.iaf.IAFFeedForwardState.html">norse.torch.module.iaf.IAFFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.iaf.IAFParameters.html">norse.torch.module.iaf.IAFParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.iaf.IAFCell.html">norse.torch.module.iaf.IAFCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichState.html">norse.torch.module.izhikevich.IzhikevichState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichSpikingBehavior.html">norse.torch.module.izhikevich.IzhikevichSpikingBehavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.izhikevich.Izhikevich.html">norse.torch.module.izhikevich.Izhikevich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichCell.html">norse.torch.module.izhikevich.IzhikevichCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichRecurrent.html">norse.torch.module.izhikevich.IzhikevichRecurrent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichRecurrentCell.html">norse.torch.module.izhikevich.IzhikevichRecurrentCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.leaky_integrator.LIState.html">norse.torch.module.leaky_integrator.LIState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.leaky_integrator.LIParameters.html">norse.torch.module.leaky_integrator.LIParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.leaky_integrator.LI.html">norse.torch.module.leaky_integrator.LI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.leaky_integrator.LICell.html">norse.torch.module.leaky_integrator.LICell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.leaky_integrator.LILinearCell.html">norse.torch.module.leaky_integrator.LILinearCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.LIFParameters.html">norse.torch.LIFParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.LIFState.html">norse.torch.LIFState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.LIF.html">norse.torch.LIF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.LIFCell.html">norse.torch.LIFCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.LIFRecurrent.html">norse.torch.LIFRecurrent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.LIFRecurrentCell.html">norse.torch.LIFRecurrentCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_box.LIFBoxFeedForwardState.html">norse.torch.module.lif_box.LIFBoxFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_box.LIFBoxParameters.html">norse.torch.module.lif_box.LIFBoxParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_box.LIFBoxCell.html">norse.torch.module.lif_box.LIFBoxCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.coba_lif.CobaLIFCell.html">norse.torch.module.coba_lif.CobaLIFCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_adex.LIFAdEx.html">norse.torch.module.lif_adex.LIFAdEx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_adex.LIFAdExCell.html">norse.torch.module.lif_adex.LIFAdExCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_adex.LIFAdExRecurrent.html">norse.torch.module.lif_adex.LIFAdExRecurrent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_adex.LIFAdExRecurrentCell.html">norse.torch.module.lif_adex.LIFAdExRecurrentCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_ex.LIFEx.html">norse.torch.module.lif_ex.LIFEx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_ex.LIFExCell.html">norse.torch.module.lif_ex.LIFExCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_ex.LIFExRecurrent.html">norse.torch.module.lif_ex.LIFExRecurrent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_ex.LIFExRecurrentCell.html">norse.torch.module.lif_ex.LIFExRecurrentCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_mc.LIFMCRecurrentCell.html">norse.torch.module.lif_mc.LIFMCRecurrentCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell.html">norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_refrac.LIFRefracCell.html">norse.torch.module.lif_refrac.LIFRefracCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.html">norse.torch.module.lif_refrac.LIFRefracRecurrentCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lsnn.LSNN.html">norse.torch.module.lsnn.LSNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lsnn.LSNNCell.html">norse.torch.module.lsnn.LSNNCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lsnn.LSNNRecurrent.html">norse.torch.module.lsnn.LSNNRecurrent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.module.lsnn.LSNNRecurrentCell.html">norse.torch.module.lsnn.LSNNRecurrentCell</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../norse.torch.functional.html">norse.torch.functional</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.constant_current_lif_encode.html">norse.torch.functional.constant_current_lif_encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.gaussian_rbf.html">norse.torch.functional.gaussian_rbf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.euclidean_distance.html">norse.torch.functional.euclidean_distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.population_encode.html">norse.torch.functional.population_encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.poisson_encode.html">norse.torch.functional.poisson_encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.poisson_encode_step.html">norse.torch.functional.poisson_encode_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.signed_poisson_encode.html">norse.torch.functional.signed_poisson_encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.signed_poisson_encode_step.html">norse.torch.functional.signed_poisson_encode_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.spike_latency_lif_encode.html">norse.torch.functional.spike_latency_lif_encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.spike_latency_encode.html">norse.torch.functional.spike_latency_encode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_current_encoder.html">norse.torch.functional.lif_current_encoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_adex_current_encoder.html">norse.torch.functional.lif_adex_current_encoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_ex_current_encoder.html">norse.torch.functional.lif_ex_current_encoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.logical.logical_and.html">norse.torch.functional.logical.logical_and</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.logical.logical_xor.html">norse.torch.functional.logical.logical_xor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.logical.logical_or.html">norse.torch.functional.logical.logical_or</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.logical.muller_c.html">norse.torch.functional.logical.muller_c</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.logical.posedge_detector.html">norse.torch.functional.logical.posedge_detector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.regularization.regularize_step.html">norse.torch.functional.regularization.regularize_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.regularization.spike_accumulator.html">norse.torch.functional.regularization.spike_accumulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.regularization.voltage_accumulator.html">norse.torch.functional.regularization.voltage_accumulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.heaviside.html">norse.torch.functional.heaviside</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.heavi_erfc_fn.html">norse.torch.functional.heavi_erfc_fn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.heavi_tanh_fn.html">norse.torch.functional.heavi_tanh_fn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.logistic_fn.html">norse.torch.functional.logistic_fn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.heavi_circ_fn.html">norse.torch.functional.heavi_circ_fn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.circ_dist_fn.html">norse.torch.functional.circ_dist_fn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.triangle_fn.html">norse.torch.functional.triangle_fn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.super_fn.html">norse.torch.functional.super_fn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lift.html">norse.torch.functional.lift</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.iaf.IAFParameters.html">norse.torch.functional.iaf.IAFParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.iaf.IAFFeedForwardState.html">norse.torch.functional.iaf.IAFFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.iaf.iaf_feed_forward_step.html">norse.torch.functional.iaf.iaf_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.IzhikevichParameters.html">norse.torch.functional.izhikevich.IzhikevichParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.IzhikevichSpikingBehavior.html">norse.torch.functional.izhikevich.IzhikevichSpikingBehavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.tonic_spiking.html">norse.torch.functional.izhikevich.tonic_spiking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.tonic_bursting.html">norse.torch.functional.izhikevich.tonic_bursting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.phasic_spiking.html">norse.torch.functional.izhikevich.phasic_spiking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.phasic_bursting.html">norse.torch.functional.izhikevich.phasic_bursting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.mixed_mode.html">norse.torch.functional.izhikevich.mixed_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.spike_frequency_adaptation.html">norse.torch.functional.izhikevich.spike_frequency_adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.class_1_exc.html">norse.torch.functional.izhikevich.class_1_exc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.class_2_exc.html">norse.torch.functional.izhikevich.class_2_exc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.spike_latency.html">norse.torch.functional.izhikevich.spike_latency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.subthreshold_oscillation.html">norse.torch.functional.izhikevich.subthreshold_oscillation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.resonator.html">norse.torch.functional.izhikevich.resonator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.izhikevich.izhikevich_feed_forward_step.html">norse.torch.functional.izhikevich.izhikevich_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.leaky_integrator.LIParameters.html">norse.torch.functional.leaky_integrator.LIParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.leaky_integrator.LIState.html">norse.torch.functional.leaky_integrator.LIState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.leaky_integrator.li_feed_forward_step.html">norse.torch.functional.leaky_integrator.li_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.LIFParameters.html">norse.torch.functional.LIFParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.LIFFeedForwardState.html">norse.torch.functional.LIFFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_feed_forward_step.html">norse.torch.functional.lif_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_feed_forward_adjoint_step.html">norse.torch.functional.lif_feed_forward_adjoint_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_feed_forward_adjoint_step_sparse.html">norse.torch.functional.lif_feed_forward_adjoint_step_sparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_box.LIFBoxFeedForwardState.html">norse.torch.functional.lif_box.LIFBoxFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_box.LIFBoxParameters.html">norse.torch.functional.lif_box.LIFBoxParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_box.lif_box_feed_forward_step.html">norse.torch.functional.lif_box.lif_box_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.coba_lif.CobaLIFParameters.html">norse.torch.functional.coba_lif.CobaLIFParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.coba_lif.CobaLIFFeedForwardState.html">norse.torch.functional.coba_lif.CobaLIFFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.coba_lif.coba_lif_feed_forward_step.html">norse.torch.functional.coba_lif.coba_lif_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_adex.LIFAdExParameters.html">norse.torch.functional.lif_adex.LIFAdExParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_adex.LIFAdExFeedForwardState.html">norse.torch.functional.lif_adex.LIFAdExFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_adex.lif_adex_feed_forward_step.html">norse.torch.functional.lif_adex.lif_adex_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_adex.lif_adex_current_encoder.html">norse.torch.functional.lif_adex.lif_adex_current_encoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_ex.LIFExParameters.html">norse.torch.functional.lif_ex.LIFExParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_ex.LIFExFeedForwardState.html">norse.torch.functional.lif_ex.LIFExFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_ex.lif_ex_feed_forward_step.html">norse.torch.functional.lif_ex.lif_ex_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_ex.lif_ex_current_encoder.html">norse.torch.functional.lif_ex.lif_ex_current_encoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_mc_feed_forward_step.html">norse.torch.functional.lif_mc_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_mc_refrac_feed_forward_step.html">norse.torch.functional.lif_mc_refrac_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.LIFRefracParameters.html">norse.torch.functional.LIFRefracParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.LIFRefracFeedForwardState.html">norse.torch.functional.LIFRefracFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_refrac_feed_forward_step.html">norse.torch.functional.lif_refrac_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lif_refrac_feed_forward_adjoint_step.html">norse.torch.functional.lif_refrac_feed_forward_adjoint_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.LSNNParameters.html">norse.torch.functional.LSNNParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.LSNNFeedForwardState.html">norse.torch.functional.LSNNFeedForwardState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lsnn_feed_forward_step.html">norse.torch.functional.lsnn_feed_forward_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.lsnn_feed_forward_adjoint_step.html">norse.torch.functional.lsnn_feed_forward_adjoint_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.receptive_field.gaussian_kernel.html">norse.torch.functional.receptive_field.gaussian_kernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.receptive_field.spatial_receptive_field.html">norse.torch.functional.receptive_field.spatial_receptive_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives.html">norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.STDPSensorParameters.html">norse.torch.functional.STDPSensorParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.STDPSensorState.html">norse.torch.functional.STDPSensorState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.stdp_sensor_step.html">norse.torch.functional.stdp_sensor_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.TsodyksMakramParameters.html">norse.torch.functional.TsodyksMakramParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.TsodyksMakramState.html">norse.torch.functional.TsodyksMakramState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.functional.stp_step.html">norse.torch.functional.stp_step</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../norse.torch.utils.html">norse.torch.utils</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.plot.plot_heatmap_2d.html">norse.torch.utils.plot.plot_heatmap_2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.plot.plot_heatmap_3d.html">norse.torch.utils.plot.plot_heatmap_3d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.plot.plot_histogram_2d.html">norse.torch.utils.plot.plot_histogram_2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.plot.plot_izhikevich.html">norse.torch.utils.plot.plot_izhikevich</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.plot.plot_neuron_states.html">norse.torch.utils.plot.plot_neuron_states</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.plot.plot_scatter_3d.html">norse.torch.utils.plot.plot_scatter_3d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.plot.plot_spikes_2d.html">norse.torch.utils.plot.plot_spikes_2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.tensorboard.hook_spike_activity_mean.html">norse.torch.utils.tensorboard.hook_spike_activity_mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.tensorboard.hook_spike_activity_sum.html">norse.torch.utils.tensorboard.hook_spike_activity_sum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.tensorboard.hook_spike_histogram_mean.html">norse.torch.utils.tensorboard.hook_spike_histogram_mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.tensorboard.hook_spike_histogram_sum.html">norse.torch.utils.tensorboard.hook_spike_histogram_sum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../generated/norse.torch.utils.tensorboard.hook_spike_image.html">norse.torch.utils.tensorboard.hook_spike_image</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api.html">Complete API</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../generated/norse.html">norse</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../generated/norse.benchmark.html">norse.benchmark</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.benchmark.benchmark.html">norse.benchmark.benchmark</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.benchmark.main.html">norse.benchmark.main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.benchmark.norse_lif.html">norse.benchmark.norse_lif</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.benchmark.plot.html">norse.benchmark.plot</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../generated/norse.dataset.html">norse.dataset</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.dataset.memory.html">norse.dataset.memory</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../generated/norse.task.html">norse.task</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.task.cifar10.html">norse.task.cifar10</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.task.correlation_experiment.html">norse.task.correlation_experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.task.memory.html">norse.task.memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.task.mnist.html">norse.task.mnist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.task.mnist_pl.html">norse.task.mnist_pl</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../generated/norse.torch.html">norse.torch</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.torch.functional.html">norse.torch.functional</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.torch.models.html">norse.torch.models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.torch.module.html">norse.torch.module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../generated/norse.torch.utils.html">norse.torch.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../generated/norse.utils.html">norse.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/norse/norse" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/norse/norse/issues/new?title=Issue%20on%20page%20%2F_modules/norse/torch/module/receptive_field.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for norse.torch.module.receptive_field</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">These receptive fields are derived from scale-space theory, specifically in the paper `Normative theory of visual receptive fields by Lindeberg, 2021 &lt;https://www.sciencedirect.com/science/article/pii/S2405844021000025&gt;`_.</span>
+
+<span class="sd">For use in spiking / binary signals, see the paper on `Translation and Scale Invariance for Event-Based Object tracking by Pedersen et al., 2023 &lt;https://dl.acm.org/doi/10.1145/3584954.3584996&gt;`_</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">norse.torch.module.leaky_integrator_box</span> <span class="kn">import</span> <span class="n">LIBoxCell</span><span class="p">,</span> <span class="n">LIBoxParameters</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNCell</span>
+<span class="kn">from</span> <span class="nn">norse.torch.functional.receptive_field</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">spatial_receptive_fields_with_derivatives</span><span class="p">,</span>
+    <span class="n">temporal_scale_distribution</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="SpatialReceptiveField2d"><a class="viewcode-back" href="../../../../generated/norse.torch.module.receptive_field.SpatialReceptiveField2d.html#norse.torch.module.receptive_field.SpatialReceptiveField2d">[docs]</a><span class="k">class</span> <span class="nc">SpatialReceptiveField2d</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="SpatialReceptiveField2d.__init__"><a class="viewcode-back" href="../../../../generated/norse.torch.module.receptive_field.SpatialReceptiveField2d.html#norse.torch.module.receptive_field.SpatialReceptiveField2d.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">n_scales</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">n_angles</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">n_ratios</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">derivatives</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">aggregate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a spatial receptive field as 2-dimensional convolutions.</span>
+<span class="sd">        The parameters decide the number of combinations to scan over, i. e. the number of receptive fields to generate.</span>
+<span class="sd">        Specifically, we generate ``n_scales * n_angles * (n_ratios - 1) + n_scales`` output_channels with aggregation,</span>
+<span class="sd">        and ``in_channels * (n_scales * n_angles * (n_ratios - 1) + n_scales)`` without aggregation.</span>
+
+<span class="sd">        The ``(n_ratios - 1) + n_scales`` terms exist because at ``ratio = 1``, fields are perfectly symmetrical, and there</span>
+<span class="sd">        is therefore no reason to scan over the angles and scales for ``ratio = 1``.</span>
+<span class="sd">        However, ``n_scales`` receptive field still needs to be added (one for each scale-space).</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            n_scales (int): Number of scaling combinations (the size of the receptive field) drawn from a logarithmic distribution</span>
+<span class="sd">            n_angles (int): Number of angular combinations (the orientation of the receptive field)</span>
+<span class="sd">            n_ratios (int): Number of eccentricity combinations (how &quot;flat&quot; the receptive field is)</span>
+<span class="sd">            size (int): The size of the square kernel in pixels</span>
+<span class="sd">            derivatives (Union[int, List[Tuple[int, int]]]): The number of derivatives to use in the receptive field.</span>
+<span class="sd">            aggregate (bool): If True, sums the input channels over all output channels. If False, every</span>
+<span class="sd">                output channel is mapped to every input channel, which may blow up in complexity.</span>
+<span class="sd">            **kwargs: Arguments passed on to the underlying torch.nn.Conv2d</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">spatial_receptive_fields_with_derivatives</span><span class="p">(</span>
+            <span class="n">n_scales</span><span class="p">,</span> <span class="n">n_angles</span><span class="p">,</span> <span class="n">n_ratios</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">derivatives</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">aggregate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">in_channels</span>
+            <span class="n">empty_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">fields</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">in_channels</span><span class="p">):</span>
+                <span class="n">in_weights</span> <span class="o">=</span> <span class="n">empty_weights</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+                <span class="n">in_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fields</span>
+                <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">in_weights</span><span class="p">)</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TemporalReceptiveField"><a class="viewcode-back" href="../../../../generated/norse.torch.module.receptive_field.TemporalReceptiveField.html#norse.torch.module.receptive_field.TemporalReceptiveField">[docs]</a><span class="k">class</span> <span class="nc">TemporalReceptiveField</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="TemporalReceptiveField.__init__"><a class="viewcode-back" href="../../../../generated/norse.torch.module.receptive_field.TemporalReceptiveField.html#norse.torch.module.receptive_field.TemporalReceptiveField.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">shape</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span>
+        <span class="n">n_scales</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">activation</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">SNNCell</span><span class="p">]</span> <span class="o">=</span> <span class="n">LIBoxCell</span><span class="p">,</span>
+        <span class="n">activation_state_map</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span>
+            <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">NamedTuple</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">LIBoxParameters</span><span class="p">(</span><span class="n">tau_mem_inv</span><span class="o">=</span><span class="n">t</span><span class="p">),</span>
+        <span class="n">min_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">max_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates ``n_scales`` temporal receptive fields for arbitrary n-dimensional inputs.</span>
+<span class="sd">        The scale spaces are selected in a range of [min_scale, max_scale] using an exponential distribution, scattered using ``torch.linspace``.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            shape (torch.Size): The shape of the incoming tensor</span>
+<span class="sd">            n_scales (int): The number of temporal scale spaces to iterate over.</span>
+<span class="sd">            activation (SNNCell): The activation neuron. Defaults to LIBoxCell</span>
+<span class="sd">            activation_state_map (Callable): A function that takes a tensor and provides a neuron parameter tuple.</span>
+<span class="sd">                Required if activation is changed, since the default behaviour provides LIBoxParameters.</span>
+<span class="sd">            min_scale (float): The minimum scale space. Defaults to 1.</span>
+<span class="sd">            max_scale (float): The maximum scale space. Defaults to 32.</span>
+<span class="sd">            dt (float): Neuron simulation timestep. Defaults to 0.001.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">taus</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">temporal_scale_distribution</span><span class="p">(</span><span class="n">min_scale</span><span class="p">,</span> <span class="n">max_scale</span><span class="p">,</span> <span class="n">n_scales</span><span class="p">)</span> <span class="o">/</span> <span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ps</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">taus</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="c1"># pytype: disable=missing-parameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neurons</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">activation_state_map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ps</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+        <span class="c1"># pytype: enable=missing-parameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rf_dimension</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_scales</span> <span class="o">=</span> <span class="n">n_scales</span></div>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NamedTuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">x_repeated</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_scales</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">rf_dimension</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">neurons</span><span class="p">(</span><span class="n">x_repeated</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Norse.ai
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

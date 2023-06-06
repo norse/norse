@@ -191,6 +191,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.encode.SpikeLatencyEncoder.html">norse.torch.module.encode.SpikeLatencyEncoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.encode.SpikeLatencyLIFEncoder.html">norse.torch.module.encode.SpikeLatencyLIFEncoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.conv.LConv2d.html">norse.torch.module.conv.LConv2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.receptive_field.SpatialReceptiveField2d.html">norse.torch.module.receptive_field.SpatialReceptiveField2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.receptive_field.TemporalReceptiveField.html">norse.torch.module.receptive_field.TemporalReceptiveField</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.iaf.IAFFeedForwardState.html">norse.torch.module.iaf.IAFFeedForwardState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.iaf.IAFParameters.html">norse.torch.module.iaf.IAFParameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.iaf.IAFCell.html">norse.torch.module.iaf.IAFCell</a></li>
@@ -313,6 +315,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.LSNNFeedForwardState.html">norse.torch.functional.LSNNFeedForwardState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.lsnn_feed_forward_step.html">norse.torch.functional.lsnn_feed_forward_step</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.lsnn_feed_forward_adjoint_step.html">norse.torch.functional.lsnn_feed_forward_adjoint_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.receptive_field.gaussian_kernel.html">norse.torch.functional.receptive_field.gaussian_kernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.receptive_field.spatial_receptive_field.html">norse.torch.functional.receptive_field.spatial_receptive_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives.html">norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.STDPSensorParameters.html">norse.torch.functional.STDPSensorParameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.STDPSensorState.html">norse.torch.functional.STDPSensorState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.stdp_sensor_step.html">norse.torch.functional.stdp_sensor_step</a></li>
@@ -598,6 +603,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-short-term-memory-lsnn">Long short-term memory (LSNN)</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#receptive-fields">Receptive fields</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plasticity-models">Plasticity models</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spike-time-dependent-plasticity-stdp">Spike-time dependent plasticity (STDP)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tsodyks-markram-timing-dependent-plasticity-tdp">Tsodyks-Markram timing-dependent plasticity (TDP)</a></li>
@@ -639,10 +645,11 @@ document.write(`
 <li><p><a class="reference internal" href="#long-short-term-memory-lsnn" id="id19">Long short-term memory (LSNN)</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#plasticity-models" id="id20">Plasticity models</a></p>
+<li><p><a class="reference internal" href="#receptive-fields" id="id20">Receptive fields</a></p></li>
+<li><p><a class="reference internal" href="#plasticity-models" id="id21">Plasticity models</a></p>
 <ul>
-<li><p><a class="reference internal" href="#spike-time-dependent-plasticity-stdp" id="id21">Spike-time dependent plasticity (STDP)</a></p></li>
-<li><p><a class="reference internal" href="#tsodyks-markram-timing-dependent-plasticity-tdp" id="id22">Tsodyks-Markram timing-dependent plasticity (TDP)</a></p></li>
+<li><p><a class="reference internal" href="#spike-time-dependent-plasticity-stdp" id="id22">Spike-time dependent plasticity (STDP)</a></p></li>
+<li><p><a class="reference internal" href="#tsodyks-markram-timing-dependent-plasticity-tdp" id="id23">Tsodyks-Markram timing-dependent plasticity (TDP)</a></p></li>
 </ul>
 </li>
 </ul>
@@ -1118,6 +1125,26 @@ It is these sudden current jumps that gives the model its name, because the shif
 </table>
 </section>
 </section>
+<section id="receptive-fields">
+<h2><a class="toc-backref" href="#id1">Receptive fields</a><a class="headerlink" href="#receptive-fields" title="Permalink to this headline">#</a></h2>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.receptive_field.gaussian_kernel.html#norse.torch.functional.receptive_field.gaussian_kernel" title="norse.torch.functional.receptive_field.gaussian_kernel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_kernel</span></code></a>(x, s, c)</p></td>
+<td><p>Efficiently creates a 2d gaussian kernel.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/norse.torch.functional.receptive_field.spatial_receptive_field.html#norse.torch.functional.receptive_field.spatial_receptive_field" title="norse.torch.functional.receptive_field.spatial_receptive_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spatial_receptive_field</span></code></a>(angle, ratio, size)</p></td>
+<td><p>Creates a (size x size) receptive field kernel</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives.html#norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives" title="norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spatial_receptive_fields_with_derivatives</span></code></a>(...)</p></td>
+<td><p>Creates a number of receptive field with 1st directional derivatives.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="plasticity-models">
 <h2><a class="toc-backref" href="#id1">Plasticity models</a><a class="headerlink" href="#plasticity-models" title="Permalink to this headline">#</a></h2>
 <section id="spike-time-dependent-plasticity-stdp">
@@ -1249,6 +1276,7 @@ It is these sudden current jumps that gives the model its name, because the shif
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#long-short-term-memory-lsnn">Long short-term memory (LSNN)</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#receptive-fields">Receptive fields</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plasticity-models">Plasticity models</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spike-time-dependent-plasticity-stdp">Spike-time dependent plasticity (STDP)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tsodyks-markram-timing-dependent-plasticity-tdp">Tsodyks-Markram timing-dependent plasticity (TDP)</a></li>

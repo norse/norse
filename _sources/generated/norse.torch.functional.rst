@@ -50,6 +50,7 @@ norse.torch.functional
    norse.torch.functional.lift
    norse.torch.functional.logical
    norse.torch.functional.lsnn
+   norse.torch.functional.receptive_field
    norse.torch.functional.regularization
    norse.torch.functional.spikes_to_times_decoder
    norse.torch.functional.stdp

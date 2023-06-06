@@ -189,6 +189,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.module.encode.SpikeLatencyEncoder.html">norse.torch.module.encode.SpikeLatencyEncoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.module.encode.SpikeLatencyLIFEncoder.html">norse.torch.module.encode.SpikeLatencyLIFEncoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.module.conv.LConv2d.html">norse.torch.module.conv.LConv2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.module.receptive_field.SpatialReceptiveField2d.html">norse.torch.module.receptive_field.SpatialReceptiveField2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.module.receptive_field.TemporalReceptiveField.html">norse.torch.module.receptive_field.TemporalReceptiveField</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.module.iaf.IAFFeedForwardState.html">norse.torch.module.iaf.IAFFeedForwardState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.module.iaf.IAFParameters.html">norse.torch.module.iaf.IAFParameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.module.iaf.IAFCell.html">norse.torch.module.iaf.IAFCell</a></li>
@@ -311,6 +313,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.functional.LSNNFeedForwardState.html">norse.torch.functional.LSNNFeedForwardState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.functional.lsnn_feed_forward_step.html">norse.torch.functional.lsnn_feed_forward_step</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.functional.lsnn_feed_forward_adjoint_step.html">norse.torch.functional.lsnn_feed_forward_adjoint_step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.functional.receptive_field.gaussian_kernel.html">norse.torch.functional.receptive_field.gaussian_kernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.functional.receptive_field.spatial_receptive_field.html">norse.torch.functional.receptive_field.spatial_receptive_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives.html">norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.functional.STDPSensorParameters.html">norse.torch.functional.STDPSensorParameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.functional.STDPSensorState.html">norse.torch.functional.STDPSensorState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/norse.torch.functional.stdp_sensor_step.html">norse.torch.functional.stdp_sensor_step</a></li>
@@ -710,7 +715,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0, &#39;$\\tau_{m}^{-1}$ [ms]&#39;)
 </pre></div>
 </div>
-<img alt="../_images/4adb6bc6bce1f78a380cdf8f3ff9effa2368c340c1760c209e6a0eb52e69925c.png" src="../_images/4adb6bc6bce1f78a380cdf8f3ff9effa2368c340c1760c209e6a0eb52e69925c.png" />
+<img alt="../_images/f8cd8d587342407dc12951a66564fde163e686dafe0f05286c507d528a5250cc.png" src="../_images/f8cd8d587342407dc12951a66564fde163e686dafe0f05286c507d528a5250cc.png" />
 </div>
 </div>
 <p>The parameters of a PyTorch module can be accesses by invoking the <code class="docutils literal notranslate"><span class="pre">parameters</span></code> method. In the case of the <code class="docutils literal notranslate"><span class="pre">LIFRecurrentCell</span></code> those are the recurrent and input weight matrices. Note how both tensors have <code class="docutils literal notranslate"><span class="pre">requires_grad=True</span></code> and that the <code class="docutils literal notranslate"><span class="pre">LIFParameters</span></code> do not appear. This is because none of the tensors entering the <code class="docutils literal notranslate"><span class="pre">LIFParameters</span></code> have been registered as a PyTorch Parameter.</p>
@@ -722,22 +727,22 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parameter containing:
- tensor([[ 0.0805,  0.0889, -0.1760,  ...,  0.0921, -0.2463,  0.0591],
-         [ 0.0335,  0.1077, -0.0053,  ...,  0.0023, -0.0270,  0.2449],
-         [ 0.2220, -0.0142, -0.0111,  ..., -0.0095,  0.3176, -0.0419],
+ tensor([[-0.0814, -0.0062, -0.1811,  ...,  0.0309,  0.0628,  0.0084],
+         [-0.2100,  0.1339, -0.1512,  ...,  0.1401,  0.1993, -0.2331],
+         [-0.2704, -0.0037, -0.0261,  ..., -0.0921, -0.1205,  0.0377],
          ...,
-         [ 0.1939, -0.0735, -0.1253,  ..., -0.0743, -0.0273,  0.0318],
-         [-0.0730, -0.1689, -0.0910,  ...,  0.1742,  0.0545,  0.1457],
-         [ 0.1649, -0.0502, -0.0093,  ..., -0.1332,  0.0508,  0.0381]],
+         [-0.1074, -0.0348,  0.2852,  ..., -0.0164, -0.0088,  0.0315],
+         [ 0.1383, -0.1604, -0.0159,  ...,  0.0039,  0.0891, -0.1496],
+         [ 0.0847, -0.0117, -0.1712,  ..., -0.1546, -0.3358,  0.2317]],
         requires_grad=True),
  Parameter containing:
- tensor([[ 0.0000,  0.0113,  0.2886,  ..., -0.2890,  0.1062,  0.1622],
-         [ 0.0595,  0.0000,  0.2379,  ...,  0.0857, -0.0044, -0.1433],
-         [ 0.0436, -0.1167,  0.0000,  ...,  0.0967, -0.1905,  0.0157],
+ tensor([[ 0.0000,  0.0672, -0.0691,  ...,  0.3815,  0.0307, -0.1956],
+         [-0.2529,  0.0000,  0.1916,  ...,  0.0777, -0.2846, -0.0821],
+         [ 0.0954,  0.0199,  0.0000,  ...,  0.0354,  0.0388, -0.2178],
          ...,
-         [ 0.1695, -0.0587,  0.1001,  ...,  0.0000, -0.0373,  0.0312],
-         [-0.2734, -0.1810, -0.0358,  ..., -0.1805,  0.0000, -0.0041],
-         [-0.2175, -0.0547,  0.0122,  ...,  0.2153,  0.0656,  0.0000]],
+         [-0.1471,  0.0985, -0.2566,  ...,  0.0000, -0.0926,  0.1403],
+         [-0.0207,  0.1002, -0.1861,  ...,  0.0650,  0.0000, -0.1226],
+         [ 0.1991,  0.1839,  0.0173,  ...,  0.2141, -0.0535,  0.0000]],
         requires_grad=True)]
 </pre></div>
 </div>
@@ -777,33 +782,33 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ParametrizedLIFRecurrentCell(
   (cell): LIFRecurrentCell(
     input_size=200, hidden_size=100, p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=Parameter containing:
-    tensor([110.2177,  65.3247,  86.7988,  99.6771,  76.6138, 112.0443,  71.1214,
-            123.4146,  98.2090,  87.8633, 114.7698, 101.8198, 146.8564, 127.7005,
-            113.0819, 100.7703,  97.4901, 126.3008, 108.4378, 116.1443, 102.0852,
-             56.1298,  88.3228,  92.9193, 101.0345, 100.9824, 116.9507, 113.6042,
-            116.9688, 128.2859, 107.7658, 112.1617,  62.2473,  90.3785, 116.7107,
-            169.5730,  91.1968, 115.4292, 104.0205,  94.9561,  85.5037,  82.3322,
-            107.3074,  62.9754, 108.2139,  78.4050,  92.6648,  97.6988,  83.9421,
-             88.7302, 104.7906, 102.5796, 102.5675,  69.2783,  95.7390, 122.5406,
-             97.9073, 118.3585,  93.5930,  86.0545,  75.2153, 118.9929, 101.9169,
-            109.3787, 136.2384, 138.2991, 116.6751,  89.4813, 136.6556,  76.2457,
-             90.7918,  99.5281, 101.8487,  69.6416, 116.4550,  93.1904,  59.4422,
-            128.2021, 100.1741,  87.8937, 107.2785,  83.6044,  89.9447,  87.3058,
-             89.0169, 124.5469,  94.1632,  76.2637,  96.3079, 108.0168, 114.5180,
-             84.6521, 102.8557,  85.7824, 103.3192, 104.0103,  88.3497,  88.4569,
-            141.3261, 116.6736], requires_grad=True), v_leak=tensor(0.), v_th=Parameter containing:
-    tensor([0.5900, 0.5050, 0.5442, 0.5316, 0.5171, 0.5738, 0.3666, 0.4545, 0.4674,
-            0.3883, 0.4402, 0.4172, 0.5104, 0.4449, 0.4720, 0.6923, 0.5582, 0.5540,
-            0.4253, 0.5996, 0.4558, 0.5164, 0.6972, 0.6769, 0.5362, 0.3955, 0.4848,
-            0.5039, 0.5555, 0.4856, 0.6909, 0.3615, 0.5571, 0.4637, 0.4274, 0.3526,
-            0.5863, 0.4259, 0.5878, 0.5889, 0.4514, 0.4747, 0.5197, 0.5328, 0.4299,
-            0.6467, 0.5265, 0.4876, 0.4341, 0.4352, 0.5269, 0.5167, 0.5198, 0.5261,
-            0.6237, 0.5157, 0.6202, 0.4687, 0.2459, 0.6589, 0.4206, 0.3801, 0.3701,
-            0.6883, 0.6861, 0.6394, 0.4809, 0.4156, 0.5701, 0.4461, 0.6234, 0.5270,
-            0.2859, 0.4977, 0.3080, 0.6060, 0.5241, 0.5502, 0.5448, 0.6397, 0.5734,
-            0.3662, 0.5612, 0.6506, 0.4899, 0.5444, 0.3616, 0.4200, 0.5095, 0.5051,
-            0.3857, 0.4470, 0.3601, 0.3767, 0.4719, 0.5549, 0.5959, 0.5874, 0.3619,
-            0.5654], requires_grad=True), v_reset=tensor(0.), method=&#39;super&#39;, alpha=tensor(100)), autapses=False, dt=0.001
+    tensor([ 81.4333, 136.1199,  97.1027,  83.2383,  89.6369, 128.1995, 109.0331,
+            139.4796, 101.2416, 101.6448,  57.4815, 127.3723, 105.1440, 122.7017,
+            114.8177, 113.1438,  98.8045,  92.8412,  76.3927,  94.8068, 108.3732,
+             88.2708,  89.6754,  75.4439,  66.4683,  99.1237, 128.8175, 147.7730,
+            136.3221,  85.6609,  88.1432, 126.2980,  72.6328,  74.8359,  71.3664,
+            122.0980, 115.2138, 106.9987,  56.8349,  74.7175, 110.2364, 111.5246,
+            105.1587,  66.2684, 109.5943,  93.6668,  90.7697, 113.8277,  93.5665,
+             97.5402,  99.2363, 120.2352,  90.0094,  94.8861,  88.0128, 104.5852,
+             92.0583,  87.1419,  74.2075, 111.8167, 110.3682, 104.6219,  81.4015,
+             71.9139,  59.6975, 115.8482,  83.7466,  95.3006,  67.8646, 104.3405,
+            155.2840,  96.5550,  93.0861,  93.7574,  70.2081,  92.3472, 117.5109,
+            118.2857, 110.8645,  87.3730, 105.6683, 107.3883,  87.5381, 106.0184,
+             96.1074,  97.5505,  94.5942,  99.0701,  64.3953,  66.5585, 107.1859,
+             92.0789, 103.8630, 102.3323, 125.8727, 136.1267,  88.7309, 117.9582,
+            106.8696, 111.0129], requires_grad=True), v_leak=tensor(0.), v_th=Parameter containing:
+    tensor([0.4929, 0.5040, 0.5240, 0.6373, 0.5378, 0.5818, 0.3336, 0.5980, 0.7056,
+            0.4379, 0.6376, 0.4540, 0.3211, 0.4927, 0.6273, 0.5974, 0.4582, 0.5530,
+            0.4672, 0.6343, 0.4370, 0.5952, 0.7504, 0.3287, 0.5830, 0.3588, 0.4803,
+            0.5910, 0.4345, 0.5272, 0.5231, 0.3616, 0.5729, 0.3592, 0.6594, 0.4995,
+            0.5748, 0.3452, 0.5521, 0.6576, 0.5715, 0.4051, 0.4596, 0.5882, 0.4306,
+            0.5432, 0.3225, 0.4206, 0.3967, 0.4766, 0.4395, 0.7160, 0.4184, 0.4371,
+            0.3936, 0.4095, 0.6104, 0.5661, 0.2876, 0.5010, 0.6004, 0.5455, 0.5253,
+            0.6289, 0.4051, 0.5156, 0.4871, 0.4788, 0.5750, 0.3830, 0.4647, 0.6787,
+            0.5294, 0.5019, 0.5814, 0.4182, 0.5612, 0.5873, 0.6637, 0.4828, 0.5600,
+            0.6632, 0.6511, 0.4872, 0.3003, 0.4738, 0.4166, 0.5535, 0.4982, 0.7007,
+            0.3735, 0.6143, 0.1983, 0.7350, 0.4318, 0.4004, 0.3977, 0.5196, 0.3913,
+            0.5576], requires_grad=True), v_reset=tensor(0.), method=&#39;super&#39;, alpha=tensor(100)), autapses=False, dt=0.001
   )
 )
 </pre></div>
@@ -819,51 +824,56 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parameter containing:
- tensor([110.2177,  65.3247,  86.7988,  99.6771,  76.6138, 112.0443,  71.1214,
-         123.4146,  98.2090,  87.8633, 114.7698, 101.8198, 146.8564, 127.7005,
-         113.0819, 100.7703,  97.4901, 126.3008, 108.4378, 116.1443, 102.0852,
-          56.1298,  88.3228,  92.9193, 101.0345, 100.9824, 116.9507, 113.6042,
-         116.9688, 128.2859, 107.7658, 112.1617,  62.2473,  90.3785, 116.7107,
-         169.5730,  91.1968, 115.4292, 104.0205,  94.9561,  85.5037,  82.3322,
-         107.3074,  62.9754, 108.2139,  78.4050,  92.6648,  97.6988,  83.9421,
-          88.7302, 104.7906, 102.5796, 102.5675,  69.2783,  95.7390, 122.5406,
-          97.9073, 118.3585,  93.5930,  86.0545,  75.2153, 118.9929, 101.9169,
-         109.3787, 136.2384, 138.2991, 116.6751,  89.4813, 136.6556,  76.2457,
-          90.7918,  99.5281, 101.8487,  69.6416, 116.4550,  93.1904,  59.4422,
-         128.2021, 100.1741,  87.8937, 107.2785,  83.6044,  89.9447,  87.3058,
-          89.0169, 124.5469,  94.1632,  76.2637,  96.3079, 108.0168, 114.5180,
-          84.6521, 102.8557,  85.7824, 103.3192, 104.0103,  88.3497,  88.4569,
-         141.3261, 116.6736], requires_grad=True),
+ tensor([ 81.4333, 136.1199,  97.1027,  83.2383,  89.6369, 128.1995, 109.0331,
+         139.4796, 101.2416, 101.6448,  57.4815, 127.3723, 105.1440, 122.7017,
+         114.8177, 113.1438,  98.8045,  92.8412,  76.3927,  94.8068, 108.3732,
+          88.2708,  89.6754,  75.4439,  66.4683,  99.1237, 128.8175, 147.7730,
+         136.3221,  85.6609,  88.1432, 126.2980,  72.6328,  74.8359,  71.3664,
+         122.0980, 115.2138, 106.9987,  56.8349,  74.7175, 110.2364, 111.5246,
+         105.1587,  66.2684, 109.5943,  93.6668,  90.7697, 113.8277,  93.5665,
+          97.5402,  99.2363, 120.2352,  90.0094,  94.8861,  88.0128, 104.5852,
+          92.0583,  87.1419,  74.2075, 111.8167, 110.3682, 104.6219,  81.4015,
+          71.9139,  59.6975, 115.8482,  83.7466,  95.3006,  67.8646, 104.3405,
+         155.2840,  96.5550,  93.0861,  93.7574,  70.2081,  92.3472, 117.5109,
+         118.2857, 110.8645,  87.3730, 105.6683, 107.3883,  87.5381, 106.0184,
+          96.1074,  97.5505,  94.5942,  99.0701,  64.3953,  66.5585, 107.1859,
+          92.0789, 103.8630, 102.3323, 125.8727, 136.1267,  88.7309, 117.9582,
+         106.8696, 111.0129], requires_grad=True),
  Parameter containing:
- tensor([0.5900, 0.5050, 0.5442, 0.5316, 0.5171, 0.5738, 0.3666, 0.4545, 0.4674,
-         0.3883, 0.4402, 0.4172, 0.5104, 0.4449, 0.4720, 0.6923, 0.5582, 0.5540,
-         0.4253, 0.5996, 0.4558, 0.5164, 0.6972, 0.6769, 0.5362, 0.3955, 0.4848,
-         0.5039, 0.5555, 0.4856, 0.6909, 0.3615, 0.5571, 0.4637, 0.4274, 0.3526,
-         0.5863, 0.4259, 0.5878, 0.5889, 0.4514, 0.4747, 0.5197, 0.5328, 0.4299,
-         0.6467, 0.5265, 0.4876, 0.4341, 0.4352, 0.5269, 0.5167, 0.5198, 0.5261,
-         0.6237, 0.5157, 0.6202, 0.4687, 0.2459, 0.6589, 0.4206, 0.3801, 0.3701,
-         0.6883, 0.6861, 0.6394, 0.4809, 0.4156, 0.5701, 0.4461, 0.6234, 0.5270,
-         0.2859, 0.4977, 0.3080, 0.6060, 0.5241, 0.5502, 0.5448, 0.6397, 0.5734,
-         0.3662, 0.5612, 0.6506, 0.4899, 0.5444, 0.3616, 0.4200, 0.5095, 0.5051,
-         0.3857, 0.4470, 0.3601, 0.3767, 0.4719, 0.5549, 0.5959, 0.5874, 0.3619,
-         0.5654], requires_grad=True),
+ tensor([0.4929, 0.5040, 0.5240, 0.6373, 0.5378, 0.5818, 0.3336, 0.5980, 0.7056,
+         0.4379, 0.6376, 0.4540, 0.3211, 0.4927, 0.6273, 0.5974, 0.4582, 0.5530,
+         0.4672, 0.6343, 0.4370, 0.5952, 0.7504, 0.3287, 0.5830, 0.3588, 0.4803,
+         0.5910, 0.4345, 0.5272, 0.5231, 0.3616, 0.5729, 0.3592, 0.6594, 0.4995,
+         0.5748, 0.3452, 0.5521, 0.6576, 0.5715, 0.4051, 0.4596, 0.5882, 0.4306,
+         0.5432, 0.3225, 0.4206, 0.3967, 0.4766, 0.4395, 0.7160, 0.4184, 0.4371,
+         0.3936, 0.4095, 0.6104, 0.5661, 0.2876, 0.5010, 0.6004, 0.5455, 0.5253,
+         0.6289, 0.4051, 0.5156, 0.4871, 0.4788, 0.5750, 0.3830, 0.4647, 0.6787,
+         0.5294, 0.5019, 0.5814, 0.4182, 0.5612, 0.5873, 0.6637, 0.4828, 0.5600,
+         0.6632, 0.6511, 0.4872, 0.3003, 0.4738, 0.4166, 0.5535, 0.4982, 0.7007,
+         0.3735, 0.6143, 0.1983, 0.7350, 0.4318, 0.4004, 0.3977, 0.5196, 0.3913,
+         0.5576], requires_grad=True),
  Parameter containing:
- tensor([[ 0.1204,  0.1979, -0.0320,  ..., -0.2462, -0.0423,  0.0844],
-         [ 0.0618,  0.1295,  0.1058,  ...,  0.0896,  0.1931, -0.1323],
-         [-0.2374, -0.0566, -0.0366,  ...,  0.4528, -0.2463,  0.3102],
+ tensor([[ 2.5432e-01, -1.5759e-02, -2.5657e-01,  ...,  1.8096e-01,
+          -1.8878e-02, -1.6048e-02],
+         [-1.4429e-01,  2.7217e-01, -1.3458e-01,  ..., -4.7881e-02,
+          -4.3962e-02, -1.5195e-02],
+         [-1.0053e-04,  1.2762e-01, -2.2558e-02,  ...,  5.9208e-02,
+           5.8363e-02,  1.5987e-01],
          ...,
-         [-0.3223,  0.2012,  0.0672,  ..., -0.0066, -0.2368,  0.0510],
-         [ 0.0522,  0.1897, -0.2629,  ..., -0.1401,  0.1201,  0.2113],
-         [ 0.1528, -0.0175, -0.1325,  ...,  0.0398, -0.1926,  0.0822]],
-        requires_grad=True),
+         [-7.8392e-02,  6.9819e-02,  5.8376e-02,  ...,  1.7664e-01,
+          -1.4019e-01,  1.1049e-01],
+         [-1.0422e-02, -9.1387e-02,  2.7325e-01,  ...,  1.4604e-01,
+          -8.6133e-02, -1.2465e-02],
+         [ 1.2656e-01,  1.2692e-02, -5.9110e-02,  ...,  1.9068e-01,
+           1.3115e-01, -4.1823e-02]], requires_grad=True),
  Parameter containing:
- tensor([[ 0.0000,  0.0308,  0.0641,  ...,  0.0182,  0.2466, -0.0256],
-         [ 0.3017,  0.0000,  0.1411,  ...,  0.0839, -0.1350, -0.0036],
-         [-0.0735,  0.0378,  0.0000,  ...,  0.0412, -0.0979,  0.1630],
+ tensor([[ 0.0000,  0.0644,  0.0413,  ..., -0.1019,  0.0198, -0.0344],
+         [ 0.2316,  0.0000, -0.0202,  ...,  0.2271, -0.0950, -0.0755],
+         [ 0.0128, -0.0210,  0.0000,  ..., -0.0157, -0.1107,  0.1071],
          ...,
-         [-0.0434,  0.0669, -0.0300,  ...,  0.0000, -0.0721,  0.3221],
-         [-0.0559,  0.1819,  0.1510,  ...,  0.1302,  0.0000, -0.1234],
-         [-0.1297,  0.1102, -0.0032,  ...,  0.2006,  0.0376,  0.0000]],
+         [ 0.0009,  0.0040,  0.0275,  ...,  0.0000,  0.3009, -0.0958],
+         [-0.2405, -0.0864,  0.2826,  ..., -0.0281,  0.0000,  0.1871],
+         [-0.0980, -0.0129, -0.1113,  ..., -0.1547,  0.1111,  0.0000]],
         requires_grad=True)]
 </pre></div>
 </div>
@@ -920,13 +930,13 @@ Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to ./MNI
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/9912422 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 9912422/9912422 [00:00&lt;00:00, 167654813.39it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 9912422/9912422 [00:00&lt;00:00, 160922248.67it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracting ./MNIST/raw/train-images-idx3-ubyte.gz to ./MNIST/raw
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
@@ -936,7 +946,7 @@ Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz to ./MNI
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/28881 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 28881/28881 [00:00&lt;00:00, 143525703.58it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 28881/28881 [00:00&lt;00:00, 138917080.07it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -951,7 +961,7 @@ Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz to ./MNIS
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/1648877 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1648877/1648877 [00:00&lt;00:00, 49903607.15it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1648877/1648877 [00:00&lt;00:00, 49805136.12it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracting ./MNIST/raw/t10k-images-idx3-ubyte.gz to ./MNIST/raw
@@ -968,7 +978,7 @@ Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/4542 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4542/4542 [00:00&lt;00:00, 26756360.63it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4542/4542 [00:00&lt;00:00, 27933326.64it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>

@@ -47,6 +47,7 @@ norse.torch.functional.test
    norse.torch.functional.test.test_lift
    norse.torch.functional.test.test_logical
    norse.torch.functional.test.test_lsnn
+   norse.torch.functional.test.test_receptive_field
    norse.torch.functional.test.test_regularization
    norse.torch.functional.test.test_spikes_to_times_decoder
    norse.torch.functional.test.test_stdp

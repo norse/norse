@@ -46,6 +46,7 @@ norse.torch.module
    norse.torch.module.lif_refrac
    norse.torch.module.lift
    norse.torch.module.lsnn
+   norse.torch.module.receptive_field
    norse.torch.module.regularization
    norse.torch.module.sequential
    norse.torch.module.snn
