@@ -11,9 +11,9 @@ def test_spatial_receptive_field():
 
 def test_spatial_receptive_field_no_aggregation():
     m = SpatialReceptiveField2d(
-        3, 2, 2, 2, 9, derivatives=0, bias=False, aggregate=False
+        3, 2, 2, 2, 11, derivatives=0, bias=False, aggregate=False
     )
-    assert m.conv.weight.shape == torch.Size([3, 3 * (2 * 2 + 2), 9, 9])
+    assert m.conv.weight.shape == torch.Size([3, 3 * (2 * 2 + 2), 11, 11])
 
 
 def test_temporal_receptive_field_1d():

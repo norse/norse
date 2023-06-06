@@ -57,7 +57,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
             weights = fields.unsqueeze(1).repeat(1, in_channels, 1, 1)
         else:
             self.out_channels = fields.shape[0] * in_channels
-            empty_weights = torch.zeros(in_channels, fields.shape[0], 9, 9)
+            empty_weights = torch.zeros(in_channels, fields.shape[0], size, size)
             weights = []
             for i in range(in_channels):
                 in_weights = empty_weights.clone()
