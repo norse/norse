@@ -153,6 +153,12 @@ from .izhikevich import (
     izhikevich_recurrent_step,
 )
 
+from .receptive_field import (
+    gaussian_kernel,
+    spatial_receptive_field,
+    spatial_receptive_fields_with_derivatives,
+)
+
 from .superspike import super_fn
 
 from .tsodyks_makram import TsodyksMakramParameters, TsodyksMakramState, stp_step
@@ -299,6 +305,10 @@ __all__ = [
     "lsnn_step",
     "lsnn_feed_forward_step",
     "lsnn_feed_forward_adjoint_step",
+    # Receptive fields
+    "gaussian_kernel",
+    "spatial_receptive_field",
+    "spatial_receptive_fields_with_derivatives",
     # Regularization
     "regularize_step",
     "spike_accumulator",
