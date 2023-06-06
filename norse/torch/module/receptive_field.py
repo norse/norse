@@ -63,7 +63,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
                 in_weights = empty_weights.clone()
                 in_weights[i] = fields
                 weights.append(in_weights)
-            weights = torch.concat(weights, 1)
+            weights = torch.concat(weights, 1).permute(1, 0, 2, 3)
 
         self.conv = torch.nn.Conv2d(in_channels, self.out_channels, size, **kwargs)
         self.conv.weight = torch.nn.Parameter(weights)
