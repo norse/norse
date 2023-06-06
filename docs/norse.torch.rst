@@ -69,10 +69,6 @@ Convolutions
 
 
 Receptive fields
-<<<<<<< HEAD
-----------------
-=======
->>>>>>> 65978bb8 (Added derivative parameterization and tests)
 
 .. currentmodule:: norse.torch.module.receptive_field
 .. autosummary::
@@ -80,11 +76,7 @@ Receptive fields
     :nosignatures:
 
     SpatialReceptiveField2d
-<<<<<<< HEAD
     TemporalReceptiveField
-=======
-    SpatioTemporalReceptiveField2d
->>>>>>> 65978bb8 (Added derivative parameterization and tests)
 
 Neuron models
 -------------
