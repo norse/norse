@@ -4,7 +4,7 @@ These receptive fields are derived from scale-space theory, specifically in the 
 For use in spiking / binary signals, see the paper on `Translation and Scale Invariance for Event-Based Object tracking by Pedersen et al., 2023 <https://dl.acm.org/doi/10.1145/3584954.3584996>`_
 """
 
-from typing import Callable, List, NamedTuple, Optional, Tuple, Union
+from typing import Callable, List, NamedTuple, Optional, Tuple, Type, Union
 
 import torch
 
@@ -38,15 +38,15 @@ class SpatialReceptiveField2d(torch.nn.Module):
         is therefore no reason to scan over the angles and scales for ``ratio = 1``.
         However, ``n_scales`` receptive field still needs to be added (one for each scale-space).
 
-        Arguments:
-          n_scales (int): Number of scaling combinations (the size of the receptive field) drawn from a logarithmic distribution
-          n_angles (int): Number of angular combinations (the orientation of the receptive field)
-          n_ratios (int): Number of eccentricity combinations (how "flat" the receptive field is)
-          size (int): The size of the square kernel in pixels
-          derivatives (Union[int, List[Tuple[int, int]]]): The number of derivatives to use in the receptive field.
-          aggregate (bool): If True, sums the input channels over all output channels. If False, every
-                            output channel is mapped to every input channel, which may blow up in complexity.
-          **kwargs: Arguments passed on to the underlying torch.nn.Conv2d
+        Parameters:
+            n_scales (int): Number of scaling combinations (the size of the receptive field) drawn from a logarithmic distribution
+            n_angles (int): Number of angular combinations (the orientation of the receptive field)
+            n_ratios (int): Number of eccentricity combinations (how "flat" the receptive field is)
+            size (int): The size of the square kernel in pixels
+            derivatives (Union[int, List[Tuple[int, int]]]): The number of derivatives to use in the receptive field.
+            aggregate (bool): If True, sums the input channels over all output channels. If False, every
+                output channel is mapped to every input channel, which may blow up in complexity.
+            **kwargs: Arguments passed on to the underlying torch.nn.Conv2d
         """
         super().__init__()
         fields = spatial_receptive_fields_with_derivatives(
@@ -77,7 +77,7 @@ class TemporalReceptiveField(torch.nn.Module):
         self,
         shape: torch.Size,
         n_scales: int = 4,
-        activation: SNNCell = LIBoxCell,
+        activation: Type[SNNCell] = LIBoxCell,
         activation_state_map: Callable[
             [torch.Tensor], NamedTuple
         ] = lambda t: LIBoxParameters(tau_mem_inv=t),
@@ -88,7 +88,7 @@ class TemporalReceptiveField(torch.nn.Module):
         """Creates ``n_scales`` temporal receptive fields for arbitrary n-dimensional inputs.
         The scale spaces are selected in a range of [min_scale, max_scale] using an exponential distribution, scattered using ``torch.linspace``.
 
-        Arguments:
+        Parameters:
             shape (torch.Size): The shape of the incoming tensor
             n_scales (int): The number of temporal scale spaces to iterate over.
             activation (SNNCell): The activation neuron. Defaults to LIBoxCell
@@ -103,7 +103,9 @@ class TemporalReceptiveField(torch.nn.Module):
         self.ps = torch.nn.Parameter(
             torch.stack([torch.full(shape, tau, dtype=torch.float32) for tau in taus])
         )
+        # pytype: disable=missing-parameter
         self.neurons = activation(p=activation_state_map(self.ps), dt=dt)
+        # pytype: enable=missing-parameter
         self.rf_dimension = len(shape)
         self.n_scales = n_scales
 

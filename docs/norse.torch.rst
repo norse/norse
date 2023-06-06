@@ -69,6 +69,7 @@ Convolutions
 
 
 Receptive fields
+----------------
 
 .. currentmodule:: norse.torch.module.receptive_field
 .. autosummary::
@@ -76,7 +77,7 @@ Receptive fields
     :nosignatures:
 
     SpatialReceptiveField2d
-    SpatioTemporalReceptiveField2d
+    TemporalReceptiveField
 
 Neuron models
 -------------
