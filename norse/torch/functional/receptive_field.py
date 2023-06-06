@@ -73,7 +73,7 @@ def _derive_fields(
     fields: torch.Tensor, derivatives: List[Tuple[int, int]]
 ) -> torch.Tensor:
     out = []
-    for (dx, dy) in derivatives:
+    for dx, dy in derivatives:
         if dx == 0:
             fx = fields
         else:
