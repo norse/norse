@@ -4,14 +4,15 @@ These receptive fields are derived from scale-space theory, specifically in the 
 For use in spiking / binary signals, see the paper on `Translation and Scale Invariance for Event-Based Object tracking by Pedersen et al., 2023 <https://dl.acm.org/doi/10.1145/3584954.3584996>`_
 """
 
-from typing import List, Tuple, Union
+from typing import Callable, List, NamedTuple, Optional, Tuple, Union
 
 import torch
 
-from norse.torch.module.leaky_integrator_box import LIBoxCell
+from norse.torch.module.leaky_integrator_box import LIBoxCell, LIBoxParameters
 from norse.torch.module.snn import SNNCell
 from norse.torch.functional.receptive_field import (
     spatial_receptive_fields_with_derivatives,
+    temporal_scale_distribution,
 )
 
 
@@ -24,12 +25,14 @@ class SpatialReceptiveField2d(torch.nn.Module):
         n_ratios: int,
         size: int,
         derivatives: Union[int, List[Tuple[int, int]]] = 0,
+        aggregate: bool = True,
         **kwargs
     ) -> None:
         """
         Creates a spatial receptive field as 2-dimensional convolutions.
         The parameters decide the number of combinations to scan over, i. e. the number of receptive fields to generate.
-        Specifically, we generate ``n_scales * n_angles * (n_ratios - 1) + n_scales`` output_channels.
+        Specifically, we generate ``n_scales * n_angles * (n_ratios - 1) + n_scales`` output_channels with aggregation,
+        and ``in_channels * (n_scales * n_angles * (n_ratios - 1) + n_scales)`` without aggregation.
 
         The ``(n_ratios - 1) + n_scales`` terms exist because at ``ratio = 1``, fields are perfectly symmetrical, and there
         is therefore no reason to scan over the angles and scales for ``ratio = 1``.
@@ -41,17 +44,71 @@ class SpatialReceptiveField2d(torch.nn.Module):
           n_ratios (int): Number of eccentricity combinations (how "flat" the receptive field is)
           size (int): The size of the square kernel in pixels
           derivatives (Union[int, List[Tuple[int, int]]]): The number of derivatives to use in the receptive field.
+          aggregate (bool): If True, sums the input channels over all output channels. If False, every
+                            output channel is mapped to every input channel, which may blow up in complexity.
           **kwargs: Arguments passed on to the underlying torch.nn.Conv2d
         """
         super().__init__()
         fields = spatial_receptive_fields_with_derivatives(
             n_scales, n_angles, n_ratios, size, derivatives
         )
-        self.out_channels = len(fields.shape[0])
-        self.conv = torch.nn.Conv2d(in_channels, fields.shape[0], size, **kwargs)
-        self.conv.weight = torch.nn.Parameter(
-            fields.unsqueeze(1).repeat(1, in_channels, 1, 1)
-        )
+        if aggregate:
+            self.out_channels = fields.shape[0]
+            weights = fields.unsqueeze(1).repeat(1, in_channels, 1, 1)
+        else:
+            self.out_channels = fields.shape[0] * in_channels
+            empty_weights = torch.zeros(in_channels, fields.shape[0], 9, 9)
+            weights = []
+            for i in range(in_channels):
+                in_weights = empty_weights.clone()
+                in_weights[i] = fields
+                weights.append(in_weights)
+            weights = torch.concat(weights, 1)
+
+        self.conv = torch.nn.Conv2d(in_channels, self.out_channels, size, **kwargs)
+        self.conv.weight = torch.nn.Parameter(weights)
 
     def forward(self, x: torch.Tensor):
         return self.conv(x)
+
+
+class TemporalReceptiveField(torch.nn.Module):
+    def __init__(
+        self,
+        shape: torch.Size,
+        n_scales: int = 4,
+        activation: SNNCell = LIBoxCell,
+        activation_state_map: Callable[
+            [torch.Tensor], NamedTuple
+        ] = lambda t: LIBoxParameters(tau_mem_inv=t),
+        min_scale: float = 1,
+        max_scale: float = 32,
+        dt: float = 0.001,
+    ):
+        """Creates ``n_scales`` temporal receptive fields for arbitrary n-dimensional inputs.
+        The scale spaces are selected in a range of [min_scale, max_scale] using an exponential distribution, scattered using ``torch.linspace``.
+
+        Arguments:
+            shape (torch.Size): The shape of the incoming tensor
+            n_scales (int): The number of temporal scale spaces to iterate over.
+            activation (SNNCell): The activation neuron. Defaults to LIBoxCell
+            activation_state_map (Callable): A function that takes a tensor and provides a neuron parameter tuple.
+                Required if activation is changed, since the default behaviour provides LIBoxParameters.
+            min_scale (float): The minimum scale space. Defaults to 1.
+            max_scale (float): The maximum scale space. Defaults to 32.
+            dt (float): Neuron simulation timestep. Defaults to 0.001.
+        """
+        super().__init__()
+        taus = 1 / temporal_scale_distribution(min_scale, max_scale, n_scales) / dt
+        self.ps = torch.nn.Parameter(
+            torch.stack([torch.full(shape, tau, dtype=torch.float32) for tau in taus])
+        )
+        self.neurons = activation(p=activation_state_map(self.ps), dt=dt)
+        self.rf_dimension = len(shape)
+        self.n_scales = n_scales
+
+    def forward(self, x: torch.Tensor, state: Optional[NamedTuple] = None):
+        x_repeated = torch.stack(
+            [x for _ in range(self.n_scales)], dim=-self.rf_dimension - 1
+        )
+        return self.neurons(x_repeated, state)

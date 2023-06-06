@@ -156,3 +156,11 @@ def spatial_receptive_fields_with_derivatives(
         derivative_max : size + derivative_max,
         derivative_max : size + derivative_max,  # Remove extra space
     ]
+
+
+def temporal_scale_distribution(start: float, stop: float, steps: int):
+    return torch.exp(
+        torch.linspace(
+            torch.log(torch.as_tensor(start)), torch.log(torch.as_tensor(stop)), steps
+        )
+    )
