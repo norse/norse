@@ -48,7 +48,7 @@ Here, we describe how to install Norse and start to apply it in your own work.
 ### 2.1. Installation
 <a name="installation"></a>
 
-We assume you are using **Python version 3.7+** and have **installed PyTorch version 1.9 or higher**. 
+We assume you are using **Python version 3.8+** and have **installed PyTorch version 1.9 or higher**. 
 [Read more about the prerequisites in our documentation](https://norse.github.io/norse/installing.html).
 
 <table>
