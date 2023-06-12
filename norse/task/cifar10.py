@@ -5,7 +5,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.data
+
+# pytype: disable=import-error
 import pytorch_lightning as pl
+
+# pytype: enable=import-error
 
 from norse.torch.module import LIFCell, SequentialState, LICell
 from norse.torch.functional.lif import LIFParameters

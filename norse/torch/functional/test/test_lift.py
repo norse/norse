@@ -25,6 +25,7 @@ def test_lift_with_state_without_parameters():
     z, s = lifted(
         data,
         state=LIFFeedForwardState(torch.zeros_like(data[0]), torch.zeros_like(data[0])),
+        p=LIFParameters(),
     )
     assert z.shape == (3, 2, 1)
     assert s.v.shape == (2, 1)
@@ -39,6 +40,7 @@ def test_lift_with_state_and_parameters():
     z, s = lifted(
         data,
         state=LIFFeedForwardState(torch.zeros_like(data[0]), torch.zeros_like(data[0])),
+        p=LIFParameters(),
     )
     assert z.shape == (3, 2, 1)
     assert s.v.shape == (2, 1)
@@ -57,6 +59,7 @@ def test_lift_with_lift_step():
         ),
         input_weights=torch.ones(1, 1),
         recurrent_weights=torch.ones(1, 1),
+        p=LIFParameters(),
     )
     assert z.shape == (3, 2, 1)
     assert s.v.shape == (2, 1)
@@ -72,6 +75,7 @@ def test_lift_with_leaky_integrator():
             i=torch.zeros(2, 1),
         ),
         input_weights=torch.ones(1, 1),
+        p=LIFParameters(),
     )
     assert z.shape == (3, 2, 1)
     assert s.v.shape == (2, 1)

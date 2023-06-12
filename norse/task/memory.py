@@ -5,9 +5,13 @@ import matplotlib
 import matplotlib.colors as colors
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
-import pytorch_lightning as pl
 import torch
 import torch.utils.data
+
+# pytype: disable=import-error
+import pytorch_lightning as pl
+
+# pytype: enable=import-error
 
 from norse.dataset.memory import MemoryStoreRecallDataset
 from norse.torch.module.leaky_integrator import LILinearCell
