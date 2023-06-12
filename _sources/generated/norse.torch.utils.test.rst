@@ -27,5 +27,6 @@ norse.torch.utils.test
    :toctree:
    :recursive:
 
+   norse.torch.utils.test.test_pytree
    norse.torch.utils.test.test_tensorboard
 

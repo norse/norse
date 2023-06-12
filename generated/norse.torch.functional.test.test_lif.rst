@@ -17,9 +17,10 @@ norse.torch.functional.test.test\_lif
       test_lif_current_encoder
       test_lif_feed_forward_step
       test_lif_feed_forward_step_batch
-      test_lif_feed_forward_step_jit
+      test_lif_feed_forward_step_compile
       test_lif_heavi
-      test_lif_jit_back
+      test_lif_integral
+      test_lif_integral_compile
    
    
 

@@ -9,6 +9,12 @@ norse.torch.utils
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      clone_tensor
+   
    
 
    
@@ -28,6 +34,7 @@ norse.torch.utils
    :recursive:
 
    norse.torch.utils.plot
+   norse.torch.utils.pytree
    norse.torch.utils.tensorboard
    norse.torch.utils.test
 

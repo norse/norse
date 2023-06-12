@@ -19,6 +19,7 @@ norse.torch.module.test.test\_sequential
       test_state_sequence
       test_state_sequence_apply_no_state
       test_state_sequence_apply_with_state
+      test_state_sequence_compile
       test_state_sequence_conv
       test_state_sequence_list
       test_state_sequence_mix

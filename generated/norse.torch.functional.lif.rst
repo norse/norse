@@ -31,7 +31,6 @@ norse.torch.functional.lif
    
       LIFFeedForwardState
       LIFParameters
-      LIFParametersJIT
       LIFState
    
    

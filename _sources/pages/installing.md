@@ -14,7 +14,7 @@ This has the benefit that your models are hardware accelerated, providing the [p
 To install Norse, you need the following two dependencies:
 1. `pip` - the [Python package manager](https://pypi.org/project/pip/)
    * This is preinstalled in most Linux and Unix distros
-   * Note that Norse requires Python >= 3.7
+   * Note that Norse requires Python >= 3.8
 2. `torch` - the [deep learning accelerator](https://pytorch.org/get-started/locally/)
    * Please follow the guide available here https://pytorch.org/get-started/locally/
    * Select the CUDA version if you require GPU hardware acceleration
