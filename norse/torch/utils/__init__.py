@@ -8,6 +8,8 @@ import torch
 from typing import Union, Optional
 from numbers import Number
 
+from .export import to_nir
+
 try:
     from .plot import *
 except ImportError as e:
