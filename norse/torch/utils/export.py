@@ -23,7 +23,12 @@ def _extract_norse_module(module: torch.nn.Module) -> Optional[nir.NIRNode]:
             r=torch.ones_like(module.p.v_leak.detach()),
         )
     elif isinstance(module, torch.nn.Linear):
-        return nir.Linear(module.weight.detach(), module.bias.detach())
+        if module.bias is None: # Add zero bias if none is present
+            return nir.Linear(
+                module.weight.detach(), torch.zeros(*module.weight.shape[:-1])
+            )
+        else:
+            return nir.Linear(module.weight.detach(), module.bias.detach())
 
     return None
 
