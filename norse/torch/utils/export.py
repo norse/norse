@@ -4,19 +4,26 @@ import torch
 import nir
 from nirtorch import extract_nir_graph
 
+from norse.torch.module.leaky_integrator_box import LIBoxCell
 from norse.torch.module.lif_box import LIFBoxCell
 
 
 def _extract_norse_module(module: torch.nn.Module) -> Optional[nir.NIRNode]:
     if isinstance(module, LIFBoxCell):
         return nir.LIF(
-            tau=module.p.tau_mem_inv,
-            v_th=module.p.v_th,
-            v_leak=module.p.v_leak,
-            r=torch.ones_like(module.p.v_leak),
+            tau=module.p.tau_mem_inv.detach(),
+            v_th=module.p.v_th.detach(),
+            v_leak=module.p.v_leak.detach(),
+            r=torch.ones_like(module.p.v_leak.detach()),
+        )
+    if isinstance(module, LIBoxCell):
+        return nir.LI(
+            tau=module.p.tau_mem_inv.detach(),
+            v_leak=module.p.v_leak.detach(),
+            r=torch.ones_like(module.p.v_leak.detach()),
         )
     elif isinstance(module, torch.nn.Linear):
-        return nir.Linear(module.weight, module.bias)
+        return nir.Linear(module.weight.detach(), module.bias.detach())
 
     return None
 
