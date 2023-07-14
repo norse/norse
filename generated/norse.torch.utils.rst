@@ -33,6 +33,8 @@ norse.torch.utils
    :toctree:
    :recursive:
 
+   norse.torch.utils.export_nir
+   norse.torch.utils.import_nir
    norse.torch.utils.plot
    norse.torch.utils.pytree
    norse.torch.utils.tensorboard
