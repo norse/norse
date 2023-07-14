@@ -1,5 +1,5 @@
 import torch
-import norse.torch as snn
+import norse.torch as norse
 
 import norse.torch.utils.tensorboard as tensorboard
 
@@ -26,7 +26,7 @@ class MockWriter:
 
 
 def test_activity_hook():
-    cell = snn.LIFCell()
+    cell = norse.LIFCell()
     writer = MockWriter()
     hook = tensorboard.hook_spike_activity_mean("lif", writer)
     cell.register_forward_hook(hook)
@@ -48,7 +48,7 @@ def test_activity_hook():
 
 
 def test_image_hook():
-    cell = snn.LIFCell()
+    cell = norse.LIFCell()
     writer = MockWriter()
     hook = tensorboard.hook_spike_image("lif", writer)
     cell.register_forward_hook(hook)
@@ -61,7 +61,7 @@ def test_image_hook():
 
 
 def test_histogram_hook():
-    cell = snn.LIFCell()
+    cell = norse.LIFCell()
     writer = MockWriter()
     hook = tensorboard.hook_spike_histogram_mean("lif", writer)
     cell.register_forward_hook(hook)
