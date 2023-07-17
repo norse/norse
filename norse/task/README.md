@@ -11,8 +11,8 @@ python -m norse.task.mnist
 ```
 
 Or, using [PyTorch Lightning](https://pytorchlightning.ai/) to scale to multiple GPUs and simplify a lot of the
-boilerplate code around logging, checkpointing, etc. **Note** that this requires you to install PyTorch Lightning
-(`pip install pytorch-lightning`).
+boilerplate code around logging, checkpointing, etc. **Note** that this requires you to install PyTorch Lightning v1
+(`pip install "pytorch-lightning<2.0"`).
 
 ```bash
 python -m norse.task.mnist_pl --gpus=4
