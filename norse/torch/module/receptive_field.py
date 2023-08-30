@@ -99,10 +99,15 @@ class TemporalReceptiveField(torch.nn.Module):
     ):
         """Creates ``n_scales`` temporal receptive fields for arbitrary n-dimensional inputs.
         The scale spaces are selected in a range of [min_scale, max_scale] using an exponential distribution, scattered using ``torch.linspace``.
-        Arguments:
-            shape (torch.Size): The shape of the incoming tensor
+
+        Parameters:
+            shape (torch.Size): The shape of the incoming tensor, where the first dimension denote channels
+            n_scales (int): The number of temporal scale spaces to iterate over.
+            activation (SNNCell): The activation neuron. Defaults to LIBoxCell
+            activation_state_map (Callable): A function that takes a tensor and provides a neuron parameter tuple.
+                Required if activation is changed, since the default behaviour provides LIBoxParameters.
             min_scale (float): The minimum scale space. Defaults to 1.
-            max_scale (float): The maximum scale space. Defaults to 32.
+            time_constants (Optional[torch.Tensor]): Hardcoded time constants. Will overwrite the automatically generated, logarithmically distributed scales, if set. Defaults to None.
             dt (float): Neuron simulation timestep. Defaults to 0.001.
         """
         super().__init__()

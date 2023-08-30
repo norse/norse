@@ -44,7 +44,6 @@ def _extract_norse_module(module: torch.nn.Module) -> Optional[nir.NIRNode]:
     if isinstance(module, iaf.IAFCell):
         return nir.IF(
             r=torch.ones_like(module.p.v_th.detach()),
-        
             v_threshold=module.p.v_th.detach(),
         )
     elif isinstance(module, torch.nn.Linear):

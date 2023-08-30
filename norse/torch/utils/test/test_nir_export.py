@@ -5,15 +5,14 @@ import norse.torch as norse
 
 
 def test_conv2d():
-    m = norse.SequentialState(
-        torch.nn.Conv2d(1, 2, 3)
-    )
+    m = norse.SequentialState(torch.nn.Conv2d(1, 2, 3))
     graph = norse.to_nir(m, torch.randn(1, 1, 10, 10))
     assert len(graph.nodes) == 3
     assert isinstance(graph.nodes["input"], nir.Input)
     assert isinstance(graph.nodes["0"], nir.Conv2d)
     assert isinstance(graph.nodes["output"], nir.Output)
     assert len(graph.edges) == 2
+
 
 def test_sequential():
     m = norse.SequentialState(
@@ -42,4 +41,3 @@ def test_linear():
     assert len(graph.nodes) == 3
     assert graph.nodes["norse"].weight.shape == (out_features, in_features)
     assert graph.nodes["norse"].bias.shape == m2.bias.shape
-
