@@ -4,7 +4,7 @@ These receptive fields are derived from scale-space theory, specifically in the 
 For use in spiking / binary signals, see the paper on `Translation and Scale Invariance for Event-Based Object tracking by Pedersen et al., 2023 <https://dl.acm.org/doi/10.1145/3584954.3584996>`_
 """
 
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Optional
 
 import torch
 
@@ -169,20 +169,27 @@ def spatial_receptive_fields_with_derivatives(
 
 
 def temporal_scale_distribution(
-    n_scales: int, min_scale: float = 1, c: float = 1.41421
+    n_scales: int,
+    min_scale: float = 1,
+    max_scale: Optional[float] = 4,
+    c: Optional[float] = 1.41421,
 ):
     r"""
     Provides temporal scales according to [Lindeberg2016].
     The scales will be logarithmic by default, but can be changed by providing other values for c.
+
     .. math:
         \tau_k = c^{2(k - K)} \tau_{max}
         \mu_k = \sqrt(\tau_k - \tau_{k - 1})
+
     Arguments:
       n_scales (int): Number of scales to generate
       min_scale (float): The minimum scale
-      c (float): The base from which to generate scale values. Should be a value between 1 to 2
+      max_scale (Optional[float]): The maximum scale, given the growth parameter c. Defaults to 4.
+      c (Optional[float]): The base from which to generate scale values. Should be a value between 1 to 2 exclusive. Defaults to sqrt(2).
+
     .. [Lindeberg2016] Lindeberg 2016, Time-Causal and Time-Recursive Spatio-Temporal Receptive Fields, https://link.springer.com/article/10.1007/s10851-015-0613-9.
     """
     ks = torch.arange(min_scale, min_scale + n_scales + 1)
-    taus = c ** (2 * (ks - n_scales))
+    taus = c ** (2 * (ks - n_scales)) * max_scale
     return (taus[1:] - taus[:-1]).sqrt()
