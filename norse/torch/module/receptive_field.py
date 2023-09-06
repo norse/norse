@@ -117,7 +117,7 @@ class TemporalReceptiveField(torch.nn.Module):
         """
         super().__init__()
         if time_constants is None:
-            taus = 1 / temporal_scale_distribution(n_scales, min_scale=min_scale) / dt
+            taus = (1 / dt) / temporal_scale_distribution(n_scales, min_scale=min_scale, max_scale=max_scale, c=c)
             self.time_constants = torch.stack(
                 [
                     torch.full(
