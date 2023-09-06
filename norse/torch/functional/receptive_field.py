@@ -171,7 +171,7 @@ def spatial_receptive_fields_with_derivatives(
 def temporal_scale_distribution(
     n_scales: int,
     min_scale: float = 1,
-    max_scale: Optional[float] = 1,
+    max_scale: Optional[float] = None,
     c: Optional[float] = 1.41421,
 ):
     r"""
@@ -185,11 +185,17 @@ def temporal_scale_distribution(
     Arguments:
       n_scales (int): Number of scales to generate
       min_scale (float): The minimum scale
-      max_scale (Optional[float]): The maximum scale, given the growth parameter c. Defaults to 1.
-      c (Optional[float]): The base from which to generate scale values. Should be a value between 1 to 2 exclusive. Defaults to sqrt(2).
+      max_scale (Optional[float]): The maximum scale. Defaults to None. If set, c is ignored.
+      c (Optional[float]): The base from which to generate scale values. Should be a value
+        between 1 to 2, exclusive. Defaults to sqrt(2). Ignored if max_scale is set.
 
-    .. [Lindeberg2016] Lindeberg 2016, Time-Causal and Time-Recursive Spatio-Temporal Receptive Fields, https://link.springer.com/article/10.1007/s10851-015-0613-9.
+    .. [Lindeberg2016] Lindeberg 2016, Time-Causal and Time-Recursive Spatio-Temporal 
+        Receptive Fields, https://link.springer.com/article/10.1007/s10851-015-0613-9.
     """
-    ks = torch.arange(min_scale, min_scale + n_scales + 1)
-    taus = c ** (2 * (ks - n_scales)) * max_scale
-    return (taus[1:] - taus[:-1]).sqrt()
+    xs = torch.linspace(1, n_scales, n_scales)
+    if max_scale is not None:
+        c = (min_scale / max_scale) ** (1 / ( 2 * (n_scales - 1)))
+    else:
+        max_scale = (c ** (2 * (n_scales - 1))) * min_scale
+    taus = c ** (2 * (xs - n_scales)) * max_scale
+    return taus.sqrt()

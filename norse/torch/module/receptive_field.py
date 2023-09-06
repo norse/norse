@@ -94,7 +94,7 @@ class TemporalReceptiveField(torch.nn.Module):
             [torch.Tensor], NamedTuple
         ] = lambda t: LIBoxParameters(tau_mem_inv=t),
         min_scale: float = 1,
-        max_scale: float = 1,
+        max_scale: Optional[float] = None,
         c: float = 1.41421,
         time_constants: Optional[torch.Tensor] = None,
         dt: float = 0.001,
@@ -109,14 +109,15 @@ class TemporalReceptiveField(torch.nn.Module):
             activation_state_map (Callable): A function that takes a tensor and provides a neuron parameter tuple.
                 Required if activation is changed, since the default behaviour provides LIBoxParameters.
             min_scale (float): The minimum scale space. Defaults to 1.
-            max_scale (Optional[float]): The maximum scale, given the growth parameter c. Defaults to 1.
-            c (Optional[float]): The base from which to generate scale values. Should be a value between 1 to 2 exclusive. Defaults to sqrt(2).
+            max_scale (Optional[float]): The maximum scale. Defaults to None. If set, c is ignored.
+            c (Optional[float]): The base from which to generate scale values. Should be a value
+                between 1 to 2, exclusive. Defaults to sqrt(2). Ignored if max_scale is set.
             time_constants (Optional[torch.Tensor]): Hardcoded time constants. Will overwrite the automatically generated, logarithmically distributed scales, if set. Defaults to None.
             dt (float): Neuron simulation timestep. Defaults to 0.001.
         """
         super().__init__()
         if time_constants is None:
-            taus = temporal_scale_distribution(n_scales, min_scale=min_scale) / dt
+            taus = 1 / temporal_scale_distribution(n_scales, min_scale=min_scale) / dt
             self.time_constants = torch.stack(
                 [
                     torch.full(
