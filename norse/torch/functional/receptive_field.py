@@ -189,12 +189,15 @@ def temporal_scale_distribution(
       c (Optional[float]): The base from which to generate scale values. Should be a value
         between 1 to 2, exclusive. Defaults to sqrt(2). Ignored if max_scale is set.
 
-    .. [Lindeberg2016] Lindeberg 2016, Time-Causal and Time-Recursive Spatio-Temporal 
+    .. [Lindeberg2016] Lindeberg 2016, Time-Causal and Time-Recursive Spatio-Temporal
         Receptive Fields, https://link.springer.com/article/10.1007/s10851-015-0613-9.
     """
     xs = torch.linspace(1, n_scales, n_scales)
     if max_scale is not None:
-        c = (min_scale / max_scale) ** (1 / ( 2 * (n_scales - 1)))
+        if n_scales > 1:  # Avoid division by zero when having a single scale
+            c = (min_scale / max_scale) ** (1 / (2 * (n_scales - 1)))
+        else:
+            return torch.tensor([min_scale]).sqrt()
     else:
         max_scale = (c ** (2 * (n_scales - 1))) * min_scale
     taus = c ** (2 * (xs - n_scales)) * max_scale
