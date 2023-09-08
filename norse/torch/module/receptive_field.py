@@ -25,6 +25,10 @@ class SpatialReceptiveField2d(torch.nn.Module):
         n_ratios: int,
         size: int,
         derivatives: Union[int, List[Tuple[int, int]]] = 0,
+        min_scale: float = 0.2,
+        max_scale: float = 1.5,
+        min_ratio: float = 0.2,
+        max_ratio: float = 1,
         aggregate: bool = True,
         **kwargs
     ) -> None:
@@ -50,7 +54,15 @@ class SpatialReceptiveField2d(torch.nn.Module):
         """
         super().__init__()
         fields = spatial_receptive_fields_with_derivatives(
-            n_scales, n_angles, n_ratios, size, derivatives
+            n_scales,
+            n_angles,
+            n_ratios,
+            size,
+            derivatives,
+            min_scale,
+            max_scale,
+            min_ratio,
+            max_ratio,
         )
         if aggregate:
             self.out_channels = fields.shape[0]
@@ -82,27 +94,43 @@ class TemporalReceptiveField(torch.nn.Module):
             [torch.Tensor], NamedTuple
         ] = lambda t: LIBoxParameters(tau_mem_inv=t),
         min_scale: float = 1,
-        max_scale: float = 32,
+        max_scale: Optional[float] = None,
+        c: float = 1.41421,
+        time_constants: Optional[torch.Tensor] = None,
         dt: float = 0.001,
     ):
         """Creates ``n_scales`` temporal receptive fields for arbitrary n-dimensional inputs.
         The scale spaces are selected in a range of [min_scale, max_scale] using an exponential distribution, scattered using ``torch.linspace``.
 
         Parameters:
-            shape (torch.Size): The shape of the incoming tensor
+            shape (torch.Size): The shape of the incoming tensor, where the first dimension denote channels
             n_scales (int): The number of temporal scale spaces to iterate over.
             activation (SNNCell): The activation neuron. Defaults to LIBoxCell
             activation_state_map (Callable): A function that takes a tensor and provides a neuron parameter tuple.
                 Required if activation is changed, since the default behaviour provides LIBoxParameters.
             min_scale (float): The minimum scale space. Defaults to 1.
-            max_scale (float): The maximum scale space. Defaults to 32.
+            max_scale (Optional[float]): The maximum scale. Defaults to None. If set, c is ignored.
+            c (Optional[float]): The base from which to generate scale values. Should be a value
+                between 1 to 2, exclusive. Defaults to sqrt(2). Ignored if max_scale is set.
+            time_constants (Optional[torch.Tensor]): Hardcoded time constants. Will overwrite the automatically generated, logarithmically distributed scales, if set. Defaults to None.
             dt (float): Neuron simulation timestep. Defaults to 0.001.
         """
         super().__init__()
-        taus = 1 / temporal_scale_distribution(min_scale, max_scale, n_scales) / dt
-        self.ps = torch.nn.Parameter(
-            torch.stack([torch.full(shape, tau, dtype=torch.float32) for tau in taus])
-        )
+        if time_constants is None:
+            taus = (1 / dt) / temporal_scale_distribution(n_scales, min_scale=min_scale, max_scale=max_scale, c=c)
+            self.time_constants = torch.stack(
+                [
+                    torch.full(
+                        [shape[0], *[1 for i in range(len(shape) - 1)]],
+                        tau,
+                        dtype=torch.float32,
+                    )
+                    for tau in taus
+                ]
+            )
+        else:
+            self.time_constants = time_constants
+        self.ps = torch.nn.Parameter(self.time_constants)
         # pytype: disable=missing-parameter
         self.neurons = activation(p=activation_state_map(self.ps), dt=dt)
         # pytype: enable=missing-parameter
