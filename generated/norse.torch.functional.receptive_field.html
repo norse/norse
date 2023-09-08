@@ -61,6 +61,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generated/norse.torch.functional.receptive_field';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -603,10 +605,10 @@ document.write(`
 <td><p>Creates a (size x size) receptive field kernel</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives.html#norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives" title="norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spatial_receptive_fields_with_derivatives</span></code></a>(...)</p></td>
-<td><p>Creates a number of receptive field with 1st directional derivatives.</p></td>
+<td><p>Creates a number of receptive field with 1st directional derivatives. The parameters decide the number of combinations to scan over, i. e. the number of receptive fields to generate. Specifically, we generate <code class="docutils literal notranslate"><span class="pre">derivatives</span> <span class="pre">*</span> <span class="pre">(n_angles</span> <span class="pre">*</span> <span class="pre">n_scales</span> <span class="pre">*</span> <span class="pre">(n_ratios</span> <span class="pre">-</span> <span class="pre">1)</span> <span class="pre">+</span> <span class="pre">n_scales)</span></code> fields. The <code class="docutils literal notranslate"><span class="pre">(n_ratios</span> <span class="pre">-</span> <span class="pre">1)</span> <span class="pre">+</span> <span class="pre">n_scales</span></code> terms exist because at <code class="docutils literal notranslate"><span class="pre">ratio</span> <span class="pre">=</span> <span class="pre">1</span></code>, fields are perfectly symmetrical, and there is therefore no reason to scan over the angles and scales for <code class="docutils literal notranslate"><span class="pre">ratio</span> <span class="pre">=</span> <span class="pre">1</span></code>. However, <code class="docutils literal notranslate"><span class="pre">n_scales</span></code> receptive fields still need to be added (one for each scale-space). Finally, the <code class="docutils literal notranslate"><span class="pre">derivatives</span> <span class="pre">*</span></code> term comes from the addition of spatial derivatives. Arguments:     n_scales (int): Number of scaling combinations (the size of the receptive field) drawn from a logarithmic distribution     n_angles (int): Number of angular combinations (the orientation of the receptive field)     n_ratios (int): Number of eccentricity combinations (how &quot;flat&quot; the receptive field is)     size (int): The size of the square kernel in pixels     derivatives (Union[int, List[Tuple[int, int]]]): The spatial derivatives to include. Defaults to 0 (no derivatives). Can either be a number, in which case 1 + 2 ** n derivatives will be made (except when 0, see below). Example: <cite>derivatives=0</cite> omits derivatives           Example: <cite>derivatives=1</cite> provides 2 spatial derivatives + 1 without derivation         Or a list of tuples specifying the derivatives in both spatial dimensions           Example: <cite>derivatives=[(0, 0), (1, 2)]</cite> provides two outputs, one without derivation and one <span class="math notranslate nohighlight">\(\partial_x \partial^2_y\)</span>.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_scale_distribution</span></code>(start, stop, steps)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_scale_distribution</span></code>(n_scales[, ...])</p></td>
+<td><p>Provides temporal scales according to [Lindeberg2016].</p></td>
 </tr>
 </tbody>
 </table>

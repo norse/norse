@@ -69,7 +69,6 @@ Convolutions
 
 
 Receptive fields
-----------------
 
 .. currentmodule:: norse.torch.module.receptive_field
 .. autosummary::

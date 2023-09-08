@@ -716,7 +716,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0, &#39;$\\tau_{m}^{-1}$ [ms]&#39;)
 </pre></div>
 </div>
-<img alt="../_images/5179c4b27eb9ad2186f171af5ce005c9cfcf04309fb1dd1d12958070ff4900e5.png" src="../_images/5179c4b27eb9ad2186f171af5ce005c9cfcf04309fb1dd1d12958070ff4900e5.png" />
+<img alt="../_images/9d4c5611306512d183ea5b57a91d2139e51a4b4d19e1843131da8a2b24f1ddf1.png" src="../_images/9d4c5611306512d183ea5b57a91d2139e51a4b4d19e1843131da8a2b24f1ddf1.png" />
 </div>
 </div>
 <p>The parameters of a PyTorch module can be accesses by invoking the <code class="docutils literal notranslate"><span class="pre">parameters</span></code> method. In the case of the <code class="docutils literal notranslate"><span class="pre">LIFRecurrentCell</span></code> those are the recurrent and input weight matrices. Note how both tensors have <code class="docutils literal notranslate"><span class="pre">requires_grad=True</span></code> and that the <code class="docutils literal notranslate"><span class="pre">LIFParameters</span></code> do not appear. This is because none of the tensors entering the <code class="docutils literal notranslate"><span class="pre">LIFParameters</span></code> have been registered as a PyTorch Parameter.</p>
@@ -728,27 +728,22 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parameter containing:
- tensor([[-2.3547e-01, -2.2478e-04,  7.0103e-02,  ..., -4.8525e-02,
-           4.8226e-02, -5.0338e-02],
-         [-9.0270e-03,  1.8276e-01, -4.0154e-02,  ..., -1.0749e-01,
-           9.1565e-02,  9.1513e-02],
-         [ 2.0772e-01,  3.0203e-02,  1.0158e-01,  ..., -2.8404e-01,
-           2.2062e-01,  4.4374e-02],
+ tensor([[ 0.0214, -0.0133,  0.1110,  ...,  0.1545, -0.2095,  0.0261],
+         [-0.0389, -0.1858,  0.1608,  ...,  0.0263,  0.0467, -0.1242],
+         [-0.1204,  0.1862,  0.2045,  ...,  0.2804, -0.0544,  0.2706],
          ...,
-         [-1.3185e-01, -3.4360e-02,  6.0391e-02,  ...,  3.8411e-02,
-          -3.5675e-01, -1.2067e-01],
-         [-4.2386e-02, -1.3040e-01,  4.8418e-03,  ..., -6.6103e-02,
-           1.4206e-01,  1.5270e-01],
-         [-9.6672e-02, -1.2842e-01, -2.1391e-02,  ...,  3.0363e-01,
-          -1.8984e-02,  3.9607e-02]], requires_grad=True),
+         [ 0.0892,  0.0651,  0.1579,  ..., -0.2346,  0.0601,  0.1623],
+         [-0.0195, -0.0254, -0.0724,  ...,  0.1571, -0.0168,  0.0729],
+         [ 0.1396, -0.1616,  0.0140,  ...,  0.1737, -0.1391, -0.1338]],
+        requires_grad=True),
  Parameter containing:
- tensor([[ 0.0000,  0.1580, -0.0830,  ..., -0.0800, -0.0539, -0.0050],
-         [-0.2749,  0.0000, -0.1401,  ..., -0.1248, -0.0729,  0.2093],
-         [ 0.1098, -0.1136,  0.0000,  ...,  0.0551, -0.0571,  0.0654],
+ tensor([[ 0.0000, -0.0743,  0.0258,  ..., -0.0702,  0.0618, -0.3842],
+         [-0.0128,  0.0000, -0.0005,  ...,  0.0495, -0.0030, -0.0176],
+         [ 0.0595,  0.1415,  0.0000,  ..., -0.1119,  0.1490,  0.1973],
          ...,
-         [ 0.0273,  0.1624,  0.1569,  ...,  0.0000,  0.0079,  0.0901],
-         [-0.0193, -0.1250,  0.0543,  ..., -0.0893,  0.0000, -0.2809],
-         [-0.1791,  0.0986,  0.2796,  ..., -0.1266,  0.0411,  0.0000]],
+         [-0.1575, -0.0620,  0.3096,  ...,  0.0000,  0.2685, -0.0051],
+         [-0.1386,  0.0740, -0.1250,  ..., -0.0825,  0.0000, -0.0465],
+         [ 0.1421,  0.1228,  0.0320,  ..., -0.1820,  0.1449,  0.0000]],
         requires_grad=True)]
 </pre></div>
 </div>
@@ -788,33 +783,33 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ParametrizedLIFRecurrentCell(
   (cell): LIFRecurrentCell(
     input_size=200, hidden_size=100, p=LIFParameters(tau_syn_inv=tensor(200.), tau_mem_inv=Parameter containing:
-    tensor([ 88.8960, 102.7464, 102.9227, 126.0287,  96.6325,  94.8459,  67.2957,
-            110.4603,  87.6704,  76.2339, 108.1132, 104.2316,  92.0736,  82.4054,
-            114.9549, 117.4887,  84.4838, 113.4417, 110.3941, 106.7113,  84.2621,
-            127.6994, 123.4221, 107.9704,  98.8592, 106.9896,  77.4390,  71.8551,
-             86.3926, 122.2755, 111.8771,  83.6111,  91.1975,  72.9784, 100.0897,
-             84.2004,  88.9078,  80.0795, 130.9936,  90.9387, 102.8102,  44.1836,
-             84.5883, 118.0558, 102.1838,  91.3511, 123.5761,  85.0962, 117.2548,
-            101.8622, 100.6864,  63.7348, 108.1012, 136.9045, 103.4503, 108.1547,
-             96.8285, 147.9207, 107.6258, 121.3831,  95.6369,  82.9880, 108.0825,
-            122.1577,  84.2975,  74.3603,  98.5034, 104.4900,  82.8582,  99.9027,
-            114.6713, 102.9468,  83.3499, 108.5363, 104.7571,  77.5103,  96.4408,
-            113.5418,  85.7860,  81.9488, 118.9404,  80.8785, 116.0838,  85.3404,
-             95.7010, 101.2201, 113.3120, 128.0383,  82.2470,  94.1217, 107.1619,
-            114.9876,  95.7595,  95.8064, 122.9800,  60.7316,  99.0354, 107.1277,
-             93.8343,  87.9495], requires_grad=True), v_leak=tensor(0.), v_th=Parameter containing:
-    tensor([0.4928, 0.5356, 0.5949, 0.5586, 0.6932, 0.3119, 0.4988, 0.5934, 0.4552,
-            0.6585, 0.4936, 0.3085, 0.4485, 0.5145, 0.5620, 0.6016, 0.5800, 0.2669,
-            0.6199, 0.4985, 0.3949, 0.4484, 0.5013, 0.5084, 0.5770, 0.7346, 0.2722,
-            0.5023, 0.5202, 0.4422, 0.5596, 0.3371, 0.5691, 0.4955, 0.4407, 0.6429,
-            0.5592, 0.5496, 0.7967, 0.6782, 0.4598, 0.4511, 0.3337, 0.7206, 0.6409,
-            0.5487, 0.5595, 0.3362, 0.6141, 0.4759, 0.6786, 0.4565, 0.5255, 0.4949,
-            0.3793, 0.4313, 0.5118, 0.6092, 0.4511, 0.5082, 0.5602, 0.5667, 0.5116,
-            0.4775, 0.4624, 0.5861, 0.4679, 0.5727, 0.5443, 0.5178, 0.2687, 0.3719,
-            0.4771, 0.3905, 0.4235, 0.5194, 0.5434, 0.2821, 0.6192, 0.2085, 0.6286,
-            0.3795, 0.4894, 0.6947, 0.4029, 0.4841, 0.5378, 0.6929, 0.6595, 0.4670,
-            0.4960, 0.9016, 0.5110, 0.3820, 0.3922, 0.5236, 0.4224, 0.5011, 0.4438,
-            0.5128], requires_grad=True), v_reset=tensor(0.), method=&#39;super&#39;, alpha=tensor(100)), autapses=False, dt=0.001
+    tensor([ 92.3514, 130.5641,  78.7327, 121.7642, 117.4420, 112.8774,  62.2287,
+             99.7453,  83.7878,  94.5692,  98.2220, 100.9192, 100.3060,  96.6489,
+            102.4558, 123.3646,  77.9581, 107.7662,  94.7332, 102.9440,  86.8629,
+             99.3414,  77.2215, 105.4340,  91.8761,  82.8499,  94.9056,  99.4317,
+             58.3137, 106.5380,  70.7427,  84.5457, 117.9483,  82.5217, 118.9781,
+            109.3344,  95.1777, 102.4456, 112.8243,  75.0957, 126.5476,  54.1385,
+            103.4261, 104.0946, 104.7892, 120.3173,  67.6885, 131.0757, 115.6275,
+             68.9224,  67.8367,  94.2568,  53.3348, 108.6198,  96.3669, 112.1419,
+             95.0869,  55.9037,  86.6415, 107.0923,  95.5055,  86.5849, 105.2488,
+             99.1959, 124.8818, 110.9490, 118.0741,  98.6798, 102.4891, 116.7395,
+             91.9531, 131.4806,  92.1289,  78.5094,  80.7293, 102.9829,  95.7296,
+            113.2787, 133.4316,  79.3414,  94.9857,  89.1840,  98.5981,  74.1630,
+             75.0216,  80.5357,  69.5182, 119.5708,  85.1392, 111.4986, 115.7547,
+             74.3814, 112.9366,  73.1779,  73.2501, 107.8162,  91.3012,  94.9348,
+             86.8900,  85.3602], requires_grad=True), v_leak=tensor(0.), v_th=Parameter containing:
+    tensor([0.5187, 0.5062, 0.4171, 0.5935, 0.4738, 0.4802, 0.4752, 0.5852, 0.5535,
+            0.4510, 0.3584, 0.6056, 0.4383, 0.6523, 0.3758, 0.5120, 0.5256, 0.7177,
+            0.6121, 0.4644, 0.4367, 0.3893, 0.7110, 0.4841, 0.5240, 0.5257, 0.4949,
+            0.5405, 0.4605, 0.5070, 0.3923, 0.4987, 0.4928, 0.6369, 0.4520, 0.5755,
+            0.6488, 0.3963, 0.6140, 0.4667, 0.5457, 0.3569, 0.6128, 0.3349, 0.3214,
+            0.4722, 0.5634, 0.5208, 0.3873, 0.5137, 0.5377, 0.3687, 0.4828, 0.4573,
+            0.4414, 0.2803, 0.5711, 0.6276, 0.3142, 0.6821, 0.4688, 0.2481, 0.3714,
+            0.6180, 0.4216, 0.5085, 0.5999, 0.4596, 0.5854, 0.4700, 0.5542, 0.4714,
+            0.6027, 0.5665, 0.3602, 0.4539, 0.3742, 0.5292, 0.3360, 0.4901, 0.5133,
+            0.4737, 0.5211, 0.6560, 0.4352, 0.4028, 0.5626, 0.4551, 0.5865, 0.5019,
+            0.5515, 0.4922, 0.6267, 0.6374, 0.5628, 0.4405, 0.4290, 0.5652, 0.5032,
+            0.2978], requires_grad=True), v_reset=tensor(0.), method=&#39;super&#39;, alpha=tensor(100)), autapses=False, dt=0.001
   )
 )
 </pre></div>
@@ -830,52 +825,57 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Parameter containing:
- tensor([ 88.8960, 102.7464, 102.9227, 126.0287,  96.6325,  94.8459,  67.2957,
-         110.4603,  87.6704,  76.2339, 108.1132, 104.2316,  92.0736,  82.4054,
-         114.9549, 117.4887,  84.4838, 113.4417, 110.3941, 106.7113,  84.2621,
-         127.6994, 123.4221, 107.9704,  98.8592, 106.9896,  77.4390,  71.8551,
-          86.3926, 122.2755, 111.8771,  83.6111,  91.1975,  72.9784, 100.0897,
-          84.2004,  88.9078,  80.0795, 130.9936,  90.9387, 102.8102,  44.1836,
-          84.5883, 118.0558, 102.1838,  91.3511, 123.5761,  85.0962, 117.2548,
-         101.8622, 100.6864,  63.7348, 108.1012, 136.9045, 103.4503, 108.1547,
-          96.8285, 147.9207, 107.6258, 121.3831,  95.6369,  82.9880, 108.0825,
-         122.1577,  84.2975,  74.3603,  98.5034, 104.4900,  82.8582,  99.9027,
-         114.6713, 102.9468,  83.3499, 108.5363, 104.7571,  77.5103,  96.4408,
-         113.5418,  85.7860,  81.9488, 118.9404,  80.8785, 116.0838,  85.3404,
-          95.7010, 101.2201, 113.3120, 128.0383,  82.2470,  94.1217, 107.1619,
-         114.9876,  95.7595,  95.8064, 122.9800,  60.7316,  99.0354, 107.1277,
-          93.8343,  87.9495], requires_grad=True),
+ tensor([ 92.3514, 130.5641,  78.7327, 121.7642, 117.4420, 112.8774,  62.2287,
+          99.7453,  83.7878,  94.5692,  98.2220, 100.9192, 100.3060,  96.6489,
+         102.4558, 123.3646,  77.9581, 107.7662,  94.7332, 102.9440,  86.8629,
+          99.3414,  77.2215, 105.4340,  91.8761,  82.8499,  94.9056,  99.4317,
+          58.3137, 106.5380,  70.7427,  84.5457, 117.9483,  82.5217, 118.9781,
+         109.3344,  95.1777, 102.4456, 112.8243,  75.0957, 126.5476,  54.1385,
+         103.4261, 104.0946, 104.7892, 120.3173,  67.6885, 131.0757, 115.6275,
+          68.9224,  67.8367,  94.2568,  53.3348, 108.6198,  96.3669, 112.1419,
+          95.0869,  55.9037,  86.6415, 107.0923,  95.5055,  86.5849, 105.2488,
+          99.1959, 124.8818, 110.9490, 118.0741,  98.6798, 102.4891, 116.7395,
+          91.9531, 131.4806,  92.1289,  78.5094,  80.7293, 102.9829,  95.7296,
+         113.2787, 133.4316,  79.3414,  94.9857,  89.1840,  98.5981,  74.1630,
+          75.0216,  80.5357,  69.5182, 119.5708,  85.1392, 111.4986, 115.7547,
+          74.3814, 112.9366,  73.1779,  73.2501, 107.8162,  91.3012,  94.9348,
+          86.8900,  85.3602], requires_grad=True),
  Parameter containing:
- tensor([0.4928, 0.5356, 0.5949, 0.5586, 0.6932, 0.3119, 0.4988, 0.5934, 0.4552,
-         0.6585, 0.4936, 0.3085, 0.4485, 0.5145, 0.5620, 0.6016, 0.5800, 0.2669,
-         0.6199, 0.4985, 0.3949, 0.4484, 0.5013, 0.5084, 0.5770, 0.7346, 0.2722,
-         0.5023, 0.5202, 0.4422, 0.5596, 0.3371, 0.5691, 0.4955, 0.4407, 0.6429,
-         0.5592, 0.5496, 0.7967, 0.6782, 0.4598, 0.4511, 0.3337, 0.7206, 0.6409,
-         0.5487, 0.5595, 0.3362, 0.6141, 0.4759, 0.6786, 0.4565, 0.5255, 0.4949,
-         0.3793, 0.4313, 0.5118, 0.6092, 0.4511, 0.5082, 0.5602, 0.5667, 0.5116,
-         0.4775, 0.4624, 0.5861, 0.4679, 0.5727, 0.5443, 0.5178, 0.2687, 0.3719,
-         0.4771, 0.3905, 0.4235, 0.5194, 0.5434, 0.2821, 0.6192, 0.2085, 0.6286,
-         0.3795, 0.4894, 0.6947, 0.4029, 0.4841, 0.5378, 0.6929, 0.6595, 0.4670,
-         0.4960, 0.9016, 0.5110, 0.3820, 0.3922, 0.5236, 0.4224, 0.5011, 0.4438,
-         0.5128], requires_grad=True),
+ tensor([0.5187, 0.5062, 0.4171, 0.5935, 0.4738, 0.4802, 0.4752, 0.5852, 0.5535,
+         0.4510, 0.3584, 0.6056, 0.4383, 0.6523, 0.3758, 0.5120, 0.5256, 0.7177,
+         0.6121, 0.4644, 0.4367, 0.3893, 0.7110, 0.4841, 0.5240, 0.5257, 0.4949,
+         0.5405, 0.4605, 0.5070, 0.3923, 0.4987, 0.4928, 0.6369, 0.4520, 0.5755,
+         0.6488, 0.3963, 0.6140, 0.4667, 0.5457, 0.3569, 0.6128, 0.3349, 0.3214,
+         0.4722, 0.5634, 0.5208, 0.3873, 0.5137, 0.5377, 0.3687, 0.4828, 0.4573,
+         0.4414, 0.2803, 0.5711, 0.6276, 0.3142, 0.6821, 0.4688, 0.2481, 0.3714,
+         0.6180, 0.4216, 0.5085, 0.5999, 0.4596, 0.5854, 0.4700, 0.5542, 0.4714,
+         0.6027, 0.5665, 0.3602, 0.4539, 0.3742, 0.5292, 0.3360, 0.4901, 0.5133,
+         0.4737, 0.5211, 0.6560, 0.4352, 0.4028, 0.5626, 0.4551, 0.5865, 0.5019,
+         0.5515, 0.4922, 0.6267, 0.6374, 0.5628, 0.4405, 0.4290, 0.5652, 0.5032,
+         0.2978], requires_grad=True),
  Parameter containing:
- tensor([[-0.1108,  0.2244, -0.1642,  ...,  0.0383, -0.1232,  0.1163],
-         [ 0.0576, -0.0245, -0.1558,  ...,  0.0873, -0.0922, -0.0480],
-         [ 0.0632, -0.1365, -0.2801,  ..., -0.1416,  0.1920, -0.0811],
+ tensor([[ 0.1967,  0.0510,  0.1348,  ...,  0.0045,  0.0701,  0.1603],
+         [ 0.0028,  0.0047, -0.0774,  ...,  0.0415,  0.1980, -0.0035],
+         [-0.0603,  0.0545, -0.1138,  ...,  0.0507, -0.0654,  0.0629],
          ...,
-         [-0.0417, -0.0666, -0.0499,  ..., -0.0914,  0.0126,  0.1908],
-         [-0.0322,  0.0505,  0.0566,  ..., -0.2359, -0.0409, -0.0487],
-         [-0.0320, -0.2070,  0.1302,  ...,  0.0058, -0.1165, -0.0823]],
+         [-0.1061,  0.2001, -0.1306,  ..., -0.4357,  0.0904, -0.0365],
+         [-0.0109,  0.0515, -0.2047,  ..., -0.3896,  0.1336,  0.0119],
+         [ 0.0635, -0.1531, -0.0793,  ..., -0.0681, -0.0227, -0.0565]],
         requires_grad=True),
  Parameter containing:
- tensor([[ 0.0000, -0.2900, -0.1051,  ...,  0.3419,  0.3246,  0.1037],
-         [ 0.1611,  0.0000, -0.2531,  ...,  0.2264, -0.0557,  0.0547],
-         [ 0.0873, -0.0991,  0.0000,  ...,  0.1223, -0.0258, -0.0106],
+ tensor([[ 0.0000e+00, -1.7138e-02,  6.5131e-02,  ...,  8.5663e-02,
+           5.2900e-02, -1.6551e-01],
+         [-1.8760e-01,  0.0000e+00,  5.3155e-02,  ...,  1.0120e-01,
+          -2.4927e-02,  8.7028e-02],
+         [-1.3757e-02,  1.6970e-01,  0.0000e+00,  ...,  2.0576e-01,
+           6.2067e-02, -1.6578e-01],
          ...,
-         [ 0.1085,  0.0145, -0.1289,  ...,  0.0000,  0.0987, -0.1033],
-         [-0.0586,  0.0212, -0.1821,  ..., -0.1067,  0.0000, -0.0285],
-         [ 0.1469,  0.3354,  0.0678,  ...,  0.1309, -0.0223,  0.0000]],
-        requires_grad=True)]
+         [ 1.1686e-01, -9.3718e-02,  6.6707e-02,  ...,  0.0000e+00,
+          -1.8954e-02,  2.1344e-01],
+         [-3.4635e-02,  9.6142e-02, -4.7428e-02,  ..., -2.8778e-02,
+           0.0000e+00,  3.1771e-01],
+         [ 3.5365e-02,  2.4859e-01, -1.8845e-01,  ..., -2.6145e-04,
+           1.9539e-01,  0.0000e+00]], requires_grad=True)]
 </pre></div>
 </div>
 </div>
@@ -925,21 +925,19 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to ./MNIST/raw/train-images-idx3-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to ./MNIST/raw/train-images-idx3-ubyte.gz
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/9912422 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 9912422/9912422 [00:00&lt;00:00, 115557100.06it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracting ./MNIST/raw/train-images-idx3-ubyte.gz to ./MNIST/raw
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 9912422/9912422 [00:00&lt;00:00, 110363246.80it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracting ./MNIST/raw/train-images-idx3-ubyte.gz to ./MNIST/raw
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
@@ -949,7 +947,7 @@ Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz to ./MNI
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/28881 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 28881/28881 [00:00&lt;00:00, 151230579.06it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 28881/28881 [00:00&lt;00:00, 108544528.52it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -964,24 +962,23 @@ Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz to ./MNIS
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/1648877 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1648877/1648877 [00:00&lt;00:00, 22986158.22it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1648877/1648877 [00:00&lt;00:00, 43713364.49it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracting ./MNIST/raw/t10k-images-idx3-ubyte.gz to ./MNIST/raw
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracting ./MNIST/raw/t10k-images-idx3-ubyte.gz to ./MNIST/raw
-
-Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz to ./MNIST/raw/t10k-labels-idx1-ubyte.gz
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz to ./MNIST/raw/t10k-labels-idx1-ubyte.gz
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/4542 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4542/4542 [00:00&lt;00:00, 23962929.27it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 4542/4542 [00:00&lt;00:00, 14476085.69it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1206,29 +1203,29 @@ Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
 <span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">training_loss</span><span class="p">,</span> <span class="n">mean_loss</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">DEVICE</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">)</span>
 <span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">test_loss</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">DEVICE</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/tqdm/notebook.py:316,</span> in <span class="ni">tnrange</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">314</span> <span class="k">def</span> <span class="nf">tnrange</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">315</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Shortcut for `tqdm.notebook.tqdm(range(*args), **kwargs)`.&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">316</span>     <span class="k">return</span> <span class="n">tqdm_notebook</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.5/x64/lib/python3.11/site-packages/tqdm/notebook.py:311,</span> in <span class="ni">tnrange</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">309</span> <span class="k">def</span> <span class="nf">tnrange</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">310</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Shortcut for `tqdm.notebook.tqdm(range(*args), **kwargs)`.&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">311</span>     <span class="k">return</span> <span class="n">tqdm_notebook</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/tqdm/notebook.py:238,</span> in <span class="ni">tqdm_notebook.__init__</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">236</span> <span class="n">unit_scale</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_scale</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_scale</span> <span class="ow">or</span> <span class="mi">1</span>
-<span class="g g-Whitespace">    </span><span class="mi">237</span> <span class="n">total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">*</span> <span class="n">unit_scale</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span>
-<span class="ne">--&gt; </span><span class="mi">238</span> <span class="bp">self</span><span class="o">.</span><span class="n">container</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_printer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fp</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">239</span> <span class="bp">self</span><span class="o">.</span><span class="n">container</span><span class="o">.</span><span class="n">pbar</span> <span class="o">=</span> <span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">240</span> <span class="bp">self</span><span class="o">.</span><span class="n">displayed</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.5/x64/lib/python3.11/site-packages/tqdm/notebook.py:233,</span> in <span class="ni">tqdm_notebook.__init__</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">231</span> <span class="n">unit_scale</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_scale</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_scale</span> <span class="ow">or</span> <span class="mi">1</span>
+<span class="g g-Whitespace">    </span><span class="mi">232</span> <span class="n">total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">*</span> <span class="n">unit_scale</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span>
+<span class="ne">--&gt; </span><span class="mi">233</span> <span class="bp">self</span><span class="o">.</span><span class="n">container</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_printer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fp</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="bp">self</span><span class="o">.</span><span class="n">container</span><span class="o">.</span><span class="n">pbar</span> <span class="o">=</span> <span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">235</span> <span class="bp">self</span><span class="o">.</span><span class="n">displayed</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/tqdm/notebook.py:113,</span> in <span class="ni">tqdm_notebook.status_printer</span><span class="nt">(_, total, desc, ncols)</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span> <span class="c1"># Fallback to text bar if there&#39;s no total</span>
-<span class="g g-Whitespace">    </span><span class="mi">105</span> <span class="c1"># DEPRECATED: replaced with an &#39;info&#39; style bar</span>
-<span class="g g-Whitespace">    </span><span class="mi">106</span> <span class="c1"># if not total:</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.5/x64/lib/python3.11/site-packages/tqdm/notebook.py:108,</span> in <span class="ni">tqdm_notebook.status_printer</span><span class="nt">(_, total, desc, ncols)</span>
+<span class="g g-Whitespace">     </span><span class="mi">99</span> <span class="c1"># Fallback to text bar if there&#39;s no total</span>
+<span class="g g-Whitespace">    </span><span class="mi">100</span> <span class="c1"># DEPRECATED: replaced with an &#39;info&#39; style bar</span>
+<span class="g g-Whitespace">    </span><span class="mi">101</span> <span class="c1"># if not total:</span>
    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">110</span> 
-<span class="g g-Whitespace">    </span><span class="mi">111</span> <span class="c1"># Prepare IPython progress bar</span>
-<span class="g g-Whitespace">    </span><span class="mi">112</span> <span class="k">if</span> <span class="n">IProgress</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># #187 #451 #558 #872</span>
-<span class="ne">--&gt; </span><span class="mi">113</span>     <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="n">WARN_NOIPYW</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">114</span> <span class="k">if</span> <span class="n">total</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">115</span>     <span class="n">pbar</span> <span class="o">=</span> <span class="n">IProgress</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">105</span> 
+<span class="g g-Whitespace">    </span><span class="mi">106</span> <span class="c1"># Prepare IPython progress bar</span>
+<span class="g g-Whitespace">    </span><span class="mi">107</span> <span class="k">if</span> <span class="n">IProgress</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># #187 #451 #558 #872</span>
+<span class="ne">--&gt; </span><span class="mi">108</span>     <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="n">WARN_NOIPYW</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">109</span> <span class="k">if</span> <span class="n">total</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">110</span>     <span class="n">pbar</span> <span class="o">=</span> <span class="n">IProgress</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
 
 <span class="ne">ImportError</span>: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
 </pre></div>
