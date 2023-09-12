@@ -29,18 +29,6 @@ Note that the following commands require access to a
 pip install norse
 ```
 
-### Installing from [Conda](https://docs.conda.io/en/latest/)
-```bash
-conda install -c norse norse
-```
-
-### Installing with [Docker](https://en.wikipedia.org/wiki/Docker_(software))
-```bash
-docker pull quay.io/norse/norse
-# Or, using CUDA
-docker pull quay.io/norse/norse:latest-cuda
-```
-
 ### Installing from source
 ```bash
 git clone https://github.com/norse/norse
@@ -48,6 +36,20 @@ cd norse
 python setup.py install
 ```
 
+### Installing [Nix](https://nixos.org/)
+Use `nix-shell .` from the Norse directory.
+
+### Installing from [Conda](https://docs.conda.io/en/latest/) (DEPRECATED)
+```bash
+conda install -c norse norse
+```
+
+### Installing with [Docker](https://en.wikipedia.org/wiki/Docker_(software))  (DEPRECATED)
+```bash
+docker pull quay.io/norse/norse
+# Or, using CUDA
+docker pull quay.io/norse/norse:latest-cuda
+```
 
 ## Optional dependencies
 
@@ -55,7 +57,7 @@ Some of the tasks require additional dependencies like [Pytorch Lightning](https
 We also offer support for [Tensorboard](https://pytorch.org/docs/stable/tensorboard.html) to make it easier to visualise the training and introspect models.
 
 (page-installing-docker)=
-## Running Norse notebooks with Docker
+## Running Norse notebooks with Docker (DEPRECATED)
 
 Docker creates a closed environment for you, which also means that the network and
 filesystem is isolated. Without going into details, here are three steps you can
