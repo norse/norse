@@ -4,9 +4,6 @@ Utilities for Norse networks in Torch.
 Packages and subpackages may depend on Matplotlib and Tensorboard.
 """
 import logging
-import torch
-from typing import Union, Optional
-from numbers import Number
 
 from .import_nir import from_nir
 from .export_nir import to_nir
