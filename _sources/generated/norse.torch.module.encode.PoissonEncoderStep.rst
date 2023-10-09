@@ -19,6 +19,7 @@
       ~PoissonEncoderStep.bfloat16
       ~PoissonEncoderStep.buffers
       ~PoissonEncoderStep.children
+      ~PoissonEncoderStep.compile
       ~PoissonEncoderStep.cpu
       ~PoissonEncoderStep.cuda
       ~PoissonEncoderStep.double

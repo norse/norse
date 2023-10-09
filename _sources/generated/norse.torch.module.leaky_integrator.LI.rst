@@ -19,6 +19,7 @@
       ~LI.bfloat16
       ~LI.buffers
       ~LI.children
+      ~LI.compile
       ~LI.cpu
       ~LI.cuda
       ~LI.double

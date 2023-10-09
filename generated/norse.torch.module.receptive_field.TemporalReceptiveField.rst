@@ -19,6 +19,7 @@
       ~TemporalReceptiveField.bfloat16
       ~TemporalReceptiveField.buffers
       ~TemporalReceptiveField.children
+      ~TemporalReceptiveField.compile
       ~TemporalReceptiveField.cpu
       ~TemporalReceptiveField.cuda
       ~TemporalReceptiveField.double

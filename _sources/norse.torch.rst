@@ -12,7 +12,7 @@ Building blocks for spiking neural networks based on `PyTorch <https://pytorch.o
 Containers
 ----------
 
-.. currentmodule:: norse.torch.module
+.. automodule:: norse.torch.module
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -21,12 +21,22 @@ Containers
     SequentialState <sequential.SequentialState>
     RegularizationCell <regularization.RegularizationCell>
 
+Convolutions
+------------
+
+.. automodule:: norse.torch.module.conv
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    LConv2d
+
 
 .. TODO: After threshold implementation
 .. Threshold models
 .. ----------------
 
-.. .. currentmodule:: norse.torch
+.. .. automodule:: norse.torch
 .. .. autosummary::
 ..     :toctree: generated
 ..     :nosignatures:
@@ -43,7 +53,7 @@ Containers
 Encoding
 --------
     
-.. currentmodule:: norse.torch.module.encode
+.. automodule:: norse.torch.module.encode
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -57,27 +67,6 @@ Encoding
     SpikeLatencyLIFEncoder
 
 
-Convolutions
-------------
-
-.. currentmodule:: norse.torch.module.conv
-.. autosummary::
-    :toctree: generated
-    :nosignatures:
-
-    LConv2d
-
-
-Receptive fields
-
-.. currentmodule:: norse.torch.module.receptive_field
-.. autosummary::
-    :toctree: generated
-    :nosignatures:
-
-    SpatialReceptiveField2d
-    TemporalReceptiveField
-
 Neuron models
 -------------
 
@@ -86,20 +75,19 @@ Integrate-and-fire
 
 Simple integrators that sums up incoming signals until a threshold.
 
-.. currentmodule:: norse.torch.module.iaf
+.. automodule:: norse.torch.module.iaf
 .. autosummary::
     :toctree: generated
     :nosignatures:
 
     IAFFeedForwardState
     IAFParameters
-
     IAFCell
 
 Izhikevich
 ^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.izhikevich
+.. automodule:: norse.torch.module.izhikevich
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -116,42 +104,7 @@ Izhikevich
 Leaky integrator
 ^^^^^^^^^^^^^^^^
 
-Leaky integrators describe a *leaky* neuron membrane that integrates
-incoming currents over time, but never spikes. In other words, the
-neuron adds up incoming input current, while leaking out some of it
-in every timestep.
-
-.. math::
-    \begin{align*}
-        \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
-        \dot{i} &= -1/\tau_{\text{syn}} i
-    \end{align*}
-
-The first equation describes how the membrane voltage (:math:`v`, across
-the membrane) changes over time. A constant amount of current is *leaked*
-out every timestep (:math:`v_{\text{leak}}`), while the current
-(:math:`i`) is added.
-
-The second equation describes how the current flowing into the neuron
-changes in every timestep.
-
-Notice that both equations are parameterized by the *time constant*
-:math:`\tau`. This constant controls how *fast* the changes in voltage
-and current occurs. A large time constant means a small change.
-In Norse, we call this parameter the *inverse* to avoid having to
-recalculate the inverse (:math:`\tau_{\text{mem_inv}}` and
-:math:`\tau_{\text{syn_inv}}` respectively).
-So, for Norse a large inverse time constant means *rapid* changes while
-a small inverse time constant means *slow* changes.
-
-Recall that *voltage* is the difference in charge between two points (in
-this case the neuron membrane) and *current* is the rate of change or the
-amount of current being added/subtracted at each timestep.
-
-More information can be found on
-`Wikipedia <https://en.wikipedia.org/wiki/Leaky_integrator>`_.
-
-.. currentmodule:: norse.torch.module.leaky_integrator
+.. automodule:: norse.torch.module.leaky_integrator
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -167,40 +120,7 @@ More information can be found on
 Leaky integrate-and-fire (LIF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A popular neuron model that combines a :mod:`norse.torch.functional.leaky_integrator` with
-spike thresholds to produce events (spikes).
-
-The model describes the change in a neuron membrane voltage (:math:`v`)
-and inflow current (:math:`i`).
-See the :mod:`.leaky_integrator` module for more information.
-
-.. math::
-    \begin{align*}
-        \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
-        \dot{i} &= 1/\tau_{\text{syn}} i
-    \end{align*}
-
-The F in LIF stands for the thresholded "firing" events that occur if the
-neuron voltage increases over a certain point or *threshold* (:math:`v_{\text{th}}`).
-
-.. math::
-    z = \Theta(v - v_{\text{th}})
-
-In regular artificial neural networks, this is referred to as the *activation
-function*. The behaviour can be controlled by setting the :code:`method` field in
-the neuron parameters, but will default to the :mod:`.superspike` synthetic
-gradient approach that uses the :mod:`.heaviside` step function:
-
-.. math::
-    H[n]=\begin{cases} 0, & n <= 0 \\ 1, & n \gt 0 \end{cases}
-
-
-More information can be found on
-`Wikipedia <https://en.wikipedia.org/wiki/Biological_neuron_model#Leaky_integrate-and-fire>`_
-or in the book `*Neuron Dynamics* by W. Gerstner et al.,
-freely available online <https://neuronaldynamics.epfl.ch/online/Ch5.html>`_.
-
-.. currentmodule:: norse.torch
+.. automodule:: norse.torch.module.lif
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -217,11 +137,7 @@ freely available online <https://neuronaldynamics.epfl.ch/online/Ch5.html>`_.
 LIF, box model
 ^^^^^^^^^^^^^^
 
-A simplified version of the popular leaky integrate-and-fire neuron model that combines a :mod:`norse.torch.functional.leaky_integrator` with spike thresholds to produce events (spikes).
-Compared to the :mod:`norse.torch.functional.lif` modules, this model leaves out the current term, making it computationally simpler but impossible to implement in physical systems because currents cannot "jump" in nature.
-It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as "current boxes".
-
-.. currentmodule:: norse.torch.module.lif_box
+.. automodule:: norse.torch.module.lif_box
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -234,7 +150,7 @@ It is these sudden current jumps that gives the model its name, because the shif
 LIF, conductance based
 ^^^^^^^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.coba_lif
+.. automodule:: norse.torch.module.coba_lif
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -245,7 +161,7 @@ LIF, conductance based
 LIF, adaptive exponential
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.lif_adex
+.. automodule:: norse.torch.module.lif_adex
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -258,7 +174,7 @@ LIF, adaptive exponential
 LIF, exponential
 ^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.lif_ex
+.. automodule:: norse.torch.module.lif_ex
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -271,7 +187,7 @@ LIF, exponential
 LIF, multicompartmental
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.lif_mc
+.. automodule:: norse.torch.module.lif_mc
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -281,7 +197,7 @@ LIF, multicompartmental
 LIF, multicompartmental with refraction
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.lif_mc_refrac
+.. automodule:: norse.torch.module.lif_mc_refrac
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -291,7 +207,7 @@ LIF, multicompartmental with refraction
 LIF, refractory
 ^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.lif_refrac
+.. automodule:: norse.torch.module.lif_refrac
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -302,7 +218,7 @@ LIF, refractory
 Long short-term memory (LSNN)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. currentmodule:: norse.torch.module.lsnn
+.. automodule:: norse.torch.module.lsnn
 .. autosummary::
     :toctree: generated
     :nosignatures:
@@ -311,3 +227,14 @@ Long short-term memory (LSNN)
     LSNNCell
     LSNNRecurrent
     LSNNRecurrentCell
+
+Receptive fields
+----------------
+
+.. automodule:: norse.torch.module.receptive_field
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    SpatialReceptiveField2d
+    TemporalReceptiveField

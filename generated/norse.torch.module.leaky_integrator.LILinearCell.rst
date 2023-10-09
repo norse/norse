@@ -19,6 +19,7 @@
       ~LILinearCell.bfloat16
       ~LILinearCell.buffers
       ~LILinearCell.children
+      ~LILinearCell.compile
       ~LILinearCell.cpu
       ~LILinearCell.cuda
       ~LILinearCell.double

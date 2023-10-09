@@ -19,6 +19,7 @@
       ~LIFExRecurrent.bfloat16
       ~LIFExRecurrent.buffers
       ~LIFExRecurrent.children
+      ~LIFExRecurrent.compile
       ~LIFExRecurrent.cpu
       ~LIFExRecurrent.cuda
       ~LIFExRecurrent.double

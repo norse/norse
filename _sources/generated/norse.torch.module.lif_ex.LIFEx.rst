@@ -19,6 +19,7 @@
       ~LIFEx.bfloat16
       ~LIFEx.buffers
       ~LIFEx.children
+      ~LIFEx.compile
       ~LIFEx.cpu
       ~LIFEx.cuda
       ~LIFEx.double

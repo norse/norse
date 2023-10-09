@@ -19,6 +19,7 @@
       ~IzhikevichCell.bfloat16
       ~IzhikevichCell.buffers
       ~IzhikevichCell.children
+      ~IzhikevichCell.compile
       ~IzhikevichCell.cpu
       ~IzhikevichCell.cuda
       ~IzhikevichCell.double

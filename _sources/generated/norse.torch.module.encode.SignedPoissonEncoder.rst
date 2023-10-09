@@ -19,6 +19,7 @@
       ~SignedPoissonEncoder.bfloat16
       ~SignedPoissonEncoder.buffers
       ~SignedPoissonEncoder.children
+      ~SignedPoissonEncoder.compile
       ~SignedPoissonEncoder.cpu
       ~SignedPoissonEncoder.cuda
       ~SignedPoissonEncoder.double

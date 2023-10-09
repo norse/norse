@@ -19,6 +19,7 @@
       ~LConv2d.bfloat16
       ~LConv2d.buffers
       ~LConv2d.children
+      ~LConv2d.compile
       ~LConv2d.cpu
       ~LConv2d.cuda
       ~LConv2d.double

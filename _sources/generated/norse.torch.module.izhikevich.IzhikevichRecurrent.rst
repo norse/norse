@@ -19,6 +19,7 @@
       ~IzhikevichRecurrent.bfloat16
       ~IzhikevichRecurrent.buffers
       ~IzhikevichRecurrent.children
+      ~IzhikevichRecurrent.compile
       ~IzhikevichRecurrent.cpu
       ~IzhikevichRecurrent.cuda
       ~IzhikevichRecurrent.double

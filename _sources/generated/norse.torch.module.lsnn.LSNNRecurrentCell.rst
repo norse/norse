@@ -19,6 +19,7 @@
       ~LSNNRecurrentCell.bfloat16
       ~LSNNRecurrentCell.buffers
       ~LSNNRecurrentCell.children
+      ~LSNNRecurrentCell.compile
       ~LSNNRecurrentCell.cpu
       ~LSNNRecurrentCell.cuda
       ~LSNNRecurrentCell.double

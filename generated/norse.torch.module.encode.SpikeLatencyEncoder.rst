@@ -19,6 +19,7 @@
       ~SpikeLatencyEncoder.bfloat16
       ~SpikeLatencyEncoder.buffers
       ~SpikeLatencyEncoder.children
+      ~SpikeLatencyEncoder.compile
       ~SpikeLatencyEncoder.cpu
       ~SpikeLatencyEncoder.cuda
       ~SpikeLatencyEncoder.double

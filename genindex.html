@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,12 +38,14 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
@@ -64,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -73,6 +75,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -178,6 +189,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.Lift.html">norse.torch.module.Lift</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.SequentialState.html">norse.torch.module.SequentialState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.RegularizationCell.html">norse.torch.module.RegularizationCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.conv.LConv2d.html">norse.torch.module.conv.LConv2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.encode.ConstantCurrentLIFEncoder.html">norse.torch.module.encode.ConstantCurrentLIFEncoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.encode.PoissonEncoder.html">norse.torch.module.encode.PoissonEncoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.encode.PoissonEncoderStep.html">norse.torch.module.encode.PoissonEncoderStep</a></li>
@@ -185,9 +197,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.encode.SignedPoissonEncoder.html">norse.torch.module.encode.SignedPoissonEncoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.encode.SpikeLatencyEncoder.html">norse.torch.module.encode.SpikeLatencyEncoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.encode.SpikeLatencyLIFEncoder.html">norse.torch.module.encode.SpikeLatencyLIFEncoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.conv.LConv2d.html">norse.torch.module.conv.LConv2d</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.receptive_field.SpatialReceptiveField2d.html">norse.torch.module.receptive_field.SpatialReceptiveField2d</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.receptive_field.TemporalReceptiveField.html">norse.torch.module.receptive_field.TemporalReceptiveField</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.iaf.IAFFeedForwardState.html">norse.torch.module.iaf.IAFFeedForwardState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.iaf.IAFParameters.html">norse.torch.module.iaf.IAFParameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.iaf.IAFCell.html">norse.torch.module.iaf.IAFCell</a></li>
@@ -202,12 +211,12 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.leaky_integrator.LI.html">norse.torch.module.leaky_integrator.LI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.leaky_integrator.LICell.html">norse.torch.module.leaky_integrator.LICell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.leaky_integrator.LILinearCell.html">norse.torch.module.leaky_integrator.LILinearCell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.LIFParameters.html">norse.torch.LIFParameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.LIFState.html">norse.torch.LIFState</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.LIF.html">norse.torch.LIF</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.LIFCell.html">norse.torch.LIFCell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.LIFRecurrent.html">norse.torch.LIFRecurrent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.LIFRecurrentCell.html">norse.torch.LIFRecurrentCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lif.LIFParameters.html">norse.torch.module.lif.LIFParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lif.LIFState.html">norse.torch.module.lif.LIFState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lif.LIF.html">norse.torch.module.lif.LIF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lif.LIFCell.html">norse.torch.module.lif.LIFCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lif.LIFRecurrent.html">norse.torch.module.lif.LIFRecurrent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lif.LIFRecurrentCell.html">norse.torch.module.lif.LIFRecurrentCell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lif_box.LIFBoxFeedForwardState.html">norse.torch.module.lif_box.LIFBoxFeedForwardState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lif_box.LIFBoxParameters.html">norse.torch.module.lif_box.LIFBoxParameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lif_box.LIFBoxCell.html">norse.torch.module.lif_box.LIFBoxCell</a></li>
@@ -228,6 +237,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lsnn.LSNNCell.html">norse.torch.module.lsnn.LSNNCell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lsnn.LSNNRecurrent.html">norse.torch.module.lsnn.LSNNRecurrent</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.lsnn.LSNNRecurrentCell.html">norse.torch.module.lsnn.LSNNRecurrentCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.receptive_field.SpatialReceptiveField2d.html">norse.torch.module.receptive_field.SpatialReceptiveField2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.module.receptive_field.TemporalReceptiveField.html">norse.torch.module.receptive_field.TemporalReceptiveField</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="norse.torch.functional.html">norse.torch.functional</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -313,6 +324,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.receptive_field.gaussian_kernel.html">norse.torch.functional.receptive_field.gaussian_kernel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.receptive_field.spatial_receptive_field.html">norse.torch.functional.receptive_field.spatial_receptive_field</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives.html">norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.receptive_field.temporal_scale_distribution.html">norse.torch.functional.receptive_field.temporal_scale_distribution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.STDPSensorParameters.html">norse.torch.functional.STDPSensorParameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.STDPSensorState.html">norse.torch.functional.STDPSensorState</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/norse.torch.functional.stdp_sensor_step.html">norse.torch.functional.stdp_sensor_step</a></li>
@@ -477,10 +489,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -488,7 +500,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -592,18 +604,6 @@ document.write(`
 </li>
         <li><a href="generated/norse.torch.functional.TsodyksMakramState.html#norse.torch.functional.TsodyksMakramState.__init__">(norse.torch.functional.TsodyksMakramState method)</a>
 </li>
-        <li><a href="generated/norse.torch.LIF.html#norse.torch.LIF.__init__">(norse.torch.LIF method)</a>
-</li>
-        <li><a href="generated/norse.torch.LIFCell.html#norse.torch.LIFCell.__init__">(norse.torch.LIFCell method)</a>
-</li>
-        <li><a href="generated/norse.torch.LIFParameters.html#norse.torch.LIFParameters.__init__">(norse.torch.LIFParameters method)</a>
-</li>
-        <li><a href="generated/norse.torch.LIFRecurrent.html#norse.torch.LIFRecurrent.__init__">(norse.torch.LIFRecurrent method)</a>
-</li>
-        <li><a href="generated/norse.torch.LIFRecurrentCell.html#norse.torch.LIFRecurrentCell.__init__">(norse.torch.LIFRecurrentCell method)</a>
-</li>
-        <li><a href="generated/norse.torch.LIFState.html#norse.torch.LIFState.__init__">(norse.torch.LIFState method)</a>
-</li>
         <li><a href="generated/norse.torch.module.coba_lif.CobaLIFCell.html#norse.torch.module.coba_lif.CobaLIFCell.__init__">(norse.torch.module.coba_lif.CobaLIFCell method)</a>
 </li>
         <li><a href="generated/norse.torch.module.conv.LConv2d.html#norse.torch.module.conv.LConv2d.__init__">(norse.torch.module.conv.LConv2d method)</a>
@@ -649,6 +649,18 @@ document.write(`
         <li><a href="generated/norse.torch.module.leaky_integrator.LIParameters.html#norse.torch.module.leaky_integrator.LIParameters.__init__">(norse.torch.module.leaky_integrator.LIParameters method)</a>
 </li>
         <li><a href="generated/norse.torch.module.leaky_integrator.LIState.html#norse.torch.module.leaky_integrator.LIState.__init__">(norse.torch.module.leaky_integrator.LIState method)</a>
+</li>
+        <li><a href="generated/norse.torch.module.lif.LIF.html#norse.torch.module.lif.LIF.__init__">(norse.torch.module.lif.LIF method)</a>
+</li>
+        <li><a href="generated/norse.torch.module.lif.LIFCell.html#norse.torch.module.lif.LIFCell.__init__">(norse.torch.module.lif.LIFCell method)</a>
+</li>
+        <li><a href="generated/norse.torch.module.lif.LIFParameters.html#norse.torch.module.lif.LIFParameters.__init__">(norse.torch.module.lif.LIFParameters method)</a>
+</li>
+        <li><a href="generated/norse.torch.module.lif.LIFRecurrent.html#norse.torch.module.lif.LIFRecurrent.__init__">(norse.torch.module.lif.LIFRecurrent method)</a>
+</li>
+        <li><a href="generated/norse.torch.module.lif.LIFRecurrentCell.html#norse.torch.module.lif.LIFRecurrentCell.__init__">(norse.torch.module.lif.LIFRecurrentCell method)</a>
+</li>
+        <li><a href="generated/norse.torch.module.lif.LIFState.html#norse.torch.module.lif.LIFState.__init__">(norse.torch.module.lif.LIFState method)</a>
 </li>
         <li><a href="generated/norse.torch.module.lif_adex.LIFAdEx.html#norse.torch.module.lif_adex.LIFAdEx.__init__">(norse.torch.module.lif_adex.LIFAdEx method)</a>
 </li>
@@ -859,7 +871,7 @@ document.write(`
 </li>
       <li><a href="generated/norse.torch.module.leaky_integrator.LICell.html#norse.torch.module.leaky_integrator.LICell">LICell (class in norse.torch.module.leaky_integrator)</a>
 </li>
-      <li><a href="generated/norse.torch.LIF.html#norse.torch.LIF">LIF (class in norse.torch)</a>
+      <li><a href="generated/norse.torch.module.lif.LIF.html#norse.torch.module.lif.LIF">LIF (class in norse.torch.module.lif)</a>
 </li>
       <li><a href="generated/norse.torch.functional.lif_adex_current_encoder.html#norse.torch.functional.lif_adex_current_encoder">lif_adex_current_encoder() (in module norse.torch.functional)</a>
 
@@ -921,7 +933,7 @@ document.write(`
         <li><a href="generated/norse.torch.module.lif_box.LIFBoxParameters.html#norse.torch.module.lif_box.LIFBoxParameters">(class in norse.torch.module.lif_box)</a>
 </li>
       </ul></li>
-      <li><a href="generated/norse.torch.LIFCell.html#norse.torch.LIFCell">LIFCell (class in norse.torch)</a>
+      <li><a href="generated/norse.torch.module.lif.LIFCell.html#norse.torch.module.lif.LIFCell">LIFCell (class in norse.torch.module.lif)</a>
 </li>
       <li><a href="generated/norse.torch.module.lif_ex.LIFEx.html#norse.torch.module.lif_ex.LIFEx">LIFEx (class in norse.torch.module.lif_ex)</a>
 </li>
@@ -943,15 +955,15 @@ document.write(`
 </li>
       <li><a href="generated/norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell.html#norse.torch.module.lif_mc_refrac.LIFMCRefracRecurrentCell">LIFMCRefracRecurrentCell (class in norse.torch.module.lif_mc_refrac)</a>
 </li>
-      <li><a href="generated/norse.torch.LIFParameters.html#norse.torch.LIFParameters">LIFParameters (class in norse.torch)</a>
+      <li><a href="generated/norse.torch.functional.LIFParameters.html#norse.torch.functional.LIFParameters">LIFParameters (class in norse.torch.functional)</a>
 
       <ul>
-        <li><a href="generated/norse.torch.functional.LIFParameters.html#norse.torch.functional.LIFParameters">(class in norse.torch.functional)</a>
+        <li><a href="generated/norse.torch.module.lif.LIFParameters.html#norse.torch.module.lif.LIFParameters">(class in norse.torch.module.lif)</a>
 </li>
       </ul></li>
-      <li><a href="generated/norse.torch.LIFRecurrent.html#norse.torch.LIFRecurrent">LIFRecurrent (class in norse.torch)</a>
+      <li><a href="generated/norse.torch.module.lif.LIFRecurrent.html#norse.torch.module.lif.LIFRecurrent">LIFRecurrent (class in norse.torch.module.lif)</a>
 </li>
-      <li><a href="generated/norse.torch.LIFRecurrentCell.html#norse.torch.LIFRecurrentCell">LIFRecurrentCell (class in norse.torch)</a>
+      <li><a href="generated/norse.torch.module.lif.LIFRecurrentCell.html#norse.torch.module.lif.LIFRecurrentCell">LIFRecurrentCell (class in norse.torch.module.lif)</a>
 </li>
       <li><a href="generated/norse.torch.module.lif_refrac.LIFRefracCell.html#norse.torch.module.lif_refrac.LIFRefracCell">LIFRefracCell (class in norse.torch.module.lif_refrac)</a>
 </li>
@@ -961,7 +973,7 @@ document.write(`
 </li>
       <li><a href="generated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.html#norse.torch.module.lif_refrac.LIFRefracRecurrentCell">LIFRefracRecurrentCell (class in norse.torch.module.lif_refrac)</a>
 </li>
-      <li><a href="generated/norse.torch.LIFState.html#norse.torch.LIFState">LIFState (class in norse.torch)</a>
+      <li><a href="generated/norse.torch.module.lif.LIFState.html#norse.torch.module.lif.LIFState">LIFState (class in norse.torch.module.lif)</a>
 </li>
       <li><a href="generated/norse.torch.module.Lift.html#norse.torch.module.Lift">Lift (class in norse.torch.module)</a>
 </li>
@@ -1049,7 +1061,7 @@ document.write(`
 </li>
         <li><a href="generated/norse.torch.html#module-norse.torch">norse.torch</a>
 </li>
-        <li><a href="generated/norse.torch.functional.html#module-norse.torch.functional">norse.torch.functional</a>
+        <li><a href="generated/norse.torch.functional.html#module-norse.torch.functional">norse.torch.functional</a>, <a href="norse.torch.functional.html#module-0">[1]</a>, <a href="norse.torch.functional.html#module-1">[2]</a>, <a href="norse.torch.functional.html#module-2">[3]</a>, <a href="norse.torch.functional.html#module-3">[4]</a>, <a href="norse.torch.functional.html#module-4">[5]</a>, <a href="norse.torch.functional.html#module-5">[6]</a>, <a href="norse.torch.functional.html#module-6">[7]</a>, <a href="norse.torch.functional.html#module-7">[8]</a>, <a href="norse.torch.functional.html#module-norse.torch.functional">[9]</a>
 </li>
         <li><a href="generated/norse.torch.functional.adjoint.html#module-norse.torch.functional.adjoint">norse.torch.functional.adjoint</a>
 </li>
@@ -1071,7 +1083,7 @@ document.write(`
 </li>
         <li><a href="generated/norse.torch.functional.adjoint.test.test_lsnn_adjoint.html#module-norse.torch.functional.adjoint.test.test_lsnn_adjoint">norse.torch.functional.adjoint.test.test_lsnn_adjoint</a>
 </li>
-        <li><a href="generated/norse.torch.functional.coba_lif.html#module-norse.torch.functional.coba_lif">norse.torch.functional.coba_lif</a>
+        <li><a href="generated/norse.torch.functional.coba_lif.html#module-norse.torch.functional.coba_lif">norse.torch.functional.coba_lif</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.coba_lif">[1]</a>
 </li>
         <li><a href="generated/norse.torch.functional.correlation_sensor.html#module-norse.torch.functional.correlation_sensor">norse.torch.functional.correlation_sensor</a>
 </li>
@@ -1081,25 +1093,25 @@ document.write(`
 </li>
         <li><a href="generated/norse.torch.functional.filter.html#module-norse.torch.functional.filter">norse.torch.functional.filter</a>
 </li>
-        <li><a href="generated/norse.torch.functional.iaf.html#module-norse.torch.functional.iaf">norse.torch.functional.iaf</a>
+        <li><a href="generated/norse.torch.functional.iaf.html#module-norse.torch.functional.iaf">norse.torch.functional.iaf</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.iaf">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.functional.izhikevich.html#module-norse.torch.functional.izhikevich">norse.torch.functional.izhikevich</a>
+        <li><a href="generated/norse.torch.functional.izhikevich.html#module-norse.torch.functional.izhikevich">norse.torch.functional.izhikevich</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.izhikevich">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.functional.leaky_integrator.html#module-norse.torch.functional.leaky_integrator">norse.torch.functional.leaky_integrator</a>
+        <li><a href="generated/norse.torch.functional.leaky_integrator.html#module-norse.torch.functional.leaky_integrator">norse.torch.functional.leaky_integrator</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.leaky_integrator">[1]</a>
 </li>
         <li><a href="generated/norse.torch.functional.leaky_integrator_box.html#module-norse.torch.functional.leaky_integrator_box">norse.torch.functional.leaky_integrator_box</a>
 </li>
         <li><a href="generated/norse.torch.functional.lif.html#module-norse.torch.functional.lif">norse.torch.functional.lif</a>
 </li>
-        <li><a href="generated/norse.torch.functional.lif_adex.html#module-norse.torch.functional.lif_adex">norse.torch.functional.lif_adex</a>
+        <li><a href="generated/norse.torch.functional.lif_adex.html#module-norse.torch.functional.lif_adex">norse.torch.functional.lif_adex</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.lif_adex">[1]</a>
 </li>
         <li><a href="generated/norse.torch.functional.lif_adex_refrac.html#module-norse.torch.functional.lif_adex_refrac">norse.torch.functional.lif_adex_refrac</a>
 </li>
-        <li><a href="generated/norse.torch.functional.lif_box.html#module-norse.torch.functional.lif_box">norse.torch.functional.lif_box</a>
+        <li><a href="generated/norse.torch.functional.lif_box.html#module-norse.torch.functional.lif_box">norse.torch.functional.lif_box</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.lif_box">[1]</a>
 </li>
         <li><a href="generated/norse.torch.functional.lif_correlation.html#module-norse.torch.functional.lif_correlation">norse.torch.functional.lif_correlation</a>
 </li>
-        <li><a href="generated/norse.torch.functional.lif_ex.html#module-norse.torch.functional.lif_ex">norse.torch.functional.lif_ex</a>
+        <li><a href="generated/norse.torch.functional.lif_ex.html#module-norse.torch.functional.lif_ex">norse.torch.functional.lif_ex</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.lif_ex">[1]</a>
 </li>
         <li><a href="generated/norse.torch.functional.lif_mc.html#module-norse.torch.functional.lif_mc">norse.torch.functional.lif_mc</a>
 </li>
@@ -1107,13 +1119,13 @@ document.write(`
 </li>
         <li><a href="generated/norse.torch.functional.lif_refrac.html#module-norse.torch.functional.lif_refrac">norse.torch.functional.lif_refrac</a>
 </li>
-        <li><a href="generated/norse.torch.functional.logical.html#module-norse.torch.functional.logical">norse.torch.functional.logical</a>
+        <li><a href="generated/norse.torch.functional.logical.html#module-norse.torch.functional.logical">norse.torch.functional.logical</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.logical">[1]</a>
 </li>
         <li><a href="generated/norse.torch.functional.lsnn.html#module-norse.torch.functional.lsnn">norse.torch.functional.lsnn</a>
 </li>
-        <li><a href="generated/norse.torch.functional.receptive_field.html#module-norse.torch.functional.receptive_field">norse.torch.functional.receptive_field</a>
+        <li><a href="generated/norse.torch.functional.receptive_field.html#module-norse.torch.functional.receptive_field">norse.torch.functional.receptive_field</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.receptive_field">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.functional.regularization.html#module-norse.torch.functional.regularization">norse.torch.functional.regularization</a>
+        <li><a href="generated/norse.torch.functional.regularization.html#module-norse.torch.functional.regularization">norse.torch.functional.regularization</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.regularization">[1]</a>
 </li>
         <li><a href="generated/norse.torch.functional.spikes_to_times_decoder.html#module-norse.torch.functional.spikes_to_times_decoder">norse.torch.functional.spikes_to_times_decoder</a>
 </li>
@@ -1201,47 +1213,47 @@ document.write(`
 </li>
         <li><a href="generated/norse.torch.models.vgg.html#module-norse.torch.models.vgg">norse.torch.models.vgg</a>
 </li>
-        <li><a href="generated/norse.torch.module.html#module-norse.torch.module">norse.torch.module</a>
+        <li><a href="generated/norse.torch.module.html#module-norse.torch.module">norse.torch.module</a>, <a href="norse.torch.html#module-norse.torch.module">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.coba_lif.html#module-norse.torch.module.coba_lif">norse.torch.module.coba_lif</a>
+        <li><a href="generated/norse.torch.module.coba_lif.html#module-norse.torch.module.coba_lif">norse.torch.module.coba_lif</a>, <a href="norse.torch.html#module-norse.torch.module.coba_lif">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.conv.html#module-norse.torch.module.conv">norse.torch.module.conv</a>
+        <li><a href="generated/norse.torch.module.conv.html#module-norse.torch.module.conv">norse.torch.module.conv</a>, <a href="norse.torch.html#module-norse.torch.module.conv">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.encode.html#module-norse.torch.module.encode">norse.torch.module.encode</a>
+        <li><a href="generated/norse.torch.module.encode.html#module-norse.torch.module.encode">norse.torch.module.encode</a>, <a href="norse.torch.html#module-norse.torch.module.encode">[1]</a>
 </li>
         <li><a href="generated/norse.torch.module.exp_filter.html#module-norse.torch.module.exp_filter">norse.torch.module.exp_filter</a>
 </li>
-        <li><a href="generated/norse.torch.module.iaf.html#module-norse.torch.module.iaf">norse.torch.module.iaf</a>
+        <li><a href="generated/norse.torch.module.iaf.html#module-norse.torch.module.iaf">norse.torch.module.iaf</a>, <a href="norse.torch.html#module-norse.torch.module.iaf">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.izhikevich.html#module-norse.torch.module.izhikevich">norse.torch.module.izhikevich</a>
+        <li><a href="generated/norse.torch.module.izhikevich.html#module-norse.torch.module.izhikevich">norse.torch.module.izhikevich</a>, <a href="norse.torch.html#module-norse.torch.module.izhikevich">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.leaky_integrator.html#module-norse.torch.module.leaky_integrator">norse.torch.module.leaky_integrator</a>
+        <li><a href="generated/norse.torch.module.leaky_integrator.html#module-norse.torch.module.leaky_integrator">norse.torch.module.leaky_integrator</a>, <a href="norse.torch.html#module-norse.torch.module.leaky_integrator">[1]</a>
 </li>
         <li><a href="generated/norse.torch.module.leaky_integrator_box.html#module-norse.torch.module.leaky_integrator_box">norse.torch.module.leaky_integrator_box</a>
 </li>
-        <li><a href="generated/norse.torch.module.lif.html#module-norse.torch.module.lif">norse.torch.module.lif</a>
+        <li><a href="generated/norse.torch.module.lif.html#module-norse.torch.module.lif">norse.torch.module.lif</a>, <a href="norse.torch.html#module-norse.torch.module.lif">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.lif_adex.html#module-norse.torch.module.lif_adex">norse.torch.module.lif_adex</a>
+        <li><a href="generated/norse.torch.module.lif_adex.html#module-norse.torch.module.lif_adex">norse.torch.module.lif_adex</a>, <a href="norse.torch.html#module-norse.torch.module.lif_adex">[1]</a>
 </li>
         <li><a href="generated/norse.torch.module.lif_adex_refrac.html#module-norse.torch.module.lif_adex_refrac">norse.torch.module.lif_adex_refrac</a>
 </li>
-        <li><a href="generated/norse.torch.module.lif_box.html#module-norse.torch.module.lif_box">norse.torch.module.lif_box</a>
+        <li><a href="generated/norse.torch.module.lif_box.html#module-norse.torch.module.lif_box">norse.torch.module.lif_box</a>, <a href="norse.torch.html#module-norse.torch.module.lif_box">[1]</a>
 </li>
         <li><a href="generated/norse.torch.module.lif_correlation.html#module-norse.torch.module.lif_correlation">norse.torch.module.lif_correlation</a>
 </li>
-        <li><a href="generated/norse.torch.module.lif_ex.html#module-norse.torch.module.lif_ex">norse.torch.module.lif_ex</a>
+        <li><a href="generated/norse.torch.module.lif_ex.html#module-norse.torch.module.lif_ex">norse.torch.module.lif_ex</a>, <a href="norse.torch.html#module-norse.torch.module.lif_ex">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.lif_mc.html#module-norse.torch.module.lif_mc">norse.torch.module.lif_mc</a>
+        <li><a href="generated/norse.torch.module.lif_mc.html#module-norse.torch.module.lif_mc">norse.torch.module.lif_mc</a>, <a href="norse.torch.html#module-norse.torch.module.lif_mc">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.lif_mc_refrac.html#module-norse.torch.module.lif_mc_refrac">norse.torch.module.lif_mc_refrac</a>
+        <li><a href="generated/norse.torch.module.lif_mc_refrac.html#module-norse.torch.module.lif_mc_refrac">norse.torch.module.lif_mc_refrac</a>, <a href="norse.torch.html#module-norse.torch.module.lif_mc_refrac">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.lif_refrac.html#module-norse.torch.module.lif_refrac">norse.torch.module.lif_refrac</a>
+        <li><a href="generated/norse.torch.module.lif_refrac.html#module-norse.torch.module.lif_refrac">norse.torch.module.lif_refrac</a>, <a href="norse.torch.html#module-norse.torch.module.lif_refrac">[1]</a>
 </li>
         <li><a href="generated/norse.torch.module.lift.html#module-norse.torch.module.lift">norse.torch.module.lift</a>
 </li>
-        <li><a href="generated/norse.torch.module.lsnn.html#module-norse.torch.module.lsnn">norse.torch.module.lsnn</a>
+        <li><a href="generated/norse.torch.module.lsnn.html#module-norse.torch.module.lsnn">norse.torch.module.lsnn</a>, <a href="norse.torch.html#module-norse.torch.module.lsnn">[1]</a>
 </li>
-        <li><a href="generated/norse.torch.module.receptive_field.html#module-norse.torch.module.receptive_field">norse.torch.module.receptive_field</a>
+        <li><a href="generated/norse.torch.module.receptive_field.html#module-norse.torch.module.receptive_field">norse.torch.module.receptive_field</a>, <a href="norse.torch.html#module-norse.torch.module.receptive_field">[1]</a>
 </li>
         <li><a href="generated/norse.torch.module.regularization.html#module-norse.torch.module.regularization">norse.torch.module.regularization</a>
 </li>
@@ -1456,7 +1468,7 @@ document.write(`
     norse.torch.functional
 
       <ul>
-        <li><a href="generated/norse.torch.functional.html#module-norse.torch.functional">module</a>
+        <li><a href="generated/norse.torch.functional.html#module-norse.torch.functional">module</a>, <a href="norse.torch.functional.html#module-0">[1]</a>, <a href="norse.torch.functional.html#module-1">[2]</a>, <a href="norse.torch.functional.html#module-2">[3]</a>, <a href="norse.torch.functional.html#module-3">[4]</a>, <a href="norse.torch.functional.html#module-4">[5]</a>, <a href="norse.torch.functional.html#module-5">[6]</a>, <a href="norse.torch.functional.html#module-6">[7]</a>, <a href="norse.torch.functional.html#module-7">[8]</a>, <a href="norse.torch.functional.html#module-norse.torch.functional">[9]</a>
 </li>
       </ul></li>
       <li>
@@ -1533,7 +1545,7 @@ document.write(`
     norse.torch.functional.coba_lif
 
       <ul>
-        <li><a href="generated/norse.torch.functional.coba_lif.html#module-norse.torch.functional.coba_lif">module</a>
+        <li><a href="generated/norse.torch.functional.coba_lif.html#module-norse.torch.functional.coba_lif">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.coba_lif">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -1568,21 +1580,21 @@ document.write(`
     norse.torch.functional.iaf
 
       <ul>
-        <li><a href="generated/norse.torch.functional.iaf.html#module-norse.torch.functional.iaf">module</a>
+        <li><a href="generated/norse.torch.functional.iaf.html#module-norse.torch.functional.iaf">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.iaf">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.functional.izhikevich
 
       <ul>
-        <li><a href="generated/norse.torch.functional.izhikevich.html#module-norse.torch.functional.izhikevich">module</a>
+        <li><a href="generated/norse.torch.functional.izhikevich.html#module-norse.torch.functional.izhikevich">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.izhikevich">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.functional.leaky_integrator
 
       <ul>
-        <li><a href="generated/norse.torch.functional.leaky_integrator.html#module-norse.torch.functional.leaky_integrator">module</a>
+        <li><a href="generated/norse.torch.functional.leaky_integrator.html#module-norse.torch.functional.leaky_integrator">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.leaky_integrator">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -1603,7 +1615,7 @@ document.write(`
     norse.torch.functional.lif_adex
 
       <ul>
-        <li><a href="generated/norse.torch.functional.lif_adex.html#module-norse.torch.functional.lif_adex">module</a>
+        <li><a href="generated/norse.torch.functional.lif_adex.html#module-norse.torch.functional.lif_adex">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.lif_adex">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -1617,7 +1629,7 @@ document.write(`
     norse.torch.functional.lif_box
 
       <ul>
-        <li><a href="generated/norse.torch.functional.lif_box.html#module-norse.torch.functional.lif_box">module</a>
+        <li><a href="generated/norse.torch.functional.lif_box.html#module-norse.torch.functional.lif_box">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.lif_box">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -1631,7 +1643,7 @@ document.write(`
     norse.torch.functional.lif_ex
 
       <ul>
-        <li><a href="generated/norse.torch.functional.lif_ex.html#module-norse.torch.functional.lif_ex">module</a>
+        <li><a href="generated/norse.torch.functional.lif_ex.html#module-norse.torch.functional.lif_ex">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.lif_ex">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -1659,7 +1671,7 @@ document.write(`
     norse.torch.functional.logical
 
       <ul>
-        <li><a href="generated/norse.torch.functional.logical.html#module-norse.torch.functional.logical">module</a>
+        <li><a href="generated/norse.torch.functional.logical.html#module-norse.torch.functional.logical">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.logical">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -1673,14 +1685,14 @@ document.write(`
     norse.torch.functional.receptive_field
 
       <ul>
-        <li><a href="generated/norse.torch.functional.receptive_field.html#module-norse.torch.functional.receptive_field">module</a>
+        <li><a href="generated/norse.torch.functional.receptive_field.html#module-norse.torch.functional.receptive_field">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.receptive_field">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.functional.regularization
 
       <ul>
-        <li><a href="generated/norse.torch.functional.regularization.html#module-norse.torch.functional.regularization">module</a>
+        <li><a href="generated/norse.torch.functional.regularization.html#module-norse.torch.functional.regularization">module</a>, <a href="norse.torch.functional.html#module-norse.torch.functional.regularization">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -1990,28 +2002,28 @@ document.write(`
     norse.torch.module
 
       <ul>
-        <li><a href="generated/norse.torch.module.html#module-norse.torch.module">module</a>
+        <li><a href="generated/norse.torch.module.html#module-norse.torch.module">module</a>, <a href="norse.torch.html#module-norse.torch.module">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.coba_lif
 
       <ul>
-        <li><a href="generated/norse.torch.module.coba_lif.html#module-norse.torch.module.coba_lif">module</a>
+        <li><a href="generated/norse.torch.module.coba_lif.html#module-norse.torch.module.coba_lif">module</a>, <a href="norse.torch.html#module-norse.torch.module.coba_lif">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.conv
 
       <ul>
-        <li><a href="generated/norse.torch.module.conv.html#module-norse.torch.module.conv">module</a>
+        <li><a href="generated/norse.torch.module.conv.html#module-norse.torch.module.conv">module</a>, <a href="norse.torch.html#module-norse.torch.module.conv">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.encode
 
       <ul>
-        <li><a href="generated/norse.torch.module.encode.html#module-norse.torch.module.encode">module</a>
+        <li><a href="generated/norse.torch.module.encode.html#module-norse.torch.module.encode">module</a>, <a href="norse.torch.html#module-norse.torch.module.encode">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -2025,21 +2037,21 @@ document.write(`
     norse.torch.module.iaf
 
       <ul>
-        <li><a href="generated/norse.torch.module.iaf.html#module-norse.torch.module.iaf">module</a>
+        <li><a href="generated/norse.torch.module.iaf.html#module-norse.torch.module.iaf">module</a>, <a href="norse.torch.html#module-norse.torch.module.iaf">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.izhikevich
 
       <ul>
-        <li><a href="generated/norse.torch.module.izhikevich.html#module-norse.torch.module.izhikevich">module</a>
+        <li><a href="generated/norse.torch.module.izhikevich.html#module-norse.torch.module.izhikevich">module</a>, <a href="norse.torch.html#module-norse.torch.module.izhikevich">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.leaky_integrator
 
       <ul>
-        <li><a href="generated/norse.torch.module.leaky_integrator.html#module-norse.torch.module.leaky_integrator">module</a>
+        <li><a href="generated/norse.torch.module.leaky_integrator.html#module-norse.torch.module.leaky_integrator">module</a>, <a href="norse.torch.html#module-norse.torch.module.leaky_integrator">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -2053,14 +2065,14 @@ document.write(`
     norse.torch.module.lif
 
       <ul>
-        <li><a href="generated/norse.torch.module.lif.html#module-norse.torch.module.lif">module</a>
+        <li><a href="generated/norse.torch.module.lif.html#module-norse.torch.module.lif">module</a>, <a href="norse.torch.html#module-norse.torch.module.lif">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.lif_adex
 
       <ul>
-        <li><a href="generated/norse.torch.module.lif_adex.html#module-norse.torch.module.lif_adex">module</a>
+        <li><a href="generated/norse.torch.module.lif_adex.html#module-norse.torch.module.lif_adex">module</a>, <a href="norse.torch.html#module-norse.torch.module.lif_adex">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -2074,7 +2086,7 @@ document.write(`
     norse.torch.module.lif_box
 
       <ul>
-        <li><a href="generated/norse.torch.module.lif_box.html#module-norse.torch.module.lif_box">module</a>
+        <li><a href="generated/norse.torch.module.lif_box.html#module-norse.torch.module.lif_box">module</a>, <a href="norse.torch.html#module-norse.torch.module.lif_box">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -2088,28 +2100,28 @@ document.write(`
     norse.torch.module.lif_ex
 
       <ul>
-        <li><a href="generated/norse.torch.module.lif_ex.html#module-norse.torch.module.lif_ex">module</a>
+        <li><a href="generated/norse.torch.module.lif_ex.html#module-norse.torch.module.lif_ex">module</a>, <a href="norse.torch.html#module-norse.torch.module.lif_ex">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.lif_mc
 
       <ul>
-        <li><a href="generated/norse.torch.module.lif_mc.html#module-norse.torch.module.lif_mc">module</a>
+        <li><a href="generated/norse.torch.module.lif_mc.html#module-norse.torch.module.lif_mc">module</a>, <a href="norse.torch.html#module-norse.torch.module.lif_mc">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.lif_mc_refrac
 
       <ul>
-        <li><a href="generated/norse.torch.module.lif_mc_refrac.html#module-norse.torch.module.lif_mc_refrac">module</a>
+        <li><a href="generated/norse.torch.module.lif_mc_refrac.html#module-norse.torch.module.lif_mc_refrac">module</a>, <a href="norse.torch.html#module-norse.torch.module.lif_mc_refrac">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.lif_refrac
 
       <ul>
-        <li><a href="generated/norse.torch.module.lif_refrac.html#module-norse.torch.module.lif_refrac">module</a>
+        <li><a href="generated/norse.torch.module.lif_refrac.html#module-norse.torch.module.lif_refrac">module</a>, <a href="norse.torch.html#module-norse.torch.module.lif_refrac">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -2123,14 +2135,14 @@ document.write(`
     norse.torch.module.lsnn
 
       <ul>
-        <li><a href="generated/norse.torch.module.lsnn.html#module-norse.torch.module.lsnn">module</a>
+        <li><a href="generated/norse.torch.module.lsnn.html#module-norse.torch.module.lsnn">module</a>, <a href="norse.torch.html#module-norse.torch.module.lsnn">[1]</a>
 </li>
       </ul></li>
       <li>
     norse.torch.module.receptive_field
 
       <ul>
-        <li><a href="generated/norse.torch.module.receptive_field.html#module-norse.torch.module.receptive_field">module</a>
+        <li><a href="generated/norse.torch.module.receptive_field.html#module-norse.torch.module.receptive_field">module</a>, <a href="norse.torch.html#module-norse.torch.module.receptive_field">[1]</a>
 </li>
       </ul></li>
       <li>
@@ -2546,14 +2558,16 @@ document.write(`
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/norse.torch.functional.receptive_field.temporal_scale_distribution.html#norse.torch.functional.receptive_field.temporal_scale_distribution">temporal_scale_distribution() (in module norse.torch.functional.receptive_field)</a>
+</li>
       <li><a href="generated/norse.torch.module.receptive_field.TemporalReceptiveField.html#norse.torch.module.receptive_field.TemporalReceptiveField">TemporalReceptiveField (class in norse.torch.module.receptive_field)</a>
 </li>
       <li><a href="generated/norse.torch.functional.izhikevich.tonic_bursting.html#norse.torch.functional.izhikevich.tonic_bursting">tonic_bursting (in module norse.torch.functional.izhikevich)</a>
 </li>
-      <li><a href="generated/norse.torch.functional.izhikevich.tonic_spiking.html#norse.torch.functional.izhikevich.tonic_spiking">tonic_spiking (in module norse.torch.functional.izhikevich)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/norse.torch.functional.izhikevich.tonic_spiking.html#norse.torch.functional.izhikevich.tonic_spiking">tonic_spiking (in module norse.torch.functional.izhikevich)</a>
+</li>
       <li><a href="generated/norse.torch.functional.triangle_fn.html#norse.torch.functional.triangle_fn">triangle_fn() (in module norse.torch.functional)</a>
 </li>
       <li><a href="generated/norse.torch.functional.TsodyksMakramParameters.html#norse.torch.functional.TsodyksMakramParameters">TsodyksMakramParameters (class in norse.torch.functional)</a>
@@ -2578,16 +2592,12 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -2636,8 +2646,8 @@ By Norse.ai
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

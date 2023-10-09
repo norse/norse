@@ -19,6 +19,7 @@
       ~LICell.bfloat16
       ~LICell.buffers
       ~LICell.children
+      ~LICell.compile
       ~LICell.cpu
       ~LICell.cuda
       ~LICell.double

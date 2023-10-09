@@ -19,6 +19,7 @@
       ~LSNN.bfloat16
       ~LSNN.buffers
       ~LSNN.children
+      ~LSNN.compile
       ~LSNN.cpu
       ~LSNN.cuda
       ~LSNN.double

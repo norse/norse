@@ -19,6 +19,7 @@
       ~LIFMCRefracRecurrentCell.bfloat16
       ~LIFMCRefracRecurrentCell.buffers
       ~LIFMCRefracRecurrentCell.children
+      ~LIFMCRefracRecurrentCell.compile
       ~LIFMCRefracRecurrentCell.cpu
       ~LIFMCRefracRecurrentCell.cuda
       ~LIFMCRefracRecurrentCell.double

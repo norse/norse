@@ -19,6 +19,7 @@
       ~LSNNRecurrent.bfloat16
       ~LSNNRecurrent.buffers
       ~LSNNRecurrent.children
+      ~LSNNRecurrent.compile
       ~LSNNRecurrent.cpu
       ~LSNNRecurrent.cuda
       ~LSNNRecurrent.double

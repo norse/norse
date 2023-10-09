@@ -19,6 +19,7 @@
       ~LIFBoxCell.bfloat16
       ~LIFBoxCell.buffers
       ~LIFBoxCell.children
+      ~LIFBoxCell.compile
       ~LIFBoxCell.cpu
       ~LIFBoxCell.cuda
       ~LIFBoxCell.double

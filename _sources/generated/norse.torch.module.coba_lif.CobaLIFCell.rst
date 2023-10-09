@@ -19,6 +19,7 @@
       ~CobaLIFCell.bfloat16
       ~CobaLIFCell.buffers
       ~CobaLIFCell.children
+      ~CobaLIFCell.compile
       ~CobaLIFCell.cpu
       ~CobaLIFCell.cuda
       ~CobaLIFCell.double

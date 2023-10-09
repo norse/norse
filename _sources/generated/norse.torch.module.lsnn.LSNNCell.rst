@@ -19,6 +19,7 @@
       ~LSNNCell.bfloat16
       ~LSNNCell.buffers
       ~LSNNCell.children
+      ~LSNNCell.compile
       ~LSNNCell.cpu
       ~LSNNCell.cuda
       ~LSNNCell.double

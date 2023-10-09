@@ -19,6 +19,7 @@
       ~LIFAdExCell.bfloat16
       ~LIFAdExCell.buffers
       ~LIFAdExCell.children
+      ~LIFAdExCell.compile
       ~LIFAdExCell.cpu
       ~LIFAdExCell.cuda
       ~LIFAdExCell.double

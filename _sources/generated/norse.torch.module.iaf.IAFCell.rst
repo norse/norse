@@ -19,6 +19,7 @@
       ~IAFCell.bfloat16
       ~IAFCell.buffers
       ~IAFCell.children
+      ~IAFCell.compile
       ~IAFCell.cpu
       ~IAFCell.cuda
       ~IAFCell.double

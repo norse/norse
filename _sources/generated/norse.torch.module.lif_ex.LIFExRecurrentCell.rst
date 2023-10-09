@@ -19,6 +19,7 @@
       ~LIFExRecurrentCell.bfloat16
       ~LIFExRecurrentCell.buffers
       ~LIFExRecurrentCell.children
+      ~LIFExRecurrentCell.compile
       ~LIFExRecurrentCell.cpu
       ~LIFExRecurrentCell.cuda
       ~LIFExRecurrentCell.double

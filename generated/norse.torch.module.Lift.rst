@@ -19,6 +19,7 @@
       ~Lift.bfloat16
       ~Lift.buffers
       ~Lift.children
+      ~Lift.compile
       ~Lift.cpu
       ~Lift.cuda
       ~Lift.double

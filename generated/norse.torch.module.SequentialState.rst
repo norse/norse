@@ -20,6 +20,7 @@
       ~SequentialState.bfloat16
       ~SequentialState.buffers
       ~SequentialState.children
+      ~SequentialState.compile
       ~SequentialState.cpu
       ~SequentialState.cuda
       ~SequentialState.double

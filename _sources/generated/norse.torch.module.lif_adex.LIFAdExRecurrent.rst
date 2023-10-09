@@ -19,6 +19,7 @@
       ~LIFAdExRecurrent.bfloat16
       ~LIFAdExRecurrent.buffers
       ~LIFAdExRecurrent.children
+      ~LIFAdExRecurrent.compile
       ~LIFAdExRecurrent.cpu
       ~LIFAdExRecurrent.cuda
       ~LIFAdExRecurrent.double

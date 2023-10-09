@@ -19,6 +19,7 @@
       ~PoissonEncoder.bfloat16
       ~PoissonEncoder.buffers
       ~PoissonEncoder.children
+      ~PoissonEncoder.compile
       ~PoissonEncoder.cpu
       ~PoissonEncoder.cuda
       ~PoissonEncoder.double

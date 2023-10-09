@@ -19,6 +19,7 @@
       ~PopulationEncoder.bfloat16
       ~PopulationEncoder.buffers
       ~PopulationEncoder.children
+      ~PopulationEncoder.compile
       ~PopulationEncoder.cpu
       ~PopulationEncoder.cuda
       ~PopulationEncoder.double

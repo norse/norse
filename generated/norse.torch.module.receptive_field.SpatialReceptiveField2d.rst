@@ -19,6 +19,7 @@
       ~SpatialReceptiveField2d.bfloat16
       ~SpatialReceptiveField2d.buffers
       ~SpatialReceptiveField2d.children
+      ~SpatialReceptiveField2d.compile
       ~SpatialReceptiveField2d.cpu
       ~SpatialReceptiveField2d.cuda
       ~SpatialReceptiveField2d.double

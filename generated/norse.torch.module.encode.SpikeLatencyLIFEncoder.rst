@@ -19,6 +19,7 @@
       ~SpikeLatencyLIFEncoder.bfloat16
       ~SpikeLatencyLIFEncoder.buffers
       ~SpikeLatencyLIFEncoder.children
+      ~SpikeLatencyLIFEncoder.compile
       ~SpikeLatencyLIFEncoder.cpu
       ~SpikeLatencyLIFEncoder.cuda
       ~SpikeLatencyLIFEncoder.double

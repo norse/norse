@@ -19,6 +19,7 @@
       ~ConstantCurrentLIFEncoder.bfloat16
       ~ConstantCurrentLIFEncoder.buffers
       ~ConstantCurrentLIFEncoder.children
+      ~ConstantCurrentLIFEncoder.compile
       ~ConstantCurrentLIFEncoder.cpu
       ~ConstantCurrentLIFEncoder.cuda
       ~ConstantCurrentLIFEncoder.double

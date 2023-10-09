@@ -19,6 +19,7 @@
       ~RegularizationCell.bfloat16
       ~RegularizationCell.buffers
       ~RegularizationCell.children
+      ~RegularizationCell.compile
       ~RegularizationCell.cpu
       ~RegularizationCell.cuda
       ~RegularizationCell.double
