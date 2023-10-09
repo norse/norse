@@ -1,5 +1,5 @@
 r"""
-A very popular neuron model that combines a :mod:`norse.torch.functional.leaky_integrator` with
+A popular neuron model that combines a :mod:`norse.torch.functional.leaky_integrator` with
 spike thresholds to produce events (spikes).
 
 The model describes the change in a neuron membrane voltage (:math:`v`)
@@ -9,7 +9,7 @@ See the :mod:`.leaky_integrator` module for more information.
 .. math::
     \begin{align*}
         \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
-        \dot{i} &= -1/\tau_{\text{syn}} i
+        \dot{i} &= 1/\tau_{\text{syn}} i
     \end{align*}
 
 The F in LIF stands for the thresholded "firing" events that occur if the
@@ -26,6 +26,11 @@ gradient approach that uses the :mod:`.heaviside` step function:
 .. math::
     H[n]=\begin{cases} 0, & n <= 0 \\ 1, & n \gt 0 \end{cases}
 
+
+More information can be found on
+`Wikipedia <https://en.wikipedia.org/wiki/Biological_neuron_model#Leaky_integrate-and-fire>`_
+or in the book `*Neuron Dynamics* by W. Gerstner et al.,
+freely available online <https://neuronaldynamics.epfl.ch/online/Ch5.html>`_.
 """
 from typing import NamedTuple, Tuple
 import torch
