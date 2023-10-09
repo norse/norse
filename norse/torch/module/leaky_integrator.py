@@ -4,7 +4,36 @@ incoming currents over time, but never spikes. In other words, the
 neuron adds up incoming input current, while leaking out some of it
 in every timestep.
 
-See :mod:`norse.torch.functional.leaky_integrator` for more information.
+.. math::
+    \begin{align*}
+        \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i) \\
+        \dot{i} &= -1/\tau_{\text{syn}} i
+    \end{align*}
+
+The first equation describes how the membrane voltage (:math:`v`, across
+the membrane) changes over time. A constant amount of current is *leaked*
+out every timestep (:math:`v_{\text{leak}}`), while the current
+(:math:`i`) is added.
+
+The second equation describes how the current flowing into the neuron
+changes in every timestep.
+
+Notice that both equations are parameterized by the *time constant*
+:math:`\tau`. This constant controls how *fast* the changes in voltage
+and current occurs. A large time constant means a small change.
+In Norse, we call this parameter the *inverse* to avoid having to
+recalculate the inverse (:math:`\tau_{\text{mem_inv}}` and
+:math:`\tau_{\text{syn_inv}}` respectively).
+So, for Norse a large inverse time constant means *rapid* changes while
+a small inverse time constant means *slow* changes.
+
+Recall that *voltage* is the difference in charge between two points (in
+this case the neuron membrane) and *current* is the rate of change or the
+amount of current being added/subtracted at each timestep.
+
+See :mod:`norse.torch.functional.leaky_integrator` and
+`Wikipedia <https://en.wikipedia.org/wiki/Leaky_integrator>`_.
+
 """
 from typing import Optional, Tuple
 

@@ -1,4 +1,5 @@
-"""A simplified version of the popular neuron model that combines a :mod:`norse.torch.functional.leaky_integrator` with spike thresholds to produce events (spikes).
+"""
+A simplified version of the popular leaky integrate-and-fire neuron model that combines a :mod:`norse.torch.functional.leaky_integrator` with spike thresholds to produce events (spikes).
 Compared to the :mod:`norse.torch.functional.lif` modules, this model leaves out the current term, making it computationally simpler but impossible to implement in physical systems because currents cannot "jump" in nature.
 It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as "current boxes".
 """
