@@ -22,3 +22,9 @@ Any questions or comments can be directed to the maintainers:
 
 * `Christian Pehle <https://github.com/cpehle/>`_
 * `Jens E. Pedersen <https://github.com/jegp/>`_
+
+Acknowledgements
+^^^^^^^^^^^^^^^^
+The research has received funding from the EC Horizon 2020 Framework Programme under Grant Agreements 785907 and 945539 (HBP) and by the Deutsche Forschungsgemeinschaft (DFG, German Research Fundation) under Germany's Excellence Strategy EXC 2181/1 - 390900948 (the Heidelberg STRUCTURES Excellence Cluster).
+
+The computations for the development of Norse were enabled by resources provided by the National Academic Infrastructure for Supercomputing in Sweden (NAISS) at Chalmers Centre for Computational Science and Engineering (C3SE), High Performance Computing Center North (HPC2N) and Uppsala Multidisciplinary Center for Advanced Computational Science (UPPMAX) partially funded by the Swedish Research Council through grant agreement no. 2022-06725.
