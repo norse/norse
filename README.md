@@ -215,7 +215,6 @@ If you use Norse in your work, please cite it as follows:
                    neural networks}},
   month        = jan,
   year         = 2021,
-  note         = {Documentation: https://norse.ai/docs/},
   publisher    = {Zenodo},
   version      = {0.0.7},
   doi          = {10.5281/zenodo.4422025},
