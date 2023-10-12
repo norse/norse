@@ -1,7 +1,8 @@
-from typing import Callable, Union
+from typing import Any, Callable, Union, NamedTuple, Optional
 
-import inspect
 import torch
+
+from norse.torch.utils.state import _is_module_stateful
 
 
 class SequentialState(torch.nn.Sequential):
@@ -46,10 +47,7 @@ class SequentialState(torch.nn.Sequential):
         for idx, module in enumerate(args):
             self.add_module(str(idx), module)
             # Identify all the stateful layers
-            signature = inspect.signature(module.forward)
-            self.stateful_layers.append(
-                "state" in signature.parameters or isinstance(module, torch.nn.RNNBase)
-            )
+            self.stateful_layers.append(_is_module_stateful(module))
 
     def register_forward_state_hooks(
         self,
@@ -110,3 +108,33 @@ class SequentialState(torch.nn.Sequential):
             else:
                 input_tensor = module(input_tensor)
         return input_tensor, state
+
+
+class RecurrentSequentialState(NamedTuple):
+    cache: Optional[Any] = None
+    state: Optional[Any] = None
+
+
+class RecurrentSequential(torch.nn.Module):
+    """A sequential module that feeds the output of the underlying modules back as input
+    in the following timestep.
+    """
+
+    def __init__(self, module: torch.nn.Sequential):
+        super().__init__()
+        self.module = module
+        self.is_stateful = _is_module_stateful(module)
+
+    def forward(
+        self, x: torch.Tensor, state: Optional[RecurrentSequentialState] = None
+    ):
+        if state is None:
+            state = RecurrentSequentialState()
+        else:
+            x = torch.stack((x, state.cache)).sum(0)
+        if self.is_stateful:
+            z, out_state = self.module(x, state.state)
+        else:
+            z = self.module(x)
+            out_state = None
+        return z, RecurrentSequentialState(z, out_state)

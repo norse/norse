@@ -157,3 +157,20 @@ def test_sequential_debug_hook_twice():
     model.register_forward_state_hooks(dub)
     with pytest.raises(ValueError):
         model.register_forward_state_hooks(dub)
+
+
+def test_recurrent_sequential_stateful():
+    v = norse.SequentialState(torch.nn.Linear(1, 1, bias=False))
+    m = norse.RecurrentSequential(v)
+    data = torch.ones(10, 1, 1)
+    actual, _ = v(v(data)[0] + v(data)[0])
+    pred, _ = m(*m(data))
+    assert torch.allclose(actual, pred)
+
+def test_recurrent_sequential_stateless():
+    v = torch.nn.Sequential(torch.nn.Linear(1, 1, bias=False))
+    m = norse.RecurrentSequential(v)
+    data = torch.ones(10, 1, 1)
+    actual = v(v(data) + v(data))
+    pred, _ = m(*m(data))
+    assert torch.allclose(actual, pred)

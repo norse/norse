@@ -10,6 +10,7 @@ import torch
 import norse.torch.module.iaf as iaf
 import norse.torch.module.lif_box as lif_box
 import norse.torch.module.lif as lif
+import norse.torch.module.sequential as sequential
 
 import logging
 
@@ -31,8 +32,8 @@ def _to_tensor(tensor: Union[np.ndarray, torch.Tensor]):
     if isinstance(tensor, torch.Tensor):
         return tensor
     if isinstance(tensor, Number):
-        return torch.as_tensor(tensor)
-    return torch.from_numpy(tensor)
+        return torch.as_tensor(tensor, dtype=torch.float32)
+    return torch.from_numpy(tensor).float()
 
 
 def _import_norse_module(
@@ -99,6 +100,13 @@ def _import_norse_module(
             kernel_size=tuple(node.kernel_size),
             stride=tuple(node.stride),
         )
+    if isinstance(node, nir.NIRGraph):
+        # Currently, just parse a recurrent recurrent Cuba LIF graph
+        types = {type(v): v for v in node.nodes.values()}
+        if len(node.nodes) == 4 and nir.CubaLIF in types and nir.Affine in types:
+            layer_lif = _import_norse_module(types[nir.CubaLIF], ignore_warnings)
+            layer_affine = _import_norse_module(types[nir.Affine], ignore_warnings)
+            return sequential.RecurrentSequential(sequential.SequentialState(layer_lif, layer_affine))
 
 
 def from_nir(node: nir.NIRNode, ignore_warnings: bool = False) -> torch.nn.Module:

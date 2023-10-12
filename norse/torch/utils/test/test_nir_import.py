@@ -12,7 +12,7 @@ def _convert_nodes(*args):
 
 
 def test_convert_to_tensor():
-    a = np.random.randn(2, 3)
+    a = np.random.randn(2, 3).astype(np.float32)
     b = torch.tensor(a)
     assert torch.allclose(_to_tensor(a), b)
 
@@ -30,8 +30,8 @@ def test_import_linear():
     )
     m = norse.from_nir(n)
     assert isinstance(m.affine, torch.nn.Linear)
-    x = torch.randn(1, 3, dtype=torch.float64)
-    out = m(x)
+    x = torch.randn(1, 3)
+    out, _ = m(x)
     actual = x @ _to_tensor(w).T + _to_tensor(b)
     assert torch.allclose(out, actual)
 
@@ -52,7 +52,7 @@ def test_import_conv2d():
 def test_import_flatten():
     m = _convert_nodes(nir.Flatten((1, 2, 3, 3), 1, -1))
     assert isinstance(m.flatten, torch.nn.Flatten)
-    assert m(torch.randn(1, 2, 3, 3)).shape == (1, 18)
+    assert m(torch.randn(1, 2, 3, 3))[0].shape == (1, 18)
 
 
 def test_import_if():
@@ -86,4 +86,9 @@ def test_import_cubalif():
 def test_import_sumpool2d():
     m = _convert_nodes(nir.SumPool2d(np.array([3, 3]), np.array([1, 1]), np.array([0, 0])))
     assert isinstance(m.sumpool2d, torch.nn.LPPool2d)
-    assert m(torch.randn(1, 2, 3, 3)).shape == (1, 2, 1, 1)
+    assert m(torch.randn(1, 2, 3, 3))[0].shape == (1, 2, 1, 1)
+
+def test_import_recurrent():
+    m = norse.from_nir("norse/torch/utils/test/braille.nir")
+    data = torch.ones(1, 12)
+    assert m(data)[0].shape == (1, 7)

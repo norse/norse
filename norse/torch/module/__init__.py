@@ -77,7 +77,7 @@ from .lsnn import (
     LSNNState,
 )
 from .regularization import RegularizationCell
-from .sequential import SequentialState
+from .sequential import SequentialState, RecurrentSequential, RecurrentSequentialState
 
 from .izhikevich import (
     IzhikevichCell,
@@ -180,6 +180,8 @@ __all__ = [
     "LSNNState",
     "RegularizationCell",
     "SequentialState",
+    "RecurrentSequential",
+    "RecurrentSequentialState",
     # Receptive fields
     "SpatialReceptiveField2d",
     "TemporalReceptiveField",
