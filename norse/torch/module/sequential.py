@@ -1,4 +1,4 @@
-from typing import Any, Callable, Union, NamedTuple, Optional
+from typing import Any, Callable, List, NamedTuple, Optional, Union
 
 import torch
 
@@ -40,10 +40,11 @@ class SequentialState(torch.nn.Sequential):
         >>> model(data)
     """
 
-    def __init__(self, *args: torch.nn.Module):
+    def __init__(self, *args: torch.nn.Module, return_hidden: bool = False):
         super(SequentialState, self).__init__()
         self.stateful_layers = []
         self.forward_state_hooks = []
+        self.return_hidden = return_hidden
         for idx, module in enumerate(args):
             self.add_module(str(idx), module)
             # Identify all the stateful layers
@@ -101,13 +102,20 @@ class SequentialState(torch.nn.Sequential):
             A tuple of (output tensor, state list)
         """
         state = [None] * len(self) if state is None else state
+        hidden = []
         for index, module in enumerate(self):
             if self.stateful_layers[index]:
                 input_tensor, s = module(input_tensor, state[index])
                 state[index] = s
             else:
                 input_tensor = module(input_tensor)
-        return input_tensor, state
+            if self.return_hidden:
+                hidden.append(input_tensor)
+
+        if self.return_hidden:
+            return hidden, state
+        else:
+            return input_tensor, state
 
 
 class RecurrentSequentialState(NamedTuple):
@@ -120,10 +128,10 @@ class RecurrentSequential(torch.nn.Module):
     in the following timestep.
     """
 
-    def __init__(self, module: torch.nn.Sequential):
+    def __init__(self, *modules: torch.nn.Module, output_modules: List[int] = -1):
         super().__init__()
-        self.module = module
-        self.is_stateful = _is_module_stateful(module)
+        self.module = SequentialState(*modules, return_hidden=True)
+        self.output_modules = output_modules
 
     def forward(
         self, x: torch.Tensor, state: Optional[RecurrentSequentialState] = None
@@ -132,9 +140,14 @@ class RecurrentSequential(torch.nn.Module):
             state = RecurrentSequentialState()
         else:
             x = torch.stack((x, state.cache)).sum(0)
-        if self.is_stateful:
-            z, out_state = self.module(x, state.state)
+        outputs, out_state = self.module(x, state.state)
+
+        if isinstance(self.output_modules, int):
+            return outputs[self.output_modules], RecurrentSequentialState(
+                outputs[self.output_modules], out_state
+            )
         else:
-            z = self.module(x)
-            out_state = None
-        return z, RecurrentSequentialState(z, out_state)
+            recurrent_outputs = [outputs[i] for i in self.output_modules]
+            return recurrent_outputs, RecurrentSequentialState(
+                recurrent_outputs, out_state
+            )

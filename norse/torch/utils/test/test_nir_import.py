@@ -42,7 +42,7 @@ def test_import_conv2d():
     conv = torch.nn.Conv2d(2, 1, 3)
     conv.weight.data = _to_tensor(w)
     conv.bias.data = _to_tensor(b)
-    m = _convert_nodes(nir.Conv2d(w, 1, 0, 1, 1, b))
+    m = _convert_nodes(nir.Conv2d(None, w, 1, 0, 1, 1, b))
     assert isinstance(m.conv2d, torch.nn.Conv2d)
     x = torch.randn(1, 2, 3, 3)
     out = m(x)
@@ -70,23 +70,26 @@ def test_import_lif():
 
 
 def test_import_cubalif():
-    m = _convert_nodes(
-        nir.CubaLIF(
-            torch.randn(10),
-            torch.randn(10),
-            torch.ones(10),
-            torch.randn(10),
-            torch.randn(10),
-        )
+    orig = nir.CubaLIF(
+        torch.randn(10),
+        torch.randn(10),
+        torch.ones(10),
+        torch.randn(10),
+        torch.randn(10),
     )
+    m = _convert_nodes(orig)
     assert isinstance(m.cubalif, norse.LIFCell)
     m(torch.randn(1, 10))  # Test application
+    torch.allclose(orig.tau_mem, 1000 / m.cubalif.p.tau_mem_inv)
 
 
 def test_import_sumpool2d():
-    m = _convert_nodes(nir.SumPool2d(np.array([3, 3]), np.array([1, 1]), np.array([0, 0])))
+    m = _convert_nodes(
+        nir.SumPool2d(np.array([3, 3]), np.array([1, 1]), np.array([0, 0]))
+    )
     assert isinstance(m.sumpool2d, torch.nn.LPPool2d)
     assert m(torch.randn(1, 2, 3, 3))[0].shape == (1, 2, 1, 1)
+
 
 def test_import_recurrent():
     m = norse.from_nir("norse/torch/utils/test/braille.nir")

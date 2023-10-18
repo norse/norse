@@ -17,17 +17,17 @@ def test_state_sequence():
     not platform.system() == "Linux", reason="Only Linux supports torch.compile"
 )
 def test_state_sequence_compile():
-    d = torch.ones(10, 1, 20)
+    d = torch.ones(2, 1, 20)
     l = norse.LIFRecurrent(20, 6)
     m = norse.SequentialState(l)
     m = torch.compile(m)
     z, s = m(d)
-    assert z.shape == (10, 1, 6)
+    assert z.shape == (2, 1, 6)
     assert s[0].v.shape == (1, 6)
 
 
 def test_state_sequence_apply_no_state():
-    d = torch.ones(10, 1, 1)
+    d = torch.ones(2, 1, 1)
     m = norse.SequentialState(nn.Linear(1, 1), norse.LIFCell())
     m(d)
     m.forward(d)
@@ -78,9 +78,9 @@ def test_state_sequence_mix():
 
 
 def test_state_sequence_conv():
-    data = torch.ones(1, 8, 16, 4, 4)  # (timestep, minibatch, channels, x, y)
+    data = torch.ones(1, 2, 1, 4, 4)  # (timestep, minibatch, channels, x, y)
     model = norse.SequentialState(
-        norse.Lift(torch.nn.Conv2d(16, 8, 3)),  # (1, 8, 8, 2, 2)
+        norse.Lift(torch.nn.Conv2d(1, 8, 3)),  # (1, 2, 8, 2, 2)
         torch.nn.Flatten(2),  # (1, 8, 32)
         norse.LSNNRecurrent(32, 6),  # (1, 8, 6)
         torch.nn.RNN(6, 4, 2),  # (1, 6, 4) with 2 recurrent layers
@@ -167,10 +167,27 @@ def test_recurrent_sequential_stateful():
     pred, _ = m(*m(data))
     assert torch.allclose(actual, pred)
 
+
 def test_recurrent_sequential_stateless():
-    v = torch.nn.Sequential(torch.nn.Linear(1, 1, bias=False))
+    v = torch.nn.Linear(1, 1, bias=False)
     m = norse.RecurrentSequential(v)
     data = torch.ones(10, 1, 1)
     actual = v(v(data) + v(data))
     pred, _ = m(*m(data))
+    assert actual.shape == pred.shape
+    assert torch.allclose(actual, pred)
+
+
+def test_recurrent_sequential_output_index():
+    l1 = torch.nn.Linear(1, 1, bias=False)
+    l2 = torch.nn.Linear(1, 1, bias=False)
+    m = norse.RecurrentSequential(l1, l2, output_modules=0)
+    data = torch.ones(10, 1, 1)
+
+    actual = l1(data)
+    pred, _ = m(data)
+    assert torch.allclose(actual, pred)
+
+    actual = l1(l1(data))
+    pred, _ = m(pred)
     assert torch.allclose(actual, pred)
