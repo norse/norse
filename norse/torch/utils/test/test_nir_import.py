@@ -78,9 +78,11 @@ def test_import_cubalif():
         torch.randn(10),
     )
     m = _convert_nodes(orig)
-    assert isinstance(m.cubalif, norse.LIFCell)
+    assert isinstance(m.cubalif, norse.SequentialState)
+    assert isinstance(m.cubalif[0], torch.nn.Linear)
+    assert isinstance(m.cubalif[1], norse.LIFCell)
     m(torch.randn(1, 10))  # Test application
-    torch.allclose(orig.tau_mem, 1000 / m.cubalif.p.tau_mem_inv)
+    torch.allclose(orig.tau_mem, 1000 / m.cubalif[1].p.tau_mem_inv)
 
 
 def test_import_sumpool2d():
@@ -93,5 +95,5 @@ def test_import_sumpool2d():
 
 def test_import_recurrent():
     m = norse.from_nir("norse/torch/utils/test/braille.nir")
-    data = torch.ones(1, 12)
-    assert m(data)[0].shape == (1, 7)
+    data = torch.ones(12)
+    assert m(data)[0].shape == (7,)

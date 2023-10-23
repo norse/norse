@@ -61,9 +61,7 @@ def _import_norse_module(
         return torch.nn.Flatten(node.start_dim, node.end_dim)
     if isinstance(node, nir.Linear):
         module = torch.nn.Linear(
-            node.weight.shape[1],
-            torch.zeros_like(node.weight.shape[0]),
-            bias=False,
+            node.weight.shape[-2], node.weight.shape[-1], bias=False
         )
         module.weight.data = _to_tensor(node.weight)
         return module
@@ -78,14 +76,20 @@ def _import_norse_module(
             node.v_threshold *= node.r
         elif not _is_identical(node.r, 1) and not ignore_warnings:
             _log_warning("r", 1, node.r.mean())
-        return lif.LIFCell(
+        linear = torch.nn.Linear(
+            node.tau_mem.shape[-1], node.tau_mem.shape[-1], bias=False
+        )
+        linear.weight.data = _to_tensor(node.w_in)
+        neuron = lif.LIFCell(
             lif.LIFParameters(
-                tau_mem_inv=(1 / dt) / _to_tensor(node.tau_mem),  # Invert time constant
-                tau_syn_inv=(1 / dt) / _to_tensor(node.tau_syn),  # Invert time constant
+                tau_mem_inv=dt / _to_tensor(node.tau_mem),  # Invert time constant
+                tau_syn_inv=dt / _to_tensor(node.tau_syn),  # Invert time constant
                 v_th=_to_tensor(node.v_threshold),
                 v_leak=_to_tensor(node.v_leak),
             )
         )
+        return sequential.SequentialState(linear, neuron)
+
     if isinstance(node, nir.LIF):
         if not _is_identical(node.r, 1) and _is_identical(node.v_leak, 0):
             # We can scale the threshold to compensate for the lack of a resistivity term
@@ -95,7 +99,7 @@ def _import_norse_module(
             _log_warning("r", 1, _to_tensor(node.r).mean())
         return lif_box.LIFBoxCell(
             lif_box.LIFBoxParameters(
-                tau_mem_inv=1 / _to_tensor(node.tau),  # Invert time constant
+                tau_mem_inv=dt / _to_tensor(node.tau),  # Invert time constant
                 v_th=_to_tensor(node.v_threshold),
                 v_leak=_to_tensor(node.v_leak),
             )
@@ -108,15 +112,15 @@ def _import_norse_module(
             kernel_size=tuple(node.kernel_size),
             stride=tuple(node.stride),
         )
-    if isinstance(node, nir.NIRGraph):
-        # Currently, just parse a recurrent recurrent Cuba LIF graph
-        types = {type(v): v for v in node.nodes.values()}
-        if len(node.nodes) == 4 and nir.CubaLIF in types and nir.Affine in types:
-            layer_lif = _import_norse_module(types[nir.CubaLIF], ignore_warnings)
-            layer_affine = _import_norse_module(types[nir.Affine], ignore_warnings)
-            return sequential.RecurrentSequential(
-                layer_lif, layer_affine, output_modules=0
-            )
+    # if isinstance(node, nir.NIRGraph):
+    #     # Currently, just parse a recurrent recurrent Cuba LIF graph
+    #     types = {type(v): v for v in node.nodes.values()}
+    #     if len(node.nodes) == 4 and nir.CubaLIF in types and nir.Affine in types:
+    #         layer_lif = _import_norse_module(types[nir.CubaLIF], ignore_warnings)
+    #         layer_affine = _import_norse_module(types[nir.Affine], ignore_warnings)
+    #         return sequential.RecurrentSequential(
+    #             layer_lif, layer_affine, output_modules=0
+    #         )
 
 
 def from_nir(node: nir.NIRNode, ignore_warnings: bool = False) -> torch.nn.Module:

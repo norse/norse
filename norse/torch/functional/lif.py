@@ -324,22 +324,20 @@ def lif_feed_forward_step(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
+    # compute current jumps
+    i_new = state.i + input_spikes
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + state.i)
+    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_new)
     v_decayed = state.v + dv
-
     # compute current updates
-    di = -dt * p.tau_syn_inv * state.i
-    i_decayed = state.i + di
-
+    di = -dt * p.tau_syn_inv * i_new
+    i_decayed = i_new + di
     # compute new spikes
     z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
     v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
-    # compute current jumps
-    i_new = i_decayed + input_spikes
 
-    return z_new, LIFFeedForwardState(v=v_new, i=i_new)
+    return z_new, LIFFeedForwardState(v=v_new, i=i_decayed)
 
 
 def lif_feed_forward_integral(

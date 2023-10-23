@@ -11,8 +11,8 @@ def test_regularization_module():
     z, s = cell(data)
     z, rs = r(z, s)
     assert z.shape == (5, 2)
-    assert rs == 0
+    assert rs == 10
     z, s = cell(data, s)
     z, rs = r(z, s)
-    assert rs == 10
-    assert r.state == 10
+    assert rs == 20
+    assert r.state == 20
