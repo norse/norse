@@ -79,7 +79,7 @@ def _import_norse_module(
         linear = torch.nn.Linear(
             node.tau_mem.shape[-1], node.tau_mem.shape[-1], bias=False
         )
-        linear.weight.data = _to_tensor(node.w_in)
+        linear.weight.data = torch.eye(len(node.w_in)) * _to_tensor(node.w_in)
         neuron = lif.LIFCell(
             lif.LIFParameters(
                 tau_mem_inv=dt / _to_tensor(node.tau_mem),  # Invert time constant

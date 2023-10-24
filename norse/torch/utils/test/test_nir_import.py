@@ -95,5 +95,5 @@ def test_import_sumpool2d():
 
 def test_import_recurrent():
     m = norse.from_nir("norse/torch/utils/test/braille.nir")
-    data = torch.ones(12)
-    assert m(data)[0].shape == (7,)
+    data = torch.ones(8, 12)
+    assert m(data)[0].shape == (8, 7,)
