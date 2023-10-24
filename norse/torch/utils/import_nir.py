@@ -7,7 +7,9 @@ import nirtorch
 import numpy as np
 import torch
 
+import norse.torch.functional.reset as reset
 import norse.torch.module.iaf as iaf
+import norse.torch.module.leaky_integrator_box as li_box
 import norse.torch.module.lif_box as lif_box
 import norse.torch.module.lif as lif
 import norse.torch.module.sequential as sequential
@@ -36,8 +38,31 @@ def _to_tensor(tensor: Union[np.ndarray, torch.Tensor]):
     return torch.from_numpy(tensor).float()
 
 
+class CubaLIF(torch.nn.Module):
+    def __init__(self, w_in, synapse, w_rec, lif):
+        super().__init__()
+        self.w_in = w_in
+        self.synapse = synapse
+        self.w_rec = w_rec
+        self.lif = lif
+
+    def forward(self, x, state=None):
+        x = self.w_in * x
+        x, syn_state = self.synapse(x, state[1] if state is not None else None)
+        if state is None:
+            state = (None, None, None)
+            rec_x = self.w_rec * x
+        else:
+            rec_x = self.w_rec * x  # + self.w_rec * state[0]
+        z, lif_state = self.lif(rec_x, state[2])
+        return z, (z, syn_state, lif_state)
+
+
 def _import_norse_module(
-    node: nir.NIRNode, ignore_warnings: bool = False, dt: float = 0.001
+    node: nir.NIRNode,
+    ignore_warnings: bool = False,
+    reset_method: reset.ResetMethod = reset.reset_value,
+    dt: float = 0.001,
 ) -> torch.nn.Module:
     if isinstance(node, nir.Affine):
         module = torch.nn.Linear(node.weight.shape[1], node.weight.shape[0])
@@ -68,41 +93,38 @@ def _import_norse_module(
     if isinstance(node, nir.IF):
         if not _is_identical(node.r, 1) and not ignore_warnings:
             _log_warning("r", 1, node.r.mean())
-        return iaf.IAFCell(iaf.IAFParameters(v_th=_to_tensor(node.v_threshold)))
+        return iaf.IAFCell(iaf.IAFParameters(v_th=_to_tensor(node.v_threshold)), dt=dt)
     if isinstance(node, nir.CubaLIF):
-        if not _is_identical(node.r, 1) and _is_identical(node.v_leak, 0):
-            # We can scale the threshold to compensate for the lack of a resistivity term
-            # if the leak term is zero (thanks to Steven Abreu)
-            node.v_threshold *= node.r
-        elif not _is_identical(node.r, 1) and not ignore_warnings:
-            _log_warning("r", 1, node.r.mean())
-        linear = torch.nn.Linear(
-            node.tau_mem.shape[-1], node.tau_mem.shape[-1], bias=False
+        w_in = _to_tensor(node.w_in)
+        synapse = li_box.LIBoxCell(
+            li_box.LIBoxParameters(
+                tau_mem_inv=1 / _to_tensor(node.tau_syn),  # Invert time constant
+                v_leak=_to_tensor(node.v_leak),
+            ),
+            dt=dt,
         )
-        linear.weight.data = torch.eye(len(node.w_in)) * _to_tensor(node.w_in)
-        neuron = lif.LIFCell(
-            lif.LIFParameters(
-                tau_mem_inv=dt / _to_tensor(node.tau_mem),  # Invert time constant
-                tau_syn_inv=dt / _to_tensor(node.tau_syn),  # Invert time constant
+        w_rec = _to_tensor(node.r)
+        neuron = lif_box.LIFBoxCell(
+            lif_box.LIFBoxParameters(
+                tau_mem_inv=1 / _to_tensor(node.tau_mem),  # Invert time constant
                 v_th=_to_tensor(node.v_threshold),
                 v_leak=_to_tensor(node.v_leak),
-            )
+                reset_method=reset_method,
+            ),
+            dt=dt,
         )
-        return sequential.SequentialState(linear, neuron)
+        return CubaLIF(w_in, synapse, w_rec, neuron)
 
     if isinstance(node, nir.LIF):
-        if not _is_identical(node.r, 1) and _is_identical(node.v_leak, 0):
-            # We can scale the threshold to compensate for the lack of a resistivity term
-            # if the leak term is zero (thanks to Steven Abreu)
-            node.v_threshold *= node.r
-        elif not _is_identical(node.r, 1) and not ignore_warnings:
+        if not _is_identical(node.r, 1) and not ignore_warnings:
             _log_warning("r", 1, _to_tensor(node.r).mean())
         return lif_box.LIFBoxCell(
             lif_box.LIFBoxParameters(
-                tau_mem_inv=dt / _to_tensor(node.tau),  # Invert time constant
+                tau_mem_inv=1 / _to_tensor(node.tau),  # Invert time constant
                 v_th=_to_tensor(node.v_threshold),
                 v_leak=_to_tensor(node.v_leak),
-            )
+            ),
+            dt=dt,
         )
     if isinstance(node, nir.SumPool2d):
         if not np.allclose(node.padding, 0.0) and not ignore_warnings:
@@ -123,7 +145,12 @@ def _import_norse_module(
     #         )
 
 
-def from_nir(node: nir.NIRNode, ignore_warnings: bool = False) -> torch.nn.Module:
+def from_nir(
+    node: nir.NIRNode,
+    ignore_warnings: bool = False,
+    reset_method: reset.ResetMethod = reset.reset_value,
+    dt: float = 0.001,
+) -> torch.nn.Module:
     """Converts a NIR graph to a Norse module.
 
     Example:
@@ -135,7 +162,14 @@ def from_nir(node: nir.NIRNode, ignore_warnings: bool = False) -> torch.nn.Modul
     Arguments:
         node (nir.NIRNode): The root node of the NIR graph to convert.
         ignore_warnings (bool): Whether to ignore warnings about diverging or unsupported parameters.
+        dt (float): The time step of the simulation.
     """
     return nirtorch.load(
-        node, partial(_import_norse_module, ignore_warnings=ignore_warnings)
+        node,
+        partial(
+            _import_norse_module,
+            ignore_warnings=ignore_warnings,
+            reset_method=reset_method,
+            dt=dt,
+        ),
     )

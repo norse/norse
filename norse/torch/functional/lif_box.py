@@ -7,6 +7,7 @@ import torch
 import torch.jit
 
 from norse.torch.functional.threshold import threshold
+from norse.torch.functional.reset import ResetMethod, reset_value
 
 
 class LIFBoxParameters(NamedTuple):
@@ -29,6 +30,7 @@ class LIFBoxParameters(NamedTuple):
     v_reset: torch.Tensor = torch.as_tensor(0.0)
     method: str = "super"
     alpha: float = torch.as_tensor(100.0)
+    reset_method: ResetMethod = reset_value
 
 
 class LIFBoxState(NamedTuple):
@@ -91,6 +93,6 @@ def lif_box_feed_forward_step(
     # compute new spikes
     z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    v_new = p.reset_method(z_new, v_decayed, p.v_reset, p.v_th)
 
     return z_new, LIFBoxFeedForwardState(v=v_new)
