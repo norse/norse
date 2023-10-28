@@ -65,9 +65,11 @@ def _import_norse_module(
     dt: float = 0.001,
 ) -> torch.nn.Module:
     if isinstance(node, nir.Affine):
-        module = torch.nn.Linear(node.weight.shape[1], node.weight.shape[0])
+        has_bias = node.bias is not None
+        module = torch.nn.Linear(node.weight.shape[1], node.weight.shape[0], bias=has_bias)
         module.weight.data = _to_tensor(node.weight)
-        module.bias.data = _to_tensor(node.bias)
+        if has_bias:
+            module.bias.data = _to_tensor(node.bias)
         return module
     if isinstance(node, nir.Conv2d):
         module = torch.nn.Conv2d(

@@ -78,11 +78,11 @@ def test_import_cubalif():
         torch.randn(10),
     )
     m = _convert_nodes(orig)
-    assert isinstance(m.cubalif, norse.SequentialState)
-    assert isinstance(m.cubalif[0], torch.nn.Linear)
-    assert isinstance(m.cubalif[1], norse.LIFCell)
+    assert isinstance(m.cubalif, norse.utils.import_nir.CubaLIF)
+    assert isinstance(m.cubalif.synapse, norse.LIBoxCell)
+    assert isinstance(m.cubalif.lif, norse.LIFBoxCell)
     m(torch.randn(1, 10))  # Test application
-    torch.allclose(orig.tau_mem, 1000 / m.cubalif[1].p.tau_mem_inv)
+    torch.allclose(orig.tau_mem, 1000 / m.cubalif.lif.p.tau_mem_inv)
 
 
 def test_import_sumpool2d():
