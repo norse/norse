@@ -16,12 +16,13 @@ def _extract_norse_module(
 ) -> Optional[nir.NIRNode]:
     if isinstance(module, torch.nn.Conv2d):
         return nir.Conv2d(
-            module.weight.detach(),
-            module.bias.detach(),
-            module.stride,
-            module.padding,
-            module.dilation,
-            module.groups,
+            input_shape=None,
+            weight=module.weight.detach(),
+            bias=module.bias.detach(),
+            stride=module.stride,
+            padding=module.padding,
+            dilation=module.dilation,
+            groups=module.groups,
         )
     if isinstance(module, lif.LIFCell):
         return nir.CubaLIF(

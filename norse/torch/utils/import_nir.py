@@ -39,23 +39,21 @@ def _to_tensor(tensor: Union[np.ndarray, torch.Tensor]):
 
 
 class CubaLIF(torch.nn.Module):
-    def __init__(self, w_in, synapse, w_rec, lif):
+    def __init__(self, w_in, synapse, r, lif):
         super().__init__()
         self.w_in = w_in
         self.synapse = synapse
-        self.w_rec = w_rec
+        self.r = r
         self.lif = lif
 
     def forward(self, x, state=None):
         x = self.w_in * x
-        x, syn_state = self.synapse(x, state[1] if state is not None else None)
+        x, syn_state = self.synapse(x, state[0] if state is not None else None)
         if state is None:
-            state = (None, None, None)
-            rec_x = self.w_rec * x
-        else:
-            rec_x = self.w_rec * x  # + self.w_rec * state[0]
-        z, lif_state = self.lif(rec_x, state[2])
-        return z, (z, syn_state, lif_state)
+            state = (None, None)
+        mid_x = self.r * x
+        z, lif_state = self.lif(mid_x, state[1])
+        return z, (syn_state, lif_state)
 
 
 def _import_norse_module(
