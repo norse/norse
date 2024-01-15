@@ -7,7 +7,6 @@ import logging
 
 from .import_nir import from_nir
 from .export_nir import to_nir
-from .clone import clone_tensor
 
 try:
     from .plot import *

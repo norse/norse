@@ -1,4 +1,3 @@
-from ssl import OP_NO_TLSv1_1
 import onnx
 import torch
 import norse.torch as snn

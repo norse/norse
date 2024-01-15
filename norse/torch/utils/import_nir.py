@@ -11,8 +11,6 @@ import norse.torch.functional.reset as reset
 import norse.torch.module.iaf as iaf
 import norse.torch.module.leaky_integrator_box as li_box
 import norse.torch.module.lif_box as lif_box
-import norse.torch.module.lif as lif
-import norse.torch.module.sequential as sequential
 
 import logging
 
