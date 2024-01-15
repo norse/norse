@@ -17,6 +17,8 @@ norse.torch.module.sequential
 
    .. autosummary::
    
+      RecurrentSequential
+      RecurrentSequentialState
       SequentialState
    
    

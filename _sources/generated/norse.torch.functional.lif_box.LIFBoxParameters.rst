@@ -27,6 +27,7 @@
    
       ~LIFBoxParameters.alpha
       ~LIFBoxParameters.method
+      ~LIFBoxParameters.reset_method
       ~LIFBoxParameters.tau_mem_inv
       ~LIFBoxParameters.v_leak
       ~LIFBoxParameters.v_reset

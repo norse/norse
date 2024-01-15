@@ -19,6 +19,12 @@ norse.torch.utils.import\_nir
 
    
    
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CubaLIF
+   
    
 
    

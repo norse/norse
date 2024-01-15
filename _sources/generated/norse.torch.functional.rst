@@ -52,6 +52,7 @@ norse.torch.functional
    norse.torch.functional.lsnn
    norse.torch.functional.receptive_field
    norse.torch.functional.regularization
+   norse.torch.functional.reset
    norse.torch.functional.spikes_to_times_decoder
    norse.torch.functional.stdp
    norse.torch.functional.stdp_sensor

@@ -14,6 +14,9 @@ norse.torch.module.test.test\_sequential
    .. autosummary::
    
       test_backprop_through_time_works
+      test_recurrent_sequential_output_index
+      test_recurrent_sequential_stateful
+      test_recurrent_sequential_stateless
       test_sequential_debug_hook_twice
       test_sequential_forward_state_hook
       test_state_sequence

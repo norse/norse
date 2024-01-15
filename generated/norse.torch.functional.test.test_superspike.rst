@@ -14,11 +14,18 @@ norse.torch.functional.test.test\_superspike
    .. autosummary::
    
       test_backward
+      test_compile
       test_forward
    
    
 
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SomeClass
    
    
 
