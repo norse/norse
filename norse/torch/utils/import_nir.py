@@ -47,12 +47,12 @@ class CubaLIF(torch.nn.Module):
         self.lif = lif
 
     def forward(self, x, state=None):
-        x = self.w_in * x
-        x, syn_state = self.synapse(x, state[0] if state is not None else None)
         if state is None:
             state = (None, None)
-        mid_x = self.r * x
-        z, lif_state = self.lif(mid_x, state[1])
+        x = self.w_in * x
+        x, syn_state = self.synapse(x, state[0])
+        x = self.r * x
+        z, lif_state = self.lif(x, state[1])
         return z, (syn_state, lif_state)
 
 
@@ -64,7 +64,9 @@ def _import_norse_module(
 ) -> torch.nn.Module:
     if isinstance(node, nir.Affine):
         has_bias = node.bias is not None
-        module = torch.nn.Linear(node.weight.shape[1], node.weight.shape[0], bias=has_bias)
+        module = torch.nn.Linear(
+            node.weight.shape[1], node.weight.shape[0], bias=has_bias
+        )
         module.weight.data = _to_tensor(node.weight)
         if has_bias:
             module.bias.data = _to_tensor(node.bias)
