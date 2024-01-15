@@ -88,7 +88,7 @@ class LIFCell(SNNCell):
         state = LIFFeedForwardState(
             v=clone_tensor(self.p.v_leak),
             i=torch.zeros(
-                *input_tensor.shape,
+                input_tensor.shape,
                 device=input_tensor.device,
                 dtype=torch.float32,
             ),
@@ -176,13 +176,13 @@ class LIFRecurrentCell(SNNRecurrentCell):
         dims = (*input_tensor.shape[:-1], self.hidden_size)
         state = LIFState(
             z=torch.zeros(
-                *dims,
+                dims,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ).to_sparse()
             if input_tensor.is_sparse
             else torch.zeros(
-                *dims,
+                dims,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
@@ -193,7 +193,7 @@ class LIFRecurrentCell(SNNRecurrentCell):
                 dtype=torch.float32,
             ),
             i=torch.zeros(
-                *dims,
+                dims,
                 device=input_tensor.device,
                 dtype=torch.float32,
             ),
@@ -251,7 +251,7 @@ class LIF(SNN):
                 dtype=torch.float32,
             ),
             i=torch.zeros(
-                *input_tensor.shape[1:],
+                input_tensor.shape[1:],
                 device=input_tensor.device,
                 dtype=torch.float32,
             ),
@@ -321,13 +321,13 @@ class LIFRecurrent(SNNRecurrent):
         )
         state = LIFState(
             z=torch.zeros(
-                *dims,
+                dims,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ).to_sparse()
             if input_tensor.is_sparse
             else torch.zeros(
-                *dims,
+                dims,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),
@@ -338,7 +338,7 @@ class LIFRecurrent(SNNRecurrent):
                 dtype=torch.float32,
             ),
             i=torch.zeros(
-                *dims,
+                dims,
                 device=input_tensor.device,
                 dtype=torch.float32,
             ),

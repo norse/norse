@@ -14,10 +14,10 @@ def test_regularisation_spikes():
     z, s = lif_feed_forward_step(x, s, LIFParameters())
     zr, rs = regularize_step(z, s)
     assert torch.equal(z, zr)
-    assert rs == 0
+    assert rs == 50
     z, s = lif_feed_forward_step(x, s, LIFParameters())
     zr, rs = regularize_step(z, s)
-    assert rs == 50
+    assert rs == 0
 
 
 def test_regularisation_voltage():

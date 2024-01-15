@@ -158,6 +158,7 @@ from .receptive_field import (
     spatial_receptive_field,
     spatial_receptive_fields_with_derivatives,
 )
+from .reset import ResetMethod, reset_value, reset_subtract
 
 from .superspike import super_fn
 
@@ -313,6 +314,10 @@ __all__ = [
     "regularize_step",
     "spike_accumulator",
     "voltage_accumulator",
+    # Reset
+    "ResetMethod",
+    "reset_value",
+    "reset_subtract",
     # STDP
     "STDPSensorParameters",
     "STDPSensorState",

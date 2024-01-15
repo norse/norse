@@ -41,7 +41,7 @@ def test_lif_feed_forward_step():
     x = torch.ones(10)
     s = LIFFeedForwardState(v=torch.zeros(10), i=torch.zeros(10))
 
-    results = [0.0, 0.1, 0.27, 0.487, 0.7335, 0.9963, 0.0, 0.3951, 0.7717, 0.0]
+    results = [0.1, 0.27, 0.487, 0.7335, 0.9963, 0.0, 0.3951, 0.7717, 0.0]
 
     for result in results:
         _, s = lif_feed_forward_step(x, s, LIFParameters())
@@ -73,7 +73,7 @@ def test_lif_feed_forward_step_compile():
         torch.as_tensor(0.0),
     )
 
-    results = [0.0, 0.1, 0.27, 0.487, 0.7335, 0.9963, 0.0, 0.3951, 0.7717, 0.0]
+    results = [0.1, 0.27, 0.487, 0.7335, 0.9963, 0.0, 0.3951, 0.7717, 0.0]
     f = torch.compile(lif_feed_forward_step)
 
     for result in results:

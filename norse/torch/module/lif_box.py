@@ -9,6 +9,7 @@ from norse.torch.functional.lif_box import (
     lif_box_feed_forward_step,
 )
 from norse.torch.module.snn import SNNCell
+from norse.torch.utils.clone import clone_tensor
 
 
 class LIFBoxCell(SNNCell):
@@ -42,13 +43,6 @@ class LIFBoxCell(SNNCell):
         super().__init__(lif_box_feed_forward_step, self.initial_state, p, dt=dt)
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFBoxFeedForwardState:
-        state = LIFBoxFeedForwardState(
-            v=torch.full(
-                input_tensor.shape,
-                torch.as_tensor(self.p.v_leak).detach(),
-                device=input_tensor.device,
-                dtype=torch.float32,
-            )
-        )
+        state = LIFBoxFeedForwardState(v=clone_tensor(self.p.v_leak))
         state.v.requires_grad = True
         return state
