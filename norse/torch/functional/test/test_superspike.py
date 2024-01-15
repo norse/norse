@@ -20,3 +20,15 @@ def test_backward():
     out.backward(torch.ones(10))
 
     assert torch.sum(x.grad < 0) == 10
+
+class SomeClass(torch.nn.Module):
+    def forward(self, x):
+        return super_fn(x)
+
+def test_compile():
+    c = SomeClass()
+    c = torch.compile(c)
+    out = c(torch.ones(1, requires_grad=True))
+    out.backward()
+    assert out.sum() == 1
+    

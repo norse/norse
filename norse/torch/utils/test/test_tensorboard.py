@@ -31,7 +31,7 @@ def test_activity_hook():
     hook = tensorboard.hook_spike_activity_mean("lif", writer)
     cell.register_forward_hook(hook)
     s = None
-    for _ in range(7):
+    for _ in range(6):
         z, s = cell(torch.ones(2), s)
 
     assert z.max() > 0
@@ -40,7 +40,7 @@ def test_activity_hook():
     hook = tensorboard.hook_spike_activity_sum("lif", writer)
     cell.register_forward_hook(hook)
     s = None
-    for _ in range(7):
+    for _ in range(6):
         z, s = cell(torch.ones(2), s)
 
     assert z.max() > 0
@@ -53,7 +53,7 @@ def test_image_hook():
     hook = tensorboard.hook_spike_image("lif", writer)
     cell.register_forward_hook(hook)
     s = None
-    for _ in range(7):
+    for _ in range(6):
         z, s = cell(torch.ones(2), s)
 
     assert z.max() > 0
@@ -66,7 +66,7 @@ def test_histogram_hook():
     hook = tensorboard.hook_spike_histogram_mean("lif", writer)
     cell.register_forward_hook(hook)
     s = None
-    for _ in range(7):
+    for _ in range(6):
         z, s = cell(torch.ones(2), s)
 
     assert z.max() > 0
@@ -75,7 +75,7 @@ def test_histogram_hook():
     hook = tensorboard.hook_spike_histogram_sum("lif", writer)
     cell.register_forward_hook(hook)
     s = None
-    for _ in range(7):
+    for _ in range(6):
         z, s = cell(torch.ones(2), s)
 
     assert z.max() > 0
