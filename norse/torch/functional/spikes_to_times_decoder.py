@@ -22,9 +22,11 @@ class ToSpikeTimes(torch.autograd.Function):
         )
         indexed_spike_input[indexed_spike_input == -1.0] = torch.inf
         spike_indices = torch.sort(indexed_spike_input, dim=0).values[
-            : spike_count
-            if spike_count < spike_input.shape[0]
-            else spike_input.shape[0]
+            : (
+                spike_count
+                if spike_count < spike_input.shape[0]
+                else spike_input.shape[0]
+            )
         ]
         ctx.save_for_backward(spike_indices, spike_input)
         ctx.shape = spike_input.shape

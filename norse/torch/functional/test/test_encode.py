@@ -1,6 +1,7 @@
 """
 Test for the encoder module
 """
+
 import torch
 
 from norse.torch.functional.encode import (

@@ -257,8 +257,8 @@ class SNN(torch.nn.Module):
             if self.record_states:
                 states.append(state)
 
-        return torch.stack(outputs), state if not self.record_states else _merge_states(
-            states
+        return torch.stack(outputs), (
+            state if not self.record_states else _merge_states(states)
         )
 
 
@@ -370,6 +370,6 @@ class SNNRecurrent(torch.nn.Module):
             if self.record_states:
                 states.append(state)
 
-        return torch.stack(outputs), state if not self.record_states else _merge_states(
-            states
+        return torch.stack(outputs), (
+            state if not self.record_states else _merge_states(states)
         )

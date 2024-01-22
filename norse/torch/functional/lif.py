@@ -32,6 +32,7 @@ More information can be found on
 or in the book `*Neuron Dynamics* by W. Gerstner et al.,
 freely available online <https://neuronaldynamics.epfl.ch/online/Ch5.html>`_.
 """
+
 from typing import NamedTuple, Tuple
 import torch
 import torch.jit

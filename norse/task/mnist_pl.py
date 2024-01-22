@@ -5,6 +5,7 @@ MNIST digit recognition task.
 This version uses the `PyTorch Lightning <https://pytorchlightning.ai/>`_ library
 to reduce the amount of boilerplate code around logging, checkpointing, training, etc.
 """
+
 from argparse import ArgumentParser
 
 import torch

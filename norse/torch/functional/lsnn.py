@@ -26,6 +26,7 @@ In practice, this means that the LSNN neurons *adapt* to fire more or less
 given the same input. The adaptation is determined by the :math:`\tau_b`
 time constant.
 """
+
 from typing import NamedTuple, Tuple
 
 import torch

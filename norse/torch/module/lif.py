@@ -4,6 +4,7 @@ spike thresholds to produce events (spikes).
 
 See :mod:`norse.torch.functional.lif` for more information.
 """
+
 import torch
 
 from norse.torch.functional.lif import (
@@ -68,9 +69,11 @@ class LIFCell(SNNCell):
                 if p.method == "adjoint"
                 else lif_feed_forward_step
             ),
-            activation_sparse=lif_feed_forward_adjoint_step_sparse
-            if p.method == "adjoint"
-            else lif_feed_forward_step_sparse,
+            activation_sparse=(
+                lif_feed_forward_adjoint_step_sparse
+                if p.method == "adjoint"
+                else lif_feed_forward_step_sparse
+            ),
             state_fallback=self.initial_state,
             p=LIFParameters(
                 torch.as_tensor(p.tau_syn_inv),
@@ -154,9 +157,9 @@ class LIFRecurrentCell(SNNRecurrentCell):
     ):
         super().__init__(
             activation=lif_adjoint_step if p.method == "adjoint" else lif_step,
-            activation_sparse=lif_adjoint_step_sparse
-            if p.method == "adjoint"
-            else lif_step_sparse,
+            activation_sparse=(
+                lif_adjoint_step_sparse if p.method == "adjoint" else lif_step_sparse
+            ),
             state_fallback=self.initial_state,
             p=LIFParameters(
                 torch.as_tensor(p.tau_syn_inv),
@@ -175,16 +178,18 @@ class LIFRecurrentCell(SNNRecurrentCell):
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
         dims = (*input_tensor.shape[:-1], self.hidden_size)
         state = LIFState(
-            z=torch.zeros(
-                dims,
-                device=input_tensor.device,
-                dtype=input_tensor.dtype,
-            ).to_sparse()
-            if input_tensor.is_sparse
-            else torch.zeros(
-                dims,
-                device=input_tensor.device,
-                dtype=input_tensor.dtype,
+            z=(
+                torch.zeros(
+                    dims,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ).to_sparse()
+                if input_tensor.is_sparse
+                else torch.zeros(
+                    dims,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                )
             ),
             v=torch.full(
                 dims,
@@ -223,12 +228,16 @@ class LIF(SNN):
 
     def __init__(self, p: LIFParameters = LIFParameters(), **kwargs):
         super().__init__(
-            activation=lif_feed_forward_adjoint_step
-            if p.method == "adjoint"
-            else lif_feed_forward_step,
-            activation_sparse=lif_feed_forward_adjoint_step_sparse
-            if p.method == "adjoint"
-            else lif_feed_forward_step_sparse,
+            activation=(
+                lif_feed_forward_adjoint_step
+                if p.method == "adjoint"
+                else lif_feed_forward_step
+            ),
+            activation_sparse=(
+                lif_feed_forward_adjoint_step_sparse
+                if p.method == "adjoint"
+                else lif_feed_forward_step_sparse
+            ),
             state_fallback=self.initial_state,
             p=LIFParameters(
                 torch.as_tensor(p.tau_syn_inv),
@@ -296,9 +305,9 @@ class LIFRecurrent(SNNRecurrent):
     ):
         super().__init__(
             activation=lif_adjoint_step if p.method == "adjoint" else lif_step,
-            activation_sparse=lif_adjoint_step_sparse
-            if p.method == "adjoint"
-            else lif_step_sparse,
+            activation_sparse=(
+                lif_adjoint_step_sparse if p.method == "adjoint" else lif_step_sparse
+            ),
             state_fallback=self.initial_state,
             input_size=input_size,
             hidden_size=hidden_size,
@@ -320,16 +329,18 @@ class LIFRecurrent(SNNRecurrent):
             self.hidden_size,
         )
         state = LIFState(
-            z=torch.zeros(
-                dims,
-                device=input_tensor.device,
-                dtype=input_tensor.dtype,
-            ).to_sparse()
-            if input_tensor.is_sparse
-            else torch.zeros(
-                dims,
-                device=input_tensor.device,
-                dtype=input_tensor.dtype,
+            z=(
+                torch.zeros(
+                    dims,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                ).to_sparse()
+                if input_tensor.is_sparse
+                else torch.zeros(
+                    dims,
+                    device=input_tensor.device,
+                    dtype=input_tensor.dtype,
+                )
             ),
             v=torch.full(
                 dims,

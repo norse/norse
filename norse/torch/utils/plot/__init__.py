@@ -2,6 +2,7 @@
 A module for plotting event-based data and module information
 such as weights and neuron parameters.
 """
+
 from .plot import (
     plot_heatmap_2d,
     plot_heatmap_3d,

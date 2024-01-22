@@ -22,13 +22,14 @@ class SuperSpike(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, grad_output):
-        inp, = ctx.saved_tensors
+        (inp,) = ctx.saved_tensors
         grad = None
         if ctx.needs_input_grad[0]:
             grad = grad_output / (torch.abs(inp) + 1.0).pow(
                 2
             )  # section 3.3.2 (beta -> alpha)
         return grad, None
+
 
 def super_fn(x: torch.Tensor, alpha: float = 100.0) -> torch.Tensor:
     return SuperSpike.apply(x, alpha)

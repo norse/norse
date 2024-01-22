@@ -3,6 +3,7 @@ This module contains ``torch.nn.Module``s for regularisation operations on
 spiking layers, where it can be desirable to regularise spikes,
 membrane parameters, or other properties over time.
 """
+
 import torch
 
 from typing import Any
