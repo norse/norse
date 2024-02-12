@@ -1,86 +1,168 @@
+"""
+A module for creating receptive fields.
+"""
+
 from typing import List, Tuple, Union, Optional
 
 import torch
 
 
-def gaussian_kernel(x, s, c):
+def gaussian_kernel(size: int, c: torch.Tensor, domain: int = 8) -> torch.Tensor:
     """
-    Efficiently creates a 2d gaussian kernel.
+    Efficiently creates a differentiable 2d gaussian kernel.
 
     Arguments:
-      x (torch.Tensor): A 2-d matrix
-      s (float): The variance of the gaussian
+      size (int): The size of the kernel
       c (torch.Tensor): A 2x2 covariance matrix describing the eccentricity of the gaussian
+      domain (int): The domain of the kernel. Defaults to 8 (sampling -8 to 8).
     """
     ci = torch.linalg.inv(c)
     cd = torch.linalg.det(c)
-    fraction = 1 / (2 * torch.pi * s * torch.sqrt(cd))
-    b = torch.einsum("bimj,jk->bik", -x.unsqueeze(2), ci)
-    a = torch.einsum("bij,bij->bi", b, x)
-    return fraction * torch.exp(a / (2 * s))
+    fraction = 1 / (2 * torch.pi * torch.sqrt(cd))
+    a = torch.linspace(-domain, domain, size)
+    xs, ys = torch.meshgrid(a, a, indexing="xy")
+    coo = torch.stack([xs, ys], dim=2)
+    b = torch.einsum("bimj,jk->bik", -coo.unsqueeze(2), ci)
+    a = torch.einsum("bij,bij->bi", b, coo)
+    return fraction * torch.exp(a / 2)
+
+
+def covariance_matrix(
+    sigma1: torch.Tensor, sigma2: torch.Tensor, phi: torch.Tensor
+) -> torch.Tensor:
+    """
+    Creates a 2-dimensional covariance matrix given two variances and an angle for the major axis.
+    """
+    lambda1 = torch.as_tensor(sigma1) ** 2
+    lambda2 = torch.as_tensor(sigma2) ** 2
+    phi = torch.as_tensor(phi)
+    cxx = lambda1 * phi.cos() ** 2 + lambda2 * phi.sin() ** 2
+    cxy = (lambda1 - lambda2) * phi.cos() * phi.sin()
+    cyy = lambda1 * phi.sin() ** 2 + lambda2 * phi.cos() ** 2
+    cov = torch.ones(2, 2, device=phi.device)
+    cov[0][0] = cxx
+    cov[0][1] = cxy
+    cov[1][0] = cxy
+    cov[1][1] = cyy
+    return cov
+
+
+def derive_kernel(kernel, angle) -> torch.Tensor:
+    """
+    Takes the spatial derivative at a given angle
+    """
+    dirx = torch.cos(angle)
+    diry = torch.sin(angle)
+    gradx = torch.gradient(kernel, dim=0)[0] * dirx
+    grady = torch.gradient(kernel, dim=1)[0] * diry
+    derived = gradx + grady
+    return derived
+
+
+def calculate_normalization(dx: int, scale: float, gamma: float = 1):
+    """
+    Calculates scale normalization for a spatial receptive field at a given directional derivative
+    Lindeberg: Feature detection with automatic scale selection, eq. 20
+    https://doi.org/10.1023/A:1008045108935
+
+    Arguments:
+        dx (int): The nth directional derivative
+        scale (float): The scale of the receptive field
+        gamma (float): A normalization parameter
+    """
+    t = scale**2
+    scale_norm = scale ** (dx * (1 - gamma))
+    xi_norm = t ** (gamma / 2)
+    return scale_norm * xi_norm
+
+
+def derive_spatial_receptive_field_single(
+    field: torch.Tensor, scale: float, angle: float, dx: int, dy: int
+) -> torch.Tensor:
+    """
+    Calculate the derivative of a single spatial receptive field at a given angle and scale with respect to x and y derivatives.
+
+    Example:
+    >>> field = spatial_receptive_field(0, 1, 16)
+    >>> derived = derive_spatial_receptive_field_xy(field, 0, 1, 1, 0)
+
+    Arguments:
+        field (torch.Tensor): The spatial receptive field
+        scale (float): The scale of the receptive field
+        angle (float): The angle of the receptive field
+        dx (int): The x-th derivative
+        dy (int): The y-th derivative
+
+    Returns:
+        torch.Tensor: The derived spatial receptive field
+    """
+    derived = field
+    dx = int(dx)
+    dy = int(dy)
+    while dx > 0 or dy > 0:
+        if dx > 0:
+            derived = derive_kernel(derived, angle) * calculate_normalization(
+                1, scale, 1
+            )
+            dx -= 1
+        if dy > 0:
+            derived = derive_kernel(
+                derived, angle + torch.pi / 2
+            ) * calculate_normalization(1, scale, 1)
+            dy -= 1
+    return derived
+
+
+def derive_spatial_receptive_field(
+    field: torch.Tensor, scale: float, angle: float, derivatives: List[Tuple[int, int]]
+) -> torch.Tensor:
+    """
+    Derive spatial receptive field at a given angle and scale with respect to a list of derivatives.
+    Returns a tensor of shape (len(derivatives), size, size), where size is the size of the receptive field.
+
+    Arguments:
+        field (torch.Tensor): The spatial receptive field
+        scale (float): The scale of the receptive field
+        angle (float): The angle of the receptive field
+        derivatives (List[Tuple[int, int]]): A list of tuples of derivatives
+
+    Returns:
+        torch.Tensor: A list of derived spatial receptive field with the same length as the input list of derivatives
+    """
+    angle = torch.as_tensor(angle)
+    kernels = []
+    for dx, dy in derivatives:
+        derived = derive_spatial_receptive_field_single(field, scale, angle, dx, dy)
+        kernels.append(derived)
+    return torch.stack(kernels)
 
 
 def spatial_receptive_field(
-    scale: float,
-    angle: float,
-    ratio: float,
+    scale: torch.Tensor,
+    angle: torch.Tensor,
+    ratio: torch.Tensor,
     size: int,
     dx: int = 0,
     dy: int = 0,
-    domain: float = 8,
-):
+    domain: float = 10,
+) -> torch.Tensor:
     """
-    Creates a (size x size) receptive field kernel
+    Creates a (size x size) receptive field kernel at a given scale, angle and ratio with respect to x and y derivatives.
 
     Arguments:
-      angle (float): The rotation of the kernel in radians
-      ratio (float): The eccentricity as a ratio
+      scale (torch.Tensor): The scale of the field. Defaults to 2.5
+      angle (torch.Tensor): The rotation of the kernel in radians
+      ratio (torch.Tensor): The eccentricity as a ratio
       size (int): The size of the square kernel in pixels
-      scale (float): The scale of the field. Defaults to 2.5
-      domain (float): The initial coordinates from which the field is sampled. Defaults to 8 (equal to -8 to 8).
+      dx (int): The x-th derivative of the field
+      dy (int): The y-th derivative of the field
+      domain (float): The initial coordinates from which the field is sampled. Defaults to 8 (sampling -8 to 8).
     """
-    sm = torch.ones(2)
-    sm[0] = scale
-    sm[1] = scale * ratio
-    a = torch.linspace(-domain, domain, size)
     angle = torch.as_tensor(angle)
-    r = torch.ones((2, 2), device=angle.device)
-    r[0][0] = angle.cos()
-    r[0][1] = angle.sin()
-    r[1][0] = -angle.sin()
-    r[1][1] = angle.cos()
-    c = (r * sm) @ (sm * r).T
-    xs, ys = torch.meshgrid(a, a, indexing="xy")
-    coo = torch.stack([xs, ys], dim=2)
-    k = gaussian_kernel(coo, scale, c)
-    k = _derived_field(k, (dx, dy))
-    return k
-
-
-def _derived_field(
-    field: torch.Tensor, derivatives: Tuple[torch.Tensor, torch.Tensor]
-) -> torch.Tensor:
-    out = []
-    (dx, dy) = derivatives
-    device = field.device
-    if dx == 0:
-        fx = field
-    else:
-        fx = field.diff(
-            dim=0,
-            prepend=torch.zeros(int(dx.item()), field.shape[1]).to(device),
-            n=int(dx.item()),
-        )
-    if dy == 0:
-        fy = fx
-    else:
-        fy = fx.diff(
-            dim=1,
-            prepend=torch.zeros(field.shape[0], int(dy.item())).to(device),
-            n=int(dy.item()),
-        )
-    out.append(fy)
-    return torch.concat(out)
+    c = covariance_matrix(ratio, 1 / ratio, angle) * scale
+    k = gaussian_kernel(size, c, domain=domain)
+    k = k / k.sum()
+    return derive_spatial_receptive_field_single(k, scale, angle, dx, dy)
 
 
 def _extract_derivatives(
@@ -132,7 +214,7 @@ def spatial_parameters(
 def spatial_receptive_fields_with_derivatives(
     combinations: torch.Tensor,
     size: int,
-    domain: float = 8,
+    domain: float = 1,
 ) -> torch.Tensor:
     r"""
     Creates a number of receptive fields based on the spatial parameters and size of the receptive field.

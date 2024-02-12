@@ -36,7 +36,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
     Arguments:
         in_channels (int): Number of input channels
         size (int): Size of the receptive field
-        rf_parameters (torch.Tensor): Parameters for the receptive fields
+        rf_parameters (torch.Tensor): Parameters for the receptive fields in the order (scale, angle, ratio, dx, dy)
         aggregate (bool): If `True`, the receptive fields will be aggregated across channels. Defaults to `True`.
         domain (float): The domain of the receptive field. Defaults to `8`.
         optimize_fields (bool): If `True`, the `rf_parameters` will be optimized during training. Defaults to `True`.
@@ -79,7 +79,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
         if optimize_fields:
 
             def update_hook(m, gi, go):
-                self.has_updated = True
+                m.has_updated = True
 
             self.register_full_backward_hook(update_hook)
 
