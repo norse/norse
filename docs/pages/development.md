@@ -21,7 +21,7 @@ As you may know, the `LIFCell` is essentially a [modular wrapper](https://pytorc
 Therefore, it is natural that the `LIFCell` *references* the functional part, which is indeed the case: all the functional components are re-used in their modular counterparts.
 
 When implementing a new module, it is therefore important to realize that the **functional parts should be implemented first**.
-Once that part is built and tested, the module can be built which, at this point, should be rather straight-forward boilerplate code.
+Once that part is built and tested, the module can be built which, at this point, should be rather straightforward boilerplate code.
 
 ### Import shortcuts
 It is also worth mentioning that importing `norse.torch.module.LIFCell` is rather tedious.
@@ -63,7 +63,7 @@ $$
 
 And that we will spike if $s > 1$.
 
-This has a straight-forward implementation in Python (please note that `input_tensor` may be a tensor and not a scalar!)
+This has a straightforward implementation in Python (please note that `input_tensor` may be a tensor and not a scalar!)
 
 ```python
 def my_dynamic(input_tensor, state=0):

@@ -4,7 +4,7 @@ Running Tasks
 -------------
 
 Norse arrives with a number of built-in examples called tasks. 
-These tasks serves to 1) illustrate what types of tasks *can* be done with Norse
+These tasks serve to 1) illustrate what types of tasks *can* be done with Norse
 and 2) how to use Norse for specific tasks. Please note that some tasks require
 additional dependencies, like OpenAI gym for the cartpole task, which is not included in 
 vanilla Norse.
@@ -12,7 +12,7 @@ vanilla Norse.
 Parameters
 ==========
 
-The tasks below uses a large number of configurable parameters to control the model/network size, 
+The tasks below use a large number of configurable parameters to control the model/network size, 
 `epochs and batch size <https://pytorch.org/docs/stable/tensor_attributes.html#torch-device>`_,
 task load, `pytorch device <https://pytorch.org/docs/stable/tensor_attributes.html#torch-device>`_, 
 `learning rate <https://towardsdatascience.com/understanding-learning-rates-and-how-it-improves-performance-in-deep-learning-d0d4059c1c10>`_,
@@ -30,7 +30,7 @@ using the ``--help`` flag on any tasks below, for instance ``python -m norse.tas
 Cartpole
 ========
 
-This tasks is a balancing exercise where a controller learns to counter the gravitational force
+This task is a balancing exercise where a controller learns to counter the gravitational force
 on an upright cartpole. You will need to install `OpenAI Gym <https://gym.openai.com/>`_, to
 provide the simulation environments for the robot. If you are using pip, this is as easy as
 typing ``pip install gym``.

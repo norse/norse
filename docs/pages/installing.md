@@ -99,7 +99,7 @@ In Debian-based distros (like Ubuntu), this can be done by running `apt install 
 ```{admonition} ImportError: ... /norse_op.so: undefined symbol: _ZN2at5addmmERKNS_6TensorES2_S2_RKN3c106ScalarES6_
 :class: warning
 
-This is likely because an existing, incompatible version of PyTorch is interferring with the installation.
+This is likely because an existing, incompatible version of PyTorch is interfering with the installation.
 Try to 
 1. remove PyTorch (`pip uninstall torch`),
 2. install `torch` by following [the official guide at pytorch.org](https://pytorch.org/get-started/locally/), and
