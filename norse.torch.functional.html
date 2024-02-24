@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="./" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>norse.torch.functional &#8212; Norse v1.0.0</title>
   
@@ -19,50 +18,46 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
-  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'norse.torch.functional';</script>
@@ -82,7 +77,6 @@ const thebe_selector_output = ".output, .cell_output"
   <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -122,13 +116,10 @@ const thebe_selector_output = ".output, .cell_output"
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <header>
   
-    <div class="bd-header navbar navbar-expand-lg bd-navbar">
-    </div>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
   
-  </header>
 
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
@@ -167,7 +158,18 @@ const thebe_selector_output = ".output, .cell_output"
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -644,8 +646,8 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="norse-torch-functional">
-<h1>norse.torch.functional<a class="headerlink" href="#norse-torch-functional" title="Permalink to this heading">#</a></h1>
-<div class="contents local topic" id="id1">
+<h1>norse.torch.functional<a class="headerlink" href="#norse-torch-functional" title="Link to this heading">#</a></h1>
+<nav class="contents local" id="id1">
 <p class="topic-title">norse.torch.functional</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#module-norse.torch.functional" id="id3">Encoding</a></p></li>
@@ -676,15 +678,11 @@ document.write(`
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="module-norse.torch.functional">
-<span id="encoding"></span><h2><a class="toc-backref" href="#id1">Encoding</a><a class="headerlink" href="#module-norse.torch.functional" title="Permalink to this heading">#</a></h2>
+<span id="encoding"></span><h2><a class="toc-backref" href="#id1" role="doc-backlink">Encoding</a><a class="headerlink" href="#module-norse.torch.functional" title="Link to this heading">#</a></h2>
 <p>Stateless spiking neural network components.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.constant_current_lif_encode.html#norse.torch.functional.constant_current_lif_encode" title="norse.torch.functional.constant_current_lif_encode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">constant_current_lif_encode</span></code></a></p></td>
 <td><p>Encodes input currents as fixed (constant) voltage currents, and simulates the spikes that occur during a number of timesteps/iterations (seq_length).</p></td>
@@ -729,12 +727,8 @@ document.write(`
 </table>
 </section>
 <section id="module-norse.torch.functional.logical">
-<span id="logical"></span><h2><a class="toc-backref" href="#id1">Logical</a><a class="headerlink" href="#module-norse.torch.functional.logical" title="Permalink to this heading">#</a></h2>
+<span id="logical"></span><h2><a class="toc-backref" href="#id1" role="doc-backlink">Logical</a><a class="headerlink" href="#module-norse.torch.functional.logical" title="Link to this heading">#</a></h2>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.logical.logical_and.html#norse.torch.functional.logical.logical_and" title="norse.torch.functional.logical.logical_and"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logical_and</span></code></a></p></td>
 <td><p>Computes a logical and provided x and y are bitvectors.</p></td>
@@ -755,7 +749,7 @@ document.write(`
 </table>
 </section>
 <section id="module-norse.torch.functional.regularization">
-<span id="regularization"></span><h2><a class="toc-backref" href="#id1">Regularization</a><a class="headerlink" href="#module-norse.torch.functional.regularization" title="Permalink to this heading">#</a></h2>
+<span id="regularization"></span><h2><a class="toc-backref" href="#id1" role="doc-backlink">Regularization</a><a class="headerlink" href="#module-norse.torch.functional.regularization" title="Link to this heading">#</a></h2>
 <p>This module contains functional components for regularization operations on
 spiking layers, where it can be desirable to regularize spikes,
 membrane parameters, or other properties over time.</p>
@@ -765,10 +759,6 @@ default, simply just counts spikes. It is the job of the user to include the
 regularization in an error term later.</p>
 <p>Read more on <a class="reference external" href="https://en.wikipedia.org/wiki/Regularization_%28mathematics%29">Wikipedia</a>.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.regularization.regularize_step.html#norse.torch.functional.regularization.regularize_step" title="norse.torch.functional.regularization.regularize_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regularize_step</span></code></a></p></td>
 <td><p>Takes one step for a regularizer that aggregates some information (based on the spike_accumulator function), which is pushed forward and returned for future inclusion in an error term.</p></td>
@@ -783,13 +773,9 @@ regularization in an error term later.</p>
 </table>
 </section>
 <section id="module-0">
-<span id="threshold-functions"></span><h2><a class="toc-backref" href="#id1">Threshold functions</a><a class="headerlink" href="#module-0" title="Permalink to this heading">#</a></h2>
+<span id="threshold-functions"></span><h2><a class="toc-backref" href="#id1" role="doc-backlink">Threshold functions</a><a class="headerlink" href="#module-0" title="Link to this heading">#</a></h2>
 <p>Stateless spiking neural network components.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.heaviside.html#norse.torch.functional.heaviside" title="norse.torch.functional.heaviside"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heaviside</span></code></a></p></td>
 <td><p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Heaviside_step_function">heaviside step function</a> that truncates numbers &lt;= 0 to 0 and everything else to 1.</p></td>
@@ -819,13 +805,9 @@ regularization in an error term later.</p>
 </table>
 </section>
 <section id="module-1">
-<span id="temporal-operations"></span><h2><a class="toc-backref" href="#id1">Temporal operations</a><a class="headerlink" href="#module-1" title="Permalink to this heading">#</a></h2>
+<span id="temporal-operations"></span><h2><a class="toc-backref" href="#id1" role="doc-backlink">Temporal operations</a><a class="headerlink" href="#module-1" title="Link to this heading">#</a></h2>
 <p>Stateless spiking neural network components.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.lift.html#norse.torch.functional.lift" title="norse.torch.functional.lift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lift</span></code></a></p></td>
 <td><p>Creates a lifted version of the given activation function which applies the activation function in the temporal domain.</p></td>
@@ -834,14 +816,10 @@ regularization in an error term later.</p>
 </table>
 </section>
 <section id="neuron-models">
-<h2><a class="toc-backref" href="#id1">Neuron models</a><a class="headerlink" href="#neuron-models" title="Permalink to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Neuron models</a><a class="headerlink" href="#neuron-models" title="Link to this heading">#</a></h2>
 <section id="module-norse.torch.functional.iaf">
-<span id="integrate-and-fire-iaf"></span><h3><a class="toc-backref" href="#id1">Integrate-and-fire (IAF)</a><a class="headerlink" href="#module-norse.torch.functional.iaf" title="Permalink to this heading">#</a></h3>
+<span id="integrate-and-fire-iaf"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">Integrate-and-fire (IAF)</a><a class="headerlink" href="#module-norse.torch.functional.iaf" title="Link to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.iaf.IAFParameters.html#norse.torch.functional.iaf.IAFParameters" title="norse.torch.functional.iaf.IAFParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IAFParameters</span></code></a></p></td>
 <td><p>Parametrization of an integrate-and-fire neuron</p></td>
@@ -856,12 +834,8 @@ regularization in an error term later.</p>
 </table>
 </section>
 <section id="module-norse.torch.functional.izhikevich">
-<span id="izhikevich"></span><h3><a class="toc-backref" href="#id1">Izhikevich</a><a class="headerlink" href="#module-norse.torch.functional.izhikevich" title="Permalink to this heading">#</a></h3>
+<span id="izhikevich"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">Izhikevich</a><a class="headerlink" href="#module-norse.torch.functional.izhikevich" title="Link to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.izhikevich.IzhikevichParameters.html#norse.torch.functional.izhikevich.IzhikevichParameters" title="norse.torch.functional.izhikevich.IzhikevichParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IzhikevichParameters</span></code></a></p></td>
 <td><p>Parametrization of av Izhikevich neuron</p></td>
@@ -909,7 +883,7 @@ regularization in an error term later.</p>
 </table>
 </section>
 <section id="module-norse.torch.functional.leaky_integrator">
-<span id="leaky-integrator"></span><h3><a class="toc-backref" href="#id1">Leaky integrator</a><a class="headerlink" href="#module-norse.torch.functional.leaky_integrator" title="Permalink to this heading">#</a></h3>
+<span id="leaky-integrator"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">Leaky integrator</a><a class="headerlink" href="#module-norse.torch.functional.leaky_integrator" title="Link to this heading">#</a></h3>
 <p>Leaky integrators describe a <em>leaky</em> neuron membrane that integrates
 incoming currents over time, but never spikes. In other words, the
 neuron adds up incoming input current, while leaking out some of it
@@ -941,10 +915,6 @@ amount of current being added/subtracted at each timestep.</p>
 or in the book <a class="reference external" href="https://neuronaldynamics.epfl.ch/online/Ch5.html">*Neuron Dynamics* by W. Gerstner et al.,
 freely available online</a>.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.leaky_integrator.LIParameters.html#norse.torch.functional.leaky_integrator.LIParameters" title="norse.torch.functional.leaky_integrator.LIParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LIParameters</span></code></a></p></td>
 <td><p>Parameters of a leaky integrator</p></td>
@@ -959,13 +929,9 @@ freely available online</a>.</p>
 </table>
 </section>
 <section id="module-2">
-<span id="leaky-integrate-and-fire-lif"></span><h3><a class="toc-backref" href="#id1">Leaky integrate-and-fire (LIF)</a><a class="headerlink" href="#module-2" title="Permalink to this heading">#</a></h3>
+<span id="leaky-integrate-and-fire-lif"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">Leaky integrate-and-fire (LIF)</a><a class="headerlink" href="#module-2" title="Link to this heading">#</a></h3>
 <p>Stateless spiking neural network components.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.LIFParameters.html#norse.torch.functional.LIFParameters" title="norse.torch.functional.LIFParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LIFParameters</span></code></a></p></td>
 <td><p>Parametrization of a LIF neuron</p></td>
@@ -986,18 +952,14 @@ freely available online</a>.</p>
 </table>
 </section>
 <section id="lif-box-model">
-<h3><a class="toc-backref" href="#id1">LIF, box model</a><a class="headerlink" href="#lif-box-model" title="Permalink to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id1" role="doc-backlink">LIF, box model</a><a class="headerlink" href="#lif-box-model" title="Link to this heading">#</a></h3>
 <p>A simplified version of the popular leaky integrate-and-fire neuron model that combines a <a class="reference internal" href="#module-norse.torch.functional.leaky_integrator" title="norse.torch.functional.leaky_integrator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">norse.torch.functional.leaky_integrator</span></code></a> with spike thresholds to produce events (spikes).
 Compared to the <a class="reference internal" href="generated/norse.torch.functional.lif.html#module-norse.torch.functional.lif" title="norse.torch.functional.lif"><code class="xref py py-mod docutils literal notranslate"><span class="pre">norse.torch.functional.lif</span></code></a> modules, this model leaves out the current term, making it computationally simpler but impossible to implement in physical systems because currents cannot “jump” in nature.
 It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as “current boxes”.</p>
-<span class="target" id="module-norse.torch.functional.lif_box"></span><p>A simplified version of the popular leaky integrate-and-fire neuron model that combines a <a class="reference internal" href="#module-norse.torch.functional.leaky_integrator" title="norse.torch.functional.leaky_integrator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">norse.torch.functional.leaky_integrator</span></code></a> with spike thresholds to produce events (spikes).
+<p id="module-norse.torch.functional.lif_box">A simplified version of the popular leaky integrate-and-fire neuron model that combines a <a class="reference internal" href="#module-norse.torch.functional.leaky_integrator" title="norse.torch.functional.leaky_integrator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">norse.torch.functional.leaky_integrator</span></code></a> with spike thresholds to produce events (spikes).
 Compared to the <a class="reference internal" href="generated/norse.torch.functional.lif.html#module-norse.torch.functional.lif" title="norse.torch.functional.lif"><code class="xref py py-mod docutils literal notranslate"><span class="pre">norse.torch.functional.lif</span></code></a> modules, this model leaves out the current term, making it computationally simpler but impossible to implement in physical systems because currents cannot “jump” in nature.
 It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as “current boxes”.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.lif_box.LIFBoxFeedForwardState.html#norse.torch.functional.lif_box.LIFBoxFeedForwardState" title="norse.torch.functional.lif_box.LIFBoxFeedForwardState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LIFBoxFeedForwardState</span></code></a></p></td>
 <td><p>State of a feed forward LIF neuron</p></td>
@@ -1012,12 +974,8 @@ It is these sudden current jumps that gives the model its name, because the shif
 </table>
 </section>
 <section id="module-norse.torch.functional.coba_lif">
-<span id="lif-conductance-based"></span><h3><a class="toc-backref" href="#id1">LIF, conductance based</a><a class="headerlink" href="#module-norse.torch.functional.coba_lif" title="Permalink to this heading">#</a></h3>
+<span id="lif-conductance-based"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">LIF, conductance based</a><a class="headerlink" href="#module-norse.torch.functional.coba_lif" title="Link to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.coba_lif.CobaLIFParameters.html#norse.torch.functional.coba_lif.CobaLIFParameters" title="norse.torch.functional.coba_lif.CobaLIFParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CobaLIFParameters</span></code></a></p></td>
 <td><p>Parameters of conductance based LIF neuron.</p></td>
@@ -1032,12 +990,8 @@ It is these sudden current jumps that gives the model its name, because the shif
 </table>
 </section>
 <section id="module-norse.torch.functional.lif_adex">
-<span id="lif-adaptive-exponential"></span><h3><a class="toc-backref" href="#id1">LIF, adaptive exponential</a><a class="headerlink" href="#module-norse.torch.functional.lif_adex" title="Permalink to this heading">#</a></h3>
+<span id="lif-adaptive-exponential"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">LIF, adaptive exponential</a><a class="headerlink" href="#module-norse.torch.functional.lif_adex" title="Link to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.lif_adex.LIFAdExParameters.html#norse.torch.functional.lif_adex.LIFAdExParameters" title="norse.torch.functional.lif_adex.LIFAdExParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LIFAdExParameters</span></code></a></p></td>
 <td><p>Parametrization of an Adaptive Exponential Leaky Integrate and Fire neuron</p></td>
@@ -1055,12 +1009,8 @@ It is these sudden current jumps that gives the model its name, because the shif
 </table>
 </section>
 <section id="module-norse.torch.functional.lif_ex">
-<span id="lif-exponential"></span><h3><a class="toc-backref" href="#id1">LIF, exponential</a><a class="headerlink" href="#module-norse.torch.functional.lif_ex" title="Permalink to this heading">#</a></h3>
+<span id="lif-exponential"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">LIF, exponential</a><a class="headerlink" href="#module-norse.torch.functional.lif_ex" title="Link to this heading">#</a></h3>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.lif_ex.LIFExParameters.html#norse.torch.functional.lif_ex.LIFExParameters" title="norse.torch.functional.lif_ex.LIFExParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LIFExParameters</span></code></a></p></td>
 <td><p>Parametrization of an Exponential Leaky Integrate and Fire neuron</p></td>
@@ -1078,13 +1028,9 @@ It is these sudden current jumps that gives the model its name, because the shif
 </table>
 </section>
 <section id="module-3">
-<span id="lif-multicompartmental-mc"></span><h3><a class="toc-backref" href="#id1">LIF, multicompartmental (MC)</a><a class="headerlink" href="#module-3" title="Permalink to this heading">#</a></h3>
+<span id="lif-multicompartmental-mc"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">LIF, multicompartmental (MC)</a><a class="headerlink" href="#module-3" title="Link to this heading">#</a></h3>
 <p>Stateless spiking neural network components.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.lif_mc_feed_forward_step.html#norse.torch.functional.lif_mc_feed_forward_step" title="norse.torch.functional.lif_mc_feed_forward_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lif_mc_feed_forward_step</span></code></a></p></td>
 <td><p>Computes a single euler-integration feed forward step of a LIF multi-compartment neuron-model.</p></td>
@@ -1096,13 +1042,9 @@ It is these sudden current jumps that gives the model its name, because the shif
 </table>
 </section>
 <section id="module-4">
-<span id="lif-refractory"></span><h3><a class="toc-backref" href="#id1">LIF, refractory</a><a class="headerlink" href="#module-4" title="Permalink to this heading">#</a></h3>
+<span id="lif-refractory"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">LIF, refractory</a><a class="headerlink" href="#module-4" title="Link to this heading">#</a></h3>
 <p>Stateless spiking neural network components.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.LIFRefracParameters.html#norse.torch.functional.LIFRefracParameters" title="norse.torch.functional.LIFRefracParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LIFRefracParameters</span></code></a></p></td>
 <td><p>Parameters of a LIF neuron with absolute refractory period.</p></td>
@@ -1120,13 +1062,9 @@ It is these sudden current jumps that gives the model its name, because the shif
 </table>
 </section>
 <section id="module-5">
-<span id="long-short-term-memory-lsnn"></span><h3><a class="toc-backref" href="#id1">Long short-term memory (LSNN)</a><a class="headerlink" href="#module-5" title="Permalink to this heading">#</a></h3>
+<span id="long-short-term-memory-lsnn"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">Long short-term memory (LSNN)</a><a class="headerlink" href="#module-5" title="Link to this heading">#</a></h3>
 <p>Stateless spiking neural network components.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.LSNNParameters.html#norse.torch.functional.LSNNParameters" title="norse.torch.functional.LSNNParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LSNNParameters</span></code></a></p></td>
 <td><p>Parameters of an LSNN neuron</p></td>
@@ -1145,14 +1083,10 @@ It is these sudden current jumps that gives the model its name, because the shif
 </section>
 </section>
 <section id="module-norse.torch.functional.receptive_field">
-<span id="receptive-fields"></span><h2><a class="toc-backref" href="#id1">Receptive fields</a><a class="headerlink" href="#module-norse.torch.functional.receptive_field" title="Permalink to this heading">#</a></h2>
+<span id="receptive-fields"></span><h2><a class="toc-backref" href="#id1" role="doc-backlink">Receptive fields</a><a class="headerlink" href="#module-norse.torch.functional.receptive_field" title="Link to this heading">#</a></h2>
 <p>These receptive fields are derived from scale-space theory, specifically in the paper <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S2405844021000025">Normative theory of visual receptive fields by Lindeberg, 2021</a>.</p>
 <p>For use in spiking / binary signals, see the paper on <a class="reference external" href="https://dl.acm.org/doi/10.1145/3584954.3584996">Translation and Scale Invariance for Event-Based Object tracking by Pedersen et al., 2023</a></p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.receptive_field.gaussian_kernel.html#norse.torch.functional.receptive_field.gaussian_kernel" title="norse.torch.functional.receptive_field.gaussian_kernel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_kernel</span></code></a>(x, s, c)</p></td>
 <td><p>Efficiently creates a 2d gaussian kernel.</p></td>
@@ -1170,15 +1104,11 @@ It is these sudden current jumps that gives the model its name, because the shif
 </table>
 </section>
 <section id="plasticity-models">
-<h2><a class="toc-backref" href="#id1">Plasticity models</a><a class="headerlink" href="#plasticity-models" title="Permalink to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Plasticity models</a><a class="headerlink" href="#plasticity-models" title="Link to this heading">#</a></h2>
 <section id="module-6">
-<span id="spike-time-dependent-plasticity-stdp"></span><h3><a class="toc-backref" href="#id1">Spike-time dependent plasticity (STDP)</a><a class="headerlink" href="#module-6" title="Permalink to this heading">#</a></h3>
+<span id="spike-time-dependent-plasticity-stdp"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">Spike-time dependent plasticity (STDP)</a><a class="headerlink" href="#module-6" title="Link to this heading">#</a></h3>
 <p>Stateless spiking neural network components.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.STDPSensorParameters.html#norse.torch.functional.STDPSensorParameters" title="norse.torch.functional.STDPSensorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">STDPSensorParameters</span></code></a></p></td>
 <td><p>Parameters of an STDP sensor as it is used for event driven plasticity rules.</p></td>
@@ -1193,13 +1123,9 @@ It is these sudden current jumps that gives the model its name, because the shif
 </table>
 </section>
 <section id="module-7">
-<span id="tsodyks-markram-timing-dependent-plasticity-tdp"></span><h3><a class="toc-backref" href="#id1">Tsodyks-Markram timing-dependent plasticity (TDP)</a><a class="headerlink" href="#module-7" title="Permalink to this heading">#</a></h3>
+<span id="tsodyks-markram-timing-dependent-plasticity-tdp"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink">Tsodyks-Markram timing-dependent plasticity (TDP)</a><a class="headerlink" href="#module-7" title="Link to this heading">#</a></h3>
 <p>Stateless spiking neural network components.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/norse.torch.functional.TsodyksMakramParameters.html#norse.torch.functional.TsodyksMakramParameters" title="norse.torch.functional.TsodyksMakramParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TsodyksMakramParameters</span></code></a></p></td>
 <td><p>Parameters of the Tsodyks-Makram Model</p></td>
@@ -1329,7 +1255,7 @@ By Norse.ai
 
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
@@ -1353,8 +1279,8 @@ By Norse.ai
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>
