@@ -191,3 +191,40 @@ def test_recurrent_sequential_output_index():
     actual = l1(l1(data))
     pred, _ = m(pred)
     assert torch.allclose(actual, pred)
+
+def test_sequential_compile():
+    x = torch.ones(2, 1)
+    m = norse.SequentialState(
+        torch.nn.Linear(2, 1),
+        norse.LIFBoxCell(),
+    )
+    m = torch.compile(m)
+    z, s = m(x)
+    _, s = m(x, s)
+
+    z.sum().backward()
+    assert s.v.grad_fn is not None
+    assert z.shape == (2, 1)
+    assert torch.all(torch.eq(s.v, 1))
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="no cuda device")
+def test_lif_box_compile_gpu():
+    x = torch.ones(2, 1, device="cuda")
+    p = LIFBoxParameters(
+        tau_mem_inv=torch.ones(1, device="cuda") * 1000,
+        v_th=torch.ones(1, device="cuda"),
+        v_leak=torch.zeros(1, device="cuda"),
+        v_reset=torch.zeros(1, device="cuda"),
+        alpha=torch.zeros(1, device="cuda"),
+    )
+
+    m = LIFBoxCell(p)
+    m = torch.compile(m, mode="reduce-overhead")
+    z, s = m(x)
+    _, s = m(x, s)
+
+    z.sum().backward()
+    assert s.v.grad_fn is not None
+    assert z.shape == (2, 1)
+    assert torch.all(torch.eq(s.v, 1))
