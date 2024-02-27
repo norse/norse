@@ -21,6 +21,7 @@ norse.torch.module.test.test\_leaky\_integrator
       test_li_cell_state
       test_li_linear_cell
       test_li_linear_cell_state
+      test_li_linear_compile_gpu
       test_li_state
    
    
