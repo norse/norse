@@ -153,10 +153,12 @@ class LIFRecurrentCell(SNNRecurrentCell):
         **kwargs
     ):
         super().__init__(
-            activation=lif_adjoint_step if p.method == "adjoint" else lif_step,
-            activation_sparse=lif_adjoint_step_sparse
+            activation=lif_feed_forward_adjoint_step
             if p.method == "adjoint"
-            else lif_step_sparse,
+            else lif_feed_forward_step,
+            activation_sparse=lif_feed_forward_adjoint_step_sparse
+            if p.method == "adjoint"
+            else lif_feed_forward_step_sparse,
             state_fallback=self.initial_state,
             p=LIFParameters(
                 torch.as_tensor(p.tau_syn_inv),
@@ -171,6 +173,28 @@ class LIFRecurrentCell(SNNRecurrentCell):
             hidden_size=hidden_size,
             **kwargs,
         )
+        self.linear_in = torch.nn.Linear(input_size, hidden_size)
+        self.linear_rec = torch.nn.Linear(hidden_size, hidden_size)
+
+    def forward(self, input_tensor, state=None):
+        state = state if state is not None else self.state_fallback(input_tensor)
+        ff_state = LIFFeedForwardState(state.v, state.i)
+        if self.activation_sparse is not None and input_tensor.is_sparse:
+            z, s = self.activation_sparse(
+                input_tensor,
+                ff_state,
+                self.p,
+                self.dt,
+            )
+            return z, LIFState(z, s.v, self.linear_in(s.i) + self.linear_rec(z))
+        else:
+            z, s = self.activation(
+                input_tensor,
+                ff_state,
+                self.p,
+                self.dt,
+            )
+            return z, LIFState(z, s.v, self.linear_in(s.i) + self.linear_rec(z))
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
         dims = (*input_tensor.shape[:-1], self.hidden_size)
