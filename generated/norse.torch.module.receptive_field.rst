@@ -17,6 +17,8 @@ norse.torch.module.receptive\_field
 
    .. autosummary::
    
+      ParameterizedSpatialReceptiveField2d
+      SampledSpatialReceptiveField2d
       SpatialReceptiveField2d
       TemporalReceptiveField
    

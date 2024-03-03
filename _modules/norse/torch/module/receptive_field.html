@@ -550,14 +550,15 @@ document.write(`
 <span class="sd">For use in spiking / binary signals, see the paper on `Translation and Scale Invariance for Event-Based Object tracking by Pedersen et al., 2023 &lt;https://dl.acm.org/doi/10.1145/3584954.3584996&gt;`_</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.module.leaky_integrator_box</span> <span class="kn">import</span> <span class="n">LIBoxCell</span><span class="p">,</span> <span class="n">LIBoxParameters</span>
 <span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNCell</span>
+<span class="kn">from</span> <span class="nn">norse.torch.module.leaky_integrator_box</span> <span class="kn">import</span> <span class="n">LIBoxCell</span><span class="p">,</span> <span class="n">LIBoxParameters</span>
 <span class="kn">from</span> <span class="nn">norse.torch.functional.receptive_field</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">spatial_receptive_fields_with_derivatives</span><span class="p">,</span>
+    <span class="n">spatial_parameters</span><span class="p">,</span>
     <span class="n">temporal_scale_distribution</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -566,23 +567,28 @@ document.write(`
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.receptive_field.SpatialReceptiveField2d.html#norse.torch.module.receptive_field.SpatialReceptiveField2d">[docs]</a>
 <span class="k">class</span> <span class="nc">SpatialReceptiveField2d</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a spatial receptive field as 2-dimensional convolutions.</span>
-<span class="sd">    The parameters decide the number of combinations to scan over, i. e. the number of receptive fields to generate.</span>
-<span class="sd">    Specifically, we generate ``n_scales * n_angles * (n_ratios - 1) + n_scales`` output_channels with aggregation,</span>
-<span class="sd">    and ``in_channels * (n_scales * n_angles * (n_ratios - 1) + n_scales)`` without aggregation.</span>
+<span class="sd">    The `rf_parameters` are a tensor of shape `(n, 5)` where `n` is the number of receptive fields.</span>
+<span class="sd">    If the `optimize_fields` flag is set to `True`, the `rf_parameters` will be optimized during training.</span>
 
-<span class="sd">    The ``(n_ratios - 1) + n_scales`` terms exist because at ``ratio = 1``, fields are perfectly symmetrical, and there</span>
-<span class="sd">    is therefore no reason to scan over the angles and scales for ``ratio = 1``.</span>
-<span class="sd">    However, ``n_scales`` receptive field still needs to be added (one for each scale-space).</span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import torch</span>
+<span class="sd">        &gt;&gt;&gt; from norse.torch import SpatialReceptiveField2d</span>
+<span class="sd">        &gt;&gt;&gt; parameters = torch.tensor([[1., 1., 1., 0., 0.]])</span>
+<span class="sd">        &gt;&gt;&gt; m = SpatialReceptiveField2d(1, 9, parameters)</span>
+<span class="sd">        &gt;&gt;&gt; m.weights.shape</span>
+<span class="sd">        torch.Size([1, 1, 9, 9])</span>
+<span class="sd">        &gt;&gt;&gt; y = m(torch.empty(1, 1, 9, 9))</span>
+<span class="sd">        &gt;&gt;&gt; y.shape</span>
+<span class="sd">        torch.Size([1, 1, 1, 1])</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">        n_scales (int): Number of scaling combinations (the size of the receptive field) drawn from a logarithmic distribution</span>
-<span class="sd">        n_angles (int): Number of angular combinations (the orientation of the receptive field)</span>
-<span class="sd">        n_ratios (int): Number of eccentricity combinations (how &quot;flat&quot; the receptive field is)</span>
-<span class="sd">        size (int): The size of the square kernel in pixels</span>
-<span class="sd">        derivatives (Union[int, List[Tuple[int, int]]]): The number of derivatives to use in the receptive field.</span>
-<span class="sd">        aggregate (bool): If True, sums the input channels over all output channels. If False, every</span>
-<span class="sd">        output channel is mapped to every input channel, which may blow up in complexity.</span>
-<span class="sd">        **kwargs: Arguments passed on to the underlying torch.nn.Conv2d</span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        in_channels (int): Number of input channels</span>
+<span class="sd">        size (int): Size of the receptive field</span>
+<span class="sd">        rf_parameters (torch.Tensor): Parameters for the receptive fields</span>
+<span class="sd">        aggregate (bool): If `True`, the receptive fields will be aggregated across channels. Defaults to `True`.</span>
+<span class="sd">        domain (float): The domain of the receptive field. Defaults to `8`.</span>
+<span class="sd">        optimize_fields (bool): If `True`, the `rf_parameters` will be optimized during training. Defaults to `True`.</span>
+<span class="sd">        **kwargs: Additional arguments for the `torch.nn.functional.conv2d` function.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SpatialReceptiveField2d.__init__">
@@ -590,50 +596,250 @@ document.write(`
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">n_scales</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">n_angles</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">n_ratios</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">derivatives</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="n">min_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
-        <span class="n">max_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span>
-        <span class="n">min_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
-        <span class="n">max_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">rf_parameters</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">aggregate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">domain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="n">optimize_fields</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="n">spatial_receptive_fields_with_derivatives</span><span class="p">(</span>
-            <span class="n">n_scales</span><span class="p">,</span>
-            <span class="n">n_angles</span><span class="p">,</span>
-            <span class="n">n_ratios</span><span class="p">,</span>
-            <span class="n">size</span><span class="p">,</span>
-            <span class="n">derivatives</span><span class="p">,</span>
-            <span class="n">min_scale</span><span class="p">,</span>
-            <span class="n">max_scale</span><span class="p">,</span>
-            <span class="n">min_ratio</span><span class="p">,</span>
-            <span class="n">max_ratio</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rf_parameters</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">rf_parameters</span><span class="p">)</span> <span class="k">if</span> <span class="n">optimize_fields</span> <span class="k">else</span> <span class="n">rf_parameters</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="n">aggregate</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">weights</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">in_channels</span>
-            <span class="n">empty_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">fields</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-            <span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">in_channels</span><span class="p">):</span>
-                <span class="n">in_weights</span> <span class="o">=</span> <span class="n">empty_weights</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-                <span class="n">in_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fields</span>
-                <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">in_weights</span><span class="p">)</span>
-            <span class="n">weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rf_parameters_previous</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rf_parameters</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span> <span class="o">=</span> <span class="n">in_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aggregate</span> <span class="o">=</span> <span class="n">aggregate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="n">domain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">rf_parameters</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">aggregate</span>
+            <span class="k">else</span> <span class="n">rf_parameters</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">in_channels</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="k">if</span> <span class="s2">&quot;bias&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;bias&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
+        <span class="c1"># Register update and update the fields for the first time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_weights</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">optimize_fields</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">update_hook</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">gi</span><span class="p">,</span> <span class="n">go</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_full_backward_hook</span><span class="p">(</span><span class="n">update_hook</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rf_parameters_previous</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rf_parameters</span><span class="p">)):</span>
+                <span class="c1"># Reset the flag</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rf_parameters_previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rf_parameters</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+                <span class="c1"># Calculate new weights</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="n">spatial_receptive_fields_with_derivatives</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rf_parameters</span><span class="p">,</span>
+                    <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                    <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggregate</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">out_channels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span>
+                    <span class="n">empty_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span>
+                        <span class="n">fields</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                        <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rf_parameters</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_channels</span><span class="p">):</span>
+                        <span class="n">in_weights</span> <span class="o">=</span> <span class="n">empty_weights</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+                        <span class="n">in_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fields</span>
+                        <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">in_weights</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_weights</span><span class="p">()</span>  <span class="c1"># Update weights if necessary</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span></div>
 
+
+
+<span class="k">class</span> <span class="nc">SampledSpatialReceptiveField2d</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a spatial receptive field as 2-dimensional convolutions, sampled over a set of scales,</span>
+<span class="sd">    angles, ratios, and derivatives.</span>
+<span class="sd">    This module allows for the optimization of the input parameters for scales, angles, and ratios</span>
+<span class="sd">    (not derivatives) and will update the parameters (and, by extension, the receptive fields) accordingly</span>
+<span class="sd">    if the respective parameters are set to True.</span>
+<span class="sd">    This module is a wrapper around the `SpatialReceptiveField2d` module and will forward the kwargs.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import torch</span>
+<span class="sd">        &gt;&gt;&gt; from norse.torch import SampledSpatialReceptiveField2d</span>
+<span class="sd">        &gt;&gt;&gt; scales = torch.tensor([1.0, 2.0])</span>
+<span class="sd">        &gt;&gt;&gt; angles = torch.tensor([0.0, 1.0])</span>
+<span class="sd">        &gt;&gt;&gt; ratios = torch.tensor([0.5, 1.0])</span>
+<span class="sd">        &gt;&gt;&gt; derivatives = torch.tensor([[0, 0]])</span>
+<span class="sd">        &gt;&gt;&gt; m = SampledSpatialReceptiveField2d(1, 9, scales, angles, ratios, derivatives,</span>
+<span class="sd">        &gt;&gt;&gt;                                    optimize_scales=False, optimize_angles=False,</span>
+<span class="sd">        &gt;&gt;&gt;                                    optimize_ratios=True)</span>
+<span class="sd">        &gt;&gt;&gt; optim = torch.optim.SGD(list(m.parameters()), lr=1)</span>
+<span class="sd">        &gt;&gt;&gt; y = m(torch.ones(1, 1, 9, 9))</span>
+<span class="sd">        &gt;&gt;&gt; y.sum().backward()</span>
+<span class="sd">        &gt;&gt;&gt; optim.step() # Will update the ratios</span>
+<span class="sd">        &gt;&gt;&gt; m.ratios() # Are now _different_ than the initial ratios</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">scales</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">angles</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">ratios</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">derivatives</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">optimize_scales</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">optimize_angles</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">optimize_ratios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scales</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">scales</span><span class="p">)</span> <span class="k">if</span> <span class="n">optimize_scales</span> <span class="k">else</span> <span class="n">scales</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span> <span class="k">if</span> <span class="n">optimize_angles</span> <span class="k">else</span> <span class="n">angles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">ratios</span><span class="p">)</span> <span class="k">if</span> <span class="n">optimize_ratios</span> <span class="k">else</span> <span class="n">ratios</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span> <span class="o">=</span> <span class="n">derivatives</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span> <span class="o">=</span> <span class="n">SpatialReceptiveField2d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+            <span class="n">rf_parameters</span><span class="o">=</span><span class="n">spatial_parameters</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span>
+            <span class="p">),</span>
+            <span class="n">optimize_fields</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">optimize_angles</span> <span class="ow">or</span> <span class="n">optimize_scales</span> <span class="ow">or</span> <span class="n">optimize_ratios</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">update_hook</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">gi</span><span class="p">,</span> <span class="n">go</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_full_backward_hook</span><span class="p">(</span><span class="n">update_hook</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_weights</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">rf_parameters</span> <span class="o">=</span> <span class="n">spatial_parameters</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">_update_weights</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">ParameterizedSpatialReceptiveField2d</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A parameterized version of the `SpatialReceptiveField2d` module, where the scales, angles,</span>
+<span class="sd">    and ratios are optimized and updated for each kernel individually during training.</span>
+<span class="sd">    This is opposite to the `SampledSpatialReceptiveField2d` module, where the scales, angles,</span>
+<span class="sd">    and ratios are updated individually (as generating functions for the kernels).</span>
+<span class="sd">    This module wraps the `SpatialReceptiveField2d` module.</span>
+<span class="sd">    This module is a wrapper around the `SpatialReceptiveField2d` module and will forward the kwargs.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import torch</span>
+<span class="sd">        &gt;&gt;&gt; from norse.torch import ParameterizedSpatialReceptiveField2d</span>
+<span class="sd">        &gt;&gt;&gt; scales = torch.tensor([1.0, 2.0])</span>
+<span class="sd">        &gt;&gt;&gt; angles = torch.tensor([0.0, 1.0])</span>
+<span class="sd">        &gt;&gt;&gt; ratios = torch.tensor([0.5, 1.0])</span>
+<span class="sd">        &gt;&gt;&gt; m = ParameterizedSpatialReceptiveField2d(1, 9, scales, angles, ratios, 1,</span>
+<span class="sd">        &gt;&gt;&gt;                                          optimize_scales=False, optimize_angles=False,</span>
+<span class="sd">        &gt;&gt;&gt;                                          optimize_ratios=True)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">scales</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">angles</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">ratios</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">derivatives</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">optimize_scales</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">optimize_angles</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">optimize_ratios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span> <span class="o">=</span> <span class="n">spatial_parameters</span><span class="p">(</span>
+            <span class="n">scales</span><span class="p">,</span> <span class="n">angles</span><span class="p">,</span> <span class="n">ratios</span><span class="p">,</span> <span class="n">derivatives</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scales</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">optimize_scales</span>
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">optimize_angles</span>
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">optimize_ratios</span>
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">rf_parameters</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:],</span>
+            <span class="p">],</span>
+            <span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span> <span class="o">=</span> <span class="n">SpatialReceptiveField2d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+            <span class="n">rf_parameters</span><span class="o">=</span><span class="n">rf_parameters</span><span class="p">,</span>
+            <span class="n">optimize_fields</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">optimize_angles</span> <span class="ow">or</span> <span class="n">optimize_scales</span> <span class="ow">or</span> <span class="n">optimize_ratios</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">update_hook</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">gi</span><span class="p">,</span> <span class="n">go</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_full_backward_hook</span><span class="p">(</span><span class="n">update_hook</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_weights</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">rf_parameters</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:],</span>
+                <span class="p">],</span>
+                <span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">_update_weights</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="TemporalReceptiveField">
@@ -655,13 +861,14 @@ document.write(`
 <span class="sd">        time_constants (Optional[torch.Tensor]): Hardcoded time constants. Will overwrite the automatically generated, logarithmically distributed scales, if set. Defaults to None.</span>
 <span class="sd">        dt (float): Neuron simulation timestep. Defaults to 0.001.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="TemporalReceptiveField.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.receptive_field.TemporalReceptiveField.html#norse.torch.module.receptive_field.TemporalReceptiveField.__init__">[docs]</a>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">shape</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span>
         <span class="n">n_scales</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
-        <span class="n">activation</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">SNNCell</span><span class="p">]</span> <span class="o">=</span> <span class="n">LIBoxCell</span><span class="p">,</span>
+        <span class="n">activation</span><span class="p">:</span> <span class="n">SNNCell</span> <span class="o">=</span> <span class="n">LIBoxCell</span><span class="p">,</span>
         <span class="n">activation_state_map</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span>
             <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">NamedTuple</span>
         <span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">LIBoxParameters</span><span class="p">(</span><span class="n">tau_mem_inv</span><span class="o">=</span><span class="n">t</span><span class="p">),</span>

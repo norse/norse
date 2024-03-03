@@ -610,9 +610,11 @@ document.write(`
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif_refrac.LIFRefracCell.html#norse.torch.module.lif_refrac.LIFRefracCell.__init__">[docs]</a>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">lif_refrac_feed_forward_adjoint_step</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;adjoint&quot;</span>
-            <span class="k">else</span> <span class="n">lif_refrac_feed_forward_step</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="n">lif_refrac_feed_forward_adjoint_step</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;adjoint&quot;</span>
+                <span class="k">else</span> <span class="n">lif_refrac_feed_forward_step</span>
+            <span class="p">),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
             <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
@@ -709,9 +711,11 @@ document.write(`
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">activation</span><span class="o">=</span><span class="n">lif_refrac_adjoint_step</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;adjoint&quot;</span>
-            <span class="k">else</span> <span class="n">lif_refrac_step</span><span class="p">,</span>
+            <span class="n">activation</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">lif_refrac_adjoint_step</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;adjoint&quot;</span>
+                <span class="k">else</span> <span class="n">lif_refrac_step</span>
+            <span class="p">),</span>
             <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
             <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
             <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
@@ -783,12 +787,16 @@ document.write(`
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">activation</span><span class="o">=</span><span class="n">lif_refrac_adjoint_step</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;adjoint&quot;</span>
-            <span class="k">else</span> <span class="n">lif_refrac_step</span><span class="p">,</span>
-            <span class="n">activation_sparse</span><span class="o">=</span><span class="n">lif_refrac_adjoint_step_sparse</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;adjoint&quot;</span>
-            <span class="k">else</span> <span class="n">lif_refrac_step_sparse</span><span class="p">,</span>
+            <span class="n">activation</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">lif_refrac_adjoint_step</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;adjoint&quot;</span>
+                <span class="k">else</span> <span class="n">lif_refrac_step</span>
+            <span class="p">),</span>
+            <span class="n">activation_sparse</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">lif_refrac_adjoint_step_sparse</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">lif</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;adjoint&quot;</span>
+                <span class="k">else</span> <span class="n">lif_refrac_step_sparse</span>
+            <span class="p">),</span>
             <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
             <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
             <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
@@ -810,12 +818,14 @@ document.write(`
     <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFRefracState</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
         <span class="n">lif_state</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span>
-            <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                <span class="o">*</span><span class="n">dims</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">input_tensor</span><span class="o">.</span><span class="n">is_sparse</span>
-            <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                <span class="o">*</span><span class="n">dims</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span>
+            <span class="n">z</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="o">*</span><span class="n">dims</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">to_sparse</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">input_tensor</span><span class="o">.</span><span class="n">is_sparse</span>
+                <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="o">*</span><span class="n">dims</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">dtype</span>
+                <span class="p">)</span>
             <span class="p">),</span>
             <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
                 <span class="n">dims</span><span class="p">,</span>

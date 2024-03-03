@@ -13,10 +13,11 @@ norse.torch.module.test.test\_receptive\_field
 
    .. autosummary::
    
+      test_column_parameterized_receptive_field_update
       test_spatial_receptive_field
-      test_spatial_receptive_field_no_aggregation
-      test_temporal_receptive_field_1d
-      test_temporal_receptive_field_2d
+      test_spatial_receptive_field_update_flag
+      test_spatial_receptive_field_update_kernels
+      test_spatially_parameterized_receptive_field_update
    
    
 

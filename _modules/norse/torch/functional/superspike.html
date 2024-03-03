@@ -568,13 +568,14 @@ document.write(`
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">):</span>
-        <span class="n">inp</span><span class="p">,</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+        <span class="p">(</span><span class="n">inp</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
         <span class="n">grad</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">ctx</span><span class="o">.</span><span class="n">needs_input_grad</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="n">grad</span> <span class="o">=</span> <span class="n">grad_output</span> <span class="o">/</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span>
                 <span class="mi">2</span>
             <span class="p">)</span>  <span class="c1"># section 3.3.2 (beta -&gt; alpha)</span>
         <span class="k">return</span> <span class="n">grad</span><span class="p">,</span> <span class="kc">None</span>
+
 
 <div class="viewcode-block" id="super_fn">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.super_fn.html#norse.torch.functional.super_fn">[docs]</a>

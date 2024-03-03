@@ -13,11 +13,10 @@ norse.torch.functional.test.test\_receptive\_field
 
    .. autosummary::
    
-      test_10th_derivative
-      test_first_derivative
-      test_first_derivative_number
-      test_several_derivatives
-      test_zero_derivative
+      test_generate_fields
+      test_spatial_parameters_derivative
+      test_spatial_rf
+      test_spatial_rf_backward
    
    
 
