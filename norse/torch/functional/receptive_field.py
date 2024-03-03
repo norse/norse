@@ -1,9 +1,3 @@
-"""
-These receptive fields are derived from scale-space theory, specifically in the paper `Normative theory of visual receptive fields by Lindeberg, 2021 <https://www.sciencedirect.com/science/article/pii/S2405844021000025>`_.
-
-For use in spiking / binary signals, see the paper on `Translation and Scale Invariance for Event-Based Object tracking by Pedersen et al., 2023 <https://dl.acm.org/doi/10.1145/3584954.3584996>`_
-"""
-
 from typing import List, Tuple, Union, Optional
 
 import torch
@@ -27,7 +21,13 @@ def gaussian_kernel(x, s, c):
 
 
 def spatial_receptive_field(
-    angle, ratio, size: int, scale: float = 2.5, domain: float = 8
+    scale: float,
+    angle: float,
+    ratio: float,
+    size: int,
+    dx: int = 0,
+    dy: int = 0,
+    domain: float = 8,
 ):
     """
     Creates a (size x size) receptive field kernel
@@ -39,17 +39,46 @@ def spatial_receptive_field(
       scale (float): The scale of the field. Defaults to 2.5
       domain (float): The initial coordinates from which the field is sampled. Defaults to 8 (equal to -8 to 8).
     """
-    sm = torch.tensor([scale, scale * ratio])
+    sm = torch.ones(2)
+    sm[0] = scale
+    sm[1] = scale * ratio
     a = torch.linspace(-domain, domain, size)
-    r = torch.tensor(
-        [[torch.cos(angle), torch.sin(angle)], [-torch.sin(angle), torch.cos(angle)]],
-        dtype=torch.float32,
-    )
+    angle = torch.as_tensor(angle)
+    r = torch.ones((2, 2), device=angle.device)
+    r[0][0] = angle.cos()
+    r[0][1] = angle.sin()
+    r[1][0] = -angle.sin()
+    r[1][1] = angle.cos()
     c = (r * sm) @ (sm * r).T
     xs, ys = torch.meshgrid(a, a, indexing="xy")
     coo = torch.stack([xs, ys], dim=2)
     k = gaussian_kernel(coo, scale, c)
-    return k / k.sum()
+    k = _derived_field(k, (dx, dy))
+    return k
+
+
+def _derived_field(field: torch.Tensor, derivatives: Tuple[int, int]) -> torch.Tensor:
+    out = []
+    (dx, dy) = derivatives
+    device = field.device
+    if dx == 0:
+        fx = field
+    else:
+        fx = field.diff(
+            dim=0,
+            prepend=torch.zeros(int(dx.item()), field.shape[1]).to(device),
+            n=int(dx.item()),
+        )
+    if dy == 0:
+        fy = fx
+    else:
+        fy = fx.diff(
+            dim=1,
+            prepend=torch.zeros(field.shape[0], int(dy.item())).to(device),
+            n=int(dy.item()),
+        )
+    out.append(fy)
+    return torch.concat(out)
 
 
 def _extract_derivatives(
@@ -70,102 +99,56 @@ def _extract_derivatives(
         )
 
 
-def _derive_fields(
-    fields: torch.Tensor, derivatives: List[Tuple[int, int]]
+def spatial_parameters(
+    scales: torch.Tensor,
+    angles: torch.Tensor,
+    ratios: torch.Tensor,
+    derivatives: Union[int, List[Tuple[int, int]]],
+    include_replicas: bool = False,
 ) -> torch.Tensor:
-    out = []
-    for dx, dy in derivatives:
-        if dx == 0:
-            fx = fields
-        else:
-            fx = fields.diff(
-                dim=1, prepend=torch.zeros(fields.shape[0], dx, fields.shape[2]), n=dx
-            )
-
-        if dy == 0:
-            fy = fx
-        else:
-            fy = fx.diff(
-                dim=2, prepend=torch.zeros(fields.shape[0], fields.shape[1], dy), n=dy
-            )
-        out.append(fy)
-    return torch.concat(out)
+    """
+    Combines the parameters of scales, angles, ratios and derivatives as cartesian products
+    to produce a set of parameters for spatial receptive fields.
+    """
+    if include_replicas or not (ratios == 1).any():
+        parameters = torch.cartesian_prod(scales, angles, ratios)
+    else:
+        mask = ratios != 1
+        asymmetric_ratios = ratios[mask]
+        symmetric_ratios = ratios[~mask]
+        asymmetric_fields = torch.cartesian_prod(scales, angles, asymmetric_ratios)
+        symmetric_rings = torch.cartesian_prod(scales, angles, symmetric_ratios)
+        parameters = torch.cat([asymmetric_fields, symmetric_rings])
+    # Add derivatives
+    derivatives, _ = _extract_derivatives(derivatives)
+    derivatives = torch.tensor(derivatives, device=scales.device).float()
+    parameters_repeated = parameters.repeat_interleave(len(derivatives), 0)
+    derivatives_repeated = derivatives.repeat(len(parameters), 1)
+    return torch.cat([parameters_repeated, derivatives_repeated], 1)
 
 
 def spatial_receptive_fields_with_derivatives(
-    n_scales: int,
-    n_angles: int,
-    n_ratios: int,
+    combinations: torch.Tensor,
     size: int,
-    derivatives: Union[int, List[Tuple[int, int]]] = 0,
-    min_scale: float = 0.2,
-    max_scale: float = 1.5,
-    min_ratio: float = 0.2,
-    max_ratio: float = 1,
+    domain: float = 8,
 ) -> torch.Tensor:
     r"""
-    Creates a number of receptive field with 1st directional derivatives.
-    The parameters decide the number of combinations to scan over, i. e. the number of receptive fields to generate.
-    Specifically, we generate ``derivatives * (n_angles * n_scales * (n_ratios - 1) + n_scales)`` fields.
-    The ``(n_ratios - 1) + n_scales`` terms exist because at ``ratio = 1``, fields are perfectly symmetrical, and there
-    is therefore no reason to scan over the angles and scales for ``ratio = 1``.
-    However, ``n_scales`` receptive fields still need to be added (one for each scale-space).
-    Finally, the ``derivatives *`` term comes from the addition of spatial derivatives.
-    Arguments:
-        n_scales (int): Number of scaling combinations (the size of the receptive field) drawn from a logarithmic distribution
-        n_angles (int): Number of angular combinations (the orientation of the receptive field)
-        n_ratios (int): Number of eccentricity combinations (how "flat" the receptive field is)
-        size (int): The size of the square kernel in pixels
-        derivatives (Union[int, List[Tuple[int, int]]]): The spatial derivatives to include. Defaults to 0 (no derivatives).
-            Can either be a number, in which case 1 + 2 ** n derivatives will be made (except when 0, see below).
-              Example: `derivatives=0` omits derivatives
-              Example: `derivatives=1` provides 2 spatial derivatives + 1 without derivation
-            Or a list of tuples specifying the derivatives in both spatial dimensions
-              Example: `derivatives=[(0, 0), (1, 2)]` provides two outputs, one without derivation and one :math:`\partial_x \partial^2_y`
+    Creates a number of receptive fields based on the spatial parameters and size of the receptive field.
     """
-
-    def _stack_empty(x):
-        if len(x) == 0:
-            return torch.tensor([])
-        else:
-            return torch.stack(x)
-
-    angles = torch.linspace(0, torch.pi - torch.pi / n_angles, n_angles)
-    ratios = torch.linspace(min_ratio, max_ratio, n_ratios)
-    scales = torch.exp(torch.linspace(min_scale, max_scale, n_scales))
-    # We add extra space in both the domain and size to account for the derivatives
-    derivative_list, derivative_max = _extract_derivatives(derivatives)
-    domain = 8 + derivative_max * size * 0.5
-
-    assymmetric_rings = _stack_empty(
+    return torch.stack(
         [
             spatial_receptive_field(
-                angle, ratio, size=size + 2 * derivative_max, scale=scale, domain=domain
-            )
-            for angle in angles
-            for scale in scales
-            for ratio in ratios[:-1]
-        ]
-    )
-    symmetric_rings = _stack_empty(
-        [
-            spatial_receptive_field(
-                torch.as_tensor(0),
-                torch.as_tensor(1),
-                size + 2 * derivative_max,
-                scale=scale,
+                scale=p[0],
+                angle=p[1],
+                ratio=p[2],
+                size=size,
+                dx=p[3],
+                dy=p[4],
                 domain=domain,
             )
-            for scale in scales
+            for p in combinations
         ]
     )
-    rings = torch.concat([assymmetric_rings, symmetric_rings])
-    derived_fields = _derive_fields(rings, derivative_list)
-    return derived_fields[
-        :,
-        derivative_max : size + derivative_max,
-        derivative_max : size + derivative_max,  # Remove extra space
-    ]
 
 
 def temporal_scale_distribution(
@@ -202,3 +185,21 @@ def temporal_scale_distribution(
         max_scale = (c ** (2 * (n_scales - 1))) * min_scale
     taus = c ** (2 * (xs - n_scales)) * max_scale
     return taus.sqrt()
+
+
+def spatio_temporal_parameters(
+    scales: torch.Tensor,
+    angles: torch.Tensor,
+    ratios: torch.Tensor,
+    derivatives: Union[int, List[Tuple[int, int]]],
+    temporal_scales: torch.Tensor,
+    include_replicas: bool = False,
+) -> torch.Tensor:
+    """
+    Combines the parameters of scales, angles, ratios and derivatives as cartesian products
+    to produce a set of parameters for spatial receptive fields.
+    """
+    spatial_parameters = spatial_parameters(
+        scales, angles, ratios, derivatives, include_replicas
+    )
+    return torch.cartesian_prod(spatial_parameters, temporal_scales)

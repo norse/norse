@@ -2,6 +2,7 @@ r"""
 In this task, we train a spiking convolutional network to learn the
 MNIST digit recognition task.
 """
+
 from argparse import ArgumentParser
 import os
 import uuid

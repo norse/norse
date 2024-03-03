@@ -21,9 +21,11 @@ def test_backward():
 
     assert torch.sum(x.grad < 0) == 10
 
+
 class SomeClass(torch.nn.Module):
     def forward(self, x):
         return super_fn(x)
+
 
 def test_compile():
     c = SomeClass()
@@ -31,4 +33,3 @@ def test_compile():
     out = c(torch.ones(1, requires_grad=True))
     out.backward()
     assert out.sum() == 1
-    

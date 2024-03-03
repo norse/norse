@@ -60,9 +60,11 @@ class LIFRefracCell(SNNCell):
 
     def __init__(self, p: LIFRefracParameters = LIFRefracParameters(), **kwargs):
         super().__init__(
-            lif_refrac_feed_forward_adjoint_step
-            if p.lif.method == "adjoint"
-            else lif_refrac_feed_forward_step,
+            (
+                lif_refrac_feed_forward_adjoint_step
+                if p.lif.method == "adjoint"
+                else lif_refrac_feed_forward_step
+            ),
             self.initial_state,
             p=p,
             **kwargs,
@@ -153,9 +155,11 @@ class LIFRefracRecurrentCell(SNNRecurrentCell):
         **kwargs
     ):
         super().__init__(
-            activation=lif_refrac_adjoint_step
-            if p.lif.method == "adjoint"
-            else lif_refrac_step,
+            activation=(
+                lif_refrac_adjoint_step
+                if p.lif.method == "adjoint"
+                else lif_refrac_step
+            ),
             state_fallback=self.initial_state,
             input_size=input_size,
             hidden_size=hidden_size,
@@ -225,12 +229,16 @@ class LIFRefracRecurrent(SNNRecurrent):
         **kwargs
     ):
         super().__init__(
-            activation=lif_refrac_adjoint_step
-            if p.lif.method == "adjoint"
-            else lif_refrac_step,
-            activation_sparse=lif_refrac_adjoint_step_sparse
-            if p.lif.method == "adjoint"
-            else lif_refrac_step_sparse,
+            activation=(
+                lif_refrac_adjoint_step
+                if p.lif.method == "adjoint"
+                else lif_refrac_step
+            ),
+            activation_sparse=(
+                lif_refrac_adjoint_step_sparse
+                if p.lif.method == "adjoint"
+                else lif_refrac_step_sparse
+            ),
             state_fallback=self.initial_state,
             input_size=input_size,
             hidden_size=hidden_size,
@@ -252,12 +260,14 @@ class LIFRefracRecurrent(SNNRecurrent):
     def initial_state(self, input_tensor: torch.Tensor) -> LIFRefracState:
         dims = (*input_tensor.shape[1:-1], self.hidden_size)
         lif_state = LIFState(
-            z=torch.zeros(
-                *dims, device=input_tensor.device, dtype=input_tensor.dtype
-            ).to_sparse()
-            if input_tensor.is_sparse
-            else torch.zeros(
-                *dims, device=input_tensor.device, dtype=input_tensor.dtype
+            z=(
+                torch.zeros(
+                    *dims, device=input_tensor.device, dtype=input_tensor.dtype
+                ).to_sparse()
+                if input_tensor.is_sparse
+                else torch.zeros(
+                    *dims, device=input_tensor.device, dtype=input_tensor.dtype
+                )
             ),
             v=torch.full(
                 dims,

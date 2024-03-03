@@ -35,6 +35,7 @@ See :mod:`norse.torch.functional.leaky_integrator` and
 `Wikipedia <https://en.wikipedia.org/wiki/Leaky_integrator>`_.
 
 """
+
 from typing import Optional, Tuple
 
 import torch

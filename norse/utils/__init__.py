@@ -1,6 +1,7 @@
 """
 Utility module for Norse.
 """
+
 try:
     import torch
     import norse_op

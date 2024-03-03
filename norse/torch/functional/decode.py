@@ -7,6 +7,7 @@ with the difference that they typically aggregate the first (temporal) dimension
 They are therefore useful to inject in :meth:`norse.torch.functional.lift` ed
 modules or situations where you need pickled functions.
 """
+
 import torch
 
 

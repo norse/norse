@@ -56,8 +56,7 @@ def compute_refractory_update(
     z_new: torch.Tensor,
     v_new: torch.Tensor,
     p: LIFRefracParameters = LIFRefracParameters(),
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    ...  # pragma: no cover
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: ...  # pragma: no cover
 
 
 @overload
@@ -66,8 +65,7 @@ def compute_refractory_update(
     z_new: torch.Tensor,
     v_new: torch.Tensor,
     p: LIFRefracParameters = LIFRefracParameters(),
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    ...  # pragma: no cover
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: ...  # pragma: no cover
 
 
 def compute_refractory_update(

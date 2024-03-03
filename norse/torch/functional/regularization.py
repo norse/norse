@@ -10,6 +10,7 @@ regularization in an error term later.
 
 Read more on `Wikipedia <https://en.wikipedia.org/wiki/Regularization_%28mathematics%29>`_.
 """
+
 from typing import Any, Callable, NewType, Optional, Tuple
 
 import torch

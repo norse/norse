@@ -1,6 +1,7 @@
 """
 Test exp_filter module and exp_filter function
 """
+
 import torch
 from norse.torch.functional.filter import exp_filter_step
 

@@ -4,6 +4,7 @@ Long-short term memory module, building on the work by
 
 See :mod:`norse.torch.functional.lsnn` for more information.
 """
+
 import torch
 
 from norse.torch.functional.lsnn import (
