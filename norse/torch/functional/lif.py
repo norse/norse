@@ -37,11 +37,6 @@ from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
-try:
-    import norse_op
-except (ModuleNotFoundError, ImportError):  # pragma: no cover
-    pass
-
 from norse.torch.functional.threshold import threshold
 
 
@@ -285,10 +280,12 @@ def lif_step_integral(
     Returns:
         A tuple of (spike output from all timesteps, neuron state from the final timestep)
     """
-    z, v, i = norse_op.lif_super_integral(
-        input_tensor, state, input_weights, recurrent_weights, p, dt
-    )
-    return z, LIFState(z=z, v=v, i=i)
+    out = []
+    for t in input_tensor:
+        z, v, i = lif_step(t, state, input_weights, recurrent_weights, p, dt=dt)
+        state = LIFState(z=z, v=v, i=i)
+        out.append(z)
+    return z, state
 
 
 def lif_feed_forward_step(

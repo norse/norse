@@ -1,7 +1,59 @@
-# Thanks to https://github.com/pytest-dev/pytest/blob/master/pyproject.toml
 [build-system]
-requires = [
-  "setuptools",
-  "wheel",
-  "torch"
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "norse"
+description = "A library for deep learning with spiking neural networks"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+  { name = "Jens E. Pedersen", email = "jens@jepedersen.dk" },
+  { name = "Christian Pehle", email = "christian.pehle@gmail.com" },
 ]
+maintainers = [{ name = "Jens E. Pedersen", email = "jens@jepedersen.dk" }]
+license = { file = "LICENSE" }
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "numpy",
+  "torch>=2.0.0",
+  "torchvision>=0.15.0",
+  "nir",
+  "nirtorch",
+]
+keywords = [
+  "spiking neural networks",
+  "deep learning",
+  "neural networks",
+  "machine learning",
+]
+dynamic = ["version"] # Version number read from setuptools_scm
+
+
+[project.urls]
+Homepage = "https://github.com/norse/norse"
+Documentation = "https://norse.github.io/norse"
+Issues = "https://github.com/norse/norse/issues"
+
+[tool.setuptools.packages.find]
+where = ["norse"]
+exclude = ["publish*", "spack*"]
+# package-dir = {"" = "norse"}
+
+[tool.setuptools_scm]
+
