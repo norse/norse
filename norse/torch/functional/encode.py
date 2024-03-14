@@ -8,7 +8,7 @@ from typing import Callable, Union
 
 import torch
 
-from .lif import lif_current_encoder, LIFParameters
+from norse.torch.functional.lif import lif_current_encoder, LIFParameters
 
 
 def constant_current_lif_encode(

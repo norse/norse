@@ -21,7 +21,8 @@ def test_lif_box_cell_backward():
     z.sum().backward()
     assert s.v.grad_fn is not None
 
-def test_lif_box_compile_cpu(device, ignore):
+
+def test_lif_box_compile_cpu():
     x = torch.ones(2, 1)
     p = LIFBoxParameters(
         tau_mem_inv=torch.ones(1) * 1000,

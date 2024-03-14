@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: '3.10'
+        python-version: [3.10]
     steps:
       - uses: actions/checkout@master
       - name: Cache
@@ -68,12 +68,12 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: true
 
-  build-python-mac-windows:
+  build-python-ubuntu-mac-windows:
     name: "Build and test for ${{ matrix.os }}: Python v${{ matrix.python-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.8, 3.9, 3.10]
+        python-version: [3.8, 3.9, 3.10, 3.11]
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4

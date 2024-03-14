@@ -2,6 +2,7 @@ from typing import Tuple, Union
 
 
 import torch
+from norse.torch.utils.state import _is_module_stateful
 
 
 class Lift(torch.nn.Module):
@@ -35,6 +36,10 @@ class Lift(torch.nn.Module):
     def __init__(self, module: torch.nn.Module):
         super(Lift, self).__init__()
         self.lifted_module = module
+        self.is_stateful = _is_module_stateful(module)
+        # or isinstance(
+        #    module, torch.nn.SequentialState
+        # )
 
     def forward(
         self, x: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]
@@ -48,14 +53,21 @@ class Lift(torch.nn.Module):
         Note:
             If the input is a tuple of two tensors, the second tuple entry will be ignored.
         """
+        state = None
         if isinstance(x, tuple):
-            x, _ = x
+            x, state = x
 
         T = x.shape[0]
         outputs = []
 
         for ts in range(T):
-            out = self.lifted_module(x[ts])
+            if self.is_stateful:
+                out, state = self.lifted_module(x[ts], state)
+            else:
+                out = self.lifted_module(x[ts])
             outputs += [out]
 
-        return torch.stack(outputs)
+        if self.is_stateful:
+            return torch.stack(outputs), state
+        else:
+            return torch.stack(outputs)

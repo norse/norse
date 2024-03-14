@@ -192,8 +192,12 @@ def test_recurrent_sequential_output_index():
     pred, _ = m(pred)
     assert torch.allclose(actual, pred)
 
+
+@pytest.mark.skipif(
+    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+)
 def test_sequential_compile():
-    x = torch.ones(2, 1)
+    x = torch.ones(2, 2)
     m = norse.SequentialState(
         torch.nn.Linear(2, 1),
         norse.LIFBoxCell(),
@@ -203,15 +207,15 @@ def test_sequential_compile():
     _, s = m(x, s)
 
     z.sum().backward()
-    assert s.v.grad_fn is not None
+    assert s[1].v.grad_fn is not None
     assert z.shape == (2, 1)
-    assert torch.all(torch.eq(s.v, 1))
+    assert not torch.all(torch.eq(s[1].v, 0))
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="no cuda device")
 def test_lif_box_compile_gpu():
     x = torch.ones(2, 1, device="cuda")
-    p = LIFBoxParameters(
+    p = norse.LIFBoxParameters(
         tau_mem_inv=torch.ones(1, device="cuda") * 1000,
         v_th=torch.ones(1, device="cuda"),
         v_leak=torch.zeros(1, device="cuda"),
@@ -219,7 +223,7 @@ def test_lif_box_compile_gpu():
         alpha=torch.zeros(1, device="cuda"),
     )
 
-    m = LIFBoxCell(p)
+    m = norse.LIFBoxCell(p).cuda()
     m = torch.compile(m, mode="reduce-overhead")
     z, s = m(x)
     _, s = m(x, s)

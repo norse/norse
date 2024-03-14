@@ -38,9 +38,10 @@ import torch
 import torch.jit
 
 from norse.torch.functional.threshold import threshold
+import norse.torch.utils.pytree as pytree
 
 
-class LIFParameters(NamedTuple):
+class LIFParameters(pytree.NamedTuple, pytree.StateTuple):
     """Parametrization of a LIF neuron
 
     Parameters:

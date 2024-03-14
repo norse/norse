@@ -70,11 +70,12 @@ class StateTuple:
 
     Usage:
     >>> from norse.torch.utils import pytree
-    >>> class SomeState(pytree.NamedTuple, pytree.BaseTuple):
+    >>> class SomeState(pytree.NamedTuple, pytree.StateTuple):
     >>>     x: torch.Tensor = torch.tensor(0.0)
     >>>
     >>> s = SomeState()
     >>> s.x # torch.tensor([0])
+    >>> s.cuda() # torch.tensor([0], device='cuda:0')
     """
 
     def broadcast(self, template: torch.Tensor):

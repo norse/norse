@@ -10,9 +10,10 @@ import torch.jit
 
 from norse.torch.functional.threshold import threshold
 from norse.torch.functional.reset import ResetMethod, reset_value
+from norse.torch.utils import pytree
 
 
-class LIFBoxParameters(NamedTuple):
+class LIFBoxParameters(pytree.NamedTuple, pytree.StateTuple):
     """Parametrization of a boxed LIF neuron
 
     Parameters:

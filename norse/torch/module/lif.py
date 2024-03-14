@@ -23,7 +23,7 @@ from norse.torch.functional.adjoint.lif_adjoint import (
     lif_feed_forward_adjoint_step_sparse,
 )
 from norse.torch.module.snn import SNN, SNNCell, SNNRecurrent, SNNRecurrentCell
-from norse.torch.utils import clone_tensor
+from norse.torch.utils.clone import clone_tensor
 
 
 class LIFCell(SNNCell):

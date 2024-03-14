@@ -1,5 +1,5 @@
 # pytype: skip-file
-from typing import NamedTuple
+import pytest
 import torch
 from norse.torch.functional.lif import (
     LIFFeedForwardState,
@@ -11,10 +11,11 @@ from norse.torch.functional.lif import (
 
 from norse.torch.functional.lif_refrac import LIFRefracState
 from norse.torch.module import lif, snn, lif_refrac
+from norse.torch.utils import pytree
 
 
-class MockParams(NamedTuple):
-    my_param: int = -15
+class MockParams(pytree.NamedTuple, pytree.StateTuple):
+    my_param: torch.Tensor = torch.tensor([-5.2])
     method: str = "bob"
 
 
@@ -153,6 +154,14 @@ def test_snn_repr():
     assert str(n) == f"SNN(p={MockParams()}, dt=0.001)"
     n = lif.LIF(p=LIFParameters())
     assert str(n) == f"LIF(p={LIFParameters()}, dt=0.001)"
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="No CUDA device available")
+def test_snn_cell_to_device():
+    n = snn.SNNCell(None, None, p=MockParams())
+    assert n.p.my_param.device.type == "cpu"
+    n.cuda()
+    assert n.p.my_param.device.type == "cpu"
 
 
 def test_snn_recurrent_repr():

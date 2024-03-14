@@ -70,7 +70,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
         )
         self.kwargs = kwargs
         if "bias" not in self.kwargs:
-            self.kwargs["bias"] = False
+            self.kwargs["bias"] = None
 
         # Register update and update the fields for the first time
         self.has_updated = True
