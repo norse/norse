@@ -14,7 +14,7 @@ from norse.torch.module import lif, snn, lif_refrac
 from norse.torch.utils import pytree
 
 
-class MockParams(pytree.NamedTuple, pytree.StateTuple):
+class MockParams(pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta):
     my_param: torch.Tensor = torch.tensor([-5.2])
     method: str = "bob"
 

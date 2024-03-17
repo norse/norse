@@ -1,5 +1,6 @@
 import functools
 from numbers import Number
+import sys
 import typing
 
 # pytype: disable=import-error
@@ -24,7 +25,6 @@ if hasattr(typing.NamedTuple, "__mro_entries__"):
     NamedTuple = typing._NamedTuple
 
 T = TypeVar("T")
-
 
 def map_only(ty: Type[T]) -> Callable[[Callable[[T], Any]], Callable[[Any], Any]]:
     """
@@ -129,3 +129,4 @@ def broadcast_input(potential_scalar: Any, template: torch.Tensor):
         raise ValueError(
             f"Cannot broadcast tensor because it is non-scalar (shape {potential_scalar.shape}) with a different shape than the template ({template.shape})"
         )
+

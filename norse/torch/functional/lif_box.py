@@ -13,7 +13,7 @@ from norse.torch.functional.reset import ResetMethod, reset_value
 from norse.torch.utils import pytree
 
 
-class LIFBoxParameters(pytree.NamedTuple, pytree.StateTuple):
+class LIFBoxParameters(pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta):
     """Parametrization of a boxed LIF neuron
 
     Parameters:

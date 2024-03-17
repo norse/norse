@@ -330,7 +330,7 @@ from norse.torch.module.spikes_to_times_decoder import SpikesToTimesDecoder
 import importlib, logging
 
 UTIL_MODULES = []
-tensorboard_loader = importlib.find_loader("tensorboard")
+tensorboard_loader = importlib.util.find_spec("tensorboard")
 HAS_TENSORBOARD = tensorboard_loader is not None
 if HAS_TENSORBOARD:
     from norse.torch.utils.tensorboard.tensorboard import (
@@ -353,7 +353,7 @@ else:
         f"Failed to import Norse tensorboard utilities: Tensorboard not installed"
     )
 
-matplotlib_loader = importlib.find_loader("matplotlib")
+matplotlib_loader = importlib.util.find_spec("matplotlib")
 HAS_MATPLOTLIB = matplotlib_loader is not None
 if HAS_MATPLOTLIB:
     from norse.torch.utils.plot.plot import (

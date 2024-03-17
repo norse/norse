@@ -41,7 +41,7 @@ from norse.torch.functional.threshold import threshold
 import norse.torch.utils.pytree as pytree
 
 
-class LIFParameters(pytree.NamedTuple, pytree.StateTuple):
+class LIFParameters(pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta):
     """Parametrization of a LIF neuron
 
     Parameters:
