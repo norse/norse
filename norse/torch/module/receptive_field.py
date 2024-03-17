@@ -312,7 +312,7 @@ class TemporalReceptiveField(torch.nn.Module):
         self,
         shape: torch.Size,
         n_scales: int = 4,
-        activation: SNNCell = LIBoxCell,
+        activation: SNNCell.type = LIBoxCell,
         activation_state_map: Callable[
             [torch.Tensor], NamedTuple
         ] = lambda t: LIBoxParameters(tau_mem_inv=t),

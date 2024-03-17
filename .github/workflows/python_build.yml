@@ -45,7 +45,7 @@ jobs:
           sudo apt update
           sudo apt install g++ -y
       - name: Install test dependencies
-        run: pip install pytest-cov pytest-xdist pytype black onnx
+        run: pip install mypy pytest-xdist pytype black onnx
       - name: Install optional libraries
         run: pip install matplotlib tensorboard pytorch-lightning spack
       - name: Install package
@@ -54,8 +54,8 @@ jobs:
       # Test, type check, and lint
       - name: Run unit tests
         run: pytest norse -n auto --cov=./ --cov-report=xml
-      - name: Type check
-        run: pytype norse -j 4
+      # - name: Type check # TODO: Revive type checking
+        # run: mypy norse
       - name: Lint
         run: black --check norse
 

@@ -57,7 +57,9 @@ def spatial_receptive_field(
     return k
 
 
-def _derived_field(field: torch.Tensor, derivatives: Tuple[int, int]) -> torch.Tensor:
+def _derived_field(
+    field: torch.Tensor, derivatives: Tuple[torch.Tensor, torch.Tensor]
+) -> torch.Tensor:
     out = []
     (dx, dy) = derivatives
     device = field.device
@@ -199,7 +201,5 @@ def spatio_temporal_parameters(
     Combines the parameters of scales, angles, ratios and derivatives as cartesian products
     to produce a set of parameters for spatial receptive fields.
     """
-    spatial_parameters = spatial_parameters(
-        scales, angles, ratios, derivatives, include_replicas
-    )
-    return torch.cartesian_prod(spatial_parameters, temporal_scales)
+    p = spatial_parameters(scales, angles, ratios, derivatives, include_replicas)
+    return torch.cartesian_prod(p, temporal_scales)
