@@ -356,7 +356,7 @@ else:
 matplotlib_loader = importlib.find_loader("matplotlib")
 HAS_MATPLOTLIB = matplotlib_loader is not None
 if HAS_MATPLOTLIB:
-    from norse.torch.utils.plot import (
+    from norse.torch.utils.plot.plot import (
         plot_heatmap_2d,
         plot_heatmap_3d,
         plot_histogram_2d,
