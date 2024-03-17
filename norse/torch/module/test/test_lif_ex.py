@@ -101,7 +101,7 @@ def test_lif_ex_state():
         i=torch.zeros(
             *input_tensor.shape[1:],
             device=input_tensor.device,
-            dtype=input_tensor.dtype
+            dtype=input_tensor.dtype,
         ),
     )
     out, _ = layer(input_tensor, state)

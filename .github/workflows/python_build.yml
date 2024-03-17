@@ -18,7 +18,7 @@ jobs:
   #         pre-build-command: 'source publish/setup_libtorch.sh 1.9.1'
 
   build-python-ubuntu:
-    name: "Build and analyze for ubuntu-latest: Python v3.10"
+    name: "Build and analyze for ubuntu-latest: Python"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -37,7 +37,7 @@ jobs:
 
       # Setup dependencies
       - name: Install Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install GCC

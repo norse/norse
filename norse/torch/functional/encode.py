@@ -158,7 +158,7 @@ def poisson_encode(
             seq_length,
             *input_values.shape,
             device=input_values.device,
-            generator=generator
+            generator=generator,
         ).float()
         < dt * f_max * input_values
     ).float()

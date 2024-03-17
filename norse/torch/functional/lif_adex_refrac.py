@@ -47,8 +47,7 @@ def compute_refractore_update(
     z_new: torch.Tensor,
     v_new: torch.Tensor,
     p: LIFAdExRefracParameters = LIFAdExRefracParameters(),
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    ...
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: ...
 
 
 @overload
@@ -57,8 +56,7 @@ def compute_refractore_update(
     z_new: torch.Tensor,
     v_new: torch.Tensor,
     p: LIFAdExRefracParameters = LIFAdExRefracParameters(),
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    ...
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: ...
 
 
 def compute_refractory_update(

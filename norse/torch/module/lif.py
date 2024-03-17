@@ -153,7 +153,7 @@ class LIFRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             activation=lif_adjoint_step if p.method == "adjoint" else lif_step,
@@ -301,7 +301,7 @@ class LIFRecurrent(SNNRecurrent):
         input_size: int,
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             activation=lif_adjoint_step if p.method == "adjoint" else lif_step,
