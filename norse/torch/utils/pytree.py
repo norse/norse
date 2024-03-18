@@ -13,7 +13,7 @@ from torch.utils._pytree import (
     PyTree,
     _namedtuple_flatten,
     _namedtuple_unflatten,
-    _register_pytree_node,
+    register_pytree_node,
     tree_map,
 )
 
@@ -52,7 +52,7 @@ def tree_map_only(ty: Type[T], fn: Callable[[T], Any], pytree: PyTree) -> PyTree
 
 
 def register_tuple(typ: Any):
-    _register_pytree_node(typ, _namedtuple_flatten, _namedtuple_unflatten)
+    register_pytree_node(typ, _namedtuple_flatten, _namedtuple_unflatten)
 
 
 class MultipleInheritanceNamedTupleMeta(NamedTupleMeta):
