@@ -26,7 +26,9 @@ def test_spatial_parameters_derivative():
     angles = torch.tensor([0.0, 0.5 * torch.pi, torch.pi], requires_grad=True)
     ratios = torch.tensor([0.2, 0.5, 1.0], requires_grad=True)
     derivatives = 1
-    sp = receptive_field.spatial_parameters(scales, angles, ratios, derivatives, include_replicas=True)
+    sp = receptive_field.spatial_parameters(
+        scales, angles, ratios, derivatives, include_replicas=True
+    )
     assert sp.shape == (108, 5)
     sp.sum().backward()
     assert not sp.grad_fn is None

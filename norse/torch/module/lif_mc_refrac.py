@@ -19,7 +19,7 @@ class LIFMCRefracRecurrentCell(SNNRecurrentCell):
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
         g_coupling: Optional[torch.Tensor] = None,
-        **kwargs
+        **kwargs,
     ):
         # pytype: disable=wrong-arg-types
         super().__init__(
@@ -28,7 +28,7 @@ class LIFMCRefracRecurrentCell(SNNRecurrentCell):
             input_size=input_size,
             hidden_size=hidden_size,
             p=p,
-            **kwargs
+            **kwargs,
         )
         # pytype: enable=wrong-arg-types
 

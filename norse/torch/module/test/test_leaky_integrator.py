@@ -1,8 +1,15 @@
 import pytest
+import platform
 
 import torch
 
-from norse.torch.module.leaky_integrator import LI, LICell, LILinearCell, LIState, LIParameters
+from norse.torch.module.leaky_integrator import (
+    LI,
+    LICell,
+    LILinearCell,
+    LIState,
+    LIParameters,
+)
 
 
 def test_li():
@@ -42,7 +49,11 @@ def test_li_linear_cell():
         assert x.shape == (5, 4)
     assert out.shape == (5, 4)
 
-@pytest.mark.skipif(not torch.cuda.is_available(), reason="no cuda device")
+
+@pytest.mark.skipif(
+    not torch.cuda.is_available() or not platform.system() == "Linux",
+    reason="no cuda device available or not on linux",
+)
 def test_li_linear_compile_gpu():
     p = LIParameters(
         tau_mem_inv=torch.ones(4, device="cuda") * 1000,
@@ -57,6 +68,7 @@ def test_li_linear_compile_gpu():
     for x in s:
         assert x.shape == (5, 4)
     assert out.shape == (5, 4)
+
 
 def test_li_linear_cell_state():
     cell = LILinearCell(2, 4)

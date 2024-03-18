@@ -152,7 +152,7 @@ class LIFRefracRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             activation=(
@@ -226,7 +226,7 @@ class LIFRefracRecurrent(SNNRecurrent):
         input_size: int,
         hidden_size: int,
         p: LIFRefracParameters = LIFRefracParameters(),
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             activation=(

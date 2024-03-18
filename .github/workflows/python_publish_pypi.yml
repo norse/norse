@@ -25,27 +25,23 @@ jobs:
   #       run: |
   #         twine upload dist/*-manylinux*.whl
 
-  publish-mac-windows:
-    name: "Publish: ${{ matrix.os }} v${{ matrix.python-version }}"
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.7, 3.8, 3.9, 3.10]
+  publish:
+    name: "Publish to pypi"
+    runs-on: ubuntu-laters
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.x
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.11'
       - name: Install build dependencies
         run: |
-          pip install setuptools wheel pytest-xdist tensorboard matplotlib twine
+          pip install build pytest-xdist tensorboard matplotlib twine
           pip install -e .
       - name: Run unit tests
         run: pytest -n auto norse
-      - name: Build wheel
-        run: python setup.py bdist_wheel sdist
+      - name: Build dost
+        run: python -m build --sdist .
       - name: Publish wheels to PyPI
         env:
           TWINE_USERNAME: __token__

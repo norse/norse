@@ -51,7 +51,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
         aggregate: bool = True,
         domain: float = 8,
         optimize_fields: bool = True,
-        **kwargs
+        **kwargs,
     ) -> None:
         super().__init__()
         self.rf_parameters = (
@@ -70,7 +70,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
         )
         self.kwargs = kwargs
         if "bias" not in self.kwargs:
-            self.kwargs["bias"] = False
+            self.kwargs["bias"] = None
 
         # Register update and update the fields for the first time
         self.has_updated = True
@@ -157,7 +157,7 @@ class SampledSpatialReceptiveField2d(torch.nn.Module):
         optimize_scales: bool = True,
         optimize_angles: bool = True,
         optimize_ratios: bool = True,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self.scales = torch.nn.Parameter(scales) if optimize_scales else scales
@@ -174,7 +174,7 @@ class SampledSpatialReceptiveField2d(torch.nn.Module):
                 self.scales, self.angles, self.ratios, self.derivatives
             ),
             optimize_fields=False,
-            **kwargs
+            **kwargs,
         )
 
         if optimize_angles or optimize_scales or optimize_ratios:
@@ -229,7 +229,7 @@ class ParameterizedSpatialReceptiveField2d(torch.nn.Module):
         optimize_scales: bool = True,
         optimize_angles: bool = True,
         optimize_ratios: bool = True,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self.initial_parameters = spatial_parameters(
@@ -262,7 +262,7 @@ class ParameterizedSpatialReceptiveField2d(torch.nn.Module):
             size=size,
             rf_parameters=rf_parameters,
             optimize_fields=False,
-            **kwargs
+            **kwargs,
         )
         self.has_updated = False
 
@@ -312,7 +312,7 @@ class TemporalReceptiveField(torch.nn.Module):
         self,
         shape: torch.Size,
         n_scales: int = 4,
-        activation: SNNCell = LIBoxCell,
+        activation: SNNCell.type = LIBoxCell,
         activation_state_map: Callable[
             [torch.Tensor], NamedTuple
         ] = lambda t: LIBoxParameters(tau_mem_inv=t),

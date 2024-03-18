@@ -53,7 +53,7 @@ class LIFMCRecurrentCell(SNNRecurrentCell):
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
         g_coupling: Optional[torch.Tensor] = None,
-        **kwargs
+        **kwargs,
     ):
         # pytype: disable=wrong-arg-types
         super().__init__(
@@ -62,7 +62,7 @@ class LIFMCRecurrentCell(SNNRecurrentCell):
             input_size=input_size,
             hidden_size=hidden_size,
             p=p,
-            **kwargs
+            **kwargs,
         )
         # pytype: enable=wrong-arg-types
         self.g_coupling = (

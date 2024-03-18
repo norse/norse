@@ -128,7 +128,9 @@ class RecurrentSequential(torch.nn.Module):
     in the following timestep.
     """
 
-    def __init__(self, *modules: torch.nn.Module, output_modules: List[int] = -1):
+    def __init__(
+        self, *modules: torch.nn.Module, output_modules: Union[List[int], int] = -1
+    ):
         super().__init__()
         self.module = SequentialState(*modules, return_hidden=True)
         self.output_modules = output_modules

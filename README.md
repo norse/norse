@@ -6,12 +6,12 @@ A [deep learning](https://en.wikipedia.org/wiki/Deep_learning) library for [spik
 
 <p align="center">
     <a href="https://github.com/norse/norse/actions">
-        <img src="https://github.com/norse/norse/workflows/Python%20package/badge.svg" alt="Test status"></a>
+        <img src="https://github.com/norse/norse/workflows/Build%20Python/badge.svg" alt="Test status"></a>
     <a href="https://pypi.org/project/norse/" alt="PyPi">
         <img src="https://img.shields.io/pypi/v/norse" />
     </a>
-    <a href="https://anaconda.org/norse" alt="Conda">
-        <img src="https://img.shields.io/conda/v/norse/norse" />
+    <a href="https://pypi.org/project/aestream/" alt="PyPi">
+        <img src="https://img.shields.io/pypi/dm/aestream" />
     </a>
     <a href="https://github.com/norse/norse/pulse" alt="Activity">
         <img src="https://img.shields.io/github/last-commit/norse/norse" />
@@ -169,26 +169,8 @@ As illustrated by our [PyTorch Lightning example task](https://norse.github.io/n
 [Read more about Norse in our documentation](https://norse.github.io/norse/about.html).
 
 ## 4. Similar work
-The list of projects below serves to illustrate the state of the art, while explaining our own incentives to create and use norse.
 
-* [BindsNET](https://github.com/BindsNET/bindsnet) also builds on PyTorch and is explicitly targeted at machine learning tasks. It implements a Network abstraction with the typical 'node' and 'connection' notions common in spiking neural network simulators like nest.
-* [cuSNN](https://github.com/tudelft/cuSNN) is a C++ GPU-accelerated simulator for large-scale networks. The library focuses on CUDA and includes spike-time dependent plasicity (STDP) learning rules.
-* [decolle](https://github.com/nmi-lab/decolle-public) implements an online learning algorithm described in the paper ["Synaptic Plasticity Dynamics for Deep Continuous Local Learning (DECOLLE)"](https://arxiv.org/abs/1811.10766) by J. Kaiser, M. Mostafa and E. Neftci.
-* [GeNN](http://genn-team.github.io/genn/) compiles SNN network models to NVIDIA CUDA to achieve high-performing SNN model simulations.
-* [Long short-term memory Spiking Neural Networks (LSNN)](https://github.com/IGITUGraz/LSNN-official) is a tool from the University of Graaz for modelling LSNN cells in [Tensorflow](https://www.tensorflow.org/). The library focuses on a single neuron and gradient model.
-* [Nengo](https://www.nengo.ai/nengo-dl/introduction.html) is a neuron simulator, and Nengo-DL is a deep learning network simulator that optimised spike-based neural networks based on an approximation method suggested by [Hunsberger and Eliasmith (2016)](https://arxiv.org/abs/1611.05141).
-* [Nengo PyTorch](https://github.com/nengo/pytorch-spiking) a thin wrapper for PyTorch that adds a single voltage-only spiking model. The approach is independent from the Nengo framework.
-* [Neuron Simulation Toolkit (NEST)](https://nest-simulator.org) constructs and evaluates highly detailed simulations of spiking neural networks. This is useful in a medical/biological sense but maps poorly to large datasets and deep learning.
-* [PyNN](http://neuralensemble.org/docs/PyNN/) is a Python interface that allows you to define and simulate spiking neural network models on different backends (both software simulators and neuromorphic hardware). It does not currently provide mechanisms for optimisation or arbitrary synaptic plasticity.
-* [PySNN](https://github.com/BasBuller/PySNN/) is a PyTorch extension similar to Norse. Its approach to model building is slightly different than Norse in that the neurons are stateful.
-* [Rockpool](https://gitlab.com/aiCTX/rockpool) is a Python package developed by SynSense for training, simulating and deploying spiking neural networks. It offers both JAX and PyTorch primitives.
-* [Sinabs](https://gitlab.com/synsense/sinabs) is a PyTorch extension by [SynSense](https://www.synsense-neuromorphic.com/). It mainly focuses on convolutions and translation to neuromorphic hardware.
-* [SlayerPyTorch](https://github.com/bamsumit/slayerPytorch) is a **S**pike **LAY**er **E**rror **R**eassignment library, that focuses on solutions for the temporal credit problem of spiking neurons and a probabilistic approach to backpropagation errors. It includes support for the [Loihi chip](https://en.wikichip.org/wiki/intel/loihi).
-* [SNN toolbox](https://snntoolbox.readthedocs.io/en/latest/guide/intro.html) <q>automates the conversion of pre-trained analog to spiking neural networks</q>. The tool is solely for already trained networks and omits the (possibly platform specific) training.
-* [snnTorch](https://snntorch.readthedocs.io/en/latest/) is a simulator built on PyTorch, featuring several [introduction tutorials](https://snntorch.readthedocs.io/en/latest/tutorials/index.html) on deep learning with SNNs.
-* [SpikingJelly](https://github.com/fangwei123456/spikingjelly) is another PyTorch-based spiking neural network simulator. SpikingJelly uses stateful neurons. [Example of training a network on MNIST](https://spikingjelly.readthedocs.io/zh_CN/latest/clock_driven_en/3_fc_mnist.html).
-* [SpyTorch](https://github.com/fzenke/spytorch) presents a set of tutorials for training SNNs with the surrogate gradient approach SuperSpike by [F. Zenke, and S. Ganguli (2017)](https://arxiv.org/abs/1705.11146). Norse [implements the SuperSpike surrogate gradient function](https://github.com/norse/norse/blob/master/norse/torch/functional/superspike.py), but allows for other surrogate gradients and training approaches.
-* [s2net](https://github.com/romainzimmer/s2net) is based on the implementation presented in [SpyTorch](https://github.com/fzenke/spytorch), but implements convolutional layers as well. It also contains a demonstration how to use those primitives to train a model on the [Google Speech Commands dataset](https://arxiv.org/abs/1804.03209).
+We refer to the [Neuromorphic Software Guide](https://open-neuromorphic.org/neuromorphic-computing/software/) for a comprehensive list of software for neuromorphic computing.
 
 
 ## 5. Contributing
@@ -223,7 +205,7 @@ If you use Norse in your work, please cite it as follows:
 }
 ```
 
-Norse is actively applied and cited in the literature. We are keeping track of the papers cited by Norse [in our documentation](https://norse.github.io/norse/papers.html).
+Norse is actively applied and cited in the literature. We refer to [Google Scholar](https://scholar.google.com/citations?view_op=view_citation&hl=de&user=A4VwxccAAAAJ&citation_for_view=A4VwxccAAAAJ:2osOgNQ5qMEC) or [Semantic Scholar](https://www.semanticscholar.org/paper/Norse-A-deep-learning-library-for-spiking-neural-Pehle-Pedersen/bdd21dfe8c4a503365a49bfdb099e63c74823c7c) for a list of citations.
 
 ## 8. License
 

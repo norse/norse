@@ -1,6 +1,6 @@
 from functools import partial
 from numbers import Number
-from typing import Union
+from typing import Any, Union
 
 import nir
 import nirtorch
@@ -15,7 +15,7 @@ import norse.torch.module.lif_box as lif_box
 import logging
 
 
-def _log_warning(parameter_name: str, expected_value: str, actual_value: str):
+def _log_warning(parameter_name: str, expected_value: Any, actual_value: Any):
     logging.warning(
         f"""The parameter {parameter_name} is expected to be set to {expected_value}, but was found to diverge (with mean {actual_value}).
 Please read the Norse documentation for more information.
@@ -104,6 +104,7 @@ def _import_norse_module(
             dt=dt,
         )
         w_rec = _to_tensor(node.r)
+        # pytype: disable=wrong-keyword-args
         neuron = lif_box.LIFBoxCell(
             lif_box.LIFBoxParameters(
                 tau_mem_inv=1 / _to_tensor(node.tau_mem),  # Invert time constant
@@ -113,6 +114,7 @@ def _import_norse_module(
             ),
             dt=dt,
         )
+        # pytype: enable=wrong-keyword-args
         return CubaLIF(w_in, synapse, w_rec, neuron)
 
     if isinstance(node, nir.LIF):

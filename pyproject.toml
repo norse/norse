@@ -55,3 +55,11 @@ exclude = ["publish*", "spack*"]
 
 [tool.setuptools_scm]
 
+[tool.mypy]
+warn_return_any = true
+warn_unused_configs = true
+exclude = [
+    '^norse/torch/models/.*',
+    '^norse/benchmark/.*',
+    '^norse/task/.*',
+]

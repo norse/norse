@@ -134,7 +134,7 @@ class LSNNRecurrentCell(SNNRecurrentCell):
         hidden_size: int,
         p: LSNNParameters = LSNNParameters(),
         adjoint: bool = False,
-        **kwargs
+        **kwargs,
     ):
         if adjoint:
             super().__init__(
@@ -265,7 +265,7 @@ class LSNNRecurrent(SNNRecurrent):
         hidden_size: int,
         p: LSNNParameters = LSNNParameters(),
         adjoint: bool = False,
-        **kwargs
+        **kwargs,
     ):
         if adjoint:
             super().__init__(
