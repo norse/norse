@@ -1,6 +1,29 @@
-norse.torch.functional.heaviside
+﻿norse.torch.functional.heaviside
 ================================
 
-.. currentmodule:: norse.torch.functional
+.. automodule:: norse.torch.functional.heaviside
 
-.. autofunction:: heaviside
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      heaviside
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

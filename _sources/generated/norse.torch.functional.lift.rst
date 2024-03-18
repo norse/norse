@@ -1,6 +1,29 @@
-norse.torch.functional.lift
+﻿norse.torch.functional.lift
 ===========================
 
-.. currentmodule:: norse.torch.functional
+.. automodule:: norse.torch.functional.lift
 
-.. autofunction:: lift
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      lift
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

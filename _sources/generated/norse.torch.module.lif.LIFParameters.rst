@@ -14,8 +14,14 @@
    .. autosummary::
    
       ~LIFParameters.__init__
+      ~LIFParameters.broadcast
       ~LIFParameters.count
+      ~LIFParameters.cpu
+      ~LIFParameters.cuda
+      ~LIFParameters.float
       ~LIFParameters.index
+      ~LIFParameters.int
+      ~LIFParameters.to
    
    
 

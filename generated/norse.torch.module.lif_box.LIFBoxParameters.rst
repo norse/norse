@@ -14,8 +14,14 @@
    .. autosummary::
    
       ~LIFBoxParameters.__init__
+      ~LIFBoxParameters.broadcast
       ~LIFBoxParameters.count
+      ~LIFBoxParameters.cpu
+      ~LIFBoxParameters.cuda
+      ~LIFBoxParameters.float
       ~LIFBoxParameters.index
+      ~LIFBoxParameters.int
+      ~LIFBoxParameters.to
    
    
 
