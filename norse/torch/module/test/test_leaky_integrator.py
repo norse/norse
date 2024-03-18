@@ -1,4 +1,5 @@
 import pytest
+import platform
 
 import torch
 
@@ -49,7 +50,10 @@ def test_li_linear_cell():
     assert out.shape == (5, 4)
 
 
-@pytest.mark.skipif(not torch.cuda.is_available(), reason="no cuda device")
+@pytest.mark.skipif(
+    not torch.cuda.is_available() or not platform.system() == "Linux",
+    reason="no cuda device available or not on linux",
+)
 def test_li_linear_compile_gpu():
     p = LIParameters(
         tau_mem_inv=torch.ones(4, device="cuda") * 1000,

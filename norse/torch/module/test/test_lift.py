@@ -1,4 +1,5 @@
 import pytest
+import platform
 
 import torch
 
@@ -54,6 +55,9 @@ def test_lift_sequential_stateful():
     assert type(out[1][0]) == LIFFeedForwardState
 
 
+@pytest.mark.skipif(
+    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+)
 def test_compile_lift():
     c = Lift(LIFCell())
     c = torch.compile(c, mode="reduce-overhead")
@@ -62,7 +66,10 @@ def test_compile_lift():
     assert type(out) == tuple
 
 
-@pytest.mark.skipif(not torch.cuda.is_available(), reason="no cuda device")
+@pytest.mark.skipif(
+    not torch.cuda.is_available() or not platform.system() == "Linux",
+    reason="no cuda device or not on linux",
+)
 def test_compile_lift():
     c = Lift(LIFCell()).cuda()
     c = torch.compile(c, mode="reduce-overhead")
