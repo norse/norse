@@ -4,10 +4,6 @@ This package contains modules that extends PyTorch with spiking neural
 network functionality.
 """
 
-"""
-Modules for spiking neural network, adhering to the ``torch.nn.Module`` interface.
-"""
-
 ################################################
 ### FUNCTIONAL
 ################################################
@@ -19,7 +15,6 @@ from norse.torch.functional.adjoint.lif_adjoint import (
 )
 from norse.torch.functional.adjoint.lif_refrac_adjoint import (
     lif_refrac_feed_forward_adjoint_step,
-    lif_refrac_feed_forward_step,
     LIFAdjointRefracFeedForwardFunction,
 )
 from norse.torch.functional.adjoint.lsnn_adjoint import (

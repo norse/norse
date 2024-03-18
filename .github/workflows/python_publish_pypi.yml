@@ -4,27 +4,6 @@ on:
   release:
 
 jobs:
-  # Currently stuck since manylinux 2014 doesn't include the required GCC v3.4.21 as required by the C++ code
-  #   Later: try with manylinux 2 - https://github.com/pypa/manylinux/issues/1012
-  # publish-manylinux:
-  #   name: "Publish: manylinux wheels"
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Build manylinux Python wheels
-  #       uses: RalfG/python-wheels-manylinux-build@v0.3.4-manylinux2014_x86_64
-  #       with:
-  #         python-versions: "cp37-cp37m cp38-cp38 cp39-cp39"
-  #         build-requirements: "torch"
-  #         system-packages: "gcc-c++"
-  #         pre-build-command: 'source publish/setup_libtorch.sh 1.9.1'
-  #     - name: Publish to PyPi
-  #       env:
-  #         TWINE_USERNAME: __token__
-  #         TWINE_PASSWORD: ${{ secrets.PYPI_PUBLISH_KEY }}
-  #       run: |
-  #         twine upload dist/*-manylinux*.whl
-
   publish:
     name: "Publish to pypi"
     runs-on: ubuntu-laters
@@ -40,7 +19,7 @@ jobs:
           pip install -e .
       - name: Run unit tests
         run: pytest -n auto norse
-      - name: Build dost
+      - name: Build dist
         run: python -m build --sdist .
       - name: Publish wheels to PyPI
         env:
