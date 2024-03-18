@@ -23,7 +23,7 @@ from norse.torch.functional.adjoint.lif_adjoint import (
     lif_feed_forward_adjoint_step_sparse,
 )
 from norse.torch.module.snn import SNN, SNNCell, SNNRecurrent, SNNRecurrentCell
-from norse.torch.utils import clone_tensor
+from norse.torch.utils.clone import clone_tensor
 
 
 class LIFCell(SNNCell):
@@ -153,7 +153,7 @@ class LIFRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             activation=lif_adjoint_step if p.method == "adjoint" else lif_step,
@@ -301,7 +301,7 @@ class LIFRecurrent(SNNRecurrent):
         input_size: int,
         hidden_size: int,
         p: LIFParameters = LIFParameters(),
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             activation=lif_adjoint_step if p.method == "adjoint" else lif_step,

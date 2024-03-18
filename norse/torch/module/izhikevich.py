@@ -96,7 +96,7 @@ class IzhikevichRecurrentCell(SNNRecurrentCell):
         input_size: int,
         hidden_size: int,
         spiking_method: IzhikevichSpikingBehavior,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             activation=izhikevich_recurrent_step,
@@ -191,7 +191,7 @@ class IzhikevichRecurrent(SNNRecurrent):
         hidden_size: int,
         spiking_method: IzhikevichSpikingBehavior,
         *args,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             activation=izhikevich_recurrent_step,

@@ -38,9 +38,12 @@ import torch
 import torch.jit
 
 from norse.torch.functional.threshold import threshold
+import norse.torch.utils.pytree as pytree
 
 
-class LIFParameters(NamedTuple):
+class LIFParameters(
+    pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta
+):
     """Parametrization of a LIF neuron
 
     Parameters:
@@ -65,6 +68,7 @@ class LIFParameters(NamedTuple):
     alpha: float = torch.as_tensor(100.0)
 
 
+# pytype: disable=bad-unpacking,wrong-keyword-args
 default_bio_parameters = LIFParameters(
     tau_syn_inv=torch.as_tensor(1 / 0.5),
     tau_mem_inv=torch.as_tensor(1 / 20.0),
@@ -72,6 +76,7 @@ default_bio_parameters = LIFParameters(
     v_th=torch.as_tensor(-50.0),
     v_reset=torch.as_tensor(-65.0),
 )
+# pytype: enable=bad-unpacking,wrong-keyword-args
 
 
 class LIFState(NamedTuple):
@@ -282,8 +287,7 @@ def lif_step_integral(
     """
     out = []
     for t in input_tensor:
-        z, v, i = lif_step(t, state, input_weights, recurrent_weights, p, dt=dt)
-        state = LIFState(z=z, v=v, i=i)
+        z, state = lif_step(t, state, input_weights, recurrent_weights, p, dt=dt)
         out.append(z)
     return z, state
 

@@ -1,6 +1,7 @@
-import torch
 import pytest
+import platform
 
+import torch
 from norse.torch.functional.lif_box import LIFBoxFeedForwardState, LIFBoxParameters
 from norse.torch.module.lif_box import LIFBoxCell
 
@@ -21,7 +22,11 @@ def test_lif_box_cell_backward():
     z.sum().backward()
     assert s.v.grad_fn is not None
 
-def test_lif_box_compile_cpu(device, ignore):
+
+@pytest.mark.skipif(
+    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+)
+def test_lif_box_compile_cpu():
     x = torch.ones(2, 1)
     p = LIFBoxParameters(
         tau_mem_inv=torch.ones(1) * 1000,

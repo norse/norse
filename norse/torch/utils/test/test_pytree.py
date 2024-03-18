@@ -40,6 +40,7 @@ def test_state_clone():
     assert torch.allclose(s1.x, s2.x - 1)
 
 
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="No CUDA device available")
 def test_to_device():
     try:
         r = torch.randn(2)

@@ -2,7 +2,7 @@
 """
 
 from importlib.metadata import version, PackageNotFoundError
-from . import benchmark, dataset, task, torch, utils
+from norse import benchmark, dataset, task, torch, utils
 
 __all__ = ["benchmark", "dataset", "task", "torch", "utils"]
 

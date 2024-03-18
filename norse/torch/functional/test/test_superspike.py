@@ -1,3 +1,6 @@
+import pytest
+import platform
+
 import torch
 from norse.torch.functional.superspike import super_fn
 from norse.torch.functional.heaviside import heaviside
@@ -27,6 +30,9 @@ class SomeClass(torch.nn.Module):
         return super_fn(x)
 
 
+@pytest.mark.skipif(
+    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+)
 def test_compile():
     c = SomeClass()
     c = torch.compile(c)

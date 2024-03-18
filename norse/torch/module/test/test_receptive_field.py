@@ -44,7 +44,9 @@ def test_spatially_parameterized_receptive_field_update():
     angles = torch.tensor([0.0, 1.0])
     ratios = torch.tensor([0.5, 1.0])
     ratios_copy = ratios.clone()
-    m = SampledSpatialReceptiveField2d(1, 9, scales, angles, ratios, 1, False, False, True)
+    m = SampledSpatialReceptiveField2d(
+        1, 9, scales, angles, ratios, 1, False, False, True
+    )
     old_kernels = m.submodule.weights.detach().clone()
     optim = torch.optim.SGD(list(m.parameters()), lr=1)
     y = m(torch.ones(1, 1, 9, 9))
@@ -59,11 +61,14 @@ def test_spatially_parameterized_receptive_field_update():
     assert not torch.all(torch.eq(ratios, ratios_copy))
     assert not torch.all(torch.eq(old_kernels, m.submodule.weights))
 
+
 def test_column_parameterized_receptive_field_update():
     scales = torch.tensor([1.0, 2.0])
     angles = torch.tensor([0.0, 1.0])
     ratios = torch.tensor([0.5, 1.0])
-    m = ParameterizedSpatialReceptiveField2d(1, 9, scales, angles, ratios, 1, False, False, True)
+    m = ParameterizedSpatialReceptiveField2d(
+        1, 9, scales, angles, ratios, 1, False, False, True
+    )
     ratios_copy = m.ratios.clone()
     old_kernels = m.submodule.weights.detach().clone()
     optim = torch.optim.SGD(list(m.parameters()), lr=1)

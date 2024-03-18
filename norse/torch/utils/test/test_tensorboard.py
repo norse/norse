@@ -1,7 +1,7 @@
 import torch
 import norse.torch as norse
 
-import norse.torch.utils.tensorboard as tensorboard
+from norse.torch.utils.tensorboard import tensorboard
 
 
 class MockWriter:

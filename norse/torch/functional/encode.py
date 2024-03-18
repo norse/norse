@@ -8,7 +8,7 @@ from typing import Callable, Union
 
 import torch
 
-from .lif import lif_current_encoder, LIFParameters
+from norse.torch.functional.lif import lif_current_encoder, LIFParameters
 
 
 def constant_current_lif_encode(
@@ -158,7 +158,7 @@ def poisson_encode(
             seq_length,
             *input_values.shape,
             device=input_values.device,
-            generator=generator
+            generator=generator,
         ).float()
         < dt * f_max * input_values
     ).float()
