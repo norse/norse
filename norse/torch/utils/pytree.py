@@ -1,6 +1,5 @@
 import functools
 from numbers import Number
-import sys
 import typing
 
 # pytype: disable=import-error
