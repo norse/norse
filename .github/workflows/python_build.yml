@@ -83,9 +83,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install build dependencies
         run: |
-          pip install setuptools wheel pytest-xdist tensorboard onnx
+          pip install pytest-xdist tensorboard onnx
           pip install -e .
       - name: Run unit tests
         run: pytest -n auto norse
-      - name: Build wheel
-        run: python setup.py bdist_wheel sdist
