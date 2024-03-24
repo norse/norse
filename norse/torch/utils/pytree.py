@@ -12,9 +12,12 @@ from torch.utils._pytree import (
     PyTree,
     _namedtuple_flatten,
     _namedtuple_unflatten,
-    register_pytree_node,
     tree_map,
 )
+try:
+    from torch.utils._pytree import register_pytree_node
+except ImportError:
+    from torch.utils._pytree import _register_pytree_node as register_pytree_node
 
 # Thanks to https://stackoverflow.com/a/50369521
 NamedTuple = typing.NamedTuple
