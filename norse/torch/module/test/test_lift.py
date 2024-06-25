@@ -45,6 +45,7 @@ def test_lift_stateful():
     assert out[0].shape == (5, 2)
     assert type(out[1]) == LIFFeedForwardState
 
+
 def test_lift_LICell():
     c = Lift(LICell())
     data = torch.randn(5, 2)
