@@ -85,7 +85,7 @@ class LICell(SNNCell):
         state = LIState(
             v=self.p.v_leak.detach(),
             i=torch.zeros(
-                *input_tensor.shape,
+                input_tensor.shape,
                 device=input_tensor.device,
                 dtype=input_tensor.dtype,
             ),

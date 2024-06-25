@@ -4,6 +4,7 @@ import platform
 import torch
 
 from norse.torch.module.lif import LIF, LIFCell, LIFFeedForwardState
+from norse.torch.module.leaky_integrator import LICell, LIState
 from norse.torch.module.lift import Lift
 from norse.torch.module.sequential import SequentialState
 
@@ -43,6 +44,14 @@ def test_lift_stateful():
     assert type(out) == tuple
     assert out[0].shape == (5, 2)
     assert type(out[1]) == LIFFeedForwardState
+
+def test_lift_LICell():
+    c = Lift(LICell())
+    data = torch.randn(5, 2)
+    out = c(data)
+    assert type(out) == tuple
+    assert out[0].shape == (5, 2)
+    assert type(out[1]) == LIState
 
 
 def test_lift_sequential_stateful():
