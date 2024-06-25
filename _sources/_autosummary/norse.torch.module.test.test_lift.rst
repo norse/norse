@@ -14,6 +14,7 @@ norse.torch.module.test.test\_lift
    .. autosummary::
    
       test_compile_lift
+      test_lift_LICell
       test_lift_conv
       test_lift_sequential
       test_lift_sequential_stateful
