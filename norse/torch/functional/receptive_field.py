@@ -7,13 +7,17 @@ from typing import List, Tuple, Union, Optional
 import torch
 
 
-def gaussian_kernel(size: int, c: torch.Tensor, domain: int = 8) -> torch.Tensor:
+def gaussian_kernel(
+    size: int, c: torch.Tensor, x: torch.Tensor, y: torch.Tensor, domain: int = 8
+) -> torch.Tensor:
     """
     Efficiently creates a differentiable 2d gaussian kernel.
 
     Arguments:
       size (int): The size of the kernel
       c (torch.Tensor): A 2x2 covariance matrix describing the eccentricity of the gaussian
+      x (torch.Tensor): The receptive's field center position in x-axis
+      y (torch.Tensor): The receptive's field center position in y-axis
       domain (int): The domain of the kernel. Defaults to 8 (sampling -8 to 8).
     """
     ci = torch.linalg.inv(c)
@@ -21,6 +25,8 @@ def gaussian_kernel(size: int, c: torch.Tensor, domain: int = 8) -> torch.Tensor
     fraction = 1 / (2 * torch.pi * torch.sqrt(cd))
     a = torch.linspace(-domain, domain, size)
     xs, ys = torch.meshgrid(a, a, indexing="xy")
+    xs = xs - x
+    ys = ys - y
     coo = torch.stack([xs, ys], dim=2)
     b = torch.einsum("bimj,jk->bik", -coo.unsqueeze(2), ci)
     a = torch.einsum("bij,bij->bi", b, coo)
@@ -141,6 +147,8 @@ def spatial_receptive_field(
     scale: torch.Tensor,
     angle: torch.Tensor,
     ratio: torch.Tensor,
+    x: torch.Tensor,
+    y: torch.Tensor,
     size: int,
     dx: int = 0,
     dy: int = 0,
@@ -153,6 +161,8 @@ def spatial_receptive_field(
       scale (torch.Tensor): The scale of the field. Defaults to 2.5
       angle (torch.Tensor): The rotation of the kernel in radians
       ratio (torch.Tensor): The eccentricity as a ratio
+      x (torch.Tensor): The receptive's field center position in x-axis
+      y (torch.Tensor): The receptive's field center position in y-axis
       size (int): The size of the square kernel in pixels
       dx (int): The x-th derivative of the field
       dy (int): The y-th derivative of the field
@@ -160,7 +170,7 @@ def spatial_receptive_field(
     """
     angle = torch.as_tensor(angle)
     c = covariance_matrix(ratio, 1 / ratio, angle) * scale
-    k = gaussian_kernel(size, c, domain=domain)
+    k = gaussian_kernel(size, c, x, y, domain=domain)
     k = k / k.sum()
     return derive_spatial_receptive_field_single(k, scale, angle, dx, dy)
 
@@ -187,21 +197,25 @@ def spatial_parameters(
     scales: torch.Tensor,
     angles: torch.Tensor,
     ratios: torch.Tensor,
+    x: torch.Tensor,
+    y: torch.Tensor,
     derivatives: Union[int, List[Tuple[int, int]]],
     include_replicas: bool = False,
 ) -> torch.Tensor:
     """
-    Combines the parameters of scales, angles, ratios and derivatives as cartesian products
+    Combines the parameters of scales, angles, ratios, xand y coordinates of the center of the rf and derivatives as cartesian products
     to produce a set of parameters for spatial receptive fields.
     """
     if include_replicas or not (ratios == 1).any():
-        parameters = torch.cartesian_prod(scales, angles, ratios)
+        parameters = torch.cartesian_prod(scales, angles, ratios, x, y)
     else:
         mask = ratios != 1
         asymmetric_ratios = ratios[mask]
         symmetric_ratios = ratios[~mask]
-        asymmetric_fields = torch.cartesian_prod(scales, angles, asymmetric_ratios)
-        symmetric_rings = torch.cartesian_prod(scales, angles, symmetric_ratios)
+        asymmetric_fields = torch.cartesian_prod(
+            scales, angles, asymmetric_ratios, x, y
+        )
+        symmetric_rings = torch.cartesian_prod(scales, angles, symmetric_ratios, x, y)
         parameters = torch.cat([asymmetric_fields, symmetric_rings])
     # Add derivatives
     derivatives, _ = _extract_derivatives(derivatives)
@@ -225,9 +239,11 @@ def spatial_receptive_fields_with_derivatives(
                 scale=p[0],
                 angle=p[1],
                 ratio=p[2],
+                x=p[3],
+                y=p[4],
                 size=size,
-                dx=p[3],
-                dy=p[4],
+                dx=p[5],
+                dy=p[6],
                 domain=domain,
             )
             for p in combinations
