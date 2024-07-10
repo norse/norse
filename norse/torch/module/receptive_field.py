@@ -97,7 +97,9 @@ class SpatialReceptiveField2d(torch.nn.Module):
                 )
                 if self.aggregate:
                     self.out_channels = fields.shape[0]
-                    self.weights = fields.unsqueeze(1).repeat(1, self.in_channels, 1, 1)
+                    self.register_buffer(
+                        "weights", fields.unsqueeze(1).repeat(1, self.in_channels, 1, 1)
+                    )
                 else:
                     self.out_channels = self.fields.shape[0] * self.in_channels
                     empty_weights = torch.zeros(
@@ -112,7 +114,9 @@ class SpatialReceptiveField2d(torch.nn.Module):
                         in_weights = empty_weights.clone()
                         in_weights[i] = fields
                         weights.append(in_weights)
-                    self.weights = torch.concat(weights, 1).permute(1, 0, 2, 3)
+                    self.register_buffer(
+                        "weights", torch.concat(weights, 1).permute(1, 0, 2, 3)
+                    )
                 self.weights.requires_grad_(True)
 
     def forward(self, x: torch.Tensor):
