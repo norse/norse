@@ -142,7 +142,7 @@ class SampledSpatialReceptiveField2d(torch.nn.Module):
         >>> x = torch.tensor([0.0, 1.0])
         >>> y = torch.tensor([0.0, 1.0])
         >>> derivatives = torch.tensor([[0, 0]])
-        >>> m = SampledSpatialReceptiveField2d(1, 9, scales, angles, ratios, x, y, derivatives,
+        >>> m = SampledSpatialReceptiveField2d(1, 9, scales, angles, ratios, derivatives, x, y,
         >>>                                    optimize_scales=False, optimize_angles=False,
         >>>                                    optimize_ratios=True, optimize_x=False,
         >>>                                    optimize_y=False))
@@ -160,9 +160,9 @@ class SampledSpatialReceptiveField2d(torch.nn.Module):
         scales: torch.Tensor,
         angles: torch.Tensor,
         ratios: torch.Tensor,
-        x: torch.Tensor,
-        y: torch.Tensor,
         derivatives: torch.Tensor,
+        x: torch.Tensor = torch.Tensor([0.0]),
+        y: torch.Tensor = torch.Tensor([0.0]),
         optimize_scales: bool = True,
         optimize_angles: bool = True,
         optimize_ratios: bool = True,
@@ -184,7 +184,12 @@ class SampledSpatialReceptiveField2d(torch.nn.Module):
             in_channels=in_channels,
             size=size,
             rf_parameters=spatial_parameters(
-                self.scales, self.angles, self.ratios, self.x, self.y, self.derivatives
+                self.scales,
+                self.angles,
+                self.ratios,
+                self.derivatives,
+                self.x,
+                self.y,
             ),
             optimize_fields=False,
             **kwargs,
@@ -210,7 +215,7 @@ class SampledSpatialReceptiveField2d(torch.nn.Module):
     def _update_weights(self):
         if self.has_updated:
             self.submodule.rf_parameters = spatial_parameters(
-                self.scales, self.angles, self.ratios, self.x, self.y, self.derivatives
+                self.scales, self.angles, self.ratios, self.derivatives, self.x, self.y
             )
             self.submodule.has_updated = True
             self.submodule._update_weights()
@@ -233,7 +238,7 @@ class ParameterizedSpatialReceptiveField2d(torch.nn.Module):
         >>> ratios = torch.tensor([0.5, 1.0])
         >>> x = torch.tensor([0.0, 1.0])
         >>> y = torch.tensor([0.0, 1.0])
-        >>> m = ParameterizedSpatialReceptiveField2d(1, 9, scales, angles, ratios, x, y, 1,
+        >>> m = ParameterizedSpatialReceptiveField2d(1, 9, scales, angles, ratios, 1, x, y,
         >>>                                          optimize_scales=False, optimize_angles=False,
         >>>                                          optimize_ratios=True, optimize_x=True,
         >>>                                          optimize_y=True)
@@ -247,9 +252,9 @@ class ParameterizedSpatialReceptiveField2d(torch.nn.Module):
         scales: torch.Tensor,
         angles: torch.Tensor,
         ratios: torch.Tensor,
-        x: torch.Tensor,
-        y: torch.Tensor,
         derivatives: torch.Tensor,
+        x: torch.Tensor = torch.Tensor([0.0]),
+        y: torch.Tensor = torch.Tensor([0.0]),
         optimize_scales: bool = True,
         optimize_angles: bool = True,
         optimize_ratios: bool = True,
@@ -259,7 +264,7 @@ class ParameterizedSpatialReceptiveField2d(torch.nn.Module):
     ):
         super().__init__()
         self.initial_parameters = spatial_parameters(
-            scales, angles, ratios, x, y, derivatives
+            scales, angles, ratios, derivatives, x, y
         )
         self.scales = (
             torch.nn.Parameter(self.initial_parameters[:, 0])
