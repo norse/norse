@@ -197,9 +197,9 @@ def spatial_parameters(
     scales: torch.Tensor,
     angles: torch.Tensor,
     ratios: torch.Tensor,
-    x: torch.Tensor,
-    y: torch.Tensor,
     derivatives: Union[int, List[Tuple[int, int]]],
+    x: torch.Tensor = torch.Tensor([0.0]),
+    y: torch.Tensor = torch.Tensor([0.0]),
     include_replicas: bool = False,
 ) -> torch.Tensor:
     """
