@@ -635,7 +635,7 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt; x = torch.tensor([0.0, 1.0])</span>
 <span class="sd">        &gt;&gt;&gt; y = torch.tensor([0.0, 1.0])</span>
 <span class="sd">        &gt;&gt;&gt; derivatives = torch.tensor([[0, 0]])</span>
-<span class="sd">        &gt;&gt;&gt; m = SampledSpatialReceptiveField2d(1, 9, scales, angles, ratios, x, y, derivatives,</span>
+<span class="sd">        &gt;&gt;&gt; m = SampledSpatialReceptiveField2d(1, 9, scales, angles, ratios, derivatives, x, y,</span>
 <span class="sd">        &gt;&gt;&gt;                                    optimize_scales=False, optimize_angles=False,</span>
 <span class="sd">        &gt;&gt;&gt;                                    optimize_ratios=True, optimize_x=False,</span>
 <span class="sd">        &gt;&gt;&gt;                                    optimize_y=False))</span>
@@ -653,9 +653,9 @@ document.write(`
         <span class="n">scales</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">angles</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">ratios</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">derivatives</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span>
+        <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span>
         <span class="n">optimize_scales</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">optimize_angles</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">optimize_ratios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -677,7 +677,12 @@ document.write(`
             <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
             <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
             <span class="n">rf_parameters</span><span class="o">=</span><span class="n">spatial_parameters</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">optimize_fields</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
@@ -703,7 +708,7 @@ document.write(`
     <span class="k">def</span> <span class="nf">_update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_updated</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">rf_parameters</span> <span class="o">=</span> <span class="n">spatial_parameters</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scales</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratios</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">has_updated</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">_update_weights</span><span class="p">()</span>
@@ -726,7 +731,7 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt; ratios = torch.tensor([0.5, 1.0])</span>
 <span class="sd">        &gt;&gt;&gt; x = torch.tensor([0.0, 1.0])</span>
 <span class="sd">        &gt;&gt;&gt; y = torch.tensor([0.0, 1.0])</span>
-<span class="sd">        &gt;&gt;&gt; m = ParameterizedSpatialReceptiveField2d(1, 9, scales, angles, ratios, x, y, 1,</span>
+<span class="sd">        &gt;&gt;&gt; m = ParameterizedSpatialReceptiveField2d(1, 9, scales, angles, ratios, 1, x, y,</span>
 <span class="sd">        &gt;&gt;&gt;                                          optimize_scales=False, optimize_angles=False,</span>
 <span class="sd">        &gt;&gt;&gt;                                          optimize_ratios=True, optimize_x=True,</span>
 <span class="sd">        &gt;&gt;&gt;                                          optimize_y=True)</span>
@@ -740,9 +745,9 @@ document.write(`
         <span class="n">scales</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">angles</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">ratios</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
         <span class="n">derivatives</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span>
+        <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span>
         <span class="n">optimize_scales</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">optimize_angles</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">optimize_ratios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -752,7 +757,7 @@ document.write(`
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span> <span class="o">=</span> <span class="n">spatial_parameters</span><span class="p">(</span>
-            <span class="n">scales</span><span class="p">,</span> <span class="n">angles</span><span class="p">,</span> <span class="n">ratios</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">derivatives</span>
+            <span class="n">scales</span><span class="p">,</span> <span class="n">angles</span><span class="p">,</span> <span class="n">ratios</span><span class="p">,</span> <span class="n">derivatives</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scales</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_parameters</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>

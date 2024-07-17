@@ -14,6 +14,7 @@ norse.torch.module.test.test\_receptive\_field
    .. autosummary::
    
       test_column_parameterized_receptive_field_update
+      test_column_parameterized_receptive_field_update_default_xy
       test_spatial_receptive_field
       test_spatial_receptive_field_update_flag
       test_spatial_receptive_field_update_kernels
