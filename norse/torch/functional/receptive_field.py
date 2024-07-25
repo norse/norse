@@ -23,7 +23,7 @@ def gaussian_kernel(
     ci = torch.linalg.inv(c)
     cd = torch.linalg.det(c)
     fraction = 1 / (2 * torch.pi * torch.sqrt(cd))
-    a = torch.linspace(-domain, domain, size)
+    a = torch.linspace(-domain, domain, size).to(x.device)
     xs, ys = torch.meshgrid(a, a, indexing="xy")
     xs = xs - x
     ys = ys - y

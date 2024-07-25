@@ -54,10 +54,13 @@ class SpatialReceptiveField2d(torch.nn.Module):
         **kwargs,
     ) -> None:
         super().__init__()
-        self.rf_parameters = (
-            torch.nn.Parameter(rf_parameters) if optimize_fields else rf_parameters
+        self.register_buffer(
+            "rf_parameters",
+            (torch.nn.Parameter(rf_parameters) if optimize_fields else rf_parameters),
         )
-        self.rf_parameters_previous = torch.zeros_like(self.rf_parameters)
+        self.register_buffer(
+            "rf_parameters_previous", torch.zeros_like(self.rf_parameters)
+        )
 
         self.in_channels = in_channels
         self.size = size
@@ -263,8 +266,9 @@ class ParameterizedSpatialReceptiveField2d(torch.nn.Module):
         **kwargs,
     ):
         super().__init__()
-        self.initial_parameters = spatial_parameters(
-            scales, angles, ratios, derivatives, x, y
+        self.register_buffer(
+            "initial_parameters",
+            spatial_parameters(scales, angles, ratios, derivatives, x, y),
         )
         self.scales = (
             torch.nn.Parameter(self.initial_parameters[:, 0])
