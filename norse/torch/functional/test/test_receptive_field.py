@@ -1,3 +1,5 @@
+import pytest
+
 import torch
 from norse.torch.functional import receptive_field
 
@@ -8,7 +10,7 @@ def test_spatial_rf():
 
 
 def test_gaussian_kernel_backwards():
-    angle = torch.tensor([0.0], requires_grad=True)
+    angle = torch.tensor([1.0], requires_grad=True)
     ratio = torch.tensor([2.0], requires_grad=True)
     x = torch.tensor([1.0], requires_grad=True)
     y = torch.tensor([1.0], requires_grad=True)
@@ -22,6 +24,28 @@ def test_gaussian_kernel_backwards():
     assert ratio.grad is not None and ratio.grad != 0
     assert x.grad is not None and x.grad != 0
     assert y.grad is not None and y.grad != 0
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="no cuda device")
+def test_gaussian_kernel_backwards_cuda():
+    angle = torch.tensor([1.0], requires_grad=True, device="cuda")
+    ratio = torch.tensor([2.0], requires_grad=True, device="cuda")
+    x = torch.tensor([1.0], requires_grad=True, device="cuda")
+    y = torch.tensor([1.0], requires_grad=True, device="cuda")
+    c = receptive_field.covariance_matrix(ratio, 1 / ratio, angle)
+    kernel = receptive_field.gaussian_kernel(9, c, x, y)
+    assert kernel.shape == (9, 9)
+    assert kernel.requires_grad
+
+    kernel.sum().backward()
+    assert angle.grad is not None and angle.grad != 0
+    assert angle.grad.device.type == "cuda"
+    assert ratio.grad is not None and ratio.grad != 0
+    assert ratio.grad.device.type == "cuda"
+    assert x.grad is not None and x.grad != 0
+    assert x.grad.device.type == "cuda"
+    assert y.grad is not None and y.grad != 0
+    assert y.grad.device.type == "cuda"
 
 
 def test_spatial_rf_backward():

@@ -23,7 +23,7 @@ def gaussian_kernel(
     ci = torch.linalg.inv(c)
     cd = torch.linalg.det(c)
     fraction = 1 / (2 * torch.pi * torch.sqrt(cd))
-    a = torch.linspace(-domain, domain, size)
+    a = torch.linspace(-domain, domain, size).to(c.device)
     xs, ys = torch.meshgrid(a, a, indexing="xy")
     xs = xs - x
     ys = ys - y
@@ -198,8 +198,8 @@ def spatial_parameters(
     angles: torch.Tensor,
     ratios: torch.Tensor,
     derivatives: Union[int, List[Tuple[int, int]]],
-    x: torch.Tensor = torch.Tensor([0.0]),
-    y: torch.Tensor = torch.Tensor([0.0]),
+    x: torch.Tensor,
+    y: torch.Tensor,
     include_replicas: bool = False,
 ) -> torch.Tensor:
     """
@@ -212,6 +212,9 @@ def spatial_parameters(
         mask = ratios != 1
         asymmetric_ratios = ratios[mask]
         symmetric_ratios = ratios[~mask]
+        print(
+            scales.device, angles.device, asymmetric_ratios.device, x.device, y.device
+        )
         asymmetric_fields = torch.cartesian_prod(
             scales, angles, asymmetric_ratios, x, y
         )

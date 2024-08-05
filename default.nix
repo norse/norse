@@ -1,7 +1,8 @@
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 let
-  pythonPackages = python3Packages;
-in pkgs.mkShell rec {
+  pythonPackages = python311Packages;
+in
+pkgs.mkShell rec {
   name = "impurePythonEnv";
   venvDir = "./.venv";
   buildInputs = [
@@ -16,19 +17,21 @@ in pkgs.mkShell rec {
     # Those are dependencies that we would like to use from nixpkgs, which will
     # add them to PYTHONPATH and thus make them accessible from within the venv.
     pythonPackages.matplotlib
-    pythonPackages.jupyter
-    pythonPackages.pytorch
     pythonPackages.pybind11
-    pythonPackages.pytest
+    # pythonPackages.pytest
 
-    cmake ninja
+    pythonPackages.torch-bin
+
+    cmake
+    ninja
   ];
 
   # Run this command, only after creating the virtual environment
   postVenvCreation = ''
     unset SOURCE_DATE_EPOCH
     pip install --upgrade pip
-    pip install -r requirements.txt
+    pip install nir nirtorch
+    pip install -e . --no-deps
   '';
 
   # Now we can execute any commands within the virtual environment.

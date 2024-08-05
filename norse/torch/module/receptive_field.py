@@ -54,10 +54,21 @@ class SpatialReceptiveField2d(torch.nn.Module):
         **kwargs,
     ) -> None:
         super().__init__()
-        self.rf_parameters = (
-            torch.nn.Parameter(rf_parameters) if optimize_fields else rf_parameters
+        if optimize_fields:
+            self.register_parameter(
+                "rf_parameters",
+                torch.nn.Parameter(rf_parameters),
+            )
+        else:
+            self.register_buffer(
+                "rf_parameters",
+                rf_parameters,
+            )
+
+        self.register_buffer(
+            "rf_parameters_previous",
+            torch.zeros_like(self.rf_parameters),
         )
-        self.rf_parameters_previous = torch.zeros_like(self.rf_parameters)
 
         self.in_channels = in_channels
         self.size = size
@@ -83,41 +94,41 @@ class SpatialReceptiveField2d(torch.nn.Module):
 
             self.register_full_backward_hook(update_hook)
 
+    def _set_weights(self, weights):
+        if hasattr(self, "weights"):
+            self.weights = weights
+        else:
+            self.register_buffer("weights", weights)
+
     def _update_weights(self):
         if self.has_updated:
-            if not torch.all(torch.eq(self.rf_parameters_previous, self.rf_parameters)):
-                # Reset the flag
-                self.has_updated = False
-                self.rf_parameters_previous = self.rf_parameters.detach().clone()
-                # Calculate new weights
-                fields = spatial_receptive_fields_with_derivatives(
-                    self.rf_parameters,
-                    size=self.size,
-                    domain=self.domain,
+            # Reset the flag
+            self.has_updated = False
+            self.rf_parameters_previous = self.rf_parameters.detach().clone()
+            # Calculate new weights
+            fields = spatial_receptive_fields_with_derivatives(
+                self.rf_parameters,
+                size=self.size,
+                domain=self.domain,
+            )
+            if self.aggregate:
+                self.out_channels = fields.shape[0]
+                self._set_weights(fields.unsqueeze(1).repeat(1, self.in_channels, 1, 1))
+            else:
+                self.out_channels = self.fields.shape[0] * self.in_channels
+                empty_weights = torch.zeros(
+                    self.in_channels,
+                    fields.shape[0],
+                    self.size,
+                    self.size,
+                    device=self.rf_parameters.device,
                 )
-                if self.aggregate:
-                    self.out_channels = fields.shape[0]
-                    self.register_buffer(
-                        "weights", fields.unsqueeze(1).repeat(1, self.in_channels, 1, 1)
-                    )
-                else:
-                    self.out_channels = self.fields.shape[0] * self.in_channels
-                    empty_weights = torch.zeros(
-                        self.in_channels,
-                        fields.shape[0],
-                        self.size,
-                        self.size,
-                        device=self.rf_parameters.device,
-                    )
-                    weights = []
-                    for i in range(self.in_channels):
-                        in_weights = empty_weights.clone()
-                        in_weights[i] = fields
-                        weights.append(in_weights)
-                    self.register_buffer(
-                        "weights", torch.concat(weights, 1).permute(1, 0, 2, 3)
-                    )
-                self.weights.requires_grad_(True)
+                weights = []
+                for i in range(self.in_channels):
+                    in_weights = empty_weights.clone()
+                    in_weights[i] = fields
+                    weights.append(in_weights)
+                self._set_weights(torch.concat(weights, 1).permute(1, 0, 2, 3))
 
     def forward(self, x: torch.Tensor):
         self._update_weights()  # Update weights if necessary
@@ -263,8 +274,11 @@ class ParameterizedSpatialReceptiveField2d(torch.nn.Module):
         **kwargs,
     ):
         super().__init__()
-        self.initial_parameters = spatial_parameters(
-            scales, angles, ratios, derivatives, x, y
+        x = x.to(scales.device)
+        y = y.to(scales.device)
+        self.register_buffer(
+            "initial_parameters",
+            spatial_parameters(scales, angles, ratios, derivatives, x, y),
         )
         self.scales = (
             torch.nn.Parameter(self.initial_parameters[:, 0])
