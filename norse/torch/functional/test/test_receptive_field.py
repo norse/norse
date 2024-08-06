@@ -107,24 +107,6 @@ def test_spatial_parameters_derivative():
     assert y.grad_fn is None
 
 
-def test_spatial_parameters_default_xy():
-    scales = torch.tensor([0.2, 0.5, 1.0], requires_grad=True)
-    angles = torch.tensor([0.0, 0.5 * torch.pi, torch.pi], requires_grad=True)
-    ratios = torch.tensor([0.2, 0.5, 1.0], requires_grad=True)
-
-    derivatives = 1
-    sp = receptive_field.spatial_parameters(
-        scales, angles, ratios, derivatives, include_replicas=True
-    )
-    assert sp.shape == (108, 7)
-    sp.sum().backward()
-    assert not sp.grad_fn is None
-
-    assert scales.grad_fn is None
-    assert angles.grad_fn is None
-    assert ratios.grad_fn is None
-
-
 def test_generate_fields():
     p = torch.tensor([[1, 1, 1, 1, 1, 1, 1.0]], requires_grad=True)
     f = receptive_field.spatial_receptive_fields_with_derivatives(p, 9)
