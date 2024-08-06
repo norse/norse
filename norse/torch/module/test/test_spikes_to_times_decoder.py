@@ -1,3 +1,5 @@
+import pytest, platform
+
 import torch
 from norse.torch.module.spikes_to_times_decoder import SpikesToTimesDecoder
 
@@ -89,6 +91,9 @@ def test_backward():
         assert torch.allclose(test_input.grad, expected_grad)
 
 
+@pytest.mark.skipif(
+    not platform.system() == "Linux", reason="Only Linux supports jit compilation"
+)
 def test_jit():
     test_input = torch.zeros((2, 1, 1))
     test_input[1, :, :] = 1.0
