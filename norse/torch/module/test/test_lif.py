@@ -1,3 +1,5 @@
+from dataclasses import fields
+
 import pytest, platform
 import torch
 

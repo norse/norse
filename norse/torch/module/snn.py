@@ -2,6 +2,7 @@
 Base module for spiking neural network (SNN) modules.
 """
 
+from weakref import ref
 from typing import Any, Callable, List, Optional, Tuple
 import torch
 

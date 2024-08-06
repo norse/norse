@@ -17,7 +17,7 @@ from torch.utils._pytree import (
 
 try:
     from torch.utils._pytree import register_pytree_node
-except ImportError:
+except ImportError:  # Support older versions of PyTorch
     from torch.utils._pytree import _register_pytree_node as register_pytree_node
 
 # Thanks to https://stackoverflow.com/a/50369521
@@ -81,6 +81,10 @@ class StateTuple:
     >>> s.x # torch.tensor([0])
     >>> s.cuda() # torch.tensor([0], device='cuda:0')
     """
+
+    # Disallow creation of weakrefs (like in NamedTuples)
+    # by removing the __weakref__ slot
+    __slots__ = []
 
     def broadcast(self, template: torch.Tensor):
         """

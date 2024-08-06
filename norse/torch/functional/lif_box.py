@@ -4,6 +4,7 @@ Compared to the :mod:`norse.torch.functional.lif` modules, this model leaves out
 It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as "current boxes".
 """
 
+from dataclasses import dataclass
 from typing import NamedTuple, Tuple
 import torch
 import torch.jit
@@ -38,7 +39,9 @@ class LIFBoxParameters(
     reset_method: ResetMethod = reset_value
 
 
-class LIFBoxState(NamedTuple):
+class LIFBoxState(
+    pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta
+):
     """State of a LIF neuron
 
     Parameters:
@@ -50,7 +53,9 @@ class LIFBoxState(NamedTuple):
     v: torch.Tensor
 
 
-class LIFBoxFeedForwardState(NamedTuple):
+class LIFBoxFeedForwardState(
+    pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta
+):
     """State of a feed forward LIF neuron
 
     Parameters:

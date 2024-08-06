@@ -33,7 +33,7 @@ or in the book `*Neuron Dynamics* by W. Gerstner et al.,
 freely available online <https://neuronaldynamics.epfl.ch/online/Ch5.html>`_.
 """
 
-from typing import NamedTuple, Tuple
+from typing import Tuple
 import torch
 import torch.jit
 
@@ -79,7 +79,7 @@ default_bio_parameters = LIFParameters(
 # pytype: enable=bad-unpacking,wrong-keyword-args
 
 
-class LIFState(NamedTuple):
+class LIFState(pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta):
     """State of a LIF neuron
 
     Parameters:
@@ -98,7 +98,9 @@ default_bio_initial_state = LIFState(
 )
 
 
-class LIFFeedForwardState(NamedTuple):
+class LIFFeedForwardState(
+    pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta
+):
     """State of a feed forward LIF neuron
 
     Parameters:
