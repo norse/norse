@@ -1,3 +1,5 @@
+import pytest
+
 import torch
 
 from norse.torch import (
@@ -138,3 +140,20 @@ def test_column_parameterized_receptive_field_update_default_xy():
     assert not torch.all(torch.eq(m.ratios, ratios_copy))
     assert not torch.all(torch.eq(m.x, x_copy))
     assert not torch.all(torch.eq(old_kernels, m.submodule.weights))
+
+
+def test_backprop_twice():
+    model = SpatialReceptiveField2d(1, 9, torch.tensor([[1, 1, 1, 0, 0, 0, 0.0]]))
+    x = torch.ones(1, 1, 9, 9)
+    y1 = model(x)
+    y1.sum().backward()
+    y2 = model(x)
+    y2.sum().backward()
+
+    # This should fail
+    with pytest.raises(RuntimeError):
+        y1 = model(x)
+        y1.sum().backward()
+        model.has_updated = False
+        y2 = model(x)
+        y2.sum().backward()

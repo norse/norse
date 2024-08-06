@@ -29,8 +29,7 @@ def test_lif_heavi():
     s = LIFState(z=torch.ones(2, 1), v=torch.zeros(2, 1), i=torch.zeros(2, 1))
     input_weights = torch.ones(1, 1) * 10
     recurrent_weights = torch.ones(1, 1)
-    p = LIFParameters()
-    p._replace(method="heaviside")
+    p = LIFParameters(method="heaviside")
     _, s = lif_step(x, s, input_weights, recurrent_weights, p)
     z, s = lif_step(x, s, input_weights, recurrent_weights, p)
     assert z.max() > 0

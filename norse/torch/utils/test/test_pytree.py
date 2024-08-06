@@ -1,4 +1,7 @@
+from dataclasses import dataclass
 from numbers import Number
+from typing import NamedTuple, Tuple
+from weakref import ref
 
 import torch
 import onnx
@@ -31,6 +34,11 @@ def test_state_create():
     assert torch.all(torch.eq(s.x, x))
     assert s.y.shape == (10, 2)
     assert s.z == 1.28
+
+
+def test_state_is_tuple():
+    s = MockState(torch.randn(1))
+    assert isinstance(s, Tuple)
 
 
 def test_state_clone():
@@ -103,3 +111,25 @@ def test_onnx():
     torch.onnx.export(m, (torch.randn(10, 2), s), "pytree.onnx")
     loaded = onnx.load("pytree.onnx")
     onnx.checker.check_model(loaded)
+
+
+def test_compile():
+    class MockModule(torch.nn.Module):
+        def __init__(self, p: MockState):
+            super().__init__()
+            self.p = p
+
+        def forward(
+            self, x: torch.Tensor, s: MockState
+        ) -> Tuple[torch.Tensor, MockState]:
+            y = x + s.x * self.p.y.sum()
+            return y, MockState(y)
+
+    s = MockState(torch.ones(1), y=torch.ones(2, 2))
+    m = MockModule(s)
+    m = torch.compile(m)
+    y1, s = m(torch.ones(1), s)
+    y2, s = m(torch.ones(1), s)
+    assert isinstance(s, MockState)
+    assert torch.eq(y1, torch.tensor([5]))
+    assert torch.eq(y2, torch.tensor([5 + 16]))
