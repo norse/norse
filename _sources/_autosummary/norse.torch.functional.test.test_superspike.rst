@@ -4,11 +4,6 @@ norse.torch.functional.test.test\_superspike
 .. automodule:: norse.torch.functional.test.test_superspike
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,21 +12,9 @@ norse.torch.functional.test.test\_superspike
       test_compile
       test_forward
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       SomeClass
    
-   
-
-   
-   
-   
-
-
-

@@ -4,15 +4,6 @@ norse.torch.module.lif
 .. automodule:: norse.torch.module.lif
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -22,11 +13,3 @@ norse.torch.module.lif
       LIFRecurrent
       LIFRecurrentCell
    
-   
-
-   
-   
-   
-
-
-

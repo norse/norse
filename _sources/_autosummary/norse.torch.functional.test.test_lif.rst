@@ -4,11 +4,6 @@ norse.torch.functional.test.test\_lif
 .. automodule:: norse.torch.functional.test.test_lif
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -22,15 +17,3 @@ norse.torch.functional.test.test\_lif
       test_lif_integral
       test_lif_integral_compile
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

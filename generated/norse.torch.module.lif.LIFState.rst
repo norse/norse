@@ -14,8 +14,14 @@
    .. autosummary::
    
       ~LIFState.__init__
+      ~LIFState.broadcast
       ~LIFState.count
+      ~LIFState.cpu
+      ~LIFState.cuda
+      ~LIFState.float
       ~LIFState.index
+      ~LIFState.int
+      ~LIFState.to
    
    
 

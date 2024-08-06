@@ -4,11 +4,6 @@ norse.torch.module.test.test\_lif\_adex
 .. automodule:: norse.torch.module.test.test_lif_adex
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -24,15 +19,3 @@ norse.torch.module.test.test\_lif\_adex
       test_lif_adex_recurrent_backward
       test_lif_adex_recurrent_cell_backward
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

@@ -4,11 +4,6 @@ norse.torch.functional.encode
 .. automodule:: norse.torch.functional.encode
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -24,15 +19,3 @@ norse.torch.functional.encode
       spike_latency_encode
       spike_latency_lif_encode
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

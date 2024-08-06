@@ -14,8 +14,14 @@
    .. autosummary::
    
       ~LIFBoxFeedForwardState.__init__
+      ~LIFBoxFeedForwardState.broadcast
       ~LIFBoxFeedForwardState.count
+      ~LIFBoxFeedForwardState.cpu
+      ~LIFBoxFeedForwardState.cuda
+      ~LIFBoxFeedForwardState.float
       ~LIFBoxFeedForwardState.index
+      ~LIFBoxFeedForwardState.int
+      ~LIFBoxFeedForwardState.to
    
    
 

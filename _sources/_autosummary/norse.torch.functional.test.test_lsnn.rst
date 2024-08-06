@@ -4,11 +4,6 @@ norse.torch.functional.test.test\_lsnn
 .. automodule:: norse.torch.functional.test.test_lsnn
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -18,15 +13,3 @@ norse.torch.functional.test.test\_lsnn
       test_lsnn_step
       test_lsnn_step_batch
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

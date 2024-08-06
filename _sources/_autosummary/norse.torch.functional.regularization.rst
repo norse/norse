@@ -4,11 +4,6 @@ norse.torch.functional.regularization
 .. automodule:: norse.torch.functional.regularization
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ norse.torch.functional.regularization
       spike_accumulator
       voltage_accumulator
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

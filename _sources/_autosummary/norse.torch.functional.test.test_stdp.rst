@@ -4,11 +4,6 @@ norse.torch.functional.test.test\_stdp
 .. automodule:: norse.torch.functional.test.test_stdp
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,15 +14,3 @@ norse.torch.functional.test.test\_stdp
       test_conv2d_stdp_stepper
       test_linear_stdp_stepper
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

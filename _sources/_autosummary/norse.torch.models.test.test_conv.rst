@@ -4,11 +4,6 @@ norse.torch.models.test.test\_conv
 .. automodule:: norse.torch.models.test.test_conv
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ norse.torch.models.test.test\_conv
       test_convnet
       test_convnet4
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

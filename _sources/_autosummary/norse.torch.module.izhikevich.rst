@@ -4,15 +4,6 @@ norse.torch.module.izhikevich
 .. automodule:: norse.torch.module.izhikevich
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -22,11 +13,3 @@ norse.torch.module.izhikevich
       IzhikevichRecurrent
       IzhikevichRecurrentCell
    
-   
-
-   
-   
-   
-
-
-

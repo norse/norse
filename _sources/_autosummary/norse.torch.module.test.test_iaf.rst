@@ -4,11 +4,6 @@ norse.torch.module.test.test\_iaf
 .. automodule:: norse.torch.module.test.test_iaf
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ norse.torch.module.test.test\_iaf
       test_iaf_cell_feed_forward_step_batch
       test_iaf_feed_forward
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

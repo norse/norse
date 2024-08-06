@@ -4,15 +4,6 @@ norse.torch.module.receptive\_field
 .. automodule:: norse.torch.module.receptive_field
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -22,11 +13,3 @@ norse.torch.module.receptive\_field
       SpatialReceptiveField2d
       TemporalReceptiveField
    
-   
-
-   
-   
-   
-
-
-

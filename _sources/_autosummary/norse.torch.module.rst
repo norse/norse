@@ -4,52 +4,34 @@ norse.torch.module
 .. automodule:: norse.torch.module
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
 .. rubric:: Modules
 
 .. autosummary::
    :toctree:
    :recursive:
 
-   norse.torch.module.coba_lif
-   norse.torch.module.conv
-   norse.torch.module.encode
-   norse.torch.module.exp_filter
-   norse.torch.module.iaf
-   norse.torch.module.izhikevich
-   norse.torch.module.leaky_integrator
-   norse.torch.module.leaky_integrator_box
-   norse.torch.module.lif
-   norse.torch.module.lif_adex
-   norse.torch.module.lif_adex_refrac
-   norse.torch.module.lif_box
-   norse.torch.module.lif_correlation
-   norse.torch.module.lif_ex
-   norse.torch.module.lif_mc
-   norse.torch.module.lif_mc_refrac
-   norse.torch.module.lif_refrac
-   norse.torch.module.lift
-   norse.torch.module.lsnn
-   norse.torch.module.receptive_field
-   norse.torch.module.regularization
-   norse.torch.module.sequential
-   norse.torch.module.snn
-   norse.torch.module.spikes_to_times_decoder
-   norse.torch.module.test
-
+   coba_lif
+   conv
+   encode
+   exp_filter
+   iaf
+   izhikevich
+   leaky_integrator
+   leaky_integrator_box
+   lif
+   lif_adex
+   lif_adex_refrac
+   lif_box
+   lif_correlation
+   lif_ex
+   lif_mc
+   lif_mc_refrac
+   lif_refrac
+   lift
+   lsnn
+   receptive_field
+   regularization
+   sequential
+   snn
+   spikes_to_times_decoder
+   test

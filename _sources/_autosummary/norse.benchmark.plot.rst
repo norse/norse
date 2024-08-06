@@ -4,11 +4,6 @@ norse.benchmark.plot
 .. automodule:: norse.benchmark.plot
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ norse.benchmark.plot
       render_frames
       save_frames
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

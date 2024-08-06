@@ -4,11 +4,6 @@ norse.torch.module.test.test\_encode
 .. automodule:: norse.torch.module.test.test_encode
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -26,15 +21,3 @@ norse.torch.module.test.test\_encode
       test_spike_latency_lif_encoder
       test_spike_latency_lif_encoder_backward
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

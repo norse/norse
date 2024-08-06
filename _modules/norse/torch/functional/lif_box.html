@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -491,6 +491,7 @@ document.write(`
 <span class="sd">It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as &quot;current boxes&quot;.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.jit</span>
@@ -525,7 +526,9 @@ document.write(`
     <span class="n">reset_method</span><span class="p">:</span> <span class="n">ResetMethod</span> <span class="o">=</span> <span class="n">reset_value</span>
 
 
-<span class="k">class</span> <span class="nc">LIFBoxState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">LIFBoxState</span><span class="p">(</span>
+    <span class="n">pytree</span><span class="o">.</span><span class="n">StateTuple</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">pytree</span><span class="o">.</span><span class="n">MultipleInheritanceNamedTupleMeta</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;State of a LIF neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -537,17 +540,16 @@ document.write(`
     <span class="n">v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
 
 
-<div class="viewcode-block" id="LIFBoxFeedForwardState">
-<a class="viewcode-back" href="../../../../generated/norse.torch.module.lif_box.LIFBoxFeedForwardState.html#norse.torch.functional.lif_box.LIFBoxFeedForwardState">[docs]</a>
-<span class="k">class</span> <span class="nc">LIFBoxFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">LIFBoxFeedForwardState</span><span class="p">(</span>
+    <span class="n">pytree</span><span class="o">.</span><span class="n">StateTuple</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">pytree</span><span class="o">.</span><span class="n">MultipleInheritanceNamedTupleMeta</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;State of a feed forward LIF neuron</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        v (torch.Tensor): membrane potential</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></div>
-
+    <span class="n">v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
 
 
 <div class="viewcode-block" id="lif_box_feed_forward_step">

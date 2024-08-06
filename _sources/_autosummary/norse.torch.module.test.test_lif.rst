@@ -4,11 +4,6 @@ norse.torch.module.test.test\_lif
 .. automodule:: norse.torch.module.test.test_lif
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -33,21 +28,9 @@ norse.torch.module.test.test\_lif
       test_lif_recurrent_layer_backward_iteration
       test_lif_recurrent_sequence
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       SNNetwork
    
-   
-
-   
-   
-   
-
-
-

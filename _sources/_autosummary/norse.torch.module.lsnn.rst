@@ -4,15 +4,6 @@ norse.torch.module.lsnn
 .. automodule:: norse.torch.module.lsnn
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -22,11 +13,3 @@ norse.torch.module.lsnn
       LSNNRecurrent
       LSNNRecurrentCell
    
-   
-
-   
-   
-   
-
-
-

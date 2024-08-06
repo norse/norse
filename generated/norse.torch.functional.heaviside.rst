@@ -4,26 +4,9 @@
 .. automodule:: norse.torch.functional.heaviside
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       heaviside
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

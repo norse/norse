@@ -4,20 +4,11 @@ norse.torch.functional.tsodyks\_makram
 .. automodule:: norse.torch.functional.tsodyks_makram
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       stp_step
-   
-   
-
-   
    
    .. rubric:: Classes
 
@@ -26,11 +17,3 @@ norse.torch.functional.tsodyks\_makram
       TsodyksMakramParameters
       TsodyksMakramState
    
-   
-
-   
-   
-   
-
-
-

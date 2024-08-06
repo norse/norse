@@ -4,11 +4,6 @@ norse.torch.module.test.test\_lif\_mc
 .. automodule:: norse.torch.module.test.test_lif_mc
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,15 +14,3 @@ norse.torch.module.test.test\_lif\_mc
       test_lif_mc_cell_no_autapses
       test_lif_mc_cell_state
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

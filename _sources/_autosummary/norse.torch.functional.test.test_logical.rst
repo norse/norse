@@ -4,11 +4,6 @@ norse.torch.functional.test.test\_logical
 .. automodule:: norse.torch.functional.test.test_logical
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,15 +14,3 @@ norse.torch.functional.test.test\_logical
       test_muller_c
       test_posedge_detector
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

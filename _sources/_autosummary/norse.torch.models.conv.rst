@@ -4,15 +4,6 @@ norse.torch.models.conv
 .. automodule:: norse.torch.models.conv
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -20,11 +11,3 @@ norse.torch.models.conv
       ConvNet
       ConvNet4
    
-   
-
-   
-   
-   
-
-
-

@@ -4,11 +4,6 @@ norse.torch.functional.lif\_refrac
 .. automodule:: norse.torch.functional.lif_refrac
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -18,10 +13,6 @@ norse.torch.functional.lif\_refrac
       lif_refrac_step
       lif_refrac_step_sparse
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -30,11 +21,3 @@ norse.torch.functional.lif\_refrac
       LIFRefracParameters
       LIFRefracState
    
-   
-
-   
-   
-   
-
-
-

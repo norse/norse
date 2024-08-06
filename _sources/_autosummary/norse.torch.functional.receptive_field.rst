@@ -4,11 +4,6 @@ norse.torch.functional.receptive\_field
 .. automodule:: norse.torch.functional.receptive_field
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -25,15 +20,3 @@ norse.torch.functional.receptive\_field
       spatio_temporal_parameters
       temporal_scale_distribution
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

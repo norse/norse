@@ -4,15 +4,6 @@ norse.torch.module.lif\_adex\_refrac
 .. automodule:: norse.torch.module.lif_adex_refrac
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -21,11 +12,3 @@ norse.torch.module.lif\_adex\_refrac
       LIFAdExRefracRecurrent
       LIFAdExRefracRecurrentCell
    
-   
-
-   
-   
-   
-
-
-

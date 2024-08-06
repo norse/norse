@@ -4,11 +4,6 @@ norse.torch.functional.test.test\_threshold
 .. automodule:: norse.torch.functional.test.test_threshold
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -24,15 +19,3 @@ norse.torch.functional.test.test\_threshold
       test_threshold_backward
       test_threshold_throws
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

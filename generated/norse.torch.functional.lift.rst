@@ -4,26 +4,9 @@
 .. automodule:: norse.torch.functional.lift
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       lift
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

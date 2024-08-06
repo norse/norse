@@ -4,11 +4,6 @@ norse.torch.module.test.test\_izhikevich
 .. automodule:: norse.torch.module.test.test_izhikevich
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -28,21 +23,9 @@ norse.torch.module.test.test\_izhikevich
       test_izhikevich_recurrent_layer_backward_iteration
       test_izhikevich_recurrent_sequence
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       SNNetwork
    
-   
-
-   
-   
-   
-
-
-

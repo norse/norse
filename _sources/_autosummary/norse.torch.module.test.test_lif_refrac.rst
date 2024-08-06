@@ -4,11 +4,6 @@ norse.torch.module.test.test\_lif\_refrac
 .. automodule:: norse.torch.module.test.test_lif_refrac
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -26,15 +21,3 @@ norse.torch.module.test.test\_lif\_refrac
       test_lif_refrac_recurrent_layer_backward_state
       test_lif_refrac_recurrent_sequence
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

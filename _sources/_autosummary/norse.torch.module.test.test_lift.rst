@@ -4,11 +4,6 @@ norse.torch.module.test.test\_lift
 .. automodule:: norse.torch.module.test.test_lift
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -20,15 +15,3 @@ norse.torch.module.test.test\_lift
       test_lift_sequential_stateful
       test_lift_stateful
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

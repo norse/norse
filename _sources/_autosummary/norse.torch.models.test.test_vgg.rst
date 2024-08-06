@@ -4,11 +4,6 @@ norse.torch.models.test.test\_vgg
 .. automodule:: norse.torch.models.test.test_vgg
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -24,15 +19,3 @@ norse.torch.models.test.test\_vgg
       test_vgg19
       test_vgg19_bn
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

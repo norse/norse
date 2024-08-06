@@ -4,11 +4,6 @@ norse.torch.utils.test.test\_tensorboard
 .. automodule:: norse.torch.utils.test.test_tensorboard
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,21 +12,9 @@ norse.torch.utils.test.test\_tensorboard
       test_histogram_hook
       test_image_hook
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       MockWriter
    
-   
-
-   
-   
-   
-
-
-

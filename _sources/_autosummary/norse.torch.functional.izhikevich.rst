@@ -4,11 +4,6 @@ norse.torch.functional.izhikevich
 .. automodule:: norse.torch.functional.izhikevich
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,10 +11,6 @@ norse.torch.functional.izhikevich
       create_izhikevich_spiking_behavior
       izhikevich_feed_forward_step
       izhikevich_recurrent_step
-   
-   
-
-   
    
    .. rubric:: Classes
 
@@ -30,11 +21,3 @@ norse.torch.functional.izhikevich
       IzhikevichSpikingBehavior
       IzhikevichState
    
-   
-
-   
-   
-   
-
-
-

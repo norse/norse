@@ -4,11 +4,6 @@ norse.torch.utils.test.test\_nir\_import
 .. automodule:: norse.torch.utils.test.test_nir_import
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -23,15 +18,3 @@ norse.torch.utils.test.test\_nir\_import
       test_import_recurrent
       test_import_sumpool2d
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

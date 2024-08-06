@@ -4,11 +4,6 @@ norse.torch.functional.logical
 .. automodule:: norse.torch.functional.logical
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,15 +14,3 @@ norse.torch.functional.logical
       muller_c
       posedge_detector
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

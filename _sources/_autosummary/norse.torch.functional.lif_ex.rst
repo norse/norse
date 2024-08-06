@@ -4,11 +4,6 @@ norse.torch.functional.lif\_ex
 .. automodule:: norse.torch.functional.lif_ex
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,10 +11,6 @@ norse.torch.functional.lif\_ex
       lif_ex_current_encoder
       lif_ex_feed_forward_step
       lif_ex_step
-   
-   
-
-   
    
    .. rubric:: Classes
 
@@ -29,11 +20,3 @@ norse.torch.functional.lif\_ex
       LIFExParameters
       LIFExState
    
-   
-
-   
-   
-   
-
-
-

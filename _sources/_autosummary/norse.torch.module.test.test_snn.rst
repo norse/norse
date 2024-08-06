@@ -4,11 +4,6 @@ norse.torch.module.test.test\_snn
 .. automodule:: norse.torch.module.test.test_snn
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -25,15 +20,3 @@ norse.torch.module.test.test\_snn
       test_snn_recurrent_weights_no_autapses
       test_snn_repr
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

@@ -4,11 +4,6 @@ norse.torch.functional.lif\_adex
 .. automodule:: norse.torch.functional.lif_adex
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,10 +11,6 @@ norse.torch.functional.lif\_adex
       lif_adex_current_encoder
       lif_adex_feed_forward_step
       lif_adex_step
-   
-   
-
-   
    
    .. rubric:: Classes
 
@@ -29,11 +20,3 @@ norse.torch.functional.lif\_adex
       LIFAdExParameters
       LIFAdExState
    
-   
-
-   
-   
-   
-
-
-

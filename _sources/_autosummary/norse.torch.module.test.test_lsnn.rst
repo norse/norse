@@ -4,11 +4,6 @@ norse.torch.module.test.test\_lsnn
 .. automodule:: norse.torch.module.test.test_lsnn
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -23,15 +18,3 @@ norse.torch.module.test.test\_lsnn
       test_lsnn_recurrent_cell_backward
       test_lsnn_recurrent_cell_no_autopses
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

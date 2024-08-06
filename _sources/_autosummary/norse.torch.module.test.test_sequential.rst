@@ -4,11 +4,6 @@ norse.torch.module.test.test\_sequential
 .. automodule:: norse.torch.module.test.test_sequential
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -30,15 +25,3 @@ norse.torch.module.test.test\_sequential
       test_state_sequence_mix
       test_state_sequence_norse
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

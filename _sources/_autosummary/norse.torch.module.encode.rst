@@ -4,15 +4,6 @@ norse.torch.module.encode
 .. automodule:: norse.torch.module.encode
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -26,11 +17,3 @@ norse.torch.module.encode
       SpikeLatencyEncoder
       SpikeLatencyLIFEncoder
    
-   
-
-   
-   
-   
-
-
-

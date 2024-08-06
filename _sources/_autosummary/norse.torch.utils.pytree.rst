@@ -4,11 +4,6 @@ norse.torch.utils.pytree
 .. automodule:: norse.torch.utils.pytree
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -18,10 +13,6 @@ norse.torch.utils.pytree
       register_tuple
       tree_map_only
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -29,11 +20,3 @@ norse.torch.utils.pytree
       MultipleInheritanceNamedTupleMeta
       StateTuple
    
-   
-
-   
-   
-   
-
-
-

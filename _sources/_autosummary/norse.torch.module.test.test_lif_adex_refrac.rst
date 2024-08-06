@@ -4,11 +4,6 @@ norse.torch.module.test.test\_lif\_adex\_refrac
 .. automodule:: norse.torch.module.test.test_lif_adex_refrac
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -26,15 +21,3 @@ norse.torch.module.test.test\_lif\_adex\_refrac
       test_lif_adex_refrac_recurrent_sequence
       test_lif_refrac_cell_autapses
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

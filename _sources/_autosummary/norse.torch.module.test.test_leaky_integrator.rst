@@ -4,11 +4,6 @@ norse.torch.module.test.test\_leaky\_integrator
 .. automodule:: norse.torch.module.test.test_leaky_integrator
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -24,15 +19,3 @@ norse.torch.module.test.test\_leaky\_integrator
       test_li_linear_compile_gpu
       test_li_state
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

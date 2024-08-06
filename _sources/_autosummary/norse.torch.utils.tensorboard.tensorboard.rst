@@ -4,11 +4,6 @@ norse.torch.utils.tensorboard.tensorboard
 .. automodule:: norse.torch.utils.tensorboard.tensorboard
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,15 +14,3 @@ norse.torch.utils.tensorboard.tensorboard
       hook_spike_histogram_sum
       hook_spike_image
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

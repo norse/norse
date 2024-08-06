@@ -4,11 +4,6 @@ norse.torch.module.test.test\_lif\_box
 .. automodule:: norse.torch.module.test.test_lif_box
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -18,15 +13,3 @@ norse.torch.module.test.test\_lif\_box
       test_lif_box_compile_cpu
       test_lif_box_compile_gpu
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

@@ -4,15 +4,6 @@ norse.benchmark.benchmark
 .. automodule:: norse.benchmark.benchmark
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -21,11 +12,3 @@ norse.benchmark.benchmark
       BenchmarkData
       BenchmarkParameters
    
-   
-
-   
-   
-   
-
-
-

@@ -4,15 +4,6 @@ norse.torch.module.snn
 .. automodule:: norse.torch.module.snn
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -22,11 +13,3 @@ norse.torch.module.snn
       SNNRecurrent
       SNNRecurrentCell
    
-   
-
-   
-   
-   
-
-
-

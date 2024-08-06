@@ -4,11 +4,6 @@ norse.torch.functional.threshold
 .. automodule:: norse.torch.functional.threshold
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -22,10 +17,6 @@ norse.torch.functional.threshold
       threshold
       triangle_fn
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -37,11 +28,3 @@ norse.torch.functional.threshold
       Logistic
       Triangle
    
-   
-
-   
-   
-   
-
-
-

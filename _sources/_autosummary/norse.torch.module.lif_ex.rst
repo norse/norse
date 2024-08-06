@@ -4,15 +4,6 @@ norse.torch.module.lif\_ex
 .. automodule:: norse.torch.module.lif_ex
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -22,11 +13,3 @@ norse.torch.module.lif\_ex
       LIFExRecurrent
       LIFExRecurrentCell
    
-   
-
-   
-   
-   
-
-
-

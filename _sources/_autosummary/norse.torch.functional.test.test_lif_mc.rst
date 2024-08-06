@@ -4,11 +4,6 @@ norse.torch.functional.test.test\_lif\_mc
 .. automodule:: norse.torch.functional.test.test_lif_mc
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ norse.torch.functional.test.test\_lif\_mc
       test_lif_mc_feed_forward_step
       test_lif_mc_step
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

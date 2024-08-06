@@ -4,15 +4,6 @@ norse.torch.module.iaf
 .. automodule:: norse.torch.module.iaf
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
@@ -20,11 +11,3 @@ norse.torch.module.iaf
       IAF
       IAFCell
    
-   
-
-   
-   
-   
-
-
-

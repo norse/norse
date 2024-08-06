@@ -4,11 +4,6 @@ norse.torch.functional.reset
 .. automodule:: norse.torch.functional.reset
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ norse.torch.functional.reset
       reset_subtract
       reset_value
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

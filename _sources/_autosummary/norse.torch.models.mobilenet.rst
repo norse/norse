@@ -4,20 +4,11 @@ norse.torch.models.mobilenet
 .. automodule:: norse.torch.models.mobilenet
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       mobilenet_v2
-   
-   
-
-   
    
    .. rubric:: Classes
 
@@ -27,11 +18,3 @@ norse.torch.models.mobilenet
       InvertedResidual
       MobileNetV2
    
-   
-
-   
-   
-   
-
-
-

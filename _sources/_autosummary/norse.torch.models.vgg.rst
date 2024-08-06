@@ -4,11 +4,6 @@ norse.torch.models.vgg
 .. automodule:: norse.torch.models.vgg
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -23,21 +18,9 @@ norse.torch.models.vgg
       vgg19
       vgg19_bn
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       VGG
    
-   
-
-   
-   
-   
-
-
-

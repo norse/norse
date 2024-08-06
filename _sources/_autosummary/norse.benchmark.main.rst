@@ -4,11 +4,6 @@ norse.benchmark.main
 .. automodule:: norse.benchmark.main
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -18,15 +13,3 @@ norse.benchmark.main
       main
       run_benchmark
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

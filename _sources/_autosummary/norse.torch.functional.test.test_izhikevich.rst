@@ -4,11 +4,6 @@ norse.torch.functional.test.test\_izhikevich
 .. automodule:: norse.torch.functional.test.test_izhikevich
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -35,15 +30,3 @@ norse.torch.functional.test.test\_izhikevich
       test_tonic_bursting
       test_tonic_spiking
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

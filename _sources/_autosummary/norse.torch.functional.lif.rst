@@ -4,11 +4,6 @@ norse.torch.functional.lif
 .. automodule:: norse.torch.functional.lif
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -21,22 +16,3 @@ norse.torch.functional.lif
       lif_step_integral
       lif_step_sparse
    
-   
-
-   
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      LIFFeedForwardState
-      LIFState
-   
-   
-
-   
-   
-   
-
-
-

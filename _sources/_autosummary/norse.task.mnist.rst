@@ -4,11 +4,6 @@ norse.task.mnist
 .. automodule:: norse.task.mnist
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,21 +14,9 @@ norse.task.mnist
       test
       train
    
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       LIFConvNet
    
-   
-
-   
-   
-   
-
-
-

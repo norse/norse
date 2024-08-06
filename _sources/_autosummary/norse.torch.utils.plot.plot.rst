@@ -4,11 +4,6 @@ norse.torch.utils.plot.plot
 .. automodule:: norse.torch.utils.plot.plot
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -21,15 +16,3 @@ norse.torch.utils.plot.plot
       plot_scatter_3d
       plot_spikes_2d
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

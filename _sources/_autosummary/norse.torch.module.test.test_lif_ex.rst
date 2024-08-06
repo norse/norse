@@ -4,11 +4,6 @@ norse.torch.module.test.test\_lif\_ex
 .. automodule:: norse.torch.module.test.test_lif_ex
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -25,15 +20,3 @@ norse.torch.module.test.test\_lif\_ex
       test_lif_ex_recurrent_state
       test_lif_ex_state
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
