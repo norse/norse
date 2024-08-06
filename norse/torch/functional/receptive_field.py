@@ -212,9 +212,6 @@ def spatial_parameters(
         mask = ratios != 1
         asymmetric_ratios = ratios[mask]
         symmetric_ratios = ratios[~mask]
-        print(
-            scales.device, angles.device, asymmetric_ratios.device, x.device, y.device
-        )
         asymmetric_fields = torch.cartesian_prod(
             scales, angles, asymmetric_ratios, x, y
         )
