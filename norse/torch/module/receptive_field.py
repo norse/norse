@@ -51,7 +51,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
         aggregate: bool = True,
         domain: float = 8,
         optimize_fields: bool = True,
-        optimize_log: bool = False,
+        optimize_log: bool = True,
         **kwargs,
     ) -> None:
         super().__init__()
@@ -234,7 +234,7 @@ class SampledSpatialReceptiveField2d(torch.nn.Module):
         optimize_ratios: bool = True,
         optimize_x: bool = True,
         optimize_y: bool = True,
-        optimize_log: bool = False,
+        optimize_log: bool = True,
         **kwargs,
     ):
         super().__init__()
@@ -349,7 +349,7 @@ class ParameterizedSpatialReceptiveField2d(torch.nn.Module):
         optimize_ratios: bool = True,
         optimize_x: bool = True,
         optimize_y: bool = True,
-        optimize_log: bool = False,
+        optimize_log: bool = True,
         **kwargs,
     ):
         super().__init__()
