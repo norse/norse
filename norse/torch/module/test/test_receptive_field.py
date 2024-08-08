@@ -157,3 +157,54 @@ def test_backprop_twice():
         model.has_updated = False
         y2 = model(x)
         y2.sum().backward()
+
+
+def test_backprop_twice_log_upd():
+    model = SpatialReceptiveField2d(
+        1, 9, torch.tensor([[1, 1, 1, 0, 0, 0, 0.0]]), optimize_log=True
+    )
+    x = torch.ones(1, 1, 9, 9)
+    y1 = model(x)
+    y1.sum().backward()
+    y2 = model(x)
+    y2.sum().backward()
+
+    # This should fail
+    with pytest.raises(RuntimeError):
+        y1 = model(x)
+        y1.sum().backward()
+        model.has_updated = False
+        y2 = model(x)
+        y2.sum().backward()
+
+
+def test_column_parameterized_receptive_field_logarithmic_update():
+    scales = torch.tensor([1.0, 2.0])
+    angles = torch.tensor([0.0, 1.0])
+    ratios = torch.tensor([0.5, 1.0])
+    x = torch.tensor([0.0, 1.0])
+    y = torch.tensor([0.0, 1.0])
+    m = ParameterizedSpatialReceptiveField2d(
+        1, 9, scales, angles, ratios, 1, x, y, False, False, True, True, False, True
+    )
+    ratios_copy = m.ratios.clone()
+    x_copy = m.x.clone()
+    old_kernels = m.submodule.weights.detach().clone()
+    optim = torch.optim.SGD(list(m.parameters()), lr=1)
+    y = m(torch.ones(1, 1, 9, 9))
+    y.sum().backward()
+    assert m.submodule.weights.grad_fn is not None
+    assert not m.ratios.is_leaf
+    assert m.log_ratios.grad is not None
+    assert m.scales.grad is None
+    assert m.angles.grad is None
+    assert m.x.grad is not None
+    assert m.y.grad is None
+    assert m.has_updated is True
+    optim.step()
+    print(m.parameters())
+    m._update_weights()
+    assert not torch.all(torch.eq(m.ratios, ratios_copy))
+    assert not torch.all(torch.eq(m.log_ratios, torch.log(ratios_copy)))
+    assert not torch.all(torch.eq(m.x, x_copy))
+    assert not torch.all(torch.eq(old_kernels, m.submodule.weights))
