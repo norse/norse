@@ -9,6 +9,8 @@ norse.torch.module.test.test\_receptive\_field
    .. autosummary::
    
       test_backprop_twice
+      test_backprop_twice_log_upd
+      test_column_parameterized_receptive_field_logarithmic_update
       test_column_parameterized_receptive_field_update
       test_column_parameterized_receptive_field_update_default_xy
       test_spatial_receptive_field
