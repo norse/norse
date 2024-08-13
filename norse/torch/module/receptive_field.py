@@ -7,7 +7,6 @@ For use in spiking / binary signals, see the paper on `Translation and Scale Inv
 from typing import Callable, NamedTuple, Optional, Tuple
 
 import torch
-import traceback
 
 from norse.torch.module.snn import SNNCell
 from norse.torch.module.leaky_integrator_box import LIBoxCell, LIBoxParameters
