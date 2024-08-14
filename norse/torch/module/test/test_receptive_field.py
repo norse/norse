@@ -28,7 +28,7 @@ def test_spatial_receptive_field_update_flag():
 
 def test_spatial_receptive_field_update_kernels():
     parameters = torch.tensor([[1, 0, 1, 0, 0, 0, 0.0]])
-    m = SpatialReceptiveField2d(1, 9, rf_parameters=parameters)
+    m = SpatialReceptiveField2d(1, 9, rf_parameters=parameters, optimize_log=False)
     old_kernels = m.weights.detach().clone()
     optim = torch.optim.SGD(list(m.parameters()), lr=1)
     y = m(torch.eye(9).view(1, 1, 9, 9))
@@ -52,7 +52,20 @@ def test_spatially_parameterized_receptive_field_update():
     ratios_copy = ratios.clone()
     x_copy = x.clone()
     m = SampledSpatialReceptiveField2d(
-        1, 9, scales, angles, ratios, 1, x, y, False, False, True, True, False
+        1,
+        9,
+        scales,
+        angles,
+        ratios,
+        1,
+        x,
+        y,
+        False,
+        False,
+        True,
+        True,
+        False,
+        optimize_log=False,
     )
     old_kernels = m.submodule.weights.detach().clone()
     optim = torch.optim.SGD(list(m.parameters()), lr=1)
@@ -79,7 +92,20 @@ def test_column_parameterized_receptive_field_update():
     x = torch.tensor([0.0, 1.0])
     y = torch.tensor([0.0, 1.0])
     m = ParameterizedSpatialReceptiveField2d(
-        1, 9, scales, angles, ratios, 1, x, y, False, False, True, True, False
+        1,
+        9,
+        scales,
+        angles,
+        ratios,
+        1,
+        x,
+        y,
+        False,
+        False,
+        True,
+        True,
+        False,
+        optimize_log=False,
     )
     ratios_copy = m.ratios.clone()
     x_copy = m.x.clone()
@@ -120,6 +146,7 @@ def test_column_parameterized_receptive_field_update_default_xy():
         optimize_ratios=True,
         optimize_x=True,
         optimize_y=False,
+        optimize_log=False,
     )
     ratios_copy = m.ratios.clone()
     x_copy = m.x.clone()

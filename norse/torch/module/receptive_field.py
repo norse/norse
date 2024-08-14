@@ -57,6 +57,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
         super().__init__()
 
         self.optimize_log = optimize_log
+        self.optimize_fields = optimize_fields
         if optimize_fields:
             if not self.optimize_log:
                 self.register_parameter(
@@ -157,7 +158,7 @@ class SpatialReceptiveField2d(torch.nn.Module):
         if self.has_updated:
             # Reset the flag
             self.has_updated = False
-            if self.optimize_log:
+            if self.optimize_fields and self.optimize_log:
                 self.rf_parameters = self._exp_log_rf_parameters()
             self.rf_parameters_previous = self.rf_parameters.detach().clone()
             # Calculate new weights
@@ -264,7 +265,7 @@ class SampledSpatialReceptiveField2d(torch.nn.Module):
         self.y = torch.nn.Parameter(y) if optimize_y else y
 
         self.derivatives = derivatives
-        self.has_updated = False
+        self.has_updated = True
 
         self.submodule = SpatialReceptiveField2d(
             in_channels=in_channels,
@@ -278,6 +279,7 @@ class SampledSpatialReceptiveField2d(torch.nn.Module):
                 self.y,
             ),
             optimize_fields=False,
+            optimize_log=False,
             **kwargs,
         )
 
@@ -414,9 +416,10 @@ class ParameterizedSpatialReceptiveField2d(torch.nn.Module):
             size=size,
             rf_parameters=rf_parameters,
             optimize_fields=False,
+            optimize_log=False,
             **kwargs,
         )
-        self.has_updated = False
+        self.has_updated = True
 
         if (
             optimize_angles
