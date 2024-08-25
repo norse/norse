@@ -9,6 +9,7 @@ norse.torch.functional.test.test\_superspike
    .. autosummary::
    
       test_backward
+      test_backward_alpha
       test_compile
       test_forward
    
