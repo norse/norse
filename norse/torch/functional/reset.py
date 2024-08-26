@@ -21,6 +21,7 @@ def reset_subtract(
 ) -> torch.Tensor:
     return v - z * th
 
+
 def reset_by_method(
     z: torch.Tensor,
     v: torch.Tensor,
@@ -32,7 +33,10 @@ def reset_by_method(
         return reset_value(z, v, reset, th)
     if reset_method == "subtract":
         return reset_subtract(z, v, reset, th)
-    raise ValueError(f"Unknown reset method: {reset_method}, must be 'value' or 'subtract'")
+    raise ValueError(
+        f"Unknown reset method: {reset_method}, must be 'value' or 'subtract'"
+    )
+
 
 def reset_fn_from_string(
     reset_method: str,
