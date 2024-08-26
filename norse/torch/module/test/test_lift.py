@@ -83,7 +83,7 @@ def test_compile_lift():
 )
 def test_compile_lift_cuda():
     c = Lift(LIFBoxCell(LIFBoxParameters().cuda())).cuda()
-    c = torch.compile(c, mode="reduce-overhead", fullgraph=True)
+    c = torch.compile(c, backend="cudagraphs", fullgraph=True)
     data = torch.randn(5, 2).cuda()
     out = c(data)
     assert type(out) == tuple

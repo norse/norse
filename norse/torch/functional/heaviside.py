@@ -24,4 +24,4 @@ def heaviside(data):
             data.shape,
         )
     else:
-        return torch.gt(data, torch.as_tensor(0.0)).to(data.dtype)  # pragma: no cover
+        return torch.gt(data, torch.tensor([0.0], device=data.device)).to(data.dtype)  # pragma: no cover
