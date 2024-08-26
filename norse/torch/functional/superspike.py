@@ -11,7 +11,7 @@ class SuperSpike(torch.autograd.Function):
     """
 
     @staticmethod
-    def forward(input_tensor: torch.Tensor, alpha: float) -> torch.Tensor:
+    def forward(input_tensor: torch.Tensor, alpha: torch.Tensor) -> torch.Tensor:
         return heaviside(input_tensor)
 
     @staticmethod
@@ -31,5 +31,7 @@ class SuperSpike(torch.autograd.Function):
         return grad, None
 
 
-def super_fn(x: torch.Tensor, alpha: float = 100.0) -> torch.Tensor:
+def super_fn(
+    x: torch.Tensor, alpha: torch.Tensor = torch.tensor([100.0])
+) -> torch.Tensor:
     return SuperSpike.apply(x, alpha)

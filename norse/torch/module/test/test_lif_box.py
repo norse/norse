@@ -31,14 +31,16 @@ def test_lif_box_compile_cpu():
     p = LIFBoxParameters(
         tau_mem_inv=torch.ones(1) * 1000,
         v_th=torch.ones(1),
-        v_leak=torch.zeros(1),
+        v_leak=torch.zeros(1, requires_grad=True),
         v_reset=torch.zeros(1),
         alpha=torch.zeros(1),
     )
 
     m = LIFBoxCell(p)
-    m = torch.compile(m)
+    m = torch.compile(m, fullgraph=True)
+    torch.compiler.cudagraph_mark_step_begin()
     z, s = m(x)
+    torch.compiler.cudagraph_mark_step_begin()
     _, s = m(x, s)
 
     z.sum().backward()
@@ -53,13 +55,13 @@ def test_lif_box_compile_gpu():
     p = LIFBoxParameters(
         tau_mem_inv=torch.ones(1, device="cuda") * 1000,
         v_th=torch.ones(1, device="cuda"),
-        v_leak=torch.zeros(1, device="cuda"),
+        v_leak=torch.zeros(1, device="cuda", requires_grad=True),
         v_reset=torch.zeros(1, device="cuda"),
         alpha=torch.zeros(1, device="cuda"),
     )
 
-    m = LIFBoxCell(p)
-    m = torch.compile(m, mode="reduce-overhead")
+    m = LIFBoxCell(p).cuda()
+    m = torch.compile(m, mode="reduce-overhead", fullgraph=True)
     z, s = m(x)
     _, s = m(x, s)
 

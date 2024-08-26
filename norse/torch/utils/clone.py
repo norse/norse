@@ -3,12 +3,9 @@ from numbers import Number
 import torch
 
 
-def clone_tensor(x: Union[torch.Tensor, Number], device: Optional[str] = None):
-    cloned = torch.as_tensor(x)
-    if isinstance(x, torch.Tensor):
-        cloned = x.detach().clone()
-    else:
-        raise ValueError("Expected tensor or number, but received ", x)
+def clone_tensor(x: torch.Tensor, device: Optional[str] = None) -> torch.Tensor:
+    """Clone a tensor and move it to a device, if specified."""
+    cloned = torch.as_tensor(x).detach().clone()
     if device is not None:
         return cloned.to(device)
     else:

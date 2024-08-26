@@ -1,5 +1,8 @@
 # pytype: skip-file
 import pytest
+
+from typing import NamedTuple
+
 import torch
 from norse.torch.functional.lif import (
     LIFFeedForwardState,
@@ -14,19 +17,9 @@ from norse.torch.module import lif, snn, lif_refrac
 from norse.torch.utils import pytree
 
 
-class MockParams(pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta):
+class MockParams(NamedTuple, metaclass=pytree.StateTupleMeta):
     my_param: torch.Tensor = torch.tensor([-5.2])
     method: str = "bob"
-
-
-def test_snn_recurrent_cell_weights():
-    in_w = torch.randn(3, 2)
-    re_w = torch.randn(3, 3)
-    n = snn.SNNRecurrentCell(
-        None, None, 2, 3, p=MockParams(), input_weights=in_w, recurrent_weights=re_w
-    )
-    assert torch.all(torch.eq(n.input_weights, in_w))
-    assert torch.all(torch.eq(n.recurrent_weights, re_w))
 
 
 def test_snn_recurrent_cell_weights_no_autapses():

@@ -4,19 +4,16 @@ Compared to the :mod:`norse.torch.functional.lif` modules, this model leaves out
 It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as "current boxes".
 """
 
-from dataclasses import dataclass
 from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
 from norse.torch.functional.threshold import threshold
-from norse.torch.functional.reset import ResetMethod, reset_value
+from norse.torch.functional.reset import reset_by_method
 from norse.torch.utils import pytree
 
 
-class LIFBoxParameters(
-    pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta
-):
+class LIFBoxParameters(NamedTuple, metaclass=pytree.StateTupleMeta):
     """Parametrization of a boxed LIF neuron
 
     Parameters:
@@ -25,23 +22,23 @@ class LIFBoxParameters(
         v_leak (torch.Tensor): leak potential in mV
         v_th (torch.Tensor): threshold potential in mV
         v_reset (torch.Tensor): reset potential in mV
-        method (str): method to determine the spike threshold
+        method (str): method to determine the spike threshold, defaults to "super"
                       (relevant for surrogate gradients)
         alpha (float): hyper parameter to use in surrogate gradient computation
+        reset_method (str): method to determine the reset, can be either
+                            "value" (default) or "subtract"
     """
 
-    tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
-    v_leak: torch.Tensor = torch.as_tensor(0.0)
-    v_th: torch.Tensor = torch.as_tensor(1.0)
-    v_reset: torch.Tensor = torch.as_tensor(0.0)
+    tau_mem_inv: torch.Tensor = torch.tensor([1.0 / 1e-2])
+    v_leak: torch.Tensor = torch.tensor([0.0])
+    v_th: torch.Tensor = torch.tensor([1.0])
+    v_reset: torch.Tensor = torch.tensor([0.0])
     method: str = "super"
-    alpha: float = torch.as_tensor(100.0)
-    reset_method: ResetMethod = reset_value
+    alpha: torch.Tensor = torch.tensor([100.0])
+    reset_method: str = "value"
 
 
-class LIFBoxState(
-    pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta
-):
+class LIFBoxState(NamedTuple, metaclass=pytree.StateTupleMeta):
     """State of a LIF neuron
 
     Parameters:
@@ -53,9 +50,7 @@ class LIFBoxState(
     v: torch.Tensor
 
 
-class LIFBoxFeedForwardState(
-    pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta
-):
+class LIFBoxFeedForwardState(NamedTuple, metaclass=pytree.StateTupleMeta):
     """State of a feed forward LIF neuron
 
     Parameters:
@@ -103,6 +98,6 @@ def lif_box_feed_forward_step(
     # compute new spikes
     z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
-    v_new = p.reset_method(z_new, v_decayed, p.v_reset, p.v_th)
+    v_new = reset_by_method(z_new, v_decayed, p.v_reset, p.v_th, p.reset_method)
 
     return z_new, LIFBoxFeedForwardState(v=v_new)

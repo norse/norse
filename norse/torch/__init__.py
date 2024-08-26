@@ -124,10 +124,21 @@ from norse.torch.functional.lsnn import (
     lsnn_feed_forward_step,
     lsnn_step,
 )
+from norse.torch.functional.receptive_field import (
+    gaussian_kernel,
+    spatial_receptive_field,
+    spatial_receptive_fields_with_derivatives,
+)
 from norse.torch.functional.regularization import (
     regularize_step,
     spike_accumulator,
     voltage_accumulator,
+)
+from norse.torch.functional.reset import (
+    reset_value,
+    reset_subtract,
+    reset_fn_from_string,
+    reset_by_method,
 )
 from norse.torch.functional.stdp_sensor import (
     STDPSensorParameters,
@@ -172,13 +183,6 @@ from norse.torch.functional.izhikevich import (
     izhikevich_feed_forward_step,
     izhikevich_recurrent_step,
 )
-
-from norse.torch.functional.receptive_field import (
-    gaussian_kernel,
-    spatial_receptive_field,
-    spatial_receptive_fields_with_derivatives,
-)
-from norse.torch.functional.reset import ResetMethod, reset_value, reset_subtract
 
 from norse.torch.functional.superspike import super_fn
 
@@ -298,6 +302,12 @@ from norse.torch.module.lsnn import (
     LSNNParameters,
     LSNNState,
 )
+from norse.torch.module.receptive_field import (
+    ParameterizedSpatialReceptiveField2d,
+    SampledSpatialReceptiveField2d,
+    SpatialReceptiveField2d,
+    TemporalReceptiveField,
+)
 from norse.torch.module.regularization import RegularizationCell
 from norse.torch.module.sequential import (
     SequentialState,
@@ -310,12 +320,6 @@ from norse.torch.module.izhikevich import (
     IzhikevichRecurrentCell,
     Izhikevich,
     IzhikevichRecurrent,
-)
-from norse.torch.module.receptive_field import (
-    ParameterizedSpatialReceptiveField2d,
-    SampledSpatialReceptiveField2d,
-    SpatialReceptiveField2d,
-    TemporalReceptiveField,
 )
 from norse.torch.module.spikes_to_times_decoder import SpikesToTimesDecoder
 
@@ -531,9 +535,9 @@ __all__ = [
     "spike_accumulator",
     "voltage_accumulator",
     # Reset
-    "ResetMethod",
     "reset_value",
     "reset_subtract",
+    "reset_by_method",
     # STDP
     "STDPSensorParameters",
     "STDPSensorState",

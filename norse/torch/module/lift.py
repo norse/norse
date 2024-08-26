@@ -1,4 +1,4 @@
-from typing import Tuple, Union
+from typing import Any, Final, Generic, Optional, Tuple, TypeVar, Union
 
 
 import torch
@@ -33,27 +33,28 @@ class Lift(torch.nn.Module):
         >>> output, _ = module(data)
     """
 
+    is_stateful: Final[bool]
+
     def __init__(self, module: torch.nn.Module):
-        super(Lift, self).__init__()
-        self.lifted_module = module
+        super().__init__()
+        self.register_module("lifted_module", module)
         self.is_stateful = _is_module_stateful(module)
-        # or isinstance(
-        #    module, torch.nn.SequentialState
-        # )
 
     def forward(
-        self, x: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]
+        self,
+        x: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]],
+        state: Optional[Any] = None,
     ) -> torch.Tensor:
         """Apply the module over the input along the 0-th (time) dimension
         and accumulate the outputs in an output tensor.
 
         Parameters:
-            x : Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]
+            x: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]
+            state: Optional[torch.Tensor]
 
         Note:
             If the input is a tuple of two tensors, the second tuple entry will be ignored.
         """
-        state = None
         if isinstance(x, tuple):
             x, state = x
 
@@ -62,9 +63,11 @@ class Lift(torch.nn.Module):
 
         for ts in range(T):
             if self.is_stateful:
-                out, state = self.lifted_module(x[ts], state)
+                out = self.lifted_module(x[ts], state)
             else:
                 out = self.lifted_module(x[ts])
+            if isinstance(out, tuple):
+                out, state = out
             outputs += [out]
 
         if self.is_stateful:
