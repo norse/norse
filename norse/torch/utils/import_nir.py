@@ -8,6 +8,7 @@ import numpy as np
 import torch
 
 import norse.torch.functional.reset as reset
+import norse.torch.module.threshold as threshold
 import norse.torch.module.iaf as iaf
 import norse.torch.module.leaky_integrator_box as li_box
 import norse.torch.module.lif_box as lif_box
@@ -136,6 +137,8 @@ def _import_norse_module(
             kernel_size=tuple(node.kernel_size),
             stride=tuple(node.stride),
         )
+    if isinstance(node, nir.Threshold):
+        return threshold.SpikeThreshold(threshold=_to_tensor(node.threshold))
     # if isinstance(node, nir.NIRGraph):
     #     # Currently, just parse a recurrent recurrent Cuba LIF graph
     #     types = {type(v): v for v in node.nodes.values()}

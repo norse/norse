@@ -317,6 +317,7 @@ from norse.torch.module.receptive_field import (
     SpatialReceptiveField2d,
     TemporalReceptiveField,
 )
+from norse.torch.module.threshold import SpikeThreshold
 from norse.torch.module.spikes_to_times_decoder import SpikesToTimesDecoder
 
 ################################################
@@ -656,6 +657,8 @@ __all__ = [
     "SampledSpatialReceptiveField2d",
     "SpatialReceptiveField2d",
     "TemporalReceptiveField",
+    # Threshold
+    "SpikeThreshold",
     # Decoder
     "SpikesToTimesDecoder",
     ############ UTILS

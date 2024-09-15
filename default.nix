@@ -1,6 +1,6 @@
 with import <nixpkgs> { };
 let
-  pythonPackages = python311Packages;
+  pythonPackages = python3Packages;
 in
 pkgs.mkShell rec {
   name = "impurePythonEnv";
@@ -18,9 +18,9 @@ pkgs.mkShell rec {
     # add them to PYTHONPATH and thus make them accessible from within the venv.
     pythonPackages.matplotlib
     pythonPackages.pybind11
-    # pythonPackages.pytest
+    pythonPackages.pytest
 
-    pythonPackages.torch-bin
+    pythonPackages.torch
 
     cmake
     ninja
