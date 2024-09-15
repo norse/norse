@@ -58,16 +58,6 @@ def register_tuple(typ: Any):
     register_pytree_node(typ, _namedtuple_flatten, _namedtuple_unflatten)
 
 
-class MultipleInheritanceNamedTupleMeta(NamedTupleMeta):
-    """A meta class to instantiate and register named tuples"""
-
-    def __new__(mcls, typename, bases, ns):
-        cls_obj = super().__new__(mcls, typename + "_nm_base", (NamedTuple,), ns)
-        t = type(typename, bases + (cls_obj,), {})
-        register_tuple(t)  # Registers the tuple in the pytree registry
-        return t
-
-
 class StateTuple:
     """
     A base class for state-tuples that allow operations like `cuda`, `to`, `int`, etc.
@@ -86,22 +76,40 @@ class StateTuple:
     # by removing the __weakref__ slot
     __slots__ = []
 
-    def broadcast(self, template: torch.Tensor):
+    def broadcast_to(
+        self, template: typing.Union[torch.Tensor, torch.Size, typing.Tuple[int]]
+    ):
         """
         Broadcasts a state tensor according to a given template, returning a tensor of the same shape on the same device.
 
         Example
         >>> input_tensor = ...
-        >>> state.broadcast(input_tensor)
+        >>> state.broadcast_to(input_tensor)
 
         Arguments:
             template (torch.Tensor): The tensor template whose shape we broadcast to
         """
-        return tree_map_only(
-            torch.Tensor,
-            functools.partial(broadcast_input, template=template),
-            self,
+        if isinstance(template, typing.Tuple):
+            template = torch.Size(template)
+        f = (
+            functools.partial(broadcast_size, template=template)
+            if isinstance(template, torch.Size)
+            else functools.partial(broadcast_input, template=template)
         )
+        return tree_map_only(torch.Tensor, f, self)
+
+    def clone(self):
+        """
+        Clones the state tuple.
+
+        Example
+        >>> s1 = SomeState()
+        >>> s2 = s1.clone()
+
+        Returns:
+            StateTuple: A clone of the state tuple
+        """
+        return tree_map_only(torch.Tensor, lambda x: x.clone(), self)
 
     def cuda(self):
         return self.to("cuda")
@@ -109,11 +117,25 @@ class StateTuple:
     def cpu(self):
         return self.to("cpu")
 
+    def detach(self):
+        return tree_map_only(torch.Tensor, lambda x: x.detach(), self)
+
+    def requires_grad_(self, requires_grad: bool):
+        return tree_map_only(
+            torch.Tensor, lambda x: x.requires_grad_(requires_grad), self
+        )
+
     def int(self):
         return tree_map_only(torch.Tensor, lambda x: x.int(), self)
 
     def float(self):
         return tree_map_only(torch.Tensor, lambda x: x.float(), self)
+
+    def to_dense(self):
+        return tree_map_only(torch.Tensor, lambda x: x.to_dense(), self)
+
+    def to_sparse(self):
+        return tree_map_only(torch.Tensor, lambda x: x.to_sparse(), self)
 
     def to(self, device):
         return tree_map_only(
@@ -126,9 +148,9 @@ def broadcast_input(potential_scalar: Any, template: torch.Tensor):
         isinstance(potential_scalar, torch.Tensor) and potential_scalar.numel() == 1
     ) or (  # Is scalar
         isinstance(potential_scalar, Number)
-    ):  # Is similarly-shaped tensor
-        return torch.full_like(template, potential_scalar.item())
-    elif (
+    ):
+        return torch.full_like(template, float(potential_scalar))
+    elif (  # Is similarly-shaped tensor
         isinstance(potential_scalar, torch.Tensor)
         and potential_scalar.shape == template.shape
     ):
@@ -137,3 +159,42 @@ def broadcast_input(potential_scalar: Any, template: torch.Tensor):
         raise ValueError(
             f"Cannot broadcast tensor because it is non-scalar (shape {potential_scalar.shape}) with a different shape than the template ({template.shape})"
         )
+
+
+def broadcast_size(potential_scalar: Any, template: torch.Size) -> torch.Tensor:
+    if (  # Is single-value tensor
+        isinstance(potential_scalar, torch.Tensor) and potential_scalar.numel() == 1
+    ) or (  # Is scalar
+        isinstance(potential_scalar, Number)
+    ):
+        return torch.full(template, float(potential_scalar))
+    elif (  # Is similarly-shaped tensor
+        isinstance(potential_scalar, torch.Tensor)
+        and potential_scalar.shape == template
+    ):
+        return potential_scalar
+    else:
+        raise ValueError(
+            f"Cannot broadcast tensor because it is non-scalar (shape {potential_scalar.shape}) with a different shape than the template ({template})"
+        )
+
+
+class StateTupleMeta(NamedTupleMeta):
+    """
+    A meta class to instantiate and register state classes as named tuples while enriching
+    them with the StateTuple methods
+    """
+
+    def __new__(mcls, typename, bases, ns):
+        t = super().__new__(mcls, typename, bases, ns)
+        # Registers the tuple in the pytree registry
+        register_tuple(t)
+        # Enrich the tuple with the StateTuple methods
+        methods = {
+            name: fun
+            for name, fun in StateTuple.__dict__.items()
+            if not name.startswith("_")
+        }
+        for name, fun in methods.items():
+            setattr(t, name, fun)
+        return t

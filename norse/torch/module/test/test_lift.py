@@ -3,6 +3,7 @@ import platform
 
 import torch
 
+from norse.torch.module.lif_box import LIFBoxCell, LIFBoxParameters
 from norse.torch.module.lif import LIF, LIFCell, LIFFeedForwardState
 from norse.torch.module.leaky_integrator import LICell, LIState
 from norse.torch.module.lift import Lift
@@ -69,8 +70,8 @@ def test_lift_sequential_stateful():
     not platform.system() == "Linux", reason="Only Linux supports torch.compile"
 )
 def test_compile_lift():
-    c = Lift(LIFCell())
-    c = torch.compile(c, mode="reduce-overhead")
+    c = Lift(LIFBoxCell())
+    c = torch.compile(c, mode="reduce-overhead", fullgraph=True)
     data = torch.randn(5, 2)
     out = c(data)
     assert type(out) == tuple
@@ -80,9 +81,9 @@ def test_compile_lift():
     not torch.cuda.is_available() or not platform.system() == "Linux",
     reason="no cuda device or not on linux",
 )
-def test_compile_lift():
-    c = Lift(LIFCell()).cuda()
-    c = torch.compile(c, mode="reduce-overhead")
+def test_compile_lift_cuda():
+    c = Lift(LIFBoxCell(LIFBoxParameters().cuda())).cuda()
+    c = torch.compile(c, backend="cudagraphs", fullgraph=True)
     data = torch.randn(5, 2).cuda()
     out = c(data)
     assert type(out) == tuple

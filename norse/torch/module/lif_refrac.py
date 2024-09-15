@@ -76,12 +76,7 @@ class LIFRefracCell(SNNCell):
     ) -> LIFRefracFeedForwardState:
         state = LIFRefracFeedForwardState(
             LIFFeedForwardState(
-                v=torch.full(
-                    input_tensor.shape,
-                    self.p.lif.v_leak.detach(),
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                ),
+                v=self.p.lif.v_leak.clone(),
                 i=torch.zeros(
                     input_tensor.shape,
                     device=input_tensor.device,
@@ -269,12 +264,7 @@ class LIFRefracRecurrent(SNNRecurrent):
                     *dims, device=input_tensor.device, dtype=input_tensor.dtype
                 )
             ),
-            v=torch.full(
-                dims,
-                torch.as_tensor(self.p.lif.v_leak).detach(),
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
+            v=self.p.lif.v_leak.clone(),
             i=torch.zeros(
                 *dims,
                 device=input_tensor.device,

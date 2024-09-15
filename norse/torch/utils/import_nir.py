@@ -57,7 +57,7 @@ class CubaLIF(torch.nn.Module):
 def _import_norse_module(
     node: nir.NIRNode,
     ignore_warnings: bool = False,
-    reset_method: reset.ResetMethod = reset.reset_value,
+    reset_method: str = "value",
     dt: float = 0.001,
 ) -> torch.nn.Module:
     if isinstance(node, nir.Affine):
@@ -150,7 +150,7 @@ def _import_norse_module(
 def from_nir(
     node: nir.NIRNode,
     ignore_warnings: bool = False,
-    reset_method: reset.ResetMethod = reset.reset_value,
+    reset_method: str = "value",
     dt: float = 0.001,
 ) -> torch.nn.Module:
     """Converts a NIR graph to a Norse module.

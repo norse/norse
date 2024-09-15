@@ -58,11 +58,13 @@ class LIFCell(SNNCell):
 
     Arguments:
         p (LIFParameters): Parameters of the LIF neuron model.
-        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.
+        requires_grad (bool): Whether the neuron parameters should be optimized. Defaults to True.
         dt (float): Time step to use. Defaults to 0.001.
     """
 
-    def __init__(self, p: LIFParameters = LIFParameters(), **kwargs):
+    def __init__(
+        self, p: LIFParameters = LIFParameters(), requires_grad: bool = True, **kwargs
+    ):
         super().__init__(
             activation=(
                 lif_feed_forward_adjoint_step
@@ -86,18 +88,20 @@ class LIFCell(SNNCell):
             ),
             **kwargs,
         )
+        self.initial_state_dense = LIFFeedForwardState(
+            v=self.p.v_leak.clone().requires_grad_(requires_grad),
+            i=torch.zeros(1, device=self.p.v_leak.device),
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
-        state = LIFFeedForwardState(
-            v=clone_tensor(self.p.v_leak),
-            i=torch.zeros(
-                input_tensor.shape,
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
-        )
-        state.v.requires_grad = True
-        return state
+        if input_tensor.is_sparse:
+            return (
+                self.initial_state_dense.broadcast_to(input_tensor.shape)
+                .to_sparse()
+                .to(input_tensor.device)
+            )
+        else:
+            return self.initial_state_dense.clone().to(input_tensor.device)
 
 
 class LIFRecurrentCell(SNNRecurrentCell):
@@ -174,37 +178,21 @@ class LIFRecurrentCell(SNNRecurrentCell):
             hidden_size=hidden_size,
             **kwargs,
         )
+        self.dims = (self.hidden_size,)
+        v = self.p.v_leak.clone().requires_grad_(True)
+        if v.is_sparse:
+            v = v.to_dense()
+        self.initial_state_dense = LIFState(
+            z=torch.zeros(self.dims, device=self.p.v_leak.device),
+            v=v,
+            i=torch.zeros(self.dims, device=self.p.v_leak.device),
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
-        dims = (*input_tensor.shape[:-1], self.hidden_size)
-        state = LIFState(
-            z=(
-                torch.zeros(
-                    dims,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                ).to_sparse()
-                if input_tensor.is_sparse
-                else torch.zeros(
-                    dims,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                )
-            ),
-            v=torch.full(
-                dims,
-                torch.as_tensor(self.p.v_leak).detach(),
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
-            i=torch.zeros(
-                dims,
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
-        )
-        state.v.requires_grad = True
-        return state
+        if input_tensor.is_sparse:
+            return self.initial_state_dense.broadcast_to(self.dims).to_sparse()
+        else:
+            return self.initial_state_dense.clone()
 
 
 class LIF(SNN):
@@ -250,23 +238,21 @@ class LIF(SNN):
             ),
             **kwargs,
         )
+        v = self.p.v_leak.clone().requires_grad_(True)
+        if v.is_sparse:
+            v = v.to_dense()
+        self.initial_state_dense = LIFFeedForwardState(
+            v=v,
+            i=torch.zeros_like(self.p.v_leak, device=self.p.v_leak.device),
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFFeedForwardState:
-        state = LIFFeedForwardState(
-            v=torch.full(
-                input_tensor.shape[1:],  # Assume first dimension is time
-                torch.as_tensor(self.p.v_leak).detach(),
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
-            i=torch.zeros(
-                input_tensor.shape[1:],
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
-        )
-        state.v.requires_grad = True
-        return state
+        if input_tensor.is_sparse:
+            return self.initial_state_dense.broadcast_to(
+                input_tensor.shape[1:]  # Remove time dimension
+            ).to_sparse()
+        else:
+            return self.initial_state_dense.clone()
 
 
 class LIFRecurrent(SNNRecurrent):
@@ -322,37 +308,22 @@ class LIFRecurrent(SNNRecurrent):
             ),
             **kwargs,
         )
+        dims = (self.hidden_size,)
+        v = self.p.v_leak.clone().requires_grad_(True)
+        if v.is_sparse:
+            v = v.to_dense()
+        if v.shape.numel() == 1:
+            v = v.broadcast_to(dims)
+        self.initial_state_dense = LIFState(
+            z=torch.zeros(dims, device=self.p.v_leak.device),
+            v=v,
+            i=torch.zeros(dims, device=self.p.v_leak.device),
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> LIFState:
-        dims = (  # Remove first dimension (time)
-            *input_tensor.shape[1:-1],
-            self.hidden_size,
-        )
-        state = LIFState(
-            z=(
-                torch.zeros(
-                    dims,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                ).to_sparse()
-                if input_tensor.is_sparse
-                else torch.zeros(
-                    dims,
-                    device=input_tensor.device,
-                    dtype=input_tensor.dtype,
-                )
-            ),
-            v=torch.full(
-                dims,
-                torch.as_tensor(self.p.v_leak).detach(),
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
-            i=torch.zeros(
-                dims,
-                device=input_tensor.device,
-                dtype=torch.float32,
-            ),
-        )
-        state.v.requires_grad = True
-        return state
+        if input_tensor.is_sparse:
+            return self.initial_state_dense.broadcast_to(
+                input_tensor.shape[1:]  # Remove time dimension
+            ).to_sparse()
+        else:
+            return self.initial_state_dense.clone()

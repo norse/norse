@@ -105,10 +105,15 @@ class SequentialState(torch.nn.Sequential):
         hidden = []
         for index, module in enumerate(self):
             if self.stateful_layers[index]:
-                input_tensor, s = module(input_tensor, state[index])
-                state[index] = s
+                out = module(input_tensor, state[index])
             else:
-                input_tensor = module(input_tensor)
+                out = module(input_tensor)
+
+            if isinstance(out, tuple):
+                input_tensor, state[index] = out
+            else:
+                input_tensor = out
+
             if self.return_hidden:
                 hidden.append(input_tensor)
 
