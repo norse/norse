@@ -40,7 +40,7 @@ or
 
 If things are setup correctly, it should be simple to move models and tensors to the GPU
 (the example is a simplified version of our 
-`MNIST task example <https://github.com/norse/norse/blob/master/norse/task/mnist.py#L60>`_):
+`MNIST task example <https://github.com/norse/norse/blob/main/norse/task/mnist.py#L60>`_):
 
 .. code:: python
 

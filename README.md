@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/norse/norse/master/logo.png">
+<img src="https://raw.githubusercontent.com/norse/norse/main/logo.png">
 </p>
 
 A [deep learning](https://en.wikipedia.org/wiki/Deep_learning) library for [spiking neural networks](https://en.wikipedia.org/wiki/Spiking_neural_network).
@@ -32,7 +32,7 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 
 ## 1. Getting started
 
-The fastest way to try Norse is via the [jupyter notebooks on Google collab](https://github.com/norse/notebooks/tree/master/).
+The fastest way to try Norse is via the [jupyter notebooks on Google collab](https://github.com/norse/notebooks/tree/main/).
 
 Alternatively, [you can install Norse locally](#installation) and run one of the [included tasks](https://norse.github.io/norse/tasks.html) such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database):
 ```bash
@@ -102,7 +102,7 @@ More information and tasks are available [in our documentation](https://norse.gi
     ```
 
 Norse is compatible with [PyTorch Lightning](https://pytorch-lightning.readthedocs.io/en/stable/),
-as demonstrated in the [PyTorch Lightning MNIST task variant](https://github.com/norse/norse/blob/master/norse/task/mnist_pl.py) (requires PyTorch lightning):
+as demonstrated in the [PyTorch Lightning MNIST task variant](https://github.com/norse/norse/blob/main/norse/task/mnist_pl.py) (requires PyTorch lightning):
 
 ```bash
 python -m norse.task.mnist_pl --gpus=4
@@ -110,7 +110,7 @@ python -m norse.task.mnist_pl --gpus=4
 
 ### 2.3. Example: Spiking convolutional classifier 
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/norse/notebooks/blob/master/mnist_classifiers.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/norse/notebooks/blob/main/mnist_classifiers.ipynb)
 
 This classifier is taken from our [tutorial on training a spiking MNIST classifier](https://github.com/norse/notebooks#level-intermediate) and achieves >99% accuracy.
 
@@ -161,7 +161,7 @@ dataset integrations, tasks, and examples.
 Combined with the PyTorch infrastructure and our high coding standards, we have found Norse to be an excellent tool for modelling *scaleable* experiments and [Norse is actively being used in research](https://norse.github.io/norse/papers.html).
 
 Finally, we are working to keep Norse as performant as possible. 
-Preliminary benchmarks suggest that Norse [achieves excellent performance on small networks of up to ~5000 neurons per layer](https://github.com/norse/norse/tree/master/norse/benchmark). 
+Preliminary benchmarks suggest that Norse [achieves excellent performance on small networks of up to ~5000 neurons per layer](https://github.com/norse/norse/tree/main/norse/benchmark). 
 Aided by the preexisting investment in scalable training and inference with PyTorch, Norse scales from a single laptop to several nodes on an HPC cluster with little effort.
 As illustrated by our [PyTorch Lightning example task](https://norse.github.io/norse/tasks.html#mnist-in-pytorch-lightning).
 
