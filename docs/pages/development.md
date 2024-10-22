@@ -32,7 +32,7 @@ snn.LIFCell
 ```
 This is visualized in figure {numref}`development-architecture` by the red arrows, showing how the imports can "jump" over directories.
 In practice, this is implemented in the `__init__.py` files in each folder.
-See [the `__init__.py` file for the `norse.torch.module` package](https://github.com/norse/norse/blob/master/norse/torch/module/__init__.py) as an example.
+See [the `__init__.py` file for the `norse.torch.module` package](https://github.com/norse/norse/blob/main/norse/torch/module/__init__.py) as an example.
 
 ## Computational graphs for neuron models
 For any neuron model to be useful in Norse, it needs to be differentiable.
@@ -50,7 +50,7 @@ The figure demonstrates how a computation is broken down into its constituent pa
 This means that any code you write will be **automatically differentiable** - *unless* it contains discontinuities.
 Unfortunately, that happens rather often in spiking models, which is why we have implemented a number of [surrogate gradient functions](https://arxiv.org/abs/1901.09948) that can be applied.
 
-Specifically, the threshold function approximations are available in [`norse.torch.functional.threshold`](https://github.com/norse/norse/blob/master/norse/torch/functional/threshold.py#L195) and its application can be studied in the simplified [LIF box function](https://github.com/norse/norse/blob/master/norse/torch/functional/lif_box.py#L93).
+Specifically, the threshold function approximations are available in [`norse.torch.functional.threshold`](https://github.com/norse/norse/blob/main/norse/torch/functional/threshold.py#L195) and its application can be studied in the simplified [LIF box function](https://github.com/norse/norse/blob/main/norse/torch/functional/lif_box.py#L93).
 Please note, however, that the threshold API may be subject to change.
 
 ## Example implementation
@@ -119,4 +119,4 @@ def my_dynamic(input_tensor, state=0, p: MyParameters=MyParameters()):
 ```
 
 Same thing can be done for the state if necessary. 
-More inspiration can be found in existing neuron models, such as the [Izhikevich model](https://github.com/norse/norse/blob/master/norse/torch/functional/izhikevich.py).
+More inspiration can be found in existing neuron models, such as the [Izhikevich model](https://github.com/norse/norse/blob/main/norse/torch/functional/izhikevich.py).
