@@ -36,6 +36,7 @@
       ~IAFCell.ipu
       ~IAFCell.load_state_dict
       ~IAFCell.modules
+      ~IAFCell.mtia
       ~IAFCell.named_buffers
       ~IAFCell.named_children
       ~IAFCell.named_modules
@@ -48,11 +49,14 @@
       ~IAFCell.register_full_backward_hook
       ~IAFCell.register_full_backward_pre_hook
       ~IAFCell.register_load_state_dict_post_hook
+      ~IAFCell.register_load_state_dict_pre_hook
       ~IAFCell.register_module
       ~IAFCell.register_parameter
+      ~IAFCell.register_state_dict_post_hook
       ~IAFCell.register_state_dict_pre_hook
       ~IAFCell.requires_grad_
       ~IAFCell.set_extra_state
+      ~IAFCell.set_submodule
       ~IAFCell.share_memory
       ~IAFCell.state_dict
       ~IAFCell.to

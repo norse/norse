@@ -36,6 +36,7 @@
       ~LICell.ipu
       ~LICell.load_state_dict
       ~LICell.modules
+      ~LICell.mtia
       ~LICell.named_buffers
       ~LICell.named_children
       ~LICell.named_modules
@@ -48,11 +49,14 @@
       ~LICell.register_full_backward_hook
       ~LICell.register_full_backward_pre_hook
       ~LICell.register_load_state_dict_post_hook
+      ~LICell.register_load_state_dict_pre_hook
       ~LICell.register_module
       ~LICell.register_parameter
+      ~LICell.register_state_dict_post_hook
       ~LICell.register_state_dict_pre_hook
       ~LICell.requires_grad_
       ~LICell.set_extra_state
+      ~LICell.set_submodule
       ~LICell.share_memory
       ~LICell.state_dict
       ~LICell.to

@@ -36,6 +36,7 @@
       ~LIFExCell.ipu
       ~LIFExCell.load_state_dict
       ~LIFExCell.modules
+      ~LIFExCell.mtia
       ~LIFExCell.named_buffers
       ~LIFExCell.named_children
       ~LIFExCell.named_modules
@@ -48,11 +49,14 @@
       ~LIFExCell.register_full_backward_hook
       ~LIFExCell.register_full_backward_pre_hook
       ~LIFExCell.register_load_state_dict_post_hook
+      ~LIFExCell.register_load_state_dict_pre_hook
       ~LIFExCell.register_module
       ~LIFExCell.register_parameter
+      ~LIFExCell.register_state_dict_post_hook
       ~LIFExCell.register_state_dict_pre_hook
       ~LIFExCell.requires_grad_
       ~LIFExCell.set_extra_state
+      ~LIFExCell.set_submodule
       ~LIFExCell.share_memory
       ~LIFExCell.state_dict
       ~LIFExCell.to

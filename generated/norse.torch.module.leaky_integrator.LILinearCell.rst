@@ -35,6 +35,7 @@
       ~LILinearCell.ipu
       ~LILinearCell.load_state_dict
       ~LILinearCell.modules
+      ~LILinearCell.mtia
       ~LILinearCell.named_buffers
       ~LILinearCell.named_children
       ~LILinearCell.named_modules
@@ -47,11 +48,14 @@
       ~LILinearCell.register_full_backward_hook
       ~LILinearCell.register_full_backward_pre_hook
       ~LILinearCell.register_load_state_dict_post_hook
+      ~LILinearCell.register_load_state_dict_pre_hook
       ~LILinearCell.register_module
       ~LILinearCell.register_parameter
+      ~LILinearCell.register_state_dict_post_hook
       ~LILinearCell.register_state_dict_pre_hook
       ~LILinearCell.requires_grad_
       ~LILinearCell.set_extra_state
+      ~LILinearCell.set_submodule
       ~LILinearCell.share_memory
       ~LILinearCell.state_dict
       ~LILinearCell.to

@@ -36,6 +36,7 @@
       ~LIFCell.ipu
       ~LIFCell.load_state_dict
       ~LIFCell.modules
+      ~LIFCell.mtia
       ~LIFCell.named_buffers
       ~LIFCell.named_children
       ~LIFCell.named_modules
@@ -48,11 +49,14 @@
       ~LIFCell.register_full_backward_hook
       ~LIFCell.register_full_backward_pre_hook
       ~LIFCell.register_load_state_dict_post_hook
+      ~LIFCell.register_load_state_dict_pre_hook
       ~LIFCell.register_module
       ~LIFCell.register_parameter
+      ~LIFCell.register_state_dict_post_hook
       ~LIFCell.register_state_dict_pre_hook
       ~LIFCell.requires_grad_
       ~LIFCell.set_extra_state
+      ~LIFCell.set_submodule
       ~LIFCell.share_memory
       ~LIFCell.state_dict
       ~LIFCell.to

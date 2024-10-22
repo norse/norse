@@ -36,6 +36,7 @@
       ~LIFRecurrent.ipu
       ~LIFRecurrent.load_state_dict
       ~LIFRecurrent.modules
+      ~LIFRecurrent.mtia
       ~LIFRecurrent.named_buffers
       ~LIFRecurrent.named_children
       ~LIFRecurrent.named_modules
@@ -48,11 +49,14 @@
       ~LIFRecurrent.register_full_backward_hook
       ~LIFRecurrent.register_full_backward_pre_hook
       ~LIFRecurrent.register_load_state_dict_post_hook
+      ~LIFRecurrent.register_load_state_dict_pre_hook
       ~LIFRecurrent.register_module
       ~LIFRecurrent.register_parameter
+      ~LIFRecurrent.register_state_dict_post_hook
       ~LIFRecurrent.register_state_dict_pre_hook
       ~LIFRecurrent.requires_grad_
       ~LIFRecurrent.set_extra_state
+      ~LIFRecurrent.set_submodule
       ~LIFRecurrent.share_memory
       ~LIFRecurrent.state_dict
       ~LIFRecurrent.to

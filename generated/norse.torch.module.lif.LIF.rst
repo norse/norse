@@ -36,6 +36,7 @@
       ~LIF.ipu
       ~LIF.load_state_dict
       ~LIF.modules
+      ~LIF.mtia
       ~LIF.named_buffers
       ~LIF.named_children
       ~LIF.named_modules
@@ -48,11 +49,14 @@
       ~LIF.register_full_backward_hook
       ~LIF.register_full_backward_pre_hook
       ~LIF.register_load_state_dict_post_hook
+      ~LIF.register_load_state_dict_pre_hook
       ~LIF.register_module
       ~LIF.register_parameter
+      ~LIF.register_state_dict_post_hook
       ~LIF.register_state_dict_pre_hook
       ~LIF.requires_grad_
       ~LIF.set_extra_state
+      ~LIF.set_submodule
       ~LIF.share_memory
       ~LIF.state_dict
       ~LIF.to

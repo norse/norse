@@ -36,6 +36,7 @@
       ~LIFEx.ipu
       ~LIFEx.load_state_dict
       ~LIFEx.modules
+      ~LIFEx.mtia
       ~LIFEx.named_buffers
       ~LIFEx.named_children
       ~LIFEx.named_modules
@@ -48,11 +49,14 @@
       ~LIFEx.register_full_backward_hook
       ~LIFEx.register_full_backward_pre_hook
       ~LIFEx.register_load_state_dict_post_hook
+      ~LIFEx.register_load_state_dict_pre_hook
       ~LIFEx.register_module
       ~LIFEx.register_parameter
+      ~LIFEx.register_state_dict_post_hook
       ~LIFEx.register_state_dict_pre_hook
       ~LIFEx.requires_grad_
       ~LIFEx.set_extra_state
+      ~LIFEx.set_submodule
       ~LIFEx.share_memory
       ~LIFEx.state_dict
       ~LIFEx.to

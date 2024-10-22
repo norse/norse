@@ -36,6 +36,7 @@
       ~LSNNRecurrentCell.ipu
       ~LSNNRecurrentCell.load_state_dict
       ~LSNNRecurrentCell.modules
+      ~LSNNRecurrentCell.mtia
       ~LSNNRecurrentCell.named_buffers
       ~LSNNRecurrentCell.named_children
       ~LSNNRecurrentCell.named_modules
@@ -48,11 +49,14 @@
       ~LSNNRecurrentCell.register_full_backward_hook
       ~LSNNRecurrentCell.register_full_backward_pre_hook
       ~LSNNRecurrentCell.register_load_state_dict_post_hook
+      ~LSNNRecurrentCell.register_load_state_dict_pre_hook
       ~LSNNRecurrentCell.register_module
       ~LSNNRecurrentCell.register_parameter
+      ~LSNNRecurrentCell.register_state_dict_post_hook
       ~LSNNRecurrentCell.register_state_dict_pre_hook
       ~LSNNRecurrentCell.requires_grad_
       ~LSNNRecurrentCell.set_extra_state
+      ~LSNNRecurrentCell.set_submodule
       ~LSNNRecurrentCell.share_memory
       ~LSNNRecurrentCell.state_dict
       ~LSNNRecurrentCell.to

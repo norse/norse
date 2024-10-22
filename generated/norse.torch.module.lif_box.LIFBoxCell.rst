@@ -36,6 +36,7 @@
       ~LIFBoxCell.ipu
       ~LIFBoxCell.load_state_dict
       ~LIFBoxCell.modules
+      ~LIFBoxCell.mtia
       ~LIFBoxCell.named_buffers
       ~LIFBoxCell.named_children
       ~LIFBoxCell.named_modules
@@ -48,11 +49,14 @@
       ~LIFBoxCell.register_full_backward_hook
       ~LIFBoxCell.register_full_backward_pre_hook
       ~LIFBoxCell.register_load_state_dict_post_hook
+      ~LIFBoxCell.register_load_state_dict_pre_hook
       ~LIFBoxCell.register_module
       ~LIFBoxCell.register_parameter
+      ~LIFBoxCell.register_state_dict_post_hook
       ~LIFBoxCell.register_state_dict_pre_hook
       ~LIFBoxCell.requires_grad_
       ~LIFBoxCell.set_extra_state
+      ~LIFBoxCell.set_submodule
       ~LIFBoxCell.share_memory
       ~LIFBoxCell.state_dict
       ~LIFBoxCell.to

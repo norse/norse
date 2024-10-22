@@ -35,6 +35,7 @@
       ~PoissonEncoder.ipu
       ~PoissonEncoder.load_state_dict
       ~PoissonEncoder.modules
+      ~PoissonEncoder.mtia
       ~PoissonEncoder.named_buffers
       ~PoissonEncoder.named_children
       ~PoissonEncoder.named_modules
@@ -47,11 +48,14 @@
       ~PoissonEncoder.register_full_backward_hook
       ~PoissonEncoder.register_full_backward_pre_hook
       ~PoissonEncoder.register_load_state_dict_post_hook
+      ~PoissonEncoder.register_load_state_dict_pre_hook
       ~PoissonEncoder.register_module
       ~PoissonEncoder.register_parameter
+      ~PoissonEncoder.register_state_dict_post_hook
       ~PoissonEncoder.register_state_dict_pre_hook
       ~PoissonEncoder.requires_grad_
       ~PoissonEncoder.set_extra_state
+      ~PoissonEncoder.set_submodule
       ~PoissonEncoder.share_memory
       ~PoissonEncoder.state_dict
       ~PoissonEncoder.to

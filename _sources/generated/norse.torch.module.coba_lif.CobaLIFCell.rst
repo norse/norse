@@ -35,6 +35,7 @@
       ~CobaLIFCell.ipu
       ~CobaLIFCell.load_state_dict
       ~CobaLIFCell.modules
+      ~CobaLIFCell.mtia
       ~CobaLIFCell.named_buffers
       ~CobaLIFCell.named_children
       ~CobaLIFCell.named_modules
@@ -47,11 +48,14 @@
       ~CobaLIFCell.register_full_backward_hook
       ~CobaLIFCell.register_full_backward_pre_hook
       ~CobaLIFCell.register_load_state_dict_post_hook
+      ~CobaLIFCell.register_load_state_dict_pre_hook
       ~CobaLIFCell.register_module
       ~CobaLIFCell.register_parameter
+      ~CobaLIFCell.register_state_dict_post_hook
       ~CobaLIFCell.register_state_dict_pre_hook
       ~CobaLIFCell.requires_grad_
       ~CobaLIFCell.set_extra_state
+      ~CobaLIFCell.set_submodule
       ~CobaLIFCell.share_memory
       ~CobaLIFCell.state_dict
       ~CobaLIFCell.to

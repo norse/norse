@@ -36,6 +36,7 @@
       ~LIFAdEx.ipu
       ~LIFAdEx.load_state_dict
       ~LIFAdEx.modules
+      ~LIFAdEx.mtia
       ~LIFAdEx.named_buffers
       ~LIFAdEx.named_children
       ~LIFAdEx.named_modules
@@ -48,11 +49,14 @@
       ~LIFAdEx.register_full_backward_hook
       ~LIFAdEx.register_full_backward_pre_hook
       ~LIFAdEx.register_load_state_dict_post_hook
+      ~LIFAdEx.register_load_state_dict_pre_hook
       ~LIFAdEx.register_module
       ~LIFAdEx.register_parameter
+      ~LIFAdEx.register_state_dict_post_hook
       ~LIFAdEx.register_state_dict_pre_hook
       ~LIFAdEx.requires_grad_
       ~LIFAdEx.set_extra_state
+      ~LIFAdEx.set_submodule
       ~LIFAdEx.share_memory
       ~LIFAdEx.state_dict
       ~LIFAdEx.to

@@ -596,7 +596,7 @@ To accommodate this, we have added import shortcuts, so the user can write the f
 </div>
 <p>This is visualized in figure <a class="reference internal" href="#development-architecture"><span class="std std-numref">Fig. 9.1</span></a> by the red arrows, showing how the imports can “jump” over directories.
 In practice, this is implemented in the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> files in each folder.
-See <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/module/__init__.py">the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file for the <code class="docutils literal notranslate"><span class="pre">norse.torch.module</span></code> package</a> as an example.</p>
+See <a class="reference external" href="https://github.com/norse/norse/blob/main/norse/torch/module/__init__.py">the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file for the <code class="docutils literal notranslate"><span class="pre">norse.torch.module</span></code> package</a> as an example.</p>
 </section>
 </section>
 <section id="computational-graphs-for-neuron-models">
@@ -613,7 +613,7 @@ The figure demonstrates how a computation is broken down into its constituent pa
 </figure>
 <p>This means that any code you write will be <strong>automatically differentiable</strong> - <em>unless</em> it contains discontinuities.
 Unfortunately, that happens rather often in spiking models, which is why we have implemented a number of <a class="reference external" href="https://arxiv.org/abs/1901.09948">surrogate gradient functions</a> that can be applied.</p>
-<p>Specifically, the threshold function approximations are available in <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/functional/threshold.py#L195"><code class="docutils literal notranslate"><span class="pre">norse.torch.functional.threshold</span></code></a> and its application can be studied in the simplified <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/functional/lif_box.py#L93">LIF box function</a>.
+<p>Specifically, the threshold function approximations are available in <a class="reference external" href="https://github.com/norse/norse/blob/main/norse/torch/functional/threshold.py#L195"><code class="docutils literal notranslate"><span class="pre">norse.torch.functional.threshold</span></code></a> and its application can be studied in the simplified <a class="reference external" href="https://github.com/norse/norse/blob/main/norse/torch/functional/lif_box.py#L93">LIF box function</a>.
 Please note, however, that the threshold API may be subject to change.</p>
 </section>
 <section id="example-implementation">
@@ -671,7 +671,7 @@ Please note, however, that the threshold API may be subject to change.</p>
 </pre></div>
 </div>
 <p>Same thing can be done for the state if necessary.
-More inspiration can be found in existing neuron models, such as the <a class="reference external" href="https://github.com/norse/norse/blob/master/norse/torch/functional/izhikevich.py">Izhikevich model</a>.</p>
+More inspiration can be found in existing neuron models, such as the <a class="reference external" href="https://github.com/norse/norse/blob/main/norse/torch/functional/izhikevich.py">Izhikevich model</a>.</p>
 </section>
 </section>
 

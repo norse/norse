@@ -35,6 +35,7 @@
       ~LConv2d.ipu
       ~LConv2d.load_state_dict
       ~LConv2d.modules
+      ~LConv2d.mtia
       ~LConv2d.named_buffers
       ~LConv2d.named_children
       ~LConv2d.named_modules
@@ -47,12 +48,15 @@
       ~LConv2d.register_full_backward_hook
       ~LConv2d.register_full_backward_pre_hook
       ~LConv2d.register_load_state_dict_post_hook
+      ~LConv2d.register_load_state_dict_pre_hook
       ~LConv2d.register_module
       ~LConv2d.register_parameter
+      ~LConv2d.register_state_dict_post_hook
       ~LConv2d.register_state_dict_pre_hook
       ~LConv2d.requires_grad_
       ~LConv2d.reset_parameters
       ~LConv2d.set_extra_state
+      ~LConv2d.set_submodule
       ~LConv2d.share_memory
       ~LConv2d.state_dict
       ~LConv2d.to

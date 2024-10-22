@@ -35,6 +35,7 @@
       ~SpikeLatencyEncoder.ipu
       ~SpikeLatencyEncoder.load_state_dict
       ~SpikeLatencyEncoder.modules
+      ~SpikeLatencyEncoder.mtia
       ~SpikeLatencyEncoder.named_buffers
       ~SpikeLatencyEncoder.named_children
       ~SpikeLatencyEncoder.named_modules
@@ -47,11 +48,14 @@
       ~SpikeLatencyEncoder.register_full_backward_hook
       ~SpikeLatencyEncoder.register_full_backward_pre_hook
       ~SpikeLatencyEncoder.register_load_state_dict_post_hook
+      ~SpikeLatencyEncoder.register_load_state_dict_pre_hook
       ~SpikeLatencyEncoder.register_module
       ~SpikeLatencyEncoder.register_parameter
+      ~SpikeLatencyEncoder.register_state_dict_post_hook
       ~SpikeLatencyEncoder.register_state_dict_pre_hook
       ~SpikeLatencyEncoder.requires_grad_
       ~SpikeLatencyEncoder.set_extra_state
+      ~SpikeLatencyEncoder.set_submodule
       ~SpikeLatencyEncoder.share_memory
       ~SpikeLatencyEncoder.state_dict
       ~SpikeLatencyEncoder.to

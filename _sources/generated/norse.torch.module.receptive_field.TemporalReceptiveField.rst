@@ -35,6 +35,7 @@
       ~TemporalReceptiveField.ipu
       ~TemporalReceptiveField.load_state_dict
       ~TemporalReceptiveField.modules
+      ~TemporalReceptiveField.mtia
       ~TemporalReceptiveField.named_buffers
       ~TemporalReceptiveField.named_children
       ~TemporalReceptiveField.named_modules
@@ -47,11 +48,14 @@
       ~TemporalReceptiveField.register_full_backward_hook
       ~TemporalReceptiveField.register_full_backward_pre_hook
       ~TemporalReceptiveField.register_load_state_dict_post_hook
+      ~TemporalReceptiveField.register_load_state_dict_pre_hook
       ~TemporalReceptiveField.register_module
       ~TemporalReceptiveField.register_parameter
+      ~TemporalReceptiveField.register_state_dict_post_hook
       ~TemporalReceptiveField.register_state_dict_pre_hook
       ~TemporalReceptiveField.requires_grad_
       ~TemporalReceptiveField.set_extra_state
+      ~TemporalReceptiveField.set_submodule
       ~TemporalReceptiveField.share_memory
       ~TemporalReceptiveField.state_dict
       ~TemporalReceptiveField.to

@@ -35,6 +35,7 @@
       ~PopulationEncoder.ipu
       ~PopulationEncoder.load_state_dict
       ~PopulationEncoder.modules
+      ~PopulationEncoder.mtia
       ~PopulationEncoder.named_buffers
       ~PopulationEncoder.named_children
       ~PopulationEncoder.named_modules
@@ -47,11 +48,14 @@
       ~PopulationEncoder.register_full_backward_hook
       ~PopulationEncoder.register_full_backward_pre_hook
       ~PopulationEncoder.register_load_state_dict_post_hook
+      ~PopulationEncoder.register_load_state_dict_pre_hook
       ~PopulationEncoder.register_module
       ~PopulationEncoder.register_parameter
+      ~PopulationEncoder.register_state_dict_post_hook
       ~PopulationEncoder.register_state_dict_pre_hook
       ~PopulationEncoder.requires_grad_
       ~PopulationEncoder.set_extra_state
+      ~PopulationEncoder.set_submodule
       ~PopulationEncoder.share_memory
       ~PopulationEncoder.state_dict
       ~PopulationEncoder.to

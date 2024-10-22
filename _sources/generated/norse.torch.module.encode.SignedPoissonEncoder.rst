@@ -35,6 +35,7 @@
       ~SignedPoissonEncoder.ipu
       ~SignedPoissonEncoder.load_state_dict
       ~SignedPoissonEncoder.modules
+      ~SignedPoissonEncoder.mtia
       ~SignedPoissonEncoder.named_buffers
       ~SignedPoissonEncoder.named_children
       ~SignedPoissonEncoder.named_modules
@@ -47,11 +48,14 @@
       ~SignedPoissonEncoder.register_full_backward_hook
       ~SignedPoissonEncoder.register_full_backward_pre_hook
       ~SignedPoissonEncoder.register_load_state_dict_post_hook
+      ~SignedPoissonEncoder.register_load_state_dict_pre_hook
       ~SignedPoissonEncoder.register_module
       ~SignedPoissonEncoder.register_parameter
+      ~SignedPoissonEncoder.register_state_dict_post_hook
       ~SignedPoissonEncoder.register_state_dict_pre_hook
       ~SignedPoissonEncoder.requires_grad_
       ~SignedPoissonEncoder.set_extra_state
+      ~SignedPoissonEncoder.set_submodule
       ~SignedPoissonEncoder.share_memory
       ~SignedPoissonEncoder.state_dict
       ~SignedPoissonEncoder.to

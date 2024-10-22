@@ -36,6 +36,7 @@
       ~LI.ipu
       ~LI.load_state_dict
       ~LI.modules
+      ~LI.mtia
       ~LI.named_buffers
       ~LI.named_children
       ~LI.named_modules
@@ -48,11 +49,14 @@
       ~LI.register_full_backward_hook
       ~LI.register_full_backward_pre_hook
       ~LI.register_load_state_dict_post_hook
+      ~LI.register_load_state_dict_pre_hook
       ~LI.register_module
       ~LI.register_parameter
+      ~LI.register_state_dict_post_hook
       ~LI.register_state_dict_pre_hook
       ~LI.requires_grad_
       ~LI.set_extra_state
+      ~LI.set_submodule
       ~LI.share_memory
       ~LI.state_dict
       ~LI.to

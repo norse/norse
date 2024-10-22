@@ -36,6 +36,7 @@
       ~LIFRefracCell.ipu
       ~LIFRefracCell.load_state_dict
       ~LIFRefracCell.modules
+      ~LIFRefracCell.mtia
       ~LIFRefracCell.named_buffers
       ~LIFRefracCell.named_children
       ~LIFRefracCell.named_modules
@@ -48,11 +49,14 @@
       ~LIFRefracCell.register_full_backward_hook
       ~LIFRefracCell.register_full_backward_pre_hook
       ~LIFRefracCell.register_load_state_dict_post_hook
+      ~LIFRefracCell.register_load_state_dict_pre_hook
       ~LIFRefracCell.register_module
       ~LIFRefracCell.register_parameter
+      ~LIFRefracCell.register_state_dict_post_hook
       ~LIFRefracCell.register_state_dict_pre_hook
       ~LIFRefracCell.requires_grad_
       ~LIFRefracCell.set_extra_state
+      ~LIFRefracCell.set_submodule
       ~LIFRefracCell.share_memory
       ~LIFRefracCell.state_dict
       ~LIFRefracCell.to

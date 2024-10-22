@@ -36,6 +36,7 @@
       ~LIFAdExRecurrent.ipu
       ~LIFAdExRecurrent.load_state_dict
       ~LIFAdExRecurrent.modules
+      ~LIFAdExRecurrent.mtia
       ~LIFAdExRecurrent.named_buffers
       ~LIFAdExRecurrent.named_children
       ~LIFAdExRecurrent.named_modules
@@ -48,11 +49,14 @@
       ~LIFAdExRecurrent.register_full_backward_hook
       ~LIFAdExRecurrent.register_full_backward_pre_hook
       ~LIFAdExRecurrent.register_load_state_dict_post_hook
+      ~LIFAdExRecurrent.register_load_state_dict_pre_hook
       ~LIFAdExRecurrent.register_module
       ~LIFAdExRecurrent.register_parameter
+      ~LIFAdExRecurrent.register_state_dict_post_hook
       ~LIFAdExRecurrent.register_state_dict_pre_hook
       ~LIFAdExRecurrent.requires_grad_
       ~LIFAdExRecurrent.set_extra_state
+      ~LIFAdExRecurrent.set_submodule
       ~LIFAdExRecurrent.share_memory
       ~LIFAdExRecurrent.state_dict
       ~LIFAdExRecurrent.to

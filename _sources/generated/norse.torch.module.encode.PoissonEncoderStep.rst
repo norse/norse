@@ -35,6 +35,7 @@
       ~PoissonEncoderStep.ipu
       ~PoissonEncoderStep.load_state_dict
       ~PoissonEncoderStep.modules
+      ~PoissonEncoderStep.mtia
       ~PoissonEncoderStep.named_buffers
       ~PoissonEncoderStep.named_children
       ~PoissonEncoderStep.named_modules
@@ -47,11 +48,14 @@
       ~PoissonEncoderStep.register_full_backward_hook
       ~PoissonEncoderStep.register_full_backward_pre_hook
       ~PoissonEncoderStep.register_load_state_dict_post_hook
+      ~PoissonEncoderStep.register_load_state_dict_pre_hook
       ~PoissonEncoderStep.register_module
       ~PoissonEncoderStep.register_parameter
+      ~PoissonEncoderStep.register_state_dict_post_hook
       ~PoissonEncoderStep.register_state_dict_pre_hook
       ~PoissonEncoderStep.requires_grad_
       ~PoissonEncoderStep.set_extra_state
+      ~PoissonEncoderStep.set_submodule
       ~PoissonEncoderStep.share_memory
       ~PoissonEncoderStep.state_dict
       ~PoissonEncoderStep.to

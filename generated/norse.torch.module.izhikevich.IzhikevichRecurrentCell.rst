@@ -36,6 +36,7 @@
       ~IzhikevichRecurrentCell.ipu
       ~IzhikevichRecurrentCell.load_state_dict
       ~IzhikevichRecurrentCell.modules
+      ~IzhikevichRecurrentCell.mtia
       ~IzhikevichRecurrentCell.named_buffers
       ~IzhikevichRecurrentCell.named_children
       ~IzhikevichRecurrentCell.named_modules
@@ -48,11 +49,14 @@
       ~IzhikevichRecurrentCell.register_full_backward_hook
       ~IzhikevichRecurrentCell.register_full_backward_pre_hook
       ~IzhikevichRecurrentCell.register_load_state_dict_post_hook
+      ~IzhikevichRecurrentCell.register_load_state_dict_pre_hook
       ~IzhikevichRecurrentCell.register_module
       ~IzhikevichRecurrentCell.register_parameter
+      ~IzhikevichRecurrentCell.register_state_dict_post_hook
       ~IzhikevichRecurrentCell.register_state_dict_pre_hook
       ~IzhikevichRecurrentCell.requires_grad_
       ~IzhikevichRecurrentCell.set_extra_state
+      ~IzhikevichRecurrentCell.set_submodule
       ~IzhikevichRecurrentCell.share_memory
       ~IzhikevichRecurrentCell.state_dict
       ~IzhikevichRecurrentCell.to

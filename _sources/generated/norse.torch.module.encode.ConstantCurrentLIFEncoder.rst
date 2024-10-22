@@ -35,6 +35,7 @@
       ~ConstantCurrentLIFEncoder.ipu
       ~ConstantCurrentLIFEncoder.load_state_dict
       ~ConstantCurrentLIFEncoder.modules
+      ~ConstantCurrentLIFEncoder.mtia
       ~ConstantCurrentLIFEncoder.named_buffers
       ~ConstantCurrentLIFEncoder.named_children
       ~ConstantCurrentLIFEncoder.named_modules
@@ -47,11 +48,14 @@
       ~ConstantCurrentLIFEncoder.register_full_backward_hook
       ~ConstantCurrentLIFEncoder.register_full_backward_pre_hook
       ~ConstantCurrentLIFEncoder.register_load_state_dict_post_hook
+      ~ConstantCurrentLIFEncoder.register_load_state_dict_pre_hook
       ~ConstantCurrentLIFEncoder.register_module
       ~ConstantCurrentLIFEncoder.register_parameter
+      ~ConstantCurrentLIFEncoder.register_state_dict_post_hook
       ~ConstantCurrentLIFEncoder.register_state_dict_pre_hook
       ~ConstantCurrentLIFEncoder.requires_grad_
       ~ConstantCurrentLIFEncoder.set_extra_state
+      ~ConstantCurrentLIFEncoder.set_submodule
       ~ConstantCurrentLIFEncoder.share_memory
       ~ConstantCurrentLIFEncoder.state_dict
       ~ConstantCurrentLIFEncoder.to

@@ -35,6 +35,7 @@
       ~SpikeLatencyLIFEncoder.ipu
       ~SpikeLatencyLIFEncoder.load_state_dict
       ~SpikeLatencyLIFEncoder.modules
+      ~SpikeLatencyLIFEncoder.mtia
       ~SpikeLatencyLIFEncoder.named_buffers
       ~SpikeLatencyLIFEncoder.named_children
       ~SpikeLatencyLIFEncoder.named_modules
@@ -47,11 +48,14 @@
       ~SpikeLatencyLIFEncoder.register_full_backward_hook
       ~SpikeLatencyLIFEncoder.register_full_backward_pre_hook
       ~SpikeLatencyLIFEncoder.register_load_state_dict_post_hook
+      ~SpikeLatencyLIFEncoder.register_load_state_dict_pre_hook
       ~SpikeLatencyLIFEncoder.register_module
       ~SpikeLatencyLIFEncoder.register_parameter
+      ~SpikeLatencyLIFEncoder.register_state_dict_post_hook
       ~SpikeLatencyLIFEncoder.register_state_dict_pre_hook
       ~SpikeLatencyLIFEncoder.requires_grad_
       ~SpikeLatencyLIFEncoder.set_extra_state
+      ~SpikeLatencyLIFEncoder.set_submodule
       ~SpikeLatencyLIFEncoder.share_memory
       ~SpikeLatencyLIFEncoder.state_dict
       ~SpikeLatencyLIFEncoder.to

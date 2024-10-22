@@ -36,6 +36,7 @@
       ~LSNN.ipu
       ~LSNN.load_state_dict
       ~LSNN.modules
+      ~LSNN.mtia
       ~LSNN.named_buffers
       ~LSNN.named_children
       ~LSNN.named_modules
@@ -48,11 +49,14 @@
       ~LSNN.register_full_backward_hook
       ~LSNN.register_full_backward_pre_hook
       ~LSNN.register_load_state_dict_post_hook
+      ~LSNN.register_load_state_dict_pre_hook
       ~LSNN.register_module
       ~LSNN.register_parameter
+      ~LSNN.register_state_dict_post_hook
       ~LSNN.register_state_dict_pre_hook
       ~LSNN.requires_grad_
       ~LSNN.set_extra_state
+      ~LSNN.set_submodule
       ~LSNN.share_memory
       ~LSNN.state_dict
       ~LSNN.to

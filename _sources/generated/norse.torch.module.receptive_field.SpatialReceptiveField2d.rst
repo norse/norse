@@ -35,6 +35,7 @@
       ~SpatialReceptiveField2d.ipu
       ~SpatialReceptiveField2d.load_state_dict
       ~SpatialReceptiveField2d.modules
+      ~SpatialReceptiveField2d.mtia
       ~SpatialReceptiveField2d.named_buffers
       ~SpatialReceptiveField2d.named_children
       ~SpatialReceptiveField2d.named_modules
@@ -47,11 +48,14 @@
       ~SpatialReceptiveField2d.register_full_backward_hook
       ~SpatialReceptiveField2d.register_full_backward_pre_hook
       ~SpatialReceptiveField2d.register_load_state_dict_post_hook
+      ~SpatialReceptiveField2d.register_load_state_dict_pre_hook
       ~SpatialReceptiveField2d.register_module
       ~SpatialReceptiveField2d.register_parameter
+      ~SpatialReceptiveField2d.register_state_dict_post_hook
       ~SpatialReceptiveField2d.register_state_dict_pre_hook
       ~SpatialReceptiveField2d.requires_grad_
       ~SpatialReceptiveField2d.set_extra_state
+      ~SpatialReceptiveField2d.set_submodule
       ~SpatialReceptiveField2d.share_memory
       ~SpatialReceptiveField2d.state_dict
       ~SpatialReceptiveField2d.to

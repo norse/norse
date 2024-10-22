@@ -36,6 +36,7 @@
       ~IzhikevichRecurrent.ipu
       ~IzhikevichRecurrent.load_state_dict
       ~IzhikevichRecurrent.modules
+      ~IzhikevichRecurrent.mtia
       ~IzhikevichRecurrent.named_buffers
       ~IzhikevichRecurrent.named_children
       ~IzhikevichRecurrent.named_modules
@@ -48,11 +49,14 @@
       ~IzhikevichRecurrent.register_full_backward_hook
       ~IzhikevichRecurrent.register_full_backward_pre_hook
       ~IzhikevichRecurrent.register_load_state_dict_post_hook
+      ~IzhikevichRecurrent.register_load_state_dict_pre_hook
       ~IzhikevichRecurrent.register_module
       ~IzhikevichRecurrent.register_parameter
+      ~IzhikevichRecurrent.register_state_dict_post_hook
       ~IzhikevichRecurrent.register_state_dict_pre_hook
       ~IzhikevichRecurrent.requires_grad_
       ~IzhikevichRecurrent.set_extra_state
+      ~IzhikevichRecurrent.set_submodule
       ~IzhikevichRecurrent.share_memory
       ~IzhikevichRecurrent.state_dict
       ~IzhikevichRecurrent.to
