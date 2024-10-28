@@ -1,3 +1,5 @@
+from typing import Optional
+
 import torch
 from norse.torch.functional.heaviside import heaviside
 
@@ -11,7 +13,7 @@ class SuperSpike(torch.autograd.Function):
     """
 
     @staticmethod
-    def forward(input_tensor: torch.Tensor, alpha: float) -> torch.Tensor:
+    def forward(input_tensor: torch.Tensor, alpha: torch.Tensor) -> torch.Tensor:
         return heaviside(input_tensor)
 
     @staticmethod
@@ -28,9 +30,11 @@ class SuperSpike(torch.autograd.Function):
         if ctx.needs_input_grad[0]:
             grad = grad_output / (alpha * torch.abs(inp) + 1.0).pow(
                 2
-            )  # section 3.3.2 (beta -> alpha)
+            )  # section 3.3.2 (beta -> alpha))
         return grad, None
 
 
-def super_fn(x: torch.Tensor, alpha: float = 100.0) -> torch.Tensor:
+def super_fn(x: torch.Tensor, alpha: Optional[torch.Tensor] = None) -> torch.Tensor:
+    if alpha is None:
+        alpha = torch.tensor([100.0], device=x.device)
     return SuperSpike.apply(x, alpha)

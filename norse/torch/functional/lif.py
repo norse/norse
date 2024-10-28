@@ -33,7 +33,7 @@ or in the book `*Neuron Dynamics* by W. Gerstner et al.,
 freely available online <https://neuronaldynamics.epfl.ch/online/Ch5.html>`_.
 """
 
-from typing import Tuple
+from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
@@ -41,9 +41,7 @@ from norse.torch.functional.threshold import threshold
 import norse.torch.utils.pytree as pytree
 
 
-class LIFParameters(
-    pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta
-):
+class LIFParameters(NamedTuple, metaclass=pytree.StateTupleMeta):
     """Parametrization of a LIF neuron
 
     Parameters:
@@ -59,13 +57,13 @@ class LIFParameters(
         alpha (float): hyper parameter to use in surrogate gradient computation
     """
 
-    tau_syn_inv: torch.Tensor = torch.as_tensor(1.0 / 5e-3)
-    tau_mem_inv: torch.Tensor = torch.as_tensor(1.0 / 1e-2)
-    v_leak: torch.Tensor = torch.as_tensor(0.0)
-    v_th: torch.Tensor = torch.as_tensor(1.0)
-    v_reset: torch.Tensor = torch.as_tensor(0.0)
+    tau_syn_inv: torch.Tensor = torch.tensor([1.0 / 5e-3])
+    tau_mem_inv: torch.Tensor = torch.tensor([1.0 / 1e-2])
+    v_leak: torch.Tensor = torch.tensor([0.0])
+    v_th: torch.Tensor = torch.tensor([1.0])
+    v_reset: torch.Tensor = torch.tensor([0.0])
     method: str = "super"
-    alpha: float = torch.as_tensor(100.0)
+    alpha: torch.Tensor = torch.tensor([100.0])
 
 
 # pytype: disable=bad-unpacking,wrong-keyword-args
@@ -79,7 +77,7 @@ default_bio_parameters = LIFParameters(
 # pytype: enable=bad-unpacking,wrong-keyword-args
 
 
-class LIFState(pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta):
+class LIFState(NamedTuple, metaclass=pytree.StateTupleMeta):
     """State of a LIF neuron
 
     Parameters:
@@ -98,9 +96,7 @@ default_bio_initial_state = LIFState(
 )
 
 
-class LIFFeedForwardState(
-    pytree.StateTuple, metaclass=pytree.MultipleInheritanceNamedTupleMeta
-):
+class LIFFeedForwardState(NamedTuple, metaclass=pytree.StateTupleMeta):
     """State of a feed forward LIF neuron
 
     Parameters:
@@ -156,9 +152,9 @@ def lif_step_sparse(
     """
     # compute current jumps
     i_jump = (
-        state.i
-        + torch.sparse.mm(input_spikes, input_weights.t())
+        torch.sparse.mm(input_spikes, input_weights.t())
         + torch.sparse.mm(state.z, recurrent_weights.t())
+        + state.i
     )
 
     # compute voltage updates
@@ -426,7 +422,7 @@ def lif_feed_forward_step_sparse(
     # compute new spikes
     z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
     # compute reset
-    v_new = (1 - z_new) * v_decayed + z_new * p.v_reset
+    v_new = v_decayed - z_new * (v_decayed + p.v_reset)
 
     return z_new.to_sparse(), LIFFeedForwardState(v=v_new, i=i_decayed)
 

@@ -81,12 +81,14 @@ def test_state_sequence_conv():
     data = torch.ones(1, 2, 1, 4, 4)  # (timestep, minibatch, channels, x, y)
     model = norse.SequentialState(
         norse.Lift(torch.nn.Conv2d(1, 8, 3)),  # (1, 2, 8, 2, 2)
-        torch.nn.Flatten(2),  # (1, 8, 32)
-        norse.LSNNRecurrent(32, 6),  # (1, 8, 6)
-        torch.nn.RNN(6, 4, 2),  # (1, 6, 4) with 2 recurrent layers
-        norse.LIFRecurrent(4, 1),  # (1, 4, 1)
+        torch.nn.Flatten(2),  # (1, 2, 32)
+        norse.LSNNRecurrent(32, 6),  # (1, 2, 6)
+        torch.nn.RNN(6, 4, 2),  # (1, 2, 4) with 2 recurrent layers
+        norse.LIFRecurrent(4, 1),  # (1, 2, 1)
     )
-    model(data)
+    dat = model(data)
+    assert isinstance(dat, tuple)
+    assert dat[0].shape == (1, 2, 1)
 
 
 def test_backprop_through_time_works():

@@ -192,11 +192,11 @@ def triangle_fn(x: torch.Tensor, alpha: float = 0.3) -> torch.Tensor:
     return Triangle.apply(x, alpha)
 
 
-def threshold(x: torch.Tensor, method: str, alpha: float) -> torch.Tensor:
+def threshold(x: torch.Tensor, method: str, alpha: torch.Tensor) -> torch.Tensor:
     if method == "heaviside":
         return heaviside(x)
     elif method == "super":
-        return superspike_fn(x, torch.as_tensor(alpha))
+        return superspike_fn(x, alpha)
     elif method == "triangle":
         return triangle_fn(x, alpha)
     elif method == "tanh":
