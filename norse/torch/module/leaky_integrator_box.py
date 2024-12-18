@@ -19,6 +19,36 @@ from ..functional.leaky_integrator_box import (
     LIBoxParameters,
 )
 
+class LIBox(SNN):
+    r"""
+    Leaky integrator model without current terms.
+    More specifically it implements a discretized version of the ODE
+
+    .. math::
+
+        \begin{align*}
+            \dot{v} &= 1/\tau_{\text{mem}} (v_{\text{leak}} - v + i)
+        \end{align*}
+
+    Parameters:
+        p (LIParameters): parameters of the leaky integrator
+        dt (float): integration timestep to use
+    """
+
+    def __init__(self, p: LIBoxParameters = LIBoxParameters(), dt: float = 0.001):
+        super().__init__(
+            li_box_feed_forward_step,
+            self.initial_state,
+            p=p,
+            dt=dt,
+        )
+
+    def initial_state(self, input_tensor: torch.Tensor) -> LIBoxState:
+        state = LIBoxState(
+            v=self.p.v_leak.detach(),
+        )
+        state.v.requires_grad = True
+        return state
 
 class LIBoxCell(SNNCell):
     r"""
