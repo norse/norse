@@ -19,6 +19,7 @@ from ..functional.leaky_integrator_box import (
     LIBoxParameters,
 )
 
+
 class LIBox(SNN):
     r"""
     Leaky integrator model without current terms.
@@ -49,6 +50,7 @@ class LIBox(SNN):
         )
         state.v.requires_grad = True
         return state
+
 
 class LIBoxCell(SNNCell):
     r"""

@@ -33,6 +33,7 @@ def test_li_box_cell_backward():
     loss = out.sum()
     loss.backward()
 
+
 def test_li_box_integral():
     x = torch.ones(10, 1)
     p = LIBoxParameters(

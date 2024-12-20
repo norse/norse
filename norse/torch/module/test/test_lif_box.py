@@ -68,6 +68,7 @@ def test_lif_box_cell_compile_gpu():
     assert z.shape == (2, 1)
     assert torch.all(torch.eq(s.v, 1))
 
+
 def test_lif_box_integral():
     x = torch.ones(10, 1)
     p = LIFBoxParameters(
@@ -81,6 +82,7 @@ def test_lif_box_integral():
     z, s = m(x)
     assert z.shape == (10, 1)
     assert torch.all(torch.eq(s.v, 1))
+
 
 def test_lif_box_integral_numerics():
     x = torch.ones(10, 1)
