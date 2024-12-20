@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from numbers import Number
-from typing import NamedTuple, Tuple
+from typing import Tuple
+import platform
 from weakref import ref
 
 import torch
@@ -113,6 +114,9 @@ def test_onnx():
     onnx.checker.check_model(loaded)
 
 
+@pytest.mark.skipif(
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
+)
 def test_compile():
     class MockModule(torch.nn.Module):
         def __init__(self, p: MockState):

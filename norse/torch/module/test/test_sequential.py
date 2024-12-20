@@ -14,7 +14,7 @@ def test_state_sequence():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_state_sequence_compile():
     d = torch.ones(2, 1, 20)
@@ -194,7 +194,7 @@ def test_recurrent_sequential_output_index():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_sequential_compile():
     x = torch.ones(2, 2)

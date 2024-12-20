@@ -24,7 +24,7 @@ def test_lif_box_cell_backward():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_lif_box_compile_cpu():
     x = torch.ones(2, 1)

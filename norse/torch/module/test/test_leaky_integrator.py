@@ -51,8 +51,8 @@ def test_li_linear_cell():
 
 
 @pytest.mark.skipif(
-    not torch.cuda.is_available() or not platform.system() == "Linux",
-    reason="no cuda device available or not on linux",
+    not torch.cuda.is_available() or platform.system() == "Windows",
+    reason="no cuda device available or windows",
 )
 def test_li_linear_compile_gpu():
     p = LIParameters(
