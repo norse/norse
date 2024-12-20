@@ -9,6 +9,45 @@ def test_spatial_rf():
     assert rf.shape == (9, 9)
 
 
+@pytest.mark.parametrize(
+    "n_scales, n_angles, n_ratios, n_derivatives",
+    [
+        (a, b, c, d)
+        for a in range(1, 4)
+        for b in range(1, 4)
+        for c in range(1, 4)
+        for d in [[(0, 0)], [(0, 0), (1, 0)]]
+    ],
+)
+def test_spatial_parameters_redundant_angles(
+    n_scales, n_angles, n_ratios, n_derivatives
+):
+    scales = (2 ** torch.arange(n_scales)).float()
+    angles = torch.linspace(0, torch.pi - torch.pi / n_angles, n_angles).float()
+    ratios = (2 ** torch.arange(n_ratios)).float()
+    params = receptive_field.spatial_parameters(
+        scales=scales,
+        angles=angles,
+        ratios=ratios,
+        derivatives=n_derivatives,
+        include_replicas=False,
+    )
+    assert params.shape == (
+        n_scales * (n_angles - 1) * (n_ratios - 1) * len(n_derivatives)
+        + n_scales * n_ratios * len(n_derivatives),
+        7,
+    )
+
+    params = receptive_field.spatial_parameters(
+        scales=scales,
+        angles=angles,
+        ratios=ratios,
+        derivatives=n_derivatives,
+        include_replicas=True,
+    )
+    assert params.shape == (n_scales * n_angles * n_ratios * len(n_derivatives), 7)
+
+
 def test_gaussian_kernel_backwards():
     angle = torch.tensor([1.0], requires_grad=True)
     ratio = torch.tensor([2.0], requires_grad=True)
