@@ -1,6 +1,7 @@
 import torch
 
 from norse.torch.module.leaky_integrator_box import (
+    LIBox,
     LIBoxCell,
     LIBoxState,
     LIBoxParameters,
@@ -31,3 +32,37 @@ def test_li_box_cell_backward():
     out, _ = model(data)
     loss = out.sum()
     loss.backward()
+
+
+def test_li_box_integral():
+    x = torch.ones(10, 1)
+    p = LIBoxParameters(
+        tau_mem_inv=torch.ones(1) * 1000,
+        v_leak=torch.zeros(1),
+    )
+    model = LIBox(p)
+    out, _ = model(x)
+
+    assert out.shape == (10, 1)
+    assert torch.all(torch.eq(out, 1))
+
+
+def test_li_box_integral_numerics():
+    x = torch.ones(10, 1)
+    p = LIBoxParameters(
+        tau_mem_inv=torch.ones(1) * 700,
+        v_leak=torch.zeros(1),
+    )
+    model = LIBoxCell(p)
+    out = []
+    state = None
+    for y in x:
+        z, state = model(y, state)
+        out.append(z)
+    out = torch.stack(out)
+
+    model2 = LIBox(p)
+    out2, _ = model2(x)
+
+    assert out.shape == (10, 1)
+    assert torch.all(torch.eq(out, out2))
