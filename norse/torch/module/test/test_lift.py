@@ -66,7 +66,7 @@ def test_lift_sequential_stateful():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_compile_lift():
     c = Lift(LIFCell())
@@ -77,8 +77,8 @@ def test_compile_lift():
 
 
 @pytest.mark.skipif(
-    not torch.cuda.is_available() or not platform.system() == "Linux",
-    reason="no cuda device or not on linux",
+    not torch.cuda.is_available() or platform.system() == "Windows",
+    reason="no cuda device or Windows",
 )
 def test_compile_lift():
     c = Lift(LIFCell()).cuda()

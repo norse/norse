@@ -36,7 +36,7 @@ def test_lif_cell_feedforward():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_lif_cell_feedforward_compile():
     layer = LIFCell()
@@ -59,7 +59,7 @@ def test_lif_recurrent_cell():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_lif_recurrent_cell_compile():
     cell = LIFRecurrentCell(2, 4)
@@ -160,7 +160,7 @@ def test_lif_feedforward_layer():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_lif_feedforward_layer_compile():
     layer = LIF()

@@ -182,9 +182,13 @@ def _extract_derivatives(
         if derivatives == 0:
             return [(0, 0)], 0
         else:
-            return [
-                (x, y) for x in range(derivatives + 1) for y in range(derivatives + 1)
-            ], derivatives
+            derivative_list = torch.arange(derivatives + 1)
+            return (
+                torch.cartesian_prod(derivative_list, derivative_list)[
+                    :-1
+                ].tolist(),  # Remove the final derivative (n, n) since it's higher-order than n
+                derivatives,
+            )
     elif isinstance(derivatives, list):
         return derivatives, max([max(x, y) for (x, y) in derivatives])
     else:
@@ -198,13 +202,22 @@ def spatial_parameters(
     angles: torch.Tensor,
     ratios: torch.Tensor,
     derivatives: Union[int, List[Tuple[int, int]]],
-    x: torch.Tensor,
-    y: torch.Tensor,
+    x: torch.Tensor = torch.tensor([0.0]),
+    y: torch.Tensor = torch.tensor([0.0]),
     include_replicas: bool = False,
 ) -> torch.Tensor:
     """
     Combines the parameters of scales, angles, ratios, xand y coordinates of the center of the rf and derivatives as cartesian products
     to produce a set of parameters for spatial receptive fields.
+
+    Arguments:
+        scales (torch.Tensor): The scales of the receptive fields
+        angles (torch.Tensor): The angles of the receptive fields
+        ratios (torch.Tensor): The ratios of the receptive fields
+        derivatives (Union[int, List[Tuple[int, int]]): The derivatives of the receptive fields
+        x (torch.Tensor): The x-shift of the receptive field center
+        y (torch.Tensor): The y-shift of the receptive field center
+        include_replicas (bool): If True, includes replicas of the receptive field for ratio 1 (they are symmetric under rotation). Defaults to False.
     """
     if include_replicas or not (ratios == 1).any():
         parameters = torch.cartesian_prod(scales, angles, ratios, x, y)
@@ -215,7 +228,13 @@ def spatial_parameters(
         asymmetric_fields = torch.cartesian_prod(
             scales, angles, asymmetric_ratios, x, y
         )
-        symmetric_rings = torch.cartesian_prod(scales, angles, symmetric_ratios, x, y)
+        symmetric_rings = torch.cartesian_prod(
+            scales,
+            angles[:1],  # We can ignore angles when ratio is 1
+            symmetric_ratios,
+            x,
+            y,
+        )
         parameters = torch.cat([asymmetric_fields, symmetric_rings])
     # Add derivatives
     derivatives, _ = _extract_derivatives(derivatives)

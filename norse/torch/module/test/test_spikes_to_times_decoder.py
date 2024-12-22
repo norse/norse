@@ -92,7 +92,7 @@ def test_backward():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports jit compilation"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_jit():
     test_input = torch.zeros((2, 1, 1))

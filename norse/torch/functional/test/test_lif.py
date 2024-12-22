@@ -56,7 +56,7 @@ def test_lif_feed_forward_step_batch():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_lif_feed_forward_step_compile():
     x = torch.ones(10)
@@ -118,7 +118,7 @@ def test_lif_integral():
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_lif_integral_compile():
     x = torch.ones(8, 1)

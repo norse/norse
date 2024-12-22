@@ -46,7 +46,7 @@ class SomeClass(torch.nn.Module):
 
 
 @pytest.mark.skipif(
-    not platform.system() == "Linux", reason="Only Linux supports torch.compile"
+    platform.system() == "Windows", reason="torch.compile not supported on Windows"
 )
 def test_compile():
     c = SomeClass()
