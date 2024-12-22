@@ -661,9 +661,13 @@
         <span class="k">if</span> <span class="n">derivatives</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span>
-                <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">derivatives</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">derivatives</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="p">],</span> <span class="n">derivatives</span>
+            <span class="n">derivative_list</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">derivatives</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">cartesian_prod</span><span class="p">(</span><span class="n">derivative_list</span><span class="p">,</span> <span class="n">derivative_list</span><span class="p">)[</span>
+                    <span class="p">:</span><span class="o">-</span><span class="mi">1</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>  <span class="c1"># Remove the final derivative (n, n) since it&#39;s higher-order than n</span>
+                <span class="n">derivatives</span><span class="p">,</span>
+            <span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">derivatives</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">derivatives</span><span class="p">,</span> <span class="nb">max</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
