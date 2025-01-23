@@ -29,7 +29,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -484,9 +484,9 @@
 <span class="sd">Read more on `Wikipedia &lt;https://en.wikipedia.org/wiki/Regularization_%28mathematics%29&gt;`_.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">NewType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">NewType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="c1"># An accumulator that can take some cell output, cell state, and regularization state</span>
 <span class="c1"># and return an updated regularization state</span>
@@ -495,7 +495,7 @@
 
 <div class="viewcode-block" id="spike_accumulator">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.regularization.spike_accumulator.html#norse.torch.functional.regularization.spike_accumulator">[docs]</a>
-<span class="k">def</span> <span class="nf">spike_accumulator</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">spike_accumulator</span><span class="p">(</span>
     <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -517,7 +517,7 @@
 
 <div class="viewcode-block" id="voltage_accumulator">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.regularization.voltage_accumulator.html#norse.torch.functional.regularization.voltage_accumulator">[docs]</a>
-<span class="k">def</span> <span class="nf">voltage_accumulator</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">voltage_accumulator</span><span class="p">(</span>
     <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -542,7 +542,7 @@
 <span class="c1"># pytype: disable=annotation-type-mismatch</span>
 <div class="viewcode-block" id="regularize_step">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.regularization.regularize_step.html#norse.torch.functional.regularization.regularize_step">[docs]</a>
-<span class="k">def</span> <span class="nf">regularize_step</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">regularize_step</span><span class="p">(</span>
     <span class="n">z</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">s</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">accumulator</span><span class="p">:</span> <span class="n">Accumulator</span> <span class="o">=</span> <span class="n">spike_accumulator</span><span class="p">,</span>

@@ -30,7 +30,7 @@
   <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -671,10 +671,10 @@ as demonstrated in the <a class="reference external" href="https://github.com/no
 <h2>2.3. Example: Spiking convolutional classifier<a class="headerlink" href="#example-spiking-convolutional-classifier" title="Link to this heading">#</a></h2>
 <p><a class="reference external" href="https://colab.research.google.com/github/norse/notebooks/blob/main/mnist_classifiers.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <p>This classifier is taken from our <a class="reference external" href="https://github.com/norse/notebooks#level-intermediate">tutorial on training a spiking MNIST classifier</a> and achieves &gt;99% accuracy.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span><span class="o">,</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">LICell</span>             <span class="c1"># Leaky integrator</span>
-<span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">LIFCell</span>            <span class="c1"># Leaky integrate-and-fire</span>
-<span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">SequentialState</span>    <span class="c1"># Stateful sequential layers</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span><span class="o">,</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">LICell</span>             <span class="c1"># Leaky integrator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">LIFCell</span>            <span class="c1"># Leaky integrate-and-fire</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">SequentialState</span>    <span class="c1"># Stateful sequential layers</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">SequentialState</span><span class="p">(</span>
     <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>      <span class="c1"># Convolve from 1 -&gt; 20 channels</span>
@@ -696,8 +696,8 @@ as demonstrated in the <a class="reference external" href="https://github.com/no
 <section id="example-long-short-term-spiking-neural-networks">
 <h2>2.4. Example: Long short-term spiking neural networks<a class="headerlink" href="#example-long-short-term-spiking-neural-networks" title="Link to this heading">#</a></h2>
 <p>The long short-term spiking neural networks from the paper by <a class="reference external" href="https://arxiv.org/abs/1803.09574">G. Bellec, D. Salaj, A. Subramoney, R. Legenstein, and W. Maass (2018)</a> is another interesting way to apply norse:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">norse.torch</span> <span class="kn">import</span> <span class="n">LSNNRecurrent</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">LSNNRecurrent</span>
 <span class="c1"># Recurrent LSNN network with 2 input neurons and 10 output neurons</span>
 <span class="n">layer</span> <span class="o">=</span> <span class="n">LSNNRecurrent</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="c1"># Generate data: 20 timesteps with 8 datapoints per batch for 2 neurons</span>

@@ -29,7 +29,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -471,9 +471,9 @@
                 <article class="bd-article">
                   
   <h1>Source code for norse.torch.module.izhikevich</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">..functional.izhikevich</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..functional.izhikevich</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">IzhikevichState</span><span class="p">,</span>
     <span class="n">IzhikevichRecurrentState</span><span class="p">,</span>
     <span class="n">IzhikevichSpikingBehavior</span><span class="p">,</span>
@@ -481,10 +481,10 @@
     <span class="n">izhikevich_recurrent_step</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNN</span><span class="p">,</span> <span class="n">SNNRecurrent</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.module.snn</span><span class="w"> </span><span class="kn">import</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNN</span><span class="p">,</span> <span class="n">SNNRecurrent</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span>
 
 
-<span class="k">def</span> <span class="nf">_convert_to_recurrent_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">IzhikevichState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichRecurrentState</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_convert_to_recurrent_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">IzhikevichState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichRecurrentState</span><span class="p">:</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">rstate</span> <span class="o">=</span> <span class="n">IzhikevichRecurrentState</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">u</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">rstate</span>
@@ -492,7 +492,7 @@
 
 <div class="viewcode-block" id="IzhikevichCell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichCell.html#norse.torch.module.izhikevich.IzhikevichCell">[docs]</a>
-<span class="k">class</span> <span class="nc">IzhikevichCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IzhikevichCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Module that computes a single Izhikevich neuron-model *without* recurrence and *without* time.</span>
 <span class="sd">    More specifically it implements one integration step of the following ODE:</span>
@@ -521,14 +521,14 @@
 
 <div class="viewcode-block" id="IzhikevichCell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichCell.html#norse.torch.module.izhikevich.IzhikevichCell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spiking_method</span><span class="p">:</span> <span class="n">IzhikevichSpikingBehavior</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spiking_method</span><span class="p">:</span> <span class="n">IzhikevichSpikingBehavior</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">izhikevich_feed_forward_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">spiking_method</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spiking_method</span> <span class="o">=</span> <span class="n">spiking_method</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spiking_method</span><span class="o">.</span><span class="n">s</span>
         <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">state</span></div>
@@ -537,7 +537,7 @@
 
 <div class="viewcode-block" id="IzhikevichRecurrentCell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichRecurrentCell.html#norse.torch.module.izhikevich.IzhikevichRecurrentCell">[docs]</a>
-<span class="k">class</span> <span class="nc">IzhikevichRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IzhikevichRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of an Izhikevich neuron-model *with* recurrence but *without* time.</span>
 <span class="sd">    More specifically it implements one integration step of the following ODE :</span>
 
@@ -574,7 +574,7 @@
 
 <div class="viewcode-block" id="IzhikevichRecurrentCell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichRecurrentCell.html#norse.torch.module.izhikevich.IzhikevichRecurrentCell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -592,7 +592,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spiking_method</span> <span class="o">=</span> <span class="n">spiking_method</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichRecurrentState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichRecurrentState</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
         <span class="n">rstate</span> <span class="o">=</span> <span class="n">_convert_to_recurrent_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spiking_method</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">IzhikevichRecurrentState</span><span class="p">(</span>
@@ -622,7 +622,7 @@
 
 <div class="viewcode-block" id="Izhikevich">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.izhikevich.Izhikevich.html#norse.torch.module.izhikevich.Izhikevich">[docs]</a>
-<span class="k">class</span> <span class="nc">Izhikevich</span><span class="p">(</span><span class="n">SNN</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Izhikevich</span><span class="p">(</span><span class="n">SNN</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A neuron layer that wraps a :class:`IzhikevichCell` in time such</span>
 <span class="sd">    that the layer keeps track of temporal sequences of spikes.</span>
@@ -642,7 +642,7 @@
 
 <div class="viewcode-block" id="Izhikevich.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.izhikevich.Izhikevich.html#norse.torch.module.izhikevich.Izhikevich.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spiking_method</span><span class="p">:</span> <span class="n">IzhikevichSpikingBehavior</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spiking_method</span><span class="p">:</span> <span class="n">IzhikevichSpikingBehavior</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">activation</span><span class="o">=</span><span class="n">izhikevich_feed_forward_step</span><span class="p">,</span>
             <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
@@ -652,7 +652,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spiking_method</span> <span class="o">=</span> <span class="n">spiking_method</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spiking_method</span><span class="o">.</span><span class="n">s</span>
         <span class="k">return</span> <span class="n">state</span></div>
 
@@ -660,7 +660,7 @@
 
 <div class="viewcode-block" id="IzhikevichRecurrent">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichRecurrent.html#norse.torch.module.izhikevich.IzhikevichRecurrent">[docs]</a>
-<span class="k">class</span> <span class="nc">IzhikevichRecurrent</span><span class="p">(</span><span class="n">SNNRecurrent</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IzhikevichRecurrent</span><span class="p">(</span><span class="n">SNNRecurrent</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A neuron layer that wraps a :class:`IzhikevichRecurrentCell` in time such</span>
 <span class="sd">    that the layer keeps track of temporal sequences of spikes.</span>
@@ -680,7 +680,7 @@
 
 <div class="viewcode-block" id="IzhikevichRecurrent.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.izhikevich.IzhikevichRecurrent.html#norse.torch.module.izhikevich.IzhikevichRecurrent.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -700,7 +700,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spiking_method</span> <span class="o">=</span> <span class="n">spiking_method</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichRecurrentState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IzhikevichRecurrentState</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
         <span class="n">rstate</span> <span class="o">=</span> <span class="n">_convert_to_recurrent_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spiking_method</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">IzhikevichRecurrentState</span><span class="p">(</span>

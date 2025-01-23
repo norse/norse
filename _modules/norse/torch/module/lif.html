@@ -29,7 +29,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -478,9 +478,9 @@
 <span class="sd">See :mod:`norse.torch.functional.lif` for more information.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.functional.lif</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.lif</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">LIFState</span><span class="p">,</span>
     <span class="n">LIFFeedForwardState</span><span class="p">,</span>
     <span class="n">LIFParameters</span><span class="p">,</span>
@@ -489,19 +489,19 @@
     <span class="n">lif_feed_forward_step</span><span class="p">,</span>
     <span class="n">lif_feed_forward_step_sparse</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">norse.torch.functional.adjoint.lif_adjoint</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.adjoint.lif_adjoint</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">lif_adjoint_step</span><span class="p">,</span>
     <span class="n">lif_adjoint_step_sparse</span><span class="p">,</span>
     <span class="n">lif_feed_forward_adjoint_step</span><span class="p">,</span>
     <span class="n">lif_feed_forward_adjoint_step_sparse</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNN</span><span class="p">,</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNNRecurrent</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span>
-<span class="kn">from</span> <span class="nn">norse.torch.utils.clone</span> <span class="kn">import</span> <span class="n">clone_tensor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.module.snn</span><span class="w"> </span><span class="kn">import</span> <span class="n">SNN</span><span class="p">,</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNNRecurrent</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.utils.clone</span><span class="w"> </span><span class="kn">import</span> <span class="n">clone_tensor</span>
 
 
 <div class="viewcode-block" id="LIFCell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif.LIFCell.html#norse.torch.module.lif.LIFCell">[docs]</a>
-<span class="k">class</span> <span class="nc">LIFCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a</span>
 <span class="sd">    leaky integrate-and-fire (LIF) neuron-model *without* recurrence and *without* time.</span>
 
@@ -539,7 +539,7 @@
 
 <div class="viewcode-block" id="LIFCell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif.LIFCell.html#norse.torch.module.lif.LIFCell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">activation</span><span class="o">=</span><span class="p">(</span>
                 <span class="n">lif_feed_forward_adjoint_step</span>
@@ -565,7 +565,7 @@
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFFeedForwardState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFFeedForwardState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span>
             <span class="n">v</span><span class="o">=</span><span class="n">clone_tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="p">),</span>
             <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
@@ -581,7 +581,7 @@
 
 <div class="viewcode-block" id="LIFRecurrentCell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif.LIFRecurrentCell.html#norse.torch.module.lif.LIFRecurrentCell">[docs]</a>
-<span class="k">class</span> <span class="nc">LIFRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a</span>
 <span class="sd">    leaky integrate-and-fire (LIF) neuron-model *with* recurrence but *without* time.</span>
 <span class="sd">    More specifically it implements one integration step</span>
@@ -631,7 +631,7 @@
 
 <div class="viewcode-block" id="LIFRecurrentCell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif.LIFRecurrentCell.html#norse.torch.module.lif.LIFRecurrentCell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -659,7 +659,7 @@
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFState</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span>
             <span class="n">z</span><span class="o">=</span><span class="p">(</span>
@@ -694,7 +694,7 @@
 
 <div class="viewcode-block" id="LIF">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif.LIF.html#norse.torch.module.lif.LIF">[docs]</a>
-<span class="k">class</span> <span class="nc">LIF</span><span class="p">(</span><span class="n">SNN</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIF</span><span class="p">(</span><span class="n">SNN</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A neuron layer that wraps a :class:`LIFCell` in time such</span>
 <span class="sd">    that the layer keeps track of temporal sequences of spikes.</span>
@@ -715,7 +715,7 @@
 
 <div class="viewcode-block" id="LIF.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif.LIF.html#norse.torch.module.lif.LIF.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFParameters</span> <span class="o">=</span> <span class="n">LIFParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">activation</span><span class="o">=</span><span class="p">(</span>
                 <span class="n">lif_feed_forward_adjoint_step</span>
@@ -741,7 +741,7 @@
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFFeedForwardState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFFeedForwardState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LIFFeedForwardState</span><span class="p">(</span>
             <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
                 <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>  <span class="c1"># Assume first dimension is time</span>
@@ -762,7 +762,7 @@
 
 <div class="viewcode-block" id="LIFRecurrent">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif.LIFRecurrent.html#norse.torch.module.lif.LIFRecurrent">[docs]</a>
-<span class="k">class</span> <span class="nc">LIFRecurrent</span><span class="p">(</span><span class="n">SNNRecurrent</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFRecurrent</span><span class="p">(</span><span class="n">SNNRecurrent</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A neuron layer that wraps a :class:`LIFRecurrentCell` in time such</span>
 <span class="sd">    that the layer keeps track of temporal sequences of spikes.</span>
@@ -791,7 +791,7 @@
 
 <div class="viewcode-block" id="LIFRecurrent.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif.LIFRecurrent.html#norse.torch.module.lif.LIFRecurrent.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -819,7 +819,7 @@
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFState</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span>  <span class="c1"># Remove first dimension (time)</span>
             <span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>

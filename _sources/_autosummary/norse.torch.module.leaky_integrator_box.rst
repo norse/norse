@@ -8,5 +8,6 @@ norse.torch.module.leaky\_integrator\_box
 
    .. autosummary::
    
+      LIBox
       LIBoxCell
    

@@ -29,7 +29,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -471,11 +471,11 @@
                 <article class="bd-article">
                   
   <h1>Source code for norse.torch.module.lif_refrac</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.functional.lif</span> <span class="kn">import</span> <span class="n">LIFState</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">,</span> <span class="n">LIFParameters</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.lif</span><span class="w"> </span><span class="kn">import</span> <span class="n">LIFState</span><span class="p">,</span> <span class="n">LIFFeedForwardState</span><span class="p">,</span> <span class="n">LIFParameters</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.functional.lif_refrac</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.lif_refrac</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">LIFRefracParameters</span><span class="p">,</span>
     <span class="n">LIFRefracState</span><span class="p">,</span>
     <span class="n">LIFRefracFeedForwardState</span><span class="p">,</span>
@@ -483,17 +483,17 @@
     <span class="n">lif_refrac_feed_forward_step</span><span class="p">,</span>
     <span class="n">lif_refrac_step_sparse</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">norse.torch.functional.adjoint.lif_refrac_adjoint</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.adjoint.lif_refrac_adjoint</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">lif_refrac_adjoint_step</span><span class="p">,</span>
     <span class="n">lif_refrac_adjoint_step_sparse</span><span class="p">,</span>
     <span class="n">lif_refrac_feed_forward_adjoint_step</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span><span class="p">,</span> <span class="n">SNNRecurrent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.module.snn</span><span class="w"> </span><span class="kn">import</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span><span class="p">,</span> <span class="n">SNNRecurrent</span>
 
 
 <div class="viewcode-block" id="LIFRefracCell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif_refrac.LIFRefracCell.html#norse.torch.module.lif_refrac.LIFRefracCell">[docs]</a>
-<span class="k">class</span> <span class="nc">LIFRefracCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFRefracCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a</span>
 <span class="sd">    LIF neuron-model with absolute refractory period *without* recurrence.</span>
 <span class="sd">    More specifically it implements one integration step of the following ODE.</span>
@@ -535,7 +535,7 @@
 
 <div class="viewcode-block" id="LIFRefracCell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif_refrac.LIFRefracCell.html#norse.torch.module.lif_refrac.LIFRefracCell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIFRefracParameters</span> <span class="o">=</span> <span class="n">LIFRefracParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="p">(</span>
                 <span class="n">lif_refrac_feed_forward_adjoint_step</span>
@@ -548,7 +548,7 @@
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFRefracFeedForwardState</span><span class="p">:</span>
@@ -579,7 +579,7 @@
 
 <div class="viewcode-block" id="LIFRefracRecurrentCell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.html#norse.torch.module.lif_refrac.LIFRefracRecurrentCell">[docs]</a>
-<span class="k">class</span> <span class="nc">LIFRefracRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFRefracRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a LIF</span>
 <span class="sd">    neuron-model with absolute refractory period. More specifically it</span>
 <span class="sd">    implements one integration step of the following ODE.</span>
@@ -630,7 +630,7 @@
 
 <div class="viewcode-block" id="LIFRefracRecurrentCell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lif_refrac.LIFRefracRecurrentCell.html#norse.torch.module.lif_refrac.LIFRefracRecurrentCell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -651,7 +651,7 @@
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFRefracState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFRefracState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LIFRefracState</span><span class="p">(</span>
             <span class="n">LIFState</span><span class="p">(</span>
                 <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
@@ -680,7 +680,7 @@
 
 
 
-<span class="k">class</span> <span class="nc">LIFRefracRecurrent</span><span class="p">(</span><span class="n">SNNRecurrent</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFRefracRecurrent</span><span class="p">(</span><span class="n">SNNRecurrent</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A neuron layer that wraps a :class:`LIFRefracRecurrentCell` in time such</span>
 <span class="sd">    that the layer keeps track of temporal sequences of spikes.</span>
@@ -706,7 +706,7 @@
 <span class="sd">        dt (float): Time step to use in integration. Defaults to 0.001.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -742,7 +742,7 @@
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFRefracState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIFRefracState</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
         <span class="n">lif_state</span> <span class="o">=</span> <span class="n">LIFState</span><span class="p">(</span>
             <span class="n">z</span><span class="o">=</span><span class="p">(</span>

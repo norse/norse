@@ -30,7 +30,7 @@
   <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -576,7 +576,7 @@ Once that part is built and tested, the module can be built which, at this point
 <h3><span class="section-number">9.1.1. </span>Import shortcuts<a class="headerlink" href="#import-shortcuts" title="Link to this heading">#</a></h3>
 <p>It is also worth mentioning that importing <code class="docutils literal notranslate"><span class="pre">norse.torch.module.LIFCell</span></code> is rather tedious.
 To accommodate this, we have added import shortcuts, so the user can write the following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">norse.torch</span> <span class="k">as</span> <span class="nn">snn</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">norse.torch</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">snn</span>
 <span class="n">snn</span><span class="o">.</span><span class="n">LIFCell</span>
 </pre></div>
 </div>
@@ -611,7 +611,7 @@ Please note, however, that the threshold API may be subject to change.</p>
 \]</div>
 <p>And that we will spike if <span class="math notranslate nohighlight">\(s &gt; 1\)</span>.</p>
 <p>This has a straightforward implementation in Python (please note that <code class="docutils literal notranslate"><span class="pre">input_tensor</span></code> may be a tensor and not a scalar!)</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_dynamic</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">my_dynamic</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="o">+</span> <span class="n">input_tensor</span>
     <span class="c1"># Spike if state &gt; 1</span>
     <span class="n">spikes</span> <span class="o">=</span> <span class="o">...</span>
@@ -620,9 +620,9 @@ Please note, however, that the threshold API may be subject to change.</p>
 </div>
 <p>Note that we are returning a <strong>tuple</strong> since we need to re-use the state in the next integration step.</p>
 <p>To resolve the discontinuity problem above, we can apply the <code class="docutils literal notranslate"><span class="pre">threshold</span> <span class="pre">module</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.threshold</span><span class="w"> </span><span class="kn">import</span> <span class="n">threshold</span>
 
-<span class="k">def</span> <span class="nf">my_dynamic</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_dynamic</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="o">+</span> <span class="n">input_tensor</span>
     <span class="c1"># Note that the threshold interprets values &gt; 0 as a spike</span>
     <span class="c1">#   - alpha is a parameter for the superspike method, ignore for now</span>
@@ -639,16 +639,16 @@ Please note, however, that the threshold API may be subject to change.</p>
 </pre></div>
 </div>
 <p>Final step can be prettying it up a bit by adding a <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> object to keep track of your hyperparameters.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.threshold</span><span class="w"> </span><span class="kn">import</span> <span class="n">threshold</span>
 
-<span class="k">class</span> <span class="nc">MyParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;superspike&quot;</span>
     <span class="n">alpha</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">my_dynamic</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">MyParameters</span><span class="o">=</span><span class="n">MyParameters</span><span class="p">()):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_dynamic</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">MyParameters</span><span class="o">=</span><span class="n">MyParameters</span><span class="p">()):</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="o">+</span> <span class="n">input_tensor</span>
     <span class="c1"># Note that the threshold interprets values &gt; 0 as a spike</span>
     <span class="c1">#   - alpha is a parameter for the superspike method, ignore for now</span>

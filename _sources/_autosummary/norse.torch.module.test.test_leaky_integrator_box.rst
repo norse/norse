@@ -11,4 +11,6 @@ norse.torch.module.test.test\_leaky\_integrator\_box
       test_li_box_cell
       test_li_box_cell_backward
       test_li_box_cell_state
+      test_li_box_integral
+      test_li_box_integral_numerics
    

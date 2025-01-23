@@ -29,7 +29,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -477,17 +477,17 @@
 <span class="sd">It is these sudden current jumps that gives the model its name, because the shift in current is instantaneous and can be drawn as &quot;current boxes&quot;.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.jit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.jit</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
-<span class="kn">from</span> <span class="nn">norse.torch.functional.reset</span> <span class="kn">import</span> <span class="n">ResetMethod</span><span class="p">,</span> <span class="n">reset_value</span>
-<span class="kn">from</span> <span class="nn">norse.torch.utils</span> <span class="kn">import</span> <span class="n">pytree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.threshold</span><span class="w"> </span><span class="kn">import</span> <span class="n">threshold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.reset</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResetMethod</span><span class="p">,</span> <span class="n">reset_value</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">pytree</span>
 
 
-<span class="k">class</span> <span class="nc">LIFBoxParameters</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFBoxParameters</span><span class="p">(</span>
     <span class="n">pytree</span><span class="o">.</span><span class="n">StateTuple</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">pytree</span><span class="o">.</span><span class="n">MultipleInheritanceNamedTupleMeta</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parametrization of a boxed LIF neuron</span>
@@ -512,7 +512,7 @@
     <span class="n">reset_method</span><span class="p">:</span> <span class="n">ResetMethod</span> <span class="o">=</span> <span class="n">reset_value</span>
 
 
-<span class="k">class</span> <span class="nc">LIFBoxState</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFBoxState</span><span class="p">(</span>
     <span class="n">pytree</span><span class="o">.</span><span class="n">StateTuple</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">pytree</span><span class="o">.</span><span class="n">MultipleInheritanceNamedTupleMeta</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;State of a LIF neuron</span>
@@ -526,7 +526,7 @@
     <span class="n">v</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
 
 
-<span class="k">class</span> <span class="nc">LIFBoxFeedForwardState</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFBoxFeedForwardState</span><span class="p">(</span>
     <span class="n">pytree</span><span class="o">.</span><span class="n">StateTuple</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">pytree</span><span class="o">.</span><span class="n">MultipleInheritanceNamedTupleMeta</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;State of a feed forward LIF neuron</span>
@@ -540,7 +540,7 @@
 
 <div class="viewcode-block" id="lif_box_feed_forward_step">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.lif_box.lif_box_feed_forward_step.html#norse.torch.functional.lif_box.lif_box_feed_forward_step">[docs]</a>
-<span class="k">def</span> <span class="nf">lif_box_feed_forward_step</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lif_box_feed_forward_step</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LIFBoxFeedForwardState</span><span class="p">,</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LIFBoxParameters</span> <span class="o">=</span> <span class="n">LIFBoxParameters</span><span class="p">(),</span>

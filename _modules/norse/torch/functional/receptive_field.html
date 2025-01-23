@@ -29,7 +29,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -475,14 +475,14 @@
 <span class="sd">A module for creating receptive fields.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 
 <div class="viewcode-block" id="gaussian_kernel">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.receptive_field.gaussian_kernel.html#norse.torch.functional.receptive_field.gaussian_kernel">[docs]</a>
-<span class="k">def</span> <span class="nf">gaussian_kernel</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gaussian_kernel</span><span class="p">(</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -509,7 +509,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">covariance_matrix</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">covariance_matrix</span><span class="p">(</span>
     <span class="n">sigma1</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">sigma2</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -529,7 +529,7 @@
     <span class="k">return</span> <span class="n">cov</span>
 
 
-<span class="k">def</span> <span class="nf">derive_kernel</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">derive_kernel</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes the spatial derivative at a given angle</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -541,7 +541,7 @@
     <span class="k">return</span> <span class="n">derived</span>
 
 
-<span class="k">def</span> <span class="nf">calculate_normalization</span><span class="p">(</span><span class="n">dx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_normalization</span><span class="p">(</span><span class="n">dx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates scale normalization for a spatial receptive field at a given directional derivative</span>
 <span class="sd">    Lindeberg: Feature detection with automatic scale selection, eq. 20</span>
@@ -558,7 +558,7 @@
     <span class="k">return</span> <span class="n">scale_norm</span> <span class="o">*</span> <span class="n">xi_norm</span>
 
 
-<span class="k">def</span> <span class="nf">derive_spatial_receptive_field_single</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">derive_spatial_receptive_field_single</span><span class="p">(</span>
     <span class="n">field</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dy</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -595,7 +595,7 @@
     <span class="k">return</span> <span class="n">derived</span>
 
 
-<span class="k">def</span> <span class="nf">derive_spatial_receptive_field</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">derive_spatial_receptive_field</span><span class="p">(</span>
     <span class="n">field</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">derivatives</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -621,7 +621,7 @@
 
 <div class="viewcode-block" id="spatial_receptive_field">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.receptive_field.spatial_receptive_field.html#norse.torch.functional.receptive_field.spatial_receptive_field">[docs]</a>
-<span class="k">def</span> <span class="nf">spatial_receptive_field</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">spatial_receptive_field</span><span class="p">(</span>
     <span class="n">scale</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">angle</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">ratio</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -654,7 +654,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_extract_derivatives</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract_derivatives</span><span class="p">(</span>
     <span class="n">derivatives</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="nb">int</span><span class="p">]:</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">derivatives</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -676,7 +676,7 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">spatial_parameters</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">spatial_parameters</span><span class="p">(</span>
     <span class="n">scales</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">angles</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">ratios</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -725,7 +725,7 @@
 
 <div class="viewcode-block" id="spatial_receptive_fields_with_derivatives">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives.html#norse.torch.functional.receptive_field.spatial_receptive_fields_with_derivatives">[docs]</a>
-<span class="k">def</span> <span class="nf">spatial_receptive_fields_with_derivatives</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">spatial_receptive_fields_with_derivatives</span><span class="p">(</span>
     <span class="n">combinations</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">domain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
@@ -754,7 +754,7 @@
 
 <div class="viewcode-block" id="temporal_scale_distribution">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.receptive_field.temporal_scale_distribution.html#norse.torch.functional.receptive_field.temporal_scale_distribution">[docs]</a>
-<span class="k">def</span> <span class="nf">temporal_scale_distribution</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">temporal_scale_distribution</span><span class="p">(</span>
     <span class="n">n_scales</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">min_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">max_scale</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -791,7 +791,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">spatio_temporal_parameters</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">spatio_temporal_parameters</span><span class="p">(</span>
     <span class="n">scales</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">angles</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">ratios</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>

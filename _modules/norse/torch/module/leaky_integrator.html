@@ -29,7 +29,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -509,15 +509,15 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.jit</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.jit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNN</span><span class="p">,</span> <span class="n">SNNCell</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.module.snn</span><span class="w"> </span><span class="kn">import</span> <span class="n">SNN</span><span class="p">,</span> <span class="n">SNNCell</span>
 
-<span class="kn">from</span> <span class="nn">..functional.leaky_integrator</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..functional.leaky_integrator</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">li_step</span><span class="p">,</span>
     <span class="n">li_feed_forward_step</span><span class="p">,</span>
     <span class="n">LIState</span><span class="p">,</span>
@@ -527,7 +527,7 @@
 
 <div class="viewcode-block" id="LICell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.leaky_integrator.LICell.html#norse.torch.module.leaky_integrator.LICell">[docs]</a>
-<span class="k">class</span> <span class="nc">LICell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LICell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Cell for a leaky-integrator *without* recurrence.</span>
 <span class="sd">    More specifically it implements a discretized version of the ODE</span>
 
@@ -550,7 +550,7 @@
 
 <div class="viewcode-block" id="LICell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.leaky_integrator.LICell.html#norse.torch.module.leaky_integrator.LICell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIParameters</span> <span class="o">=</span> <span class="n">LIParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIParameters</span> <span class="o">=</span> <span class="n">LIParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">activation</span><span class="o">=</span><span class="n">li_feed_forward_step</span><span class="p">,</span>
             <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
@@ -559,7 +559,7 @@
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LIState</span><span class="p">(</span>
             <span class="n">v</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">v_leak</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
             <span class="n">i</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
@@ -575,7 +575,7 @@
 
 <div class="viewcode-block" id="LI">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.leaky_integrator.LI.html#norse.torch.module.leaky_integrator.LI">[docs]</a>
-<span class="k">class</span> <span class="nc">LI</span><span class="p">(</span><span class="n">SNN</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LI</span><span class="p">(</span><span class="n">SNN</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A neuron layer that wraps a leaky-integrator :class:`LICell` in time, but</span>
 <span class="sd">    *without* recurrence. The layer iterates over the  _outer_ dimension of the input.</span>
 <span class="sd">    More specifically it implements a discretized version of the ODE</span>
@@ -607,7 +607,7 @@
 
 <div class="viewcode-block" id="LI.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.leaky_integrator.LI.html#norse.torch.module.leaky_integrator.LI.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIParameters</span> <span class="o">=</span> <span class="n">LIParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LIParameters</span> <span class="o">=</span> <span class="n">LIParameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">activation</span><span class="o">=</span><span class="n">li_feed_forward_step</span><span class="p">,</span>
             <span class="n">state_fallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span>
@@ -616,7 +616,7 @@
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LIState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LIState</span><span class="p">(</span>
             <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
                 <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>  <span class="c1"># Assume first dimension is time</span>
@@ -637,7 +637,7 @@
 
 <div class="viewcode-block" id="LILinearCell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.leaky_integrator.LILinearCell.html#norse.torch.module.leaky_integrator.LILinearCell">[docs]</a>
-<span class="k">class</span> <span class="nc">LILinearCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LILinearCell</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Cell for a leaky-integrator with an additional linear weighting.</span>
 <span class="sd">    More specifically it implements a discretized version of the ODE</span>
 
@@ -663,7 +663,7 @@
 
 <div class="viewcode-block" id="LILinearCell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.leaky_integrator.LILinearCell.html#norse.torch.module.leaky_integrator.LILinearCell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -680,7 +680,7 @@
         <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LIState</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">LIState</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

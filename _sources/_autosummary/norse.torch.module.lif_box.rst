@@ -8,5 +8,6 @@ norse.torch.module.lif\_box
 
    .. autosummary::
    
+      LIFBox
       LIFBoxCell
    

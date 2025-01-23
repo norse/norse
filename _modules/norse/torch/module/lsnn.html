@@ -29,7 +29,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -478,25 +478,25 @@
 <span class="sd">See :mod:`norse.torch.functional.lsnn` for more information.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.functional.lsnn</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.lsnn</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">LSNNParameters</span><span class="p">,</span>
     <span class="n">LSNNState</span><span class="p">,</span>
     <span class="n">LSNNFeedForwardState</span><span class="p">,</span>
     <span class="n">lsnn_step</span><span class="p">,</span>
     <span class="n">lsnn_feed_forward_step</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">norse.torch.functional.adjoint.lsnn_adjoint</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.adjoint.lsnn_adjoint</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">lsnn_adjoint_step</span><span class="p">,</span>
     <span class="n">lsnn_feed_forward_adjoint_step</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">norse.torch.module.snn</span> <span class="kn">import</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span><span class="p">,</span> <span class="n">SNN</span><span class="p">,</span> <span class="n">SNNRecurrent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.module.snn</span><span class="w"> </span><span class="kn">import</span> <span class="n">SNNCell</span><span class="p">,</span> <span class="n">SNNRecurrentCell</span><span class="p">,</span> <span class="n">SNN</span><span class="p">,</span> <span class="n">SNNRecurrent</span>
 
 
 <div class="viewcode-block" id="LSNNCell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lsnn.LSNNCell.html#norse.torch.module.lsnn.LSNNCell">[docs]</a>
-<span class="k">class</span> <span class="nc">LSNNCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LSNNCell</span><span class="p">(</span><span class="n">SNNCell</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Euler integration cell for LIF Neuron with threshold adaptation</span>
 <span class="sd">    *without* recurrence.</span>
 <span class="sd">    More specifically it implements one integration step of the following ODE</span>
@@ -531,7 +531,7 @@
 
 <div class="viewcode-block" id="LSNNCell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lsnn.LSNNCell.html#norse.torch.module.lsnn.LSNNCell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span> <span class="n">adjoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="n">adjoint</span><span class="p">:</span>
@@ -550,7 +550,7 @@
             <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNFeedForwardState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNFeedForwardState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LSNNFeedForwardState</span><span class="p">(</span>
             <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
                 <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
@@ -572,7 +572,7 @@
 
 <div class="viewcode-block" id="LSNNRecurrentCell">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lsnn.LSNNRecurrentCell.html#norse.torch.module.lsnn.LSNNRecurrentCell">[docs]</a>
-<span class="k">class</span> <span class="nc">LSNNRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LSNNRecurrentCell</span><span class="p">(</span><span class="n">SNNRecurrentCell</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Module that computes a single euler-integration step of a LSNN</span>
 <span class="sd">    neuron-model *with* recurrence. More specifically it implements one</span>
 <span class="sd">    integration step of the following ODE</span>
@@ -611,7 +611,7 @@
 
 <div class="viewcode-block" id="LSNNRecurrentCell.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lsnn.LSNNRecurrentCell.html#norse.torch.module.lsnn.LSNNRecurrentCell.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -639,7 +639,7 @@
             <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNState</span><span class="p">:</span>
@@ -670,7 +670,7 @@
 
 <div class="viewcode-block" id="LSNN">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lsnn.LSNN.html#norse.torch.module.lsnn.LSNN">[docs]</a>
-<span class="k">class</span> <span class="nc">LSNN</span><span class="p">(</span><span class="n">SNN</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LSNN</span><span class="p">(</span><span class="n">SNN</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A Long short-term memory neuron module *without* recurrence</span>
 <span class="sd">    adapted from https://arxiv.org/abs/1803.09574</span>
 
@@ -688,7 +688,7 @@
 
 <div class="viewcode-block" id="LSNN.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lsnn.LSNN.html#norse.torch.module.lsnn.LSNN.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">LSNNParameters</span> <span class="o">=</span> <span class="n">LSNNParameters</span><span class="p">(),</span> <span class="n">adjoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="n">adjoint</span><span class="p">:</span>
@@ -707,7 +707,7 @@
             <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNFeedForwardState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNFeedForwardState</span><span class="p">:</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LSNNFeedForwardState</span><span class="p">(</span>
             <span class="n">v</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
                 <span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
@@ -734,7 +734,7 @@
 
 <div class="viewcode-block" id="LSNNRecurrent">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lsnn.LSNNRecurrent.html#norse.torch.module.lsnn.LSNNRecurrent">[docs]</a>
-<span class="k">class</span> <span class="nc">LSNNRecurrent</span><span class="p">(</span><span class="n">SNNRecurrent</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LSNNRecurrent</span><span class="p">(</span><span class="n">SNNRecurrent</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A Long short-term memory neuron module *wit* recurrence</span>
 <span class="sd">    adapted from https://arxiv.org/abs/1803.09574</span>
 
@@ -754,7 +754,7 @@
 
 <div class="viewcode-block" id="LSNNRecurrent.__init__">
 <a class="viewcode-back" href="../../../../generated/norse.torch.module.lsnn.LSNNRecurrent.html#norse.torch.module.lsnn.LSNNRecurrent.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -782,7 +782,7 @@
             <span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LSNNState</span><span class="p">:</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">LSNNState</span><span class="p">(</span>
             <span class="n">z</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>

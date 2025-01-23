@@ -29,7 +29,7 @@
   <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -471,17 +471,17 @@
                 <article class="bd-article">
                   
   <h1>Source code for norse.torch.functional.lif_ex</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.jit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.jit</span>
 
-<span class="kn">from</span> <span class="nn">norse.torch.functional.threshold</span> <span class="kn">import</span> <span class="n">threshold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">norse.torch.functional.threshold</span><span class="w"> </span><span class="kn">import</span> <span class="n">threshold</span>
 
 
 <div class="viewcode-block" id="LIFExParameters">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.lif_ex.LIFExParameters.html#norse.torch.functional.lif_ex.LIFExParameters">[docs]</a>
-<span class="k">class</span> <span class="nc">LIFExParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFExParameters</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parametrization of an Exponential Leaky Integrate and Fire neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -509,7 +509,7 @@
 
 
 
-<span class="k">class</span> <span class="nc">LIFExState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFExState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;State of a LIFEx neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -525,7 +525,7 @@
 
 <div class="viewcode-block" id="LIFExFeedForwardState">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.lif_ex.LIFExFeedForwardState.html#norse.torch.functional.lif_ex.LIFExFeedForwardState">[docs]</a>
-<span class="k">class</span> <span class="nc">LIFExFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIFExFeedForwardState</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;State of a feed forward LIFEx neuron</span>
 
 <span class="sd">    Parameters:</span>
@@ -538,7 +538,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">lif_ex_step</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lif_ex_step</span><span class="p">(</span>
     <span class="n">input_tensor</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LIFExState</span><span class="p">,</span>
     <span class="n">input_weights</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -608,7 +608,7 @@
 
 <div class="viewcode-block" id="lif_ex_feed_forward_step">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.lif_ex.lif_ex_feed_forward_step.html#norse.torch.functional.lif_ex.lif_ex_feed_forward_step">[docs]</a>
-<span class="k">def</span> <span class="nf">lif_ex_feed_forward_step</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lif_ex_feed_forward_step</span><span class="p">(</span>
     <span class="n">input_spikes</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">LIFExFeedForwardState</span> <span class="o">=</span> <span class="n">LIFExFeedForwardState</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LIFExParameters</span> <span class="o">=</span> <span class="n">LIFExParameters</span><span class="p">(),</span>
@@ -671,7 +671,7 @@
 
 <div class="viewcode-block" id="lif_ex_current_encoder">
 <a class="viewcode-back" href="../../../../generated/norse.torch.functional.lif_ex.lif_ex_current_encoder.html#norse.torch.functional.lif_ex.lif_ex_current_encoder">[docs]</a>
-<span class="k">def</span> <span class="nf">lif_ex_current_encoder</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lif_ex_current_encoder</span><span class="p">(</span>
     <span class="n">input_current</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">voltage</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">p</span><span class="p">:</span> <span class="n">LIFExParameters</span> <span class="o">=</span> <span class="n">LIFExParameters</span><span class="p">(),</span>
