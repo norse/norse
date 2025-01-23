@@ -137,7 +137,13 @@ def test_spatial_parameters_derivative():
     )
     assert sp.shape == (324, 7)
     sp = receptive_field.spatial_parameters(
-        scales, angles, ratios, [(0, 0), (1, 0), (0, 1), (1, 1)], x, y, include_replicas=True
+        scales,
+        angles,
+        ratios,
+        [(0, 0), (1, 0), (0, 1), (1, 1)],
+        x,
+        y,
+        include_replicas=True,
     )
     assert sp.shape == (432, 7)
     sp.sum().backward()
