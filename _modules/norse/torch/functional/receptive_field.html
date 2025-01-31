@@ -535,10 +535,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dirx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
     <span class="n">diry</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
-    <span class="n">gradx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">dirx</span>
-    <span class="n">grady</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">diry</span>
-    <span class="n">derived</span> <span class="o">=</span> <span class="n">gradx</span> <span class="o">+</span> <span class="n">grady</span>
-    <span class="k">return</span> <span class="n">derived</span>
+    <span class="n">grady</span><span class="p">,</span> <span class="n">gradx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dirx</span> <span class="o">*</span> <span class="n">gradx</span> <span class="o">+</span> <span class="n">diry</span> <span class="o">*</span> <span class="n">grady</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_normalization</span><span class="p">(</span><span class="n">dx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
