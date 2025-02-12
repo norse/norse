@@ -3,6 +3,7 @@ from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
+from norse.torch.functional.parameter import default_bio_parameters
 from norse.torch.functional.threshold import threshold
 
 
@@ -31,6 +32,11 @@ class LIFExParameters(NamedTuple):
     v_reset: torch.Tensor = torch.as_tensor(0.0)
     method: str = "super"
     alpha: float = 100.0
+
+    @staticmethod
+    def bio_default():
+        return LIFExParameters(**default_bio_parameters('lifEx'))
+
 
 
 class LIFExState(NamedTuple):

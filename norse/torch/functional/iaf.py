@@ -1,5 +1,7 @@
 import torch
 from typing import NamedTuple, Tuple
+
+from norse.torch.functional.parameter import default_bio_parameters
 from norse.torch.functional.threshold import threshold
 
 
@@ -18,6 +20,10 @@ class IAFParameters(NamedTuple):
     v_reset: torch.Tensor = torch.as_tensor(0.0)
     method: str = "super"
     alpha: float = torch.as_tensor(100.0)
+
+    @staticmethod
+    def bio_default():
+        return IAFParameters(**default_bio_parameters('iaf'))
 
 
 class IAFState(NamedTuple):

@@ -37,6 +37,7 @@ from typing import Tuple
 import torch
 import torch.jit
 
+from norse.torch.functional.parameter import default_bio_parameters
 from norse.torch.functional.threshold import threshold
 import norse.torch.utils.pytree as pytree
 
@@ -67,15 +68,11 @@ class LIFParameters(
     method: str = "super"
     alpha: float = torch.as_tensor(100.0)
 
+    @staticmethod
+    def bio_default():
+        return LIFParameters(**default_bio_parameters('lif'))
 
 # pytype: disable=bad-unpacking,wrong-keyword-args
-default_bio_parameters = LIFParameters(
-    tau_syn_inv=torch.as_tensor(1 / 0.5),
-    tau_mem_inv=torch.as_tensor(1 / 20.0),
-    v_leak=torch.as_tensor(-65.0),
-    v_th=torch.as_tensor(-50.0),
-    v_reset=torch.as_tensor(-65.0),
-)
 # pytype: enable=bad-unpacking,wrong-keyword-args
 
 
