@@ -59,10 +59,8 @@ def derive_kernel(kernel, angle) -> torch.Tensor:
     """
     dirx = torch.cos(angle)
     diry = torch.sin(angle)
-    gradx = torch.gradient(kernel, dim=0)[0] * dirx
-    grady = torch.gradient(kernel, dim=1)[0] * diry
-    derived = gradx + grady
-    return derived
+    grady, gradx = torch.gradient(kernel)
+    return dirx * gradx + diry * grady
 
 
 def calculate_normalization(dx: int, scale: float, gamma: float = 1):
