@@ -21,7 +21,7 @@ def _align_shapes(
             return a.view(shape)
         except RuntimeError:
             logging.error(
-                f"Could not align shapes {a.shape} and {b.shape} of parameter {message}"
+                f"Could not align shapes {a.shape} and {shape} of parameter {message}"
             )
     else:
         return a
