@@ -14,6 +14,7 @@
    .. autosummary::
    
       ~LIFAdExParameters.__init__
+      ~LIFAdExParameters.bio_default
       ~LIFAdExParameters.count
       ~LIFAdExParameters.index
    

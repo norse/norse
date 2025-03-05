@@ -14,6 +14,7 @@
    .. autosummary::
    
       ~IAFParameters.__init__
+      ~IAFParameters.bio_default
       ~IAFParameters.count
       ~IAFParameters.index
    

@@ -14,6 +14,7 @@
    .. autosummary::
    
       ~LIFExParameters.__init__
+      ~LIFExParameters.bio_default
       ~LIFExParameters.count
       ~LIFExParameters.index
    

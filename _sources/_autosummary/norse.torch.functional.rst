@@ -33,6 +33,7 @@ norse.torch.functional
    lift
    logical
    lsnn
+   parameter
    receptive_field
    regularization
    reset

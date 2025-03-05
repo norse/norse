@@ -14,6 +14,7 @@
    .. autosummary::
    
       ~LIFParameters.__init__
+      ~LIFParameters.bio_default
       ~LIFParameters.broadcast
       ~LIFParameters.count
       ~LIFParameters.cpu

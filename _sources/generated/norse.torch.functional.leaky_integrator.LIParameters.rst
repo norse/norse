@@ -14,6 +14,7 @@
    .. autosummary::
    
       ~LIParameters.__init__
+      ~LIParameters.bio_default
       ~LIParameters.count
       ~LIParameters.index
    
