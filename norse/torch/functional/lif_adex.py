@@ -3,6 +3,9 @@ from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
+from norse.torch.functional.parameter import default_bio_parameters
+
+
 from norse.torch.functional.threshold import threshold
 
 
@@ -41,6 +44,9 @@ class LIFAdExParameters(NamedTuple):
     method: str = "super"
     alpha: float = 100.0
 
+    @staticmethod
+    def bio_default():
+        return LIFAdExParameters(**default_bio_parameters('lifAdEx'))
 
 class LIFAdExState(NamedTuple):
     """State of a LIFAdEx neuron
