@@ -41,3 +41,52 @@ def test_linear():
     assert len(graph.nodes) == 3
     assert graph.nodes["norse"].weight.shape == (out_features, in_features)
     assert graph.nodes["norse"].bias.shape == m2.bias.shape
+
+
+def test_li_varying_time_scaling_factor():
+    p = norse.LIBoxParameters(
+        tau_mem_inv=torch.tensor([900.0]), v_leak=torch.tensor([0.0])
+    )
+    m = norse.LIBoxCell(p)
+    graph = norse.to_nir(m, torch.randn(1, 1), time_scaling_factor=1.0)
+    assert len(graph.nodes) == 3
+    assert torch.allclose(graph.nodes["norse"].tau, 1.0 / p.tau_mem_inv)
+    assert torch.allclose(graph.nodes["norse"].v_leak, p.v_leak)
+    graph = norse.to_nir(m, torch.randn(1, 1), time_scaling_factor=0.5)
+    assert len(graph.nodes) == 3
+    assert torch.allclose(graph.nodes["norse"].tau, 0.5 / p.tau_mem_inv)
+    assert torch.allclose(graph.nodes["norse"].v_leak, p.v_leak)
+
+
+def test_lif_varying_time_scaling_factor():
+    p = norse.LIFParameters(
+        tau_mem_inv=torch.tensor([100.0]),
+        tau_syn_inv=torch.tensor([100.0]),
+        v_leak=torch.tensor([0.0]),
+    )
+    m = norse.LIFCell(p)
+    graph = norse.to_nir(m, torch.randn(1, 1), time_scaling_factor=1.0)
+    assert len(graph.nodes) == 3
+    assert torch.allclose(graph.nodes["norse"].tau_mem, 1.0 / p.tau_mem_inv)
+    assert torch.allclose(graph.nodes["norse"].tau_syn, 1.0 / p.tau_syn_inv)
+    assert torch.allclose(graph.nodes["norse"].v_leak, p.v_leak)
+    graph = norse.to_nir(m, torch.randn(1, 1), time_scaling_factor=0.5)
+    assert len(graph.nodes) == 3
+    assert torch.allclose(graph.nodes["norse"].tau_mem, 0.5 / p.tau_mem_inv)
+    assert torch.allclose(graph.nodes["norse"].tau_syn, 0.5 / p.tau_syn_inv)
+    assert torch.allclose(graph.nodes["norse"].v_leak, p.v_leak)
+
+
+def test_lif_box_varying_time_scaling_factor():
+    p = norse.LIFBoxParameters(
+        tau_mem_inv=torch.tensor([100.0]), v_leak=torch.tensor([0.0])
+    )
+    m = norse.LIFBoxCell(p)
+    graph = norse.to_nir(m, torch.randn(1, 1), time_scaling_factor=1.0)
+    assert len(graph.nodes) == 3
+    assert torch.allclose(graph.nodes["norse"].tau, 1.0 / p.tau_mem_inv)
+    assert torch.allclose(graph.nodes["norse"].v_leak, p.v_leak)
+    graph = norse.to_nir(m, torch.randn(1, 1), time_scaling_factor=0.5)
+    assert len(graph.nodes) == 3
+    assert torch.allclose(graph.nodes["norse"].tau, 0.5 / p.tau_mem_inv)
+    assert torch.allclose(graph.nodes["norse"].v_leak, p.v_leak)
