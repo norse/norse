@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-RUN apt update && apt install -y python3-pip build-essential
+RUN apt update && apt install -y python3-pip build-essential git
 RUN rm -rf /var/lib/apt/lists/
 
 WORKDIR /norse
