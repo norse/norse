@@ -10,8 +10,8 @@ A [deep learning](https://en.wikipedia.org/wiki/Deep_learning) library for [spik
     <a href="https://pypi.org/project/norse/" alt="PyPi">
         <img src="https://img.shields.io/pypi/v/norse" />
     </a>
-    <a href="https://pypi.org/project/aestream/" alt="PyPi">
-        <img src="https://img.shields.io/pypi/dm/aestream" />
+    <a href="https://pypi.org/project/norse/" alt="PyPi">
+        <img src="https://img.shields.io/pypi/dm/norse" />
     </a>
     <a href="https://github.com/norse/norse/pulse" alt="Activity">
         <img src="https://img.shields.io/github/last-commit/norse/norse" />
