@@ -12,7 +12,7 @@ jobs:
       matrix:
         python-version: ["3.11"]
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@4
       - name: Cache
         if: ${{ !env.ACT }} # Cache not working due to https://github.com/nektos/act/issues/329
         uses: actions/cache@v2
