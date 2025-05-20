@@ -7,11 +7,11 @@ A [deep learning](https://en.wikipedia.org/wiki/Deep_learning) library for [spik
 <p align="center">
     <a href="https://github.com/norse/norse/actions">
         <img src="https://github.com/norse/norse/workflows/Build%20Python/badge.svg" alt="Test status"></a>
-    <a href="https://pypi.org/project/norse/" alt="PyPi">
-        <img src="https://img.shields.io/pypi/v/norse" />
+    <a href="https://pypi.org/project/norse/" alt="PyPi Norse">
+        <img src="https://img.shields.io/pepy/dt/norse?label=PyPi%20Downloads" />
     </a>
-    <a href="https://pypi.org/project/aestream/" alt="PyPi">
-        <img src="https://img.shields.io/pypi/dm/aestream" />
+    <a href="https://anaconda.org/conda-forge/norse" alt="Conda Norse repository">
+        <img src="https://img.shields.io/conda/dn/conda-forge/norse?label=Conda%20Downloads" />
     </a>
     <a href="https://github.com/norse/norse/pulse" alt="Activity">
         <img src="https://img.shields.io/github/last-commit/norse/norse" />
@@ -33,11 +33,6 @@ bringing you two advantages: a modern and proven infrastructure based on PyTorch
 ## 1. Getting started
 
 The fastest way to try Norse is via the [jupyter notebooks on Google collab](https://github.com/norse/notebooks/tree/main/).
-
-Alternatively, [you can install Norse locally](#installation) and run one of the [included tasks](https://norse.github.io/norse/tasks.html) such as [MNIST](https://en.wikipedia.org/wiki/MNIST_database):
-```bash
-python -m norse.task.mnist
-```
 
 ## 2. Using Norse
 
@@ -75,7 +70,7 @@ docker pull quay.io/norse/norse
 </tr>
 <tr>
 <td>From Conda</td><td> <div class="highlight highlight-source-shell"><pre>
-conda install -c norse norse
+conda install norse
 </pre></div></td><td><a href="https://docs.anaconda.com/anaconda/install/" title="Anaconda">Anaconda</a> or <a href="https://docs.conda.io/en/latest/miniconda.html" title="Miniconda">Miniconda</a></td>
 </tr>
 </table>
