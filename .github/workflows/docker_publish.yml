@@ -10,12 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: quay.io
           username: "norse+github_actions"
@@ -23,7 +25,7 @@ jobs:
 
       - name: Build and push vanilla Python version
         id: docker_build_vanilla
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: publish/Dockerfile
@@ -34,7 +36,7 @@ jobs:
 
       - name: Build and push CUDA version
         id: docker_build_cuda
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: publish/Dockerfile.cuda
@@ -48,12 +50,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: quay.io
           username: "norse+github_actions"
@@ -62,7 +65,7 @@ jobs:
       - name: Build and push vanilla Python version
         if: startsWith(github.ref, 'refs/tags/v') # Only publish if new tag
         id: docker_build_vanilla
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: publish/Dockerfile
@@ -73,7 +76,7 @@ jobs:
 
       - name: Build and push CUDA version
         id: docker_build_cuda
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: publish/Dockerfile.cuda
