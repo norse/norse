@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Cache
         if: ${{ !env.ACT }} # Cache not working due to https://github.com/nektos/act/issues/329
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           # Increase this value to reset cache if environment.yaml has not changed
           CACHE_NUMBER: 0
