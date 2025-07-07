@@ -56,14 +56,14 @@ def test_import_flatten():
 
 
 def test_import_if():
-    m = _convert_nodes(nir.IF(torch.randn(10), torch.randn(10)))
+    m = _convert_nodes(nir.IF(torch.randn(10), torch.randn(10), torch.randn(10)))
     assert isinstance(getattr(m, "if"), norse.IAFCell)
     m(torch.randn(1, 10))  # Test application
 
 
 def test_import_lif():
     m = _convert_nodes(
-        nir.LIF(torch.randn(10), torch.ones(10), torch.randn(10), torch.randn(10))
+        nir.LIF(torch.randn(10), torch.ones(10), torch.randn(10), torch.randn(10), torch.randn(10))
     )
     assert isinstance(m.lif, norse.LIFBoxCell)
     m(torch.randn(1, 10))  # Test application
@@ -74,6 +74,7 @@ def test_import_cubalif():
         torch.randn(10),
         torch.randn(10),
         torch.ones(10),
+        torch.randn(10),
         torch.randn(10),
         torch.randn(10),
     )

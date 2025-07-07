@@ -55,6 +55,7 @@ def _extract_norse_module(
             v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak"),
             r=np.ones_like(module.p.v_leak.detach()),
             w_in=np.ones_like(module.p.v_leak.detach()),
+            v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset"),
         )
     if isinstance(module, lif_box.LIFBoxCell):
         shape = module.p.tau_mem_inv.shape
@@ -66,6 +67,7 @@ def _extract_norse_module(
             v_threshold=_align_shapes(module.p.v_th.detach(), shape, "v_th"),
             v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak"),
             r=torch.ones_like(module.p.v_leak.detach()),
+            v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset"),
         )
     if isinstance(module, leaky_integrator_box.LIBoxCell):
         shape = module.p.tau_mem_inv.shape
@@ -81,6 +83,7 @@ def _extract_norse_module(
         return nir.IF(
             r=torch.ones_like(module.p.v_th.detach()),
             v_threshold=module.p.v_th.detach(),
+            v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset"),
         )
     elif isinstance(module, torch.nn.Linear):
         if module.bias is None:  # Add zero bias if none is present
