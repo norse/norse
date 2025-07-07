@@ -13,6 +13,8 @@ import norse
 def _align_shapes(
     a: torch.Tensor, shape: torch.Size, message: str = ""
 ) -> torch.Tensor:
+    if a.numel() == 1:
+        return a.repeat(shape)
     if not a.shape == shape:
         try:
             return a.view(shape)

@@ -90,3 +90,29 @@ def test_lif_box_varying_time_scaling_factor():
     node = norse.to_nir(m, time_scaling_factor=0.5)
     assert torch.allclose(node.tau, 0.5 / p.tau_mem_inv)
     assert torch.allclose(node.v_leak, p.v_leak)
+
+
+def test_lif_box_v_reset():
+    p = norse.LIFBoxParameters(
+        tau_mem_inv=torch.tensor([100.0, 200.0]),
+        v_leak=torch.tensor([0.0, 0.0]),
+        v_reset=torch.tensor([0.0, 0.0]),
+    )
+    m = norse.LIFBoxCell(p)
+    node = norse.to_nir(m, time_scaling_factor=1.0)
+    assert isinstance(node, nir.LIF)
+    assert torch.allclose(node.tau, 1.0 / p.tau_mem_inv)
+    assert torch.allclose(node.v_leak, p.v_leak)
+    assert torch.allclose(node.v_reset, p.v_reset)
+
+
+def test_lif_box_v_reset_default():
+    p = norse.LIFBoxParameters(
+        tau_mem_inv=torch.tensor([100.0, 200.0]), v_leak=torch.tensor([0.0, 0.0])
+    )
+    m = norse.LIFBoxCell(p)
+    node = norse.to_nir(m, time_scaling_factor=1.0)
+    assert isinstance(node, nir.LIF)
+    assert torch.allclose(node.tau, 1.0 / p.tau_mem_inv)
+    assert torch.allclose(node.v_leak, p.v_leak)
+    assert torch.allclose(node.v_reset, torch.zeros_like(p.v_leak))
