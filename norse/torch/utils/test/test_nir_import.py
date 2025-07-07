@@ -42,7 +42,7 @@ def test_import_conv2d():
     conv = torch.nn.Conv2d(2, 1, 3)
     conv.weight.data = _to_tensor(w)
     conv.bias.data = _to_tensor(b)
-    m = _convert_nodes(nir.Conv2d(None, w, 1, 0, 1, 1, b))
+    m = _convert_nodes(nir.Conv2d((5, 5), w, 1, 0, 1, 1, b))
     assert isinstance(m.conv2d, torch.nn.Conv2d)
     x = torch.randn(1, 2, 3, 3)
     out = m(x)
@@ -88,6 +88,7 @@ def test_import_cubalif():
 
 def test_import_sumpool2d():
     m = _convert_nodes(
+        nir.Input({"input": torch.tensor([5, 5])}),
         nir.SumPool2d(np.array([3, 3]), np.array([1, 1]), np.array([0, 0]))
     )
     assert isinstance(m.sumpool2d, torch.nn.LPPool2d)
