@@ -42,7 +42,7 @@ def test_import_conv2d():
     conv = torch.nn.Conv2d(2, 1, 3)
     conv.weight.data = _to_tensor(w)
     conv.bias.data = _to_tensor(b)
-    m = _convert_nodes(nir.Conv2d(None, w, 1, 0, 1, 1, b))
+    m = _convert_nodes(nir.Conv2d((5, 5), w, 1, 0, 1, 1, b))
     assert isinstance(m.conv2d, torch.nn.Conv2d)
     x = torch.randn(1, 2, 3, 3)
     out = m(x)
@@ -56,14 +56,20 @@ def test_import_flatten():
 
 
 def test_import_if():
-    m = _convert_nodes(nir.IF(torch.randn(10), torch.randn(10)))
-    assert isinstance(getattr(m, "if"), norse.IAFCell)
+    m = _convert_nodes(nir.IF(torch.randn(10), torch.randn(10), torch.randn(10)))
+    assert isinstance(getattr(m, "nir_node_if"), norse.IAFCell)
     m(torch.randn(1, 10))  # Test application
 
 
 def test_import_lif():
     m = _convert_nodes(
-        nir.LIF(torch.randn(10), torch.ones(10), torch.randn(10), torch.randn(10))
+        nir.LIF(
+            torch.randn(10),
+            torch.ones(10),
+            torch.randn(10),
+            torch.randn(10),
+            torch.randn(10),
+        )
     )
     assert isinstance(m.lif, norse.LIFBoxCell)
     m(torch.randn(1, 10))  # Test application
@@ -74,6 +80,7 @@ def test_import_cubalif():
         torch.randn(10),
         torch.randn(10),
         torch.ones(10),
+        torch.randn(10),
         torch.randn(10),
         torch.randn(10),
     )
@@ -87,7 +94,8 @@ def test_import_cubalif():
 
 def test_import_sumpool2d():
     m = _convert_nodes(
-        nir.SumPool2d(np.array([3, 3]), np.array([1, 1]), np.array([0, 0]))
+        nir.Input({"input": torch.tensor([5, 5])}),
+        nir.SumPool2d(np.array([3, 3]), np.array([1, 1]), np.array([0, 0])),
     )
     assert isinstance(m.sumpool2d, torch.nn.LPPool2d)
     assert m(torch.randn(1, 2, 3, 3))[0].shape == (1, 2, 1, 1)
