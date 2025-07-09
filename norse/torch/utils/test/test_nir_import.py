@@ -75,6 +75,26 @@ def test_import_lif():
     m(torch.randn(1, 10))  # Test application
 
 
+def test_import_li():
+    tau = np.ones(10) * 0.01
+    r = np.ones(10)
+    v_leak = np.random.randn(10).astype(np.float32)
+
+    m = _convert_nodes(nir.LI(tau, r, v_leak))
+    assert isinstance(m.li, norse.LIBoxCell)
+
+    x = torch.randn(1, 10)
+    output, _ = m(x)
+    assert output.shape == (1, 10)
+
+    expected_tau_mem_inv = 1.0 / tau
+    actual_tau_mem_inv = m.li.p.tau_mem_inv.detach().numpy()
+    assert np.allclose(expected_tau_mem_inv, actual_tau_mem_inv)
+
+    actual_v_leak = m.li.p.v_leak.detach().numpy()
+    assert np.allclose(v_leak, actual_v_leak)
+
+
 def test_import_cubalif():
     orig = nir.CubaLIF(
         torch.randn(10),

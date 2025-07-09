@@ -102,6 +102,19 @@ def _nir_to_norse_mapping_dict(
 
     nir_map[nir.IF] = _map_if
 
+    def _map_li(node: nir.LI):
+        if not _is_identical(node.r, 1) and not ignore_warnings:
+            _log_warning("r", 1, _to_tensor(node.r).mean())
+        return li_box.LIBoxCell(
+            li_box.LIBoxParameters(
+                tau_mem_inv=1 / _to_tensor(node.tau),  # Invert time constant
+                v_leak=_to_tensor(node.v_leak),
+            ),
+            dt=dt,
+        )
+
+    nir_map[nir.LI] = _map_li
+
     def _map_cuba_lif(node: nir.CubaLIF):
         w_in = _to_tensor(node.w_in)
         synapse = li_box.LIBoxCell(
