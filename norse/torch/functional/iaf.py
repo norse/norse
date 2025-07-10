@@ -23,7 +23,7 @@ class IAFParameters(NamedTuple):
 
     @staticmethod
     def bio_default():
-        return IAFParameters(**default_bio_parameters('iaf'))
+        return IAFParameters(**default_bio_parameters("iaf"))
 
 
 class IAFState(NamedTuple):

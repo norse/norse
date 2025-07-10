@@ -1,5 +1,4 @@
-"""Norse is a library for doing deep learning with spiking neural networks.
-"""
+"""Norse is a library for doing deep learning with spiking neural networks."""
 
 from importlib.metadata import version, PackageNotFoundError
 from norse import benchmark, dataset, task, torch, utils

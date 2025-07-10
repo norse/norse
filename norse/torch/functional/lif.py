@@ -70,7 +70,8 @@ class LIFParameters(
 
     @staticmethod
     def bio_default():
-        return LIFParameters(**default_bio_parameters('lif'))
+        return LIFParameters(**default_bio_parameters("lif"))
+
 
 # pytype: disable=bad-unpacking,wrong-keyword-args
 # pytype: enable=bad-unpacking,wrong-keyword-args
