@@ -46,7 +46,8 @@ class LIFAdExParameters(NamedTuple):
 
     @staticmethod
     def bio_default():
-        return LIFAdExParameters(**default_bio_parameters('lifAdEx'))
+        return LIFAdExParameters(**default_bio_parameters("lifAdEx"))
+
 
 class LIFAdExState(NamedTuple):
     """State of a LIFAdEx neuron

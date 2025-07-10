@@ -62,7 +62,8 @@ class LSNNParameters(NamedTuple):
 
     @staticmethod
     def bio_default():
-        return LSNNParameters(**default_bio_parameters('lsnn'))
+        return LSNNParameters(**default_bio_parameters("lsnn"))
+
 
 class LSNNState(NamedTuple):
     """State of an LSNN neuron

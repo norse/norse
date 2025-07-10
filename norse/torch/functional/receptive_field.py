@@ -174,7 +174,7 @@ def spatial_receptive_field(
 
 
 def _extract_derivatives(
-    derivatives: Union[int, List[Tuple[int, int]]]
+    derivatives: Union[int, List[Tuple[int, int]]],
 ) -> Tuple[List[Tuple[int, int]], int]:
     if isinstance(derivatives, int):
         if derivatives == 0:

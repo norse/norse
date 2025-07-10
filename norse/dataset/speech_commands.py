@@ -1,5 +1,4 @@
-"""This module provides a wrapper around the torchaudio.SPEECHCOMMANDS dataset.
-"""
+"""This module provides a wrapper around the torchaudio.SPEECHCOMMANDS dataset."""
 
 import torch
 
