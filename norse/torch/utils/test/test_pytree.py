@@ -43,10 +43,10 @@ def test_state_is_tuple():
 
 
 def test_state_clone():
-    x = torch.randn(2)
+    x = torch.tensor([1.0, 2.0])
     s1 = MockState(x=x)
-    s2 = MockState(x=s1.x + 1)
-    assert torch.allclose(s1.x, s2.x - 1)
+    s2 = MockState(x=s1.x + 1.0)
+    assert torch.allclose(s1.x, s2.x - 1.0)
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="No CUDA device available")

@@ -72,7 +72,8 @@ class LIParameters(NamedTuple):
 
     @staticmethod
     def bio_default():
-        return LIParameters(**default_bio_parameters('li'))
+        return LIParameters(**default_bio_parameters("li"))
+
 
 def li_step(
     input_spikes: torch.Tensor,

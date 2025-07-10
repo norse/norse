@@ -35,8 +35,7 @@ class LIFExParameters(NamedTuple):
 
     @staticmethod
     def bio_default():
-        return LIFExParameters(**default_bio_parameters('lifEx'))
-
+        return LIFExParameters(**default_bio_parameters("lifEx"))
 
 
 class LIFExState(NamedTuple):

@@ -1,6 +1,5 @@
-from functools import partial
 from numbers import Number
-from typing import Any, Union
+import typing
 
 import nir
 import nirtorch
@@ -15,7 +14,9 @@ import norse.torch.module.lif_box as lif_box
 import logging
 
 
-def _log_warning(parameter_name: str, expected_value: Any, actual_value: Any):
+def _log_warning(
+    parameter_name: str, expected_value: typing.Any, actual_value: typing.Any
+):
     logging.warning(
         f"""The parameter {parameter_name} is expected to be set to {expected_value}, but was found to diverge (with mean {actual_value}).
 Please read the Norse documentation for more information.
@@ -28,7 +29,7 @@ def _is_identical(array: np.ndarray, expected_value: float):
     return np.allclose(array, expected_value)
 
 
-def _to_tensor(tensor: Union[np.ndarray, torch.Tensor]):
+def _to_tensor(tensor: typing.Union[np.ndarray, torch.Tensor]):
     if isinstance(tensor, torch.Tensor):
         return tensor
     if isinstance(tensor, Number):
@@ -54,13 +55,14 @@ class CubaLIF(torch.nn.Module):
         return z, (syn_state, lif_state)
 
 
-def _import_norse_module(
-    node: nir.NIRNode,
+def _nir_to_norse_mapping_dict(
     ignore_warnings: bool = False,
     reset_method: reset.ResetMethod = reset.reset_value,
     dt: float = 0.001,
-) -> torch.nn.Module:
-    if isinstance(node, nir.Affine):
+) -> typing.Dict[nir.NIRNode, typing.Callable[[nir.NIRNode], torch.nn.Module]]:
+    nir_map = {}
+
+    def _map_affine(node: nir.Affine):
         has_bias = node.bias is not None
         module = torch.nn.Linear(
             node.weight.shape[1], node.weight.shape[0], bias=has_bias
@@ -69,7 +71,10 @@ def _import_norse_module(
         if has_bias:
             module.bias.data = _to_tensor(node.bias)
         return module
-    if isinstance(node, nir.Conv2d):
+
+    nir_map[nir.Affine] = _map_affine
+
+    def _map_conv2d(node: nir.Conv2d):
         module = torch.nn.Conv2d(
             in_channels=node.weight.shape[1],
             out_channels=node.weight.shape[0],
@@ -82,19 +87,22 @@ def _import_norse_module(
         module.weight.data = _to_tensor(node.weight)
         module.bias.data = _to_tensor(node.bias)
         return module
-    if isinstance(node, nir.Flatten):
+
+    nir_map[nir.Conv2d] = _map_conv2d
+
+    def _map_flatten(node: nir.Flatten):
         return torch.nn.Flatten(node.start_dim, node.end_dim)
-    if isinstance(node, nir.Linear):
-        module = torch.nn.Linear(
-            node.weight.shape[-2], node.weight.shape[-1], bias=False
-        )
-        module.weight.data = _to_tensor(node.weight)
-        return module
-    if isinstance(node, nir.IF):
+
+    nir_map[nir.Flatten] = _map_flatten
+
+    def _map_if(node: nir.IF):
         if not _is_identical(node.r, 1) and not ignore_warnings:
             _log_warning("r", 1, node.r.mean())
         return iaf.IAFCell(iaf.IAFParameters(v_th=_to_tensor(node.v_threshold)), dt=dt)
-    if isinstance(node, nir.CubaLIF):
+
+    nir_map[nir.IF] = _map_if
+
+    def _map_cuba_lif(node: nir.CubaLIF):
         w_in = _to_tensor(node.w_in)
         synapse = li_box.LIBoxCell(
             li_box.LIBoxParameters(
@@ -117,7 +125,9 @@ def _import_norse_module(
         # pytype: enable=wrong-keyword-args
         return CubaLIF(w_in, synapse, w_rec, neuron)
 
-    if isinstance(node, nir.LIF):
+    nir_map[nir.CubaLIF] = _map_cuba_lif
+
+    def _map_lif(node: nir.LIF):
         if not _is_identical(node.r, 1) and not ignore_warnings:
             _log_warning("r", 1, _to_tensor(node.r).mean())
         return lif_box.LIFBoxCell(
@@ -128,7 +138,10 @@ def _import_norse_module(
             ),
             dt=dt,
         )
-    if isinstance(node, nir.SumPool2d):
+
+    nir_map[nir.LIF] = _map_lif
+
+    def _map_sum_pool_2d(node: nir.SumPool2d):
         if not np.allclose(node.padding, 0.0) and not ignore_warnings:
             _log_warning("padding", 0, node.padding.mean())
         return torch.nn.LPPool2d(
@@ -136,6 +149,8 @@ def _import_norse_module(
             kernel_size=tuple(node.kernel_size),
             stride=tuple(node.stride),
         )
+
+    nir_map[nir.SumPool2d] = _map_sum_pool_2d
     # if isinstance(node, nir.NIRGraph):
     #     # Currently, just parse a recurrent recurrent Cuba LIF graph
     #     types = {type(v): v for v in node.nodes.values()}
@@ -145,6 +160,7 @@ def _import_norse_module(
     #         return sequential.RecurrentSequential(
     #             layer_lif, layer_affine, output_modules=0
     #         )
+    return nir_map
 
 
 def from_nir(
@@ -166,12 +182,10 @@ def from_nir(
         ignore_warnings (bool): Whether to ignore warnings about diverging or unsupported parameters.
         dt (float): The time step of the simulation.
     """
-    return nirtorch.load(
-        node,
-        partial(
-            _import_norse_module,
-            ignore_warnings=ignore_warnings,
-            reset_method=reset_method,
-            dt=dt,
-        ),
+    nir_to_norse_map = _nir_to_norse_mapping_dict(
+        ignore_warnings=ignore_warnings, reset_method=reset_method, dt=dt
+    )
+    return nirtorch.nir_to_torch(
+        nir_node=node,
+        node_map=nir_to_norse_map,
     )
