@@ -13,6 +13,7 @@ norse.torch.utils.test.test\_nir\_import
       test_import_cubalif
       test_import_flatten
       test_import_if
+      test_import_li
       test_import_lif
       test_import_linear
       test_import_recurrent
