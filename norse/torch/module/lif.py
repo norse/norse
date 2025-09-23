@@ -58,7 +58,6 @@ class LIFCell(SNNCell):
 
     Arguments:
         p (LIFParameters): Parameters of the LIF neuron model.
-        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.
         dt (float): Time step to use. Defaults to 0.001.
     """
 
@@ -138,7 +137,6 @@ class LIFRecurrentCell(SNNRecurrentCell):
         input_size (int): Size of the input. Also known as the number of input features.
         hidden_size (int): Size of the hidden state. Also known as the number of input features.
         p (LIFParameters): Parameters of the LIF neuron model.
-        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.
         input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
             matrix normalized to the number of hidden neurons.
         recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
@@ -222,7 +220,6 @@ class LIF(SNN):
     Parameters:
         p (LIFParameters): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
-        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.
         dt (float): Time step to use in integration. Defaults to 0.001.
     """
 
