@@ -127,11 +127,9 @@ class SequentialState(torch.nn.Sequential):
         super().append(module)
         self.stateful_layers.append(_is_module_stateful(module))
 
-
 class RecurrentSequentialState(NamedTuple):
     cache: Optional[Any] = None
     state: Optional[Any] = None
-
 
 class RecurrentSequential(torch.nn.Module):
     """A sequential module that feeds the output of the underlying modules back as input
