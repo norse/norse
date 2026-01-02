@@ -116,6 +116,16 @@ class SequentialState(torch.nn.Sequential):
             return hidden, state
         else:
             return input_tensor, state
+        
+    def append(self, module: torch.nn.Module):
+        """
+        Appends a module to the sequential model.
+
+        Arguments:
+          module (torch.nn.Module): The module to append
+        """
+        super().append(module)
+        self.stateful_layers.append(_is_module_stateful(module))
 
 
 class RecurrentSequentialState(NamedTuple):
