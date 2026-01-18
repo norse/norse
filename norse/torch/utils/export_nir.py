@@ -149,6 +149,34 @@ def to_nir(
         )
 
     mapping_dict = _norse_to_nir_mapping_dict(time_scaling_factor=time_scaling_factor)
-    return nirtorch.torch_to_nir(
-        module=module, module_map=mapping_dict, type_check=type_check
+
+    # Define stateful modules that return (output, state) tuples
+    # These modules need special handling during tracing
+    stateful_modules = {
+        norse.torch.LIFCell,
+        norse.torch.LIFBoxCell,
+        norse.torch.LIBoxCell,
+        norse.torch.IAFCell,
+    }
+
+    # Only pass stateful_modules and concrete_args when the module contains
+    # stateful layers that would cause tracing issues
+    has_stateful_layers = (
+        isinstance(module, norse.torch.SequentialState)
+        and any(module.stateful_layers)
     )
+
+    if has_stateful_layers:
+        return nirtorch.torch_to_nir(
+            module=module,
+            module_map=mapping_dict,
+            type_check=type_check,
+            stateful_modules=stateful_modules,
+            concrete_args={"state": None},
+        )
+    else:
+        return nirtorch.torch_to_nir(
+            module=module,
+            module_map=mapping_dict,
+            type_check=type_check,
+        )

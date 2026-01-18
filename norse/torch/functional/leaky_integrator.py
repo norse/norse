@@ -116,7 +116,7 @@ def li_step(
     di = -dt * p.tau_syn_inv * i_jump
     i_decayed = i_jump + di
 
-    return v_new, LIState(v_new, i_decayed)
+    return v_new, LIState(v_new.clone(), i_decayed)
 
 
 def li_feed_forward_step(
@@ -135,4 +135,4 @@ def li_feed_forward_step(
     di = -dt * p.tau_syn_inv * i_jump
     i_decayed = i_jump + di
 
-    return v_new, LIState(v_new, i_decayed)
+    return v_new, LIState(v_new.clone(), i_decayed)
