@@ -33,7 +33,7 @@ dependencies = [
   "torch>=2.2.0",
   "torchvision>=0.15.0",
   "nir>=1.0.6",
-  "nirtorch>=2.0.5",
+  "nirtorch>=2.0.6",
 ]
 keywords = [
   "spiking neural networks",
@@ -53,6 +53,25 @@ Issues = "https://github.com/norse/norse/issues"
 exclude = ["publish*", "spack*"]
 
 [tool.setuptools_scm]
+
+[dependency-groups]
+test = [
+  "pytest",
+  "pytest-xdist",
+  "black",
+  "isort",
+  "onnx",
+  "onnxruntime",
+  "mypy",
+  "tensorboard",
+  "build"
+]
+release = [
+  "matplotlib",
+  "twine",
+  "setuptools>=64",
+  "setuptools_scm>=8",
+]
 
 [tool.mypy]
 warn_return_any = true

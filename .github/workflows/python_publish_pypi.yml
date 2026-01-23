@@ -15,7 +15,7 @@ jobs:
           python-version: '3.11'
       - name: Install build dependencies
         run: |
-          pip install build pytest-xdist tensorboard matplotlib twine
+          pip install --group release --group test
           pip install -e .
       - name: Run unit tests
         run: pytest -n auto norse
