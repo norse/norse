@@ -37,7 +37,7 @@ class ToSpikeTimes(torch.autograd.Function):
         """Local gradient is set -1 for spike whose index was returned by forward, and 0 for no
         spike or if a spikes index wasn't returned in forward call.
         """
-        (spike_indices, spk_rec) = ctx.saved_tensors
+        spike_indices, spk_rec = ctx.saved_tensors
         spikeidcs_size, batch_size, out_size = spike_indices.shape
         noninf_spike_indices = spike_indices.flatten() != torch.inf
 

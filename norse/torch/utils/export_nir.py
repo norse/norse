@@ -161,9 +161,8 @@ def to_nir(
 
     # Only pass stateful_modules and concrete_args when the module contains
     # stateful layers that would cause tracing issues
-    has_stateful_layers = (
-        isinstance(module, norse.torch.SequentialState)
-        and any(module.stateful_layers)
+    has_stateful_layers = isinstance(module, norse.torch.SequentialState) and any(
+        module.stateful_layers
     )
 
     if has_stateful_layers:

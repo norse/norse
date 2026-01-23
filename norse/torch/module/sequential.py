@@ -118,7 +118,7 @@ class SequentialState(torch.nn.Sequential):
             return hidden, output_states
         else:
             return input_tensor, output_states
-        
+
     def append(self, module: torch.nn.Module):
         """
         Appends a module to the sequential model.
@@ -129,9 +129,11 @@ class SequentialState(torch.nn.Sequential):
         super().append(module)
         self.stateful_layers.append(_is_module_stateful(module))
 
+
 class RecurrentSequentialState(NamedTuple):
     cache: Optional[Any] = None
     state: Optional[Any] = None
+
 
 class RecurrentSequential(torch.nn.Module):
     """A sequential module that feeds the output of the underlying modules back as input

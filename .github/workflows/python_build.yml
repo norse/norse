@@ -34,11 +34,9 @@ jobs:
           sudo apt update
           sudo apt install g++ -y
       - name: Install test dependencies
-        run: pip install pytest-cov pytest-xdist mypy black==25.1.0 onnx
-      - name: Install optional libraries
-        run: pip install matplotlib tensorboard pytorch-lightning
-      - name: Install package
-        run: pip install -e .
+        run: |
+          pip install --group test
+          pip install -e .
 
       # Test, type check, and lint
       - name: Run unit tests

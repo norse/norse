@@ -60,6 +60,7 @@ def test_li_varying_time_scaling_factor():
     assert torch.allclose(node.tau, 0.5 / p.tau_mem_inv)
     assert torch.allclose(node.v_leak, p.v_leak)
 
+
 def test_lif_sequential():
     network = norse.SequentialState(norse.LIFCell(), torch.nn.Linear(1, 1))
     # type_check=False because LIFCell has no inherent shape information
@@ -71,6 +72,7 @@ def test_lif_sequential():
     assert isinstance(graph.nodes["_1"], nir.Affine)
     assert isinstance(graph.nodes["output"], nir.Output)
     assert len(graph.edges) == 3
+
 
 def test_lif_varying_time_scaling_factor():
     p = norse.LIFParameters(
