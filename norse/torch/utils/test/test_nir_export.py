@@ -8,6 +8,7 @@ import pytest
 
 def test_conv2d():
     m = norse.SequentialState(torch.nn.Conv2d(1, 2, 3))
+    # type_check=False because Conv2d is created without input_shape
     graph = norse.to_nir(m, type_check=False)
     assert len(graph.nodes) == 3
     assert isinstance(graph.nodes["input_tensor"], nir.Input)
@@ -16,7 +17,6 @@ def test_conv2d():
     assert len(graph.edges) == 2
 
 
-@pytest.mark.skip("TODO: Fix assignment during symbolic tracing")
 def test_sequential():
     m = norse.SequentialState(
         norse.LIFBoxCell(),
@@ -24,13 +24,14 @@ def test_sequential():
         norse.LIBoxCell(),
         torch.nn.Linear(2, 1),
     )
+    # type_check=False because neuron models lack shape information
     graph = norse.to_nir(m, type_check=False)
     assert len(graph.nodes) == 6  # 4 + 2 for input and output
-    assert isinstance(graph.nodes["input"], nir.Input)
-    assert isinstance(graph.nodes["0"], nir.LIF)
-    assert isinstance(graph.nodes["1"], nir.Affine)
-    assert isinstance(graph.nodes["2"], nir.LI)
-    assert isinstance(graph.nodes["3"], nir.Affine)
+    assert isinstance(graph.nodes["input_tensor"], nir.Input)
+    assert isinstance(graph.nodes["_0"], nir.LIF)
+    assert isinstance(graph.nodes["_1"], nir.Affine)
+    assert isinstance(graph.nodes["_2"], nir.LI)
+    assert isinstance(graph.nodes["_3"], nir.Affine)
     assert isinstance(graph.nodes["output"], nir.Output)
     assert len(graph.edges) == 5
 
@@ -58,6 +59,19 @@ def test_li_varying_time_scaling_factor():
     node = norse.to_nir(m, time_scaling_factor=0.5)
     assert torch.allclose(node.tau, 0.5 / p.tau_mem_inv)
     assert torch.allclose(node.v_leak, p.v_leak)
+
+
+def test_lif_sequential():
+    network = norse.SequentialState(norse.LIFCell(), torch.nn.Linear(1, 1))
+    # type_check=False because LIFCell has no inherent shape information
+    # (neurons are element-wise and work with any input size)
+    graph = norse.to_nir(network, type_check=False)
+    assert len(graph.nodes) == 4  # 2 + 2 for input and output
+    assert isinstance(graph.nodes["input_tensor"], nir.Input)
+    assert isinstance(graph.nodes["_0"], nir.CubaLIF)
+    assert isinstance(graph.nodes["_1"], nir.Affine)
+    assert isinstance(graph.nodes["output"], nir.Output)
+    assert len(graph.edges) == 3
 
 
 def test_lif_varying_time_scaling_factor():

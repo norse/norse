@@ -1,6 +1,5 @@
 if __name__ == "__main__":  # pragma: no cover
-    print(
-        """\
+    print("""\
 
 .:::     .::    .::::     .:::::::      .:: ::  .::::::::         .:       .::
 .: .::   .::  .::    .::  .::    .::  .::    .::.::              .: ::     .::
@@ -22,5 +21,4 @@ if __name__ == "__main__":  # pragma: no cover
   NOTE: To execute the above tasks, you may need additional dependencies.
 
   Please refer to the documentation for usage information: https://norse.ai
-"""
-    )
+""")

@@ -101,22 +101,24 @@ class SequentialState(torch.nn.Sequential):
         Returns:
             A tuple of (output tensor, state list)
         """
-        state = [None] * len(self) if state is None else state
+        input_states = [None] * len(self) if state is None else state
         hidden = []
+        output_states = []
         for index, module in enumerate(self):
             if self.stateful_layers[index]:
-                input_tensor, s = module(input_tensor, state[index])
-                state[index] = s
+                input_tensor, s = module(input_tensor, input_states[index])
+                output_states.append(s)
             else:
                 input_tensor = module(input_tensor)
+                output_states.append(None)
             if self.return_hidden:
                 hidden.append(input_tensor)
 
         if self.return_hidden:
-            return hidden, state
+            return hidden, output_states
         else:
-            return input_tensor, state
-        
+            return input_tensor, output_states
+
     def append(self, module: torch.nn.Module):
         """
         Appends a module to the sequential model.
@@ -127,9 +129,11 @@ class SequentialState(torch.nn.Sequential):
         super().append(module)
         self.stateful_layers.append(_is_module_stateful(module))
 
+
 class RecurrentSequentialState(NamedTuple):
     cache: Optional[Any] = None
     state: Optional[Any] = None
+
 
 class RecurrentSequential(torch.nn.Module):
     """A sequential module that feeds the output of the underlying modules back as input

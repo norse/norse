@@ -165,7 +165,7 @@ class SpeechCommandsDataset(torch.utils.data.Dataset):
         self.label_to_index = label_to_index(dataset)
 
     def __getitem__(self, index):
-        (waveform, sample_rate, label, _, _) = self.dataset[index]
+        waveform, sample_rate, label, _, _ = self.dataset[index]
 
         padding = int((sample_rate - waveform.shape[1]))
         waveform = torch.nn.functional.pad(waveform, (0, padding))

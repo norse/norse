@@ -76,7 +76,7 @@ def li_box_step(
     dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_jump)
     v_new = state.v + dv
 
-    return v_new, LIBoxState(v_new)
+    return v_new, LIBoxState(v_new.clone())
 
 
 def li_box_feed_forward_step(
@@ -89,4 +89,4 @@ def li_box_feed_forward_step(
     dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + input_tensor)
     v_new = state.v + dv
 
-    return v_new, LIBoxState(v_new)
+    return v_new, LIBoxState(v_new.clone())

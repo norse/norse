@@ -188,7 +188,6 @@ from norse.torch.functional.tsodyks_makram import (
     stp_step,
 )
 
-
 ################################################
 ### MODELS
 ################################################
@@ -205,7 +204,6 @@ from norse.torch.models.vgg import (
     vgg19_bn,
 )
 from norse.torch.models.mobilenet import MobileNetV2, mobilenet_v2
-
 
 ################################################
 ### MODULES
