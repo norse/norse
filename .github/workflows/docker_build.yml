@@ -17,7 +17,11 @@ jobs:
 
       - name: Get version
         id: version
-        run: echo "version=$(git describe --tags --always)" >> $GITHUB_OUTPUT
+        run: |
+          # Get version and convert to PEP 440 format
+          # v1.1.0-30-g4b213c96 -> 1.1.0.dev30+g4b213c96
+          VERSION=$(git describe --tags --always | sed 's/^v//' | sed 's/-\([0-9]*\)-g/.dev\1+g/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Docker image
         id: docker_build

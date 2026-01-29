@@ -29,7 +29,11 @@ jobs:
 
       - name: Get version
         id: version
-        run: echo "version=$(git describe --tags --always)" >> $GITHUB_OUTPUT
+        run: |
+          # Get version and convert to PEP 440 format
+          # v1.1.0-30-g4b213c96 -> 1.1.0.dev30+g4b213c96
+          VERSION=$(git describe --tags --always | sed 's/^v//' | sed 's/-\([0-9]*\)-g/.dev\1+g/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build and push
         id: docker_build
@@ -63,6 +67,10 @@ jobs:
           username: "norse+github_actions"
           password: ${{ secrets.QUAY_TOKEN }}
 
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v6
@@ -72,6 +80,7 @@ jobs:
           push: true
           tags: quay.io/norse/norse:${{ github.ref_name }}
           build-args: |
-            VERSION=${{ github.ref_name }}
+            VERSION=${{ steps.version.outputs.version }}
+
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
