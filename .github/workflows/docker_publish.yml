@@ -4,9 +4,12 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
 
 jobs:
   publish-docker-latest:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,71 +19,68 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Login to DockerHub
+
+      - name: Login to Quay.io
         uses: docker/login-action@v3
         with:
           registry: quay.io
           username: "norse+github_actions"
           password: ${{ secrets.QUAY_TOKEN }}
 
-      - name: Build and push vanilla Python version
-        id: docker_build_vanilla
+      - name: Get version
+        id: version
+        run: |
+          # Get version and convert to PEP 440 format
+          # v1.1.0-30-g4b213c96 -> 1.1.0.dev30+g4b213c96
+          VERSION=$(git describe --tags --always | sed 's/^v//' | sed 's/-\([0-9]*\)-g/.dev\1+g/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build and push
+        id: docker_build
         uses: docker/build-push-action@v6
         with:
           context: .
           file: publish/Dockerfile
           push: true
           tags: quay.io/norse/norse:latest
-      - name: Image digest vanilla
-        run: echo ${{ steps.docker_build_vanilla.outputs.digest }}
-
-      - name: Build and push CUDA version
-        id: docker_build_cuda
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: publish/Dockerfile.cuda
-          push: true
-          tags: quay.io/norse/norse:latest-cuda
-      - name: Image digest cuda
-        run: echo ${{ steps.docker_build_cuda.outputs.digest }}
+          build-args: |
+            VERSION=${{ steps.version.outputs.version }}
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
 
   publish-docker-tag:
-    if: startsWith(github.ref, 'refs/tags/v') # Only run if new tag
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Login to DockerHub
+
+      - name: Login to Quay.io
         uses: docker/login-action@v3
         with:
           registry: quay.io
           username: "norse+github_actions"
           password: ${{ secrets.QUAY_TOKEN }}
 
-      - name: Build and push vanilla Python version
-        if: startsWith(github.ref, 'refs/tags/v') # Only publish if new tag
-        id: docker_build_vanilla
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Build and push
+        id: docker_build
         uses: docker/build-push-action@v6
         with:
           context: .
           file: publish/Dockerfile
           push: true
-          tags: quay.io/norse/norse:${{ env.GITHUB_REF }}
-      - name: Image digest
-        run: echo ${{ steps.docker_build_vanilla.outputs.digest }}
+          tags: quay.io/norse/norse:${{ github.ref_name }}
+          build-args: |
+            VERSION=${{ steps.version.outputs.version }}
 
-      - name: Build and push CUDA version
-        id: docker_build_cuda
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: publish/Dockerfile.cuda
-          push: true
-          tags: quay.io/norse/norse:${{ env.GITHUB_REF }}-cuda
       - name: Image digest
-        run: echo ${{ steps.docker_build_cuda.outputs.digest }}
+        run: echo ${{ steps.docker_build.outputs.digest }}

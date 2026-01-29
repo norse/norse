@@ -2,8 +2,7 @@
 
 # Installing Norse
 
-We have chosen to build Norse with new Python features such as [type hints](https://docs.python.org/3/whatsnew/3.7.html#whatsnew37-pep560).
-For that reason **we require Python version 3.7 or higher**. 
+Norse **requires Python version 3.9 or higher**. 
 If this is a problem, it is recommended to install Norse via [Docker](https://en.wikipedia.org/wiki/Docker_(software)), as [described below](page-installing-docker).
 
 Norse builds on top of the [PyTorch](https://pytorch.org/) deep learning library, which is also our primary dependency.
@@ -14,7 +13,7 @@ This has the benefit that your models are hardware accelerated, providing the [p
 To install Norse, you need the following two dependencies:
 1. `pip` - the [Python package manager](https://pypi.org/project/pip/)
    * This is preinstalled in most Linux and Unix distros
-   * Note that Norse requires Python >= 3.8
+   * Note that Norse requires Python >= 3.9
 2. `torch` - the [deep learning accelerator](https://pytorch.org/get-started/locally/)
    * Please follow the guide available here https://pytorch.org/get-started/locally/
    * Select the CUDA version if you require GPU hardware acceleration
@@ -37,15 +36,21 @@ conda install -c norse norse
 ### Installing with [Docker](https://en.wikipedia.org/wiki/Docker_(software))
 ```bash
 docker pull quay.io/norse/norse
-# Or, using CUDA
-docker pull quay.io/norse/norse:latest-cuda
 ```
+
+Alternatively, build from source:
+
+```bash
+docker build -t norse -f publish/Dockerfile --build-arg VERSION=1.0.0 .
+```
+
+Replace `1.0.0` with the desired version number.
 
 ### Installing from source
 ```bash
 git clone https://github.com/norse/norse
 cd norse
-python setup.py install
+pip install -e .
 ```
 
 
@@ -55,28 +60,32 @@ Some of the tasks require additional dependencies like [Pytorch Lightning](https
 We also offer support for [Tensorboard](https://pytorch.org/docs/stable/tensorboard.html) to make it easier to visualise the training and introspect models.
 
 (page-installing-docker)=
-## Running Norse notebooks with Docker
+## Running Norse with Docker
 
 Docker creates a closed environment for you, which also means that the network and
-filesystem is isolated. Without going into details, here are three steps you can
-take to create a [Jupyter Notebook](https://jupyter.org/) environment with
-Docker. You will have to replace `/your/directory` with the **full** path to
-your current directory.
+filesystem is isolated. To run with a mounted volume:
 
 ```bash
-docker run -it -p 8888:8888 -v /your/directory:/work quay.io/norse/norse bash
-pip3 install jupyter
-jupyter notebook --notebook-dir=/work --ip 0.0.0.0 --allow-root
+docker run -it --rm -v $(pwd):/workspace quay.io/norse/norse
 ```
-
-The command line will now show you a URL you can copy-paste into your browser.
-And voila!
 
 ### GPU acceleration in Docker
 
-If you would like to have GPU hardware acceleration when running the `latest-cuda` version of the
-docker container, you will have to enable the NVIDIA runtime, 
-as described here: https://developer.nvidia.com/nvidia-container-runtime.
+The Docker image includes CUDA support by default. To use GPU hardware acceleration, you need:
+
+1. An NVIDIA GPU
+2. The [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html) installed
+3. The `--gpus all` flag when running the container
+
+```bash
+docker run -it --rm --gpus all quay.io/norse/norse python -c "import torch; print(torch.cuda.is_available())"
+```
+
+The `--ipc=host` flag is recommended for multiprocessing and DataLoader with multiple workers:
+
+```bash
+docker run -it --rm --gpus all --ipc=host -v $(pwd):/workspace quay.io/norse/norse
+```
 
 For more information on hardware acceleration, please refer to our page on {ref}(page-hardware).
 
