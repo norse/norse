@@ -5,23 +5,19 @@ on:
 
 jobs:
   build-docs:
-    name: "Build documentation"
+    name: Build documentation
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v1
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - name: Install system dependencies
-        run: sudo apt update && sudo apt install g++ -y
-      # - name: Fix sphinx-jupyterbook-latex bug
-      #   run: pip install git+https://github.com/jegp/sphinx-jupyterbook-latex
-      - name: Install python dependencies
+          python-version: "3.13"
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r docs/requirements.txt
-          pip install -e .
-      - name: Compile docs
+          uv pip install -r docs/requirements.txt --system
+          uv pip install -e . --system
+      - name: Build docs
         run: jupyter-book build docs
