@@ -34,8 +34,8 @@ def _norse_to_nir_mapping_dict(
     def _map_conv2d(module: torch.nn.Conv2d):
         return nir.Conv2d(
             input_shape=None,
-            weight=module.weight.detach(),
-            bias=module.bias.detach(),
+            weight=module.weight.detach().numpy(),
+            bias=module.bias.detach().numpy(),
             stride=module.stride,
             padding=module.padding,
             dilation=module.dilation,
@@ -49,17 +49,17 @@ def _norse_to_nir_mapping_dict(
         return nir.CubaLIF(
             tau_mem=time_scaling_factor
             / _align_shapes(
-                module.p.tau_mem_inv.detach(), shape, "tau_syn"
-            ),  # Invert time constant
+                module.p.tau_mem_inv.detach(), shape, "tau_mem"
+            ).numpy(),  # Invert time constant
             tau_syn=time_scaling_factor
             / _align_shapes(
                 module.p.tau_syn_inv.detach(), shape, "tau_syn"
-            ),  # Invert time constant
-            v_threshold=_align_shapes(module.p.v_th.detach(), shape, "v_th"),
-            v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak"),
-            r=np.ones_like(module.p.v_leak.detach()),
-            w_in=np.ones_like(module.p.v_leak.detach()),
-            v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset"),
+            ).numpy(),  # Invert time constant
+            v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset").numpy(),
+            v_threshold=_align_shapes(module.p.v_th.detach(), shape, "v_th").numpy(),
+            v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak").numpy(),
+            r=np.ones_like(module.p.v_leak.detach().numpy()),
+            w_in=np.ones_like(module.p.v_leak.detach().numpy()),
         )
 
     norse_map[norse.torch.LIFCell] = _map_cuba_lif
@@ -70,11 +70,11 @@ def _norse_to_nir_mapping_dict(
             tau=time_scaling_factor
             / _align_shapes(
                 module.p.tau_mem_inv.detach(), shape, "tau"
-            ),  # Invert time constant
-            v_threshold=_align_shapes(module.p.v_th.detach(), shape, "v_th"),
-            v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak"),
-            r=torch.ones_like(module.p.v_leak.detach()),
-            v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset"),
+            ).numpy(),  # Invert time constant
+            v_threshold=_align_shapes(module.p.v_th.detach(), shape, "v_th").numpy(),
+            v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak").numpy(),
+            r=np.ones_like(module.p.v_leak.detach().numpy()),
+            v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset").numpy(),
         )
 
     norse_map[norse.torch.LIFBoxCell] = _map_lif_box
@@ -85,29 +85,31 @@ def _norse_to_nir_mapping_dict(
             tau=time_scaling_factor
             / _align_shapes(
                 module.p.tau_mem_inv.detach(), shape, "tau_mem_inv"
-            ),  # Invert time constant
-            v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak"),
-            r=torch.ones_like(module.p.v_leak.detach()),
+            ).numpy(),  # Invert time constant
+            v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak").numpy(),
+            r=np.ones_like(module.p.v_leak.detach().numpy()),
         )
 
     norse_map[norse.torch.LIBoxCell] = _map_li_box
 
     def _map_iaf(module: norse.torch.IAFCell):
         return nir.IF(
-            r=torch.ones_like(module.p.v_th.detach()),
-            v_threshold=module.p.v_th.detach(),
+            r=np.ones_like(module.p.v_th.detach().numpy()),
+            v_threshold=module.p.v_th.detach().numpy(),
             v_reset=_align_shapes(
                 module.p.v_reset.detach(), module.p.v_th.shape, "v_reset"
-            ),
+            ).numpy(),
         )
 
     norse_map[norse.torch.IAFCell] = _map_iaf
 
     def _map_linear(module: torch.nn.Linear):
         if module.bias is None:
-            return nir.Linear(module.weight.detach())
+            return nir.Linear(module.weight.detach().numpy())
         else:
-            return nir.Affine(module.weight.detach(), module.bias.detach())
+            return nir.Affine(
+                module.weight.detach().numpy(), module.bias.detach().numpy()
+            )
 
     norse_map[torch.nn.Linear] = _map_linear
 
