@@ -36,6 +36,37 @@ def test_sequential():
     assert len(graph.edges) == 5
 
 
+def test_torch_subclass():
+    class TorchSubclassModel(torch.nn.Module):
+        def __init__(self):
+            super(TorchSubclassModel, self).__init__()
+
+            self.lif0 = norse.LIFBoxCell()
+            self.l0 = torch.nn.Linear(10, 2)
+            self.lif1 = norse.LIBoxCell()
+            self.l1 = torch.nn.Linear(2, 1)
+
+            self.states = [None, None]
+
+        def forward(self, x):
+            z, self.states[0] = self.lif0(x, self.states[0])
+            z = self.l0(z)
+            z, self.states[1] = self.lif1(x, self.states[1])
+            z = self.l1(z)
+            return z
+
+    m = TorchSubclassModel()
+    graph = norse.to_nir(m, stateful_model=True, type_check=False)
+    assert len(graph.nodes) == 6  # 4 + 2 for input and output
+    assert isinstance(graph.nodes["x"], nir.Input)
+    assert isinstance(graph.nodes["lif0"], nir.LIF)
+    assert isinstance(graph.nodes["l0"], nir.Affine)
+    assert isinstance(graph.nodes["lif1"], nir.LI)
+    assert isinstance(graph.nodes["l1"], nir.Affine)
+    assert isinstance(graph.nodes["output"], nir.Output)
+    assert len(graph.edges) == 5
+
+
 def test_linear():
     in_features = 2
     out_features = 3

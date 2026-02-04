@@ -119,6 +119,7 @@ def to_nir(
     sample_data: typing.Optional[torch.Tensor] = None,
     model_name: str = "norse",
     time_scaling_factor: float = 1,
+    stateful_model: bool = False,
     type_check: bool = True,
 ) -> nir.NIRNode:
     """Converts a Norse module to a NIR graph.
@@ -165,7 +166,7 @@ def to_nir(
         module.stateful_layers
     )
 
-    if has_stateful_layers:
+    if has_stateful_layers or stateful_model:
         return nirtorch.torch_to_nir(
             module=module,
             module_map=mapping_dict,
