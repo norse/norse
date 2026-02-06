@@ -56,10 +56,14 @@ def test_li_varying_time_scaling_factor():
     node = norse.to_nir(m, time_scaling_factor=1.0)
     assert isinstance(node, nir.LI)
     assert np.allclose(node.tau, 1.0 / p.tau_mem_inv.numpy())
+    assert isinstance(node.tau, np.ndarray)
     assert np.allclose(node.v_leak, p.v_leak.numpy())
+    assert isinstance(node.v_leak, np.ndarray)
     node = norse.to_nir(m, time_scaling_factor=0.5)
     assert np.allclose(node.tau, 0.5 / p.tau_mem_inv.numpy())
+    assert isinstance(node.tau, np.ndarray)
     assert np.allclose(node.v_leak, p.v_leak.numpy())
+    assert isinstance(node.v_leak, np.ndarray)
 
 
 def test_lif_sequential():
@@ -85,12 +89,18 @@ def test_lif_varying_time_scaling_factor():
     node = norse.to_nir(m, time_scaling_factor=1.0)
     assert isinstance(node, nir.CubaLIF)
     assert np.allclose(node.tau_mem, 1.0 / p.tau_mem_inv.numpy())
+    assert isinstance(node.tau_mem, np.ndarray)
     assert np.allclose(node.tau_syn, 1.0 / p.tau_syn_inv.numpy())
+    assert isinstance(node.tau_syn, np.ndarray)
     assert np.allclose(node.v_leak, p.v_leak.numpy())
+    assert isinstance(node.v_leak, np.ndarray)
     node = norse.to_nir(m, time_scaling_factor=0.5)
     assert np.allclose(node.tau_mem, 0.5 / p.tau_mem_inv.numpy())
+    assert isinstance(node.tau_mem, np.ndarray)
     assert np.allclose(node.tau_syn, 0.5 / p.tau_syn_inv.numpy())
+    assert isinstance(node.tau_syn, np.ndarray)
     assert np.allclose(node.v_leak, p.v_leak.numpy())
+    assert isinstance(node.v_leak, np.ndarray)
 
 
 def test_lif_box_varying_time_scaling_factor():
@@ -101,10 +111,14 @@ def test_lif_box_varying_time_scaling_factor():
     node = norse.to_nir(m, time_scaling_factor=1.0)
     assert isinstance(node, nir.LIF)
     assert np.allclose(node.tau, 1.0 / p.tau_mem_inv.numpy())
+    assert isinstance(node.tau, np.ndarray)
     assert np.allclose(node.v_leak, p.v_leak.numpy())
+    assert isinstance(node.v_leak, np.ndarray)
     node = norse.to_nir(m, time_scaling_factor=0.5)
     assert np.allclose(node.tau, 0.5 / p.tau_mem_inv.numpy())
+    assert isinstance(node.tau, np.ndarray)
     assert np.allclose(node.v_leak, p.v_leak.numpy())
+    assert isinstance(node.v_leak, np.ndarray)
 
 
 def test_lif_box_v_reset():
@@ -117,8 +131,11 @@ def test_lif_box_v_reset():
     node = norse.to_nir(m, time_scaling_factor=1.0)
     assert isinstance(node, nir.LIF)
     assert np.allclose(node.tau, 1.0 / p.tau_mem_inv.numpy())
+    assert isinstance(node.tau, np.ndarray)
     assert np.allclose(node.v_leak, p.v_leak.numpy())
+    assert isinstance(node.v_leak, np.ndarray)
     assert np.allclose(node.v_reset, p.v_reset.numpy())
+    assert isinstance(node.v_reset, np.ndarray)
 
 
 def test_lif_box_v_reset_default():
@@ -129,5 +146,8 @@ def test_lif_box_v_reset_default():
     node = norse.to_nir(m, time_scaling_factor=1.0)
     assert isinstance(node, nir.LIF)
     assert np.allclose(node.tau, 1.0 / p.tau_mem_inv.numpy())
+    assert isinstance(node.tau, np.ndarray)
     assert np.allclose(node.v_leak, p.v_leak.numpy())
+    assert isinstance(node.v_leak, np.ndarray)
     assert np.allclose(node.v_reset, np.zeros_like(p.v_leak.numpy()))
+    assert isinstance(node.v_reset, np.ndarray)
