@@ -161,23 +161,10 @@ def to_nir(
         norse.torch.IAFCell,
     }
 
-    # Only pass stateful_modules and concrete_args when the module contains
-    # stateful layers that would cause tracing issues
-    has_stateful_layers = isinstance(module, norse.torch.SequentialState) and any(
-        module.stateful_layers
+    return nirtorch.torch_to_nir(
+        module=module,
+        module_map=mapping_dict,
+        type_check=type_check,
+        stateful_modules=stateful_modules,
+        concrete_args={"state": None},
     )
-
-    if has_stateful_layers:
-        return nirtorch.torch_to_nir(
-            module=module,
-            module_map=mapping_dict,
-            type_check=type_check,
-            stateful_modules=stateful_modules,
-            concrete_args={"state": None},
-        )
-    else:
-        return nirtorch.torch_to_nir(
-            module=module,
-            module_map=mapping_dict,
-            type_check=type_check,
-        )
