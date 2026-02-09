@@ -56,7 +56,7 @@ def test_torch_subclass():
             return z
 
     m = TorchSubclassModel()
-    graph = norse.to_nir(m, stateful_model=True, type_check=False)
+    graph = norse.to_nir(m, type_check=False)
     assert len(graph.nodes) == 6  # 4 + 2 for input and output
     assert isinstance(graph.nodes["x"], nir.Input)
     assert isinstance(graph.nodes["lif0"], nir.LIF)

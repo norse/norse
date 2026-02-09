@@ -119,7 +119,6 @@ def to_nir(
     sample_data: typing.Optional[torch.Tensor] = None,
     model_name: str = "norse",
     time_scaling_factor: float = 1,
-    stateful_model: bool = False,
     type_check: bool = True,
 ) -> nir.NIRNode:
     """Converts a Norse module to a NIR graph.
@@ -160,23 +159,10 @@ def to_nir(
         norse.torch.IAFCell,
     }
 
-    # Only pass stateful_modules and concrete_args when the module contains
-    # stateful layers that would cause tracing issues
-    has_stateful_layers = isinstance(module, norse.torch.SequentialState) and any(
-        module.stateful_layers
+    return nirtorch.torch_to_nir(
+        module=module,
+        module_map=mapping_dict,
+        type_check=type_check,
+        stateful_modules=stateful_modules,
+        concrete_args={"state": None},
     )
-
-    if has_stateful_layers or stateful_model:
-        return nirtorch.torch_to_nir(
-            module=module,
-            module_map=mapping_dict,
-            type_check=type_check,
-            stateful_modules=stateful_modules,
-            concrete_args={"state": None},
-        )
-    else:
-        return nirtorch.torch_to_nir(
-            module=module,
-            module_map=mapping_dict,
-            type_check=type_check,
-        )
