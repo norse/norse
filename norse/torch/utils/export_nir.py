@@ -31,11 +31,13 @@ def _norse_to_nir_mapping_dict(
 ) -> typing.Dict[torch.nn.Module, typing.Callable[[torch.nn.Module], nir.NIRNode]]:
     norse_map = {}
 
+    # Projections
+
     def _map_conv2d(module: torch.nn.Conv2d):
         return nir.Conv2d(
             input_shape=None,
             weight=module.weight.detach().numpy(),
-            bias=module.bias.detach().numpy(),
+            bias=module.bias.detach().numpy() if module.bias is not None else np.zeros(module.weight.shape[0]),
             stride=module.stride,
             padding=module.padding,
             dilation=module.dilation,
@@ -44,7 +46,52 @@ def _norse_to_nir_mapping_dict(
 
     norse_map[torch.nn.Conv2d] = _map_conv2d
 
-    def _map_cuba_lif(module: nir.CubaLIF):
+    def _map_conv1d(module: torch.nn.Conv1d):
+        return nir.Conv1d(
+            input_shape=None,
+            weight=module.weight.detach().numpy(),
+            bias=module.bias.detach().numpy() if module.bias is not None else np.zeros(module.weight.shape[0]),
+            stride=module.stride,
+            padding=module.padding,
+            dilation=module.dilation,
+            groups=module.groups,
+        )
+
+    norse_map[torch.nn.Conv1d] = _map_conv1d
+
+    def _map_linear(module: torch.nn.Linear):
+        if module.bias is None:
+            return nir.Linear(module.weight.detach().numpy())
+        else:
+            return nir.Affine(module.weight.detach().numpy(), module.bias.detach().numpy())
+
+    norse_map[torch.nn.Linear] = _map_linear
+
+    def _map_flatten(module: torch.nn.Flatten):
+        # The Flatten node usually skips one dimension and starts at dimension 1.
+        # This is because the batch dimension is not being flattened. However, NIR
+        # doesn't include the batch dimension in its input/output shapes, which is
+        # why we subtract 1 from the start dimension and end dimension.
+        return nir.Flatten(
+            input_type=None,
+            start_dim=module.start_dim - 1 if module.start_dim > 0 else module.end_dim,
+            end_dim=module.end_dim - 1 if module.end_dim > 0 else module.end_dim
+        )
+
+    norse_map[torch.nn.Flatten] = _map_flatten
+
+    def _map_avgpool2d(module: torch.nn.AvgPool2d):
+        return nir.AvgPool2d(
+            kernel_size=module.kernel_size,
+            stride=module.stride,
+            padding=module.padding
+        )
+
+    norse_map[torch.nn.AvgPool2d] = _map_avgpool2d
+
+    # Neurons
+
+    def _map_cuba_lif(module: norse.torch.LIFCell):
         shape = module.p.tau_mem_inv.shape
         return nir.CubaLIF(
             tau_mem=time_scaling_factor
@@ -63,6 +110,24 @@ def _norse_to_nir_mapping_dict(
         )
 
     norse_map[norse.torch.LIFCell] = _map_cuba_lif
+
+    def _map_leaky_integrator(module: norse.torch.LICell):
+        shape = module.p.tau_mem_inv.shape
+        return nir.CubaLI(
+            tau_mem=time_scaling_factor
+            / _align_shapes(
+                module.p.tau_mem_inv.detach(), shape, "tau_syn"
+            ).numpy(),  # Invert time constant
+            tau_syn=time_scaling_factor
+            / _align_shapes(
+                module.p.tau_syn_inv.detach(), shape, "tau_syn"
+            ).numpy(),  # Invert time constant
+            v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak").numpy(),
+            r=np.ones_like(module.p.v_leak.detach().numpy()),
+            w_in=np.ones_like(module.p.v_leak.detach().numpy()),
+        )
+
+    norse_map[norse.torch.LICell] = _map_leaky_integrator
 
     def _map_lif_box(module: norse.torch.LIFBoxCell):
         shape = module.p.tau_mem_inv.shape
@@ -102,16 +167,6 @@ def _norse_to_nir_mapping_dict(
         )
 
     norse_map[norse.torch.IAFCell] = _map_iaf
-
-    def _map_linear(module: torch.nn.Linear):
-        if module.bias is None:
-            return nir.Linear(module.weight.detach().numpy())
-        else:
-            return nir.Affine(
-                module.weight.detach().numpy(), module.bias.detach().numpy()
-            )
-
-    norse_map[torch.nn.Linear] = _map_linear
 
     return norse_map
 
