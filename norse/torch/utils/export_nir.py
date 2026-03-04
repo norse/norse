@@ -212,6 +212,7 @@ def to_nir(
     stateful_modules = {
         norse.torch.LIFCell,
         norse.torch.LIFBoxCell,
+        norse.torch.LICell,
         norse.torch.LIBoxCell,
         norse.torch.IAFCell,
     }
