@@ -122,6 +122,7 @@ def to_nir(
     model_name: str = "norse",
     time_scaling_factor: float = 1,
     custom_stateful_modules: typing.Set[typing.Type[torch.nn.Module]] = set(),
+    custom_bypass_modules: typing.Set[typing.Type[torch.nn.Module]] = set(),
     custom_mapping: typing.Dict[torch.nn.Module, typing.Callable[[torch.nn.Module], nir.NIRNode]] = {},
     type_check: bool = True,
 ) -> nir.NIRNode:
@@ -138,6 +139,9 @@ def to_nir(
             needed.
         custom_stateful_modules (Set[Type[torch.nn.Module]]): Set of additional custom stateful modules.
             Custom neuron implementation types and other stateful modules can be added to this set to ensure
+            correct tracing.
+        custom_bypass_modules (Set[Type[torch.nn.Module]]): Set of modules to bypass when tracing. Modules
+            that do not alter the dataflow (i.e., Dropout, Identity) can be added to this set to ensure
             correct tracing.
         custom_mapping (Dict[torch.nn.Module, (torch.nn.Module) -> nir.NIRNode]): Dictionary of additional
             custom module mappings. Through entries in this dictionary, custom modules can be mapped to
@@ -177,5 +181,6 @@ def to_nir(
         module_map=combined_dict,
         type_check=type_check,
         stateful_modules=combined_stateful_modules,
+        bypass_modules=custom_bypass_modules,
         concrete_args={"state": None},
     )

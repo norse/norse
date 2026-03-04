@@ -259,3 +259,27 @@ def test_custom_module_stateful():
     assert isinstance(graph.nodes["_3"], nir.Affine)
     assert isinstance(graph.nodes["output"], nir.Output)
     assert len(graph.edges) == 5
+
+
+def test_bypass_module():
+    m = norse.SequentialState(
+        norse.LIFBoxCell(),
+        torch.nn.Linear(10, 2),
+        torch.nn.Dropout(),
+        norse.LIBoxCell(),
+        torch.nn.Linear(2, 1),
+    )
+
+    bypass_modules = {torch.nn.Dropout}
+
+    # type_check=False because neuron models lack shape information
+    graph = norse.to_nir(m, type_check=False, custom_bypass_modules=bypass_modules)
+    assert len(graph.nodes) == 6  # 4 + 2 for input and output
+    assert isinstance(graph.nodes["input_tensor"], nir.Input)
+    assert isinstance(graph.nodes["_0"], nir.LIF)
+    assert isinstance(graph.nodes["_1"], nir.Affine)
+    assert "_2" not in graph.nodes  # 'Dropout' not present because it has been bypassed
+    assert isinstance(graph.nodes["_3"], nir.LI)
+    assert isinstance(graph.nodes["_4"], nir.Affine)
+    assert isinstance(graph.nodes["output"], nir.Output)
+    assert len(graph.edges) == 5
