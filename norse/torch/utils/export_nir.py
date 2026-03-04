@@ -37,7 +37,11 @@ def _norse_to_nir_mapping_dict(
         return nir.Conv2d(
             input_shape=None,
             weight=module.weight.detach().numpy(),
-            bias=module.bias.detach().numpy() if module.bias is not None else np.zeros(module.weight.shape[0]),
+            bias=(
+                module.bias.detach().numpy()
+                if module.bias is not None
+                else np.zeros(module.weight.shape[0])
+            ),
             stride=module.stride,
             padding=module.padding,
             dilation=module.dilation,
@@ -50,7 +54,11 @@ def _norse_to_nir_mapping_dict(
         return nir.Conv1d(
             input_shape=None,
             weight=module.weight.detach().numpy(),
-            bias=module.bias.detach().numpy() if module.bias is not None else np.zeros(module.weight.shape[0]),
+            bias=(
+                module.bias.detach().numpy()
+                if module.bias is not None
+                else np.zeros(module.weight.shape[0])
+            ),
             stride=module.stride,
             padding=module.padding,
             dilation=module.dilation,
@@ -63,7 +71,9 @@ def _norse_to_nir_mapping_dict(
         if module.bias is None:
             return nir.Linear(module.weight.detach().numpy())
         else:
-            return nir.Affine(module.weight.detach().numpy(), module.bias.detach().numpy())
+            return nir.Affine(
+                module.weight.detach().numpy(), module.bias.detach().numpy()
+            )
 
     norse_map[torch.nn.Linear] = _map_linear
 
@@ -75,16 +85,14 @@ def _norse_to_nir_mapping_dict(
         return nir.Flatten(
             input_type=None,
             start_dim=module.start_dim - 1 if module.start_dim > 0 else module.end_dim,
-            end_dim=module.end_dim - 1 if module.end_dim > 0 else module.end_dim
+            end_dim=module.end_dim - 1 if module.end_dim > 0 else module.end_dim,
         )
 
     norse_map[torch.nn.Flatten] = _map_flatten
 
     def _map_avgpool2d(module: torch.nn.AvgPool2d):
         return nir.AvgPool2d(
-            kernel_size=module.kernel_size,
-            stride=module.stride,
-            padding=module.padding
+            kernel_size=module.kernel_size, stride=module.stride, padding=module.padding
         )
 
     norse_map[torch.nn.AvgPool2d] = _map_avgpool2d
