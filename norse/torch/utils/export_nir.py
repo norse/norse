@@ -121,6 +121,8 @@ def to_nir(
     sample_data: typing.Optional[torch.Tensor] = None,
     model_name: str = "norse",
     time_scaling_factor: float = 1,
+    custom_stateful_modules: typing.Set[typing.Type[torch.nn.Module]] = set(),
+    custom_mapping: typing.Dict[torch.nn.Module, typing.Callable[[torch.nn.Module], nir.NIRNode]] = {},
     type_check: bool = True,
 ) -> nir.NIRNode:
     """Converts a Norse module to a NIR graph.
@@ -134,6 +136,14 @@ def to_nir(
             defaults to 1 which retains the dynamics of the neuron equation. However, if your network has
             been trained with a different dt, this scaling factor can re-scale the network dynamics as
             needed.
+        custom_stateful_modules (Set[Type[torch.nn.Module]]): Set of additional custom stateful modules.
+            Custom neuron implementation types and other stateful modules can be added to this set to ensure
+            correct tracing.
+        custom_mapping (Dict[torch.nn.Module, (torch.nn.Module) -> nir.NIRNode]): Dictionary of additional
+            custom module mappings. Through entries in this dictionary, custom modules can be mapped to
+            nir.NIRNode primitives in the export process. Module mappings already present in the default
+            map are overridden. Modules that do not alter the dataflow (i.e., Dropout, Identity) can be
+            mapped to None in order to be bypassed.
         type_check (bool): Whether to run type checking on generated NIRGraphs
     """
     if sample_data is not None:
@@ -151,20 +161,23 @@ def to_nir(
         )
 
     mapping_dict = _norse_to_nir_mapping_dict(time_scaling_factor=time_scaling_factor)
+    combined_dict = mapping_dict | custom_mapping
 
     # Define stateful modules that return (output, state) tuples
     # These modules need special handling during tracing
     stateful_modules = {
         norse.torch.LIFCell,
         norse.torch.LIFBoxCell,
+        norse.torch.LICell,
         norse.torch.LIBoxCell,
         norse.torch.IAFCell,
     }
+    combined_stateful_modules = stateful_modules | custom_stateful_modules
 
     return nirtorch.torch_to_nir(
         module=module,
-        module_map=mapping_dict,
+        module_map=combined_dict,
         type_check=type_check,
-        stateful_modules=stateful_modules,
+        stateful_modules=combined_stateful_modules,
         concrete_args={"state": None},
     )

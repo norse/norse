@@ -182,3 +182,106 @@ def test_lif_box_v_reset_default():
     assert isinstance(node.v_leak, np.ndarray)
     assert np.allclose(node.v_reset, np.zeros_like(p.v_leak.numpy()))
     assert isinstance(node.v_reset, np.ndarray)
+
+
+def test_custom_module():
+    # Create custom module and define how it is mapped to NIR primitives
+    class CustomModule(torch.nn.Module):
+        def forward(self, x):
+            return x
+
+    def _map_custom_neuron(_: CustomModule):
+        return nir.LIF(
+            tau=np.array(1.0),
+            r=np.array(1.0),
+            v_leak=np.array(0.0),
+            v_threshold=np.array(1.0),
+            v_reset=np.array(0.0)
+        )
+
+    custom_mapping = { CustomModule: _map_custom_neuron }
+
+    m = norse.SequentialState(
+        CustomModule(),
+        torch.nn.Linear(10, 2),
+        norse.LIBoxCell(),
+        torch.nn.Linear(2, 1),
+    )
+
+    # type_check=False because neuron models lack shape information
+    graph = norse.to_nir(m, type_check=False, custom_mapping=custom_mapping)
+    assert len(graph.nodes) == 6  # 4 + 2 for input and output
+    assert isinstance(graph.nodes["input_tensor"], nir.Input)
+    assert isinstance(graph.nodes["_0"], nir.LIF)
+    assert isinstance(graph.nodes["_1"], nir.Affine)
+    assert isinstance(graph.nodes["_2"], nir.LI)
+    assert isinstance(graph.nodes["_3"], nir.Affine)
+    assert isinstance(graph.nodes["output"], nir.Output)
+    assert len(graph.edges) == 5
+
+
+def test_custom_module_stateful():
+    # Create custom stateful module and define how it is mapped to NIR primitives
+    class CustomStatefulModule(torch.nn.Module):
+        def forward(self, x, state):
+            return x, state
+
+    def _map_custom_neuron(_: CustomStatefulModule):
+        return nir.LIF(
+            tau=np.array(1.0),
+            r=np.array(1.0),
+            v_leak=np.array(0.0),
+            v_threshold=np.array(1.0),
+            v_reset=np.array(0.0)
+        )
+
+    custom_stateful_modules = { CustomStatefulModule }
+    custom_mapping = { CustomStatefulModule: _map_custom_neuron }
+
+    m = norse.SequentialState(
+        CustomStatefulModule(),
+        torch.nn.Linear(10, 2),
+        norse.LIBoxCell(),
+        torch.nn.Linear(2, 1),
+    )
+
+    # type_check=False because neuron models lack shape information
+    graph = norse.to_nir(
+        m, type_check=False,
+        custom_stateful_modules=custom_stateful_modules,
+        custom_mapping=custom_mapping
+    )
+    assert len(graph.nodes) == 6  # 4 + 2 for input and output
+    assert isinstance(graph.nodes["input_tensor"], nir.Input)
+    assert isinstance(graph.nodes["_0"], nir.LIF)
+    assert isinstance(graph.nodes["_1"], nir.Affine)
+    assert isinstance(graph.nodes["_2"], nir.LI)
+    assert isinstance(graph.nodes["_3"], nir.Affine)
+    assert isinstance(graph.nodes["output"], nir.Output)
+    assert len(graph.edges) == 5
+
+
+def test_bypass_module():
+    m = norse.SequentialState(
+        norse.LIFBoxCell(),
+        torch.nn.Linear(10, 2),
+        torch.nn.Dropout(),
+        norse.LIBoxCell(),
+        torch.nn.Linear(2, 1),
+    )
+
+    def map_none(_):
+        return None
+
+    bypass_map = {torch.nn.Dropout: map_none}
+
+    graph = norse.to_nir(m, type_check=False, custom_mapping=bypass_map)
+    assert len(graph.nodes) == 6  # 4 + 2 for input and output
+    assert isinstance(graph.nodes["input_tensor"], nir.Input)
+    assert isinstance(graph.nodes["_0"], nir.LIF)
+    assert isinstance(graph.nodes["_1"], nir.Affine)
+    assert "_2" not in graph.nodes  # 'Dropout' not present because it has been bypassed
+    assert isinstance(graph.nodes["_3"], nir.LI)
+    assert isinstance(graph.nodes["_4"], nir.Affine)
+    assert isinstance(graph.nodes["output"], nir.Output)
+    assert len(graph.edges) == 5
