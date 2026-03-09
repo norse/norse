@@ -270,10 +270,12 @@ def test_bypass_module():
         torch.nn.Linear(2, 1),
     )
 
-    bypass_modules = {torch.nn.Dropout}
+    def map_none(_):
+        return None
 
-    # type_check=False because neuron models lack shape information
-    graph = norse.to_nir(m, type_check=False, custom_bypass_modules=bypass_modules)
+    bypass_map = {torch.nn.Dropout: map_none}
+
+    graph = norse.to_nir(m, type_check=False, custom_mapping=bypass_map)
     assert len(graph.nodes) == 6  # 4 + 2 for input and output
     assert isinstance(graph.nodes["input_tensor"], nir.Input)
     assert isinstance(graph.nodes["_0"], nir.LIF)
