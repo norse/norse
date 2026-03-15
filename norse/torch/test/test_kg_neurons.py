@@ -79,7 +79,7 @@ class TestKGLeapfrogPhysics:
         freqs = np.fft.rfftfreq(n_steps, d=dt)
         dominant_freq = freqs[np.argmax(spectrum[1:]) + 1]  # skip DC
         expected_freq = chi / (2 * np.pi)
-        assert abs(dominant_freq - expected_freq) < 0.05, \
+        assert abs(dominant_freq - expected_freq) < 0.02, \
             f"Dominant freq {dominant_freq:.3f} vs expected {expected_freq:.3f}"
 
     def test_cfl_stability_condition(self):
