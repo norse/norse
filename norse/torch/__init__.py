@@ -76,6 +76,13 @@ from norse.torch.functional.lif import (
     lif_feed_forward_step,
     lif_step,
 )
+from norse.torch.functional.wave_lif import (
+    WaveLIFFeedForwardState,
+    WaveLIFParameters,
+    WaveLIFState,
+    wave_lif_feed_forward_step,
+    wave_lif_step,
+)
 from norse.torch.functional.lif_adex import (
     LIFAdExFeedForwardState,
     LIFAdExParameters,
@@ -238,6 +245,12 @@ from norse.torch.module.leaky_integrator_box import (
     LIBoxCell,
     LIBoxParameters,
     LIBoxState,
+)
+from norse.torch.module.wave_lif import (
+    WaveLIF,
+    WaveLIFCell,
+    WaveLIFRecurrent,
+    WaveLIFRecurrentCell,
 )
 from norse.torch.module.lif import (
     LIFCell,
@@ -466,6 +479,12 @@ __all__ = [
     "lif_current_encoder",
     "lif_feed_forward_step",
     "lif_step",
+    # WaveLIF
+    "WaveLIFFeedForwardState",
+    "WaveLIFParameters",
+    "WaveLIFState",
+    "wave_lif_feed_forward_step",
+    "wave_lif_step",
     # LIF Conductance based
     "CobaLIFState",
     "CobaLIFParameters",
@@ -637,6 +656,11 @@ __all__ = [
     "LIFRefracFeedForwardState",
     "LIFRefracParameters",
     "LIFRefracState",
+    # WaveLIF modules
+    "WaveLIF",
+    "WaveLIFCell",
+    "WaveLIFRecurrent",
+    "WaveLIFRecurrentCell",
     "Lift",
     "LSNNCell",
     "LSNNRecurrentCell",
