@@ -129,6 +129,11 @@ from norse.torch.functional.regularization import (
     spike_accumulator,
     voltage_accumulator,
 )
+from norse.torch.functional.synops import (
+    linear_synops_accumulator,
+    conv_synops_accumulator,
+    synops_accumulator,
+)
 from norse.torch.functional.stdp_sensor import (
     STDPSensorParameters,
     STDPSensorState,
@@ -297,6 +302,7 @@ from norse.torch.module.lsnn import (
     LSNNState,
 )
 from norse.torch.module.regularization import RegularizationCell
+from norse.torch.module.synops import SynOpsCounter
 from norse.torch.module.sequential import (
     SequentialState,
     RecurrentSequential,
@@ -528,6 +534,10 @@ __all__ = [
     "regularize_step",
     "spike_accumulator",
     "voltage_accumulator",
+    # SynOps
+    "linear_synops_accumulator",
+    "conv_synops_accumulator",
+    "synops_accumulator",
     # Reset
     "ResetMethod",
     "reset_value",
@@ -646,6 +656,7 @@ __all__ = [
     "LSNNParameters",
     "LSNNState",
     "RegularizationCell",
+    "SynOpsCounter",
     "SequentialState",
     "RecurrentSequential",
     "RecurrentSequentialState",
