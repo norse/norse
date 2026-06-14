@@ -1,6 +1,4 @@
-"""
-Functional components for measuring synaptic operations (SynOps) during the
-forward pass of a spiking neural network.
+"""Functional components for measuring synaptic operations (SynOps).
 
 A synaptic operation occurs when a spike propagates through a synapse. For a
 linear layer, each firing neuron triggers one multiply-accumulate per output
@@ -10,9 +8,8 @@ output channel per kernel element (divided by the number of groups).
 This metric is commonly used in neuromorphic computing to quantify computational
 cost and energy efficiency of SNNs.
 
-Reference:
-    Pfeiffer, M. & Pfeil, T. (2018). Deep learning with spiking neurons:
-    Opportunities and challenges. Frontiers in Computational Neuroscience.
+Reference: Pfeiffer, M. & Pfeil, T. (2018). Deep learning with spiking neurons:
+Opportunities and challenges. Frontiers in Computational Neuroscience.
 """
 
 from typing import Optional, Union
@@ -26,19 +23,25 @@ def linear_synops_accumulator(
     layer: nn.Linear,
     state: Optional[Union[int, torch.Tensor]] = None,
 ) -> Union[int, torch.Tensor]:
-    """
-    Counts synaptic operations for a linear layer.
+    """Count synaptic operations for a linear layer.
 
     Each firing input neuron triggers ``out_features`` multiply-accumulate
     operations (one per output neuron).
 
-    Parameters:
-        z (torch.Tensor): Spike tensor from the preceding spiking layer.
-        layer (nn.Linear): The linear (synaptic) layer that receives the spikes.
-        state: Accumulated synops from previous steps. Defaults to 0.
+    Parameters
+    ----------
+    z : torch.Tensor
+        Spike tensor from the preceding spiking layer.
+    layer : nn.Linear
+        The linear (synaptic) layer that receives the spikes.
+    state : int or torch.Tensor, optional
+        Accumulated synops from previous steps. Defaults to 0.
 
-    Returns:
-        Updated synops count: ``state + spike_count * out_features``
+    Returns
+    -------
+    int or torch.Tensor
+        Updated synops count: ``state + spike_count * out_features``.
+
     """
     if state is None:
         state = 0
@@ -50,20 +53,26 @@ def conv_synops_accumulator(
     layer: nn.Conv2d,
     state: Optional[Union[int, torch.Tensor]] = None,
 ) -> Union[int, torch.Tensor]:
-    """
-    Counts synaptic operations for a 2-D convolutional layer.
+    """Count synaptic operations for a 2-D convolutional layer.
 
     Each firing activation at any spatial position triggers
     ``out_channels * kernel_h * kernel_w / groups`` multiply-accumulate
     operations.
 
-    Parameters:
-        z (torch.Tensor): Spike tensor from the preceding spiking layer.
-        layer (nn.Conv2d): The convolutional (synaptic) layer that receives the spikes.
-        state: Accumulated synops from previous steps. Defaults to 0.
+    Parameters
+    ----------
+    z : torch.Tensor
+        Spike tensor from the preceding spiking layer.
+    layer : nn.Conv2d
+        The convolutional (synaptic) layer that receives the spikes.
+    state : int or torch.Tensor, optional
+        Accumulated synops from previous steps. Defaults to 0.
 
-    Returns:
+    Returns
+    -------
+    int or torch.Tensor
         Updated synops count.
+
     """
     if state is None:
         state = 0
@@ -81,19 +90,27 @@ def synops_accumulator(
     layer: nn.Module,
     state: Optional[Union[int, torch.Tensor]] = None,
 ) -> Union[int, torch.Tensor]:
-    """
-    Counts synaptic operations for a supported layer type (Linear or Conv2d).
+    """Count synaptic operations for a supported layer type (Linear or Conv2d).
 
-    Parameters:
-        z (torch.Tensor): Spike tensor from the preceding spiking layer.
-        layer (nn.Module): The synaptic layer (``nn.Linear`` or ``nn.Conv2d``).
-        state: Accumulated synops from previous steps. Defaults to 0.
+    Parameters
+    ----------
+    z : torch.Tensor
+        Spike tensor from the preceding spiking layer.
+    layer : nn.Module
+        The synaptic layer (``nn.Linear`` or ``nn.Conv2d``).
+    state : int or torch.Tensor, optional
+        Accumulated synops from previous steps. Defaults to 0.
 
-    Returns:
+    Returns
+    -------
+    int or torch.Tensor
         Updated synops count.
 
-    Raises:
-        TypeError: If ``layer`` is not a supported type.
+    Raises
+    ------
+    TypeError
+        If ``layer`` is not a supported type.
+
     """
     if isinstance(layer, nn.Linear):
         return linear_synops_accumulator(z, layer, state)
