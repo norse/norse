@@ -18,7 +18,7 @@ Reference:
 from typing import Optional, Union
 
 import torch
-import torch.nn as nn
+from torch import nn
 
 
 def linear_synops_accumulator(
@@ -97,10 +97,9 @@ def synops_accumulator(
     """
     if isinstance(layer, nn.Linear):
         return linear_synops_accumulator(z, layer, state)
-    elif isinstance(layer, nn.Conv2d):
+    if isinstance(layer, nn.Conv2d):
         return conv_synops_accumulator(z, layer, state)
-    else:
-        raise TypeError(
-            f"synops_accumulator does not support layer type {type(layer).__name__}. "
-            "Supported types: nn.Linear, nn.Conv2d."
-        )
+    raise TypeError(
+        f"synops_accumulator does not support layer type {type(layer).__name__}. "
+        "Supported types: nn.Linear, nn.Conv2d."
+    )
