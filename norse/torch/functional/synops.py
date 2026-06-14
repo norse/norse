@@ -1,4 +1,5 @@
-"""Functional components for measuring synaptic operations (SynOps).
+"""
+Functional components for measuring synaptic operations (SynOps).
 
 A synaptic operation occurs when a spike propagates through a synapse. For a
 linear layer, each firing neuron triggers one multiply-accumulate per output
@@ -23,7 +24,8 @@ def linear_synops_accumulator(
     layer: nn.Linear,
     state: Optional[Union[int, torch.Tensor]] = None,
 ) -> Union[int, torch.Tensor]:
-    """Count synaptic operations for a linear layer.
+    """
+    Count synaptic operations for a linear layer.
 
     Each firing input neuron triggers ``out_features`` multiply-accumulate
     operations (one per output neuron).
@@ -53,7 +55,8 @@ def conv_synops_accumulator(
     layer: nn.Conv2d,
     state: Optional[Union[int, torch.Tensor]] = None,
 ) -> Union[int, torch.Tensor]:
-    """Count synaptic operations for a 2-D convolutional layer.
+    """
+    Count synaptic operations for a 2-D convolutional layer.
 
     Each firing activation at any spatial position triggers
     ``out_channels * kernel_h * kernel_w / groups`` multiply-accumulate
@@ -90,7 +93,8 @@ def synops_accumulator(
     layer: nn.Module,
     state: Optional[Union[int, torch.Tensor]] = None,
 ) -> Union[int, torch.Tensor]:
-    """Count synaptic operations for a supported layer type (Linear or Conv2d).
+    """
+    Count synaptic operations for a supported layer type (Linear or Conv2d).
 
     Parameters
     ----------

@@ -9,7 +9,8 @@ from norse.torch.functional.synops import synops_accumulator
 
 
 class SynOpsCounter(nn.Module):
-    """Counts synaptic operations (SynOps) from spikes through a weight layer.
+    """
+    Counts synaptic operations (SynOps) from spikes through a weight layer.
 
     Wraps a single synaptic layer (``nn.Linear`` or ``nn.Conv2d``) and
     accumulates the total number of multiply-accumulate events triggered by
@@ -53,7 +54,8 @@ class SynOpsCounter(nn.Module):
         self.state = None
 
     def forward(self, z: torch.Tensor) -> Tuple[torch.Tensor, Union[int, torch.Tensor]]:
-        """Accumulate synops for the current timestep's spikes.
+        """
+        Accumulate synops for the current timestep's spikes.
 
         Parameters
         ----------
