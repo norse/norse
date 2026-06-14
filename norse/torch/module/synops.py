@@ -3,9 +3,10 @@ Module wrapper for measuring synaptic operations (SynOps) during the forward
 pass of a spiking neural network.
 """
 
+from typing import Optional, Tuple, Union
+
 import torch
-import torch.nn as nn
-from typing import Any, Optional, Tuple, Union
+from torch import nn
 
 from norse.torch.functional.synops import synops_accumulator
 
@@ -21,10 +22,10 @@ class SynOpsCounter(nn.Module):
 
     Example:
         >>> import torch
-        >>> import torch.nn as nn
+        >>> from torch import nn
         >>> import norse.torch as snn
-        >>> cell = snn.LIFCell(2, 4)
-        >>> counter = snn.SynOpsCounter(nn.Linear(4, 8))
+        >>> cell = snn.LIFCell()
+        >>> counter = snn.SynOpsCounter(nn.Linear(2, 8))
         >>> data = torch.ones(5, 2) + 10   # drives all neurons to fire
         >>> z, s = cell(data)
         >>> z, total_synops = counter(z)
@@ -45,6 +46,10 @@ class SynOpsCounter(nn.Module):
         super().__init__()
         self.layer = layer
         self.state = state
+
+    def reset(self) -> None:
+        """Resets the accumulated synops counter to zero."""
+        self.state = None
 
     def forward(self, z: torch.Tensor) -> Tuple[torch.Tensor, Union[int, torch.Tensor]]:
         """

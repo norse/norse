@@ -1,5 +1,5 @@
 import torch
-import torch.nn as nn
+from torch import nn
 
 from norse.torch.module.lif import LIFCell
 from norse.torch.functional.synops import (
@@ -69,7 +69,7 @@ def test_synops_counter_module_linear():
     cell = LIFCell()
     counter = SynOpsCounter(nn.Linear(2, 8))
     data = torch.ones(5, 2) + 10  # drives all neurons to fire
-    z, s = cell(data)
+    z, _ = cell(data)
     z_out, count = counter(z)
     assert z_out.shape == z.shape
     assert count == z.sum().item() * 8
@@ -98,3 +98,15 @@ def test_synops_counter_module_state_persists():
     _, c2 = counter(spikes)
     assert c1 == 30
     assert c2 == 60
+
+
+def test_synops_counter_reset():
+    layer = nn.Linear(3, 5)
+    counter = SynOpsCounter(layer)
+    spikes = torch.ones(2, 3)
+    _, c1 = counter(spikes)
+    assert c1 == 30
+    counter.reset()
+    assert counter.state is None
+    _, c2 = counter(spikes)
+    assert c2 == 30  # starts fresh after reset
