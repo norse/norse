@@ -20,6 +20,7 @@ Containers
     Lift <lift.Lift>
     SequentialState <sequential.SequentialState>
     RegularizationCell <regularization.RegularizationCell>
+    SynOpsCounter <synops.SynOpsCounter>
 
 Convolutions
 ------------

@@ -55,6 +55,18 @@ Regularization
     spike_accumulator
     voltage_accumulator
 
+Synaptic operations (SynOps)
+----------------------------
+
+.. automodule:: norse.torch.functional.synops
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    synops_accumulator
+    linear_synops_accumulator
+    conv_synops_accumulator
+
 Threshold functions
 -------------------
 

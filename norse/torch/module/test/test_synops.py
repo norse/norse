@@ -1,3 +1,4 @@
+import pytest
 import torch
 from torch import nn
 
@@ -63,6 +64,12 @@ def test_synops_accumulator_dispatches_conv():
     layer = nn.Conv2d(2, 4, kernel_size=3)
     result = synops_accumulator(spikes, layer)
     assert result == 18 * 4 * 3 * 3
+
+
+def test_synops_accumulator_rejects_unsupported_layer():
+    spikes = torch.ones(1, 4)
+    with pytest.raises(TypeError):
+        synops_accumulator(spikes, nn.ReLU())
 
 
 def test_synops_counter_module_linear():

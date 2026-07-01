@@ -16,27 +16,22 @@ class SynOpsCounter(nn.Module):
     accumulates the total number of multiply-accumulate events triggered by
     spikes across forward steps.
 
-    Example
-    -------
-    >>> import torch
-    >>> from torch import nn
-    >>> import norse.torch as snn
-    >>> cell = snn.LIFCell()
-    >>> counter = snn.SynOpsCounter(nn.Linear(2, 8))
-    >>> data = torch.ones(5, 2) + 10
-    >>> z, s = cell(data)
-    >>> z, total_synops = counter(z)
-    >>> print(total_synops)
+    Example:
+        >>> import torch
+        >>> from torch import nn
+        >>> import norse.torch as snn
+        >>> cell = snn.LIFCell()
+        >>> counter = snn.SynOpsCounter(nn.Linear(2, 8))
+        >>> data = torch.ones(5, 2) + 10
+        >>> z, s = cell(data)
+        >>> z, total_synops = counter(z)
+        >>> print(total_synops)
 
-    Parameters
-    ----------
-    layer : nn.Module
-        The synaptic layer whose operations are counted.
-        Must be ``nn.Linear`` or ``nn.Conv2d``.
-    state : int or torch.Tensor, optional
-        Initial accumulated synops value. Defaults to ``None``
-        (treated as 0 on first call).
-
+    Parameters:
+        layer (nn.Module): The synaptic layer whose operations are counted.
+            Must be ``nn.Linear`` or ``nn.Conv2d``.
+        state (Optional[Union[int, torch.Tensor]]): Initial accumulated synops value.
+            Defaults to ``None`` (treated as 0 on first call).
     """
 
     def __init__(
@@ -57,16 +52,11 @@ class SynOpsCounter(nn.Module):
         """
         Accumulate synops for the current timestep's spikes.
 
-        Parameters
-        ----------
-        z : torch.Tensor
-            Spike tensor from the preceding spiking layer.
+        Parameters:
+            z (torch.Tensor): Spike tensor from the preceding spiking layer.
 
-        Returns
-        -------
-        tuple of (torch.Tensor, int or torch.Tensor)
-            The unchanged spike tensor and the running synops total.
-
+        Returns:
+            A tuple of the unchanged spike tensor and the running synops total.
         """
         self.state = synops_accumulator(z, self.layer, self.state)
         return z, self.state
