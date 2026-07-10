@@ -37,6 +37,28 @@ def test_state_create():
     assert s.z == 1.28
 
 
+def test_state_pickle_module_path():
+    # Regression test for issue #414: the generated state tuple must report the
+    # module in which it is defined so that pickle can find it again.
+    assert MockState.__module__ == __name__
+    assert MockState.__qualname__ == "MockState"
+
+
+def test_serialize():
+    # Regression test for issue #414: state tuples produced by the metaclass
+    # must survive a torch.save/torch.load round-trip (previously raised
+    # PicklingError: attribute lookup ... failed).
+    import io
+
+    s = MockState(torch.rand(10))
+    buffer = io.BytesIO()
+    torch.save(s, buffer)
+    buffer.seek(0)
+    new_s = torch.load(buffer, weights_only=False)
+    assert isinstance(new_s, MockState)
+    assert torch.allclose(s.x, new_s.x)
+
+
 def test_state_is_tuple():
     s = MockState(torch.randn(1))
     assert isinstance(s, Tuple)

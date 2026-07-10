@@ -63,7 +63,19 @@ class MultipleInheritanceNamedTupleMeta(NamedTupleMeta):
 
     def __new__(mcls, typename, bases, ns):
         cls_obj = super().__new__(mcls, typename + "_nm_base", (NamedTuple,), ns)
-        t = type(typename, bases + (cls_obj,), {})
+        # Carry over ``__module__`` and ``__qualname__`` from the original class
+        # namespace so the generated type is discoverable where it is actually
+        # defined. Without this, ``type()`` records this module
+        # (``norse.torch.utils.pytree``) as the home of every state tuple, which
+        # breaks pickling/``torch.save`` (see issue #414).
+        t = type(
+            typename,
+            bases + (cls_obj,),
+            {
+                "__module__": ns.get("__module__", mcls.__module__),
+                "__qualname__": ns.get("__qualname__", typename),
+            },
+        )
         register_tuple(t)  # Registers the tuple in the pytree registry
         return t
 
