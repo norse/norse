@@ -283,7 +283,6 @@ class LIFRecurrent(SNNRecurrent):
         hidden_size (int): The number of hidden neurons
         p (LIFParameters): The neuron parameters as a torch Module, which allows the module
             to configure neuron parameters as optimizable.
-        sparse (bool): Whether to apply sparse activation functions (True) or not (False). Defaults to False.
         input_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
             matrix normalized to the number of hidden neurons.
         recurrent_weights (torch.Tensor): Weights used for input tensors. Defaults to a random
