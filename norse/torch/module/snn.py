@@ -5,6 +5,7 @@ Base module for spiking neural network (SNN) modules.
 from weakref import ref
 from typing import Any, Callable, List, Optional, Tuple
 import torch
+import warnings
 
 FeedforwardActivation = Callable[
     # Input        State         Parameters       dt
@@ -17,6 +18,19 @@ RecurrentActivation = Callable[
     [torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.nn.Module, float],
     Tuple[torch.Tensor, torch.Tensor],
 ]
+
+def _warn_if_wrong_parameter_type(p, expected_type):
+    """
+    Warns the user if the provided parameter object does not strictly match the expected type
+    (Program will still work meanwhile).
+    """
+    if type(p) is not expected_type:
+        warnings.warn(
+            f"Expected parameter of type {expected_type.__name__}, "
+            f"got {type(p).__name__}. Unexpected fields will be silently ignored.",
+            UserWarning,
+            stacklevel=3  # Sets the warning to point to the user's instantiation call
+        )
 
 
 def _merge_states(states: List[Any]):

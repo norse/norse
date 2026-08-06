@@ -1,3 +1,5 @@
+import pytest
+import warnings
 import torch
 
 from norse.torch.module.leaky_integrator_box import (
@@ -6,6 +8,7 @@ from norse.torch.module.leaky_integrator_box import (
     LIBoxState,
     LIBoxParameters,
 )
+from norse.torch.functional.lif import LIFParameters
 
 
 def test_li_box_cell():
@@ -66,3 +69,23 @@ def test_li_box_integral_numerics():
 
     assert out.shape == (10, 1)
     assert torch.all(torch.eq(out, out2))
+
+
+def test_libox_parameter_warning():
+    """Ensure LIBox warns when given incompatible parameters."""
+    with pytest.warns(UserWarning, match="Expected parameter of type LIBoxParameters"):
+        LIBox(p=LIFParameters())
+        
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        LIBox(p=LIBoxParameters())
+
+
+def test_libox_cell_parameter_warning():
+    """Ensure LIBoxCell warns when given incompatible parameters."""
+    with pytest.warns(UserWarning, match="Expected parameter of type LIBoxParameters"):
+        LIBoxCell(p=LIFParameters())
+        
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        LIBoxCell(p=LIBoxParameters())

@@ -10,7 +10,7 @@ See :mod:`norse.torch.functional.leaky_integrator_box` for more information.
 
 import torch
 
-from norse.torch.module.snn import SNN, SNNCell
+from norse.torch.module.snn import SNN, SNNCell, _warn_if_wrong_parameter_type
 
 from ..functional.leaky_integrator_box import (
     li_box_step,
@@ -37,6 +37,8 @@ class LIBox(SNN):
     """
 
     def __init__(self, p: LIBoxParameters = LIBoxParameters(), dt: float = 0.001):
+        _warn_if_wrong_parameter_type(p, LIBoxParameters)
+        
         super().__init__(
             li_box_feed_forward_step,
             self.initial_state,
@@ -69,6 +71,8 @@ class LIBoxCell(SNNCell):
     """
 
     def __init__(self, p: LIBoxParameters = LIBoxParameters(), **kwargs):
+        _warn_if_wrong_parameter_type(p, LIBoxParameters)
+        
         super().__init__(
             activation=li_box_feed_forward_step,
             state_fallback=self.initial_state,
