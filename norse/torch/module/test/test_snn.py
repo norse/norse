@@ -156,12 +156,18 @@ def test_snn_repr():
     assert str(n) == f"LIF(p={LIFParameters()}, dt=0.001)"
 
 
+def test_snn_cell_dtype_cast():
+    n = snn.SNNCell(None, None, p=MockParams())
+    assert n.p.my_param.dtype == torch.float32
+    n.double()
+    assert n.p.my_param.dtype == torch.float64
+
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="No CUDA device available")
 def test_snn_cell_to_device():
     n = snn.SNNCell(None, None, p=MockParams())
     assert n.p.my_param.device.type == "cpu"
     n.cuda()
-    assert n.p.my_param.device.type == "cpu"
+    assert n.p.my_param.device.type == "cuda"
 
 
 def test_snn_recurrent_repr():
