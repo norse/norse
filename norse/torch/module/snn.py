@@ -78,6 +78,12 @@ class SNNCell(torch.nn.Module):
         self.p = p
         self.dt = dt
 
+    def _apply(self, fn):
+        super()._apply(fn)
+        if hasattr(self, "p") and self.p is not None:
+            self.p = type(self.p)(*[fn(x) if torch.is_tensor(x) else x for x in self.p])
+        return self
+    
     def extra_repr(self) -> str:
         return f"p={self.p}, dt={self.dt}"
 
@@ -165,6 +171,12 @@ class SNNRecurrentCell(torch.nn.Module):
             self.recurrent_weights.requires_grad = True
             self.recurrent_weights.register_hook(autapse_hook)
 
+    def _apply(self, fn):
+        super()._apply(fn)
+        if hasattr(self, "p") and self.p is not None:
+            self.p = type(self.p)(*[fn(x) if torch.is_tensor(x) else x for x in self.p])
+        return self
+
     def extra_repr(self) -> str:
         return (
             f"input_size={self.input_size}, hidden_size={self.hidden_size}, "
@@ -230,6 +242,12 @@ class SNN(torch.nn.Module):
         self.p = p
         self.dt = dt
         self.record_states = record_states
+
+    def _apply(self, fn):
+        super()._apply(fn)
+        if hasattr(self, "p") and self.p is not None:
+            self.p = type(self.p)(*[fn(x) if torch.is_tensor(x) else x for x in self.p])
+        return self
 
     def extra_repr(self) -> str:
         return f"p={self.p}, dt={self.dt}"
@@ -341,6 +359,12 @@ class SNNRecurrent(torch.nn.Module):
 
             self.recurrent_weights.requires_grad = True
             self.recurrent_weights.register_hook(autapse_hook)
+
+    def _apply(self, fn):
+        super()._apply(fn)
+        if hasattr(self, "p") and self.p is not None:
+            self.p = type(self.p)(*[fn(x) if torch.is_tensor(x) else x for x in self.p])
+        return self
 
     def extra_repr(self) -> str:
         return f"input_size={self.input_size}, hidden_size={self.hidden_size}, p={self.p}, autapses={self.autapses}, dt={self.dt}"
