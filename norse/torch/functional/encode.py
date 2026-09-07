@@ -11,6 +11,13 @@ import torch
 from norse.torch.functional.lif import lif_current_encoder, LIFParameters
 
 
+def _float_dtype(tensor: torch.Tensor) -> torch.dtype:
+    """The floating dtype an encoder's output should have: the input's own
+    if it is already floating (so float16 / bfloat16 / float64 are preserved
+    instead of being silently forced to float32), otherwise the default."""
+    return tensor.dtype if tensor.is_floating_point() else torch.get_default_dtype()
+
+
 def constant_current_lif_encode(
     input_current: torch.Tensor,
     seq_length: int,
@@ -41,9 +48,12 @@ def constant_current_lif_encode(
     Returns:
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
-    v = torch.zeros(*input_current.shape, device=input_current.device)
-    z = torch.zeros(*input_current.shape, device=input_current.device)
-    spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
+    dtype = _float_dtype(input_current)
+    v = torch.zeros(*input_current.shape, device=input_current.device, dtype=dtype)
+    z = torch.zeros(*input_current.shape, device=input_current.device, dtype=dtype)
+    spikes = torch.zeros(
+        seq_length, *input_current.shape, device=input_current.device, dtype=dtype
+    )
 
     for ts in range(seq_length):
         z, v = lif_current_encoder(input_current=input_current, voltage=v, p=p, dt=dt)
@@ -123,7 +133,13 @@ def population_encode(
     size = input_values.shape + (out_features,)
     if not scale:
         scale = input_values.max()
-    centres = torch.linspace(0, scale, out_features).expand(size)
+    centres = torch.linspace(
+        0,
+        scale,
+        out_features,
+        dtype=_float_dtype(input_values),
+        device=input_values.device,
+    ).expand(size)
     x = input_values.unsqueeze(-1).expand(size)
     distances = distance_function(x, centres) * scale
     return kernel(distances)
@@ -153,15 +169,17 @@ def poisson_encode(
     Returns:
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
+    dtype = _float_dtype(input_values)
     return (
         torch.rand(
             seq_length,
             *input_values.shape,
             device=input_values.device,
+            dtype=dtype,
             generator=generator,
-        ).float()
+        )
         < dt * f_max * input_values
-    ).float()
+    ).to(dtype)
 
 
 def poisson_encode_step(
@@ -185,12 +203,16 @@ def poisson_encode_step(
     Returns:
         A tensor containing binary values in .
     """
+    dtype = _float_dtype(input_values)
     return (
         torch.rand(
-            *input_values.shape, device=input_values.device, generator=generator
-        ).float()
+            *input_values.shape,
+            device=input_values.device,
+            dtype=dtype,
+            generator=generator,
+        )
         < dt * f_max * input_values
-    ).float()
+    ).to(dtype)
 
 
 def signed_poisson_encode(
@@ -215,13 +237,17 @@ def signed_poisson_encode(
     Returns:
         A tensor with an extra dimension of size `seq_length` containing values in {-1,0,1}
     """
-    return (
-        torch.sign(input_values)
-        * (
-            torch.rand(seq_length, *input_values.shape, generator=generator).float()
-            < dt * f_max * torch.abs(input_values)
-        ).float()
-    )
+    dtype = _float_dtype(input_values)
+    return torch.sign(input_values) * (
+        torch.rand(
+            seq_length,
+            *input_values.shape,
+            device=input_values.device,
+            dtype=dtype,
+            generator=generator,
+        )
+        < dt * f_max * torch.abs(input_values)
+    ).to(dtype)
 
 
 def signed_poisson_encode_step(
@@ -242,15 +268,16 @@ def signed_poisson_encode_step(
     Returns:
         A tensor containing values in {-1,0,1}.
     """
-    return (
-        torch.sign(input_values)
-        * (
-            torch.rand(
-                *input_values.shape, device=input_values.device, generator=generator
-            ).float()
-            < dt * f_max * torch.abs(input_values)
-        ).float()
-    )
+    dtype = _float_dtype(input_values)
+    return torch.sign(input_values) * (
+        torch.rand(
+            *input_values.shape,
+            device=input_values.device,
+            dtype=dtype,
+            generator=generator,
+        )
+        < dt * f_max * torch.abs(input_values)
+    ).to(dtype)
 
 
 def spike_latency_lif_encode(
