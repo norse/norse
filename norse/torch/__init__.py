@@ -292,6 +292,8 @@ from norse.torch.module.lif_refrac import (
     LIFRefracState,
 )
 from norse.torch.module.lift import Lift
+from norse.torch.module.synapse_delay import SynapseDelay
+from norse.torch.functional.synapse_delay import SynapseDelayState
 from norse.torch.module.lsnn import (
     LSNNCell,
     LSNNRecurrentCell,
@@ -648,6 +650,8 @@ __all__ = [
     "LIFRefracParameters",
     "LIFRefracState",
     "Lift",
+    "SynapseDelay",
+    "SynapseDelayState",
     "LSNNCell",
     "LSNNRecurrentCell",
     "LSNN",

@@ -19,6 +19,7 @@ Containers
 
     Lift <lift.Lift>
     SequentialState <sequential.SequentialState>
+    SynapseDelay <synapse_delay.SynapseDelay>
     RegularizationCell <regularization.RegularizationCell>
     SynOpsCounter <synops.SynOpsCounter>
 
