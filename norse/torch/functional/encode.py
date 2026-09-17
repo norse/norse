@@ -12,9 +12,13 @@ from norse.torch.functional.lif import lif_current_encoder, LIFParameters
 
 
 def _float_dtype(tensor: torch.Tensor) -> torch.dtype:
-    """The floating dtype an encoder's output should have: the input's own
-    if it is already floating (so float16 / bfloat16 / float64 are preserved
-    instead of being silently forced to float32), otherwise the default."""
+    """
+    Determine the floating dtype an encoder's output should have.
+
+    Returns the input's own floating dtype if it is already floating
+    (so float16 / bfloat16 / float64 are preserved instead of being
+    silently forced to float32), otherwise the default dtype.
+    """
     return tensor.dtype if tensor.is_floating_point() else torch.get_default_dtype()
 
 
