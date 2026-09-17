@@ -2,7 +2,6 @@ import pytest
 import torch
 
 from norse.torch import SynapseDelay, SequentialState, LIFCell
-from norse.torch.functional.synapse_delay import SynapseDelayState
 
 
 def test_module_matches_functional_step():
@@ -95,7 +94,7 @@ def test_learns_a_target_delay():
 
 
 def test_sequential_state_composition_matches_maintainer_proposal():
-    """Exactly the API Jegp proposed in issue #224:
+    """Exactly the API Jegp proposed in issue #224.
 
     model = SequentialState(LIFCell(), SynapseDelay(), ...)
     """
@@ -114,7 +113,7 @@ def test_sequential_state_composition_matches_maintainer_proposal():
     assert delay_params[0].grad is not None
 
     # a second call with the returned state must not error (state threading)
-    out2, state2 = model(torch.rand(4, 3), state)
+    out2, _ = model(torch.rand(4, 3), state)
     assert out2.shape == (4, 3)
 
 

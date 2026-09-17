@@ -1,10 +1,7 @@
 import pytest
 import torch
 
-from norse.torch.functional.synapse_delay import (
-    SynapseDelayState,
-    synapse_delay_step,
-)
+from norse.torch.functional.synapse_delay import synapse_delay_step
 
 
 def test_integer_delay_is_exact():
@@ -100,9 +97,9 @@ def test_delay_gradient_matches_finite_difference():
 
 
 def test_state_lazily_reinitialises_on_shape_change():
-    o1, s1 = synapse_delay_step(torch.randn(2, 3), None, torch.tensor(1.0), 4)
+    _, s1 = synapse_delay_step(torch.randn(2, 3), None, torch.tensor(1.0), 4)
     # a shape change (e.g. batch size) must not crash on the stale buffer
-    o2, s2 = synapse_delay_step(torch.randn(5, 3), s1, torch.tensor(1.0), 4)
+    _, s2 = synapse_delay_step(torch.randn(5, 3), s1, torch.tensor(1.0), 4)
     assert s2.buffer.shape == (5, 5, 3)
 
 

@@ -1,7 +1,4 @@
-r"""
-See :mod:`norse.torch.functional.synapse_delay` for the underlying step
-function and the motivation (issue #224).
-"""
+r"""See :mod:`norse.torch.functional.synapse_delay` for the underlying step function and the motivation (issue #224)."""
 
 import math
 from typing import Optional, Union
@@ -16,6 +13,8 @@ from norse.torch.functional.synapse_delay import (
 
 class SynapseDelay(torch.nn.Module):
     r"""
+    Delay a signal by a learnable number of time steps.
+
     Delays a signal by ``delay`` time steps before passing it on -- an
     axonal / synaptic transmission delay. Drop it between two neuron
     layers in a :class:`SequentialState`::
@@ -45,25 +44,31 @@ class SynapseDelay(torch.nn.Module):
     tensor broadcastable against the module's input (e.g. one delay per
     feature channel for a ``(batch, channels)`` input).
 
-    Parameters:
-        delay (Union[float, torch.Tensor]): initial delay, in time steps.
-            Defaults to 1.0.
-        max_delay (Optional[int]): length of the ring buffer / kernel. Must
-            be >= ``ceil(delay)``. Defaults to ``ceil(delay) + 1``.
-        learn_delay (bool): if True, ``delay`` is a learnable
-            ``torch.nn.Parameter``; otherwise it is fixed. Defaults to
-            False.
-        kernel (str): ``"linear"`` (default) or ``"gaussian"``.
-        sigma (float): width of the Gaussian kernel (ignored for
-            ``"linear"``). Defaults to 1.0.
+    Parameters
+    ----------
+    delay : Union[float, torch.Tensor]
+        Initial delay, in time steps. Defaults to 1.0.
+    max_delay : Optional[int]
+        Length of the ring buffer / kernel. Must be >= ``ceil(delay)``.
+        Defaults to ``ceil(delay) + 1``.
+    learn_delay : bool
+        If True, ``delay`` is a learnable ``torch.nn.Parameter``;
+        otherwise it is fixed. Defaults to False.
+    kernel : str
+        ``"linear"`` (default) or ``"gaussian"``.
+    sigma : float
+        Width of the Gaussian kernel (ignored for ``"linear"``).
+        Defaults to 1.0.
 
-    Examples:
+    Examples
+    --------
         >>> import torch
         >>> from norse.torch import SynapseDelay
         >>> delay = SynapseDelay(delay=3.0, max_delay=8)
         >>> x = torch.zeros(1, 4)
         >>> x[0, 0] = 1.0
         >>> out, state = delay(x)  # a unit impulse; appears 3 steps later
+
     """
 
     def __init__(
@@ -74,6 +79,7 @@ class SynapseDelay(torch.nn.Module):
         kernel: str = "linear",
         sigma: float = 1.0,
     ):
+        """Construct a :class:`SynapseDelay`; see the class docstring for parameters."""
         super().__init__()
         if not isinstance(delay, torch.Tensor):
             delay = torch.as_tensor(delay, dtype=torch.float32)
