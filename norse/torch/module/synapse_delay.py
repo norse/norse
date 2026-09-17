@@ -1,4 +1,8 @@
-r"""See :mod:`norse.torch.functional.synapse_delay` for the underlying step function and the motivation (issue #224)."""
+r"""Wrap :func:`synapse_delay_step` as a :class:`torch.nn.Module`.
+
+See :mod:`norse.torch.functional.synapse_delay` for the underlying step
+function and the motivation (issue #224).
+"""
 
 import math
 from typing import Optional, Union
@@ -114,6 +118,7 @@ class SynapseDelay(torch.nn.Module):
         input_tensor: torch.Tensor,
         state: Optional[SynapseDelayState] = None,
     ):
+        """Delay ``input_tensor`` by one step; see :func:`synapse_delay_step`."""
         return synapse_delay_step(
             input_tensor,
             state,
@@ -124,6 +129,7 @@ class SynapseDelay(torch.nn.Module):
         )
 
     def extra_repr(self) -> str:
+        """Return a one-line summary of the module's delay configuration."""
         d = self.delay.detach()
         dstr = f"{float(d):.3g}" if d.dim() == 0 else f"tensor{tuple(d.shape)}"
         return (
