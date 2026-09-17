@@ -12,6 +12,7 @@ The delay is realised by interpolation over a ring buffer of the most
 recent ``max_delay`` inputs, so a delay of ``d`` steps need not be an
 integer: gradients flow to ``d`` itself.
 """
+
 from typing import NamedTuple, Optional, Tuple
 
 import torch
@@ -50,7 +51,7 @@ def _delay_weights(
     elif kernel == "gaussian":
         # wider gradient support; anneal `sigma` from wide to narrow to
         # learn a large delay from a far initial value (see module docs)
-        weights = torch.exp(-(diff ** 2) / (2.0 * sigma ** 2))
+        weights = torch.exp(-(diff**2) / (2.0 * sigma**2))
     else:
         raise ValueError(f"kernel must be 'linear' or 'gaussian', got {kernel!r}")
 

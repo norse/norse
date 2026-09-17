@@ -2,6 +2,7 @@ r"""
 See :mod:`norse.torch.functional.synapse_delay` for the underlying step
 function and the motivation (issue #224).
 """
+
 import math
 from typing import Optional, Union
 

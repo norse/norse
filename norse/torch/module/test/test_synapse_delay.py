@@ -54,8 +54,11 @@ def test_learns_a_target_delay():
     def train(learn_delay):
         torch.manual_seed(2)
         delay = SynapseDelay(
-            delay=1.0, max_delay=16, learn_delay=learn_delay,
-            kernel="gaussian", sigma=6.0,
+            delay=1.0,
+            max_delay=16,
+            learn_delay=learn_delay,
+            kernel="gaussian",
+            sigma=6.0,
         )
         opt = torch.optim.Adam(delay.parameters(), lr=0.15) if learn_delay else None
         loss0 = None
@@ -82,17 +85,19 @@ def test_learns_a_target_delay():
 
     assert abs(d_learned - 7.0) < 0.2
     assert lf < 0.1 * l0
-    assert d_frozen == pytest.approx(1.0)          # RED control: no movement
+    assert d_frozen == pytest.approx(1.0)  # RED control: no movement
     assert lff == pytest.approx(l0f, abs=1e-6)
 
-    print(f"[SynapseDelay] learned delay {d_learned:.3f} (target 7.0), "
-          f"loss {l0:.4f} -> {lf:.5f}")
+    print(
+        f"[SynapseDelay] learned delay {d_learned:.3f} (target 7.0), "
+        f"loss {l0:.4f} -> {lf:.5f}"
+    )
 
 
 def test_sequential_state_composition_matches_maintainer_proposal():
     """Exactly the API Jegp proposed in issue #224:
 
-        model = SequentialState(LIFCell(), SynapseDelay(), ...)
+    model = SequentialState(LIFCell(), SynapseDelay(), ...)
     """
     torch.manual_seed(0)
     model = SequentialState(

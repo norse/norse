@@ -13,9 +13,7 @@ def test_integer_delay_is_exact():
     state = None
     outs = []
     for t in range(12):
-        o, state = synapse_delay_step(
-            x[t], state, delay=torch.tensor(3.0), max_delay=8
-        )
+        o, state = synapse_delay_step(x[t], state, delay=torch.tensor(3.0), max_delay=8)
         outs.append(o)
     out = torch.stack(outs).squeeze(-1)
     nz = (out.abs() > 1e-6).nonzero().flatten().tolist()
@@ -28,9 +26,7 @@ def test_zero_delay_is_passthrough():
     state = None
     for _ in range(5):
         x = torch.randn(3, 4)
-        o, state = synapse_delay_step(
-            x, state, delay=torch.tensor(0.0), max_delay=4
-        )
+        o, state = synapse_delay_step(x, state, delay=torch.tensor(0.0), max_delay=4)
         assert torch.allclose(o, x, atol=1e-6)
 
 
