@@ -63,6 +63,7 @@ Encoding
     PoissonEncoder
     PoissonEncoderStep
     PopulationEncoder
+    RankOrderEncoder
     SignedPoissonEncoder
     SpikeLatencyEncoder
     SpikeLatencyLIFEncoder

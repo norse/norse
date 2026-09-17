@@ -7,6 +7,7 @@ import torch
 from norse.torch.functional.encode import (
     population_encode,
     constant_current_lif_encode,
+    rank_order_encode,
     spike_latency_lif_encode,
     spike_latency_encode,
     poisson_encode,
@@ -151,3 +152,62 @@ def test_poisson_encode():
     print("seed1 spikes:", spikes_seed1)
 
     assert torch.equal(spikes_seed0, spikes_seed1) == False
+
+
+def test_rank_order_encode_matches_docstring_example():
+    data = torch.as_tensor([0.9, 0.1, 0.5])
+    expected = torch.tensor([[1.0, 0.0, 0.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0]])
+    assert torch.equal(rank_order_encode(data), expected)
+
+
+def test_rank_order_encode_default_steps_equals_input_size():
+    data = torch.rand(4, 6)
+    out = rank_order_encode(data)
+    assert out.shape == (6, 4, 6)
+
+
+def test_rank_order_encode_exactly_one_spike_per_element():
+    torch.manual_seed(0)
+    data = torch.rand(3, 5)
+    out = rank_order_encode(data)
+    assert torch.equal(out.sum(dim=0), torch.ones(3, 5))
+
+
+def test_rank_order_encode_largest_fires_first():
+    torch.manual_seed(1)
+    data = torch.rand(8, 10)
+    out = rank_order_encode(data)
+    top = data.argmax(dim=-1)
+    fires_at_zero = out[0].argmax(dim=-1)
+    assert torch.equal(fires_at_zero, top)
+
+
+def test_rank_order_encode_smallest_fires_last():
+    torch.manual_seed(2)
+    data = torch.rand(8, 10)
+    out = rank_order_encode(data)
+    bottom = data.argmin(dim=-1)
+    fires_at_last = out[-1].argmax(dim=-1)
+    assert torch.equal(fires_at_last, bottom)
+
+
+def test_rank_order_encode_truncates_with_num_steps():
+    torch.manual_seed(3)
+    data = torch.rand(4, 10)
+    out = rank_order_encode(data, num_steps=3)
+    assert out.shape == (3, 4, 10)
+    # exactly the top-3-ranked elements per row fire; the rest never do
+    assert out.sum().item() == 4 * 3
+    top3 = data.topk(3, dim=-1).indices
+    fired = out.sum(dim=0).nonzero()
+    for row in range(4):
+        fired_this_row = set(fired[fired[:, 0] == row][:, 1].tolist())
+        assert fired_this_row == set(top3[row].tolist())
+
+
+def test_rank_order_encode_ties_produce_no_double_firing():
+    data = torch.tensor([1.0, 1.0, 0.5])
+    out = rank_order_encode(data)
+    # ties are broken deterministically (stable argsort); either way,
+    # exactly one spike per element, none shared
+    assert torch.equal(out.sum(dim=0), torch.ones(3))

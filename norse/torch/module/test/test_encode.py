@@ -8,6 +8,7 @@ from ..lif import LIFRecurrent
 from norse.torch.module.encode import (
     PopulationEncoder,
     ConstantCurrentLIFEncoder,
+    RankOrderEncoder,
     SpikeLatencyEncoder,
     PoissonEncoder,
     PoissonEncoderStep,
@@ -123,3 +124,31 @@ def test_spike_latency_encode_chain():
     data = torch.randn(7, 5) + 10
     encoder = torch.nn.Sequential(ConstantCurrentLIFEncoder(2), SpikeLatencyEncoder())
     encoder(data)
+
+
+def test_rank_order_encoder():
+    data = torch.rand(3, 5)
+    encoder = RankOrderEncoder()
+    out = encoder(data)
+    assert out.shape == (5, 3, 5)
+    assert torch.equal(out.sum(dim=0), torch.ones(3, 5))
+
+
+def test_rank_order_encoder_num_steps():
+    data = torch.rand(3, 5)
+    encoder = RankOrderEncoder(num_steps=2)
+    out = encoder(data)
+    assert out.shape == (2, 3, 5)
+
+
+def test_rank_order_encoder_feeding_a_neuron():
+    """
+    Confirm the encoder is stateless.
+
+    It should chain into any recurrent layer exactly like the other
+    encoders in this file.
+    """
+    data = torch.rand(4, 6)
+    net = torch.nn.Sequential(RankOrderEncoder(), LIFRecurrent(6, 3))
+    out, _ = net(data)
+    assert out.shape == (6, 4, 3)

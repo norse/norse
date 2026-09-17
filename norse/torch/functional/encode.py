@@ -4,7 +4,7 @@ inputs to the spiking domain. Note that some functions, like `population_encode`
 but rather numerical values that will have to be converted into spikes via, for instance, the poisson encoder.
 """
 
-from typing import Callable, Union
+from typing import Callable, Optional, Union
 
 import torch
 
@@ -314,3 +314,60 @@ def spike_latency_encode(input_spikes: torch.Tensor) -> torch.Tensor:
         spikes.append(torch.where(mask > 0, zero_spikes, input_spikes[index]))
         mask += spikes[-1]
     return torch.stack(spikes)
+
+
+def rank_order_encode(
+    input_values: torch.Tensor, num_steps: Optional[int] = None
+) -> torch.Tensor:
+    """
+    Encodes a static input by its rank order: the largest-valued elements
+    fire earliest, the smallest fire latest (or not at all, if there are
+    more elements than ``num_steps``). Each element fires **exactly one**
+    spike, at the time step equal to its descending-magnitude rank among
+    the elements sharing its last dimension -- there is no neuron
+    simulation involved, unlike :func:`spike_latency_lif_encode`.
+
+    This is the encoding from `S. Thorpe & J. Gautrais (1998): Rank Order
+    Coding <https://doi.org/10.1007/978-1-4615-4831-7_19>`_, distinct from
+    the LIF-driven first-spike latency of
+    `R. Van Rullen & S. J. Thorpe (2001) <https://doi.org/10.1162/08997660152002852>`_
+    already implemented as :func:`spike_latency_lif_encode` /
+    :func:`spike_latency_encode`.
+
+    Example:
+        >>> data = torch.as_tensor([0.9, 0.1, 0.5])
+        >>> rank_order_encode(data)
+        tensor([[1., 0., 0.],
+                [0., 0., 1.],
+                [0., 1., 0.]])
+
+    Parameters:
+        input_values (torch.Tensor): Static input values, encoded along the
+            last dimension. Any number of leading (batch) dimensions.
+        num_steps (Optional[int]): Number of time steps in the resulting
+            spike train. Elements ranked ``num_steps`` or later never fire.
+            Defaults to the size of the last dimension (every element fires
+            exactly once).
+
+    Returns:
+        A tensor of shape ``(num_steps, *input_values.shape)`` containing
+        spikes (1) or no spikes (0), with exactly one spike per element
+        (fewer if truncated by ``num_steps``).
+    """
+    n = input_values.shape[-1]
+    steps = num_steps if num_steps is not None else n
+
+    # rank[..., i] = position of element i when the last dimension is
+    # sorted by decreasing value (0 = largest)
+    order = torch.argsort(input_values, dim=-1, descending=True)
+    rank = torch.argsort(order, dim=-1)
+
+    valid = rank < steps
+    index = rank.clamp(max=steps - 1).unsqueeze(0)
+    source = valid.to(input_values.dtype).unsqueeze(0)
+
+    spikes = torch.zeros(
+        steps, *input_values.shape, device=input_values.device, dtype=input_values.dtype
+    )
+    spikes.scatter_(0, index, source)
+    return spikes
