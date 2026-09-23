@@ -96,10 +96,10 @@ def coba_lif_step(
         input_spikes, torch.nn.functional.relu(-input_weights)
     )
 
-    g_e = state.g_e + torch.nn.functional.linear(
+    g_e += torch.nn.functional.linear(
         state.z, torch.nn.functional.relu(recurrent_weights)
     )
-    g_i = state.g_i + torch.nn.functional.linear(
+    g_i += torch.nn.functional.linear(
         state.z, torch.nn.functional.relu(-recurrent_weights)
     )
     dg_e = -dt * p.tau_syn_exc_inv * g_e
