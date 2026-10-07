@@ -1,6 +1,19 @@
 import torch
 import copy
 
+
+def _float_parameter(value):
+    """Promote integer parameters before scalar arithmetic for ONNX export.
+
+    Keep floating tensors unchanged so time-step scaling can happen before
+    multiplication with the state, avoiding overflow in low-precision states.
+    """
+    if isinstance(value, torch.Tensor):
+        if not (value.is_floating_point() or value.is_complex()):
+            return value.to(dtype=torch.get_default_dtype())
+    return value
+
+
 DEFAULT_BIO_PARAMS = {
     "iaf": {"v_reset": torch.tensor(-70.0), "v_th": torch.as_tensor(-55.0)},
     "li": {

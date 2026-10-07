@@ -2,6 +2,8 @@ from typing import NamedTuple, Tuple
 
 import torch
 
+from norse.torch.functional.parameter import _float_parameter
+
 from norse.torch.functional.threshold import threshold
 
 
@@ -102,14 +104,14 @@ def coba_lif_step(
     g_i = state.g_i + torch.nn.functional.linear(
         state.z, torch.nn.functional.relu(-recurrent_weights)
     )
-    dg_e = -dt * p.tau_syn_exc_inv * g_e
+    dg_e = -dt * _float_parameter(p.tau_syn_exc_inv) * g_e
     g_e = g_e + dg_e
-    dg_i = -dt * p.tau_syn_inh_inv * g_i
+    dg_i = -dt * _float_parameter(p.tau_syn_inh_inv) * g_i
     g_i = g_i + dg_i
 
     dv = (
         dt
-        * p.c_m_inv
+        * _float_parameter(p.c_m_inv)
         * (
             p.g_l * (p.v_rest - state.v)
             + g_e * (p.e_rev_E - state.v)
@@ -155,14 +157,14 @@ def coba_lif_feed_forward_step(
     g_e = state.g_e + torch.nn.functional.relu(input_tensor)
     g_i = state.g_i + torch.nn.functional.relu(-input_tensor)
 
-    dg_e = -dt * p.tau_syn_exc_inv * g_e
+    dg_e = -dt * _float_parameter(p.tau_syn_exc_inv) * g_e
     g_e = g_e + dg_e
-    dg_i = -dt * p.tau_syn_inh_inv * g_i
+    dg_i = -dt * _float_parameter(p.tau_syn_inh_inv) * g_i
     g_i = g_i + dg_i
 
     dv = (
         dt
-        * p.c_m_inv
+        * _float_parameter(p.c_m_inv)
         * (
             p.g_l * (p.v_rest - state.v)
             + g_e * (p.e_rev_E - state.v)

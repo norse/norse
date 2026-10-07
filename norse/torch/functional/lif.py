@@ -37,7 +37,7 @@ from typing import Tuple
 import torch
 import torch.jit
 
-from norse.torch.functional.parameter import default_bio_parameters
+from norse.torch.functional.parameter import _float_parameter, default_bio_parameters
 from norse.torch.functional.threshold import threshold
 import norse.torch.utils.pytree as pytree
 
@@ -160,11 +160,11 @@ def lif_step_sparse(
     )
 
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_jump)
+    dv = dt * _float_parameter(p.tau_mem_inv) * ((p.v_leak - state.v) + i_jump)
     v_decayed = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * i_jump
+    di = -dt * _float_parameter(p.tau_syn_inv) * i_jump
     i_decayed = i_jump + di
 
     # compute new spikes
@@ -225,11 +225,11 @@ def lif_step(
         + torch.nn.functional.linear(state.z, recurrent_weights)
     )
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_jump)
+    dv = dt * _float_parameter(p.tau_mem_inv) * ((p.v_leak - state.v) + i_jump)
     v_decayed = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * i_jump
+    di = -dt * _float_parameter(p.tau_syn_inv) * i_jump
     i_decayed = i_jump + di
 
     # compute new spikes
@@ -334,10 +334,10 @@ def lif_feed_forward_step(
     # compute current jumps
     i_new = state.i + input_spikes
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_new)
+    dv = dt * _float_parameter(p.tau_mem_inv) * ((p.v_leak - state.v) + i_new)
     v_decayed = state.v + dv
     # compute current updates
-    di = -dt * p.tau_syn_inv * i_new
+    di = -dt * _float_parameter(p.tau_syn_inv) * i_new
     i_decayed = i_new + di
     # compute new spikes
     z_new = threshold(v_decayed - p.v_th, p.method, p.alpha)
@@ -387,11 +387,11 @@ def lif_feed_forward_integral(
         # compute current jumps
         i_new = state.i + input_spikes
         # compute voltage updates
-        dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_new)
+        dv = dt * _float_parameter(p.tau_mem_inv) * ((p.v_leak - state.v) + i_new)
         v_decayed = state.v + dv
 
         # compute current updates
-        di = -dt * p.tau_syn_inv * i_new
+        di = -dt * _float_parameter(p.tau_syn_inv) * i_new
         i_decayed = i_new + di
 
         # compute new spikes
@@ -414,11 +414,11 @@ def lif_feed_forward_step_sparse(
     i_jump = state.i + input_tensor
 
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_jump)
+    dv = dt * _float_parameter(p.tau_mem_inv) * ((p.v_leak - state.v) + i_jump)
     v_decayed = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * i_jump
+    di = -dt * _float_parameter(p.tau_syn_inv) * i_jump
     i_decayed = i_jump + di
 
     # compute new spikes
@@ -450,7 +450,7 @@ def lif_current_encoder(
         p (LIFParameters): parameters of a leaky integrate and fire neuron
         dt (float): Integration timestep to use
     """
-    dv = dt * p.tau_mem_inv * ((p.v_leak - voltage) + input_current)
+    dv = dt * _float_parameter(p.tau_mem_inv) * ((p.v_leak - voltage) + input_current)
     voltage = voltage + dv
     z = threshold(voltage - p.v_th, p.method, p.alpha)
 

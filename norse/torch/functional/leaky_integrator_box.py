@@ -19,6 +19,8 @@ freely available online <https://neuronaldynamics.epfl.ch/online/Ch5.html>`_.
 """
 
 import torch
+
+from norse.torch.functional.parameter import _float_parameter
 import torch.jit
 
 from typing import NamedTuple, Tuple
@@ -73,7 +75,7 @@ def li_box_step(
     i_jump = torch.nn.functional.linear(input_spikes, input_weights)
 
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + i_jump)
+    dv = dt * _float_parameter(p.tau_mem_inv) * ((p.v_leak - state.v) + i_jump)
     v_new = state.v + dv
 
     return v_new, LIBoxState(v_new.clone())
@@ -86,7 +88,7 @@ def li_box_feed_forward_step(
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, LIBoxState]:
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * ((p.v_leak - state.v) + input_tensor)
+    dv = dt * _float_parameter(p.tau_mem_inv) * ((p.v_leak - state.v) + input_tensor)
     v_new = state.v + dv
 
     return v_new, LIBoxState(v_new.clone())

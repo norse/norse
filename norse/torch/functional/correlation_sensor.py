@@ -1,4 +1,6 @@
 import torch
+
+from norse.torch.functional.parameter import _float_parameter
 import torch.jit
 
 from typing import NamedTuple
@@ -52,12 +54,14 @@ def correlation_sensor_step(
     """Euler integration step of an idealized version of the correlation sensor
     as it is present on the BrainScaleS 2 chips.
     """
-    dcorrelation_trace = dt * p.tau_c_inv * (-state.correlation_trace)
+    dcorrelation_trace = dt * _float_parameter(p.tau_c_inv) * (-state.correlation_trace)
     correlation_trace_decayed = (
         state.correlation_trace + (1 - state.post_pre) * dcorrelation_trace
     )
 
-    danti_correlation_trace = dt * p.tau_ac_inv * (-state.anti_correlation_trace)
+    danti_correlation_trace = (
+        dt * _float_parameter(p.tau_ac_inv) * (-state.anti_correlation_trace)
+    )
     anti_correlation_trace_decayed = (
         state.anti_correlation_trace + state.post_pre * danti_correlation_trace
     )

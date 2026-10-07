@@ -7,6 +7,8 @@ It is these sudden current jumps that gives the model its name, because the shif
 from dataclasses import dataclass
 from typing import NamedTuple, Tuple
 import torch
+
+from norse.torch.functional.parameter import _float_parameter
 import torch.jit
 
 from norse.torch.functional.threshold import threshold
@@ -97,7 +99,7 @@ def lif_box_feed_forward_step(
         dt (float): Integration timestep to use
     """
     # compute voltage updates
-    dv = dt * p.tau_mem_inv * (input_tensor + p.v_leak - state.v)
+    dv = dt * _float_parameter(p.tau_mem_inv) * (input_tensor + p.v_leak - state.v)
     v_decayed = state.v + dv
 
     # compute new spikes

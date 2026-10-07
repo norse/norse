@@ -3,7 +3,7 @@ from typing import NamedTuple, Tuple
 import torch
 import torch.jit
 
-from norse.torch.functional.parameter import default_bio_parameters
+from norse.torch.functional.parameter import _float_parameter, default_bio_parameters
 from norse.torch.functional.threshold import threshold
 
 
@@ -117,11 +117,11 @@ def lif_ex_step(
     # compute voltage updates
     dv_leak = p.v_leak - state.v
     dv_exp = p.delta_T * torch.exp((state.v - p.v_th) / p.delta_T)
-    dv = dt * p.tau_mem_inv * (dv_leak + dv_exp + i_jump)
+    dv = dt * _float_parameter(p.tau_mem_inv) * (dv_leak + dv_exp + i_jump)
     v_decayed = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * i_jump
+    di = -dt * _float_parameter(p.tau_syn_inv) * i_jump
     i_decayed = i_jump + di
 
     # compute new spikes
@@ -177,11 +177,11 @@ def lif_ex_feed_forward_step(
     # compute voltage updates
     dv_leak = p.v_leak - state.v
     dv_exp = p.delta_T * torch.exp((state.v - p.v_th) / p.delta_T)
-    dv = dt * p.tau_mem_inv * (dv_leak + dv_exp + i_jump)
+    dv = dt * _float_parameter(p.tau_mem_inv) * (dv_leak + dv_exp + i_jump)
     v_decayed = state.v + dv
 
     # compute current updates
-    di = -dt * p.tau_syn_inv * i_jump
+    di = -dt * _float_parameter(p.tau_syn_inv) * i_jump
     i_decayed = i_jump + di
 
     # compute new spikes
@@ -216,7 +216,7 @@ def lif_ex_current_encoder(
     """
     dv_leak = p.v_leak - voltage
     dv_exp = p.delta_T * torch.exp((voltage - p.v_th) / p.delta_T)
-    dv = dt * p.tau_mem_inv * (dv_leak + dv_exp + input_current)
+    dv = dt * _float_parameter(p.tau_mem_inv) * (dv_leak + dv_exp + input_current)
     voltage = voltage + dv
     z = threshold(voltage - p.v_th, p.method, p.alpha)
 
