@@ -6,6 +6,7 @@ import torch
 import torchaudio
 
 # pytype: enable=import-error
+import copy
 import os
 import glob
 
@@ -24,13 +25,15 @@ def generate_background_noise(speech_commands):
     for file in background_noise:
         waveform, sample_rate = torchaudio.load(file)
         background_waveforms = torch.split(waveform, sample_rate, dim=1)[:-1]
+        # name chunks after their source file so a second call overwrites them instead of adding more
+        name = os.path.splitext(os.path.basename(file))[0]
 
         for idx, background_waveform in enumerate(background_waveforms):
             torchaudio.save(
                 os.path.join(
                     speech_commands._path,
                     "background",
-                    f"{hash(waveform)}_nohash_{idx}.wav",
+                    f"{name}_nohash_{idx}.wav",
                 ),
                 background_waveform,
                 sample_rate=sample_rate,
@@ -50,31 +53,30 @@ def prepare_dataset(speech_commands):
     Parameters:
         speech_commands (torch.utils.data.Dataset): Speech Commands dataset as defined by torchaudio.
     """
-    with open(os.path.join(speech_commands._path, "validation_list.txt")) as f:
-        text = f.read()
-        valid_filelist = text.split("\n")
-        valid_filelist = [
-            os.path.join(speech_commands._path, p) for p in valid_filelist
+
+    # Compare normalized paths: the list files hold paths like "yes/0a7c2a8d_nohash_0.wav", while the
+    # walker holds paths built from the dataset root (e.g. "./SpeechCommands/..."), so raw strings never match.
+    def read_list(name):
+        with open(os.path.join(speech_commands._path, name)) as f:
+            return {
+                os.path.normpath(os.path.join(speech_commands._path, line.strip()))
+                for line in f
+                if line.strip()
+            }
+
+    valid_files = read_list("validation_list.txt")
+    test_files = read_list("testing_list.txt")
+
+    def subset(keep):
+        split = copy.copy(speech_commands)
+        split._walker = [
+            w for w in speech_commands._walker if keep(os.path.normpath(w))
         ]
+        return split
 
-    with open(os.path.join(speech_commands._path, "testing_list.txt")) as f:
-        text = f.read()
-        test_filelist = text.split("\n")
-        test_filelist = [os.path.join(speech_commands._path, p) for p in test_filelist]
-
-    train_sc = torchaudio.datasets.SPEECHCOMMANDS(root=".")
-    train_sc._walker = list(
-        filter(
-            lambda w: w not in valid_filelist and w not in test_filelist,
-            train_sc._walker,
-        )
-    )
-
-    valid_sc = torchaudio.datasets.SPEECHCOMMANDS(root=".")
-    valid_sc._walker = list(filter(lambda w: w in valid_filelist, valid_sc._walker))
-
-    test_sc = torchaudio.datasets.SPEECHCOMMANDS(root=".")
-    test_sc._walker = list(filter(lambda w: w in valid_filelist, valid_sc._walker))
+    train_sc = subset(lambda w: w not in valid_files and w not in test_files)
+    valid_sc = subset(lambda w: w in valid_files)
+    test_sc = subset(lambda w: w in test_files)
 
     # no generate the background noise category
     generate_background_noise(speech_commands)
@@ -82,10 +84,12 @@ def prepare_dataset(speech_commands):
     ratios = [
         len(train_sc._walker) / len(speech_commands._walker),
         len(valid_sc._walker) / len(speech_commands._walker),
-        len(test_filelist) / len(speech_commands._walker),
+        len(test_sc._walker) / len(speech_commands._walker),
     ]
 
-    files = glob.glob(os.path.join(speech_commands._path, "background/*.wav"))
+    files = sorted(
+        glob.glob(os.path.join(speech_commands._path, "background", "*.wav"))
+    )
     train_idx = int(ratios[0] * len(files))
     valid_idx = train_idx + int(ratios[1] * len(files))
     test_idx = valid_idx + int(ratios[2] * len(files))
