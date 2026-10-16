@@ -151,3 +151,53 @@ def test_poisson_encode():
     print("seed1 spikes:", spikes_seed1)
 
     assert torch.equal(spikes_seed0, spikes_seed1) == False
+
+
+import pytest  # noqa: E402
+
+from norse.torch.functional.encode import (  # noqa: E402
+    poisson_encode_step,
+    signed_poisson_encode,
+    signed_poisson_encode_step,
+)
+
+
+@pytest.mark.parametrize(
+    "dtype", [torch.float64, torch.float32, torch.float16, torch.bfloat16]
+)
+def test_encoders_preserve_input_float_dtype(dtype):
+    # The encoders built their output with torch.zeros / torch.rand / torch.linspace
+    # at the default float32 (or a trailing .float()), so a float64 / float16 /
+    # bfloat16 input was silently forced to float32 before it reached the network.
+    x = torch.rand(3, 5, dtype=dtype)
+
+    assert constant_current_lif_encode(x, 4).dtype == dtype
+    assert (
+        poisson_encode(x, 4, generator=torch.Generator().manual_seed(0)).dtype == dtype
+    )
+    assert (
+        poisson_encode_step(x, generator=torch.Generator().manual_seed(0)).dtype
+        == dtype
+    )
+    signed = x * 2 - 1
+    assert (
+        signed_poisson_encode(
+            signed, 4, generator=torch.Generator().manual_seed(0)
+        ).dtype
+        == dtype
+    )
+    assert (
+        signed_poisson_encode_step(
+            signed, generator=torch.Generator().manual_seed(0)
+        ).dtype
+        == dtype
+    )
+    assert population_encode(x, 4).dtype == dtype
+
+
+def test_encoders_non_float_input_still_returns_float():
+    # an integer input must still yield a usable float spike train, not int
+    x = torch.randint(0, 2, (3, 5))
+    assert constant_current_lif_encode(x, 4).is_floating_point()
+    assert poisson_encode(x, 4).is_floating_point()
+    assert population_encode(x, 4).is_floating_point()
