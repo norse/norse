@@ -41,7 +41,7 @@ class ToSpikeTimes(torch.autograd.Function):
         spikeidcs_size, batch_size, out_size = spike_indices.shape
         noninf_spike_indices = spike_indices.flatten() != torch.inf
 
-        grad_input = torch.zeros_like(spk_rec, dtype=torch.float)
+        grad_input = torch.zeros_like(spk_rec)
 
         grad_input_indices = (
             spike_indices.flatten().type(torch.long)[noninf_spike_indices],
@@ -53,6 +53,8 @@ class ToSpikeTimes(torch.autograd.Function):
             .repeat(spikeidcs_size)[noninf_spike_indices],
         )
 
-        grad_input[grad_input_indices] = -1.0 * grad_output.flatten()
+        grad_input[grad_input_indices] = (
+            -1.0 * grad_output.flatten()[noninf_spike_indices]
+        )
 
         return grad_input, None
