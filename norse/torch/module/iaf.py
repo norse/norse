@@ -46,7 +46,12 @@ class IAFCell(SNNCell):
 
 
 class IAF(SNN):
-    def __init__(self, p: IAFParameters = IAFParameters(), dt: float = 0.001):
+    def __init__(
+        self,
+        p: IAFParameters = IAFParameters(),
+        dt: float = 0.001,
+        record_states: bool = False,
+    ):
         r"""Feedforward step of an integrate-and-fire neuron, computing a single step
 
         .. math::
@@ -65,8 +70,18 @@ class IAF(SNN):
         Parameters:
             p (IAFParameters): parameters of a leaky integrate and fire neuron
             dt (float): Integration timestep to use (unused, but added for compatibility)
+            record_states (bool): If True, return membrane states from every timestep
+                with an additional leading time dimension, retaining their autograd
+                history. This uses more memory. If False (default), return only the
+                final state.
         """
-        super().__init__(iaf_feed_forward_step, self.initial_state, p, dt)
+        super().__init__(
+            iaf_feed_forward_step,
+            self.initial_state,
+            p,
+            dt,
+            record_states=record_states,
+        )
 
     def initial_state(self, input_tensor: torch.Tensor) -> IAFFeedForwardState:
         state = IAFFeedForwardState(
