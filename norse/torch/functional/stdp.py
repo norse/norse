@@ -179,6 +179,7 @@ def stdp_step_conv2d(
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, STDPState]:
     """STDP step for a conv2d LIF layer.
+    Spike and trace tensors may be non-contiguous.
     Input:
         z_pre (torch.tensor): Presynaptic activity z: {0,1} -> {no spike, spike}
         z_post (torch.tensor): Postsynaptic activity z: {0,1} -> {no spike, spike}
@@ -227,13 +228,13 @@ def stdp_step_conv2d(
     # STDP weight update
     dw_plus = p_stdp.A_plus(w) * torch.einsum(
         "bik,bjk->ij",
-        z_post.view(batch_size, out_channels, -1),
+        z_post.reshape(batch_size, out_channels, -1),
         state_stdp_t_pre_uf,
     ).view(w.shape)
 
     dw_minus = p_stdp.A_minus(w) * torch.einsum(
         "bik,bjk->ij",
-        state_stdp.t_post.view(batch_size, out_channels, -1),
+        state_stdp.t_post.reshape(batch_size, out_channels, -1),
         z_pre_uf,
     ).view(w.shape)
 
