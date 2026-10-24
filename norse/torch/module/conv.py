@@ -42,7 +42,7 @@ class LConv2d(torch.nn.Conv3d):
         out_channels: int,
         kernel_size: _size_2_t,
         stride: _size_2_t = 1,
-        padding: _size_2_t = 0,
+        padding: _size_2_t | str = 0,
         dilation: _size_2_t = 1,
         groups: int = 1,
         device=None,
@@ -50,7 +50,7 @@ class LConv2d(torch.nn.Conv3d):
     ):
         kernel_size = (*_pair(kernel_size), 1)
         stride = (*_pair(stride), 1)
-        padding = (*_pair(padding), 0)
+        padding = padding if isinstance(padding, str) else (*_pair(padding), 0)
         dilation = (*_pair(dilation), 1)
 
         super(LConv2d, self).__init__(
