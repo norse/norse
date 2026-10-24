@@ -161,7 +161,7 @@ def plot_neuron_states(
     if axes is None:
         axes = plt.gca()
     for variable in variables:
-        values = getattr(states, variable)
+        values = _detach_tensor(getattr(states, variable))
         if label:
             axes.plot(values, label=variable, **kwargs)
         else:
