@@ -175,7 +175,7 @@ def stdp_step_conv2d(
     z_post: torch.Tensor,
     w: torch.Tensor,
     state_stdp: STDPState,
-    p_stdp: STDPParameters = STDPParameters(),
+    p_stdp: STDPParameters = STDPParameters(convolutional=True),
     dt: float = 0.001,
 ) -> Tuple[torch.Tensor, STDPState]:
     """STDP step for a conv2d LIF layer.
