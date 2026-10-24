@@ -41,8 +41,8 @@ def constant_current_lif_encode(
     Returns:
         A tensor with an extra dimension of size `seq_length` containing spikes (1) or no spikes (0).
     """
-    v = torch.zeros(*input_current.shape, device=input_current.device)
-    z = torch.zeros(*input_current.shape, device=input_current.device)
+    v = torch.zeros(input_current.shape, device=input_current.device)
+    z = torch.zeros(input_current.shape, device=input_current.device)
     spikes = torch.zeros(seq_length, *input_current.shape, device=input_current.device)
 
     for ts in range(seq_length):
@@ -187,7 +187,7 @@ def poisson_encode_step(
     """
     return (
         torch.rand(
-            *input_values.shape, device=input_values.device, generator=generator
+            input_values.shape, device=input_values.device, generator=generator
         ).float()
         < dt * f_max * input_values
     ).float()
@@ -246,7 +246,7 @@ def signed_poisson_encode_step(
         torch.sign(input_values)
         * (
             torch.rand(
-                *input_values.shape, device=input_values.device, generator=generator
+                input_values.shape, device=input_values.device, generator=generator
             ).float()
             < dt * f_max * torch.abs(input_values)
         ).float()
