@@ -54,9 +54,35 @@ def voltage_accumulator(
 
     Returns:
         A new RegularizationState containing the aggregated data
+
+    Raises:
+        ValueError: If ``state`` already has the same number of dimensions as
+            ``s.v`` (i.e. it's a previously-accumulated state, not a reduced-
+            rank broadcasting initializer) but a different concrete shape --
+            e.g. accumulated against a different batch size. ``state`` is
+            cached from whichever call first created it (always via
+            ``torch.zeros_like(s.v)``, same rank as ``s.v``), so a later call
+            with a different same-rank shape would otherwise either crash
+            with an opaque broadcasting error, or -- if the shapes happen to
+            be broadcastable (e.g. batch size 1) -- silently combine
+            unrelated samples into the accumulated state with no error at
+            all. A genuinely reduced-rank initial ``state`` (e.g. a per-
+            neuron-only ``state`` meant to broadcast up on first use, as in
+            ``test_regularisation_voltage_state``) is NOT an error -- that's
+            a legitimate initialization pattern, not an accumulated mismatch.
+            Call with ``state=None`` (or :meth:`RegularizationCell.reset`) to
+            start a new accumulation.
     """
     if state is None:
         state = torch.zeros_like(s.v)
+    elif state.dim() == s.v.dim() and state.shape != s.v.shape:
+        raise ValueError(
+            f"voltage_accumulator: state has shape {tuple(state.shape)} but this "
+            f"call's s.v has shape {tuple(s.v.shape)} -- state was accumulated "
+            f"against a different shape (e.g. a different batch size) and cannot "
+            f"be combined with this call's values. Pass state=None, or call "
+            f"RegularizationCell.reset(), to start a new accumulation."
+        )
     return state + s.v
 
 

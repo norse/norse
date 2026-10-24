@@ -46,6 +46,17 @@ class RegularizationCell(torch.nn.Module):
 
     # pytype: enable=annotation-type-mismatch
 
+    def reset(self) -> None:
+        """Reset the accumulated regularization state.
+
+        Required before reusing this cell with a differently-shaped cell
+        state (e.g. a different batch size) -- ``self.state`` is otherwise
+        combined with the new call's values regardless of shape, which
+        raises :class:`ValueError` for ``voltage_accumulator`` (or silently
+        produces wrong values for accumulators that don't validate shape).
+        """
+        self.state = None
+
     def forward(self, z, s):
         _, state = regularize_step(z, s, self.accumulator, self.state)
         self.state = state
