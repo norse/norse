@@ -121,9 +121,15 @@ def population_encode(
     """
     # Thanks to: https://github.com/JeremyLinux/PyTorch-Radial-Basis-Function-Layer/blob/master/Torch%20RBF/torch_rbf.py
     size = input_values.shape + (out_features,)
-    if not scale:
+    if scale is None:
         scale = input_values.max()
-    centres = torch.linspace(0, scale, out_features).expand(size)
+    scale = torch.as_tensor(scale, device=input_values.device)
+    if scale.ndim > 0:
+        scale = scale.unsqueeze(-1)
+    centres = (
+        torch.linspace(0, 1, out_features, device=input_values.device).expand(size)
+        * scale
+    )
     x = input_values.unsqueeze(-1).expand(size)
     distances = distance_function(x, centres) * scale
     return kernel(distances)
