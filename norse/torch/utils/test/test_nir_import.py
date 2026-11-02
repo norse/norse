@@ -105,11 +105,13 @@ def test_import_cubalif():
         torch.randn(10),
     )
     m = _convert_nodes(orig)
-    assert isinstance(m.cubalif, norse.utils.import_nir.CubaLIF)
-    assert isinstance(m.cubalif.synapse, norse.LIBoxCell)
-    assert isinstance(m.cubalif.lif, norse.LIFBoxCell)
+    assert isinstance(m.cubalif, norse.CubaLIFCell)
     m(torch.randn(1, 10))  # Test application
-    torch.allclose(orig.tau_mem, 1000 / m.cubalif.lif.p.tau_mem_inv)
+    assert torch.allclose(_to_tensor(orig.tau_syn), 1 / m.cubalif.p.tau_syn_inv)
+    assert torch.allclose(_to_tensor(orig.tau_mem), 1 / m.cubalif.p.tau_mem_inv)
+    assert torch.allclose(_to_tensor(orig.r), m.cubalif.p.r)
+    assert torch.allclose(_to_tensor(orig.w_in), m.cubalif.p.w_in)
+    assert torch.allclose(_to_tensor(orig.v_reset), m.cubalif.p.v_reset)
 
 
 def test_import_sumpool2d():
