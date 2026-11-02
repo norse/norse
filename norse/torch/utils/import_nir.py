@@ -98,7 +98,13 @@ def _nir_to_norse_mapping_dict(
     def _map_if(node: nir.IF):
         if not _is_identical(node.r, 1) and not ignore_warnings:
             _log_warning("r", 1, node.r.mean())
-        return iaf.IAFCell(iaf.IAFParameters(v_th=_to_tensor(node.v_threshold)), dt=dt)
+        return iaf.IAFCell(
+            iaf.IAFParameters(
+                v_th=_to_tensor(node.v_threshold),
+                v_reset=_to_tensor(node.v_reset),
+            ),
+            dt=dt,
+        )
 
     nir_map[nir.IF] = _map_if
 
@@ -131,6 +137,7 @@ def _nir_to_norse_mapping_dict(
                 tau_mem_inv=1 / _to_tensor(node.tau_mem),  # Invert time constant
                 v_th=_to_tensor(node.v_threshold),
                 v_leak=_to_tensor(node.v_leak),
+                v_reset=_to_tensor(node.v_reset),
                 reset_method=reset_method,
             ),
             dt=dt,
@@ -148,6 +155,7 @@ def _nir_to_norse_mapping_dict(
                 tau_mem_inv=1 / _to_tensor(node.tau),  # Invert time constant
                 v_th=_to_tensor(node.v_threshold),
                 v_leak=_to_tensor(node.v_leak),
+                v_reset=_to_tensor(node.v_reset),
             ),
             dt=dt,
         )
