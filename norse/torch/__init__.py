@@ -84,6 +84,11 @@ from norse.torch.functional.lif_adex import (
     lif_adex_feed_forward_step,
     lif_adex_step,
 )
+from norse.torch.functional.cuba_lif import (
+    CubaLIFParameters,
+    CubaLIFFeedForwardState,
+    cuba_lif_feed_forward_step,
+)
 from norse.torch.functional.lif_box import (
     LIFBoxParameters,
     LIFBoxState,
@@ -262,6 +267,7 @@ from norse.torch.module.lif_adex import (
     LIFAdExParameters,
     LIFAdExState,
 )
+from norse.torch.module.cuba_lif import CubaLIF, CubaLIFCell
 from norse.torch.module.lif_box import (
     LIFBoxFeedForwardState,
     LIFBoxParameters,
@@ -485,6 +491,10 @@ __all__ = [
     "lif_adex_current_encoder",
     "lif_adex_feed_forward_step",
     "lif_adex_step",
+    # CubaLIF
+    "CubaLIFParameters",
+    "CubaLIFFeedForwardState",
+    "cuba_lif_feed_forward_step",
     # LIF box
     "LIFBoxParameters",
     "LIFBoxState",
@@ -623,6 +633,9 @@ __all__ = [
     "LIFAdExRecurrent",
     "LIFAdExParameters",
     "LIFAdExState",
+    # CubaLIF
+    "CubaLIF",
+    "CubaLIFCell",
     # LIF Box
     "LIFBoxFeedForwardState",
     "LIFBoxParameters",

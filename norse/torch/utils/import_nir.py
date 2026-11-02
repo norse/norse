@@ -7,6 +7,7 @@ import numpy as np
 import torch
 
 import norse.torch.functional.reset as reset
+import norse.torch.module.cuba_lif as cuba_lif
 import norse.torch.module.iaf as iaf
 import norse.torch.module.leaky_integrator_box as li_box
 import norse.torch.module.lif_box as lif_box
@@ -35,24 +36,6 @@ def _to_tensor(tensor: typing.Union[np.ndarray, torch.Tensor]):
     if isinstance(tensor, Number):
         return torch.as_tensor(tensor, dtype=torch.float32)
     return torch.from_numpy(tensor).float()
-
-
-class CubaLIF(torch.nn.Module):
-    def __init__(self, w_in, synapse, r, lif):
-        super().__init__()
-        self.w_in = w_in
-        self.synapse = synapse
-        self.r = r
-        self.lif = lif
-
-    def forward(self, x, state=None):
-        if state is None:
-            state = (None, None)
-        x = self.w_in * x
-        x, syn_state = self.synapse(x, state[0])
-        x = self.r * x
-        z, lif_state = self.lif(x, state[1])
-        return z, (syn_state, lif_state)
 
 
 def _nir_to_norse_mapping_dict(
@@ -122,28 +105,21 @@ def _nir_to_norse_mapping_dict(
     nir_map[nir.LI] = _map_li
 
     def _map_cuba_lif(node: nir.CubaLIF):
-        w_in = _to_tensor(node.w_in)
-        synapse = li_box.LIBoxCell(
-            li_box.LIBoxParameters(
-                tau_mem_inv=1 / _to_tensor(node.tau_syn),  # Invert time constant
-                v_leak=_to_tensor(node.v_leak),
-            ),
-            dt=dt,
-        )
-        w_rec = _to_tensor(node.r)
         # pytype: disable=wrong-keyword-args
-        neuron = lif_box.LIFBoxCell(
-            lif_box.LIFBoxParameters(
+        return cuba_lif.CubaLIFCell(
+            cuba_lif.CubaLIFParameters(
+                tau_syn_inv=1 / _to_tensor(node.tau_syn),  # Invert time constant
                 tau_mem_inv=1 / _to_tensor(node.tau_mem),  # Invert time constant
-                v_th=_to_tensor(node.v_threshold),
+                r=_to_tensor(node.r),
+                w_in=_to_tensor(node.w_in),
                 v_leak=_to_tensor(node.v_leak),
+                v_th=_to_tensor(node.v_threshold),
                 v_reset=_to_tensor(node.v_reset),
                 reset_method=reset_method,
             ),
             dt=dt,
         )
         # pytype: enable=wrong-keyword-args
-        return CubaLIF(w_in, synapse, w_rec, neuron)
 
     nir_map[nir.CubaLIF] = _map_cuba_lif
 
