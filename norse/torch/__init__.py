@@ -178,6 +178,14 @@ from norse.torch.functional.izhikevich import (
     izhikevich_recurrent_step,
 )
 
+from norse.torch.functional.scale_space import (
+    exponential_tau_mem_inv,
+    geometric_time_constants,
+    geometric_variance_ladder,
+    mu_from_per_step_leak,
+    per_step_leak,
+    stable_cascade_depth,
+)
 from norse.torch.functional.receptive_field import (
     gaussian_kernel,
     spatial_receptive_field,
@@ -322,6 +330,12 @@ from norse.torch.module.receptive_field import (
     TemporalReceptiveField,
 )
 from norse.torch.module.spikes_to_times_decoder import SpikesToTimesDecoder
+from norse.torch.module.wavelet import (
+    DifferenceOfExponentials,
+    DifferenceOfTimeCausalKernels,
+    SpikingDifferenceOfExponentials,
+    SpikingDifferenceOfTimeCausalKernels,
+)
 
 ################################################
 ### UTILS
@@ -529,6 +543,17 @@ __all__ = [
     # Receptive fields
     "gaussian_kernel",
     "spatial_receptive_field",
+    # Temporal scale-space and wavelets
+    "DifferenceOfExponentials",
+    "DifferenceOfTimeCausalKernels",
+    "SpikingDifferenceOfExponentials",
+    "SpikingDifferenceOfTimeCausalKernels",
+    "exponential_tau_mem_inv",
+    "geometric_time_constants",
+    "geometric_variance_ladder",
+    "mu_from_per_step_leak",
+    "per_step_leak",
+    "stable_cascade_depth",
     "spatial_receptive_fields_with_derivatives",
     # Regularization
     "regularize_step",

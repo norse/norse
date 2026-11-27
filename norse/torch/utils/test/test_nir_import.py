@@ -3,6 +3,7 @@ import nirtorch
 import numpy as np
 import torch
 
+from norse.torch.functional.scale_space import exponential_tau_mem_inv
 from norse.torch.utils.import_nir import _to_tensor
 import norse.torch as norse
 
@@ -64,7 +65,7 @@ def test_import_if():
 def test_import_lif():
     m = _convert_nodes(
         nir.LIF(
-            torch.randn(10),
+            torch.rand(10) + 0.01,  # tau must be a positive time constant
             torch.ones(10),
             torch.randn(10),
             torch.randn(10),
@@ -87,18 +88,26 @@ def test_import_li():
     output, _ = m(x)
     assert output.shape == (1, 10)
 
-    expected_tau_mem_inv = 1.0 / tau
+    # NIR's tau is a continuous time constant, so the imported integrator is
+    # configured to decay by exactly exp(-dt/tau) per step.
+    dt = 0.001
     actual_tau_mem_inv = m.li.p.tau_mem_inv.detach().numpy()
-    assert np.allclose(expected_tau_mem_inv, actual_tau_mem_inv)
+    assert np.allclose(
+        exponential_tau_mem_inv(torch.as_tensor(tau), dt).numpy(),
+        actual_tau_mem_inv,
+        rtol=1e-6,
+    )
+    assert np.allclose(1 - dt * actual_tau_mem_inv, np.exp(-dt / tau), atol=1e-6)
 
     actual_v_leak = m.li.p.v_leak.detach().numpy()
     assert np.allclose(v_leak, actual_v_leak)
 
 
 def test_import_cubalif():
+    dt = 0.001
     orig = nir.CubaLIF(
-        torch.randn(10),
-        torch.randn(10),
+        torch.rand(10) + 0.01,  # tau_syn, a positive time constant
+        torch.rand(10) + 0.01,  # tau_mem, a positive time constant
         torch.ones(10),
         torch.randn(10),
         torch.randn(10),
@@ -109,7 +118,16 @@ def test_import_cubalif():
     assert isinstance(m.cubalif.synapse, norse.LIBoxCell)
     assert isinstance(m.cubalif.lif, norse.LIFBoxCell)
     m(torch.randn(1, 10))  # Test application
-    torch.allclose(orig.tau_mem, 1000 / m.cubalif.lif.p.tau_mem_inv)
+    assert torch.allclose(
+        exponential_tau_mem_inv(orig.tau_mem, dt),
+        m.cubalif.lif.p.tau_mem_inv,
+        rtol=1e-6,
+    )
+    assert torch.allclose(
+        exponential_tau_mem_inv(orig.tau_syn, dt),
+        m.cubalif.synapse.p.tau_mem_inv,
+        rtol=1e-6,
+    )
 
 
 def test_import_sumpool2d():

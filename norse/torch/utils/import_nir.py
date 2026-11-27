@@ -13,6 +13,8 @@ import norse.torch.module.lif_box as lif_box
 
 import logging
 
+from norse.torch.functional.scale_space import exponential_tau_mem_inv
+
 
 def _log_warning(
     parameter_name: str, expected_value: typing.Any, actual_value: typing.Any
@@ -107,7 +109,7 @@ def _nir_to_norse_mapping_dict(
             _log_warning("r", 1, _to_tensor(node.r).mean())
         return li_box.LIBoxCell(
             li_box.LIBoxParameters(
-                tau_mem_inv=1 / _to_tensor(node.tau),  # Invert time constant
+                tau_mem_inv=exponential_tau_mem_inv(_to_tensor(node.tau), dt),
                 v_leak=_to_tensor(node.v_leak),
             ),
             dt=dt,
@@ -119,7 +121,7 @@ def _nir_to_norse_mapping_dict(
         w_in = _to_tensor(node.w_in)
         synapse = li_box.LIBoxCell(
             li_box.LIBoxParameters(
-                tau_mem_inv=1 / _to_tensor(node.tau_syn),  # Invert time constant
+                tau_mem_inv=exponential_tau_mem_inv(_to_tensor(node.tau_syn), dt),
                 v_leak=_to_tensor(node.v_leak),
             ),
             dt=dt,
@@ -128,7 +130,7 @@ def _nir_to_norse_mapping_dict(
         # pytype: disable=wrong-keyword-args
         neuron = lif_box.LIFBoxCell(
             lif_box.LIFBoxParameters(
-                tau_mem_inv=1 / _to_tensor(node.tau_mem),  # Invert time constant
+                tau_mem_inv=exponential_tau_mem_inv(_to_tensor(node.tau_mem), dt),
                 v_th=_to_tensor(node.v_threshold),
                 v_leak=_to_tensor(node.v_leak),
                 reset_method=reset_method,
@@ -145,7 +147,7 @@ def _nir_to_norse_mapping_dict(
             _log_warning("r", 1, _to_tensor(node.r).mean())
         return lif_box.LIFBoxCell(
             lif_box.LIFBoxParameters(
-                tau_mem_inv=1 / _to_tensor(node.tau),  # Invert time constant
+                tau_mem_inv=exponential_tau_mem_inv(_to_tensor(node.tau), dt),
                 v_th=_to_tensor(node.v_threshold),
                 v_leak=_to_tensor(node.v_leak),
             ),

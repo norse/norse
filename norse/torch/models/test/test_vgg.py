@@ -1,5 +1,8 @@
+import pytest
 import torch
+
 from norse.torch.models import vgg
+from norse.torch.models.test.conftest import local_state_dict
 
 
 def test_vgg11_forward():
@@ -13,9 +16,11 @@ def test_vgg11_forward():
     assert out.shape == torch.Size([seq_length, batch_size, 1000])
 
 
-def test_vgg11_forward_pretrained():
+def test_vgg11_forward_pretrained(monkeypatch):
+    monkeypatch.setattr(
+        vgg, "load_state_dict_from_url", lambda *a, **kw: local_state_dict("vgg11")
+    )
     model = vgg.vgg11(pretrained=True)
-    print(model)
     seq_length = 1
     batch_size = 2
     features = 3, 256, 256
@@ -66,3 +71,11 @@ def test_vgg19():
 def test_vgg19_bn():
     model = vgg.vgg19_bn()
     assert isinstance(model, vgg.VGG)
+
+
+@pytest.mark.download
+def test_vgg11_forward_pretrained_download():
+    """The same path as test_vgg11_forward_pretrained, against the real weights."""
+    model = vgg.vgg11(pretrained=True)
+    x = torch.randn(1, 2, 3, 256, 256)
+    assert model(x).shape == torch.Size([1, 2, 1000])

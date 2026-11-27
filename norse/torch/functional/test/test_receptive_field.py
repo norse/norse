@@ -165,3 +165,29 @@ def test_generate_fields():
     f.sum().backward()
     assert p.grad is not None
     assert p.grad_fn is None
+
+
+def test_temporal_scale_distribution_c_branch():
+    scales = receptive_field.temporal_scale_distribution(4, min_scale=1, c=2.0)
+    assert scales.shape == (4,)
+    # mu = sqrt(tau) with tau on a c^2 ladder, so mu ratios are c
+    assert torch.allclose(scales[1:] / scales[:-1], torch.full((3,), 2.0))
+    assert scales[0].item() == pytest.approx(1.0)
+
+
+def test_temporal_scale_distribution_max_scale_spans_the_range():
+    scales = receptive_field.temporal_scale_distribution(
+        4, min_scale=1.0, max_scale=4.0
+    )
+    assert torch.all(scales[1:] > scales[:-1])
+    assert scales[0].item() == pytest.approx(1.0)
+    assert scales[-1].item() == pytest.approx(2.0)  # sqrt(max_scale)
+
+
+def test_temporal_scale_distribution_single_scale():
+    assert receptive_field.temporal_scale_distribution(
+        1, min_scale=4.0
+    ).tolist() == pytest.approx([2.0])
+    assert receptive_field.temporal_scale_distribution(
+        1, min_scale=1.0, max_scale=4.0
+    ).tolist() == pytest.approx([1.0])

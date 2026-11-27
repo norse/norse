@@ -6,6 +6,8 @@ from typing import List, Tuple, Union, Optional
 
 import torch
 
+from norse.torch.functional.scale_space import geometric_variance_ladder
+
 
 def gaussian_kernel(
     size: int, c: torch.Tensor, x: torch.Tensor, y: torch.Tensor, domain: int = 8
@@ -292,16 +294,14 @@ def temporal_scale_distribution(
     .. [Lindeberg2016] Lindeberg 2016, Time-Causal and Time-Recursive Spatio-Temporal
         Receptive Fields, https://link.springer.com/article/10.1007/s10851-015-0613-9.
     """
-    xs = torch.linspace(1, n_scales, n_scales)
     if max_scale is not None:
         if n_scales > 1:  # Avoid division by zero when having a single scale
-            c = (min_scale / max_scale) ** (1 / (2 * (n_scales - 1)))
+            c = (max_scale / min_scale) ** (1 / (2 * (n_scales - 1)))
         else:
             return torch.tensor([min_scale]).sqrt()
     else:
         max_scale = (c ** (2 * (n_scales - 1))) * min_scale
-    taus = c ** (2 * (xs - n_scales)) * max_scale
-    return taus.sqrt()
+    return geometric_variance_ladder(n_scales, c, max_scale).sqrt()
 
 
 def spatio_temporal_parameters(

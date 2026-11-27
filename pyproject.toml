@@ -76,6 +76,14 @@ release = [
   "setuptools_scm>=8",
 ]
 
+[tool.pytest.ini_options]
+markers = [
+  "download: test fetches pretrained weights over the network (deselected by default; run with -m download)",
+]
+# The pretrained-weight downloads dominate the test suite, so they # are opt-in.
+addopts = "-m 'not download'"
+
+
 [tool.mypy]
 warn_return_any = true
 warn_unused_configs = true

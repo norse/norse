@@ -106,17 +106,20 @@ def test_spike_latency_encode_max_spikes():
 
 
 def test_spike_latency_encode_backward():
-    torch.autograd.set_detect_anomaly(True)
-    timesteps = 20
-    data = torch.randn(7, 5) + 10
-    encoder = torch.nn.Sequential(
-        ConstantCurrentLIFEncoder(seq_length=timesteps), SpikeLatencyEncoder()
-    )
-    layer = LIFRecurrent(5, 2)
-    encoded = encoder(data)
-    out, _ = layer(encoded)
-    out = out.sum()
-    out.backward()
+    # Scoped so anomaly detection does not stay enabled for the rest of the
+    # session, where it would slow every backward pass and emit warnings
+    # attributed to unrelated tests.
+    with torch.autograd.detect_anomaly():
+        timesteps = 20
+        data = torch.randn(7, 5) + 10
+        encoder = torch.nn.Sequential(
+            ConstantCurrentLIFEncoder(seq_length=timesteps), SpikeLatencyEncoder()
+        )
+        layer = LIFRecurrent(5, 2)
+        encoded = encoder(data)
+        out, _ = layer(encoded)
+        out = out.sum()
+        out.backward()
 
 
 def test_spike_latency_encode_chain():
