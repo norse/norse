@@ -34,14 +34,15 @@ def _norse_to_nir_mapping_dict(
     # Projections
 
     def _map_conv2d(module: torch.nn.Conv2d):
+        bias = (
+            module.bias.detach().numpy()
+            if module.bias is not None
+            else np.zeros(module.weight.shape[0], dtype=np.float32)
+        )
         return nir.Conv2d(
             input_shape=None,
             weight=module.weight.detach().numpy(),
-            bias=(
-                module.bias.detach().numpy()
-                if module.bias is not None
-                else np.zeros(module.weight.shape[0])
-            ),
+            bias=bias,
             stride=module.stride,
             padding=module.padding,
             dilation=module.dilation,
@@ -92,9 +93,19 @@ def _norse_to_nir_mapping_dict(
 
     norse_map[torch.nn.Flatten] = _map_flatten
 
+    def _pool_param(value):
+        """Normalize an int|tuple pooling parameter to the (H, W) array NIR declares."""
+        if isinstance(value, (tuple, list)):
+            return np.array(value, dtype=np.int64)
+        return np.array([value, value], dtype=np.int64)
+
     def _map_avgpool2d(module: torch.nn.AvgPool2d):
+        # nir.AvgPool2d declares kernel_size/stride/padding as (H, W) arrays,
+        # whereas torch keeps them as int|tuple.
         return nir.AvgPool2d(
-            kernel_size=module.kernel_size, stride=module.stride, padding=module.padding
+            kernel_size=_pool_param(module.kernel_size),
+            stride=_pool_param(module.stride),
+            padding=_pool_param(module.padding),
         )
 
     norse_map[torch.nn.AvgPool2d] = _map_avgpool2d
@@ -102,7 +113,13 @@ def _norse_to_nir_mapping_dict(
     # Neurons
 
     def _map_cuba_lif(module: norse.torch.LIFCell):
-        shape = module.p.tau_mem_inv.shape
+        shape = torch.broadcast_shapes(
+            module.p.tau_mem_inv.shape,
+            module.p.tau_syn_inv.shape,
+            module.p.v_th.shape,
+            module.p.v_leak.shape,
+            module.p.v_reset.shape,
+        )
         return nir.CubaLIF(
             tau_mem=time_scaling_factor
             / _align_shapes(
@@ -115,8 +132,8 @@ def _norse_to_nir_mapping_dict(
             v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset").numpy(),
             v_threshold=_align_shapes(module.p.v_th.detach(), shape, "v_th").numpy(),
             v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak").numpy(),
-            r=np.ones_like(module.p.v_leak.detach().numpy()),
-            w_in=np.ones_like(module.p.v_leak.detach().numpy()),
+            r=np.ones(tuple(shape), dtype=np.float32),
+            w_in=np.ones(tuple(shape), dtype=np.float32),
         )
 
     norse_map[norse.torch.LIFCell] = _map_cuba_lif
@@ -140,7 +157,12 @@ def _norse_to_nir_mapping_dict(
     norse_map[norse.torch.LICell] = _map_leaky_integrator
 
     def _map_lif_box(module: norse.torch.LIFBoxCell):
-        shape = module.p.tau_mem_inv.shape
+        shape = torch.broadcast_shapes(
+            module.p.tau_mem_inv.shape,
+            module.p.v_th.shape,
+            module.p.v_leak.shape,
+            module.p.v_reset.shape,
+        )
         return nir.LIF(
             tau=time_scaling_factor
             / _align_shapes(
@@ -148,32 +170,38 @@ def _norse_to_nir_mapping_dict(
             ).numpy(),  # Invert time constant
             v_threshold=_align_shapes(module.p.v_th.detach(), shape, "v_th").numpy(),
             v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak").numpy(),
-            r=np.ones_like(module.p.v_leak.detach().numpy()),
+            r=np.ones(tuple(shape), dtype=np.float32),
             v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset").numpy(),
         )
 
     norse_map[norse.torch.LIFBoxCell] = _map_lif_box
 
     def _map_li_box(module: norse.torch.LIBoxCell):
-        shape = module.p.tau_mem_inv.shape
+        shape = torch.broadcast_shapes(
+            module.p.tau_mem_inv.shape,
+            module.p.v_leak.shape,
+        )
         return nir.LI(
             tau=time_scaling_factor
             / _align_shapes(
                 module.p.tau_mem_inv.detach(), shape, "tau_mem_inv"
             ).numpy(),  # Invert time constant
             v_leak=_align_shapes(module.p.v_leak.detach(), shape, "v_leak").numpy(),
-            r=np.ones_like(module.p.v_leak.detach().numpy()),
+            r=np.ones(tuple(shape), dtype=np.float32),
         )
 
     norse_map[norse.torch.LIBoxCell] = _map_li_box
 
     def _map_iaf(module: norse.torch.IAFCell):
+        shape = torch.broadcast_shapes(
+            module.p.v_th.shape,
+            module.p.v_reset.shape,
+        )
+        v_threshold = _align_shapes(module.p.v_th.detach(), shape, "v_th").numpy()
         return nir.IF(
-            r=np.ones_like(module.p.v_th.detach().numpy()),
-            v_threshold=module.p.v_th.detach().numpy(),
-            v_reset=_align_shapes(
-                module.p.v_reset.detach(), module.p.v_th.shape, "v_reset"
-            ).numpy(),
+            r=np.ones_like(v_threshold),
+            v_threshold=v_threshold,
+            v_reset=_align_shapes(module.p.v_reset.detach(), shape, "v_reset").numpy(),
         )
 
     norse_map[norse.torch.IAFCell] = _map_iaf

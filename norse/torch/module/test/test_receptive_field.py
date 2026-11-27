@@ -1,3 +1,5 @@
+import math
+
 import pytest
 
 import torch
@@ -8,7 +10,10 @@ from norse.torch import (
     ParameterizedSpatialReceptiveField2d,
     TemporalReceptiveField,
 )
-from norse.torch.functional.receptive_field import spatial_parameters
+from norse.torch.functional.receptive_field import (
+    spatial_parameters,
+    temporal_scale_distribution,
+)
 
 
 def test_spatial_receptive_field():
@@ -235,3 +240,22 @@ def test_column_parameterized_receptive_field_logarithmic_update():
     assert not torch.all(torch.eq(m.log_ratios, torch.log(ratios_copy)))
     assert not torch.all(torch.eq(m.x, x_copy))
     assert not torch.all(torch.eq(old_kernels, m.submodule.weights))
+
+
+def test_temporal_receptive_field_decays_exactly():
+    # Each scale must retain exp(-dt/mu) per step, including the finest,
+    # where dt/mu = 1.
+    dt, n_scales = 1e-3, 4
+    rf = TemporalReceptiveField(torch.Size([1, 3]), n_scales=n_scales, dt=dt)
+    mu_seconds = temporal_scale_distribution(n_scales, min_scale=1) * dt
+    multipliers = 1 - dt * rf.ps.detach().reshape(n_scales, -1)[:, 0]
+    expected = torch.exp(-dt / mu_seconds)
+    assert torch.allclose(multipliers, expected, atol=1e-6)
+    assert torch.all(multipliers > 0)
+
+
+def test_temporal_receptive_field_finest_scale_retains_memory():
+    dt = 1e-3
+    rf = TemporalReceptiveField(torch.Size([1, 3]), n_scales=4, dt=dt)
+    finest = (1 - dt * rf.ps.detach().reshape(4, -1)[0, 0]).item()
+    assert finest == pytest.approx(math.exp(-1.0), abs=1e-6)

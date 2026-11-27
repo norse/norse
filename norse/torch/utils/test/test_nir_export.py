@@ -47,7 +47,9 @@ def test_avgpool2d():
     assert len(graph.nodes) == 3
     assert isinstance(graph.nodes["input_tensor"], nir.Input)
     assert isinstance(graph.nodes["_0"], nir.AvgPool2d)
-    assert graph.nodes["_0"].kernel_size == 2
+    assert np.array_equal(graph.nodes["_0"].kernel_size, np.array([2, 2]))
+    assert np.array_equal(graph.nodes["_0"].stride, np.array([2, 2]))
+    assert np.array_equal(graph.nodes["_0"].padding, np.array([0, 0]))
     assert isinstance(graph.nodes["output"], nir.Output)
     assert len(graph.edges) == 2
 
@@ -229,3 +231,39 @@ def test_lif_box_v_reset_default():
     assert isinstance(node.v_leak, np.ndarray)
     assert np.allclose(node.v_reset, np.zeros_like(p.v_leak.numpy()))
     assert isinstance(node.v_reset, np.ndarray)
+
+
+def test_avgpool2d_tuple_kernel():
+    m = norse.SequentialState(torch.nn.AvgPool2d(kernel_size=(2, 3)))
+    graph = norse.to_nir(m, type_check=False)
+    node = graph.nodes["_0"]
+    assert np.array_equal(node.kernel_size, np.array([2, 3]))
+    assert np.array_equal(node.stride, np.array([2, 3]))
+
+
+def test_conv2d_no_bias():
+    m = norse.SequentialState(torch.nn.Conv2d(3, 4, 3, bias=False))
+    graph = norse.to_nir(m, type_check=False)
+    node = graph.nodes["_0"]
+    assert isinstance(node, nir.Conv2d)
+    assert node.bias.shape == (4,)
+    assert np.allclose(node.bias, np.zeros(4))
+    assert node.bias.dtype == node.weight.dtype
+
+
+def test_lif_box_scalar_tau_mem_inv():
+    # A 0-dim scalar tau_mem_inv alongside [1]-shaped thresholds: the exported
+    # shape has to come from broadcasting all parameters, not from tau_mem_inv.
+    p = norse.LIFBoxParameters(
+        tau_mem_inv=torch.as_tensor(50.0).float(),
+        v_th=torch.tensor([0.1]),
+        v_leak=torch.tensor([0.0]),
+        v_reset=torch.tensor([0.0]),
+    )
+    assert p.tau_mem_inv.shape == torch.Size([])
+    m = norse.LIFBoxCell(p)
+    node = norse.to_nir(m, type_check=False)
+    assert isinstance(node, nir.LIF)
+    assert np.allclose(node.tau, 1.0 / 50.0)
+    assert np.allclose(node.v_threshold, 0.1)
+    assert node.r.shape == (1,)

@@ -305,3 +305,38 @@ Tsodyks-Markram timing-dependent plasticity (TDP)
     TsodyksMakramParameters
     TsodyksMakramState
     stp_step
+
+
+Temporal scale-space
+^^^^^^^^^^^^^^^^^^^^
+
+.. currentmodule:: norse.torch.functional.scale_space
+.. autosummary::
+    :toctree: auto_api
+    :nosignatures:
+
+    geometric_variance_ladder
+    per_step_leak
+    mu_from_per_step_leak
+    exponential_tau_mem_inv
+    geometric_time_constants
+    stable_cascade_depth
+
+.. automodule:: norse.torch.functional.scale_space
+
+Wavelets
+^^^^^^^^
+
+.. currentmodule:: norse.torch.functional.wavelet
+.. autosummary::
+    :toctree: auto_api
+    :nosignatures:
+
+    time_causal_limit_kernel
+    fft_convolve_causal
+    dot_analysis
+    dot_reconstruct
+    bandpass_kernel_norms
+    invert_membrane_integration
+
+.. automodule:: norse.torch.functional.wavelet

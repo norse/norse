@@ -239,3 +239,20 @@ Receptive fields
 
     SpatialReceptiveField2d
     TemporalReceptiveField
+
+
+Wavelets
+^^^^^^^^
+
+.. currentmodule:: norse.torch.module.wavelet
+.. autosummary::
+    :toctree: auto_api
+    :nosignatures:
+    :template: class.rst
+
+    DifferenceOfTimeCausalKernels
+    DifferenceOfExponentials
+    SpikingDifferenceOfTimeCausalKernels
+    SpikingDifferenceOfExponentials
+
+.. automodule:: norse.torch.module.wavelet

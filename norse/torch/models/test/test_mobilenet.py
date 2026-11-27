@@ -1,6 +1,8 @@
-import torch
 import pytest
+import torch
+
 from norse.torch.models import mobilenet
+from norse.torch.models.test.conftest import local_state_dict
 
 
 def test_mobilenet_forward():
@@ -13,7 +15,12 @@ def test_mobilenet_forward():
     assert out.shape == torch.Size([seq_length, batch_size, 1000])
 
 
-def test_mobilenet_forward_pretrained():
+def test_mobilenet_forward_pretrained(monkeypatch):
+    monkeypatch.setattr(
+        mobilenet,
+        "load_state_dict_from_url",
+        lambda *a, **kw: local_state_dict("mobilenet_v2"),
+    )
     model = mobilenet.mobilenet_v2(pretrained=True)
     seq_length = 4
     batch_size = 2
@@ -36,3 +43,11 @@ def test_mobilenet_no_defaults():
         norm_layer=torch.nn.BatchNorm2d,
     )
     assert model.last_channel % 4 == 0
+
+
+@pytest.mark.download
+def test_mobilenet_forward_pretrained_download():
+    """The same path as test_mobilenet_forward_pretrained, against the real weights."""
+    model = mobilenet.mobilenet_v2(pretrained=True)
+    x = torch.randn(4, 2, 3, 256, 256)
+    assert model(x).shape == torch.Size([4, 2, 1000])

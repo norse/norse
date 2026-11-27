@@ -15,6 +15,9 @@ from norse.torch.functional.receptive_field import (
     spatial_parameters,
     temporal_scale_distribution,
 )
+from norse.torch.functional.scale_space import (
+    exponential_tau_mem_inv,
+)
 
 
 class SpatialReceptiveField2d(torch.nn.Module):
@@ -490,9 +493,16 @@ class TemporalReceptiveField(torch.nn.Module):
     ):
         super().__init__()
         if time_constants is None:
-            taus = (1 / dt) / temporal_scale_distribution(
-                n_scales, min_scale=min_scale, max_scale=max_scale, c=c
+            # temporal_scale_distribution returns scales mu in samples; the
+            # conversion to tau_mem_inv makes each integrator decay by
+            # exactly exp(-dt/mu) per step.
+            mu_seconds = (
+                temporal_scale_distribution(
+                    n_scales, min_scale=min_scale, max_scale=max_scale, c=c
+                )
+                * dt
             )
+            taus = exponential_tau_mem_inv(mu_seconds, dt)
             self.time_constants = torch.stack(
                 [
                     torch.full(
